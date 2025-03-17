@@ -1,0 +1,18 @@
+{
+  "nav": {
+    "dashboards": {
+      "dashboards": "Dashboards",
+      "home": "Home"
+    },
+    "settings": {
+      "settings": "Settings",
+      "general": "General",
+      "appearance": "Appearance"
+    },
+    "users": {
+      "users": "Users",
+      "admin": "Admin",
+      "players": "Players"
+    }
+  }
+}
