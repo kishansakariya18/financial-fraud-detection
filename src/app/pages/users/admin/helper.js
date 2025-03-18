@@ -18,10 +18,13 @@ export const responseMapper = (apiData) => {
   const resultData = apiData.map((data) => ({
     id: data.AdminID,
     username: data.Username,
+    firstname: data.FirstName,
+    lastname: data.LastName,
     mobile: data.Mobile,
     role: data.Role,
     email: data.Email,
     createdAt: data.DateCreated,
+    updatedAt: data.DateModified,
     isMasterAdmin: data.MasterAdmin,
     // lastLoginAt: data.LastLoginAt ? getDateInUTCToTimeZone(data.LastLoginAt) : '-',
     status: parseAdminStatusToApp(data.Status)

@@ -2,6 +2,7 @@ import { parseAdminStatusToApi } from 'app/pages/users/admin/helper';
 import apiConfig from '../configs/api.config';
 import { sendRequest } from '../utils/axios';
 import dayjs from 'dayjs';
+import { replaceText } from 'utils/custom.utilities';
 // import dayjs from 'dayjs';
 // import { parseAdminStatusToApi } from '../pages/admin/helper';
 // import { replaceText } from '../helpers/functions';
@@ -16,6 +17,7 @@ const AdminService = {
 
       const apiRequestParams = {
         filters: {
+          keyword: filters.keyword ? filters.keyword : undefined,
           status: filters.status ? parseAdminStatusToApi(filters.status): undefined,
           start_date: filters.startDate ? dayjs(+filters.startDate).format("YYYY-MM-DD HH:mm:ss") : undefined,
           end_date: filters.endDate ? dayjs(+filters.endDate).format("YYYY-MM-DD HH:mm:ss") : undefined
@@ -39,7 +41,7 @@ const AdminService = {
     } catch (err) {
       console.log('Error', err);
     }
-  }
+  },
   // getAdminDetail: async (id) => {
   //   try {
   //     const endPoint = replaceText(apiConfig.endPoints.ADMIN_USER.ADMIN_DETAIL, ':adminId', id);
@@ -56,26 +58,26 @@ const AdminService = {
   //     console.log('Error', err);
   //   }
   // },
-  // changeAdminStatus: async (id) => {
-  //   try {
-  //     const endPoint = replaceText(
-  //       apiConfig.endPoints.ADMIN_USER.ADMIN_CHANGE_STATUS,
-  //       ':adminId',
-  //       id
-  //     );
-  //     const response = await sendRequest({
-  //       url: apiConfig.baseURL.API_BASE_URL + endPoint,
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       }
-  //     });
+  changeAdminStatus: async (id) => {
+    try {
+      const endPoint = replaceText(
+        apiConfig.endPoints.ADMIN_USER.ADMIN_CHANGE_STATUS,
+        ':adminId',
+        id
+      );
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + endPoint,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
 
-  //     return response;
-  //   } catch (err) {
-  //     console.log('Error', err);
-  //   }
-  // },
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
   // deleteAdmin: async (id) => {
   //   try {
   //     const endPoint = replaceText(apiConfig.endPoints.ADMIN_USER.ADMIN_DELETE, ':adminId', id);

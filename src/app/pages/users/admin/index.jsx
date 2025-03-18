@@ -4,7 +4,6 @@ import {
   getCoreRowModel,
   getFacetedMinMaxValues,
   getFacetedUniqueValues,
-  // getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
@@ -16,9 +15,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Table, Card, THead, TBody, Th, Tr, Td } from "components/ui";
 import { TableSortIcon } from "components/shared/table/TableSortIcon";
 import { Page } from "components/shared/Page";
-import { useLockScrollbar, useDidUpdate, useLocalStorage } from "hooks";
+import { useLockScrollbar, useDidUpdate } from "hooks";
 import { fuzzyFilter } from "utils/react-table/fuzzyFilter";
-// import { useSkipper } from "utils/react-table/useSkipper";
 import { Toolbar } from "./Toolbar";
 import { columns } from "./columns";
 import { PaginationSection } from "components/shared/table/PaginationSection";
@@ -59,26 +57,26 @@ export default function Admin() {
     [searchParams],
   );
 
-  // const [filters, setFilters] = useState("");
+  const [columnVisibility, setColumnVisibility] = useState({
+    firstname: false,
+    lastname: false,
+  });
 
-  const [columnVisibility, setColumnVisibility] = useLocalStorage(
-    "column-visibility-orders-1",
-    {},
-  );
+  const [columnPinning, setColumnPinning] = useState({
+    left: ["id"],
+    right: ["actions"],
+  });
 
-  const [columnPinning, setColumnPinning] = useLocalStorage(
-    "column-pinning-orders-1",
-    {},
-  );
-
-  // const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
 
   const fetchAdmin = async () => {
     setIsLoading(true);
     // setError(null);
-    const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex
-    const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize
-    const result = await AdminService.getAllAdmin({ pagination: {pageIndex, pageSize}, filters: queryParams  });
+    const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
+    const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
+    const result = await AdminService.getAllAdmin({
+      pagination: { pageIndex, pageSize },
+      filters: queryParams,
+    });
 
     if (result.status === 200) {
       const apiData = result.response.data;
@@ -98,14 +96,14 @@ export default function Admin() {
 
   useEffect(() => {
     fetchAdmin();
-    
-    const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex
-    const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize
 
-    setSearchParams({...queryParams, pageIndex, pageSize})
+    const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
+    const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
+
+    setSearchParams({ ...queryParams, pageIndex, pageSize });
 
     const filtersFromQuery = [];
-  
+
     if (queryParams.keyword) {
       filtersFromQuery.push({ id: "username", value: queryParams.keyword });
     }
@@ -119,24 +117,25 @@ export default function Admin() {
       });
     }
 
-
     setPagination({
       ...pagination,
       pageIndex,
-      pageSize
-    })
-  
+      pageSize,
+    });
+
     setColumnFilters(filtersFromQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryParams]);
 
   useEffect(() => {
-    // fetchAdmin();
-
-    setSearchParams({...queryParams, pageIndex: pagination.pageIndex, pageSize: pagination.pageSize})
+    setSearchParams({
+      ...queryParams,
+      pageIndex: pagination.pageIndex,
+      pageSize: pagination.pageSize,
+    });
 
     const filtersFromQuery = [];
-  
+
     if (queryParams.keyword) {
       filtersFromQuery.push({ id: "username", value: queryParams.keyword });
     }
@@ -150,17 +149,9 @@ export default function Admin() {
       });
     }
 
-
-    // setPagination({
-    //   ...pagination,
-    //   pageIndex: pagination.pageIndex,
-    //   pageSize: pagination.pageSize
-    // })
-  
     setColumnFilters(filtersFromQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.pageIndex, pagination.pageSize]);
-
 
   const table = useReactTable({
     data: response,
@@ -177,36 +168,10 @@ export default function Admin() {
       tableSettings,
     },
     meta: {
-      // updateData: (rowIndex, columnId, value) => {
-      //   // Skip page index reset until after next rerender
-      //   skipAutoResetPageIndex();
-      //   setResponse((old) =>
-      //     old.map((row, index) => {
-      //       if (index === rowIndex) {
-      //         return {
-      //           ...old[rowIndex],
-      //           [columnId]: value,
-      //         };
-      //       }
-      //       return row;
-      //     }),
-      //   );
-      // },
-      // deleteRow: (row) => {
-      //   // Skip page index reset until after next rerender
-      //   skipAutoResetPageIndex();
-      //   setResponse((old) =>
-      //     old.filter((oldRow) => oldRow.order_id !== row.original.order_id),
-      //   );
-      // },
-      // deleteRows: (rows) => {
-      //   // Skip page index reset until after next rerender
-      //   skipAutoResetPageIndex();
-      //   const rowIds = rows.map((row) => row.original.order_id);
-      //   setResponse((old) =>
-      //     old.filter((row) => !rowIds.includes(row.order_id)),
-      //   );
-      // },
+      deleteRow: async () => {
+
+        await fetchAdmin();
+      },
       setTableSettings,
     },
     filterFns: {
@@ -229,32 +194,6 @@ export default function Admin() {
     // autoResetPageIndex,
   });
 
-  // useEffect(() => {
-  //   const filtersFromQuery = [];
-  
-  //   if (queryParams.keyword) {
-  //     filtersFromQuery.push({ id: "username", value: queryParams.keyword });
-  //   }
-  //   if (queryParams.status) {
-  //     filtersFromQuery.push({ id: "status", value: queryParams.status });
-  //   }
-  //   if (queryParams.startDate && queryParams.endDate) {
-  //     filtersFromQuery.push({
-  //       id: "createdAt",
-  //       value: [queryParams.startDate, queryParams.endDate],
-  //     });
-  //   }
-
-  //   // setPagination({
-  //   //   ...pagination,
-  //   //   pageIndex: queryParams.pageIndex,
-  //   //   pageSize: queryParams.pageSize
-  //   // })
-  
-  //   setColumnFilters(filtersFromQuery);
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [queryParams]);
-
   const applyFilterHandler = () => {
     const filterItems = {};
     for (let data of columnFilters) {
@@ -271,8 +210,8 @@ export default function Admin() {
       }
     }
 
-    delete queryParams.pageIndex
-    delete queryParams.pageSize
+    delete queryParams.pageIndex;
+    delete queryParams.pageSize;
 
     setSearchParams({
       ...queryParams,
@@ -282,7 +221,6 @@ export default function Admin() {
       ...(filterItems.date && { endDate: filterItems?.date[1] }),
     });
   };
-
 
   useDidUpdate(() => table.resetRowSelection(), [response]);
 

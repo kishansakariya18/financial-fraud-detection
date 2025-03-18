@@ -7,11 +7,9 @@ import {
   Transition,
 } from "@headlessui/react";
 import {
-  ArrowUpRightIcon,
   EllipsisHorizontalIcon,
   EyeIcon,
   PencilIcon,
-  TrashIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { Fragment, useCallback, useState } from "react";
@@ -20,18 +18,17 @@ import PropTypes from "prop-types";
 // Local Imports
 import { ConfirmModal } from "components/shared/ConfirmModal";
 import { Button } from "components/ui";
-// import { OrdersDrawer } from "./OrdersDrawer";
-import { useDisclosure } from "hooks";
-
-// ----------------------------------------------------------------------
+import AdminService from "services/admin.services";
+import { TbStatusChange } from "react-icons/tb";
 
 const confirmMessages = {
   pending: {
-    description:
-      "Are you sure you want to delete this order? Once deleted, it cannot be restored.",
+    description: "Are you sure you want to change Status of the Admin?",
+    actionText: "Submit",
   },
   success: {
-    title: "Order Deleted",
+    title: "Admin Status Changed",
+    description: "Admin Status has been changed successfully",
   },
 };
 
@@ -40,9 +37,6 @@ export function RowActions({ row, table }) {
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
-
-  const [ { open: openDrawer }] =
-    useDisclosure(false);
 
   const closeModal = () => {
     setDeleteModalOpen(false);
@@ -54,13 +48,17 @@ export function RowActions({ row, table }) {
     setDeleteSuccess(false);
   };
 
-  const handleDeleteRows = useCallback(() => {
+  const handleDeleteRows = useCallback(async () => {
     setConfirmDeleteLoading(true);
-    setTimeout(() => {
+    const result = await AdminService.changeAdminStatus(row.original.id);
+    if (result.status === 200) {
       table.options.meta?.deleteRow(row);
       setDeleteSuccess(true);
-      setConfirmDeleteLoading(false);
-    }, 1000);
+    } else {
+      setDeleteError(true);
+    }
+
+    setConfirmDeleteLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [row]);
 
@@ -69,14 +67,6 @@ export function RowActions({ row, table }) {
   return (
     <>
       <div className="flex justify-center space-x-1.5 rtl:space-x-reverse">
-        <Button
-          isIcon
-          className="size-8 rounded-full"
-          onClick={() => openDrawer()}
-        >
-          <ArrowUpRightIcon className="size-4" />
-        </Button>
-
         <Menu as="div" className="relative inline-block text-left">
           <MenuButton as={Button} isIcon className="size-8 rounded-full">
             <EllipsisHorizontalIcon className="size-4.5" />
@@ -127,12 +117,12 @@ export function RowActions({ row, table }) {
                   <button
                     onClick={openModal}
                     className={clsx(
-                      "this:error flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse",
+                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse",
                       focus && "bg-this/10 dark:bg-this-light/10",
                     )}
                   >
-                    <TrashIcon className="size-4.5 stroke-1" />
-                    <span>Delete</span>
+                    <TbStatusChange className="size-4.5 stroke-1" />
+                    <span>Change Status</span>
                   </button>
                 )}
               </MenuItem>
@@ -149,8 +139,6 @@ export function RowActions({ row, table }) {
         confirmLoading={confirmDeleteLoading}
         state={state}
       />
-
-      {/* <OrdersDrawer row={row} close={closeDrawer} isOpen={isDrawerOpen} /> */}
     </>
   );
 }
