@@ -20,6 +20,7 @@ import { ConfirmModal } from "components/shared/ConfirmModal";
 import { Button } from "components/ui";
 import AdminService from "services/admin.services";
 import { TbStatusChange } from "react-icons/tb";
+import { useNavigate } from "react-router";
 
 const confirmMessages = {
   pending: {
@@ -37,10 +38,15 @@ export function RowActions({ row, table }) {
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
+  const navigate = useNavigate()
 
   const closeModal = () => {
     setDeleteModalOpen(false);
   };
+
+  const handleClickView = () => {
+    navigate(`/admin/${row.original.id}/tab`)
+  }
 
   const openModal = () => {
     setDeleteModalOpen(true);
@@ -92,6 +98,7 @@ export function RowActions({ row, table }) {
                       focus &&
                         "bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100",
                     )}
+                    onClick={handleClickView}
                   >
                     <EyeIcon className="size-4.5 stroke-1" />
                     <span>View</span>

@@ -29,6 +29,6 @@ export const users = {
             title: 'Players',
             transKey: 'nav.users.players',
             Icon: UsersIcon,
-        },
+        }
     ]
 }

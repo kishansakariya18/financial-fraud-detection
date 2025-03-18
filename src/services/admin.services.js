@@ -42,22 +42,22 @@ const AdminService = {
       console.log('Error', err);
     }
   },
-  // getAdminDetail: async (id) => {
-  //   try {
-  //     const endPoint = replaceText(apiConfig.endPoints.ADMIN_USER.ADMIN_DETAIL, ':adminId', id);
-  //     const response = await sendRequest({
-  //       url: apiConfig.baseURL.REACT_APP_API_URL + endPoint,
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       }
-  //     });
+  getAdminDetail: async (id) => {
+    try {
+      const endPoint = replaceText(apiConfig.endPoints.ADMIN_USER.ADMIN_DETAIL, ':adminId', id);
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + endPoint,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
 
-  //     return response;
-  //   } catch (err) {
-  //     console.log('Error', err);
-  //   }
-  // },
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
   changeAdminStatus: async (id) => {
     try {
       const endPoint = replaceText(
