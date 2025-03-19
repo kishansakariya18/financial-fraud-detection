@@ -3,65 +3,71 @@ import { Page } from "components/shared/Page";
 import { Outlet, NavLink, useParams } from "react-router";
 // import TabNavigation from "./ShiftLeftAnimation";
 import clsx from "clsx";
+import { HomeIcon } from "@heroicons/react/24/outline";
 import {
-  HomeIcon,
-  EnvelopeIcon,
-  UserIcon,
-  Cog6ToothIcon,
-} from "@heroicons/react/24/outline";
-import { TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
+  Button,
+  Tab,
+  TabGroup,
+  TabList,
+  TabPanel,
+  TabPanels,
+} from "@headlessui/react";
+import { randomId } from "utils/randomId";
 
 // ----------------------------------------------------------------------
 
-
-
-
 export default function Tabs() {
-    console.log('in tabs');
-
   const { adminId } = useParams();
   const tabs = [
-    { title: "Details", path: `/admin/${adminId}/tab/details`, icon: HomeIcon },
-    { title: "Profile", path: "/profile", icon: UserIcon },
-    { title: "Messages", path: "/messages", icon: EnvelopeIcon },
-    { title: "Settings", path: "/settings", icon: Cog6ToothIcon },
+    {
+      id: randomId(),
+      title: "Details",
+      path: `/admin/${adminId}/tab/details`,
+      icon: HomeIcon,
+    },
+    // { id: randomId(), title: "Profile", path: `/admin/${adminId}/tab/edit`, icon: TbEditCircle },
+    // { id: randomId(), title: "Messages", path: "/messages", icon: EnvelopeIcon },
+    // { id: randomId(), title: "Settings", path: "/settings", icon: Cog6ToothIcon },
   ];
-    
+
   return (
-  <Page title="Admin Tabs">
-    <TabGroup defaultIndex={0} >
-      <div className="hide-scrollbar overflow-x-auto border-b-2 border-gray-150 dark:border-dark-500">
-        <div className="flex w-max min-w-full border-b-2 border-gray-150 dark:border-dark-500">
-          <TabList className="flex w-max min-w-full px-1.5 py-1">
-            {tabs.map((tab) => (
-              <NavLink
-                key={tab.path}
-                to={tab.path}
-                className={({ isActive }) =>
-                  clsx(
-                    "shrink-0 space-x-2 px-3 py-2 font-medium rtl:space-x-reverse",
-                    isActive
-                      ? "border-b-2 border-primary-600 text-primary-600 dark:border-primary-500 dark:text-primary-400"
-                      : "border-transparent hover:text-gray-800 dark:hover:text-dark-100",
-                  )
-                }
-              >
-                <tab.icon className="size-4.5" />
-                <span>{tab.title}</span>
-              </NavLink>
-            ))}
-          </TabList>
+    <Page title="Admin Tabs">
+      <TabGroup defaultIndex={0}>
+        <div className="hide-scrollbar overflow-x-auto border-b-2 border-gray-150 dark:border-dark-500">
+          <div className="flex w-max min-w-full border-b-2 border-gray-150 dark:border-dark-500">
+            <TabList className="flex w-max min-w-full px-1.5 py-1">
+              {tabs.map((tab) => (
+                <Tab
+                  key={tab.id}
+                  className={({ selected }) =>
+                    clsx(
+                      "shrink-0 space-x-2 whitespace-nowrap border-b-2 px-3 py-2 font-medium rtl:space-x-reverse",
+                      selected
+                        ? "border-primary-600 text-primary-600 dark:border-primary-500 dark:text-primary-400"
+                        : "border-transparent hover:text-gray-800 focus:text-gray-800 dark:hover:text-dark-100 dark:focus:text-dark-100",
+                    )
+                  }
+                  as={Button}
+                  unstyled
+                >
+                  <NavLink>
+                    <tab.icon className="size-4.5" />
+                    <span>{tab.title}</span>
+                  </NavLink>
+                </Tab>
+              ))}
+            </TabList>
+          </div>
         </div>
-      </div>
-      <TabPanels className="mt-2">
+        <TabPanels className="mt-2">
           {tabs.map((tab) => (
             <TabPanel key={tab.id}>
               <Outlet />
             </TabPanel>
           ))}
         </TabPanels>
-    </TabGroup>
-        {/* <TabNavigation /> */}
+      </TabGroup>
+      {/* <TabNavigation /> */}
     </Page>
   );
 }

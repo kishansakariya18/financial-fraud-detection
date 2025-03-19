@@ -26,6 +26,9 @@ import AdminService from "../../../../services/admin.services";
 import { responseMapper } from "./helper";
 import { useSearchParams } from "react-router";
 import { getQueryParams, isEmptyObject } from "utils/custom.utilities";
+import { toast } from "sonner";
+// import { Button } from "@headlessui/react";
+// import { PlusIcon } from "@heroicons/react/24/outline";
 
 // ----------------------------------------------------------------------
 
@@ -153,6 +156,14 @@ export default function Admin() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.pageIndex, pagination.pageSize]);
 
+  useEffect(() => {
+    if(!isLoading && error){
+      toast.error(error);
+      setError('')
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error])
+
   const table = useReactTable({
     data: response,
     columns: columns,
@@ -190,8 +201,6 @@ export default function Admin() {
     onColumnVisibilityChange: setColumnVisibility,
     onColumnPinningChange: setColumnPinning,
     onColumnFiltersChange: setColumnFilters,
-
-    // autoResetPageIndex,
   });
 
   const applyFilterHandler = () => {
@@ -231,13 +240,11 @@ export default function Admin() {
     table.resetColumnFilters();
   };
 
-  useLockScrollbar(tableSettings.enableFullScreen);
-  console.log(isLoading);
-  console.log(error);
-  console.log("search params: ", searchParams);
+  useLockScrollbar(tableSettings.enableFullScreen);  
 
   return (
-    <Page title="Orders Datatable v1">
+    
+    <Page title="Admins">
       <div className="transition-content w-full pb-5">
         <div
           className={clsx(

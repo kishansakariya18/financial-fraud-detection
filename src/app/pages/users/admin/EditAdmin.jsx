@@ -6,13 +6,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { Listbox } from "components/shared/form/Listbox";
 import { Button, Checkbox, Input } from "components/ui";
-import { createAdminSchema } from "./schema";
+import { editAdminSchema } from "./schema";
 import { CiMobile1 } from "react-icons/ci";
 import AdminService from "services/admin.services";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Breadcrumbs } from "components/shared/Breadcrumbs";
+import { parseAdminStatusToApp } from "./helper";
 
 const adminStatus = [
   {
@@ -25,7 +26,7 @@ const adminStatus = [
   },
 ];
 
-const CreateAdmin = () => {
+const EditAdmin = () => {
   const [roles, setRoles] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -34,7 +35,7 @@ const CreateAdmin = () => {
 
   const breadcrumbItem = [
     { title: "Admin", path: "/admin" },
-    { title: "Create" },
+    { title: "Edit" },
   ];
 
   const navigate = useNavigate();
@@ -45,8 +46,28 @@ const CreateAdmin = () => {
     reset,
     control,
   } = useForm({
-    resolver: yupResolver(createAdminSchema),
+    resolver: yupResolver(editAdminSchema),
+    defaultValues: async () => {
+      if (adminId) {
+        const result = await fetchAdminDetails();
+
+        if (result) {
+          return {
+            userName: result.Username || "",
+            firstName: result.FirstName || "",
+            lastName: result.LastName || "",
+            email: result.Email || "",
+            roles: result.RoleID,
+            status: parseAdminStatusToApp(result.Status) || "inactive",
+            mobile: result.Mobile || "",
+            isMasterAdmin: result.MasterAdmin || false,
+          };
+        }
+      }
+    },
   });
+
+  const { adminId } = useParams();
 
   const fetchRoles = async () => {
     setLoading(true);
@@ -69,10 +90,21 @@ const CreateAdmin = () => {
     setLoading(false);
   };
 
-  const createAdminAPI = async (requestObject) => {
+  const fetchAdminDetails = async () => {
+    const result = await AdminService.getAdminDetail(adminId);
+
+    if (result && result.status === 200) {
+      const details = result.response.data;
+      return details;
+    } else {
+      return null;
+    }
+  };
+
+  const editAdminApi = async (requestObject) => {
     setLoading(true);
     setError(null);
-    const result = await AdminService.createAdmin(requestObject);
+    const result = await AdminService.editAdmin(requestObject);
     if (result) {
       if (result.status === 200 || result.status === 201) {
         setResponse(result.response);
@@ -85,7 +117,8 @@ const CreateAdmin = () => {
 
   useEffect(() => {
     fetchRoles();
-  }, []);
+ 
+  }, [adminId]);
 
   if (!loading && error) {
     toast.error(error);
@@ -103,14 +136,14 @@ const CreateAdmin = () => {
 
   const onSubmit = async (data) => {
     console.log("data: ", data);
-    await createAdminAPI(data);
+    await editAdminApi({...data, adminId});
   };
   return (
-    <Page title="Create Admin">
+    <Page title="Edit Admin">
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
         <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
-            Create Admin Form
+            Edit Admin Form
           </h2>
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
@@ -239,7 +272,7 @@ const CreateAdmin = () => {
               color="primary"
               disabled={loading}
             >
-              Submit
+              Edit
             </Button>
           </div>
         </form>
@@ -248,4 +281,4 @@ const CreateAdmin = () => {
   );
 };
 
-export default CreateAdmin;
+export default EditAdmin;
