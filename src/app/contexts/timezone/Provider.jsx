@@ -1,7 +1,5 @@
-import { createContext, useContext, useEffect, useState } from "react";
-
-// Create Context
-const TimezoneContext = createContext();
+import { useEffect, useState } from "react";
+import TimezoneContext from "./context"
 
 // Timezone Provider Component
 export function TimezoneProvider({ children }){
@@ -18,5 +16,3 @@ export function TimezoneProvider({ children }){
         </TimezoneContext.Provider>
     );
 };
-
-export const useTimezone = () => useContext(TimezoneContext);
