@@ -95,50 +95,50 @@ const AdminService = {
   //     console.log('Error', err);
   //   }
   // },
-  // getAdminRole: async () => {
-  //   try {
-  //     const response = await sendRequest({
-  //       url:
-  //         apiConfig.baseURL.REACT_APP_API_URL + apiConfig.endPoints.ADMIN_USER.ADMIN_ROLE_LIST,
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       }
-  //     });
+  getAdminRole: async () => {
+    try {
+      const response = await sendRequest({
+        url:
+          apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.ADMIN_USER.ADMIN_ROLE_LIST,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
 
-  //     return response;
-  //   } catch (err) {
-  //     console.log('Error', err);
-  //   }
-  // },
-  // createAdmin: async (data) => {
-  //   try {
-  //     const requestObject = {
-  //       username: data.username,
-  //       firstname: data.firstname,
-  //       lastname: data.lastname,
-  //       email: data.email,
-  //       mobile: data.mobile,
-  //       password: data.password,
-  //       status: data.status,
-  //       is_master_admin: data.isMasterAdmin ? 1 : 0,
-  //       role: data.role
-  //     };
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
+  createAdmin: async (data) => {
+    try {
+      const requestObject = {
+        username: data.userName,
+        firstname: data.firstName,
+        lastname: data.lastName,
+        email: data.email,
+        mobile: data.mobile,
+        password: data.password,
+        status: parseAdminStatusToApi(data.status),
+        is_master_admin: data.isMasterAdmin ? 1 : 0,
+        role: data.roles
+      };
 
-  //     const response = await sendRequest({
-  //       url: apiConfig.baseURL.REACT_APP_API_URL + apiConfig.endPoints.ADMIN_USER.ADMIN_CREATE,
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: requestObject
-  //     });
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.ADMIN_USER.ADMIN_CREATE,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: requestObject
+      });
 
-  //     return response;
-  //   } catch (err) {
-  //     console.log('Error', err);
-  //   }
-  // },
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
   // editAdmin: async (data) => {
   //   try {
   //     const requestObject = {

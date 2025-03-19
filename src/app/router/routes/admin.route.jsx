@@ -26,6 +26,12 @@ export const adminRoute = [
   ]
 
   },
+  {
+    path: "admin/create",
+    lazy: async () => ({
+      Component: (await import("../../pages/users/admin/CreateAdmin")).default,
+    })
+  },
 ];
 
 export default adminRoute;

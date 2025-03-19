@@ -9,5 +9,5 @@ import svgr from 'vite-plugin-svgr'
 export default defineConfig({
   plugins: [react(), jsconfigPaths(), svgr(),
   eslint()
-  ],
+  ]
 })
