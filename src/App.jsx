@@ -6,6 +6,7 @@ import { BreakpointProvider } from "app/contexts/breakpoint/Provider";
 import { LocaleProvider } from "app/contexts/locale/Provider";
 import { SidebarProvider } from "app/contexts/sidebar/Provider";
 import { ThemeProvider } from "app/contexts/theme/Provider";
+import { TimezoneProvider } from "app/contexts/timezone/Provider"
 import router from "app/router/router";
 import { Provider } from "react-redux";
 import store from "./store/index";
@@ -19,7 +20,9 @@ function App() {
         <LocaleProvider>
           <BreakpointProvider>
             <SidebarProvider>
-              <RouterProvider router={router} />
+              <TimezoneProvider>
+                <RouterProvider router={router} />
+              </TimezoneProvider>
             </SidebarProvider>
           </BreakpointProvider>
         </LocaleProvider>

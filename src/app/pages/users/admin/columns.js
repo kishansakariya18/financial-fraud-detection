@@ -74,10 +74,10 @@ export const columns = [
         filterFn: "inNumberRange",
         enableSorting: false,
     }),
-    columnHelper.accessor((row) => row.updatedAt, {
-        id: "updatedAt",
-        label: "Updated At",
-        header: "Updated At",
+    columnHelper.accessor((row) => row.lastLoginAt, {
+        id: "lastLoginAt",
+        label: "Last Login At",
+        header: "Last Login At",
         cell: DateCell,
         filterFn: "inNumberRange",
         enableSorting: false,

@@ -29,8 +29,17 @@ export function DateCell({ getValue }) {
   const time = dayjs(serverDate).format("hh:mm A");
   return (
     <>
-      <p className="font-medium">{date}</p>
-      <p className="mt-0.5 text-xs text-gray-400 dark:text-dark-300">{time}</p>
+      {serverDate && (
+        <>
+          <p className="font-medium">{date}</p>
+          <p className="mt-0.5 text-xs text-gray-400 dark:text-dark-300">{time}</p>
+        </>
+      )}
+      {!serverDate && (
+        <>
+          <p className="font-medium">-</p>
+        </>
+      )}
     </>
   );
 }
