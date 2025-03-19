@@ -1,3 +1,4 @@
+import { Navigate } from "react-router";
 
 
 export const adminRoute = [
@@ -14,7 +15,7 @@ export const adminRoute = [
     }),
     children: [{
         index: true,
-        // element: <Navigate to="/" />,
+        element: <Navigate to="details" />,
     },
     {
       path: "details",
