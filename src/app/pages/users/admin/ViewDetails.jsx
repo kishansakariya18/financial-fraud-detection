@@ -10,8 +10,8 @@ import AdminService from "services/admin.services";
 import { useParams } from "react-router";
 import { Page } from "components/shared/Page";
 import { parseAdminStatusToApp } from "./helper";
+import { getDateInUTCToTimeZone } from "helpers/functions";
 
-// ----------------------------------------------------------------------
 
 export function ViewDetails({ setCurrentStep }) {
   //   const kycFormCtx = useKYCFormContext();
@@ -20,7 +20,6 @@ export function ViewDetails({ setCurrentStep }) {
   const [error, setError] = useState("");
 
   const { adminId } = useParams();
-
 
   const fetchAdminDetails = async () => {
     setLoading(true);
@@ -37,9 +36,8 @@ export function ViewDetails({ setCurrentStep }) {
 
   useEffect(() => {
     fetchAdminDetails();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [adminId]);
-
 
   return (
     <Page title="Admin Details">
@@ -57,126 +55,80 @@ export function ViewDetails({ setCurrentStep }) {
               {"Details Regarding Admin"}
             </p>
 
-              <h6 className="mt-8 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
-                Personal Information:
-              </h6>
-              <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    User Name:
-                  </p>
-                  <p>{response?.Username}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    First Name:
-                  </p>
-                  <p>{response?.FirstName}</p>
-                </div>
-
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    Last Name:
-                  </p>
-                  <p>{response?.LastName}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    Email:
-                  </p>
-                  <p>{response?.Email}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    Phone:
-                  </p>
-                  <p>
-                    {response?.dialCode || "+91"} {response?.Mobile}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    Status:
-                  </p>
-                  <p>{+response.Status >= 0 && parseAdminStatusToApp(+response?.Status)}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    Created At:
-                  </p>
-                  <p>{response?.DateCreated}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    Role:
-                  </p>
-                  <p>{response?.Role}</p>
-                </div>
+            <h6 className="mt-8 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
+              Personal Information:
+            </h6>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                  User Name:
+                </p>
+                <p>{response?.Username}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                  First Name:
+                </p>
+                <p>{response?.FirstName}</p>
               </div>
 
-              
-              <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-                <Button
-                  className="min-w-[7rem]"
-                  onClick={() => setCurrentStep(2)}
-                >
-                  Back
-                </Button>
-                  {loading && <GhostSpinner className="size-4 border-2" />}
-                  {error && <p>{error}</p>}
+              <div>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                  Last Name:
+                </p>
+                <p>{response?.LastName}</p>
               </div>
+              <div>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                  Email:
+                </p>
+                <p>{response?.Email}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                  Phone:
+                </p>
+                <p>
+                  {response?.dialCode || "+91"} {response?.Mobile}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                  Status:
+                </p>
+                <p>
+                  {+response.Status >= 0 &&
+                    parseAdminStatusToApp(+response?.Status)}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                  Created At:
+                </p>
+                <p>{getDateInUTCToTimeZone(response?.DateCreated)}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                  Role:
+                </p>
+                <p>{response?.Role}</p>
+              </div>
+            </div>
+
+            <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
+              <Button
+                className="min-w-[7rem]"
+                onClick={() => setCurrentStep(2)}
+              >
+                Back
+              </Button>
+              {loading && <GhostSpinner className="size-4 border-2" />}
+              {error && <p>{error}</p>}
+            </div>
           </Card>
         </div>
       </div>
     </Page>
   );
 }
-
-// function getAddressNode(address) {
-//   return (
-//     <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-//       <div>
-//         <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-//           Country:
-//         </p>
-//         <p>{countries.find((c) => c.code === address.country).name}</p>
-//       </div>
-//       <div>
-//         <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-//           City:
-//         </p>
-//         <p>{address.city}</p>
-//       </div>
-//       <div>
-//         <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-//           State:
-//         </p>
-//         <p>{address.state}</p>
-//       </div>
-//       <div>
-//         <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-//           Zipcode:
-//         </p>
-//         <p>{address.zipCode}</p>
-//       </div>
-//       <div>
-//         <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-//           Address Line 1:
-//         </p>
-//         <p>{address.addressLine1}</p>
-//       </div>
-//       <div>
-//         <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-//           Address Line 2:
-//         </p>
-//         <p>{address.addressLine2 || "---"}</p>
-//       </div>
-//     </div>
-//   );
-// }
-
-// Declaration.propTypes = {
-//   setCurrentStep: PropTypes.func,
-//   setFinished: PropTypes.func,
-// };

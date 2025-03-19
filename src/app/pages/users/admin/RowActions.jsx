@@ -113,6 +113,7 @@ export function RowActions({ row, table }) {
                       focus &&
                         "bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100",
                     )}
+                    onClick={() => navigate(`/admin/${row.original.id}/edit`)}
                   >
                     <PencilIcon className="size-4.5 stroke-1" />
                     <span>Edit</span>
