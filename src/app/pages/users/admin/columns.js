@@ -4,12 +4,13 @@ import { createColumnHelper } from "@tanstack/react-table";
 // Local Imports
 import { RowActions } from "./RowActions";
 import {
-    CustomerCell,
+    IdCell,
     DateCell,
-    OrderIdCell,
-    StatusCell,
-} from "./rows";
+    BoldCell,
+    BadgeCell
+} from "../../../../components/custom/table/cell"
 import { CopyableCell } from "../../../../components/shared/table/CopyableCell";
+import { orderStatusOptions } from "./data";
 
 // ----------------------------------------------------------------------
 
@@ -20,28 +21,28 @@ export const columns = [
         id: "id",
         label: "Admin ID",
         header: "Admin ID",
-        cell: OrderIdCell,
+        cell: IdCell,
         enableSorting: false,
     }),
     columnHelper.accessor((row) => row.username, {
         id: "username",
         label: "Username",
         header: "User Name",
-        cell: CustomerCell,
+        cell: BoldCell,
         enableSorting: false,
     }),
     columnHelper.accessor((row) => row.firstname, {
         id: "firstname",
         label: "FirstName",
         header: "First Name",
-        cell: CustomerCell,
+        cell: BoldCell,
         enableSorting: false
     }),
     columnHelper.accessor((row) => row.lastname, {
         id: "lastname",
         label: "LastName",
         header: "Last Name",
-        cell: CustomerCell,
+        cell: BoldCell,
         enableSorting: false
     }),
     columnHelper.accessor((row) => row.email, {
@@ -62,7 +63,8 @@ export const columns = [
         id: "status",
         label: "Admin Status",
         header: "Status",
-        cell: StatusCell,
+        cell: BadgeCell,
+        meta: {'optionData': orderStatusOptions},
         filterFn: "arrIncludesSome",
         enableSorting: false,
     }),
