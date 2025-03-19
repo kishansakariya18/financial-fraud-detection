@@ -1,4 +1,4 @@
-// import { getDateInUTCToTimeZone } from "../../helpers/functions";
+import { getDateInUTCToTimeZone } from "../../../../helpers/functions";
 
 export const parseAdminStatusToApp = (status) => (status ? 'active' : 'inactive');
 
@@ -23,10 +23,9 @@ export const responseMapper = (apiData) => {
     mobile: data.Mobile,
     role: data.Role,
     email: data.Email,
-    createdAt: data.DateCreated,
-    updatedAt: data.DateModified,
+    createdAt: getDateInUTCToTimeZone(data.DateCreated),
     isMasterAdmin: data.MasterAdmin,
-    // lastLoginAt: data.LastLoginAt ? getDateInUTCToTimeZone(data.LastLoginAt) : '-',
+    lastLoginAt: data.LastLoginAt ? getDateInUTCToTimeZone(data.LastLoginAt) : '',
     status: parseAdminStatusToApp(data.Status)
   }));
   return resultData;
