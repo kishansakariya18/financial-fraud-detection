@@ -21,9 +21,6 @@ export function DateFilter({ column, title, config }) {
   const selectedValues = column?.getFilterValue();
   const { locale } = useLocaleContext();
 
-  console.log('selectedValues: ', selectedValues);
-  
-
   return (
     <ResponsiveFilter
       buttonContent={
