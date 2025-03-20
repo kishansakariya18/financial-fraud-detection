@@ -13,7 +13,7 @@ import { DateFilter } from "components/shared/table/DateFilter";
 import { FacedtedFilter } from "components/shared/table/FacedtedFilter";
 // import { RangeFilter } from "components/shared/table/RangeFilter";
 import { Button, Input } from "components/ui";
-import { TableConfig } from "./TableConfig";
+import { TableConfig } from "components/ui/custom/TableConfig";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 import { statusOptions } from "../data";
 import { useNavigate } from "react-router";

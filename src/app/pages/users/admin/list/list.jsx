@@ -32,13 +32,18 @@ export default function Admin() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const queryParams = useMemo(
+    () => getQueryParams(searchParams),
+    [searchParams],
+  );
+
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
     totalCount: 0,
   });
-
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const [columnFilters, setColumnFilters] = useState([]);
   const [sorting, setSorting] = useState([]);
@@ -47,11 +52,6 @@ export default function Admin() {
     enableFullScreen: false,
     enableRowDense: false,
   });
-
-  const queryParams = useMemo(
-    () => getQueryParams(searchParams),
-    [searchParams],
-  );
 
   const [columnVisibility, setColumnVisibility] = useState({
     firstname: false,
@@ -236,7 +236,7 @@ export default function Admin() {
   console.log(error);
 
   return (
-    <ContentWrapper pageTitle="Admin">
+    <ContentWrapper pageTitle="Admin" enableFullScreen={tableSettings.enableFullScreen}>
       <Toolbar
         table={table}
         onApplyFilters={applyFilterHandler}

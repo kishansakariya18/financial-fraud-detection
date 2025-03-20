@@ -4,7 +4,7 @@ import clsx from "clsx";
 // Local Imports
 import { Page } from "components/shared/Page";
 
-const ContentWrapper = ({ pageTitle = '', enableFullScreen = false, children }) => {
+const ContentWrapper = ({ pageTitle = '', enableFullScreen, children }) => {
   return (
     <Page title={pageTitle}>
       <div className="transition-content w-full pb-5">
