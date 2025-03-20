@@ -26,6 +26,7 @@ import AdminService from "../../../../services/admin.services";
 import { responseMapper } from "./helper";
 import { useSearchParams } from "react-router";
 import { getQueryParams, isEmptyObject } from "utils/custom.utilities";
+import { Outlet } from "react-router";
 
 // ----------------------------------------------------------------------
 
@@ -251,6 +252,10 @@ export default function Admin() {
             onApplyFilters={applyFilterHandler}
             onClearFilters={clearFilterHandler}
           />
+
+          {/* Render child components inside Admin */}
+          <Outlet />
+
           <div
             className={clsx(
               "transition-content flex grow flex-col pt-3",

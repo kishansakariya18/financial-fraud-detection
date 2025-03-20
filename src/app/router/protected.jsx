@@ -8,6 +8,7 @@ import AuthGuard from "middleware/AuthGuard";
 
 import adminRoute from "./routes/admin.route";
 import playerRoutes from "./routes/player.route";
+import roleRoutes from "./routes/role.route";
 
 // ----------------------------------------------------------------------
 
@@ -40,6 +41,7 @@ const protectedRoutes = {
         },
         ...adminRoute,
         ...playerRoutes,
+        ...roleRoutes
       ],
     },
   ],
