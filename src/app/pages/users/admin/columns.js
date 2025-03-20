@@ -36,7 +36,7 @@ export const columns = [
         label: "FirstName",
         header: "First Name",
         cell: BoldCell,
-        enableSorting: false
+        enableSorting: false,
     }),
     columnHelper.accessor((row) => row.lastname, {
         id: "lastname",

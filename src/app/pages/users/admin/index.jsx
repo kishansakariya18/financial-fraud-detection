@@ -21,6 +21,7 @@ import { responseMapper } from "./helper";
 import { useSearchParams } from "react-router";
 import { getQueryParams, isEmptyObject } from "utils/custom.utilities";
 import TableCard from "components/ui/custom/TableCard";
+import { toast } from "sonner";
 
 // ----------------------------------------------------------------------
 
@@ -145,6 +146,14 @@ export default function Admin() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.pageIndex, pagination.pageSize]);
 
+  useEffect(() => {
+    if(!isLoading && error){
+      toast.error(error);
+      setError('')
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error])
+
   const table = useReactTable({
     data: response,
     columns: columns,
@@ -181,8 +190,6 @@ export default function Admin() {
     onColumnVisibilityChange: setColumnVisibility,
     onColumnPinningChange: setColumnPinning,
     onColumnFiltersChange: setColumnFilters,
-
-    // autoResetPageIndex,
   });
 
   const applyFilterHandler = () => {
@@ -227,7 +234,8 @@ export default function Admin() {
   console.log(error);
 
   return (
-    <Page title="Orders Datatable v1">
+    
+    <Page title="Admins">
       <div className="transition-content w-full pb-5">
         <div
           className={clsx(

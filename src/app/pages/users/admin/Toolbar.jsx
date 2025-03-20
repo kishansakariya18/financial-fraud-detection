@@ -2,6 +2,7 @@
 import {
   MagnifyingGlassIcon,
   MapPinIcon,
+  PlusIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 // import { TbCurrencyDollar } from "react-icons/tb";
@@ -15,11 +16,17 @@ import { Button, Input } from "components/ui";
 import { TableConfig } from "./TableConfig";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 import { orderStatusOptions } from "./data";
+import { useNavigate } from "react-router";
 
 // ----------------------------------------------------------------------
 
-export function Toolbar({ table, onApplyFilters = () => {}, onClearFilters = () => {} }) {
+export function Toolbar({
+  table,
+  onApplyFilters = () => {},
+  onClearFilters = () => {},
+}) {
   const { isXs } = useBreakpointsContext();
+  const navigate = useNavigate();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
   return (
@@ -35,6 +42,15 @@ export function Toolbar({ table, onApplyFilters = () => {}, onClearFilters = () 
             Admins
           </h2>
         </div>
+
+        <Button
+          className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
+          color="primary"
+          onClick={() => navigate("/admin/create")}
+        >
+          <PlusIcon className="size-5" />
+          <span>Create Admin</span>
+        </Button>
       </div>
 
       {isXs ? (
@@ -54,7 +70,11 @@ export function Toolbar({ table, onApplyFilters = () => {}, onClearFilters = () 
               isFullScreenEnabled ? "px-4 sm:px-5" : "px-[--margin-x]",
             )}
           >
-            <Filters table={table} onApplyFilters={onApplyFilters} onClearFilters={onClearFilters}/>
+            <Filters
+              table={table}
+              onApplyFilters={onApplyFilters}
+              onClearFilters={onClearFilters}
+            />
           </div>
         </>
       ) : (
@@ -71,7 +91,11 @@ export function Toolbar({ table, onApplyFilters = () => {}, onClearFilters = () 
         >
           <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
             <SearchInput table={table} />
-            <Filters table={table} onApplyFilters={onApplyFilters} onClearFilters={onClearFilters}/>
+            <Filters
+              table={table}
+              onApplyFilters={onApplyFilters}
+              onClearFilters={onClearFilters}
+            />
           </div>
 
           <TableConfig table={table} />
@@ -84,8 +108,10 @@ export function Toolbar({ table, onApplyFilters = () => {}, onClearFilters = () 
 function SearchInput({ table }) {
   return (
     <Input
-      value={table?.getColumn("username")?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn("username").setFilterValue(e.target.value)}
+      value={table?.getColumn("username")?.getFilterValue() || ""}
+      onChange={(e) =>
+        table.getColumn("username").setFilterValue(e.target.value)
+      }
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: "h-8 text-xs ring-primary-500/50 focus:ring",
@@ -96,7 +122,11 @@ function SearchInput({ table }) {
   );
 }
 
-function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {}}) {
+function Filters({
+  table,
+  onApplyFilters = () => {},
+  onClearFilters = () => {},
+}) {
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>
@@ -124,18 +154,18 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {}})
 
       {isFiltered && (
         <div>
-        <Button
-          onClick={onApplyFilters}
-          className="h-8 whitespace-nowrap px-2.5 text-xs"
-        >
-          Search
-        </Button>
-        <Button
-          onClick={onClearFilters}
-          className="h-8 whitespace-nowrap px-2.5 text-xs ml-1"
-        >
-          Reset Filters
-        </Button>
+          <Button
+            onClick={onApplyFilters}
+            className="h-8 whitespace-nowrap px-2.5 text-xs"
+          >
+            Search
+          </Button>
+          <Button
+            onClick={onClearFilters}
+            className="ml-1 h-8 whitespace-nowrap px-2.5 text-xs"
+          >
+            Reset Filters
+          </Button>
         </div>
       )}
     </>
