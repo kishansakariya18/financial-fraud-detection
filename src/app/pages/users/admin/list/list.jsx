@@ -1,10 +1,6 @@
 // Import Dependencies
 import {
   getCoreRowModel,
-  getFacetedMinMaxValues,
-  getFacetedUniqueValues,
-  getPaginationRowModel,
-  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
@@ -13,7 +9,6 @@ import { useSearchParams } from "react-router";
 import { useLockScrollbar, useDidUpdate } from "hooks";
 
 // Local Imports - UI,Services,Helper,Utils
-import { fuzzyFilter } from "utils/react-table/fuzzyFilter";
 import { Toolbar } from "./Toolbar";
 import { columns } from "./columns";
 import TableCard from "components/ui/custom/TableCard";
@@ -46,7 +41,6 @@ export default function Admin() {
   });
 
   const [columnFilters, setColumnFilters] = useState([]);
-  const [sorting, setSorting] = useState([]);
 
   const [tableSettings, setTableSettings] = useState({
     enableFullScreen: false,
@@ -165,7 +159,6 @@ export default function Admin() {
     state: {
       columnFilters,
       pagination,
-      sorting,
       columnVisibility,
       columnPinning,
       tableSettings,
@@ -176,19 +169,9 @@ export default function Admin() {
       },
       setTableSettings,
     },
-    filterFns: {
-      fuzzy: fuzzyFilter,
-    },
-    enableSorting: tableSettings.enableSorting,
     enableColumnFilters: tableSettings.enableColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
-    getFacetedMinMaxValues: getFacetedMinMaxValues(),
-    globalFilterFn: fuzzyFilter,
-    onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
     onPaginationChange: setPagination,
-    getPaginationRowModel: getPaginationRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onColumnPinningChange: setColumnPinning,
     onColumnFiltersChange: setColumnFilters,
