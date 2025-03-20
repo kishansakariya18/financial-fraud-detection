@@ -7,21 +7,23 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import clsx from "clsx";
 import { useEffect, useMemo, useState } from "react";
-
-// Local Imports
-import { Page } from "components/shared/Page";
+import { toast } from "sonner";
+import { useSearchParams } from "react-router";
 import { useLockScrollbar, useDidUpdate } from "hooks";
+
+// Local Imports - UI,Services,Helper,Utils
 import { fuzzyFilter } from "utils/react-table/fuzzyFilter";
 import { Toolbar } from "./Toolbar";
 import { columns } from "./columns";
-import AdminService from "../../../../services/admin.services";
-import { responseMapper } from "./helper";
-import { useSearchParams } from "react-router";
-import { getQueryParams, isEmptyObject } from "utils/custom.utilities";
 import TableCard from "components/ui/custom/TableCard";
-import { toast } from "sonner";
+import ContentWrapper from "components/ui/custom/ContentWrapper";
+
+import AdminService from "../../../../services/admin.services";
+
+import { responseMapper } from "./helper";
+import { getQueryParams, isEmptyObject } from "utils/custom.utilities";
+
 
 // ----------------------------------------------------------------------
 
@@ -151,7 +153,7 @@ export default function Admin() {
       toast.error(error);
       setError('')
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error])
 
   const table = useReactTable({
@@ -234,36 +236,13 @@ export default function Admin() {
   console.log(error);
 
   return (
-    
-    <Page title="Admins">
-      <div className="transition-content w-full pb-5">
-        <div
-          className={clsx(
-            "flex h-full w-full flex-col",
-            tableSettings.enableFullScreen &&
-              "fixed inset-0 z-[61] bg-white pt-3 dark:bg-dark-900",
-          )}
-        >
-          <Toolbar
-            table={table}
-            onApplyFilters={applyFilterHandler}
-            onClearFilters={clearFilterHandler}
-          />
-          <div
-            className={clsx(
-              "transition-content flex grow flex-col pt-3",
-              tableSettings.enableFullScreen
-                ? "overflow-hidden"
-                : "px-[--margin-x]",
-            )}
-          >
-            <TableCard 
-            tableSettings={tableSettings}
-            table={table}
-            />
-          </div>
-        </div>
-      </div>
-    </Page>
+    <ContentWrapper pageTitle="Admin">
+      <Toolbar
+        table={table}
+        onApplyFilters={applyFilterHandler}
+        onClearFilters={clearFilterHandler}
+      />
+      <TableCard tableSettings={tableSettings} table={table} />
+    </ContentWrapper>
   );
 }
