@@ -19,9 +19,9 @@ import { columns } from "./columns";
 import TableCard from "components/ui/custom/TableCard";
 import ContentWrapper from "components/ui/custom/ContentWrapper";
 
-import AdminService from "../../../../services/admin.services";
+import AdminService from "../../../../../services/admin.services";
 
-import { responseMapper } from "./helper";
+import { responseMapper } from "../helper";
 import { getQueryParams, isEmptyObject } from "utils/custom.utilities";
 
 

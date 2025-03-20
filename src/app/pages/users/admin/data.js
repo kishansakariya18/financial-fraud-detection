@@ -1,6 +1,6 @@
 import { CheckBadgeIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
-export const orderStatusOptions = [
+export const statusOptions = [
     {
         value: 'active',
         label: 'Active',

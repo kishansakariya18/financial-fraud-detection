@@ -5,7 +5,7 @@ export const adminRoute = [
   {
     path: "admin",
     lazy: async () => ({
-      Component: (await import("../../pages/users/admin/index")).default,
+      Component: (await import("../../pages/users/admin/list/list")).default,
     })
   },
   {

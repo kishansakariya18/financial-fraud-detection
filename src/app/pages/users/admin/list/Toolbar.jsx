@@ -15,7 +15,7 @@ import { FacedtedFilter } from "components/shared/table/FacedtedFilter";
 import { Button, Input } from "components/ui";
 import { TableConfig } from "./TableConfig";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
-import { orderStatusOptions } from "./data";
+import { statusOptions } from "../data";
 import { useNavigate } from "react-router";
 
 // ----------------------------------------------------------------------
@@ -132,7 +132,7 @@ function Filters({
     <>
       {table.getColumn("status") && (
         <FacedtedFilter
-          options={orderStatusOptions}
+          options={statusOptions}
           column={table.getColumn("status")}
           title="Status"
           Icon={MapPinIcon}

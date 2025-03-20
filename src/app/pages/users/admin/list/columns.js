@@ -8,9 +8,9 @@ import {
     DateCell,
     BoldCell,
     BadgeCell
-} from "../../../../components/custom/table/cell"
-import { CopyableCell } from "../../../../components/shared/table/CopyableCell";
-import { orderStatusOptions } from "./data";
+} from "../../../../../components/custom/table/cell"
+import { CopyableCell } from "../../../../../components/shared/table/CopyableCell";
+import { statusOptions } from "../data";
 
 // ----------------------------------------------------------------------
 
@@ -64,7 +64,7 @@ export const columns = [
         label: "Admin Status",
         header: "Status",
         cell: BadgeCell,
-        meta: {'optionData': orderStatusOptions},
+        meta: {'optionData': statusOptions},
         filterFn: "arrIncludesSome",
         enableSorting: false,
     }),
