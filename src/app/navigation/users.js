@@ -25,7 +25,7 @@ export const users = {
         {
             id: 'players',
             type: NAV_TYPE_ITEM,
-            path: '/players',
+            path: '/player',
             title: 'Players',
             transKey: 'nav.users.players',
             Icon: UsersIcon,

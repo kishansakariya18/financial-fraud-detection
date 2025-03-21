@@ -310,7 +310,11 @@ const PlayerService = {
             MaxWithdrawPerMonth: data?.monthlyWithdrawLimit || undefined,
             DailyLossLimit: data?.dailyLossLimit || undefined,
             WeeklyLossLimit: data?.weeklyLossLimit || undefined,
-            MonthlyLossLimit: data?.monthlyLossLimit || undefined
+            MonthlyLossLimit: data?.monthlyLossLimit || undefined,
+            ExclusionType: data?.selfExclusionType || undefined,
+            ExclusionStartAt: ConvertDateIntoUTC(data?.exclusionStartAt) || undefined,
+            ExclusionEndAt: ConvertDateIntoUTC(data?.exclusionEndAt) || undefined
+
         }
 
       const endPoint = replaceText(apiConfig.endPoints.USER.UPDATE_RISK_MANAGEMENT, ':userID', userID);;

@@ -13,6 +13,9 @@ export const playerLimitSchema = Yup.object().shape({
     dailyLossLimit: Yup.number(),
     weeklyLossLimit: Yup.number(),
     monthlyLossLimit: Yup.number(),
+    selfExclusionType: Yup.string().trim(),
+    exclusionStartAt: Yup.date(),
+    exclusionEndAt: Yup.date(),
   
     // Flags
     hasDailyWagerLimit: Yup.boolean(),
