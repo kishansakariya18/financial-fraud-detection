@@ -2,7 +2,7 @@
 import { Box, Button, GhostSpinner, Input, Switch } from "components/ui";
 import { Page } from "components/shared/Page";
 import { Breadcrumbs } from "components/shared/Breadcrumbs";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useParams } from "react-router";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -10,16 +10,29 @@ import { useEffect, useState } from "react";
 import PlayerService from "services/player.services";
 import { ContextualHelp } from "components/shared/ContextualHelp";
 import { playerLimitSchema } from "./schema";
+import { Listbox } from "components/shared/form/Listbox";
+import { DatePicker } from "components/shared/form/Datepicker";
+import { getDateInUTCToTimeZone } from "helpers/functions";
 
 // ----------------------------------------------------------------------
 
 const breadcrumbs = [{ title: "Players", path: "/player" }, { title: "Limit" }];
+const exclusionTimeOptions = [
+  { label: "1 day", value: "1" },
+  { label: "7 day", value: "2" },
+  { label: "1 month", value: "3" },
+  { label: "6 month", value: "4" },
+  { label: "12 month", value: "5" },
+  { label: "custom", value: "6" },
+  { label: "permanent", value: "7" },
+];
 
 const PlayerLimit = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const { playerId } = useParams();
+  const [exclusionType, setExclusionType] = useState("");
 
   // const breadcrumbItem = [
   //   { title: "Admin", path: "/admin" },
@@ -30,15 +43,14 @@ const PlayerLimit = () => {
     handleSubmit,
     reset,
     formState: { errors },
-    // control,
+    control,
   } = useForm({
-    resolver: yupResolver(playerLimitSchema)
+    resolver: yupResolver(playerLimitSchema),
   });
-
 
   useEffect(() => {
     if (playerId) {
-      console.log('called: first useEffect');
+      console.log("called: first useEffect");
 
       fetchUserDetails().then((result) => {
         if (result) {
@@ -55,7 +67,10 @@ const PlayerLimit = () => {
             dailyLossLimit: result.DailyLossLimit,
             weeklyLossLimit: result.WeeklyLossLimit,
             monthlyLossLimit: result.MonthlyLossLimit,
-  
+            selfExclusionType: result.ExclusionType,
+            exclusionStartAt: getDateInUTCToTimeZone(result.ExclusionStartAt, 'Asia/Kolkata', 'YYYY-MM-DD HH:mm'),
+            exclusionEndAt: getDateInUTCToTimeZone(result.ExclusionEndAt, 'Asia/Kolkata', 'YYYY-MM-DD HH:mm'),
+
             // Flags
             hasDailyWagerLimit: result.HasDailyBetWageLimit,
             hasWeeklyWagerLimit: result.HasWeeklyBetWageLimit,
@@ -73,7 +88,7 @@ const PlayerLimit = () => {
         }
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerId, reset]);
 
   const fetchUserDetails = async () => {
@@ -113,20 +128,23 @@ const PlayerLimit = () => {
     if (!loading && !error && response) {
       toast.success(response.message);
       setResponse(null);
-
-      fetchUserDetails()
-  
+      fetchUserDetails();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [response])
-  
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response]);
 
   const handlePlayerLimitUpdate = async (data) => {
     await updatePlayerLimit(data);
   };
+
+  const handleChangeExclusionType = (field, val) => {
+    field.onChange(val.value);
+    setExclusionType(val.value);
+  };
+
   return (
     <Page title="Box">
-      {loading && <GhostSpinner/>}
+      {loading && <GhostSpinner />}
       <div className="transition-content w-full px-[--margin-x] pb-8">
         <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
@@ -381,9 +399,6 @@ const PlayerLimit = () => {
               <div className="pt-2">
                 <div className="max-w-xl">
                   <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
-                    {/* <div className="flex items-center justify-center border border-gray-300 bg-gray-150 px-3.5 text-gray-800 dark:border-dark-450 dark:bg-dark-500 dark:text-dark-100 ltr:rounded-l-lg rtl:rounded-r-lg">
-                      <span className="leading-none">$</span>
-                    </div> */}
                     <Input
                       {...register("dailyLossLimit")}
                       error={errors?.dailyLossLimit?.message}
@@ -418,9 +433,6 @@ const PlayerLimit = () => {
                         input: "relative rounded-none hover:z-1 focus:z-1",
                       }}
                     />
-                    {/* <div className="flex items-center justify-center border border-gray-300 bg-gray-150 px-3.5 text-gray-800 dark:border-dark-450 dark:bg-dark-500 dark:text-dark-100 ltr:rounded-r-lg rtl:rounded-l-lg">
-                      <span className="leading-none">.00</span>
-                    </div> */}
                   </div>
                 </div>
               </div>
@@ -435,9 +447,6 @@ const PlayerLimit = () => {
               <div className="pt-2">
                 <div className="max-w-xl">
                   <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
-                    {/* <div className="flex items-center justify-center border border-gray-300 bg-gray-150 px-3.5 text-gray-800 dark:border-dark-450 dark:bg-dark-500 dark:text-dark-100 ltr:rounded-l-lg rtl:rounded-r-lg">
-                      <span className="leading-none">$</span>
-                    </div> */}
                     <Input
                       {...register("monthlyLossLimit")}
                       error={errors?.monthlyLossLimit?.message}
@@ -458,40 +467,85 @@ const PlayerLimit = () => {
                   Self Exclusion Time
                 </h2>
               </div>
-              {/* <div className="pt-2">
-              <div className="max-w-xl">
-                <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
-                <Controller
-                render={({ field }) => (
-                  <Listbox
-                    data={[{ label: 'active', value: 'active'}]}
-                    value={
-                      [{ label: 'active', value: 'active'}].find(
-                        (status) => status.value === field.value,
-                      ) || null
-                    }
-                    onChange={(val) => field.onChange(val.value)}
-                    name={field.name}
-                    label="Status"
-                    placeholder="Select Status"
-                    displayField="label"
-                    // error={errors?.status?.message}
-                  />
-                )}
-                // control={control}
-                name="status"
-              />
+              <div className="pt-2">
+                <div className="max-w-xl">
+                  <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
+                    <Controller
+                      render={({ field }) => (
+                        <Listbox
+                          data={exclusionTimeOptions}
+                          value={
+                            exclusionTimeOptions.find(
+                              (exclusionTime) =>
+                                +exclusionTime.value === +field.value,
+                            ) || null
+                          }
+                          onChange={(val) =>
+                            handleChangeExclusionType(field, val)
+                          }
+                          name={field.name}
+                          placeholder="Select Self Exclusion Type"
+                          displayField="label"
+                          error={errors?.selfExclusionType?.message}
+                        />
+                      )}
+                      control={control}
+                      name="selfExclusionType"
+                    />
+                  </div>
 
-                  <div className="flex items-center justify-center border border-gray-300 bg-gray-150 px-3.5 text-gray-800 dark:border-dark-450 dark:bg-dark-500 dark:text-dark-100 ltr:rounded-r-lg rtl:rounded-l-lg">
-                    <span className="leading-none">.00</span>
+                  <div>
+                    {+exclusionType === 6 && (
+                      <div className="flex flex-wrap gap-2 pt-1.5">
+                        <Controller
+                          render={({ field: { onChange, value, ...rest } }) => (
+                            <DatePicker
+                              onChange={onChange}
+                              value={value || ""}
+                              label="Exclusion Start At"
+                              error={errors?.exclusionStartAt?.message}
+                              options={{
+                                disableMobile: true,
+                                enableTime: true,
+                                time_24hr: true
+                              }}
+                              placeholder="Choose date..."
+                              {...rest}
+                            />
+                          )}
+                          control={control}
+                          name="exclusionStartAt"
+                        />
+                        <Controller
+                          render={({ field: { onChange, value, ...rest } }) => (
+                            <DatePicker
+                              onChange={onChange}
+                              value={value || ""}
+                              label="Exclusion End At"
+                              error={errors?.exclusionEndAt?.message}
+                              options={{
+                                disableMobile: true,
+                                enableTime: true,
+                                time_24hr: true
+                              }}
+                              placeholder="Choose date..."
+                              {...rest}
+                            />
+                          )}
+                          control={control}
+                          name="exclusionEndAt"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
-            </div> */}
             </Box>
           </div>
           <div className="mt-1.5 flex items-center justify-center">
-            <Button type="submit" color="primary" disabled={loading}>Update</Button>
+            <Button type="submit" color="primary" disabled={loading}>
+              Update
+            </Button>
           </div>
         </form>
       </div>
