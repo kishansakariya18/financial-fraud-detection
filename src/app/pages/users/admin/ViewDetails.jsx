@@ -11,10 +11,12 @@ import { useParams } from "react-router";
 import { Page } from "components/shared/Page";
 import { parseAdminStatusToApp } from "./helper";
 import { getDateInUTCToTimeZone } from "helpers/functions";
-
+import { useTranslation } from "react-i18next";
 
 export function ViewDetails({ setCurrentStep }) {
   //   const kycFormCtx = useKYCFormContext();
+  const { t } = useTranslation();
+  const pageTitle = t("admin") + " " + t("details");
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState("");
   const [error, setError] = useState("");
@@ -40,53 +42,53 @@ export function ViewDetails({ setCurrentStep }) {
   }, [adminId]);
 
   return (
-    <Page title="Admin Details">
+    <Page title={pageTitle}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
         <h2 className="py-5 text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:py-6 lg:text-2xl">
-          Admin Details
+          {pageTitle}
         </h2>
 
         <div className="col-span-12 sm:col-span-8 lg:col-span-9">
           <Card className="h-full p-4 sm:p-5">
             <h5 className="text-lg font-medium text-gray-800 dark:text-dark-100">
-              {"Details"}
+              {t("details")}
             </h5>
             <p className="text-sm text-gray-500 dark:text-dark-200">
-              {"Details Regarding Admin"}
+              {t("details") + " " +  t("regarding") + " " + t("admin")}
             </p>
 
             <h6 className="mt-8 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
-              Personal Information:
+              {t("information")}:
             </h6>
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  User Name:
+                  {t("userName")}:
                 </p>
                 <p>{response?.Username}</p>
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  First Name:
+                  {t("firstName")}:
                 </p>
                 <p>{response?.FirstName}</p>
               </div>
 
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  Last Name:
+                  {t("lastName")}:
                 </p>
                 <p>{response?.LastName}</p>
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  Email:
+                  {t("email")}:
                 </p>
                 <p>{response?.Email}</p>
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  Phone:
+                  {t("mobile")}:
                 </p>
                 <p>
                   {response?.dialCode || "+91"} {response?.Mobile}
@@ -95,7 +97,7 @@ export function ViewDetails({ setCurrentStep }) {
 
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  Status:
+                  {t("status")}:
                 </p>
                 <p>
                   {+response.Status >= 0 &&
@@ -104,13 +106,13 @@ export function ViewDetails({ setCurrentStep }) {
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  Created At:
+                  {t("createdAt")}:
                 </p>
                 <p>{getDateInUTCToTimeZone(response?.DateCreated)}</p>
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  Role:
+                  {t("role")}:
                 </p>
                 <p>{response?.Role}</p>
               </div>
@@ -121,7 +123,7 @@ export function ViewDetails({ setCurrentStep }) {
                 className="min-w-[7rem]"
                 onClick={() => setCurrentStep(2)}
               >
-                Back
+                {t("back")}
               </Button>
               {loading && <GhostSpinner className="size-4 border-2" />}
               {error && <p>{error}</p>}

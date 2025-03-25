@@ -2,7 +2,6 @@
 import {
   MagnifyingGlassIcon,
   MapPinIcon,
-  PlusIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import PropTypes from "prop-types";
@@ -13,8 +12,9 @@ import { FacedtedFilter } from "components/shared/table/FacedtedFilter";
 import { Button, Input } from "components/ui";
 import { TableConfig } from "components/ui/custom/TableConfig";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
-import { useNavigate } from "react-router";
 import { playerStatusOptions } from "../helper";
+import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ export function Toolbar({
   onClearFilters = () => {},
 }) {
   const { isXs } = useBreakpointsContext();
-  const navigate = useNavigate();
+  const { t } = useTranslation()
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
   return (
@@ -37,18 +37,9 @@ export function Toolbar({
       >
         <div className="min-w-0">
           <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
-            Players
+            {t('players')}
           </h2>
         </div>
-
-        <Button
-          className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
-          color="primary"
-          onClick={() => navigate("/admin/create")}
-        >
-          <PlusIcon className="size-5" />
-          <span>Create Admin</span>
-        </Button>
       </div>
 
       {isXs ? (
@@ -132,7 +123,7 @@ function Filters({
         <FacedtedFilter
           options={playerStatusOptions}
           column={table.getColumn("status")}
-          title="Status"
+          title={t("status")}
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}
@@ -142,7 +133,7 @@ function Filters({
       {table.getColumn("createdAt") && (
         <DateFilter
           column={table.getColumn("createdAt")}
-          title="Date Range"
+          title={t("date") + " " + t("range")}
           config={{
             maxDate: new Date().fp_incr(1),
             mode: "range",
@@ -156,13 +147,13 @@ function Filters({
             onClick={onApplyFilters}
             className="h-8 whitespace-nowrap px-2.5 text-xs"
           >
-            Search
+            {t('search')}
           </Button>
           <Button
             onClick={onClearFilters}
             className="ml-1 h-8 whitespace-nowrap px-2.5 text-xs"
           >
-            Reset Filters
+            {t('reset') + ' ' + t('filter')}
           </Button>
         </div>
       )}

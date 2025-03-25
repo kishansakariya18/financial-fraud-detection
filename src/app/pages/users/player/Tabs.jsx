@@ -14,24 +14,26 @@ import {
 } from "@headlessui/react";
 import { randomId } from "utils/randomId";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
 export default function Tabs() {
   const { playerId } = useParams();
+  const {t} = useTranslation()
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const tabs = [
     {
       id: randomId(),
-      title: "Details",
+      title: t("details"),
       path: `/player/${playerId}/tab/details`,
       icon: HomeIcon,
       index: 0
     },
     {
       id: randomId(),
-      title: "Limits",
+      title: t("limits"),
       path: `/player/${playerId}/tab/limits`,
       icon: AdjustmentsVerticalIcon,
       index: 1

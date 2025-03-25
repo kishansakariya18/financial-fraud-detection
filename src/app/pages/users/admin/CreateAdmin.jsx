@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { Breadcrumbs } from "components/shared/Breadcrumbs";
+import { useTranslation } from "react-i18next";
 
 const adminStatus = [
   {
@@ -31,6 +32,7 @@ const CreateAdmin = () => {
   const [loading, setLoading] = useState(false);
 
   const [response, setResponse] = useState(null);
+  const { t } = useTranslation()
 
   const breadcrumbItem = [
     { title: "Admin", path: "/admin" },
@@ -102,15 +104,14 @@ const CreateAdmin = () => {
   }
 
   const onSubmit = async (data) => {
-    console.log("data: ", data);
     await createAdminAPI(data);
   };
   return (
-    <Page title="Create Admin">
+    <Page title={t("create") + " " + t("admin")}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
         <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
-            Create Admin Form
+            {t("create") + " " + t("admin") + " " + t("form")}
           </h2>
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
@@ -124,32 +125,32 @@ const CreateAdmin = () => {
               <Input
                 {...register("userName")}
                 prefix={<UserIcon className="size-5" />}
-                label="User Name"
+                label={t("userName")}
                 error={errors?.userName?.message}
-                placeholder="Enter User Name"
+                placeholder={t("enter") + " " + t("userName")}
               />
               <Input
                 {...register("firstName")}
                 prefix={<UserIcon className="size-5" />}
-                label="First Name"
+                label={t("firstName")}
                 error={errors?.firstName?.message}
-                placeholder="Enter First Name"
+                placeholder={t("enter") + " " + t("firstName")}
               />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
                 {...register("lastName")}
                 prefix={<UserIcon className="size-5" />}
-                label="Last Name"
+                label={t("lastName")}
                 error={errors?.lastName?.message}
-                placeholder="Enter Last Name"
+                placeholder={t("enter") + " " + t("lastName")}
               />
               <Input
                 {...register("email")}
                 prefix={<EnvelopeIcon className="size-5" />}
-                label="Enter Email"
+                label={t("enter") + " " + t("email")}
                 error={errors?.email?.message}
-                placeholder="Enter Email Address"
+                placeholder={t("enter") + " " + t("email") + " " + t("address")}
               />
             </div>
 
@@ -163,8 +164,8 @@ const CreateAdmin = () => {
                     }
                     onChange={(val) => field.onChange(val.value)}
                     name={field.name}
-                    label="Roles"
-                    placeholder="Select Roles"
+                    label={t("roles")}
+                    placeholder={t("select") + " " + t("roles")}
                     displayField="label"
                     error={errors?.roles?.message}
                   />
@@ -181,9 +182,9 @@ const CreateAdmin = () => {
                     strokeWidth="1"
                   />
                 }
-                label="Enter Password"
+                label={t("enter") + " " + t("password")}
                 error={errors?.password?.message}
-                placeholder="Enter Password"
+                placeholder={t("enter") + " " + t("password")}
               />
             </div>
 
@@ -199,8 +200,8 @@ const CreateAdmin = () => {
                     }
                     onChange={(val) => field.onChange(val.value)}
                     name={field.name}
-                    label="Status"
-                    placeholder="Select Status"
+                    label={t("status")}
+                    placeholder={t("select") + " " + t("status")}
                     displayField="label"
                     error={errors?.status?.message}
                   />
@@ -212,15 +213,15 @@ const CreateAdmin = () => {
               <Input
                 {...register("mobile")}
                 prefix={<CiMobile1 className="size-5" />}
-                label="Enter Mobile"
+                label={t("enter") + " " + t("mobile")}
                 error={errors?.mobile?.message}
-                placeholder="Enter Mobile Number"
+                placeholder={t("enter") + " " + t("mobile") + " " + t("number")}
               />
             </div>
 
             <div className="grid gap-4 lg:grid-cols-2">
               <Checkbox
-                label="Is Master Admin?"
+                label={t("isMasterAdmin")}
                 {...register("isMasterAdmin")}
               />
             </div>
@@ -231,7 +232,7 @@ const CreateAdmin = () => {
               onClick={() => reset()}
               disabled={loading}
             >
-              Reset
+              {t("reset")}
             </Button>
             <Button
               type="submit"
@@ -239,7 +240,7 @@ const CreateAdmin = () => {
               color="primary"
               disabled={loading}
             >
-              Submit
+              {t("create")}
             </Button>
           </div>
         </form>

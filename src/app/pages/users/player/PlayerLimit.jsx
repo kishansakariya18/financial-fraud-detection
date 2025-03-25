@@ -13,6 +13,7 @@ import { playerLimitSchema } from "./schema";
 import { Listbox } from "components/shared/form/Listbox";
 import { DatePicker } from "components/shared/form/Datepicker";
 import { getDateInUTCToTimeZone } from "helpers/functions";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
@@ -33,11 +34,9 @@ const PlayerLimit = () => {
   const [response, setResponse] = useState(null);
   const { playerId } = useParams();
   const [exclusionType, setExclusionType] = useState("");
+  const { t } = useTranslation()
+  const pageTitle = t("player") + " " + t("limit")
 
-  // const breadcrumbItem = [
-  //   { title: "Admin", path: "/admin" },
-  //   { title: "Edit" },
-  // ];
   const {
     register,
     handleSubmit,
@@ -50,8 +49,6 @@ const PlayerLimit = () => {
 
   useEffect(() => {
     if (playerId) {
-      console.log("called: first useEffect");
-
       fetchUserDetails().then((result) => {
         if (result) {
           reset({
@@ -151,12 +148,12 @@ const PlayerLimit = () => {
   };
 
   return (
-    <Page title="Box">
+    <Page title={pageTitle}>
       {loading && <GhostSpinner />}
       <div className="transition-content w-full px-[--margin-x] pb-8">
         <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
-            Player Limit
+            {pageTitle}
           </h2>
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
@@ -170,7 +167,7 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                  Daily Wager Limit
+                 {t("dailyWagerLimit")}
                 </h2>
                 <Switch {...register("hasDailyWagerLimit")} label="" />
               </div>
@@ -194,7 +191,7 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                  Weekly Wager Limit
+                {t("weeklyWagerLimit")}
                 </h2>
 
                 <Switch {...register("hasWeeklyWagerLimit")} label="" />
@@ -219,7 +216,7 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                  Monthly Wager Limit
+                {t("monthlyWagerLimit")}
                 </h2>
 
                 <Switch {...register("hasMonthlyWagerLimit")} label="" />
@@ -244,7 +241,7 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                  Daily Deposit Limit
+                {t("dailyDepositLimit")}
                 </h2>
                 <Switch {...register("hasDailyDepositLimit")} label="" />
               </div>
@@ -268,7 +265,7 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                  Weekly Deposit Limit
+                {t("weeklyDepositLimit")}
                 </h2>
                 <Switch {...register("hasWeeklyDepositLimit")} label="" />
               </div>
@@ -292,7 +289,8 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                  Monthly Deposit Limit
+                {t("monthlyDepositLimit")}
+
                 </h2>
                 <Switch {...register("hasMonthlyDepositLimit")} label="" />
               </div>
@@ -316,7 +314,7 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                  Daily Withdraw Limit
+                {t("dailyWithdrawLimit")}
                 </h2>
                 <Switch {...register("hasDailyWithdrawLimit")} label="" />
               </div>
@@ -340,7 +338,7 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                  Weekly Withdraw Limit
+                {t("weeklyWithdrawLimit")}
                 </h2>
                 <Switch {...register("hasWeeklyWithdrawLimit")} label="" />
               </div>
@@ -364,7 +362,7 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                  Monthly Withdraw Limit
+                {t("monthlyWithdrawLimit")}
                 </h2>
                 <Switch {...register("hasMonthlyWithdrawLimit")} label="" />
               </div>
@@ -390,7 +388,7 @@ const PlayerLimit = () => {
               <div className="mt-1.5 flex items-center justify-between">
                 <div className="flex flex-wrap gap-1">
                   <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                    Daily Loss Limit
+                  {t("dailyLossLimit")}
                   </h2>
                   <ContextualHelp
                     title="What is a Contextual help ?"
@@ -424,7 +422,7 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                  Weekly Loss Limit
+                {t("weeklyLossLimit")}
                 </h2>
                 <Switch {...register("hasWeeklyLossLimit")} label="" />
               </div>
@@ -448,7 +446,7 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                  Monthly Loss Limit
+                {t("monthlyLossLimit")}
                 </h2>
                 <Switch {...register("hasMonthlyLossLimit")} label="" />
               </div>
@@ -472,7 +470,7 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div>
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                  Self Exclusion Time
+                {t("selfExclusionTime")}
                 </h2>
               </div>
               <div className="pt-2">
@@ -550,11 +548,6 @@ const PlayerLimit = () => {
               </div>
             </Box>
           </div>
-          {/* <div className="mt-1.5 flex items-center justify-center">
-            <Button type="submit" color="primary" disabled={loading}>
-              Update
-            </Button>
-          </div> */}
 
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
             <Button
@@ -562,7 +555,7 @@ const PlayerLimit = () => {
               onClick={() => reset()}
               disabled={loading}
             >
-              Reset
+              {t("reset")}
             </Button>
             <Button
               type="submit"
@@ -570,7 +563,7 @@ const PlayerLimit = () => {
               color="primary"
               disabled={loading}
             >
-              Update
+              {t("update")}
             </Button>
           </div>
         </form>

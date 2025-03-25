@@ -18,16 +18,18 @@ import AdminService from "../../../../../services/admin.services";
 
 import { responseMapper } from "../helper";
 import { getQueryParams, isEmptyObject } from "utils/custom.utilities";
+import { useTranslation } from "react-i18next";
 
 
 // ----------------------------------------------------------------------
 
 export default function Admin() {
+  const { t } = useTranslation()
   const [response, setResponse] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-
   const [searchParams, setSearchParams] = useSearchParams();
+  const pageTitle = t("admins")
 
   const queryParams = useMemo(
     () => getQueryParams(searchParams),
@@ -59,7 +61,6 @@ export default function Admin() {
 
   const fetchAdmin = async () => {
     setIsLoading(true);
-    // setError(null);
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
     const result = await AdminService.getAllAdmin({
@@ -219,7 +220,7 @@ export default function Admin() {
   console.log(error);
 
   return (
-    <ContentWrapper pageTitle="Admin" enableFullScreen={tableSettings.enableFullScreen}>
+    <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
       <Toolbar
         table={table}
         onApplyFilters={applyFilterHandler}

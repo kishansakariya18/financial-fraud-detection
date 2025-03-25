@@ -17,6 +17,8 @@ import { TableConfig } from "components/ui/custom/TableConfig";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 import { statusOptions } from "../data";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 // ----------------------------------------------------------------------
 
@@ -26,6 +28,7 @@ export function Toolbar({
   onClearFilters = () => {},
 }) {
   const { isXs } = useBreakpointsContext();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
@@ -39,7 +42,7 @@ export function Toolbar({
       >
         <div className="min-w-0">
           <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
-            Admins
+            {t("admins")}
           </h2>
         </div>
 
@@ -49,7 +52,7 @@ export function Toolbar({
           onClick={() => navigate("/admin/create")}
         >
           <PlusIcon className="size-5" />
-          <span>Create Admin</span>
+          <span>{t("create") + " " + t("admin")}</span>
         </Button>
       </div>
 
@@ -144,7 +147,7 @@ function Filters({
       {table.getColumn("createdAt") && (
         <DateFilter
           column={table.getColumn("createdAt")}
-          title="Date Range"
+          title={t("date") + " " + t("range")}
           config={{
             maxDate: new Date().fp_incr(1),
             mode: "range",
@@ -158,13 +161,13 @@ function Filters({
             onClick={onApplyFilters}
             className="h-8 whitespace-nowrap px-2.5 text-xs"
           >
-            Search
+            {t("search")}
           </Button>
           <Button
             onClick={onClearFilters}
             className="ml-1 h-8 whitespace-nowrap px-2.5 text-xs"
           >
-            Reset Filters
+           {t("reset") + " " + t("filter")}
           </Button>
         </div>
       )}

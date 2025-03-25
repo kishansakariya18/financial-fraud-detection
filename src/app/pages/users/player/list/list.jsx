@@ -15,14 +15,17 @@ import { getQueryParams, isEmptyObject } from "utils/custom.utilities";
 import PlayerService from "services/player.services";
 import { responseMapper } from "../helper";
 import { Skeleton } from "components/ui";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
 export default function Player() {
+  const { t } = useTranslation();
+
+  const pageTitle = t("player") + " " + t("list");
   const [response, setResponse] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-
   const [searchParams, setSearchParams] = useSearchParams();
 
   const queryParams = useMemo(
@@ -214,7 +217,7 @@ export default function Player() {
 
   return (
     <ContentWrapper
-      pageTitle="Player"
+      pageTitle={pageTitle}
       enableFullScreen={tableSettings.enableFullScreen}
     >
       {isLoading && <Skeleton />}

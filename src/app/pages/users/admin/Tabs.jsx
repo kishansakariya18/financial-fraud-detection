@@ -13,18 +13,20 @@ import {
   TabPanels,
 } from "@headlessui/react";
 import { randomId } from "utils/randomId";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
 export default function Tabs() {
   const { adminId } = useParams();
+  const { t } = useTranslation();
   const tabs = [
     {
       id: randomId(),
-      title: "Details",
+      title: t("details"),
       path: `/admin/${adminId}/tab/details`,
       icon: HomeIcon,
-    }
+    },
   ];
 
   return (

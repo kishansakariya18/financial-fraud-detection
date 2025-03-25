@@ -6,18 +6,20 @@ import PropTypes from "prop-types";
 import { TableSettings } from "components/shared/table/TableSettings";
 import { ResponsiveFilter } from "components/shared/table/ResponsiveFilter";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
 export function TableConfig({ table }) {
   const { smAndDown } = useBreakpointsContext();
+  const { t } = useTranslation()
   return (
     <ResponsiveFilter
       anchor={{ to: "bottom end", gap: 12 }}
       buttonContent={
         <>
           <ViewColumnsIcon className="size-4" />
-          <span>View</span>
+          <span>{t("view")}</span>
         </>
       }
       classNames={{

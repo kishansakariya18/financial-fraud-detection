@@ -21,6 +21,7 @@ import { Button } from "components/ui";
 import AdminService from "services/admin.services";
 import { TbStatusChange } from "react-icons/tb";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 
 const confirmMessages = {
   pending: {
@@ -34,6 +35,7 @@ const confirmMessages = {
 };
 
 export function RowActions({ row, table }) {
+  const { t } = useTranslation()
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
@@ -101,7 +103,7 @@ export function RowActions({ row, table }) {
                     onClick={handleClickView}
                   >
                     <EyeIcon className="size-4.5 stroke-1" />
-                    <span>View</span>
+                    <span>{t("view")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -116,7 +118,7 @@ export function RowActions({ row, table }) {
                     onClick={() => navigate(`/admin/${row.original.id}/edit`)}
                   >
                     <PencilIcon className="size-4.5 stroke-1" />
-                    <span>Edit</span>
+                    <span>{t("edit")}</span>
                   </button>
                 )}
               </MenuItem>
@@ -130,7 +132,7 @@ export function RowActions({ row, table }) {
                     )}
                   >
                     <TbStatusChange className="size-4.5 stroke-1" />
-                    <span>Change Status</span>
+                    <span>{t("change") + " " + t("status")}</span>
                   </button>
                 )}
               </MenuItem>
