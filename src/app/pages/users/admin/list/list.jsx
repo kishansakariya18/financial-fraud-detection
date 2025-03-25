@@ -1,12 +1,7 @@
-// Import Dependencies
-import {
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import { useSearchParams } from "react-router";
-import { useLockScrollbar, useDidUpdate } from "hooks";
+import { useLockScrollbar } from "hooks";
 
 // Local Imports - UI,Services,Helper,Utils
 import { Toolbar } from "./Toolbar";
@@ -20,14 +15,10 @@ import { responseMapper } from "../helper";
 import { getQueryParams, isEmptyObject } from "utils/custom.utilities";
 import { useTranslation } from "react-i18next";
 
-
-// ----------------------------------------------------------------------
+import useTable from "components/ui/useTable";
 
 export default function Admin() {
   const { t } = useTranslation()
-  const [response, setResponse] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t("admins")
 
@@ -35,32 +26,9 @@ export default function Admin() {
     () => getQueryParams(searchParams),
     [searchParams],
   );
-
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10,
-    totalCount: 0,
-  });
-
-  const [columnFilters, setColumnFilters] = useState([]);
-
-  const [tableSettings, setTableSettings] = useState({
-    enableFullScreen: false,
-    enableRowDense: false,
-  });
-
-  const [columnVisibility, setColumnVisibility] = useState({
-    firstname: false,
-    lastname: false,
-  });
-
-  const [columnPinning, setColumnPinning] = useState({
-    left: ["id"],
-    right: ["actions"],
-  });
-
+  
   const fetchAdmin = async () => {
-    setIsLoading(true);
+    // setError(null);
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
     const result = await AdminService.getAllAdmin({
@@ -69,79 +37,23 @@ export default function Admin() {
     });
 
     if (result.status === 200) {
-      const apiData = result.response.data;
-      const recordsCount = parseInt(result.response.total_records, 10) || 0;
-      const resultData = responseMapper(apiData);
-      setResponse(resultData);
-
-      setPagination((prev) => ({
-        ...prev,
-        totalCount: recordsCount,
-      }));
-    } else {
-      setError(result.error);
+      return {
+        status: 200,
+        data: responseMapper(result.response.data),
+        totalRecords: parseInt(result.response.total_records, 10) || 0,
+      };
     }
-    setIsLoading(false);
+
+    return { status: result.status, error: result.error };
   };
 
-  useEffect(() => {
-    fetchAdmin();
-
-    const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
-    const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
-
-    setSearchParams({ ...queryParams, pageIndex, pageSize });
-
-    const filtersFromQuery = [];
-
-    if (queryParams.keyword) {
-      filtersFromQuery.push({ id: "username", value: queryParams.keyword });
-    }
-    if (queryParams.status) {
-      filtersFromQuery.push({ id: "status", value: queryParams.status });
-    }
-    if (queryParams.startDate && queryParams.endDate) {
-      filtersFromQuery.push({
-        id: "createdAt",
-        value: [+queryParams.startDate, +queryParams.endDate],
-      });
-    }
-
-    setPagination({
-      ...pagination,
-      pageIndex,
-      pageSize,
-    });
-
-    setColumnFilters(filtersFromQuery);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [queryParams]);
-
-  useEffect(() => {
-    setSearchParams({
-      ...queryParams,
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-    });
-
-    const filtersFromQuery = [];
-
-    if (queryParams.keyword) {
-      filtersFromQuery.push({ id: "username", value: queryParams.keyword });
-    }
-    if (queryParams.status) {
-      filtersFromQuery.push({ id: "status", value: queryParams.status });
-    }
-    if (queryParams.startDate && queryParams.endDate) {
-      filtersFromQuery.push({
-        id: "createdAt",
-        value: [+queryParams.startDate, +queryParams.endDate],
-      });
-    }
-
-    setColumnFilters(filtersFromQuery);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pagination.pageIndex, pagination.pageSize]);
+  const {
+    table,
+    isLoading,
+    error,
+    setError,
+    tableSettings,
+  } = useTable({ columns, fetchData: fetchAdmin, queryParams, setSearchParams });
 
   useEffect(() => {
     if(!isLoading && error){
@@ -151,36 +63,9 @@ export default function Admin() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error])
 
-  const table = useReactTable({
-    data: response,
-    columns: columns,
-    manualPagination: true,
-    rowCount: pagination.totalCount,
-    manualFiltering: true,
-    state: {
-      columnFilters,
-      pagination,
-      columnVisibility,
-      columnPinning,
-      tableSettings,
-    },
-    meta: {
-      deleteRow: async () => {
-        await fetchAdmin();
-      },
-      setTableSettings,
-    },
-    enableColumnFilters: tableSettings.enableColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    onPaginationChange: setPagination,
-    onColumnVisibilityChange: setColumnVisibility,
-    onColumnPinningChange: setColumnPinning,
-    onColumnFiltersChange: setColumnFilters,
-  });
-
   const applyFilterHandler = () => {
     const filterItems = {};
-    for (let data of columnFilters) {
+    for (let data of table.getState().columnFilters) {
       if (data.id === "username") {
         filterItems.keyword = data.value;
       }
@@ -194,11 +79,10 @@ export default function Admin() {
       }
     }
 
-    delete queryParams.pageIndex;
-    delete queryParams.pageSize;
-
     setSearchParams({
       ...queryParams,
+      pageIndex: 0,
+      pageSize: 10,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
       ...(filterItems.status && { status: filterItems.status }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
@@ -206,11 +90,12 @@ export default function Admin() {
     });
   };
 
-  useDidUpdate(() => table.resetRowSelection(), [response]);
-
   const clearFilterHandler = () => {
     if (!isEmptyObject(queryParams)) {
-      setSearchParams();
+      setSearchParams({
+        pageIndex: 0,
+      pageSize: 10,
+    });
     }
     table.resetColumnFilters();
   };
