@@ -3,6 +3,7 @@ import {
   DocumentPlusIcon,
 } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 import { Page } from "components/shared/Page";
 import { Button, Card, Input } from "components/ui";
@@ -13,7 +14,11 @@ import { useParams } from "react-router";
 
 const EditRole = () => {
   const { rolePermissionId } = useParams();
+  const { t } = useTranslation();
 
+  const pageTitle = (t('edit') + ' ' + t('role')) || 'Edit Role'
+  const roleName = (t('role') + ' ' + t('name')) || 'Role Name'
+  const update = t('update') || 'Update'
   //* === Get api state for Edit ===
   const [isDetailLoading, setDetailLoading] = useState(false);
   const [detailError, setDetailError] = useState(null);
@@ -170,13 +175,13 @@ const EditRole = () => {
   }, []);
 
   return (
-    <Page title="Add Role">
+    <Page title={pageTitle}>
       <div className="transition-content px-[--margin-x] pb-6">
         <div className="flex flex-col items-center justify-between space-y-4 py-5 sm:flex-row sm:space-y-0 lg:py-6">
           <div className="flex items-center gap-1">
             <DocumentPlusIcon className="size-6" />
             <h2 className="line-clamp-1 text-xl font-medium text-gray-700 dark:text-dark-50">
-              Edit Role
+              {pageTitle}
             </h2>
           </div>
         </div>
@@ -196,7 +201,7 @@ const EditRole = () => {
                     defaultValue={rolePermissionId ? detail.roleName : ''}
                     type="text"
                     name="roleName"
-                    label="Role Name"
+                    label={roleName}
                     placeholder="Enter Role Name"
                     {...register('roleName', {
                         required: 'Role name is required'
@@ -254,7 +259,7 @@ const EditRole = () => {
             </div>
           </div>
         </form>
-        <div className="flex flex-col flex-row-reverse items-center space-y-4 py-5 sm:flex-row sm:space-y-0 lg:py-6">
+        <div className="flex flex-col !flex-row-reverse items-center space-y-4 py-5 sm:flex-row sm:space-y-0 lg:py-6">
           <div className="flex gap-2">
             <Button
               className="min-w-[7rem]"
@@ -262,7 +267,7 @@ const EditRole = () => {
               type="submit"
               form="add-role-form"
             >
-              Save
+              {update}
             </Button>
           </div>
         </div>

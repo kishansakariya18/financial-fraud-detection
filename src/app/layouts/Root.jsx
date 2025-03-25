@@ -10,6 +10,9 @@ import { Loadable } from "components/shared/Loadable";
 // import { useSelector } from "react-redux";
 
 const Toaster = Loadable(lazy(() => import("components/template/Toaster")));
+const Customizer = Loadable(
+  lazy(() => import("components/template/Customizer")),
+);
 const Tooltip = Loadable(lazy(() => import("components/template/Tooltip")));
 
 // ----------------------------------------------------------------------
@@ -32,6 +35,7 @@ function Root() {
       <Outlet />
       <Tooltip />
       <Toaster />
+      <Customizer />
     </>
   );
 }

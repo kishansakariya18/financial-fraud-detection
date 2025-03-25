@@ -14,5 +14,12 @@
       "admin": "Admin",
       "players": "Players"
     }
-  }
+  },
+  "add": "Add",
+  "edit": "Edit",
+  "roles": "Roles",
+  "role": "Role",
+  "save": "Save",
+  "name": "Name",
+  "Update": "update"
 }
