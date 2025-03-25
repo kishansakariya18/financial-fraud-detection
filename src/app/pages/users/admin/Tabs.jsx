@@ -24,10 +24,7 @@ export default function Tabs() {
       title: "Details",
       path: `/admin/${adminId}/tab/details`,
       icon: HomeIcon,
-    },
-    // { id: randomId(), title: "Profile", path: `/admin/${adminId}/tab/edit`, icon: TbEditCircle },
-    // { id: randomId(), title: "Messages", path: "/messages", icon: EnvelopeIcon },
-    // { id: randomId(), title: "Settings", path: "/settings", icon: Cog6ToothIcon },
+    }
   ];
 
   return (
@@ -67,7 +64,6 @@ export default function Tabs() {
           ))}
         </TabPanels>
       </TabGroup>
-      {/* <TabNavigation /> */}
     </Page>
   );
 }

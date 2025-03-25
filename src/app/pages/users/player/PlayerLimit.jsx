@@ -68,8 +68,16 @@ const PlayerLimit = () => {
             weeklyLossLimit: result.WeeklyLossLimit,
             monthlyLossLimit: result.MonthlyLossLimit,
             selfExclusionType: result.ExclusionType,
-            exclusionStartAt: getDateInUTCToTimeZone(result.ExclusionStartAt, 'Asia/Kolkata', 'YYYY-MM-DD HH:mm'),
-            exclusionEndAt: getDateInUTCToTimeZone(result.ExclusionEndAt, 'Asia/Kolkata', 'YYYY-MM-DD HH:mm'),
+            exclusionStartAt: getDateInUTCToTimeZone(
+              result.ExclusionStartAt,
+              "Asia/Kolkata",
+              "YYYY-MM-DD HH:mm",
+            ),
+            exclusionEndAt: getDateInUTCToTimeZone(
+              result.ExclusionEndAt,
+              "Asia/Kolkata",
+              "YYYY-MM-DD HH:mm",
+            ),
 
             // Flags
             hasDailyWagerLimit: result.HasDailyBetWageLimit,
@@ -507,7 +515,7 @@ const PlayerLimit = () => {
                               options={{
                                 disableMobile: true,
                                 enableTime: true,
-                                time_24hr: true
+                                time_24hr: true,
                               }}
                               placeholder="Choose date..."
                               {...rest}
@@ -526,7 +534,7 @@ const PlayerLimit = () => {
                               options={{
                                 disableMobile: true,
                                 enableTime: true,
-                                time_24hr: true
+                                time_24hr: true,
                               }}
                               placeholder="Choose date..."
                               {...rest}
@@ -542,8 +550,26 @@ const PlayerLimit = () => {
               </div>
             </Box>
           </div>
-          <div className="mt-1.5 flex items-center justify-center">
+          {/* <div className="mt-1.5 flex items-center justify-center">
             <Button type="submit" color="primary" disabled={loading}>
+              Update
+            </Button>
+          </div> */}
+
+          <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
+            <Button
+              className="min-w-[7rem]"
+              onClick={() => reset()}
+              disabled={loading}
+            >
+              Reset
+            </Button>
+            <Button
+              type="submit"
+              className="min-w-[7rem]"
+              color="primary"
+              disabled={loading}
+            >
               Update
             </Button>
           </div>
