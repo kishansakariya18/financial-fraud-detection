@@ -12,7 +12,12 @@
     "users": {
       "users": "Users",
       "admin": "Admin",
-      "players": "Players"
+      "players": "Players",
+      "platform-limit": "Platform Limit"
+    },
+    "platform": {
+      "platform": "Platform",
+      "limit": "Platform Limit"
     }
   },
   "add": "Add",

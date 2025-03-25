@@ -68,6 +68,15 @@ export function BadgeCell({ getValue, column }) {
     );
   }
 
+
+  export function AmountCell({ getValue }) {
+    return (
+      <p className="text-sm+ font-medium text-gray-800 dark:text-dark-100">
+        {getValue().toFixed(1)}
+      </p>
+    );
+  }
+
 DateCell.propTypes = {
   getValue: PropTypes.func,
 };
@@ -80,5 +89,9 @@ BoldCell.propTypes = {
   row: PropTypes.object,
   column: PropTypes.object,
   table: PropTypes.object,
+  getValue: PropTypes.func,
+};
+
+AmountCell.propTypes = {
   getValue: PropTypes.func,
 };

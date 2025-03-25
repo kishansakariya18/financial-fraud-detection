@@ -1,34 +1,40 @@
-
 // import { replaceText } from '../helpers/functions';
 
+import { playerStatusToAPI } from "app/pages/users/player/helper";
 import apiConfig from "configs/api.config";
+import dayjs from "dayjs";
 import { sendRequest } from "utils/axios";
 import { ConvertDateIntoUTC, replaceText } from "utils/custom.utilities";
 
 const PlayerService = {
-  userList: async (state) => {
+  playerList: async (data) => {
     try {
-      const reqBody = {
-        page: state.currentPage,
-        limit: state.perPage,
-        keyword: state.filters?.keyword,
-        startDate: '',
-        endDate: '',
-        status: state.filters?.status
+      const { pagination, filters } = data;
+      const apiRequestParams = {
+        keyword: filters.keyword ? filters.keyword : undefined,
+        status: filters.status ? playerStatusToAPI(filters.status): undefined,
+        startDate: filters.startDate
+          ? dayjs(+filters.startDate).format("YYYY-MM-DD HH:mm:ss")
+          : undefined,
+        endDate: filters.endDate
+          ? dayjs(+filters.endDate).format("YYYY-MM-DD HH:mm:ss")
+          : undefined,
+        limit: pagination?.pageSize || 10,
+        page: pagination.pageIndex + 1,
       };
       const endPoint = apiConfig.endPoints.USER.LIST;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: reqBody
+        body: apiRequestParams,
       });
       return response;
     } catch (error) {
-      console.log('Error from user list', error);
+      console.log("Error from user list", error);
     }
   },
   setUserExclusion: async (data, userId) => {
@@ -36,42 +42,50 @@ const PlayerService = {
       const reqBody = {
         startDate: data.startDate || null,
         endDate: data?.endDate || null,
-        ExclusionType: data?.ExclusionType || 0
+        ExclusionType: data?.ExclusionType || 0,
       };
-      const endPoint = replaceText(apiConfig.endPoints.USER.SET_EXCLUSION, ':userID', userId); ;
+      const endPoint = replaceText(
+        apiConfig.endPoints.USER.SET_EXCLUSION,
+        ":userID",
+        userId,
+      );
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: reqBody
+        body: reqBody,
       });
       return response;
     } catch (error) {
-      console.log('Error from user list', error);
+      console.log("Error from user list", error);
     }
   },
   userReferralList: async (data) => {
     try {
       const reqBody = {
         page: +data.currentPage,
-        limit: +data.perPage
+        limit: +data.perPage,
       };
-      const endPoint = replaceText(apiConfig.endPoints.USER.REFERRAL_LIST, ':userID', data.userID);
+      const endPoint = replaceText(
+        apiConfig.endPoints.USER.REFERRAL_LIST,
+        ":userID",
+        data.userID,
+      );
       const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: reqBody
+        body: reqBody,
       });
       return response;
     } catch (error) {
-      console.log('Error from user referral list', error);
+      console.log("Error from user referral list", error);
     }
   },
   userFund: async (reqBody) => {
@@ -82,414 +96,419 @@ const PlayerService = {
         amountType: reqBody.fundType,
         type: reqBody.transactionType,
         fundMessage: reqBody.fundMessage,
-        password: reqBody.password
+        password: reqBody.password,
       };
       const endPoint = apiConfig.endPoints.USER.FUND;
       const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: reqData
+        body: reqData,
       });
       return response;
     } catch (error) {
-      console.log('Error from userFund', error);
+      console.log("Error from userFund", error);
     }
   },
   userTransactionList: async (reqBody) => {
     try {
       const query = {
         page: +reqBody.currentPage,
-        perPage: +reqBody.perPage
+        perPage: +reqBody.perPage,
       };
       const body = {
         userID: reqBody.userID,
         filters: {
           keyword: reqBody?.filters?.keyword,
           endDate: reqBody?.filters?.endDate,
-          startDate: '',
-          type: reqBody?.filters?.type
+          startDate: "",
+          type: reqBody?.filters?.type,
         },
         partialFilters: {
-          type: reqBody.activePartialTransactionType
-        }
+          type: reqBody.activePartialTransactionType,
+        },
       };
       const endPoint = apiConfig.endPoints.USER.TRANSACTION_LIST;
       const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body,
-        params: query
+        params: query,
       });
       return response;
     } catch (error) {
-      console.log('Error from userTransactionList', error);
+      console.log("Error from userTransactionList", error);
     }
   },
   userBetTransactionList: async (reqBody) => {
     try {
       const query = {
         page: +reqBody.currentPage,
-        perPage: +reqBody.perPage
+        perPage: +reqBody.perPage,
       };
       const body = {
         userID: reqBody.userID,
         filters: {
           keyword: reqBody?.filters?.keyword,
           endDate: reqBody?.filters?.endDate
-            ? ConvertDateIntoUTC(reqBody?.filters?.endDate + ' 23:59:59')
-            : '',
-          startDate: '',
-          type: reqBody?.filters?.type
+            ? ConvertDateIntoUTC(reqBody?.filters?.endDate + " 23:59:59")
+            : "",
+          startDate: "",
+          type: reqBody?.filters?.type,
         },
         partialFilters: {
-          type: reqBody.activePartialTransactionType
-        }
+          type: reqBody.activePartialTransactionType,
+        },
       };
       const endPoint = apiConfig.endPoints.USER.TRANSACTION_LIST;
       const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body,
-        params: query
+        params: query,
       });
       return response;
     } catch (error) {
-      console.log('Error from userTransactionList', error);
+      console.log("Error from userTransactionList", error);
     }
   },
   userTdsSummaryTransactionList: async (reqBody) => {
     try {
       const query = {
         page: +reqBody.currentPage,
-        perPage: +reqBody.perPage
+        perPage: +reqBody.perPage,
       };
       const body = {
         userID: reqBody.userID,
         filters: {
           keyword: reqBody?.filters?.keyword,
           endDate: reqBody?.filters?.endDate
-            ? ConvertDateIntoUTC(reqBody?.filters?.endDate + ' 23:59:59')
-            : '',
-          startDate: ConvertDateIntoUTC(reqBody?.filters?.startDate)
+            ? ConvertDateIntoUTC(reqBody?.filters?.endDate + " 23:59:59")
+            : "",
+          startDate: ConvertDateIntoUTC(reqBody?.filters?.startDate),
         },
         partialFilters: {
-          type: reqBody.activePartialTransactionType
-        }
+          type: reqBody.activePartialTransactionType,
+        },
       };
       const endPoint = apiConfig.endPoints.USER.TDS_SUMMARY_TRANSACTION_LIST;
       const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body,
-        params: query
+        params: query,
       });
       return response;
     } catch (error) {
-      console.log('Error from userTransactionList', error);
+      console.log("Error from userTransactionList", error);
     }
   },
   userStatus: async (userID) => {
     try {
       const body = {
-        userID
+        userID,
       };
       const endPoint = apiConfig.endPoints.USER.CHANGE_STATUS;
       const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body
+        body,
       });
       return response;
     } catch (error) {
-      console.log('Error from userStatus', error);
+      console.log("Error from userStatus", error);
     }
   },
   userRestBankCount: async (userID) => {
     try {
       const body = {
-        userID
+        userID,
       };
       const endPoint = apiConfig.endPoints.USER.REST_BANK_COUNT;
       const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body
+        body,
       });
       return response;
     } catch (error) {
-      console.log('Error from userRestBankCount', error);
+      console.log("Error from userRestBankCount", error);
     }
   },
   userDetail: async (userID) => {
     try {
-      const endPoint = replaceText(apiConfig.endPoints.USER.DETAIL, ':userID', userID);
+      const endPoint = replaceText(
+        apiConfig.endPoints.USER.DETAIL,
+        ":userID",
+        userID,
+      );
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+        },
       });
       return response;
     } catch (error) {
-      console.log('Error from user referral list', error);
+      console.log("Error from user referral list", error);
     }
   },
   userTransactionDetail: async (data) => {
     try {
       const endPoint = apiConfig.endPoints.USER.TRANSACTION_DETAIL;
-      console.log('data::', data);
+      console.log("data::", data);
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: {
           transactionId: data.transactionId,
-          db: data.db
-        }
+          db: data.db,
+        },
       });
       return response;
     } catch (error) {
-      console.log('Error from user referral list', error);
+      console.log("Error from user referral list", error);
     }
   },
   updateRiskManagementFields: async (data, userID) => {
     try {
+      console.log("data; ", data);
+      const apiBodyData = {
+        HasDailyBetWageLimit: data.hasDailyWagerLimit,
+        HasWeeklyBetWageLimit: data.hasWeeklyWagerLimit,
+        HasMonthlyBetWageLimit: data.hasMonthlyWagerLimit,
+        HasMaxDepositPerDayLimit: data.hasDailyDepositLimit,
+        HasMaxDepositPerWeekLimit: data.hasWeeklyDepositLimit,
+        HasMaxDepositPerMonthLimit: data.hasMonthlyDepositLimit,
+        HasMaxWithdrawPerDayLimit: data.hasDailyWithdrawLimit,
+        HasMaxWithdrawPerWeekLimit: data.hasWeeklyWithdrawLimit,
+        HasMaxWithdrawPerMonthLimit: data.hasMonthlyWithdrawLimit,
+        HasDailyLossLimit: data.hasDailyLossLimit,
+        HasWeeklyLossLimit: data.hasWeeklyLossLimit,
+        HasMonthlyLossLimit: data.hasMonthlyLossLimit,
 
-        console.log('data; ', data)
-        const apiBodyData = {
-            HasDailyBetWageLimit: data.hasDailyWagerLimit,
-            HasWeeklyBetWageLimit: data.hasWeeklyWagerLimit,
-            HasMonthlyBetWageLimit: data.hasMonthlyWagerLimit,
-            HasMaxDepositPerDayLimit: data.hasDailyDepositLimit,
-            HasMaxDepositPerWeekLimit: data.hasWeeklyDepositLimit,
-            HasMaxDepositPerMonthLimit: data.hasMonthlyDepositLimit,
-            HasMaxWithdrawPerDayLimit: data.hasDailyWithdrawLimit,
-            HasMaxWithdrawPerWeekLimit: data.hasWeeklyWithdrawLimit,
-            HasMaxWithdrawPerMonthLimit: data.hasMonthlyWithdrawLimit,
-            HasDailyLossLimit: data.hasDailyLossLimit,
-            HasWeeklyLossLimit: data.hasWeeklyLossLimit,
-            HasMonthlyLossLimit: data.hasMonthlyLossLimit,
-        
-            BetDailyWageLimit: data?.dailyWagerLimit || undefined,
-            BetWeeklyWageLimit: data?.weeklyWagerLimit || undefined,
-            BetMonthlyWageLimit: data?.monthlyWagerLimit || undefined,
-            MaxDepositPerDay: data?.dailyDepositLimit || undefined,
-            MaxDepositPerWeek: data?.weeklyDepositLimit || undefined,
-            MaxDepositPerMonth: data?.monthlyDepositLimit || undefined,
-            MaxWithdrawPerDay: data?.dailyWithdrawLimit || undefined,
-            MaxWithdrawPerWeek: data?.weeklyWithdrawLimit || undefined,
-            MaxWithdrawPerMonth: data?.monthlyWithdrawLimit || undefined,
-            DailyLossLimit: data?.dailyLossLimit || undefined,
-            WeeklyLossLimit: data?.weeklyLossLimit || undefined,
-            MonthlyLossLimit: data?.monthlyLossLimit || undefined,
-            ExclusionType: data?.selfExclusionType || undefined,
-            ExclusionStartAt: ConvertDateIntoUTC(data?.exclusionStartAt) || undefined,
-            ExclusionEndAt: ConvertDateIntoUTC(data?.exclusionEndAt) || undefined
+        BetDailyWageLimit: data?.dailyWagerLimit || undefined,
+        BetWeeklyWageLimit: data?.weeklyWagerLimit || undefined,
+        BetMonthlyWageLimit: data?.monthlyWagerLimit || undefined,
+        MaxDepositPerDay: data?.dailyDepositLimit || undefined,
+        MaxDepositPerWeek: data?.weeklyDepositLimit || undefined,
+        MaxDepositPerMonth: data?.monthlyDepositLimit || undefined,
+        MaxWithdrawPerDay: data?.dailyWithdrawLimit || undefined,
+        MaxWithdrawPerWeek: data?.weeklyWithdrawLimit || undefined,
+        MaxWithdrawPerMonth: data?.monthlyWithdrawLimit || undefined,
+        DailyLossLimit: data?.dailyLossLimit || undefined,
+        WeeklyLossLimit: data?.weeklyLossLimit || undefined,
+        MonthlyLossLimit: data?.monthlyLossLimit || undefined,
+        ExclusionType: data?.selfExclusionType || undefined,
+        ExclusionStartAt:
+          ConvertDateIntoUTC(data?.exclusionStartAt) || undefined,
+        ExclusionEndAt: ConvertDateIntoUTC(data?.exclusionEndAt) || undefined,
+      };
 
-        }
-
-      const endPoint = replaceText(apiConfig.endPoints.USER.UPDATE_RISK_MANAGEMENT, ':userID', userID);;
+      const endPoint = replaceText(
+        apiConfig.endPoints.USER.UPDATE_RISK_MANAGEMENT,
+        ":userID",
+        userID,
+      );
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body: apiBodyData,
-
       });
       return response;
     } catch (error) {
-      console.log('Error from Risk management Update', error);
+      console.log("Error from Risk management Update", error);
     }
   },
   getAllUserTransactionList: async (reqBody) => {
     try {
       const query = {
         page: +reqBody.currentPage,
-        perPage: +reqBody.perPage
+        perPage: +reqBody.perPage,
       };
       const body = {
         filters: {
           keyword: reqBody?.filters?.keyword,
           endDate: reqBody?.filters?.endDate
-            ? ConvertDateIntoUTC(reqBody?.filters?.endDate + ' 23:59:59')
-            : '',
+            ? ConvertDateIntoUTC(reqBody?.filters?.endDate + " 23:59:59")
+            : "",
           startDate: ConvertDateIntoUTC(reqBody?.filters?.startDate),
           // type: reqBody?.filters?.type
-          transactionType: +reqBody?.filters.transactionType
+          transactionType: +reqBody?.filters.transactionType,
         },
-       
       };
       const endPoint = apiConfig.endPoints.USER.ALL_TRANSACTION_LIST;
       const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
         body,
-        params: query
+        params: query,
       });
       return response;
     } catch (error) {
-      console.log('Error from userTransactionList', error);
+      console.log("Error from userTransactionList", error);
     }
   },
   getCommentDetail: async (commentID) => {
     try {
       const query = {
-       commentID
+        commentID,
       };
 
       const endPoint = apiConfig.endPoints.USER.GET_COMMENT_DETAIL;
       const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        params: query
+        params: query,
       });
       return response;
     } catch (error) {
-      console.log('Error from getCommentDetail', error);
+      console.log("Error from getCommentDetail", error);
     }
   },
   getComment: async (userID) => {
     try {
       const query = {
-       userID
+        userID,
       };
 
       const endPoint = apiConfig.endPoints.USER.GET_COMMENT;
       const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        params: query
+        params: query,
       });
       return response;
     } catch (error) {
-      console.log('Error from getComment', error);
+      console.log("Error from getComment", error);
     }
   },
   deleteComment: async (commentID) => {
     try {
       const query = {
-       commentID
+        commentID,
       };
 
       const endPoint = apiConfig.endPoints.USER.DELETE_COMMENT;
       const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        params: query
+        params: query,
       });
       return response;
     } catch (error) {
-      console.log('Error from deleteComment', error);
+      console.log("Error from deleteComment", error);
     }
   },
   updateComment: async (data) => {
     try {
-
       const endPoint = apiConfig.endPoints.USER.UPDATE_COMMENT;
       const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: data
+        body: data,
       });
       return response;
     } catch (error) {
-      console.log('Error from updateComment', error);
+      console.log("Error from updateComment", error);
     }
   },
 
   getUserLoginHistory: async (reqBody) => {
-    try {      
+    try {
       const query = {
         page: +reqBody.currentPage,
-        perPage: +reqBody.perPage
+        perPage: +reqBody.perPage,
       };
-      const endPoint = replaceText(apiConfig.endPoints.USER.LOGIN_HISTORY, ':userID', reqBody.userID);
+      const endPoint = replaceText(
+        apiConfig.endPoints.USER.LOGIN_HISTORY,
+        ":userID",
+        reqBody.userID,
+      );
       const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        params: query
+        params: query,
       });
       return response;
     } catch (error) {
-      console.log('Error from userLoginHistory', error);
-    
+      console.log("Error from userLoginHistory", error);
     }
   },
   AddComment: async (data) => {
     try {
-
       const endPoint = apiConfig.endPoints.USER.ADD_COMMENT;
       const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: data
+        body: data,
       });
       return response;
     } catch (error) {
-      console.log('Error from AddComment', error);
+      console.log("Error from AddComment", error);
     }
   },
-  
 };
 
 export default PlayerService;

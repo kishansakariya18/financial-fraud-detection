@@ -1,9 +1,11 @@
 import { dashboards } from "./dashboards";
+import { platform } from "./platoform";
 import { users } from "./users";
 
 export const navigation = [
     dashboards,
-    users
+    users,
+    platform
 ]
 
 export { baseNavigation } from './baseNavigation'

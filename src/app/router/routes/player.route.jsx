@@ -4,7 +4,7 @@ export const playerRoutes = [
   {
     path: "player",
     lazy: async () => ({
-      Component: (await import("../../pages/users/player/index")).default,
+      Component: (await import("../../pages/users/player/list/list")).default,
     }),
   },
   {
@@ -12,17 +12,26 @@ export const playerRoutes = [
     lazy: async () => ({
       Component: (await import("../../pages/users/player/Tabs")).default,
     }),
-    children: [{
+    children: [
+      {
         index: true,
-        element: <Navigate to="limit" />,
-    },
-    {
-      path: "limit",
-      lazy: async () => ({
-        Component: (await import("../../pages/users/player/PlayerLimit")).default,
-      })
-    }
-  ]
+        element: <Navigate to="details" />,
+      },
+      {
+        path: "details",
+        lazy: async () => ({
+          Component: (await import("../../pages/users/player/ViewDetails"))
+            .ViewDetails,
+        }),
+      },
+      {
+        path: "limits",
+        lazy: async () => ({
+          Component: (await import("../../pages/users/player/PlayerLimit"))
+            .default,
+        }),
+      },
+    ],
   },
 ];
 
