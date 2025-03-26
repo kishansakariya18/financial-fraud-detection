@@ -14,19 +14,18 @@ import AdminService from "../../../../../services/admin.services";
 import { responseMapper } from "../helper";
 import { getQueryParams, isEmptyObject } from "utils/custom.utilities";
 import { useTranslation } from "react-i18next";
-
 import useTable from "components/ui/useTable";
 
 export default function Admin() {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t("admins")
+  const pageTitle = t("admins");
 
   const queryParams = useMemo(
     () => getQueryParams(searchParams),
     [searchParams],
   );
-  
+
   const fetchAdmin = async () => {
     // setError(null);
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
@@ -47,21 +46,45 @@ export default function Admin() {
     return { status: result.status, error: result.error };
   };
 
-  const {
-    table,
-    isLoading,
-    error,
-    setError,
-    tableSettings,
-  } = useTable({ columns, fetchData: fetchAdmin, queryParams, setSearchParams });
+  const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
+    columns,
+    fetchData: fetchAdmin,
+    queryParams,
+    setSearchParams,
+    initialSettings: {
+      columnPinning: { left: ["id"], right: ["actions"] },
+      tableSettings: {},
+      columnVisibility: { firstname: false },
+    },
+  });
 
   useEffect(() => {
-    if(!isLoading && error){
+    if (!isLoading && error) {
       toast.error(error);
-      setError('')
+      setError("");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error])
+  }, [error]);
+
+
+  useEffect(() => {
+    const filtersFromQuery = [];
+    if (queryParams.keyword) {
+      filtersFromQuery.push({ id: "username", value: queryParams.keyword });
+    }
+    if (queryParams.status) {
+      filtersFromQuery.push({ id: "status", value: queryParams.status });
+    }
+    if (queryParams.startDate && queryParams.endDate) {
+      filtersFromQuery.push({
+        id: "createdAt",
+        value: [+queryParams.startDate, +queryParams.endDate],
+      });
+    }
+
+    setColumnFilters(filtersFromQuery);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queryParams]);
 
   const applyFilterHandler = () => {
     const filterItems = {};
@@ -94,18 +117,19 @@ export default function Admin() {
     if (!isEmptyObject(queryParams)) {
       setSearchParams({
         pageIndex: 0,
-      pageSize: 10,
-    });
+        pageSize: 10,
+      });
     }
     table.resetColumnFilters();
   };
 
   useLockScrollbar(tableSettings.enableFullScreen);
-  console.log(isLoading);
-  console.log(error);
 
   return (
-    <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
+    <ContentWrapper
+      pageTitle={pageTitle}
+      enableFullScreen={tableSettings.enableFullScreen}
+    >
       <Toolbar
         table={table}
         onApplyFilters={applyFilterHandler}

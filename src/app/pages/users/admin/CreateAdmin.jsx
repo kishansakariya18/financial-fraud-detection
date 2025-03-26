@@ -14,17 +14,8 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { Breadcrumbs } from "components/shared/Breadcrumbs";
 import { useTranslation } from "react-i18next";
+import { statusOptions } from "./helper";
 
-const adminStatus = [
-  {
-    label: "Active",
-    value: "active",
-  },
-  {
-    label: "Inactive",
-    value: "inactive",
-  },
-];
 
 const CreateAdmin = () => {
   const [roles, setRoles] = useState([]);
@@ -35,8 +26,8 @@ const CreateAdmin = () => {
   const { t } = useTranslation()
 
   const breadcrumbItem = [
-    { title: "Admin", path: "/admin" },
-    { title: "Create" },
+    { title: t("admin"), path: "/admin" },
+    { title: t("create") },
   ];
 
   const navigate = useNavigate();
@@ -192,9 +183,9 @@ const CreateAdmin = () => {
               <Controller
                 render={({ field }) => (
                   <Listbox
-                    data={adminStatus}
+                    data={statusOptions}
                     value={
-                      adminStatus.find(
+                      statusOptions.find(
                         (status) => status.value === field.value,
                       ) || null
                     }

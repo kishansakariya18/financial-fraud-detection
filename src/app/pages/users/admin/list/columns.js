@@ -10,7 +10,7 @@ import {
     BadgeCell
 } from "../../../../../components/custom/table/cell"
 import { CopyableCell } from "../../../../../components/shared/table/CopyableCell";
-import { statusOptions } from "../data";
+import { statusOptions } from "../helper";
 
 // ----------------------------------------------------------------------
 

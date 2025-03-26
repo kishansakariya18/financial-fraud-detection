@@ -15,10 +15,10 @@ import { FacedtedFilter } from "components/shared/table/FacedtedFilter";
 import { Button, Input } from "components/ui";
 import { TableConfig } from "components/ui/custom/TableConfig";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
-import { statusOptions } from "../data";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
 import { t } from "i18next";
+import { statusOptions } from "../helper";
 
 // ----------------------------------------------------------------------
 

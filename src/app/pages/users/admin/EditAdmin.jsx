@@ -13,22 +13,12 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useNavigate, useParams } from "react-router";
 import { Breadcrumbs } from "components/shared/Breadcrumbs";
-import { parseAdminStatusToApp } from "./helper";
+import { parseAdminStatusToApp, statusOptions } from "./helper";
 import { useTranslation } from "react-i18next";
 
-const adminStatus = [
-  {
-    label: "Active",
-    value: "active",
-  },
-  {
-    label: "Inactive",
-    value: "inactive",
-  },
-];
-
 const EditAdmin = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
+  const { adminId } = useParams();
   const [roles, setRoles] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -37,8 +27,8 @@ const EditAdmin = () => {
   const pageTitle = t("edit") + " "  + t("admin")
 
   const breadcrumbItem = [
-    { title: "Admin", path: "/admin" },
-    { title: "Edit" },
+    { title: t("admin"), path: "/admin" },
+    { title: t("edit") },
   ];
 
   const navigate = useNavigate();
@@ -70,7 +60,6 @@ const EditAdmin = () => {
     },
   });
 
-  const { adminId } = useParams();
 
   const fetchRoles = async () => {
     setLoading(true);
@@ -138,7 +127,6 @@ const EditAdmin = () => {
   }
 
   const onSubmit = async (data) => {
-    console.log("data: ", data);
     await editAdminApi({...data, adminId});
   };
   return (
@@ -227,9 +215,9 @@ const EditAdmin = () => {
               <Controller
                 render={({ field }) => (
                   <Listbox
-                    data={adminStatus}
+                    data={statusOptions}
                     value={
-                      adminStatus.find(
+                      statusOptions.find(
                         (status) => status.value === field.value,
                       ) || null
                     }
