@@ -37,32 +37,6 @@ const PlayerService = {
       console.log("Error from user list", error);
     }
   },
-  setUserExclusion: async (data, userId) => {
-    try {
-      const reqBody = {
-        startDate: data.startDate || null,
-        endDate: data?.endDate || null,
-        ExclusionType: data?.ExclusionType || 0,
-      };
-      const endPoint = replaceText(
-        apiConfig.endPoints.USER.SET_EXCLUSION,
-        ":userID",
-        userId,
-      );
-      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
-      const response = await sendRequest({
-        url: apiURL,
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: reqBody,
-      });
-      return response;
-    } catch (error) {
-      console.log("Error from user list", error);
-    }
-  },
   userReferralList: async (data) => {
     try {
       const reqBody = {
@@ -113,26 +87,24 @@ const PlayerService = {
       console.log("Error from userFund", error);
     }
   },
-  userTransactionList: async (reqBody) => {
+  playerTransactions: async (data) => {
     try {
+      const { pagination, filters, playerId } = data;
       const query = {
-        page: +reqBody.currentPage,
-        perPage: +reqBody.perPage,
+        page: +pagination.pageIndex + 1,
+        perPage:  pagination?.pageSize,
       };
       const body = {
-        userID: reqBody.userID,
+        userID: playerId,
         filters: {
-          keyword: reqBody?.filters?.keyword,
-          endDate: reqBody?.filters?.endDate,
-          startDate: "",
-          type: reqBody?.filters?.type,
-        },
-        partialFilters: {
-          type: reqBody.activePartialTransactionType,
-        },
+          keyword: filters?.keyword || undefined,
+          endDate: filters?.endDate || undefined,
+          startDate: filters?.startDate || undefined,
+          type: filters?.type,
+        }
       };
       const endPoint = apiConfig.endPoints.USER.TRANSACTION_LIST;
-      const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
         method: "POST",

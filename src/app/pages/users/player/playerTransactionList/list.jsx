@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { toast } from "sonner";
-import { useSearchParams } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import { useLockScrollbar } from "hooks";
 
 // Local Imports - UI, Services, Helpers, Utils
@@ -10,51 +10,50 @@ import TableCard from "components/ui/custom/TableCard";
 import ContentWrapper from "components/ui/custom/ContentWrapper";
 
 import PlayerService from "services/player.services";
-import { responseMapper } from "../helper";
+import { playerTransactionsResponseMapper } from "../helper";
 import { getQueryParams, isEmptyObject } from "utils/custom.utilities";
 import { useTranslation } from "react-i18next";
 import useTable from "components/ui/useTable";
 
-export default function Player() {
+export default function PlayerTransactions() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t("player") + " " + t("list");
+  const { playerId } = useParams();
+  const pageTitle = t("player") + " " + t("transactions");
 
-  const queryParams = useMemo(
-    () => getQueryParams(searchParams),
-    [searchParams],
-  );
+  const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
-  const fetchPlayers = async () => {
+  const fetchPlayerTransactions = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
-    const result = await PlayerService.playerList({
+    const result = await PlayerService.playerTransactions({
       pagination: { pageIndex, pageSize },
       filters: queryParams,
+      playerId,
     });
 
     if (result.status === 200) {
+      const response = playerTransactionsResponseMapper(result.response.data);
       return {
         status: 200,
-        data: responseMapper(result.response.data),
-        totalRecords: parseInt(result.response.totalRecords, 10) || 0,
+        data: response.list,
+        totalRecords: response.totalRecords || 0,
       };
     }
     return { status: result.status, error: result.error };
   };
 
-  const { table, isLoading, error, setError, tableSettings, setColumnFilters } =
-    useTable({
-      columns,
-      fetchData: fetchPlayers,
-      queryParams,
-      setSearchParams,
-      initialSettings: {
-        columnPinning: { left: ["id"], right: ["actions"] },
-        tableSettings: {},
-        columnVisibility: { username: false },
-      },
-    });
+  const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
+    columns,
+    fetchData: fetchPlayerTransactions,
+    queryParams,
+    setSearchParams,
+    initialSettings: {
+      columnPinning: { left: ["id"], right: ["actions"] },
+      tableSettings: {},
+      columnVisibility: { username: false },
+    },
+  });
 
   useEffect(() => {
     if (!isLoading && error) {
@@ -78,7 +77,6 @@ export default function Player() {
         value: [+queryParams.startDate, +queryParams.endDate],
       });
     }
-
     setColumnFilters(filtersFromQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryParams]);
@@ -118,15 +116,8 @@ export default function Player() {
   useLockScrollbar(tableSettings.enableFullScreen);
 
   return (
-    <ContentWrapper
-      pageTitle={pageTitle}
-      enableFullScreen={tableSettings.enableFullScreen}
-    >
-      <Toolbar
-        table={table}
-        onApplyFilters={applyFilterHandler}
-        onClearFilters={clearFilterHandler}
-      />
+    <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
+      <Toolbar table={table} onApplyFilters={applyFilterHandler} onClearFilters={clearFilterHandler} />
       <TableCard tableSettings={tableSettings} table={table} />
     </ContentWrapper>
   );

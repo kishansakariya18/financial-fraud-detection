@@ -72,3 +72,34 @@ export const playerStatusOptions = [
         icon: XCircleIcon
     }
 ]
+
+
+export const playerTransactionsResponseMapper = (apiData) => {
+  const totalRecords = apiData.totalRecords;
+  const userData = { username: apiData?.data?.userData?.Username };
+  const list = apiData?.data?.transactionList?.map((item) => {
+    return {
+      transactionID: item.TransactionID,
+      // type: transactionTypeApiToApp(item.Type),
+      customMessage: item.CustomMessage,
+      realCash: item.RealCash,
+      bonus: item.Bonus,
+      realCashAmount: item.RealCashAmount,
+      // transactionMesg: transactionTypeInWords(item.TransactionType),
+      winning:
+        parseFloat(item.Winning) > 0
+          ? item.Winning
+          : item.TransactionData['Merchandise_Product_name']
+            ? item.TransactionData['Merchandise_Product_name']
+            : 0,
+      coin: item.Coin,
+      dateCreated: getDateInUTCToTimeZone(item.DateCreated),
+      // status: transactionStatusApiToApp(item.Status),
+      transactionData: item.TransactionData,
+      transactionUID: item.TransactionUID,
+      username: item.user.Username,
+      admin: item.admin
+    };
+  });
+  return { totalRecords, list, userData };
+};
