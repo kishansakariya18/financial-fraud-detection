@@ -16,9 +16,9 @@ const EditRole = () => {
   const { rolePermissionId } = useParams();
   const { t } = useTranslation();
 
-  const pageTitle = (t('edit') + ' ' + t('role')) || 'Edit Role'
-  const roleName = (t('role') + ' ' + t('name')) || 'Role Name'
-  const update = t('update') || 'Update'
+  const pageTitle = (t('edit') + ' ' + t('role'));
+  const roleName = (t('role') + ' ' + t('name'));
+  const update = t('update');
   //* === Get api state for Edit ===
   const [isDetailLoading, setDetailLoading] = useState(false);
   const [detailError, setDetailError] = useState(null);
@@ -39,6 +39,8 @@ const EditRole = () => {
     }
     setDetailLoading(false);
   };
+
+  // TODO: remove below code and implement loader
   if (!isDetailLoading && detailError) {
     // toast.error(detailError, config.TOAST_UI);
     setDetailError(null);

@@ -21,5 +21,14 @@
   "role": "Role",
   "save": "Save",
   "name": "Name",
-  "Update": "update"
+  "update": "Update",
+  "title": "Title",
+  "email-template": "Email Template",
+  "slug": "Slug",
+  "heading": "Heading",
+  "to": "To",
+  "cc": "CC",
+  "bcc": "BCC",
+  "template": "Template",
+  "status": "Status"
 }
