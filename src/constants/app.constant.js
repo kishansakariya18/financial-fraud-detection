@@ -28,3 +28,17 @@ export const LOCAL_STORAGE = {
     AUTH_EMAIL: "authEmail",
     LANGUAGE: "language",
   };
+
+
+  export const TRANSACTION =  {
+    TRANSACTION_TYPE: {
+      SYSTEM: 0,
+      DEPOSIT: 1,
+      WITHDRAW: 2,
+      WINNING: 3,
+      BETSLIP: 4,
+      WITHDRAW_TAX: 5,
+      DEPOSIT_TAX: 6,
+      PROMOCODE_BENEFIT: 7,
+    },
+  }

@@ -1,34 +1,21 @@
 // Import Dependencies
-import {
-  MagnifyingGlassIcon,
-  MapPinIcon,
-  PlusIcon,
-} from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-// import { TbCurrencyDollar } from "react-icons/tb";
 import PropTypes from "prop-types";
 
 // Local Imports
 import { DateFilter } from "components/shared/table/DateFilter";
 import { FacedtedFilter } from "components/shared/table/FacedtedFilter";
-// import { RangeFilter } from "components/shared/table/RangeFilter";
 import { Button, Input } from "components/ui";
-import { TableConfig } from "components/ui/custom/TableConfig";
-import { useBreakpointsContext } from "app/contexts/breakpoint/context";
-import { useNavigate } from "react-router";
+import { playerStatusOptions } from "../helper";
 import { t } from "i18next";
-import { statusOptions } from "../helper";
 
 // ----------------------------------------------------------------------
 
 export function Toolbar({
   table,
-  onApplyFilters = () => {},
-  onClearFilters = () => {},
-  pageTitle=''
+  pageTitle = "",
 }) {
-  const { isXs } = useBreakpointsContext();
-  const navigate = useNavigate();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
   return (
@@ -41,68 +28,10 @@ export function Toolbar({
       >
         <div className="min-w-0">
           <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
-          {pageTitle}
+            {pageTitle}
           </h2>
         </div>
-
-        <Button
-          className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
-          color="primary"
-          onClick={() => navigate("/admin/create")}
-        >
-          <PlusIcon className="size-5" />
-          <span>{t("create") + " " + t("admin")}</span>
-        </Button>
       </div>
-
-      {isXs ? (
-        <>
-          <div
-            className={clsx(
-              "flex space-x-2 pt-4 rtl:space-x-reverse [&_.input-root]:flex-1",
-              isFullScreenEnabled ? "px-4 sm:px-5" : "px-[--margin-x]",
-            )}
-          >
-            <SearchInput table={table} />
-            <TableConfig table={table} />
-          </div>
-          <div
-            className={clsx(
-              "hide-scrollbar flex shrink-0 space-x-2 overflow-x-auto pb-1 pt-4 rtl:space-x-reverse",
-              isFullScreenEnabled ? "px-4 sm:px-5" : "px-[--margin-x]",
-            )}
-          >
-            <Filters
-              table={table}
-              onApplyFilters={onApplyFilters}
-              onClearFilters={onClearFilters}
-            />
-          </div>
-        </>
-      ) : (
-        <div
-          className={clsx(
-            "custom-scrollbar transition-content flex justify-between space-x-4 overflow-x-auto pb-1 pt-4 rtl:space-x-reverse",
-            isFullScreenEnabled ? "px-4 sm:px-5" : "px-[--margin-x]",
-          )}
-          style={{
-            "--margin-scroll": isFullScreenEnabled
-              ? "1.25rem"
-              : "var(--margin-x)",
-          }}
-        >
-          <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
-            <SearchInput table={table} />
-            <Filters
-              table={table}
-              onApplyFilters={onApplyFilters}
-              onClearFilters={onClearFilters}
-            />
-          </div>
-
-          <TableConfig table={table} />
-        </div>
-      )}
     </div>
   );
 }
@@ -134,9 +63,9 @@ function Filters({
     <>
       {table.getColumn("status") && (
         <FacedtedFilter
-          options={statusOptions}
+          options={playerStatusOptions}
           column={table.getColumn("status")}
-          title="Status"
+          title={t("status")}
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}
@@ -166,7 +95,7 @@ function Filters({
             onClick={onClearFilters}
             className="ml-1 h-8 whitespace-nowrap px-2.5 text-xs"
           >
-           {t("reset") + " " + t("filter")}
+            {t("reset") + " " + t("filter")}
           </Button>
         </div>
       )}

@@ -27,7 +27,7 @@ export const columns = [
     }),
     columnHelper.accessor((row) => row.username, {
         id: "username",
-        label: "Username",
+        label: "User Name",
         header: "User Name",
         cell: BoldCell,
         enableSorting: false,

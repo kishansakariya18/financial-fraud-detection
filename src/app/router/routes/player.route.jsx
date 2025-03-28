@@ -1,3 +1,5 @@
+// import { Navigate } from "react-router";
+
 import { Navigate } from "react-router";
 
 export const playerRoutes = [
@@ -15,7 +17,7 @@ export const playerRoutes = [
     children: [
       {
         index: true,
-        element: <Navigate to="details" />,
+        element: <Navigate to="./details" />,
       },
       {
         path: "details",
@@ -28,6 +30,20 @@ export const playerRoutes = [
         path: "limits",
         lazy: async () => ({
           Component: (await import("../../pages/users/player/PlayerLimit"))
+            .default,
+        }),
+      },
+      {
+        path: "transactions",
+        lazy: async () => ({
+          Component: (await import("../../pages/users/player/transaction-list/list"))
+            .default,
+        }),
+      },
+      {
+        path: "login-history",
+        lazy: async () => ({
+          Component: (await import("../../pages/users/player/login-history/list"))
             .default,
         }),
       },

@@ -1,5 +1,6 @@
 // Import Dependencies
 import {
+  FunnelIcon,
   MagnifyingGlassIcon,
   MapPinIcon,
 } from "@heroicons/react/24/outline";
@@ -12,19 +13,16 @@ import { FacedtedFilter } from "components/shared/table/FacedtedFilter";
 import { Button, Input } from "components/ui";
 import { TableConfig } from "components/ui/custom/TableConfig";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
-import { playerStatusOptions } from "../helper";
-import { useTranslation } from "react-i18next";
+import { transactionStatusOption, transactionTypeOption, txnTypeOption } from "../helper";
 import { t } from "i18next";
-
-// ----------------------------------------------------------------------
 
 export function Toolbar({
   table,
   onApplyFilters = () => {},
   onClearFilters = () => {},
+  pageTitle = ''
 }) {
   const { isXs } = useBreakpointsContext();
-  const { t } = useTranslation()
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
   return (
@@ -37,7 +35,7 @@ export function Toolbar({
       >
         <div className="min-w-0">
           <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
-            {t('players')}
+            {pageTitle}
           </h2>
         </div>
       </div>
@@ -121,11 +119,31 @@ function Filters({
     <>
       {table.getColumn("status") && (
         <FacedtedFilter
-          options={playerStatusOptions}
+          options={transactionStatusOption}
           column={table.getColumn("status")}
           title={t("status")}
           Icon={MapPinIcon}
           isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
+      {table.getColumn("type") && (
+        <FacedtedFilter
+          options={transactionTypeOption}
+          column={table.getColumn("type")}
+          title={t("type")}
+          Icon={FunnelIcon}
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
+      {table.getColumn("transactionType") && (
+        <FacedtedFilter
+          options={txnTypeOption}
+          column={table.getColumn("transactionType")}
+          title={t("transaction") + " " + t("type")}
+          Icon={FunnelIcon}
+          isMultiple={false}  
           showCheckbox={false}
         />
       )}

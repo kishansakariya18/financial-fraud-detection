@@ -1,6 +1,6 @@
 // import { replaceText } from '../helpers/functions';
 
-import { playerStatusToAPI } from "app/pages/users/player/helper";
+import { playerStatusToAPI , transactionStatusToAPI, transactionTypeAppToApi, txnTypeToAPI } from "app/pages/users/player/helper";
 import apiConfig from "configs/api.config";
 import dayjs from "dayjs";
 import { sendRequest } from "utils/axios";
@@ -91,16 +91,18 @@ const PlayerService = {
     try {
       const { pagination, filters, playerId } = data;
       const query = {
-        page: +pagination.pageIndex + 1,
+        page: pagination.pageIndex + 1,
         perPage:  pagination?.pageSize,
       };
       const body = {
         userID: playerId,
         filters: {
           keyword: filters?.keyword || undefined,
-          endDate: filters?.endDate || undefined,
-          startDate: filters?.startDate || undefined,
-          type: filters?.type,
+          endDate: ConvertDateIntoUTC(filters?.endDate) || undefined,
+          startDate: ConvertDateIntoUTC(filters?.startDate) || undefined,
+          status: filters.status ? transactionStatusToAPI(filters.status) : undefined,
+          type: filters?.type ? transactionTypeAppToApi(filters.type) : undefined,
+          transactionType: filters?.transactionType ? txnTypeToAPI(filters.transactionType) : undefined
         }
       };
       const endPoint = apiConfig.endPoints.USER.TRANSACTION_LIST;
@@ -190,13 +192,13 @@ const PlayerService = {
       console.log("Error from userTransactionList", error);
     }
   },
-  userStatus: async (userID) => {
+  changePlayerStatus: async (userID) => {
     try {
       const body = {
         userID,
       };
       const endPoint = apiConfig.endPoints.USER.CHANGE_STATUS;
-      const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
         method: "POST",
@@ -439,18 +441,19 @@ const PlayerService = {
     }
   },
 
-  getUserLoginHistory: async (reqBody) => {
+  getPlayerLoginHistory: async (data) => {
     try {
+      const { pagination, playerId } = data;
       const query = {
-        page: +reqBody.currentPage,
-        perPage: +reqBody.perPage,
+        page: pagination.pageIndex + 1,
+        perPage:  pagination?.pageSize,
       };
       const endPoint = replaceText(
         apiConfig.endPoints.USER.LOGIN_HISTORY,
         ":userID",
-        reqBody.userID,
+        playerId,
       );
-      const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
         method: "GET",

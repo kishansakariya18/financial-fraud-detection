@@ -124,6 +124,7 @@ export default function Player() {
     >
       <Toolbar
         table={table}
+        pageTitle={pageTitle}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
       />

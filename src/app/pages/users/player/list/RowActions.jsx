@@ -18,10 +18,10 @@ import PropTypes from "prop-types";
 // Local Imports
 import { ConfirmModal } from "components/shared/ConfirmModal";
 import { Button } from "components/ui";
-import AdminService from "services/admin.services";
 import { TbStatusChange } from "react-icons/tb";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
+import PlayerService from "services/player.services";
 
 const confirmMessages = {
   pending: {
@@ -36,14 +36,14 @@ const confirmMessages = {
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation()
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [chnageStatusModalOpen, setChangeStatusModalOpen] = useState(false);
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
-  const [deleteSuccess, setDeleteSuccess] = useState(false);
-  const [deleteError, setDeleteError] = useState(false);
+  const [changeStatusSuccess, setChangeStatusSuccess] = useState(false);
+  const [changeStatusError, setChangeStatusError] = useState(false);
   const navigate = useNavigate()
 
   const closeModal = () => {
-    setDeleteModalOpen(false);
+    setChangeStatusModalOpen(false);
   };
 
   const handleClickView = () => {
@@ -51,26 +51,26 @@ export function RowActions({ row, table }) {
   }
 
   const openModal = () => {
-    setDeleteModalOpen(true);
-    setDeleteError(false);
-    setDeleteSuccess(false);
+    setChangeStatusModalOpen(true);
+    setChangeStatusError(false);
+    setChangeStatusSuccess(false);
   };
 
-  const handleDeleteRows = useCallback(async () => {
+  const handleChangeStatus = useCallback(async () => {
     setConfirmDeleteLoading(true);
-    const result = await AdminService.changeAdminStatus(row.original.id);
+    const result = await PlayerService.changePlayerStatus(row.original.id);
     if (result.status === 200) {
-      table.options.meta?.deleteRow(row);
-      setDeleteSuccess(true);
+      table.options.meta?.changeStatus(row);
+      setChangeStatusSuccess(true);
     } else {
-      setDeleteError(true);
+      setChangeStatusError(true);
     }
 
     setConfirmDeleteLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [row]);
 
-  const state = deleteError ? "error" : deleteSuccess ? "success" : "pending";
+  const state = changeStatusError ? "error" : changeStatusSuccess ? "success" : "pending";
 
   return (
     <>
@@ -142,10 +142,10 @@ export function RowActions({ row, table }) {
       </div>
 
       <ConfirmModal
-        show={deleteModalOpen}
+        show={chnageStatusModalOpen}
         onClose={closeModal}
         messages={confirmMessages}
-        onOk={handleDeleteRows}
+        onOk={handleChangeStatus}
         confirmLoading={confirmDeleteLoading}
         state={state}
       />

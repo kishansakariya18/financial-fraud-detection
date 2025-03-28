@@ -80,5 +80,10 @@
   "number": "Number",
   "isMasterAdmin": "Is Master Admin?",
   "regarding": "Regarding",
-  "limits": "Limits"
+  "limits": "Limits",
+  "transactions": "Transactions",
+  "transaction": "Transaction",
+  "type": "Type",
+  "login": "Login",
+  "history": "History"
 }

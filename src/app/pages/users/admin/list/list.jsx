@@ -46,17 +46,18 @@ export default function Admin() {
     return { status: result.status, error: result.error };
   };
 
-  const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns,
-    fetchData: fetchAdmin,
-    queryParams,
-    setSearchParams,
-    initialSettings: {
-      columnPinning: { left: ["id"], right: ["actions"] },
-      tableSettings: {},
-      columnVisibility: { firstname: false },
-    },
-  });
+  const { table, isLoading, error, setError, tableSettings, setColumnFilters } =
+    useTable({
+      columns,
+      fetchData: fetchAdmin,
+      queryParams,
+      setSearchParams,
+      initialSettings: {
+        columnPinning: { left: ["id"], right: ["actions"] },
+        tableSettings: {},
+        columnVisibility: { firstname: false },
+      },
+    });
 
   useEffect(() => {
     if (!isLoading && error) {
@@ -65,7 +66,6 @@ export default function Admin() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
-
 
   useEffect(() => {
     const filtersFromQuery = [];
@@ -131,6 +131,7 @@ export default function Admin() {
       enableFullScreen={tableSettings.enableFullScreen}
     >
       <Toolbar
+        pageTitle={pageTitle}
         table={table}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}

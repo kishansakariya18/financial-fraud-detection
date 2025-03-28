@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import { useParams, useSearchParams } from "react-router";
 import { useLockScrollbar } from "hooks";
@@ -21,9 +21,12 @@ export default function PlayerTransactions() {
   const { playerId } = useParams();
   const pageTitle = t("player") + " " + t("transactions");
 
-  const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const queryParams = useMemo(
+    () => getQueryParams(searchParams),
+    [searchParams],
+  );
 
-  const fetchPlayerTransactions = async () => {
+  const fetchPlayerTransactions = useCallback(async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
     const result = await PlayerService.playerTransactions({
@@ -33,7 +36,7 @@ export default function PlayerTransactions() {
     });
 
     if (result.status === 200) {
-      const response = playerTransactionsResponseMapper(result.response.data);
+      const response = playerTransactionsResponseMapper(result.response);
       return {
         status: 200,
         data: response.list,
@@ -41,19 +44,19 @@ export default function PlayerTransactions() {
       };
     }
     return { status: result.status, error: result.error };
-  };
+  }, [queryParams, playerId]);
 
-  const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns,
-    fetchData: fetchPlayerTransactions,
-    queryParams,
-    setSearchParams,
-    initialSettings: {
-      columnPinning: { left: ["id"], right: ["actions"] },
-      tableSettings: {},
-      columnVisibility: { username: false },
-    },
-  });
+  const { table, isLoading, error, setError, tableSettings, setColumnFilters } =
+    useTable({
+      columns,
+      fetchData: fetchPlayerTransactions,
+      queryParams,
+      setSearchParams,
+      initialSettings: {
+        columnPinning: { left: ["id"], right: ["actions"] },
+        tableSettings: {},
+      },
+    });
 
   useEffect(() => {
     if (!isLoading && error) {
@@ -70,6 +73,15 @@ export default function PlayerTransactions() {
     }
     if (queryParams.status) {
       filtersFromQuery.push({ id: "status", value: queryParams.status });
+    }
+    if (queryParams.transactionType ) {
+      filtersFromQuery.push({
+        id: "transactionType",
+        value: queryParams.transactionType,
+      });
+    }
+    if (queryParams.type) {
+      filtersFromQuery.push({ id: "type", value: queryParams.type });
     }
     if (queryParams.startDate && queryParams.endDate) {
       filtersFromQuery.push({
@@ -90,6 +102,12 @@ export default function PlayerTransactions() {
       if (data.id === "status") {
         filterItems.status = data.value;
       }
+      if (data.id === "type") {
+        filterItems.type = data.value;
+      }
+      if (data.id === "transactionType") {  
+        filterItems.transactionType = data.value;
+      }
       if (data.id === "createdAt") {
         filterItems.date = data.value;
       }
@@ -101,6 +119,10 @@ export default function PlayerTransactions() {
       pageSize: 10,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
       ...(filterItems.status && { status: filterItems.status }),
+      ...(filterItems.type && { type: filterItems.type }),
+      ...(filterItems.transactionType && {
+        transactionType: filterItems.transactionType,
+      }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
       ...(filterItems.date && { endDate: filterItems?.date[1] }),
     });
@@ -116,8 +138,16 @@ export default function PlayerTransactions() {
   useLockScrollbar(tableSettings.enableFullScreen);
 
   return (
-    <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
-      <Toolbar table={table} onApplyFilters={applyFilterHandler} onClearFilters={clearFilterHandler} />
+    <ContentWrapper
+      pageTitle={pageTitle}
+      enableFullScreen={tableSettings.enableFullScreen}
+    >
+      <Toolbar
+        table={table}
+        pageTitle={pageTitle}
+        onApplyFilters={applyFilterHandler}
+        onClearFilters={clearFilterHandler}
+      />
       <TableCard tableSettings={tableSettings} table={table} />
     </ContentWrapper>
   );

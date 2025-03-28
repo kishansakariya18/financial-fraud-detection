@@ -75,6 +75,7 @@ const useTable = ({
       pageIndex: pagination.pageIndex,
       pageSize: pagination.pageSize,
     }), { replace: true });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.pageIndex, pagination.pageSize]);
 
   const table = useReactTable({
@@ -92,6 +93,9 @@ const useTable = ({
     },
     meta: {
       deleteRow: async () => {
+        await fetchTableData();
+      },
+      changeStatus: async () => {
         await fetchTableData();
       },
       setTableSettings,

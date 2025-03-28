@@ -13,18 +13,17 @@ import { Button, Input } from "components/ui";
 import { TableConfig } from "components/ui/custom/TableConfig";
 import { useBreakpointsContext } from "app/contexts/breakpoint/context";
 import { playerStatusOptions } from "../helper";
-import { useTranslation } from "react-i18next";
 import { t } from "i18next";
 
 // ----------------------------------------------------------------------
 
 export function Toolbar({
   table,
+  pageTitle='',
   onApplyFilters = () => {},
   onClearFilters = () => {},
 }) {
   const { isXs } = useBreakpointsContext();
-  const { t } = useTranslation()
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
   return (
@@ -37,7 +36,7 @@ export function Toolbar({
       >
         <div className="min-w-0">
           <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
-            {t('players')}
+            {pageTitle}
           </h2>
         </div>
       </div>
