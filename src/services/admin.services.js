@@ -20,7 +20,7 @@ const AdminService = {
           keyword: filters.keyword ? filters.keyword : undefined,
           status: filters.status ? parseAdminStatusToApi(filters.status): undefined,
           start_date: filters.startDate ? dayjs(+filters.startDate).format("YYYY-MM-DD HH:mm:ss") : undefined,
-          end_date: filters.endDate ? dayjs(+filters.endDate).format("YYYY-MM-DD HH:mm:ss") : undefined
+          end_date: filters.endDate ? dayjs(+filters.endDate).hour(23).minute(59).second(59).format("YYYY-MM-DD HH:mm:ss") : undefined
         },
         per_page: pagination?.pageSize || 10,
         page: pagination.pageIndex + 1
