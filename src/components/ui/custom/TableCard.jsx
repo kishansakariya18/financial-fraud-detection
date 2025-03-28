@@ -124,7 +124,7 @@ const TableCard = (props) => {
             </TBody>
           </Table>
         </div>
-        {table.getCoreRowModel().rows.length && (
+        {table.getCoreRowModel().rows.length > 0 && (
           <div
             className={clsx(
               "px-4 pb-4 sm:px-5 sm:pt-4",
