@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 // Local Imports
-import { Button, Card, GhostSpinner } from "components/ui";
+import { Card, GhostSpinner } from "components/ui";
 // import { useKYCFormContext } from "../KYCFormContext";
 // import { declarationSchema } from "../schema";
 import AdminService from "services/admin.services";
@@ -13,7 +13,7 @@ import { parseAdminStatusToApp } from "./helper";
 import { getDateInUTCToTimeZone } from "helpers/functions";
 import { useTranslation } from "react-i18next";
 
-export function ViewDetails({ setCurrentStep }) {
+const ViewDetails = () =>{
   //   const kycFormCtx = useKYCFormContext();
   const { t } = useTranslation();
   const pageTitle = t("admin") + " " + t("details");
@@ -119,12 +119,6 @@ export function ViewDetails({ setCurrentStep }) {
             </div>
 
             <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-              <Button
-                className="min-w-[7rem]"
-                onClick={() => setCurrentStep(2)}
-              >
-                {t("back")}
-              </Button>
               {loading && <GhostSpinner className="size-4 border-2" />}
               {error && <p>{error}</p>}
             </div>
@@ -134,3 +128,5 @@ export function ViewDetails({ setCurrentStep }) {
     </Page>
   );
 }
+
+export default ViewDetails

@@ -47,7 +47,7 @@ export default function Tabs() {
                     )
                   }
                   as={Button}
-                  unstyled
+                  unstyled="true"
                 >
                   <NavLink>
                     <tab.icon className="size-4.5" />
