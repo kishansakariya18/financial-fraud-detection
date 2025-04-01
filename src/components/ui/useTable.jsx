@@ -98,6 +98,9 @@ const useTable = ({
       changeStatus: async () => {
         await fetchTableData();
       },
+      editRow: async () => {
+        await fetchTableData();
+      },
       setTableSettings,
     },
     enableColumnFilters: tableSettings.enableColumnFilters,
