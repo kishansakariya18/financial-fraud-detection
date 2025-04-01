@@ -1,12 +1,8 @@
 // Import Dependencies
-import { Tooltip } from "react-tooltip";
+import { Tooltip } from 'react-tooltip';
 
 // Local Import
-import {
-  injectStyles,
-  insertStylesToHead,
-  makeStyleTag,
-} from "utils/dom/injectStylesToHead";
+import { injectStyles, insertStylesToHead, makeStyleTag } from 'utils/dom/injectStylesToHead';
 
 // ----------------------------------------------------------------------
 

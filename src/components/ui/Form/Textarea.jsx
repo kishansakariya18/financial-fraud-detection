@@ -1,11 +1,11 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import { forwardRef } from "react";
-import clsx from "clsx";
+import PropTypes from 'prop-types';
+import { forwardRef } from 'react';
+import clsx from 'clsx';
 
 // Local Imports
-import { useId } from "hooks";
-import { InputErrorMsg } from "./InputErrorMsg";
+import { useId } from 'hooks';
+import { InputErrorMsg } from './InputErrorMsg';
 
 // ----------------------------------------------------------------------
 
@@ -25,47 +25,35 @@ const Textarea = forwardRef(
       id,
       ...rest
     },
-    ref,
+    ref
   ) => {
-    const Component = component || "textarea";
-    const inputId = useId(id, "textarea");
+    const Component = component || 'textarea';
+    const inputId = useId(id, 'textarea');
 
     return (
       <div className={`input-root ${classNames?.root}`} {...rootProps}>
         {label && (
-          <label
-            htmlFor={inputId}
-            className={`input-label ${classNames?.label}`}
-            {...labelProps}
-          >
-            <span className={`input-label ${classNames?.labelText}`}>
-              {label}
-            </span>
+          <label htmlFor={inputId} className={`input-label ${classNames?.label}`} {...labelProps}>
+            <span className={`input-label ${classNames?.labelText}`}>{label}</span>
           </label>
         )}
 
-        <div
-          className={clsx(
-            "input-wrapper relative",
-            label && "mt-1.5",
-            classNames?.wrapper,
-          )}
-        >
+        <div className={clsx('input-wrapper relative', label && 'mt-1.5', classNames?.wrapper)}>
           <Component
             className={clsx(
-              "form-textarea-base",
+              'form-textarea-base',
               !unstyled && [
-                "form-textarea",
+                'form-textarea',
                 error
-                  ? "border-error dark:border-error-lighter"
+                  ? 'border-error dark:border-error-lighter'
                   : [
                       disabled
-                        ? "cursor-not-allowed border-gray-300 bg-gray-150 opacity-60 dark:border-dark-500 dark:bg-dark-600"
-                        : "peer border-gray-300 hover:border-gray-400 focus:border-primary-600 dark:border-dark-450 dark:hover:border-dark-400 dark:focus:border-primary-500",
-                    ],
+                        ? 'cursor-not-allowed border-gray-300 bg-gray-150 opacity-60 dark:border-dark-500 dark:bg-dark-600'
+                        : 'peer border-gray-300 hover:border-gray-400 focus:border-primary-600 dark:border-dark-450 dark:hover:border-dark-400 dark:focus:border-primary-500'
+                    ]
               ],
               className,
-              classNames?.input,
+              classNames?.input
             )}
             id={inputId}
             ref={ref}
@@ -73,28 +61,24 @@ const Textarea = forwardRef(
             {...rest}
           />
         </div>
-        <InputErrorMsg
-          when={error && typeof error !== "boolean"}
-          className={classNames?.error}
-        >
+        <InputErrorMsg when={error && typeof error !== 'boolean'} className={classNames?.error}>
           {error}
         </InputErrorMsg>
         {description && (
           <span
             className={clsx(
-              "input-description mt-1 text-xs text-gray-400 dark:text-dark-300",
-              classNames?.description,
-            )}
-          >
+              'input-description mt-1 text-xs text-gray-400 dark:text-dark-300',
+              classNames?.description
+            )}>
             {description}
           </span>
         )}
       </div>
     );
-  },
+  }
 );
 
-Textarea.displayName = "Textarea";
+Textarea.displayName = 'Textarea';
 
 Textarea.propTypes = {
   component: PropTypes.elementType,
@@ -107,7 +91,7 @@ Textarea.propTypes = {
   disabled: PropTypes.bool,
   rootProps: PropTypes.object,
   labelProps: PropTypes.object,
-  id: PropTypes.string,
+  id: PropTypes.string
 };
 
 export { Textarea };

@@ -1,10 +1,10 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import { forwardRef } from "react";
+import PropTypes from 'prop-types';
+import { forwardRef } from 'react';
 
 // Local imports
-import { Box } from "components/ui";
-import { AccordionProvider } from "./AccordionProvider";
+import { Box } from 'components/ui';
+import { AccordionProvider } from './AccordionProvider';
 
 // ----------------------------------------------------------------------
 
@@ -29,8 +29,7 @@ const Accordion = forwardRef((props, ref) => {
       defaultValue={defaultValue}
       onChange={onChange}
       transitionDuration={transitionDuration}
-      loop={loop}
-    >
+      loop={loop}>
       <Box {...rest} data-accordion ref={ref}>
         {children}
       </Box>
@@ -47,9 +46,9 @@ Accordion.propTypes = {
   onChange: PropTypes.func,
   transitionDuration: PropTypes.number,
   loop: PropTypes.bool,
-  className: PropTypes.string,
+  className: PropTypes.string
 };
 
-Accordion.displayName = "Accordion";
+Accordion.displayName = 'Accordion';
 
 export { Accordion };

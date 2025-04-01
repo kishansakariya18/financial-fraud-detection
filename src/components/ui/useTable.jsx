@@ -25,8 +25,10 @@ const useTable = ({ columns, fetchData, queryParams, setSearchParams, initialSet
   });
 
   // Fetch data from API with pagination + queryParams
-  const fetchTableData = async () => {
-    setIsLoading(true);
+  const fetchTableData = async (loading = true) => {
+    if (loading) {
+      setIsLoading(true);
+    }
     try {
       const result = await fetchData({
         ...queryParams, // Keep existing filters from URL
@@ -46,7 +48,10 @@ const useTable = ({ columns, fetchData, queryParams, setSearchParams, initialSet
     } catch (err) {
       setError(err.message);
     }
-    setIsLoading(false);
+
+    if (loading) {
+      setIsLoading(false);
+    }
   };
 
   // Re-fetch data when pagination or queryParams change
@@ -90,10 +95,10 @@ const useTable = ({ columns, fetchData, queryParams, setSearchParams, initialSet
     },
     meta: {
       deleteRow: async () => {
-        await fetchTableData();
+        await fetchTableData(false);
       },
       changeStatus: async () => {
-        await fetchTableData();
+        await fetchTableData(false);
       },
       editRow: async () => {
         await fetchTableData();

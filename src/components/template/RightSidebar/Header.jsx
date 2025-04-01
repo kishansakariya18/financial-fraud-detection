@@ -1,17 +1,17 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import dayjs from "dayjs";                  
-import { CalendarIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
+import { CalendarIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 // Local Imports
-import { Button } from "components/ui";
-import { useLocaleContext } from "app/contexts/locale/context";
+import { Button } from 'components/ui';
+import { useLocaleContext } from 'app/contexts/locale/context';
 
 // ----------------------------------------------------------------------
 
 export function Header({ close }) {
   const { locale } = useLocaleContext();
-  const now = dayjs().locale(locale).format("DD MMMM, YYYY");
+  const now = dayjs().locale(locale).format('DD MMMM, YYYY');
 
   return (
     <div className="flex items-center justify-between px-4 py-2">
@@ -23,8 +23,7 @@ export function Header({ close }) {
         onClick={close}
         variant="flat"
         isIcon
-        className="size-6 rounded-full ltr:-mr-1 rtl:-ml-1"
-      >
+        className="size-6 rounded-full ltr:-mr-1 rtl:-ml-1">
         <XMarkIcon className="size-4" />
       </Button>
     </div>
@@ -32,5 +31,5 @@ export function Header({ close }) {
 }
 
 Header.propTypes = {
-  close: PropTypes.func,
+  close: PropTypes.func
 };

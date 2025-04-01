@@ -1,10 +1,10 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import { PrismLight } from "react-syntax-highlighter";
-import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import jsx from "react-syntax-highlighter/dist/esm/languages/prism/jsx";
+import PropTypes from 'prop-types';
+import { PrismLight } from 'react-syntax-highlighter';
+import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import jsx from 'react-syntax-highlighter/dist/esm/languages/prism/jsx';
 
-PrismLight.registerLanguage("jsx", jsx);
+PrismLight.registerLanguage('jsx', jsx);
 
 // ----------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ function SyntaxHighlighter({ children, ...rest }) {
 }
 
 SyntaxHighlighter.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node
 };
 
 export { SyntaxHighlighter };

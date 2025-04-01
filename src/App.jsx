@@ -1,15 +1,15 @@
 // Import Dependencies
-import { RouterProvider } from "react-router";
+import { RouterProvider } from 'react-router';
 
 // Local Imports
-import { BreakpointProvider } from "app/contexts/breakpoint/Provider";
-import { LocaleProvider } from "app/contexts/locale/Provider";
-import { SidebarProvider } from "app/contexts/sidebar/Provider";
-import { ThemeProvider } from "app/contexts/theme/Provider";
-import { TimezoneProvider } from "app/contexts/timezone/Provider"
-import router from "app/router/router";
-import { Provider } from "react-redux";
-import store from "./store/index";
+import { BreakpointProvider } from 'app/contexts/breakpoint/Provider';
+import { LocaleProvider } from 'app/contexts/locale/Provider';
+import { SidebarProvider } from 'app/contexts/sidebar/Provider';
+import { ThemeProvider } from 'app/contexts/theme/Provider';
+import { TimezoneProvider } from 'app/contexts/timezone/Provider';
+import router from 'app/router/router';
+import { Provider } from 'react-redux';
+import store from './store/index';
 
 // ----------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ function App() {
           </BreakpointProvider>
         </LocaleProvider>
       </ThemeProvider>
-      </ Provider>
+    </Provider>
   );
 }
 

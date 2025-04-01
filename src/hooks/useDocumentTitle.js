@@ -1,25 +1,22 @@
-import { useRef } from 'react'
+import { useRef } from 'react';
 
-import { useIsomorphicEffect, useUnmount } from 'hooks'
+import { useIsomorphicEffect, useUnmount } from 'hooks';
 
-export function useDocumentTitle(
-    title,
-    options = {},
-) {
-    const { preserveTitleOnUnmount = true } = options
-    const defaultTitle = useRef(null)
+export function useDocumentTitle(title, options = {}) {
+  const { preserveTitleOnUnmount = true } = options;
+  const defaultTitle = useRef(null);
 
-    useIsomorphicEffect(() => {
-        defaultTitle.current = window.document.title
-    }, [])
+  useIsomorphicEffect(() => {
+    defaultTitle.current = window.document.title;
+  }, []);
 
-    useIsomorphicEffect(() => {
-        window.document.title = title
-    }, [title])
+  useIsomorphicEffect(() => {
+    window.document.title = title;
+  }, [title]);
 
-    useUnmount(() => {
-        if (!preserveTitleOnUnmount && defaultTitle.current) {
-            window.document.title = defaultTitle.current
-        }
-    })
+  useUnmount(() => {
+    if (!preserveTitleOnUnmount && defaultTitle.current) {
+      window.document.title = defaultTitle.current;
+    }
+  });
 }

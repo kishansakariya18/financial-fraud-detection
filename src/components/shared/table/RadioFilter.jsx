@@ -1,21 +1,16 @@
 // Import Dependencies
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxOption,
-  ComboboxOptions,
-} from "@headlessui/react";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import clsx from "clsx";
-import { useEffect, useRef } from "react";
-import PropTypes from "prop-types";
+import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import clsx from 'clsx';
+import { useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 
 // Local Imports
-import { Badge, Button, Input, Radio } from "components/ui";
-import { useBreakpointsContext } from "app/contexts/breakpoint/context";
-import { useFuse } from "hooks";
-import { ResponsiveFilter } from "./ResponsiveFilter";
-import { compareArrays } from "utils/compareArrays";
+import { Badge, Button, Input, Radio } from 'components/ui';
+import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
+import { useFuse } from 'hooks';
+import { ResponsiveFilter } from './ResponsiveFilter';
+import { compareArrays } from 'utils/compareArrays';
 
 // ----------------------------------------------------------------------
 
@@ -24,9 +19,7 @@ export function RadioFilter({ column, options, title, Icon }) {
   useEffect(() => () => column?.setFilterValue(undefined), []);
 
   const selectedValue = column?.getFilterValue() || [];
-  const selectedItem = options.find(({ value }) =>
-    compareArrays(value, selectedValue),
-  );
+  const selectedItem = options.find(({ value }) => compareArrays(value, selectedValue));
 
   return (
     <ResponsiveFilter
@@ -41,8 +34,7 @@ export function RadioFilter({ column, options, title, Icon }) {
             </>
           )}
         </>
-      }
-    >
+      }>
       <Content {...{ column, title, options }} />
     </ResponsiveFilter>
   );
@@ -55,11 +47,11 @@ function Content({ column, title, options }) {
   const {
     result: filteredItems,
     query,
-    setQuery,
+    setQuery
   } = useFuse(options, {
-    keys: ["label"],
+    keys: ['label'],
     threshold: 0.2,
-    matchAllOnEmptyQuery: true,
+    matchAllOnEmptyQuery: true
   });
 
   const selectedValue = column?.getFilterValue() || [];
@@ -74,8 +66,7 @@ function Content({ column, title, options }) {
       value={options.find((item) => item.value === selectedValue) || null}
       onChange={(item) => {
         if (item) column.setFilterValue(item?.value);
-      }}
-    >
+      }}>
       <div className="relative">
         <div className="relative bg-gray-100 py-1 dark:bg-dark-900">
           <ComboboxInput
@@ -89,11 +80,8 @@ function Content({ column, title, options }) {
           />
         </div>
 
-        <ComboboxOptions
-          static
-          className="max-h-72 w-full overflow-y-auto py-1 outline-none"
-        >
-          {filteredItems.length === 0 && query !== "" ? (
+        <ComboboxOptions static className="max-h-72 w-full overflow-y-auto py-1 outline-none">
+          {filteredItems.length === 0 && query !== '' ? (
             <div className="relative cursor-default select-none px-2.5 py-2 text-gray-800 dark:text-dark-100">
               Nothing found for {query}
             </div>
@@ -103,18 +91,15 @@ function Content({ column, title, options }) {
                 key={refIndex}
                 className={({ focus }) =>
                   clsx(
-                    "relative cursor-pointer select-none px-2.5 py-2 text-gray-800 outline-none transition-colors dark:text-dark-100",
-                    focus && "bg-gray-100 dark:bg-dark-600",
+                    'relative cursor-pointer select-none px-2.5 py-2 text-gray-800 outline-none transition-colors dark:text-dark-100',
+                    focus && 'bg-gray-100 dark:bg-dark-600'
                   )
                 }
-                value={item}
-              >
+                value={item}>
                 {({ selected }) => (
                   <div className="flex min-w-0 items-center space-x-2">
                     <Radio checked={selected} readOnly />
-                    <span className="block truncate text-xs+">
-                      {item.label}
-                    </span>
+                    <span className="block truncate text-xs+">{item.label}</span>
                   </div>
                 )}
               </ComboboxOption>
@@ -122,10 +107,7 @@ function Content({ column, title, options }) {
           )}
         </ComboboxOptions>
         {selectedValue?.length > 0 && (
-          <Button
-            onClick={() => column?.setFilterValue(undefined)}
-            className="w-full rounded-none"
-          >
+          <Button onClick={() => column?.setFilterValue(undefined)} className="w-full rounded-none">
             Clear Filter
           </Button>
         )}
@@ -138,12 +120,12 @@ RadioFilter.propTypes = {
   column: PropTypes.object,
   options: PropTypes.array,
   title: PropTypes.string,
-  Icon: PropTypes.elementType,
+  Icon: PropTypes.elementType
 };
 
 Content.propTypes = {
   column: PropTypes.object,
   options: PropTypes.array,
   title: PropTypes.string,
-  Icon: PropTypes.elementType,
+  Icon: PropTypes.elementType
 };

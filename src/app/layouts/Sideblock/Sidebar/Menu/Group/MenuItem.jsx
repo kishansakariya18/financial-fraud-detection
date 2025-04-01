@@ -1,13 +1,13 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import clsx from "clsx";
-import { NavLink, useRouteLoaderData } from "react-router";
-import { useTranslation } from "react-i18next";
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
+import { NavLink, useRouteLoaderData } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 // Local Imports
-import { Badge } from "components/ui";
-import { useBreakpointsContext } from "app/contexts/breakpoint/context";
-import { useSidebarContext } from "app/contexts/sidebar/context";
+import { Badge } from 'components/ui';
+import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
+import { useSidebarContext } from 'app/contexts/sidebar/context';
 
 // ----------------------------------------------------------------------
 
@@ -19,7 +19,7 @@ export function MenuItem({ data }) {
 
   const title = t(transKey) || data.title;
 
-  const info = useRouteLoaderData("root")?.[id]?.info;
+  const info = useRouteLoaderData('root')?.[id]?.info;
 
   const handleMenuItemClick = () => lgAndDown && close();
 
@@ -30,25 +30,23 @@ export function MenuItem({ data }) {
         onClick={handleMenuItemClick}
         className={({ isActive }) =>
           clsx(
-            "group min-w-0 flex-1 rounded-md px-3 py-2 font-medium outline-none transition-colors ease-in-out",
+            'group min-w-0 flex-1 rounded-md px-3 py-2 font-medium outline-none transition-colors ease-in-out',
             isActive
-              ? "text-primary-600 dark:text-primary-400"
-              : "text-gray-800 hover:bg-gray-100 hover:text-gray-950 focus:bg-gray-100 focus:text-gray-950 dark:text-dark-200 dark:hover:bg-dark-300/10 dark:hover:text-dark-50 dark:focus:bg-dark-300/10",
+              ? 'text-primary-600 dark:text-primary-400'
+              : 'text-gray-800 hover:bg-gray-100 hover:text-gray-950 focus:bg-gray-100 focus:text-gray-950 dark:text-dark-200 dark:hover:bg-dark-300/10 dark:hover:text-dark-50 dark:focus:bg-dark-300/10'
           )
-        }
-      >
+        }>
         {({ isActive }) => (
           <>
             <div
               data-menu-active={isActive}
-              className="flex min-w-0 items-center justify-between gap-2 text-xs+ tracking-wide"
-            >
+              className="flex min-w-0 items-center justify-between gap-2 text-xs+ tracking-wide">
               <div className="flex min-w-0 items-center gap-3">
                 {Icon && (
                   <Icon
                     className={clsx(
-                      "size-5 shrink-0 stroke-[1.5]",
-                      !isActive && "opacity-80 group-hover:opacity-100",
+                      'size-5 shrink-0 stroke-[1.5]',
+                      !isActive && 'opacity-80 group-hover:opacity-100'
                     )}
                   />
                 )}
@@ -58,8 +56,7 @@ export function MenuItem({ data }) {
                 <Badge
                   color={info.color}
                   variant="soft"
-                  className="h-4.5 min-w-[1rem] shrink-0 p-[5px] text-tiny+"
-                >
+                  className="h-4.5 min-w-[1rem] shrink-0 p-[5px] text-tiny+">
                   {info.val}
                 </Badge>
               )}
@@ -75,5 +72,5 @@ export function MenuItem({ data }) {
 }
 
 MenuItem.propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.object
 };

@@ -1,5 +1,5 @@
-import apiConfig from "configs/api.config";
-import { sendRequest } from "utils/axios";
+import apiConfig from 'configs/api.config';
+import { sendRequest } from 'utils/axios';
 
 const PlatformLimitService = {
   getPlatoformLimit: async () => {
@@ -8,14 +8,14 @@ const PlatformLimitService = {
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
-        },
+          'Content-Type': 'application/json'
+        }
       });
       return response;
     } catch (error) {
-      console.log("Error from Risk management List", error);
+      console.log('Error from Risk management List', error);
     }
   },
   updatePlatformLimit: async (data) => {
@@ -32,17 +32,17 @@ const PlatformLimitService = {
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json'
         },
-        body: apiBodyData,
+        body: apiBodyData
       });
       return response;
     } catch (error) {
-      console.log("Error from Risk management Update", error);
+      console.log('Error from Risk management Update', error);
     }
-  },
+  }
 };
 
 export default PlatformLimitService;

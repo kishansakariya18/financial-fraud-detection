@@ -1,30 +1,27 @@
-import { useCallback, useEffect, useMemo } from "react";
-import { toast } from "sonner";
-import { useParams, useSearchParams } from "react-router";
-import { useLockScrollbar } from "hooks";
+import { useCallback, useEffect, useMemo } from 'react';
+import { toast } from 'sonner';
+import { useParams, useSearchParams } from 'react-router';
+import { useLockScrollbar } from 'hooks';
 
 // Local Imports - UI, Services, Helpers, Utils
-import { Toolbar } from "./Toolbar";
-import { columns } from "./columns";
-import TableCard from "components/ui/custom/TableCard";
-import ContentWrapper from "components/ui/custom/ContentWrapper";
+import { Toolbar } from './Toolbar';
+import { columns } from './columns';
+import TableCard from 'components/ui/custom/TableCard';
+import ContentWrapper from 'components/ui/custom/ContentWrapper';
 
-import PlayerService from "services/player.services";
-import { playerTransactionsResponseMapper } from "../helper";
-import { getQueryParams, isEmptyObject } from "utils/custom.utilities";
-import { useTranslation } from "react-i18next";
-import useTable from "components/ui/useTable";
+import PlayerService from 'services/player.services';
+import { playerTransactionsResponseMapper } from '../helper';
+import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
+import { useTranslation } from 'react-i18next';
+import useTable from 'components/ui/useTable';
 
 export default function PlayerTransactions() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const { playerId } = useParams();
-  const pageTitle = t("player") + " " + t("transactions");
+  const pageTitle = t('player') + ' ' + t('transactions');
 
-  const queryParams = useMemo(
-    () => getQueryParams(searchParams),
-    [searchParams],
-  );
+  const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const fetchPlayerTransactions = useCallback(async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
@@ -32,7 +29,7 @@ export default function PlayerTransactions() {
     const result = await PlayerService.playerTransactions({
       pagination: { pageIndex, pageSize },
       filters: queryParams,
-      playerId,
+      playerId
     });
 
     if (result.status === 200) {
@@ -40,28 +37,27 @@ export default function PlayerTransactions() {
       return {
         status: 200,
         data: response.list,
-        totalRecords: response.totalRecords || 0,
+        totalRecords: response.totalRecords || 0
       };
     }
     return { status: result.status, error: result.error };
   }, [queryParams, playerId]);
 
-  const { table, isLoading, error, setError, tableSettings, setColumnFilters } =
-    useTable({
-      columns,
-      fetchData: fetchPlayerTransactions,
-      queryParams,
-      setSearchParams,
-      initialSettings: {
-        columnPinning: { left: ["id"], right: ["actions"] },
-        tableSettings: {},
-      },
-    });
+  const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
+    columns,
+    fetchData: fetchPlayerTransactions,
+    queryParams,
+    setSearchParams,
+    initialSettings: {
+      columnPinning: { left: ['id'], right: ['actions'] },
+      tableSettings: {}
+    }
+  });
 
   useEffect(() => {
     if (!isLoading && error) {
       toast.error(error);
-      setError("");
+      setError('');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
@@ -69,24 +65,24 @@ export default function PlayerTransactions() {
   useEffect(() => {
     const filtersFromQuery = [];
     if (queryParams.keyword) {
-      filtersFromQuery.push({ id: "username", value: queryParams.keyword });
+      filtersFromQuery.push({ id: 'username', value: queryParams.keyword });
     }
     if (queryParams.status) {
-      filtersFromQuery.push({ id: "status", value: queryParams.status });
+      filtersFromQuery.push({ id: 'status', value: queryParams.status });
     }
-    if (queryParams.transactionType ) {
+    if (queryParams.transactionType) {
       filtersFromQuery.push({
-        id: "transactionType",
-        value: queryParams.transactionType,
+        id: 'transactionType',
+        value: queryParams.transactionType
       });
     }
     if (queryParams.type) {
-      filtersFromQuery.push({ id: "type", value: queryParams.type });
+      filtersFromQuery.push({ id: 'type', value: queryParams.type });
     }
     if (queryParams.startDate && queryParams.endDate) {
       filtersFromQuery.push({
-        id: "createdAt",
-        value: [+queryParams.startDate, +queryParams.endDate],
+        id: 'createdAt',
+        value: [+queryParams.startDate, +queryParams.endDate]
       });
     }
     setColumnFilters(filtersFromQuery);
@@ -96,19 +92,19 @@ export default function PlayerTransactions() {
   const applyFilterHandler = () => {
     const filterItems = {};
     for (let data of table.getState().columnFilters) {
-      if (data.id === "username") {
+      if (data.id === 'username') {
         filterItems.keyword = data.value;
       }
-      if (data.id === "status") {
+      if (data.id === 'status') {
         filterItems.status = data.value;
       }
-      if (data.id === "type") {
+      if (data.id === 'type') {
         filterItems.type = data.value;
       }
-      if (data.id === "transactionType") {  
+      if (data.id === 'transactionType') {
         filterItems.transactionType = data.value;
       }
-      if (data.id === "createdAt") {
+      if (data.id === 'createdAt') {
         filterItems.date = data.value;
       }
     }
@@ -121,10 +117,10 @@ export default function PlayerTransactions() {
       ...(filterItems.status && { status: filterItems.status }),
       ...(filterItems.type && { type: filterItems.type }),
       ...(filterItems.transactionType && {
-        transactionType: filterItems.transactionType,
+        transactionType: filterItems.transactionType
       }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
-      ...(filterItems.date && { endDate: filterItems?.date[1] }),
+      ...(filterItems.date && { endDate: filterItems?.date[1] })
     });
   };
 
@@ -138,10 +134,7 @@ export default function PlayerTransactions() {
   useLockScrollbar(tableSettings.enableFullScreen);
 
   return (
-    <ContentWrapper
-      pageTitle={pageTitle}
-      enableFullScreen={tableSettings.enableFullScreen}
-    >
+    <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
       <Toolbar
         table={table}
         pageTitle={pageTitle}

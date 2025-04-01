@@ -1,5 +1,5 @@
-import { createSafeContext } from "utils/createSafeContext";
+import { createSafeContext } from 'utils/createSafeContext';
 
 export const [LocaleContext, useLocaleContext] = createSafeContext(
-    "useLocaleContext must be used within LocaleProvider",
+  'useLocaleContext must be used within LocaleProvider'
 );

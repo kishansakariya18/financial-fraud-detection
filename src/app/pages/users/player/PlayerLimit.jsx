@@ -1,50 +1,50 @@
 // Local Imports
-import { Box, Button, GhostSpinner, Input, Switch } from "components/ui";
-import { Page } from "components/shared/Page";
-import { Breadcrumbs } from "components/shared/Breadcrumbs";
-import { Controller, useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { useParams } from "react-router";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect, useState } from "react";
-import PlayerService from "services/player.services";
-import { ContextualHelp } from "components/shared/ContextualHelp";
-import { playerLimitSchema } from "./schema";
-import { Listbox } from "components/shared/form/Listbox";
-import { DatePicker } from "components/shared/form/Datepicker";
-import { getDateInUTCToTimeZone } from "helpers/functions";
-import { useTranslation } from "react-i18next";
+import { Box, Button, GhostSpinner, Input, Switch } from 'components/ui';
+import { Page } from 'components/shared/Page';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { useParams } from 'react-router';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useEffect, useState } from 'react';
+import PlayerService from 'services/player.services';
+import { ContextualHelp } from 'components/shared/ContextualHelp';
+import { playerLimitSchema } from './schema';
+import { Listbox } from 'components/shared/form/Listbox';
+import { DatePicker } from 'components/shared/form/Datepicker';
+import { getDateInUTCToTimeZone } from 'helpers/functions';
+import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
-const breadcrumbs = [{ title: "Players", path: "/player" }, { title: "Limit" }];
+const breadcrumbs = [{ title: 'Players', path: '/player' }, { title: 'Limit' }];
 const exclusionTimeOptions = [
-  { label: "1 day", value: "1" },
-  { label: "7 day", value: "2" },
-  { label: "1 month", value: "3" },
-  { label: "6 month", value: "4" },
-  { label: "12 month", value: "5" },
-  { label: "custom", value: "6" },
-  { label: "permanent", value: "7" },
+  { label: '1 day', value: '1' },
+  { label: '7 day', value: '2' },
+  { label: '1 month', value: '3' },
+  { label: '6 month', value: '4' },
+  { label: '12 month', value: '5' },
+  { label: 'custom', value: '6' },
+  { label: 'permanent', value: '7' }
 ];
 
 const PlayerLimit = () => {
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const { playerId } = useParams();
-  const [exclusionType, setExclusionType] = useState("");
-  const { t } = useTranslation()
-  const pageTitle = t("player") + " " + t("limit")
+  const [exclusionType, setExclusionType] = useState('');
+  const { t } = useTranslation();
+  const pageTitle = t('player') + ' ' + t('limit');
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-    control,
+    control
   } = useForm({
-    resolver: yupResolver(playerLimitSchema),
+    resolver: yupResolver(playerLimitSchema)
   });
 
   useEffect(() => {
@@ -67,13 +67,13 @@ const PlayerLimit = () => {
             selfExclusionType: result.ExclusionType,
             exclusionStartAt: getDateInUTCToTimeZone(
               result.ExclusionStartAt,
-              "Asia/Kolkata",
-              "YYYY-MM-DD HH:mm",
+              'Asia/Kolkata',
+              'YYYY-MM-DD HH:mm'
             ),
             exclusionEndAt: getDateInUTCToTimeZone(
               result.ExclusionEndAt,
-              "Asia/Kolkata",
-              "YYYY-MM-DD HH:mm",
+              'Asia/Kolkata',
+              'YYYY-MM-DD HH:mm'
             ),
 
             // Flags
@@ -88,7 +88,7 @@ const PlayerLimit = () => {
             hasMonthlyWithdrawLimit: result.HasMaxWithdrawPerMonthLimit,
             hasDailyLossLimit: result.HasDailyLossLimit,
             hasWeeklyLossLimit: result.HasWeeklyLossLimit,
-            hasMonthlyLossLimit: result.HasMonthlyLossLimit,
+            hasMonthlyLossLimit: result.HasMonthlyLossLimit
           });
         }
       });
@@ -110,10 +110,7 @@ const PlayerLimit = () => {
   const updatePlayerLimit = async (requestObject) => {
     setLoading(true);
     setError(null);
-    const result = await PlayerService.updateRiskManagementFields(
-      requestObject,
-      playerId,
-    );
+    const result = await PlayerService.updateRiskManagementFields(requestObject, playerId);
     if (result) {
       if (result.status === 200 || result.status === 201) {
         setResponse(result.response);
@@ -126,7 +123,7 @@ const PlayerLimit = () => {
 
   if (!loading && error) {
     toast.error(error);
-    setError("");
+    setError('');
   }
 
   useEffect(() => {
@@ -167,21 +164,21 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                 {t("dailyWagerLimit")}
+                  {t('dailyWagerLimit')}
                 </h2>
-                <Switch {...register("hasDailyWagerLimit")} label="" />
+                <Switch {...register('hasDailyWagerLimit')} label="" />
               </div>
               <div className="pt-2">
                 <div className="max-w-xl">
                   <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
                     <Input
                       id="dailyWagerLimit"
-                      {...register("dailyWagerLimit")}
+                      {...register('dailyWagerLimit')}
                       error={errors?.dailyWagerLimit?.message}
                       placeholder="Enter Daily Wager Limit"
                       classNames={{
-                        root: "flex-1",
-                        input: "relative rounded-none hover:z-1 focus:z-1",
+                        root: 'flex-1',
+                        input: 'relative rounded-none hover:z-1 focus:z-1'
                       }}
                     />
                   </div>
@@ -191,22 +188,22 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                {t("weeklyWagerLimit")}
+                  {t('weeklyWagerLimit')}
                 </h2>
 
-                <Switch {...register("hasWeeklyWagerLimit")} label="" />
+                <Switch {...register('hasWeeklyWagerLimit')} label="" />
               </div>
               <div className="pt-2">
                 <div className="max-w-xl">
                   <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
                     <Input
-                      {...register("weeklyWagerLimit")}
+                      {...register('weeklyWagerLimit')}
                       error={errors?.weeklyWagerLimit?.message}
                       id="weeklyWagerLimit"
                       placeholder="Enter Weekly Wager Limit"
                       classNames={{
-                        root: "flex-1",
-                        input: "relative rounded-none hover:z-1 focus:z-1",
+                        root: 'flex-1',
+                        input: 'relative rounded-none hover:z-1 focus:z-1'
                       }}
                     />
                   </div>
@@ -216,22 +213,22 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                {t("monthlyWagerLimit")}
+                  {t('monthlyWagerLimit')}
                 </h2>
 
-                <Switch {...register("hasMonthlyWagerLimit")} label="" />
+                <Switch {...register('hasMonthlyWagerLimit')} label="" />
               </div>
               <div className="pt-2">
                 <div className="max-w-xl">
                   <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
                     <Input
-                      {...register("monthlyWagerLimit")}
+                      {...register('monthlyWagerLimit')}
                       error={errors?.monthlyWagerLimit?.message}
                       id="monthlyWagerLimit"
                       placeholder="Enter Monthly Wager Limit"
                       classNames={{
-                        root: "flex-1",
-                        input: "relative rounded-none hover:z-1 focus:z-1",
+                        root: 'flex-1',
+                        input: 'relative rounded-none hover:z-1 focus:z-1'
                       }}
                     />
                   </div>
@@ -241,21 +238,21 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                {t("dailyDepositLimit")}
+                  {t('dailyDepositLimit')}
                 </h2>
-                <Switch {...register("hasDailyDepositLimit")} label="" />
+                <Switch {...register('hasDailyDepositLimit')} label="" />
               </div>
               <div className="pt-2">
                 <div className="max-w-xl">
                   <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
                     <Input
-                      {...register("dailyDepositLimit")}
+                      {...register('dailyDepositLimit')}
                       error={errors?.dailyDepositLimit?.message}
                       id="dailyDepositLimit"
                       placeholder="Enter Daily Deposit Limit"
                       classNames={{
-                        root: "flex-1",
-                        input: "relative rounded-none hover:z-1 focus:z-1",
+                        root: 'flex-1',
+                        input: 'relative rounded-none hover:z-1 focus:z-1'
                       }}
                     />
                   </div>
@@ -265,21 +262,21 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                {t("weeklyDepositLimit")}
+                  {t('weeklyDepositLimit')}
                 </h2>
-                <Switch {...register("hasWeeklyDepositLimit")} label="" />
+                <Switch {...register('hasWeeklyDepositLimit')} label="" />
               </div>
               <div className="pt-2">
                 <div className="max-w-xl">
                   <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
                     <Input
-                      {...register("weeklyDepositLimit")}
+                      {...register('weeklyDepositLimit')}
                       error={errors?.weeklyDepositLimit?.message}
                       id="weeklyDepositLimit"
                       placeholder="Enter Weekly Deposit Limit"
                       classNames={{
-                        root: "flex-1",
-                        input: "relative rounded-none hover:z-1 focus:z-1",
+                        root: 'flex-1',
+                        input: 'relative rounded-none hover:z-1 focus:z-1'
                       }}
                     />
                   </div>
@@ -289,22 +286,21 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                {t("monthlyDepositLimit")}
-
+                  {t('monthlyDepositLimit')}
                 </h2>
-                <Switch {...register("hasMonthlyDepositLimit")} label="" />
+                <Switch {...register('hasMonthlyDepositLimit')} label="" />
               </div>
               <div className="pt-2">
                 <div className="max-w-xl">
                   <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
                     <Input
-                      {...register("monthlyDepositLimit")}
+                      {...register('monthlyDepositLimit')}
                       error={errors?.monthlyDepositLimit?.message}
                       id="monthlyDepositLimit"
                       placeholder="Enter Monthly Deposit Limit"
                       classNames={{
-                        root: "flex-1",
-                        input: "relative rounded-none hover:z-1 focus:z-1",
+                        root: 'flex-1',
+                        input: 'relative rounded-none hover:z-1 focus:z-1'
                       }}
                     />
                   </div>
@@ -314,21 +310,21 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                {t("dailyWithdrawLimit")}
+                  {t('dailyWithdrawLimit')}
                 </h2>
-                <Switch {...register("hasDailyWithdrawLimit")} label="" />
+                <Switch {...register('hasDailyWithdrawLimit')} label="" />
               </div>
               <div className="pt-2">
                 <div className="max-w-xl">
                   <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
                     <Input
-                      {...register("dailyWithdrawLimit")}
+                      {...register('dailyWithdrawLimit')}
                       error={errors?.dailyWithdrawLimit?.message}
                       id="dailyWithdrawLimit"
                       placeholder="Enter Daily Withdraw Limit"
                       classNames={{
-                        root: "flex-1",
-                        input: "relative rounded-none hover:z-1 focus:z-1",
+                        root: 'flex-1',
+                        input: 'relative rounded-none hover:z-1 focus:z-1'
                       }}
                     />
                   </div>
@@ -338,21 +334,21 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                {t("weeklyWithdrawLimit")}
+                  {t('weeklyWithdrawLimit')}
                 </h2>
-                <Switch {...register("hasWeeklyWithdrawLimit")} label="" />
+                <Switch {...register('hasWeeklyWithdrawLimit')} label="" />
               </div>
               <div className="pt-2">
                 <div className="max-w-xl">
                   <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
                     <Input
-                      {...register("weeklyWithdrawLimit")}
+                      {...register('weeklyWithdrawLimit')}
                       error={errors?.weeklyWithdrawLimit?.message}
                       id="weeklyWithdrawLimit"
                       placeholder="Enter Weekly Withdraw Limit"
                       classNames={{
-                        root: "flex-1",
-                        input: "relative rounded-none hover:z-1 focus:z-1",
+                        root: 'flex-1',
+                        input: 'relative rounded-none hover:z-1 focus:z-1'
                       }}
                     />
                   </div>
@@ -362,21 +358,21 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                {t("monthlyWithdrawLimit")}
+                  {t('monthlyWithdrawLimit')}
                 </h2>
-                <Switch {...register("hasMonthlyWithdrawLimit")} label="" />
+                <Switch {...register('hasMonthlyWithdrawLimit')} label="" />
               </div>
               <div className="pt-2">
                 <div className="max-w-xl">
                   <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
                     <Input
-                      {...register("monthlyWithdrawLimit")}
+                      {...register('monthlyWithdrawLimit')}
                       error={errors?.monthlyWithdrawLimit?.message}
                       id="monthlyWithdrawLimit"
                       placeholder="Enter Monthly Withdraw Limit"
                       classNames={{
-                        root: "flex-1",
-                        input: "relative rounded-none hover:z-1 focus:z-1",
+                        root: 'flex-1',
+                        input: 'relative rounded-none hover:z-1 focus:z-1'
                       }}
                     />
                   </div>
@@ -388,31 +384,31 @@ const PlayerLimit = () => {
               <div className="mt-1.5 flex items-center justify-between">
                 <div className="flex flex-wrap gap-1">
                   <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                  {t("dailyLossLimit")}
+                    {t('dailyLossLimit')}
                   </h2>
                   <ContextualHelp
                     title="What is a Contextual help ?"
                     content={
                       <p>
-                        Contextual help shows a user extra information about the
-                        state of an adjacent component, or a total view.
+                        Contextual help shows a user extra information about the state of an
+                        adjacent component, or a total view.
                       </p>
                     }
                   />
                 </div>
-                <Switch {...register("hasDailyLossLimit")} label="" />
+                <Switch {...register('hasDailyLossLimit')} label="" />
               </div>
               <div className="pt-2">
                 <div className="max-w-xl">
                   <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
                     <Input
-                      {...register("dailyLossLimit")}
+                      {...register('dailyLossLimit')}
                       error={errors?.dailyLossLimit?.message}
                       id="dailyLossLimit"
                       placeholder="Enter Daily Loss Limit"
                       classNames={{
-                        root: "flex-1",
-                        input: "relative rounded-none hover:z-1 focus:z-1",
+                        root: 'flex-1',
+                        input: 'relative rounded-none hover:z-1 focus:z-1'
                       }}
                     />
                   </div>
@@ -422,21 +418,21 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                {t("weeklyLossLimit")}
+                  {t('weeklyLossLimit')}
                 </h2>
-                <Switch {...register("hasWeeklyLossLimit")} label="" />
+                <Switch {...register('hasWeeklyLossLimit')} label="" />
               </div>
               <div className="pt-2">
                 <div className="max-w-xl">
                   <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
                     <Input
-                      {...register("weeklyLossLimit")}
+                      {...register('weeklyLossLimit')}
                       error={errors?.weeklyLossLimit?.message}
                       id="weeklyLossLimit"
                       placeholder="Enter Weekly Loss Limit"
                       classNames={{
-                        root: "flex-1",
-                        input: "relative rounded-none hover:z-1 focus:z-1",
+                        root: 'flex-1',
+                        input: 'relative rounded-none hover:z-1 focus:z-1'
                       }}
                     />
                   </div>
@@ -446,21 +442,21 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div className="mt-1.5 flex items-center justify-between">
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                {t("monthlyLossLimit")}
+                  {t('monthlyLossLimit')}
                 </h2>
-                <Switch {...register("hasMonthlyLossLimit")} label="" />
+                <Switch {...register('hasMonthlyLossLimit')} label="" />
               </div>
               <div className="pt-2">
                 <div className="max-w-xl">
                   <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
                     <Input
-                      {...register("monthlyLossLimit")}
+                      {...register('monthlyLossLimit')}
                       error={errors?.monthlyLossLimit?.message}
                       id="monthlyLossLimit"
                       placeholder="Enter Monthly Loss Limit"
                       classNames={{
-                        root: "flex-1",
-                        input: "relative rounded-none hover:z-1 focus:z-1",
+                        root: 'flex-1',
+                        input: 'relative rounded-none hover:z-1 focus:z-1'
                       }}
                     />
                   </div>
@@ -470,7 +466,7 @@ const PlayerLimit = () => {
             <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
               <div>
                 <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                {t("selfExclusionTime")}
+                  {t('selfExclusionTime')}
                 </h2>
               </div>
               <div className="pt-2">
@@ -482,13 +478,10 @@ const PlayerLimit = () => {
                           data={exclusionTimeOptions}
                           value={
                             exclusionTimeOptions.find(
-                              (exclusionTime) =>
-                                +exclusionTime.value === +field.value,
+                              (exclusionTime) => +exclusionTime.value === +field.value
                             ) || null
                           }
-                          onChange={(val) =>
-                            handleChangeExclusionType(field, val)
-                          }
+                          onChange={(val) => handleChangeExclusionType(field, val)}
                           name={field.name}
                           placeholder="Select Self Exclusion Type"
                           displayField="label"
@@ -507,13 +500,13 @@ const PlayerLimit = () => {
                           render={({ field: { onChange, value, ...rest } }) => (
                             <DatePicker
                               onChange={onChange}
-                              value={value || ""}
+                              value={value || ''}
                               label="Exclusion Start At"
                               error={errors?.exclusionStartAt?.message}
                               options={{
                                 disableMobile: true,
                                 enableTime: true,
-                                time_24hr: true,
+                                time_24hr: true
                               }}
                               placeholder="Choose date..."
                               {...rest}
@@ -526,13 +519,13 @@ const PlayerLimit = () => {
                           render={({ field: { onChange, value, ...rest } }) => (
                             <DatePicker
                               onChange={onChange}
-                              value={value || ""}
+                              value={value || ''}
                               label="Exclusion End At"
                               error={errors?.exclusionEndAt?.message}
                               options={{
                                 disableMobile: true,
                                 enableTime: true,
-                                time_24hr: true,
+                                time_24hr: true
                               }}
                               placeholder="Choose date..."
                               {...rest}
@@ -550,20 +543,11 @@ const PlayerLimit = () => {
           </div>
 
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-            <Button
-              className="min-w-[7rem]"
-              onClick={() => reset()}
-              disabled={loading}
-            >
-              {t("reset")}
+            <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
+              {t('reset')}
             </Button>
-            <Button
-              type="submit"
-              className="min-w-[7rem]"
-              color="primary"
-              disabled={loading}
-            >
-              {t("update")}
+            <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
+              {t('update')}
             </Button>
           </div>
         </form>

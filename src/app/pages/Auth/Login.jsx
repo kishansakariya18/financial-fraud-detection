@@ -1,38 +1,35 @@
 // Import Dependencies
-import { useLocation, useNavigate } from "react-router";
-import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import { useLocation, useNavigate } from 'react-router';
+import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
 
 // Local Imports
-import Logo from "assets/appLogo.svg?react";
-import { Button, Card, Checkbox, Input } from "components/ui";
-import { loginSchema } from "./schema";
-import { Page } from "components/shared/Page";
-import AuthService from "services/auth.services";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import  { AuthAction } from "store/admin-slice/AuthSlice";
-import { LOCAL_STORAGE } from "constants/app.constant";
-import { toast } from "sonner";
+import Logo from 'assets/appLogo.svg?react';
+import { Button, Card, Checkbox, Input } from 'components/ui';
+import { loginSchema } from './schema';
+import { Page } from 'components/shared/Page';
+import AuthService from 'services/auth.services';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { AuthAction } from 'store/admin-slice/AuthSlice';
+import { LOCAL_STORAGE } from 'constants/app.constant';
+import { toast } from 'sonner';
 
 // ----------------------------------------------------------------------
 
 export default function Login() {
-  
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm({
     resolver: yupResolver(loginSchema),
     defaultValues: {
-      mobile: "",
-      password: "",
-    },
+      mobile: '',
+      password: ''
+    }
   });
-
-
 
   const [response, setResponse] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -48,9 +45,8 @@ export default function Login() {
     if (isLoggedIn) {
       navigate(state?.path || '/');
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   const submitHandler = async (data) => {
     setIsLoading(true);
@@ -58,7 +54,7 @@ export default function Login() {
     const result = await AuthService.login(data);
     if (result) {
       if (result.status === 200) {
-        if(!result.response.data?.mfaEnabled) {
+        if (!result.response.data?.mfaEnabled) {
           localStorage.setItem(LOCAL_STORAGE.AUTH_TOKEN, result.response.data.UserToken);
           const responseData = await performPostLoginActions();
           setResponse({
@@ -71,7 +67,6 @@ export default function Login() {
         }
         setValidateResponse({ ...result.response.data, userPassword: data.password });
         setValidateMessage(result.response.message);
-       
       } else {
         setError(result.error);
       }
@@ -80,44 +75,44 @@ export default function Login() {
   };
 
   if (!isLoading && error) {
-    toast.error(error)
-    setError('')
+    toast.error(error);
+    setError('');
   }
-  
+
   useEffect(() => {
     if (!isLoading && !error && validateResponse) {
-      toast.success(validateMessage)
-     
-      let isMfaEnabled = (validateResponse?.mfaEnabled) ? true : false;
-      let redirectTo = "/"
-      if(isMfaEnabled) {
+      toast.success(validateMessage);
+
+      let isMfaEnabled = validateResponse?.mfaEnabled ? true : false;
+      let redirectTo = '/';
+      if (isMfaEnabled) {
         // localStorage.setItem(LOCAL_STORAGE.AUTH_PASSWORD, validateResponse.userPassword);
         // localStorage.setItem(LOCAL_STORAGE.TWO_STEP_MODE, 'login');
-        redirectTo=`/otp-verification?token=${validateResponse.token}&&mobile=${validateResponse.mobile}&&UserToken=${validateResponse.UserToken}&&password=${validateResponse.userPassword}`
+        redirectTo = `/otp-verification?token=${validateResponse.token}&&mobile=${validateResponse.mobile}&&UserToken=${validateResponse.UserToken}&&password=${validateResponse.userPassword}`;
       } else {
-      localStorage.setItem(LOCAL_STORAGE.AUTH_EMAIL, response?.adminData?.Email);
-      localStorage.setItem(LOCAL_STORAGE.USER_DATA, JSON.stringify(response.adminData));
-      localStorage.setItem(LOCAL_STORAGE.SETTINGS, JSON.stringify(response.appSettings));
-      localStorage.setItem(LOCAL_STORAGE.IS_MASTER_ADMIN, response.isMasterAdmin);
-      localStorage.setItem(LOCAL_STORAGE.PERMISSIONS, JSON.stringify(response.permissions));
+        localStorage.setItem(LOCAL_STORAGE.AUTH_EMAIL, response?.adminData?.Email);
+        localStorage.setItem(LOCAL_STORAGE.USER_DATA, JSON.stringify(response.adminData));
+        localStorage.setItem(LOCAL_STORAGE.SETTINGS, JSON.stringify(response.appSettings));
+        localStorage.setItem(LOCAL_STORAGE.IS_MASTER_ADMIN, response.isMasterAdmin);
+        localStorage.setItem(LOCAL_STORAGE.PERMISSIONS, JSON.stringify(response.permissions));
 
-      setValidateMessage('')
-      setValidateResponse(null)
+        setValidateMessage('');
+        setValidateResponse(null);
 
-        if(state?.path){
-          redirectTo=state?.path
+        if (state?.path) {
+          redirectTo = state?.path;
         }
       }
-      
-      if(!isMfaEnabled){
+
+      if (!isMfaEnabled) {
         // dispatch(AuthAction.sendLoginOtp(response));
         dispatch(AuthAction.login(response));
       }
       setTimeout(() => {
-        navigate(redirectTo)
+        navigate(redirectTo);
       }, 1000);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [validateResponse]);
   const loadInitialVariables = async () => {
     const result = await AuthService.loadInitialSettings();
@@ -197,9 +192,7 @@ export default function Login() {
               <h2 className="text-2xl font-semibold text-gray-600 dark:text-dark-100">
                 Welcome Back
               </h2>
-              <p className="text-gray-400 dark:text-dark-300">
-                Please sign in to continue
-              </p>
+              <p className="text-gray-400 dark:text-dark-300">Please sign in to continue</p>
             </div>
           </div>
           <Card className="mt-5 rounded-lg p-5 lg:p-7">
@@ -214,7 +207,7 @@ export default function Login() {
                       strokeWidth="1"
                     />
                   }
-                  {...register("mobile")}
+                  {...register('mobile')}
                   error={errors?.mobile?.message}
                 />
                 <Input
@@ -227,7 +220,7 @@ export default function Login() {
                       strokeWidth="1"
                     />
                   }
-                  {...register("password")}
+                  {...register('password')}
                   error={errors?.password?.message}
                 />
               </div>
@@ -236,8 +229,7 @@ export default function Login() {
                 <Checkbox label="Remember me" />
                 <a
                   href="/forgot-password"
-                  className="text-xs text-gray-400 transition-colors hover:text-gray-800 focus:text-gray-800 dark:text-dark-300 dark:hover:text-dark-100 dark:focus:text-dark-100"
-                >
+                  className="text-xs text-gray-400 transition-colors hover:text-gray-800 focus:text-gray-800 dark:text-dark-300 dark:hover:text-dark-100 dark:focus:text-dark-100">
                   Forgot Password?
                 </a>
               </div>

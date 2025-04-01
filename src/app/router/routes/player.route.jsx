@@ -1,66 +1,62 @@
 // import { Navigate } from "react-router";
 
-import { Navigate } from "react-router";
+import { Navigate } from 'react-router';
 
 export const playerRoutes = [
   {
-    path: "player",
+    path: 'player',
     lazy: async () => ({
-      Component: (await import("../../pages/users/player/list/list")).default,
-    }),
+      Component: (await import('../../pages/users/player/list/list')).default
+    })
   },
   {
-    path: "player/:playerId/tab",
+    path: 'player/:playerId/tab',
     lazy: async () => ({
-      Component: (await import("../../pages/users/player/Tabs")).default,
+      Component: (await import('../../pages/users/player/Tabs')).default
     }),
     children: [
       {
         index: true,
-        element: <Navigate to="./details" />,
+        element: <Navigate to="./details" />
       },
       {
-        path: "details",
+        path: 'details',
         lazy: async () => ({
-          Component: (await import("../../pages/users/player/ViewDetails"))
-            .ViewDetails,
-        }),
+          Component: (await import('../../pages/users/player/ViewDetails')).ViewDetails
+        })
       },
       {
-        path: "limits",
+        path: 'limits',
         lazy: async () => ({
-          Component: (await import("../../pages/users/player/PlayerLimit"))
-            .default,
-        }),
+          Component: (await import('../../pages/users/player/PlayerLimit')).default
+        })
       },
       {
-        path: "transactions",
+        path: 'transactions',
         lazy: async () => ({
-          Component: (await import("../../pages/users/player/transaction-list/list"))
-            .default,
-        }),
+          Component: (await import('../../pages/users/player/transaction-list/list')).default
+        })
       },
       {
-        path: "login-history",
+        path: 'login-history',
         lazy: async () => ({
-          Component: (await import("../../pages/users/player/login-history/list"))
-            .default,
-        }),
+          Component: (await import('../../pages/users/player/login-history/list')).default
+        })
       },
       {
-        path: "manage-fund",
+        path: 'manage-fund',
         lazy: async () => ({
-          Component: (await import("../../pages/users/player/ManageFund")).default,
-        }),
+          Component: (await import('../../pages/users/player/ManageFund')).default
+        })
       },
       {
-        path: "player-notes",
+        path: 'player-notes',
         lazy: async () => ({
-          Component: (await import("../../pages/users/player/player-notes/list")).default,
-        }),
-      },
-    ],
-  },
+          Component: (await import('../../pages/users/player/player-notes/list')).default
+        })
+      }
+    ]
+  }
 ];
 
 export default playerRoutes;

@@ -36,9 +36,9 @@ export function useBoxPosition() {
 
   return useMemo(
     () => ({
-      ref, 
-      left: position.x, 
-      top: position.y,
+      ref,
+      left: position.x,
+      top: position.y
     }),
     [position.x, position.y, ref]
   );

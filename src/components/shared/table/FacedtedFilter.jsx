@@ -1,20 +1,15 @@
 // Import Dependencies
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxOption,
-  ComboboxOptions,
-} from "@headlessui/react";
-import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
-import clsx from "clsx";
-import { useEffect, useRef } from "react";
-import PropTypes from "prop-types";
+import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react';
+import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
+import clsx from 'clsx';
+import { useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 
 // Local Imports
-import { Badge, Button, Checkbox, Input } from "components/ui";
-import { useFuse } from "hooks";
-import { ResponsiveFilter } from "./ResponsiveFilter";
-import { useBreakpointsContext } from "app/contexts/breakpoint/context";
+import { Badge, Button, Checkbox, Input } from 'components/ui';
+import { useFuse } from 'hooks';
+import { ResponsiveFilter } from './ResponsiveFilter';
+import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 
 // ----------------------------------------------------------------------
 
@@ -22,8 +17,8 @@ export function FacedtedFilter({
   column,
   title,
   options,
-  labelField = "label",
-  valueField = "value",
+  labelField = 'label',
+  valueField = 'value',
   Icon,
   renderPrefix,
   showCheckbox = true,
@@ -33,9 +28,9 @@ export function FacedtedFilter({
   useEffect(() => () => column?.setFilterValue(undefined), []);
 
   const selectedValues = column?.getFilterValue() || [];
-  
+
   const selectedItems = options?.filter((o) =>
-    isMultiple ? selectedValues.includes(o[valueField]) : o[valueField] === selectedValues,
+    isMultiple ? selectedValues.includes(o[valueField]) : o[valueField] === selectedValues
   );
 
   return (
@@ -52,9 +47,7 @@ export function FacedtedFilter({
               <Badge className="lg:hidden">{selectedItems.length}</Badge>
 
               {selectedItems.length > 2 ? (
-                <Badge className="max-lg:hidden">
-                  {selectedItems.length} selected
-                </Badge>
+                <Badge className="max-lg:hidden">{selectedItems.length} selected</Badge>
               ) : (
                 <div className="hidden gap-1 lg:flex">
                   {selectedItems.map((val) => (
@@ -68,8 +61,7 @@ export function FacedtedFilter({
             </>
           )}
         </>
-      }
-    >
+      }>
       <ComboboxFilter
         {...{
           column,
@@ -94,17 +86,17 @@ function ComboboxFilter({
   valueField,
   renderPrefix,
   showCheckbox,
-  isMultiple=true
+  isMultiple = true
 }) {
   const inputRef = useRef();
   const {
     result: filteredItems,
     query,
-    setQuery,
+    setQuery
   } = useFuse(options, {
     keys: [labelField],
     threshold: 0.2,
-    matchAllOnEmptyQuery: true,
+    matchAllOnEmptyQuery: true
   });
 
   const { smAndUp } = useBreakpointsContext();
@@ -118,13 +110,16 @@ function ComboboxFilter({
 
   return (
     <Combobox
-      value={isMultiple ? options?.filter((o) => selectedValues.includes(o[valueField])) : selectedValues}
+      value={
+        isMultiple ? options?.filter((o) => selectedValues.includes(o[valueField])) : selectedValues
+      }
       onChange={(list) => {
-        isMultiple ?  column.setFilterValue(list.map((item) => item[valueField])) : column.setFilterValue(list[valueField])
+        isMultiple
+          ? column.setFilterValue(list.map((item) => item[valueField]))
+          : column.setFilterValue(list[valueField]);
       }}
       multiple={isMultiple}
-      className="h-[366px] sm:h-auto sm:max-h-80 sm:w-56"
-    >
+      className="h-[366px] sm:h-auto sm:max-h-80 sm:w-56">
       <div className="relative flex flex-col">
         <div className="relative bg-gray-100 py-1 dark:bg-dark-900">
           <ComboboxInput
@@ -139,11 +134,8 @@ function ComboboxFilter({
           />
         </div>
 
-        <ComboboxOptions
-          static
-          className="h-auto w-full overflow-y-auto py-1 outline-none"
-        >
-          {filteredItems.length === 0 && query !== "" ? (
+        <ComboboxOptions static className="h-auto w-full overflow-y-auto py-1 outline-none">
+          {filteredItems.length === 0 && query !== '' ? (
             <div className="relative cursor-default select-none px-2.5 py-2 text-gray-800 dark:text-dark-100">
               Nothing found for {query}
             </div>
@@ -153,25 +145,20 @@ function ComboboxFilter({
                 key={refIndex}
                 className={({ focus }) =>
                   clsx(
-                    "relative cursor-pointer select-none px-2.5 py-2 text-gray-800 outline-none transition-colors dark:text-dark-100",
-                    focus && "bg-gray-100 dark:bg-dark-600",
+                    'relative cursor-pointer select-none px-2.5 py-2 text-gray-800 outline-none transition-colors dark:text-dark-100',
+                    focus && 'bg-gray-100 dark:bg-dark-600'
                   )
                 }
-                value={item}
-              >
+                value={item}>
                 {({ selected }) => (
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex min-w-0 items-center gap-2">
                       {showCheckbox && <Checkbox checked={selected} readOnly />}
                       {item.icon && <item.icon className="size-4.5 stroke-1" />}
                       {renderPrefix && renderPrefix(item, selected)}
-                      <span className="block truncate text-xs+">
-                        {item[labelField]}
-                      </span>
+                      <span className="block truncate text-xs+">{item[labelField]}</span>
                     </div>
-                    <span className="font-mono text-xs">
-                      {facets?.get(item[valueField])}
-                    </span>
+                    <span className="font-mono text-xs">{facets?.get(item[valueField])}</span>
                   </div>
                 )}
               </ComboboxOption>
@@ -181,8 +168,7 @@ function ComboboxFilter({
         {selectedValues?.length > 0 && (
           <Button
             onClick={() => column?.setFilterValue(undefined)}
-            className="w-full shrink-0 rounded-none"
-          >
+            className="w-full shrink-0 rounded-none">
             Clear Filter
           </Button>
         )}
@@ -199,7 +185,7 @@ FacedtedFilter.propTypes = {
   options: PropTypes.array,
   Icon: PropTypes.elementType,
   renderPrefix: PropTypes.func,
-  showCheckbox: PropTypes.bool,
+  showCheckbox: PropTypes.bool
 };
 
 ComboboxFilter.propTypes = {
@@ -209,5 +195,5 @@ ComboboxFilter.propTypes = {
   valueField: PropTypes.string,
   options: PropTypes.array,
   renderPrefix: PropTypes.func,
-  showCheckbox: PropTypes.bool,
+  showCheckbox: PropTypes.bool
 };

@@ -1,4 +1,4 @@
-import { Tooltip as ReactTooltip } from "components/shared/Tooltip";
+import { Tooltip as ReactTooltip } from 'components/shared/Tooltip';
 
 export default function Tooltip() {
   return (
@@ -6,9 +6,9 @@ export default function Tooltip() {
       anchorSelect="[data-tooltip]"
       opacity={1}
       style={{
-        padding: "0.3rem 0.75rem",
-        borderRadius: "0.5rem",
-        zIndex: 1000,
+        padding: '0.3rem 0.75rem',
+        borderRadius: '0.5rem',
+        zIndex: 1000
       }}
     />
   );

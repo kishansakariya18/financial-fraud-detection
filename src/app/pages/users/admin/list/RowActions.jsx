@@ -1,37 +1,27 @@
 // Import Dependencies
-import {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  Transition,
-} from "@headlessui/react";
-import {
-  EllipsisHorizontalIcon,
-  EyeIcon,
-  PencilIcon,
-} from "@heroicons/react/24/outline";
-import clsx from "clsx";
-import { Fragment, useCallback, useState } from "react";
-import PropTypes from "prop-types";
+import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
+import { EllipsisHorizontalIcon, EyeIcon, PencilIcon } from '@heroicons/react/24/outline';
+import clsx from 'clsx';
+import { Fragment, useCallback, useState } from 'react';
+import PropTypes from 'prop-types';
 
 // Local Imports
-import { ConfirmModal } from "components/shared/ConfirmModal";
-import { Button } from "components/ui";
-import AdminService from "services/admin.services";
-import { TbStatusChange } from "react-icons/tb";
-import { useNavigate } from "react-router";
-import { useTranslation } from "react-i18next";
+import { ConfirmModal } from 'components/shared/ConfirmModal';
+import { Button } from 'components/ui';
+import AdminService from 'services/admin.services';
+import { TbStatusChange } from 'react-icons/tb';
+import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 const confirmMessages = {
   pending: {
-    description: "Are you sure you want to change Status of the Admin?",
-    actionText: "Submit",
+    description: 'Are you sure you want to change Status of the Admin?',
+    actionText: 'Submit'
   },
   success: {
-    title: "Admin Status Changed",
-    description: "Admin Status has been changed successfully",
-  },
+    title: 'Admin Status Changed',
+    description: 'Admin Status has been changed successfully'
+  }
 };
 
 export function RowActions({ row, table }) {
@@ -40,15 +30,15 @@ export function RowActions({ row, table }) {
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const closeModal = () => {
     setDeleteModalOpen(false);
   };
 
   const handleClickView = () => {
-    navigate(`/admin/${row.original.id}/tab/details`)
-  }
+    navigate(`/admin/${row.original.id}/tab/details`);
+  };
 
   const openModal = () => {
     setDeleteModalOpen(true);
@@ -70,7 +60,7 @@ export function RowActions({ row, table }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [row]);
 
-  const state = deleteError ? "error" : deleteSuccess ? "success" : "pending";
+  const state = deleteError ? 'error' : deleteSuccess ? 'success' : 'pending';
 
   return (
     <>
@@ -86,24 +76,20 @@ export function RowActions({ row, table }) {
             enterTo="opacity-100 translate-y-0"
             leave="transition ease-in"
             leaveFrom="opacity-100 translate-y-0"
-            leaveTo="opacity-0 translate-y-2"
-          >
+            leaveTo="opacity-0 translate-y-2">
             <MenuItems
-              anchor={{ to: "bottom end", gap: 12 }}
-              className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0"
-            >
+              anchor={{ to: 'bottom end', gap: 12 }}
+              className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
               <MenuItem>
                 {({ focus }) => (
                   <button
                     className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse",
-                      focus &&
-                        "bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100",
+                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                      focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
                     )}
-                    onClick={handleClickView}
-                  >
+                    onClick={handleClickView}>
                     <EyeIcon className="size-4.5 stroke-1" />
-                    <span>{t("view")}</span>
+                    <span>{t('view')}</span>
                   </button>
                 )}
               </MenuItem>
@@ -111,14 +97,12 @@ export function RowActions({ row, table }) {
                 {({ focus }) => (
                   <button
                     className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse",
-                      focus &&
-                        "bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100",
+                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                      focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
                     )}
-                    onClick={() => navigate(`/admin/${row.original.id}/edit`)}
-                  >
+                    onClick={() => navigate(`/admin/${row.original.id}/edit`)}>
                     <PencilIcon className="size-4.5 stroke-1" />
-                    <span>{t("edit")}</span>
+                    <span>{t('edit')}</span>
                   </button>
                 )}
               </MenuItem>
@@ -127,12 +111,11 @@ export function RowActions({ row, table }) {
                   <button
                     onClick={openModal}
                     className={clsx(
-                      "flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse",
-                      focus && "bg-this/10 dark:bg-this-light/10",
-                    )}
-                  >
+                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                      focus && 'bg-this/10 dark:bg-this-light/10'
+                    )}>
                     <TbStatusChange className="size-4.5 stroke-1" />
-                    <span>{t("change") + " " +  t("status")}</span>
+                    <span>{t('change') + ' ' + t('status')}</span>
                   </button>
                 )}
               </MenuItem>
@@ -155,5 +138,5 @@ export function RowActions({ row, table }) {
 
 RowActions.propTypes = {
   row: PropTypes.object,
-  table: PropTypes.object,
+  table: PropTypes.object
 };

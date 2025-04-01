@@ -1,11 +1,11 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import { forwardRef } from "react";
-import clsx from 'clsx'
+import PropTypes from 'prop-types';
+import { forwardRef } from 'react';
+import clsx from 'clsx';
 
 // Local Imports
-import { Box } from "components/ui";
-import { useThemeContext } from "app/contexts/theme/context";
+import { Box } from 'components/ui';
+import { useThemeContext } from 'app/contexts/theme/context';
 
 // -------------------------------------------------------------
 
@@ -18,29 +18,27 @@ const Card = forwardRef((props, ref) => {
     <Box
       ref={ref}
       className={clsx(
-        "card rounded-lg",
+        'card rounded-lg',
         skin &&
-          skin !== "none" && [
-            skin === "bordered" &&
-              "border border-gray-200 dark:border-dark-600 print:border-0",
-            skin === "shadow" &&
-              "bg-white shadow-soft dark:bg-dark-700 dark:shadow-none print:shadow-none",
+          skin !== 'none' && [
+            skin === 'bordered' && 'border border-gray-200 dark:border-dark-600 print:border-0',
+            skin === 'shadow' &&
+              'bg-white shadow-soft dark:bg-dark-700 dark:shadow-none print:shadow-none'
           ],
-        className,
+        className
       )}
-      {...rest}
-    >
+      {...rest}>
       {children}
     </Box>
   );
 });
 
-Card.displayName = "Card";
+Card.displayName = 'Card';
 
 Card.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
-  skin: PropTypes.oneOf(["none", "bordered", "shadow"]),
+  skin: PropTypes.oneOf(['none', 'bordered', 'shadow'])
 };
 
 export { Card };

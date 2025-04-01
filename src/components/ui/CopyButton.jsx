@@ -1,8 +1,8 @@
 // Import Dependencies
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 // Local Import
-import { useClipboard } from "hooks";
+import { useClipboard } from 'hooks';
 
 // ----------------------------------------------------------------------
 
@@ -15,9 +15,9 @@ const CopyButton = ({ timeout, value, children, ...rest }) => {
 CopyButton.propTypes = {
   children: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
-  timeout: PropTypes.number,
+  timeout: PropTypes.number
 };
 
-CopyButton.displayName = "CopyButton";
+CopyButton.displayName = 'CopyButton';
 
 export { CopyButton };

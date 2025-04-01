@@ -1,4 +1,3 @@
-
 import { useParams } from 'react-router';
 import { HomeIcon } from '@heroicons/react/24/outline';
 import { randomId } from 'utils/randomId';
@@ -15,8 +14,8 @@ export default function Tabs() {
       id: randomId(),
       title: t('details'),
       path: `/admin/${adminId}/tab/details`,
-      icon: HomeIcon,
-    },
+      icon: HomeIcon
+    }
   ];
 
   return <TabsPage tabs={tabs} />;

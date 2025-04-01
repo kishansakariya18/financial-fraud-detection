@@ -1,9 +1,9 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import { useRef, forwardRef } from "react";
+import PropTypes from 'prop-types';
+import { useRef, forwardRef } from 'react';
 
 // Local Imports
-import { useMergedRef } from "hooks";
+import { useMergedRef } from 'hooks';
 
 // ----------------------------------------------------------------------
 
@@ -54,7 +54,7 @@ const Upload = forwardRef((props, ref) => {
   );
 });
 
-Upload.displayName = "Upload";
+Upload.displayName = 'Upload';
 
 Upload.propTypes = {
   onChange: PropTypes.func,
@@ -65,7 +65,7 @@ Upload.propTypes = {
   capture: PropTypes.string,
   name: PropTypes.string,
   form: PropTypes.string,
-  inputProps: PropTypes.object,
+  inputProps: PropTypes.object
 };
 
 export { Upload };

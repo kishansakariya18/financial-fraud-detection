@@ -8,20 +8,20 @@
  */
 export const compareArrays = (a, b) => {
   if (!Array.isArray(a) || !Array.isArray(b)) {
-      throw new TypeError("Both arguments must be arrays.");
+    throw new TypeError('Both arguments must be arrays.');
   }
 
   if (a.length !== b.length) return false;
 
   return a.every((element, index) => {
-      const otherElement = b[index];
+    const otherElement = b[index];
 
-      // Recursively compare nested arrays
-      if (Array.isArray(element) && Array.isArray(otherElement)) {
-          return compareArrays(element, otherElement);
-      }
+    // Recursively compare nested arrays
+    if (Array.isArray(element) && Array.isArray(otherElement)) {
+      return compareArrays(element, otherElement);
+    }
 
-      // Direct comparison for primitive values
-      return element === otherElement;
+    // Direct comparison for primitive values
+    return element === otherElement;
   });
 };

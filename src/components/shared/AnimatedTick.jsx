@@ -1,15 +1,15 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import clsx from "clsx";
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
 
 // Local Imports
-import { useIsomorphicEffect } from "hooks";
+import { useIsomorphicEffect } from 'hooks';
 import {
   injectStyles,
   insertStylesToHead,
   makeStyleTag,
-  removeStylesFromHead,
-} from "utils/dom/injectStylesToHead";
+  removeStylesFromHead
+} from 'utils/dom/injectStylesToHead';
 
 // ----------------------------------------------------------------------
 
@@ -40,12 +40,7 @@ svg[data-animated-tick=true] .checkmark-circle {
     animation: checkmark-circle 0.6s ease-in-out backwards;
 }`;
 
-export function AnimatedTick({
-  strokeWidth = 10,
-  animate = true,
-  className,
-  ...rest
-}) {
+export function AnimatedTick({ strokeWidth = 10, animate = true, className, ...rest }) {
   useIsomorphicEffect(() => {
     const sheet = makeStyleTag();
 
@@ -61,12 +56,11 @@ export function AnimatedTick({
       viewBox="0 0 154 154"
       fill="none"
       data-animated-tick={animate}
-      className={clsx("stroke-current", className)}
-      {...rest}
-    >
+      className={clsx('stroke-current', className)}
+      {...rest}>
       <path
         d="M77 141C112.346 141 141 112.346 141 77C141 41.6538 112.346 13 77 13C41.6538 13 13 41.6538 13 77C13 112.346 41.6538 141 77 141Z"
-        style={{ strokeDasharray: "480px, 480px", strokeDashoffset: "960px" }}
+        style={{ strokeDasharray: '480px, 480px', strokeDashoffset: '960px' }}
         strokeWidth={strokeWidth}
         className="checkmark-circle"
       />
@@ -75,7 +69,7 @@ export function AnimatedTick({
         strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
-        style={{ strokeDasharray: "100px, 100px", strokeDashoffset: "200px" }}
+        style={{ strokeDasharray: '100px, 100px', strokeDashoffset: '200px' }}
         className="checkmark-tick"
       />
     </svg>
@@ -85,5 +79,5 @@ export function AnimatedTick({
 AnimatedTick.propTypes = {
   strokeWidth: PropTypes.number,
   animate: PropTypes.bool,
-  className: PropTypes.string,
+  className: PropTypes.string
 };

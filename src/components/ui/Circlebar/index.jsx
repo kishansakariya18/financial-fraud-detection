@@ -1,13 +1,13 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import { Children, forwardRef, useMemo } from "react";
-import clsx from "clsx";
+import PropTypes from 'prop-types';
+import { Children, forwardRef, useMemo } from 'react';
+import clsx from 'clsx';
 
 // Local Imports
-import { setThisClass } from "utils/setThisClass";
-import { COLORS } from "constants/app.constant";
-import { getPathStyles } from "./getPathStyles";
-import { useThemeContext } from "app/contexts/theme/context";
+import { setThisClass } from 'utils/setThisClass';
+import { COLORS } from 'constants/app.constant';
+import { getPathStyles } from './getPathStyles';
+import { useThemeContext } from 'app/contexts/theme/context';
 
 // ----------------------------------------------------------------------
 
@@ -19,13 +19,13 @@ const Circlebar = forwardRef((props, ref) => {
     gapDegree = 0,
     gapOffsetDegree = 0,
     strokeWidth = 6,
-    strokeLinecap = "round",
+    strokeLinecap = 'round',
     isActive = false,
     size = 24,
     showRail = true,
     children,
-    color = "neutral",
-    variant = "default",
+    color = 'neutral',
+    variant = 'default',
     contentProps = {},
     rootProps = {},
     wrapperProps = {},
@@ -37,48 +37,41 @@ const Circlebar = forwardRef((props, ref) => {
 
   const { pathString: railPathString, pathStyle: railPathStyle } = useMemo(
     () => getPathStyles(100, 0, gapDegree, strokeWidth),
-    [gapDegree, strokeWidth],
+    [gapDegree, strokeWidth]
   );
 
   const { pathString: fillPathString, pathStyle: fillPathStyle } = useMemo(
     () => getPathStyles(value, offsetDegree, gapDegree, strokeWidth),
-    [gapDegree, offsetDegree, strokeWidth, value],
+    [gapDegree, offsetDegree, strokeWidth, value]
   );
 
   const { cardSkin } = useThemeContext();
 
   const strokeClass = [
-    color === "neutral"
-      ? "stroke-gray-500 dark:stroke-dark-450"
-      : [setThisClass(color), "stroke-this dark:stroke-this-light"],
+    color === 'neutral'
+      ? 'stroke-gray-500 dark:stroke-dark-450'
+      : [setThisClass(color), 'stroke-this dark:stroke-this-light']
   ];
 
   return (
-    <div className={clsx("max-w-full", classNames?.root)} {...rootProps}>
+    <div className={clsx('max-w-full', classNames?.root)} {...rootProps}>
       <div
         {...wrapperProps}
-        className={clsx(
-          "circlebar-wrapper relative inline-block",
-          classNames.wrapper,
-        )}
-        style={{ width: `${size / 4}rem`, height: `${size / 4}rem` }}
-      >
+        className={clsx('circlebar-wrapper relative inline-block', classNames.wrapper)}
+        style={{ width: `${size / 4}rem`, height: `${size / 4}rem` }}>
         <svg
           style={{
-            transform: gapOffsetDegree
-              ? `rotate(${gapOffsetDegree}deg)`
-              : undefined,
+            transform: gapOffsetDegree ? `rotate(${gapOffsetDegree}deg)` : undefined
           }}
           ref={ref}
           viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`}
           className={clsx(
-            "circlebar-svg",
-            isIndeterminate && "circlebar-indeterminate-wrapper",
+            'circlebar-svg',
+            isIndeterminate && 'circlebar-indeterminate-wrapper',
             className,
-            classNames?.svg,
+            classNames?.svg
           )}
-          {...rest}
-        >
+          {...rest}>
           {showRail && (
             <path
               d={railPathString}
@@ -86,18 +79,13 @@ const Circlebar = forwardRef((props, ref) => {
               strokeLinecap={strokeLinecap}
               fill="none"
               style={railPathStyle}
-              className={clsx("circlebar-rail-path", [
-                color === "neutral" || variant !== "soft"
+              className={clsx('circlebar-rail-path', [
+                color === 'neutral' || variant !== 'soft'
                   ? [
-                      "stroke-gray-150",
-                      cardSkin === "shadow"
-                        ? "dark:stroke-dark-900"
-                        : "dark:stroke-dark-700",
+                      'stroke-gray-150',
+                      cardSkin === 'shadow' ? 'dark:stroke-dark-900' : 'dark:stroke-dark-700'
                     ]
-                  : [
-                      setThisClass(color),
-                      "stroke-this/[.15] dark:stroke-this-light/20",
-                    ],
+                  : [setThisClass(color), 'stroke-this/[.15] dark:stroke-this-light/20']
               ])}
             />
           )}
@@ -111,11 +99,11 @@ const Circlebar = forwardRef((props, ref) => {
                 fill="none"
                 style={{
                   ...fillPathStyle,
-                  transitionProperty: "stroke-dasharray",
-                  transitionDuration: "200ms",
+                  transitionProperty: 'stroke-dasharray',
+                  transitionDuration: '200ms'
                 }}
-                className={clsx("circlebar-inner-path ease-out", strokeClass)}
-                stroke={variant === "gradient" ? "url(#gradient)" : undefined}
+                className={clsx('circlebar-inner-path ease-out', strokeClass)}
+                stroke={variant === 'gradient' ? 'url(#gradient)' : undefined}
               />
 
               {isActive && (
@@ -126,11 +114,9 @@ const Circlebar = forwardRef((props, ref) => {
                   fill="none"
                   style={{
                     ...fillPathStyle,
-                    "--dashoffset": `${
-                      (value / 100) * (Math.PI * 100 - gapDegree)
-                    }px`,
-                    transformOrigin: "center",
-                    transform: `rotate(${(gapDegree / 2) * 1.15}deg)`,
+                    '--dashoffset': `${(value / 100) * (Math.PI * 100 - gapDegree)}px`,
+                    transformOrigin: 'center',
+                    transform: `rotate(${(gapDegree / 2) * 1.15}deg)`
                   }}
                   className="circlebar-active-path stroke-white"
                 />
@@ -142,14 +128,11 @@ const Circlebar = forwardRef((props, ref) => {
                   <stop
                     offset="0%"
                     style={{
-                      stopColor: "var(--start-color)",
-                      stopOpacity: 1,
+                      stopColor: 'var(--start-color)',
+                      stopOpacity: 1
                     }}
                   />
-                  <stop
-                    offset="100%"
-                    style={{ stopColor: "var(--end-color)", stopOpacity: 1 }}
-                  />
+                  <stop offset="100%" style={{ stopColor: 'var(--end-color)', stopOpacity: 1 }} />
                 </linearGradient>
               </defs>
               {/* )} */}
@@ -161,18 +144,16 @@ const Circlebar = forwardRef((props, ref) => {
               r="50"
               fill="none"
               strokeWidth={strokeWidth}
-              className={clsx("circlebar-indeterminate", strokeClass)}
-            ></circle>
+              className={clsx('circlebar-indeterminate', strokeClass)}></circle>
           )}
         </svg>
         {Children.count(children) > 0 && (
           <div
             className={clsx(
-              "absolute inset-0 flex items-center justify-center",
-              classNames?.content,
+              'absolute inset-0 flex items-center justify-center',
+              classNames?.content
             )}
-            {...contentProps}
-          >
+            {...contentProps}>
             {children}
           </div>
         )}
@@ -181,7 +162,7 @@ const Circlebar = forwardRef((props, ref) => {
   );
 });
 
-Circlebar.displayName = "Circlebar";
+Circlebar.displayName = 'Circlebar';
 
 Circlebar.propTypes = {
   value: PropTypes.number,
@@ -196,12 +177,12 @@ Circlebar.propTypes = {
   size: PropTypes.number,
   showRail: PropTypes.bool,
   color: PropTypes.oneOf(COLORS),
-  variant: PropTypes.oneOf(["default", "soft"]),
+  variant: PropTypes.oneOf(['default', 'soft']),
   contentProps: PropTypes.object,
   rootProps: PropTypes.object,
   wrapperProps: PropTypes.object,
   className: PropTypes.string,
-  classNames: PropTypes.object,
+  classNames: PropTypes.object
 };
 
 export { Circlebar };

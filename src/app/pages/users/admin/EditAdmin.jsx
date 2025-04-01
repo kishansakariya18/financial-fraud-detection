@@ -1,35 +1,32 @@
 // Import Dependencies
-import { Page } from "components/shared/Page";
-import { UserIcon } from "@heroicons/react/20/solid";
-import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Controller, useForm } from "react-hook-form";
-import { Listbox } from "components/shared/form/Listbox";
-import { Button, Checkbox, Input } from "components/ui";
-import { editAdminSchema } from "./schema";
-import { CiMobile1 } from "react-icons/ci";
-import AdminService from "services/admin.services";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import { useNavigate, useParams } from "react-router";
-import { Breadcrumbs } from "components/shared/Breadcrumbs";
-import { parseAdminStatusToApp, statusOptions } from "./helper";
-import { useTranslation } from "react-i18next";
+import { Page } from 'components/shared/Page';
+import { UserIcon } from '@heroicons/react/20/solid';
+import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Controller, useForm } from 'react-hook-form';
+import { Listbox } from 'components/shared/form/Listbox';
+import { Button, Checkbox, Input } from 'components/ui';
+import { editAdminSchema } from './schema';
+import { CiMobile1 } from 'react-icons/ci';
+import AdminService from 'services/admin.services';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import { useNavigate, useParams } from 'react-router';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { parseAdminStatusToApp, statusOptions } from './helper';
+import { useTranslation } from 'react-i18next';
 
 const EditAdmin = () => {
   const { t } = useTranslation();
   const { adminId } = useParams();
   const [roles, setRoles] = useState([]);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
 
-  const pageTitle = t("edit") + " "  + t("admin")
+  const pageTitle = t('edit') + ' ' + t('admin');
 
-  const breadcrumbItem = [
-    { title: t("admin"), path: "/admin" },
-    { title: t("edit") },
-  ];
+  const breadcrumbItem = [{ title: t('admin'), path: '/admin' }, { title: t('edit') }];
 
   const navigate = useNavigate();
   const {
@@ -37,7 +34,7 @@ const EditAdmin = () => {
     handleSubmit,
     formState: { errors },
     reset,
-    control,
+    control
   } = useForm({
     resolver: yupResolver(editAdminSchema),
     defaultValues: async () => {
@@ -46,20 +43,19 @@ const EditAdmin = () => {
 
         if (result) {
           return {
-            userName: result.Username || "",
-            firstName: result.FirstName || "",
-            lastName: result.LastName || "",
-            email: result.Email || "",
+            userName: result.Username || '',
+            firstName: result.FirstName || '',
+            lastName: result.LastName || '',
+            email: result.Email || '',
             roles: result.RoleID,
-            status: parseAdminStatusToApp(result.Status) || "inactive",
-            mobile: result.Mobile || "",
-            isMasterAdmin: result.MasterAdmin || false,
+            status: parseAdminStatusToApp(result.Status) || 'inactive',
+            mobile: result.Mobile || '',
+            isMasterAdmin: result.MasterAdmin || false
           };
         }
       }
-    },
+    }
   });
-
 
   const fetchRoles = async () => {
     setLoading(true);
@@ -71,7 +67,7 @@ const EditAdmin = () => {
       const roleList = roles.map((role) => {
         return {
           value: role.RoleID,
-          label: role.RoleName,
+          label: role.RoleName
         };
       });
 
@@ -109,32 +105,31 @@ const EditAdmin = () => {
 
   useEffect(() => {
     fetchRoles();
- 
   }, [adminId]);
 
   if (!loading && error) {
     toast.error(error);
-    setError("");
+    setError('');
   }
 
   if (!loading && !error && response) {
     toast.success(response.message);
     setTimeout(() => {
-      navigate("/admin");
+      navigate('/admin');
     }, 0);
 
     setResponse(null);
   }
 
   const onSubmit = async (data) => {
-    await editAdminApi({...data, adminId});
+    await editAdminApi({ ...data, adminId });
   };
   return (
     <Page title={pageTitle}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
         <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
-            {pageTitle + " " + t("form")}
+            {pageTitle + ' ' + t('form')}
           </h2>
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
@@ -146,34 +141,34 @@ const EditAdmin = () => {
           <div className="mt-6 space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
-                {...register("userName")}
+                {...register('userName')}
                 prefix={<UserIcon className="size-5" />}
-                label={t("userName")}
+                label={t('userName')}
                 error={errors?.userName?.message}
-                placeholder={t("enter") + " " + t("userName")}
+                placeholder={t('enter') + ' ' + t('userName')}
               />
               <Input
-                {...register("firstName")}
+                {...register('firstName')}
                 prefix={<UserIcon className="size-5" />}
-                label={t("firstName")}
+                label={t('firstName')}
                 error={errors?.firstName?.message}
-                placeholder={t("enter") + " " + t("firstName")}
+                placeholder={t('enter') + ' ' + t('firstName')}
               />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
-                {...register("lastName")}
+                {...register('lastName')}
                 prefix={<UserIcon className="size-5" />}
-                label={t("lastName")}
+                label={t('lastName')}
                 error={errors?.lastName?.message}
-                placeholder={t("enter") + " " + t("lastName")}
+                placeholder={t('enter') + ' ' + t('lastName')}
               />
               <Input
-                {...register("email")}
+                {...register('email')}
                 prefix={<EnvelopeIcon className="size-5" />}
-                label={t("enter") + " " + t("email")}
+                label={t('enter') + ' ' + t('email')}
                 error={errors?.email?.message}
-                placeholder={t("enter") + " " + t("email") + " " + t("address") }
+                placeholder={t('enter') + ' ' + t('email') + ' ' + t('address')}
               />
             </div>
 
@@ -182,13 +177,11 @@ const EditAdmin = () => {
                 render={({ field }) => (
                   <Listbox
                     data={roles}
-                    value={
-                      roles.find((role) => role.value === field.value) || null
-                    }
+                    value={roles.find((role) => role.value === field.value) || null}
                     onChange={(val) => field.onChange(val.value)}
                     name={field.name}
                     label={t('role')}
-                    placeholder={t('select') + " " + t('role')}
+                    placeholder={t('select') + ' ' + t('role')}
                     displayField="label"
                     error={errors?.roles?.message}
                   />
@@ -198,16 +191,16 @@ const EditAdmin = () => {
               />
 
               <Input
-                {...register("password")}
+                {...register('password')}
                 prefix={
                   <LockClosedIcon
                     className="size-5 transition-colors duration-200"
                     strokeWidth="1"
                   />
                 }
-                label={t("enter") + " " + t("password")}
+                label={t('enter') + ' ' + t('password')}
                 error={errors?.password?.message}
-                placeholder={t("enter") + " " + t("password")}
+                placeholder={t('enter') + ' ' + t('password')}
               />
             </div>
 
@@ -216,15 +209,11 @@ const EditAdmin = () => {
                 render={({ field }) => (
                   <Listbox
                     data={statusOptions}
-                    value={
-                      statusOptions.find(
-                        (status) => status.value === field.value,
-                      ) || null
-                    }
+                    value={statusOptions.find((status) => status.value === field.value) || null}
                     onChange={(val) => field.onChange(val.value)}
                     name={field.name}
-                    label={t("status")}
-                    placeholder={t("select") + " " +  t("status")}
+                    label={t('status')}
+                    placeholder={t('select') + ' ' + t('status')}
                     displayField="label"
                     error={errors?.status?.message}
                   />
@@ -234,36 +223,24 @@ const EditAdmin = () => {
               />
 
               <Input
-                {...register("mobile")}
+                {...register('mobile')}
                 prefix={<CiMobile1 className="size-5" />}
-                label={t("select") + " " +  t("mobile")}
+                label={t('select') + ' ' + t('mobile')}
                 error={errors?.mobile?.message}
-                placeholder={t("select") + " " +  t("mobile") + " " + t("number")}
+                placeholder={t('select') + ' ' + t('mobile') + ' ' + t('number')}
               />
             </div>
 
             <div className="grid gap-4 lg:grid-cols-2">
-              <Checkbox
-                label={t("isMasterAdmin")}
-                {...register("isMasterAdmin")}
-              />
+              <Checkbox label={t('isMasterAdmin')} {...register('isMasterAdmin')} />
             </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-            <Button
-              className="min-w-[7rem]"
-              onClick={() => reset()}
-              disabled={loading}
-            >
-              {t("reset")}
+            <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
+              {t('reset')}
             </Button>
-            <Button
-              type="submit"
-              className="min-w-[7rem]"
-              color="primary"
-              disabled={loading}
-            >
-              {t("edit")}
+            <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
+              {t('edit')}
             </Button>
           </div>
         </form>

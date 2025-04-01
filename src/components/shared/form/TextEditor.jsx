@@ -1,24 +1,18 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useLayoutEffect,
-  useRef,
-} from "react";
-import clsx from "clsx";
-import Quill from "quill";
-import "quill/dist/quill.snow.css";
+import PropTypes from 'prop-types';
+import { forwardRef, useEffect, useImperativeHandle, useLayoutEffect, useRef } from 'react';
+import clsx from 'clsx';
+import Quill from 'quill';
+import 'quill/dist/quill.snow.css';
 
 // Local Imports
-import { InputErrorMsg } from "components/ui";
-import { useUncontrolled } from "hooks";
+import { InputErrorMsg } from 'components/ui';
+import { useUncontrolled } from 'hooks';
 
 // ----------------------------------------------------------------------
 
-const Delta = Quill.import("delta");
-const DEFAULT_PLACEHOLDER = "Type here...";
+const Delta = Quill.import('delta');
+const DEFAULT_PLACEHOLDER = 'Type here...';
 
 const TextEditor = forwardRef(
   (
@@ -34,9 +28,9 @@ const TextEditor = forwardRef(
       className,
       error,
       classNames,
-      label,
+      label
     },
-    forwardedRef,
+    forwardedRef
   ) => {
     const containerRef = useRef(null);
     const quillRef = useRef(null);
@@ -47,7 +41,7 @@ const TextEditor = forwardRef(
       value,
       defaultValue,
       finalValue: new Delta(),
-      onChange,
+      onChange
     });
 
     const onChangeRef = useRef(handleChange);
@@ -61,14 +55,12 @@ const TextEditor = forwardRef(
     useEffect(() => {
       const container = containerRef.current;
 
-      const editorContainer = container.appendChild(
-        container.ownerDocument.createElement("div"),
-      );
+      const editorContainer = container.appendChild(container.ownerDocument.createElement('div'));
 
       const quill = new Quill(editorContainer, {
-        theme: "snow",
+        theme: 'snow',
         placeholder: placeholder || DEFAULT_PLACEHOLDER,
-        modules: modules || {},
+        modules: modules || {}
       });
 
       quill.enable(!readOnly);
@@ -79,7 +71,7 @@ const TextEditor = forwardRef(
 
       quill.on(Quill.events.TEXT_CHANGE, (...args) => {
         const [, , source] = args;
-        if (source === "user") {
+        if (source === 'user') {
           const newContent = quill.getContents();
           onChangeRef?.current(newContent, quill);
           onTextChangeRef.current?.(...args);
@@ -94,7 +86,7 @@ const TextEditor = forwardRef(
         quill.off(Quill.events.TEXT_CHANGE);
         quill.off(Quill.events.SELECTION_CHANGE);
         quillRef.current = null;
-        container.innerHTML = "";
+        container.innerHTML = '';
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [readOnly, modules, placeholder]);
@@ -103,7 +95,7 @@ const TextEditor = forwardRef(
       getQuillInstance: () => quillRef.current,
       blur: () => quillRef.current.blur(),
       focus: () => quillRef.current.focus(),
-      hasFocus: () => quillRef.current.hasFocus(),
+      hasFocus: () => quillRef.current.hasFocus()
     }));
 
     useEffect(() => {
@@ -119,36 +111,21 @@ const TextEditor = forwardRef(
     }, [quillRef, value]);
 
     return (
-      <div
-        className={clsx(
-          "flex flex-col",
-          className,
-          error && "ql-error",
-          classNames?.root,
-        )}
-      >
+      <div className={clsx('flex flex-col', className, error && 'ql-error', classNames?.root)}>
         {label && <label>{label}</label>}
         <div
-          className={clsx(
-            "ql-container",
-            label && "!mt-1.5",
-            classNames?.container,
-          )}
-          ref={containerRef}
-        ></div>
+          className={clsx('ql-container', label && '!mt-1.5', classNames?.container)}
+          ref={containerRef}></div>
 
-        <InputErrorMsg
-          when={error && typeof error !== "boolean"}
-          className={classNames?.error}
-        >
+        <InputErrorMsg when={error && typeof error !== 'boolean'} className={classNames?.error}>
           {error}
         </InputErrorMsg>
       </div>
     );
-  },
+  }
 );
 
-TextEditor.displayName = "TextEditor";
+TextEditor.displayName = 'TextEditor';
 
 TextEditor.propTypes = {
   readOnly: PropTypes.bool,
@@ -163,7 +140,7 @@ TextEditor.propTypes = {
   error: PropTypes.oneOfType([PropTypes.bool, PropTypes.node]),
   className: PropTypes.string,
   classNames: PropTypes.object,
-  label: PropTypes.node,
+  label: PropTypes.node
 };
 
 export { TextEditor, Delta, Quill };

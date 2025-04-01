@@ -1,13 +1,13 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import { NavLink, useRouteLoaderData } from "react-router";
-import clsx from "clsx";
-import { useTranslation } from "react-i18next";
+import PropTypes from 'prop-types';
+import { NavLink, useRouteLoaderData } from 'react-router';
+import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 // Local Imports
-import { useBreakpointsContext } from "app/contexts/breakpoint/context";
-import { useSidebarContext } from "app/contexts/sidebar/context";
-import { Badge } from "components/ui";
+import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
+import { useSidebarContext } from 'app/contexts/sidebar/context';
+import { Badge } from 'components/ui';
 
 // ----------------------------------------------------------------------
 
@@ -18,7 +18,7 @@ export function MenuItem({ data }) {
   const { close } = useSidebarContext();
   const title = t(transKey) || data.title;
 
-  const info = useRouteLoaderData("root")?.[id]?.info;
+  const info = useRouteLoaderData('root')?.[id]?.info;
 
   const handleMenuItemClick = () => lgAndDown && close();
 
@@ -28,26 +28,23 @@ export function MenuItem({ data }) {
       onClick={handleMenuItemClick}
       className={({ isActive }) =>
         clsx(
-          "outline-none transition-colors duration-300 ease-in-out",
+          'outline-none transition-colors duration-300 ease-in-out',
           isActive
-            ? "font-medium text-primary-600 dark:text-primary-400"
-            : "text-gray-600 hover:text-gray-900 dark:text-dark-200 dark:hover:text-dark-50",
+            ? 'font-medium text-primary-600 dark:text-primary-400'
+            : 'text-gray-600 hover:text-gray-900 dark:text-dark-200 dark:hover:text-dark-50'
         )
-      }
-    >
+      }>
       {({ isActive }) => (
         <div
           data-menu-active={isActive}
-          style={{ height: "34px" }}
-          className="flex items-center justify-between text-xs+ tracking-wide"
-        >
+          style={{ height: '34px' }}
+          className="flex items-center justify-between text-xs+ tracking-wide">
           <span className="mr-1 truncate"> {title}</span>
           {info && info.val && (
             <Badge
               color={info.color}
               variant="soft"
-              className="h-4.5 min-w-[1rem] shrink-0 p-[5px] text-tiny+"
-            >
+              className="h-4.5 min-w-[1rem] shrink-0 p-[5px] text-tiny+">
               {info.val}
             </Badge>
           )}
@@ -58,5 +55,5 @@ export function MenuItem({ data }) {
 }
 
 MenuItem.propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.object
 };

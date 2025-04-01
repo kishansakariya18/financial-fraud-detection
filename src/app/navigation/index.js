@@ -1,13 +1,8 @@
-import { country } from "./country";
-import { dashboards } from "./dashboards";
-import { platform } from "./platoform";
-import { users } from "./users";
+import { country } from './country';
+import { dashboards } from './dashboards';
+import { platform } from './platoform';
+import { users } from './users';
 
-export const navigation = [
-    dashboards,
-    users,
-    platform,
-    country
-]
+export const navigation = [dashboards, users, platform, country];
 
-export { baseNavigation } from './baseNavigation'
+export { baseNavigation } from './baseNavigation';

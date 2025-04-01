@@ -1,15 +1,6 @@
 // import { Navigate } from "react-router";
 
 export const countryRoutes = [
-  // {
-  //     path: "country",
-  //     children: [
-  //       {
-  //         index: true,
-  //         element: <Navigate to="/country" />,
-  //       },
-  //     ],
-  //   },
   {
     path: 'country',
     lazy: async () => ({

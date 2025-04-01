@@ -1,5 +1,5 @@
 import axios from 'axios';
-import store from '../store';;
+import store from '../store';
 import { LOCAL_STORAGE } from 'constants/app.constant';
 import { AuthAction } from 'store/admin-slice/AuthSlice';
 // import { toast } from 'react-toastify';

@@ -38,13 +38,13 @@ const AuthSlice = createSlice({
       console.log('message: ', message);
       if (state.isLoggedIn && message.payload) {
         // toast.error(message.payload, config.TOAST_UI);
-        console.log('logout toast should be add')
+        console.log('logout toast should be add');
       }
       state.isLoggedIn = false;
       state.userData = null;
       state.permissions = [];
     },
-      sendLoginOtp(state, action) {
+    sendLoginOtp(state, action) {
       state.isLoggedIn = false;
       state.twoStepMode = 'login';
       state.authEmail = action.payload.authEmail;
@@ -53,7 +53,7 @@ const AuthSlice = createSlice({
     },
     roleUpdate(state, action) {
       console.log('action.payload::', action.payload);
-      
+
       state.permissions = action.payload.permissions;
     }
   }
@@ -107,7 +107,7 @@ export default AuthSlice;
 //     }
 //     ,
 //     changeAdminProfile(state, action) {
-      
+
 //       state.authData.profilePic = action.payload.profilePic
 //       state.authData.firstName  = action.payload.firstName
 //       state.authData.lastName  = action.payload.lastName

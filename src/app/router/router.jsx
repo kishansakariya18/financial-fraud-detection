@@ -1,26 +1,25 @@
 // Import Dependencies
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter } from 'react-router';
 
 // Local Imports
-import Root from "app/layouts/Root";
-import RootErrorBoundary from "app/pages/errors/RootErrorBoundary";
-import { SplashScreen } from "components/template/SplashScreen";
-import { protectedRoutes } from "./protected";
+import Root from 'app/layouts/Root';
+import RootErrorBoundary from 'app/pages/errors/RootErrorBoundary';
+import { SplashScreen } from 'components/template/SplashScreen';
+import { protectedRoutes } from './protected';
 // import { ghostRoutes } from "./ghost";
-import { publicRoutes } from "./public";
-import authRoute from "./authRoute";
+import { publicRoutes } from './public';
+import authRoute from './authRoute';
 
 // ----------------------------------------------------------------------
 
 const router = createBrowserRouter([
- 
   {
-    id: "root",
+    id: 'root',
     Component: Root,
     hydrateFallbackElement: <SplashScreen />,
     ErrorBoundary: RootErrorBoundary,
-    children: [...authRoute, protectedRoutes, publicRoutes],
-  },
+    children: [...authRoute, protectedRoutes, publicRoutes]
+  }
 ]);
 
 export default router;

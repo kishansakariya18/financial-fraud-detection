@@ -1,33 +1,33 @@
 // Import Dependencies
-import { useLocation, useNavigate, useSearchParams } from "react-router";
-import { EnvelopeIcon, LockClosedIcon } from "@heroicons/react/24/outline";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import { useLocation, useNavigate, useSearchParams } from 'react-router';
+import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
 
 // Local Imports
-import Logo from "assets/appLogo.svg?react";
-import { Button, Card, Input } from "components/ui";
-import { resetPasswordSchema } from "./schema";
-import { Page } from "components/shared/Page";
-import AuthService from "services/auth.services";
-import { useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
-import { toast } from "sonner";
-import { getQueryParams } from "utils/custom.utilities";
+import Logo from 'assets/appLogo.svg?react';
+import { Button, Card, Input } from 'components/ui';
+import { resetPasswordSchema } from './schema';
+import { Page } from 'components/shared/Page';
+import AuthService from 'services/auth.services';
+import { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { toast } from 'sonner';
+import { getQueryParams } from 'utils/custom.utilities';
 
 export default function ResetPassword() {
   const {
     register,
     handleSubmit,
     resetField,
-    formState: { errors },
+    formState: { errors }
   } = useForm({
     resolver: yupResolver(resetPasswordSchema),
     defaultValues: {
-      otp: "",
-      password: "",
-      confirmPassword: "",
-    },
+      otp: '',
+      password: '',
+      confirmPassword: ''
+    }
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -39,19 +39,16 @@ export default function ResetPassword() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const [searchParams, setSearchParams] = useSearchParams();
   const [seconds, setSeconds] = useState(30);
-  const [resendOtp, setResendOtp] = useState("");
+  const [resendOtp, setResendOtp] = useState('');
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate(state?.path || "/");
+      navigate(state?.path || '/');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const queryParams = useMemo(
-    () => getQueryParams(searchParams),
-    [searchParams],
-  );
+  const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const submitHandler = async (data) => {
     setIsLoading(true);
@@ -60,7 +57,7 @@ export default function ResetPassword() {
       ...data,
       token: queryParams.token,
       email: queryParams.email,
-      mobile: queryParams.mobile,
+      mobile: queryParams.mobile
     });
     if (result) {
       if (result.status === 200) {
@@ -81,10 +78,10 @@ export default function ResetPassword() {
   // resend otp button handler
   const handleResendOtp = async (e) => {
     e.preventDefault();
-    resetField("otp");
+    resetField('otp');
     const result = await AuthService.resedOtp({
       token: queryParams.token,
-      mobile: queryParams.mobile,
+      mobile: queryParams.mobile
     });
 
     if (result) {
@@ -116,23 +113,21 @@ export default function ResetPassword() {
 
   useEffect(() => {
     if (!isLoading && !error && response) {
-        console.log('toast called');
-        
+      console.log('toast called');
+
       toast.success(response.message);
-      navigate("/login");
+      navigate('/login');
       setResponse(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
   // resend otp display message
   useEffect(() => {
-
-    if(resendOtp.message){
-        toast.success(resendOtp.message);
+    if (resendOtp.message) {
+      toast.success(resendOtp.message);
     }
 
-    
-    setResendOtp("");
+    setResendOtp('');
   }, [resendOtp]);
 
   return (
@@ -145,9 +140,7 @@ export default function ResetPassword() {
               <h2 className="text-2xl font-semibold text-gray-600 dark:text-dark-100">
                 Welcome Back
               </h2>
-              <p className="text-gray-400 dark:text-dark-300">
-                Reset Your Password To Continue
-              </p>
+              <p className="text-gray-400 dark:text-dark-300">Reset Your Password To Continue</p>
             </div>
           </div>
           <Card className="mt-5 rounded-lg p-5 lg:p-7">
@@ -162,7 +155,7 @@ export default function ResetPassword() {
                       strokeWidth="1"
                     />
                   }
-                  {...register("otp")}
+                  {...register('otp')}
                   error={errors?.otp?.message}
                 />
                 <Input
@@ -175,7 +168,7 @@ export default function ResetPassword() {
                       strokeWidth="1"
                     />
                   }
-                  {...register("password")}
+                  {...register('password')}
                   error={errors?.password?.message}
                 />
                 <Input
@@ -188,7 +181,7 @@ export default function ResetPassword() {
                       strokeWidth="1"
                     />
                   }
-                  {...register("confirmPassword")}
+                  {...register('confirmPassword')}
                   error={errors?.confirmPassword?.message}
                 />
               </div>
@@ -198,9 +191,8 @@ export default function ResetPassword() {
                   <a
                     href="##"
                     onClick={handleResendOtp}
-                    className="text-xs text-gray-400 transition-colors hover:text-gray-800 focus:text-gray-800 dark:text-dark-300 dark:hover:text-dark-100 dark:focus:text-dark-100"
-                  >
-                    {"Resend OTP?"}
+                    className="text-xs text-gray-400 transition-colors hover:text-gray-800 focus:text-gray-800 dark:text-dark-300 dark:hover:text-dark-100 dark:focus:text-dark-100">
+                    {'Resend OTP?'}
                   </a>
                 </div>
               ) : (

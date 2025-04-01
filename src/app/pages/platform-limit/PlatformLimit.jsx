@@ -1,36 +1,33 @@
 // Import Dependencies
-import { Page } from "components/shared/Page";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import { Button, Checkbox, Input } from "components/ui";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import { Breadcrumbs } from "components/shared/Breadcrumbs";
-import PlatformLimitService from "services/platform.services";
-import { updatePlatformLimitSchema } from "./schema";
-import { useTranslation } from "react-i18next";
+import { Page } from 'components/shared/Page';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { Button, Checkbox, Input } from 'components/ui';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import PlatformLimitService from 'services/platform.services';
+import { updatePlatformLimitSchema } from './schema';
+import { useTranslation } from 'react-i18next';
 
 const PlatformLimit = () => {
   const { t } = useTranslation();
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const [response, setResponse] = useState(null);
 
-  const breadcrumbItem = [
-    { title: "Platform", path: "/platform-limit" },
-    { title: "Limit" },
-  ];
+  const breadcrumbItem = [{ title: 'Platform', path: '/platform-limit' }, { title: 'Limit' }];
 
-  const pageTitle = t("platform") + " " + t("limit");
+  const pageTitle = t('platform') + ' ' + t('limit');
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
+    reset
   } = useForm({
-    resolver: yupResolver(updatePlatformLimitSchema),
+    resolver: yupResolver(updatePlatformLimitSchema)
   });
 
   useEffect(() => {
@@ -38,11 +35,11 @@ const PlatformLimit = () => {
       const result = await fetchPlatformLimit();
       if (result) {
         reset({
-          oneTimeBetLimit: result?.BetLimit?.Value || "",
-          oneTimeWinLimit: result?.WinLimit?.Value || "",
-          dailyDepositLimit: result?.MaxDepositPerDay?.Value || "",
-          dailyWithdrawLimit: result?.MaxWithdrawPerDay?.Value || "",
-          isCheckCaladerTime: +result?.CheckCalanderTime?.Value,
+          oneTimeBetLimit: result?.BetLimit?.Value || '',
+          oneTimeWinLimit: result?.WinLimit?.Value || '',
+          dailyDepositLimit: result?.MaxDepositPerDay?.Value || '',
+          dailyWithdrawLimit: result?.MaxWithdrawPerDay?.Value || '',
+          isCheckCaladerTime: +result?.CheckCalanderTime?.Value
         });
       }
     };
@@ -53,8 +50,7 @@ const PlatformLimit = () => {
   const updatePlatformLimit = async (requestObject) => {
     setLoading(true);
     setError(null);
-    const result =
-      await PlatformLimitService.updatePlatformLimit(requestObject);
+    const result = await PlatformLimitService.updatePlatformLimit(requestObject);
     if (result) {
       if (result.status === 200 || result.status === 201) {
         setResponse(result.response);
@@ -80,7 +76,7 @@ const PlatformLimit = () => {
 
   if (!loading && error) {
     toast.error(error);
-    setError("");
+    setError('');
   }
 
   if (!loading && !error && response) {
@@ -110,15 +106,15 @@ const PlatformLimit = () => {
           <div className="mt-6 space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
-                {...register("dailyDepositLimit")}
-                label={t("dailyDepositLimit")}
+                {...register('dailyDepositLimit')}
+                label={t('dailyDepositLimit')}
                 type="number"
                 error={errors?.dailyDepositLimit?.message}
                 placeholder="Enter Daily Deposit Limit"
               />
               <Input
-                {...register("dailyWithdrawLimit")}
-                label={t("dailyWithdrawLimit")}
+                {...register('dailyWithdrawLimit')}
+                label={t('dailyWithdrawLimit')}
                 type="number"
                 error={errors?.dailyWithdrawLimit?.message}
                 placeholder="Enter Daily Withdraw Limit"
@@ -126,15 +122,15 @@ const PlatformLimit = () => {
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
-                {...register("oneTimeBetLimit")}
-                label={t("oneTimeBetLimit")}
+                {...register('oneTimeBetLimit')}
+                label={t('oneTimeBetLimit')}
                 type="number"
                 error={errors?.oneTimeBetLimit?.message}
                 placeholder="Enter Bet Limit"
               />
               <Input
-                {...register("oneTimeWinLimit")}
-                label={t("oneTimeWinLimit")}
+                {...register('oneTimeWinLimit')}
+                label={t('oneTimeWinLimit')}
                 type="number"
                 error={errors?.oneTimeWinLimit?.message}
                 placeholder="Enter Win Limit"
@@ -142,27 +138,15 @@ const PlatformLimit = () => {
             </div>
 
             <div className="ml-1 grid gap-4 lg:grid-cols-2">
-              <Checkbox
-                label={t("checkCalenderTime")}
-                {...register("isCheckCaladerTime")}
-              />
+              <Checkbox label={t('checkCalenderTime')} {...register('isCheckCaladerTime')} />
             </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-            <Button
-              className="min-w-[7rem]"
-              onClick={() => reset()}
-              disabled={loading}
-            >
-              {t("reset")}
+            <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
+              {t('reset')}
             </Button>
-            <Button
-              type="submit"
-              className="min-w-[7rem]"
-              color="primary"
-              disabled={loading}
-            >
-              {t("update")}
+            <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
+              {t('update')}
             </Button>
           </div>
         </form>

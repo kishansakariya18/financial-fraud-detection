@@ -1,26 +1,21 @@
 // Import Dependencies
-import { useState } from "react";
+import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
-export function useUncontrolled({
-    value,
-    defaultValue,
-    finalValue,
-    onChange = () => { },
-}) {
-    const [uncontrolledValue, setUncontrolledValue] = useState(
-        defaultValue !== undefined ? defaultValue : finalValue
-    );
+export function useUncontrolled({ value, defaultValue, finalValue, onChange = () => {} }) {
+  const [uncontrolledValue, setUncontrolledValue] = useState(
+    defaultValue !== undefined ? defaultValue : finalValue
+  );
 
-    const handleUncontrolledChange = (val) => {
-        setUncontrolledValue(val);
-        onChange?.(val);
-    };
+  const handleUncontrolledChange = (val) => {
+    setUncontrolledValue(val);
+    onChange?.(val);
+  };
 
-    if (value !== undefined) {
-        return [value, onChange, true];
-    }
+  if (value !== undefined) {
+    return [value, onChange, true];
+  }
 
-    return [uncontrolledValue, handleUncontrolledChange, false];
+  return [uncontrolledValue, handleUncontrolledChange, false];
 }

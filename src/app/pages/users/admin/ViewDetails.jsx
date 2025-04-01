@@ -1,25 +1,25 @@
 // Import Dependencies
 // import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 // Local Imports
-import { Card, GhostSpinner } from "components/ui";
+import { Card, GhostSpinner } from 'components/ui';
 // import { useKYCFormContext } from "../KYCFormContext";
 // import { declarationSchema } from "../schema";
-import AdminService from "services/admin.services";
-import { useParams } from "react-router";
-import { Page } from "components/shared/Page";
-import { parseAdminStatusToApp } from "./helper";
-import { getDateInUTCToTimeZone } from "helpers/functions";
-import { useTranslation } from "react-i18next";
+import AdminService from 'services/admin.services';
+import { useParams } from 'react-router';
+import { Page } from 'components/shared/Page';
+import { parseAdminStatusToApp } from './helper';
+import { getDateInUTCToTimeZone } from 'helpers/functions';
+import { useTranslation } from 'react-i18next';
 
-const ViewDetails = () =>{
+const ViewDetails = () => {
   //   const kycFormCtx = useKYCFormContext();
   const { t } = useTranslation();
-  const pageTitle = t("admin") + " " + t("details");
+  const pageTitle = t('admin') + ' ' + t('details');
   const [loading, setLoading] = useState(false);
-  const [response, setResponse] = useState("");
-  const [error, setError] = useState("");
+  const [response, setResponse] = useState('');
+  const [error, setError] = useState('');
 
   const { adminId } = useParams();
 
@@ -50,70 +50,63 @@ const ViewDetails = () =>{
 
         <div className="col-span-12 sm:col-span-8 lg:col-span-9">
           <Card className="h-full p-4 sm:p-5">
-            <h5 className="text-lg font-medium text-gray-800 dark:text-dark-100">
-              {t("details")}
-            </h5>
+            <h5 className="text-lg font-medium text-gray-800 dark:text-dark-100">{t('details')}</h5>
             <p className="text-sm text-gray-500 dark:text-dark-200">
-              {t("details") + " " +  t("regarding") + " " + t("admin")}
+              {t('details') + ' ' + t('regarding') + ' ' + t('admin')}
             </p>
 
             <h6 className="mt-8 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
-              {t("information")}:
+              {t('information')}:
             </h6>
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t("userName")}:
+                  {t('userName')}:
                 </p>
                 <p>{response?.Username}</p>
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t("firstName")}:
+                  {t('firstName')}:
                 </p>
                 <p>{response?.FirstName}</p>
               </div>
 
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t("lastName")}:
+                  {t('lastName')}:
                 </p>
                 <p>{response?.LastName}</p>
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t("email")}:
+                  {t('email')}:
                 </p>
                 <p>{response?.Email}</p>
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t("mobile")}:
+                  {t('mobile')}:
                 </p>
                 <p>
-                  {response?.dialCode || "+91"} {response?.Mobile}
+                  {response?.dialCode || '+91'} {response?.Mobile}
                 </p>
               </div>
 
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t("status")}:
+                  {t('status')}:
                 </p>
-                <p>
-                  {+response.Status >= 0 &&
-                    parseAdminStatusToApp(+response?.Status)}
-                </p>
+                <p>{+response.Status >= 0 && parseAdminStatusToApp(+response?.Status)}</p>
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t("createdAt")}:
+                  {t('createdAt')}:
                 </p>
                 <p>{getDateInUTCToTimeZone(response?.DateCreated)}</p>
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t("role")}:
-                </p>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('role')}:</p>
                 <p>{response?.Role}</p>
               </div>
             </div>
@@ -127,6 +120,6 @@ const ViewDetails = () =>{
       </div>
     </Page>
   );
-}
+};
 
-export default ViewDetails
+export default ViewDetails;

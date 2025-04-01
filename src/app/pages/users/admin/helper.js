@@ -1,14 +1,13 @@
-import { CheckBadgeIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { getDateInUTCToTimeZone } from "../../../../helpers/functions";
+import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { getDateInUTCToTimeZone } from '../../../../helpers/functions';
 
-export const parseAdminStatusToApp = (status) =>
-  status ? "active" : "inactive";
+export const parseAdminStatusToApp = (status) => (status ? 'active' : 'inactive');
 
 export const parseAdminStatusToApi = (status) => {
   let apiStatus = null;
-  if (status === "inactive") {
+  if (status === 'inactive') {
     apiStatus = 0;
-  } else if (status === "active") {
+  } else if (status === 'active') {
     apiStatus = 1;
   }
   return apiStatus;
@@ -27,10 +26,8 @@ export const responseMapper = (apiData) => {
     email: data.Email,
     createdAt: getDateInUTCToTimeZone(data.DateCreated),
     isMasterAdmin: data.MasterAdmin,
-    lastLoginAt: data.LastLoginAt
-      ? getDateInUTCToTimeZone(data.LastLoginAt)
-      : "",
-    status: parseAdminStatusToApp(data.Status),
+    lastLoginAt: data.LastLoginAt ? getDateInUTCToTimeZone(data.LastLoginAt) : '',
+    status: parseAdminStatusToApp(data.Status)
   }));
   return resultData;
 };
@@ -38,22 +35,22 @@ export const adminDetailResponseMapper = (data) => {
   const resultData = {
     ...data,
     Status: parseAdminStatusToApp(data.Status),
-    MasterAdmin: data.MasterAdmin ? "yes" : "no",
+    MasterAdmin: data.MasterAdmin ? 'yes' : 'no'
   };
   return resultData;
 };
 
 export const statusOptions = [
   {
-    value: "active",
-    label: "Active",
-    color: "success",
-    icon: CheckBadgeIcon,
+    value: 'active',
+    label: 'Active',
+    color: 'success',
+    icon: CheckBadgeIcon
   },
   {
-    value: "inactive",
-    label: "Inactive",
-    color: "error",
-    icon: XCircleIcon,
-  },
+    value: 'inactive',
+    label: 'Inactive',
+    color: 'error',
+    icon: XCircleIcon
+  }
 ];

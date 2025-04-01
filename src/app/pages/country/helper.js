@@ -1,13 +1,12 @@
-import { CheckBadgeIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
 
-export const parseAdminStatusToApp = (status) =>
-  status ? "active" : "inactive";
+export const parseAdminStatusToApp = (status) => (status ? 'active' : 'inactive');
 
 export const parseAdminStatusToApi = (status) => {
   let apiStatus = null;
-  if (status === "inactive") {
+  if (status === 'inactive') {
     apiStatus = 0;
-  } else if (status === "active") {
+  } else if (status === 'active') {
     apiStatus = 1;
   }
   return apiStatus;
@@ -20,22 +19,22 @@ export const responseMapper = (apiData) => {
     id: data.CountryID,
     countryName: data.CountryName,
     countryCode: data.CountryCode,
-    status: parseAdminStatusToApp(data.Status),
+    status: parseAdminStatusToApp(data.Status)
   }));
   return resultData;
 };
 
 export const statusOptions = [
   {
-    value: "active",
-    label: "Active",
-    color: "success",
-    icon: CheckBadgeIcon,
+    value: 'active',
+    label: 'Active',
+    color: 'success',
+    icon: CheckBadgeIcon
   },
   {
-    value: "inactive",
-    label: "Inactive",
-    color: "error",
-    icon: XCircleIcon,
-  },
+    value: 'inactive',
+    label: 'Inactive',
+    color: 'error',
+    icon: XCircleIcon
+  }
 ];

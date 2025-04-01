@@ -1,16 +1,6 @@
 // Import Dependencies
-import {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  Transition,
-} from '@headlessui/react';
-import {
-  EllipsisHorizontalIcon,
-  EyeIcon,
-  PencilIcon,
-} from '@heroicons/react/24/outline';
+import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
+import { EllipsisHorizontalIcon, EyeIcon, PencilIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -52,22 +42,18 @@ export function RowActions({ row, table }) {
             enterTo="opacity-100 translate-y-0"
             leave="transition ease-in"
             leaveFrom="opacity-100 translate-y-0"
-            leaveTo="opacity-0 translate-y-2"
-          >
+            leaveTo="opacity-0 translate-y-2">
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
-              className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0"
-            >
+              className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
               <MenuItem>
                 {({ focus }) => (
                   <button
                     className={clsx(
                       'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
-                      focus &&
-                        'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100',
+                      focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
                     )}
-                    onClick={onOpenDialogBox}
-                  >
+                    onClick={onOpenDialogBox}>
                     <EyeIcon className="size-4.5 stroke-1" />
                     <span>{t('view')}</span>
                   </button>
@@ -84,13 +70,11 @@ export function RowActions({ row, table }) {
         icon={<PencilIcon className="size-4.5 stroke-1" />}
         btnClassName={clsx(
           'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
-          focus &&
-            'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100',
+          focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
         )}
         onClose={onCloseDialogBox}
         onOpen={onOpenDialogBox}
-        onOk={onOkDialogBox}
-      >
+        onOk={onOkDialogBox}>
         <ViewDetails transactionId={row.original.id} onClose={onCloseDialogBox} />
       </CustomModal>
     </>
@@ -99,5 +83,5 @@ export function RowActions({ row, table }) {
 
 RowActions.propTypes = {
   row: PropTypes.object,
-  table: PropTypes.object,
+  table: PropTypes.object
 };
