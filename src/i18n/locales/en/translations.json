@@ -20,6 +20,7 @@
       "limit": "Platform Limit"
     }
   },
+  "country": "Country",
   "add": "Add",
   "edit": "Edit",
   "roles": "Roles",

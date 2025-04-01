@@ -6,6 +6,7 @@ import adminRoute from "./routes/admin.route";
 import playerRoutes from "./routes/player.route";
 import roleRoutes from "./routes/role.route";
 import platformRoute from "./routes/platformSetting.route";
+import countryRoutes from "./routes/country.route";
 
 // ----------------------------------------------------------------------
 
@@ -21,7 +22,8 @@ const protectedRoutes = {
         ...adminRoute,
         ...playerRoutes,
         ...roleRoutes,
-        ...platformRoute
+        ...platformRoute,
+        ...countryRoutes
       ],
     },
   ],
