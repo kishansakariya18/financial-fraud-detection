@@ -1,12 +1,12 @@
 // Import Dependencies
-import { Outlet } from "react-router";
-import { useState } from "react";
+import { Outlet } from 'react-router';
+import { useState } from 'react';
 
 // Local Imports
-import { useSidebarContext } from "app/contexts/sidebar/context";
-import { useThemeContext } from "app/contexts/theme/context";
-import { useBreakpointsContext } from "app/contexts/breakpoint/context";
-import { useIsomorphicEffect } from "hooks";
+import { useSidebarContext } from 'app/contexts/sidebar/context';
+import { useThemeContext } from 'app/contexts/theme/context';
+import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
+import { useIsomorphicEffect } from 'hooks';
 
 // ----------------------------------------------------------------------
 
@@ -26,11 +26,11 @@ export function AppLayout() {
   }, [close, lgAndDown, open, xlAndUp]);
 
   useIsomorphicEffect(() => {
-    dataset.layout = "main-layout";
+    dataset.layout = 'main-layout';
 
     // Fix flicker layout
     queueMicrotask(() => {
-      dataset.layout = "main-layout";
+      dataset.layout = 'main-layout';
     });
 
     return () => {

@@ -1,9 +1,9 @@
 // Import Dependencies
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 // Local Imports
-import { ensureString } from "utils/ensureString";
-import { Highlight } from "../Highlight";
+import { ensureString } from 'utils/ensureString';
+import { Highlight } from '../Highlight';
 
 // ----------------------------------------------------------------------
 
@@ -19,5 +19,5 @@ export function HighlightableCell({ getValue, table }) {
 
 HighlightableCell.propTypes = {
   getValue: PropTypes.func,
-  table: PropTypes.object,
+  table: PropTypes.object
 };

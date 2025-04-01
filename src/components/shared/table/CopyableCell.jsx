@@ -1,12 +1,12 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import { DocumentDuplicateIcon } from "@heroicons/react/20/solid";
+import PropTypes from 'prop-types';
+import { DocumentDuplicateIcon } from '@heroicons/react/20/solid';
 
 // Local Imports
-import { Button } from "components/ui";
-import { useClipboard } from "hooks";
-import { ensureString } from "utils/ensureString";
-import { Highlight } from "../Highlight";
+import { Button } from 'components/ui';
+import { useClipboard } from 'hooks';
+import { ensureString } from 'utils/ensureString';
+import { Highlight } from '../Highlight';
 
 // ----------------------------------------------------------------------
 
@@ -17,19 +17,16 @@ export function CopyableCell({ getValue, table, highlight }) {
 
   return (
     <div className="flex space-x-1 rtl:space-x-reverse">
-      <span>
-        {highlight ? <Highlight query={query}>{val}</Highlight> : val}
-      </span>
+      <span>{highlight ? <Highlight query={query}>{val}</Highlight> : val}</span>
 
       <Button
         data-tooltip
-        data-tooltip-content={copied ? "Copied" : "Copy"}
+        data-tooltip-content={copied ? 'Copied' : 'Copy'}
         onClick={() => copy(val)}
         isIcon
         variant="flat"
         className="size-5 rounded-full opacity-0 group-hover/td:opacity-100"
-        aria-label="Copy Button"
-      >
+        aria-label="Copy Button">
         <DocumentDuplicateIcon className="size-3.5" />
       </Button>
     </div>
@@ -39,5 +36,5 @@ export function CopyableCell({ getValue, table, highlight }) {
 CopyableCell.propTypes = {
   getValue: PropTypes.func,
   table: PropTypes.object,
-  highlight: PropTypes.bool,
+  highlight: PropTypes.bool
 };

@@ -1,19 +1,12 @@
 // Local Imports
-import { Page } from "components/shared/Page";
-import { Outlet, NavLink, useParams } from "react-router";
+import { Page } from 'components/shared/Page';
+import { Outlet, NavLink, useParams } from 'react-router';
 // import TabNavigation from "./ShiftLeftAnimation";
-import clsx from "clsx";
-import { HomeIcon } from "@heroicons/react/24/outline";
-import {
-  Button,
-  Tab,
-  TabGroup,
-  TabList,
-  TabPanel,
-  TabPanels,
-} from "@headlessui/react";
-import { randomId } from "utils/randomId";
-import { useTranslation } from "react-i18next";
+import clsx from 'clsx';
+import { HomeIcon } from '@heroicons/react/24/outline';
+import { Button, Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
+import { randomId } from 'utils/randomId';
+import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
@@ -23,10 +16,10 @@ export default function Tabs() {
   const tabs = [
     {
       id: randomId(),
-      title: t("details"),
+      title: t('details'),
       path: `/admin/${adminId}/tab/details`,
-      icon: HomeIcon,
-    },
+      icon: HomeIcon
+    }
   ];
 
   return (
@@ -40,15 +33,14 @@ export default function Tabs() {
                   key={tab.id}
                   className={({ selected }) =>
                     clsx(
-                      "shrink-0 space-x-2 whitespace-nowrap border-b-2 px-3 py-2 font-medium rtl:space-x-reverse",
+                      'shrink-0 space-x-2 whitespace-nowrap border-b-2 px-3 py-2 font-medium rtl:space-x-reverse',
                       selected
-                        ? "border-primary-600 text-primary-600 dark:border-primary-500 dark:text-primary-400"
-                        : "border-transparent hover:text-gray-800 focus:text-gray-800 dark:hover:text-dark-100 dark:focus:text-dark-100",
+                        ? 'border-primary-600 text-primary-600 dark:border-primary-500 dark:text-primary-400'
+                        : 'border-transparent hover:text-gray-800 focus:text-gray-800 dark:hover:text-dark-100 dark:focus:text-dark-100'
                     )
                   }
                   as={Button}
-                  unstyled="true"
-                >
+                  unstyled="true">
                   <NavLink>
                     <tab.icon className="size-4.5" />
                     <span>{tab.title}</span>

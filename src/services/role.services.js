@@ -1,6 +1,6 @@
-import { replaceText } from "utils/custom.utilities";
-import apiConfig from "../configs/api.config";
-import { sendRequest } from "../utils/axios";
+import { replaceText } from 'utils/custom.utilities';
+import apiConfig from '../configs/api.config';
+import { sendRequest } from '../utils/axios';
 const RoleService = {
   rolePermissionList: async () => {
     try {
@@ -8,14 +8,14 @@ const RoleService = {
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
-        },
+          'Content-Type': 'application/json'
+        }
       });
       return response;
     } catch (error) {
-      console.log("Error from role Permission List", error);
+      console.log('Error from role Permission List', error);
     }
   },
   roleSubmit: async (data) => {
@@ -80,7 +80,7 @@ const RoleService = {
     } catch (error) {
       console.log('Error from Edit role permission', error);
     }
-  },
+  }
 };
 
 export default RoleService;

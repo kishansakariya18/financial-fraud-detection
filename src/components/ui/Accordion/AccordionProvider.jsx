@@ -1,31 +1,22 @@
 // Import Dependencies
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 // Local Imports
-import { useId, useUncontrolled } from "hooks";
-import { AccordionContextProvider } from "./Accordion.context";
+import { useId, useUncontrolled } from 'hooks';
+import { AccordionContextProvider } from './Accordion.context';
 
 // ----------------------------------------------------------------------
 
 const AccordionProvider = (props) => {
-  const {
-    children,
-    multiple,
-    value,
-    defaultValue,
-    onChange,
-    id,
-    transitionDuration,
-    loop,
-  } = props;
+  const { children, multiple, value, defaultValue, onChange, id, transitionDuration, loop } = props;
 
-  const uid = useId(id, "accordion");
+  const uid = useId(id, 'accordion');
 
   const [_value, handleChange] = useUncontrolled({
     value,
     defaultValue,
     finalValue: multiple ? [] : null,
-    onChange,
+    onChange
   });
 
   const isItemActive = (itemValue) =>
@@ -51,9 +42,8 @@ const AccordionProvider = (props) => {
         buttonId: `${uid}-control`,
         panelId: `${uid}-panel`,
         transitionDuration,
-        loop,
-      }}
-    >
+        loop
+      }}>
       {children}
     </AccordionContextProvider>
   );
@@ -67,7 +57,7 @@ AccordionProvider.propTypes = {
   onChange: PropTypes.func,
   id: PropTypes.string,
   transitionDuration: PropTypes.number,
-  loop: PropTypes.bool,
+  loop: PropTypes.bool
 };
 
 export { AccordionProvider };

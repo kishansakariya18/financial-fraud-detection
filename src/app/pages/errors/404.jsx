@@ -1,12 +1,12 @@
 // Import Dependencies
-import { Link } from "react-router";
+import { Link } from 'react-router';
 
 // Local Imports
-import Error404Magnify from "assets/illustrations/error-404-magnify.svg?react";
-import { Page } from "components/shared/Page";
-import { Button } from "components/ui";
-import { useThemeContext } from "app/contexts/theme/context";
-import { useHover } from "hooks";
+import Error404Magnify from 'assets/illustrations/error-404-magnify.svg?react';
+import { Page } from 'components/shared/Page';
+import { Button } from 'components/ui';
+import { useThemeContext } from 'app/contexts/theme/context';
+import { useHover } from 'hooks';
 
 // ----------------------------------------------------------------------
 
@@ -21,8 +21,8 @@ export default function Error404() {
           <Error404Magnify
             className="w-full"
             style={{
-              "--primary": isDark ? primary[500] : primary[600],
-              "--primary-light": primary[300],
+              '--primary': isDark ? primary[500] : primary[600],
+              '--primary-light': primary[300]
             }}
           />
           <p className="pt-4 text-xl font-semibold text-gray-800 dark:text-dark-50">
@@ -38,8 +38,7 @@ export default function Error404() {
               ref={btnRef}
               isGlow={btnHovered}
               color="primary"
-              className="h-11 text-base"
-            >
+              className="h-11 text-base">
               Back To Home
             </Button>
           </div>

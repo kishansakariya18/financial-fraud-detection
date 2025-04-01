@@ -1,16 +1,15 @@
-import { useState, useRef } from "react"
-import { useEventListener } from "./useEventListener"
+import { useState, useRef } from 'react';
+import { useEventListener } from './useEventListener';
 
 export function useHover() {
-    const [value, setValue] = useState(false)
-    const ref = useRef(null);
+  const [value, setValue] = useState(false);
+  const ref = useRef(null);
 
-    const handleMouseEnter = () => setValue(true)
-    const handleMouseLeave = () => setValue(false)
+  const handleMouseEnter = () => setValue(true);
+  const handleMouseLeave = () => setValue(false);
 
-    useEventListener('mouseenter', handleMouseEnter, ref)
-    useEventListener('mouseleave', handleMouseLeave, ref)
+  useEventListener('mouseenter', handleMouseEnter, ref);
+  useEventListener('mouseleave', handleMouseLeave, ref);
 
-    return [ref, value]
+  return [ref, value];
 }
-

@@ -1,8 +1,8 @@
 // Import Dependencies
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 // Local Imports
-import { Checkbox } from "components/ui";
+import { Checkbox } from 'components/ui';
 
 // ----------------------------------------------------------------------
 
@@ -35,9 +35,9 @@ export function SelectCell({ row }) {
 }
 
 SelectHeader.propTypes = {
-  table: PropTypes.object,
+  table: PropTypes.object
 };
 
 SelectCell.propTypes = {
-  row: PropTypes.object,
+  row: PropTypes.object
 };

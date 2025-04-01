@@ -1,4 +1,4 @@
-import { isRef } from "./isRef"
+import { isRef } from './isRef';
 
 /**
  * Accepts either a ref object or a dom node and returns a dom node
@@ -7,10 +7,5 @@ import { isRef } from "./isRef"
  * @returns {Element} - The resolved DOM node.
  */
 export function unRef(target) {
-    return isRef(target)
-        ? target.current
-        : target
+  return isRef(target) ? target.current : target;
 }
-
-
-

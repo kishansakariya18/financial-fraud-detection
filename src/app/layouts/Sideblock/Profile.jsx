@@ -1,50 +1,41 @@
 // Import Dependencies
-import {
-  Popover,
-  PopoverButton,
-  PopoverPanel,
-  Transition,
-} from "@headlessui/react";
-import {
-  ArrowLeftStartOnRectangleIcon,
-  Cog6ToothIcon,
-} from "@heroicons/react/24/outline";
-import { TbUser } from "react-icons/tb";
-import { Link, useNavigate } from "react-router";
+import { Popover, PopoverButton, PopoverPanel, Transition } from '@headlessui/react';
+import { ArrowLeftStartOnRectangleIcon, Cog6ToothIcon } from '@heroicons/react/24/outline';
+import { TbUser } from 'react-icons/tb';
+import { Link, useNavigate } from 'react-router';
 
 // Local Imports
-import { Avatar, AvatarDot, Button } from "components/ui";
-import { AuthAction } from "store/admin-slice/AuthSlice";
-import { useDispatch } from "react-redux";
-import { LOCAL_STORAGE } from "constants/app.constant";
-import { toast } from "sonner";
-
+import { Avatar, AvatarDot, Button } from 'components/ui';
+import { AuthAction } from 'store/admin-slice/AuthSlice';
+import { useDispatch } from 'react-redux';
+import { LOCAL_STORAGE } from 'constants/app.constant';
+import { toast } from 'sonner';
 
 const links = [
   {
-    id: "1",
-    title: "Profile",
-    description: "Your profile Setting",
-    to: "/settings/general",
+    id: '1',
+    title: 'Profile',
+    description: 'Your profile Setting',
+    to: '/settings/general',
     Icon: TbUser,
-    color: "warning",
+    color: 'warning'
   },
   {
-    id: "2",
-    title: "Settings",
-    description: "Webapp settings",
-    to: "/settings/appearance",
+    id: '2',
+    title: 'Settings',
+    description: 'Webapp settings',
+    to: '/settings/appearance',
     Icon: Cog6ToothIcon,
-    color: "success",
-  },
+    color: 'success'
+  }
 ];
 
 export function Profile() {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const logoutHandler = (e) => {
     e.preventDefault();
-    toast.success("Logout Successfully");
+    toast.success('Logout Successfully');
     dispatch(AuthAction.logout());
     localStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN);
     localStorage.removeItem(LOCAL_STORAGE.USER_DATA);
@@ -55,7 +46,7 @@ export function Profile() {
     localStorage.removeItem(LOCAL_STORAGE.SETTINGS);
     localStorage.removeItem(LOCAL_STORAGE.TWO_STEP_MODE);
     setTimeout(() => {
-      navigate("/login");
+      navigate('/login');
     }, 0);
   };
 
@@ -66,12 +57,7 @@ export function Profile() {
         size={9}
         role="button"
         src="/images/100x100.png"
-        indicator={
-          <AvatarDot
-            color="success"
-            className="-m-0.5 size-3 ltr:right-0 rtl:left-0"
-          />
-        }
+        indicator={<AvatarDot color="success" className="-m-0.5 size-3 ltr:right-0 rtl:left-0" />}
       />
       <Transition
         enter="duration-200 ease-out"
@@ -79,12 +65,10 @@ export function Profile() {
         enterTo="translate-y-0 opacity-100"
         leave="duration-200 ease-out"
         leaveFrom="translate-y-0 opacity-100"
-        leaveTo="translate-y-2 opacity-0"
-      >
+        leaveTo="translate-y-2 opacity-0">
         <PopoverPanel
-          anchor={{ to: "bottom end", gap: 12 }}
-          className="z-[70] flex w-64 flex-col rounded-lg border border-gray-150 bg-white shadow-soft transition dark:border-dark-600 dark:bg-dark-700 dark:shadow-none"
-        >
+          anchor={{ to: 'bottom end', gap: 12 }}
+          className="z-[70] flex w-64 flex-col rounded-lg border border-gray-150 bg-white shadow-soft transition dark:border-dark-600 dark:bg-dark-700 dark:shadow-none">
           {({ close }) => (
             <>
               <div className="flex items-center gap-4 rounded-t-lg bg-gray-100 px-4 py-5 dark:bg-dark-800">
@@ -92,8 +76,7 @@ export function Profile() {
                 <div>
                   <Link
                     className="text-base font-medium text-gray-700 hover:text-primary-600 focus:text-primary-600 dark:text-dark-100 dark:hover:text-primary-400 dark:focus:text-primary-400"
-                    to="/settings/general"
-                  >
+                    to="/settings/general">
                     Travis Fuller
                   </Link>
 
@@ -108,13 +91,11 @@ export function Profile() {
                     key={link.id}
                     to={link.to}
                     onClick={close}
-                    className="group flex items-center gap-3 px-4 py-2 tracking-wide outline-none transition-all hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-dark-600 dark:focus:bg-dark-600"
-                  >
+                    className="group flex items-center gap-3 px-4 py-2 tracking-wide outline-none transition-all hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-dark-600 dark:focus:bg-dark-600">
                     <Avatar
                       size={8}
                       initialColor={link.color}
-                      classNames={{ display: "rounded-lg" }}
-                    >
+                      classNames={{ display: 'rounded-lg' }}>
                       <link.Icon className="size-4.5" />
                     </Avatar>
                     <div>

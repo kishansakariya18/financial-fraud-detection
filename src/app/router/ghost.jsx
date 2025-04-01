@@ -1,16 +1,16 @@
-import GhostGuard from "middleware/GhostGuard";
+import GhostGuard from 'middleware/GhostGuard';
 
 const ghostRoutes = {
-  id: "ghost",
+  id: 'ghost',
   Component: GhostGuard,
   children: [
     {
-      path: "login",
+      path: 'login',
       lazy: async () => ({
-        Component: (await import("../pages/Auth/Login")).default,
-      }),
-    },
-  ],
+        Component: (await import('../pages/Auth/Login')).default
+      })
+    }
+  ]
 };
 
 export { ghostRoutes };

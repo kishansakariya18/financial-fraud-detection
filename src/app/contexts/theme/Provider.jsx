@@ -1,11 +1,11 @@
 // Import Dependencies
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
 // Local Imports
-import { defaultTheme } from "configs/theme.config";
-import { colors } from "constants/colors.constant";
-import { useIsomorphicEffect, useLocalStorage, useMediaQuery } from "hooks";
-import { ThemeContext } from "./context";
+import { defaultTheme } from 'configs/theme.config';
+import { colors } from 'constants/colors.constant';
+import { useIsomorphicEffect, useLocalStorage, useMediaQuery } from 'hooks';
+import { ThemeContext } from './context';
 
 // ----------------------------------------------------------------------
 
@@ -20,17 +20,17 @@ const initialState = {
   setPrimaryColorScheme: () => {},
   setNotificationPosition: () => {},
   setNotificationExpand: () => {},
-  resetTheme: () => {},
+  resetTheme: () => {}
 };
 
-const COLOR_SCHEME_QUERY = "(prefers-color-scheme: dark)";
+const COLOR_SCHEME_QUERY = '(prefers-color-scheme: dark)';
 
 const _html = document?.documentElement;
 
 export function ThemeProvider({ children }) {
   const isDarkOS = useMediaQuery(COLOR_SCHEME_QUERY);
 
-  const [settings, setSettings] = useLocalStorage("settings", {
+  const [settings, setSettings] = useLocalStorage('settings', {
     themeMode: initialState.themeMode,
     themeLayout: initialState.themeLayout,
     cardSkin: initialState.cardSkin,
@@ -38,18 +38,16 @@ export function ThemeProvider({ children }) {
     darkColorScheme: initialState.darkColorScheme,
     lightColorScheme: initialState.lightColorScheme,
     primaryColorScheme: initialState.primaryColorScheme,
-    notification: { ...initialState.notification },
+    notification: { ...initialState.notification }
   });
 
-  const isDark =
-    (settings.themeMode === "system" && isDarkOS) ||
-    settings.themeMode === "dark";
+  const isDark = (settings.themeMode === 'system' && isDarkOS) || settings.themeMode === 'dark';
 
   const setThemeMode = (val) => {
     setSettings((settings) => {
       return {
         ...settings,
-        themeMode: val,
+        themeMode: val
       };
     });
   };
@@ -57,14 +55,14 @@ export function ThemeProvider({ children }) {
   const setThemeLayout = (val) => {
     setSettings({
       ...settings,
-      themeLayout: val,
+      themeLayout: val
     });
   };
 
   const setMonochromeMode = (val) => {
     setSettings({
       ...settings,
-      isMonochrome: val,
+      isMonochrome: val
     });
   };
 
@@ -73,8 +71,8 @@ export function ThemeProvider({ children }) {
       ...settings,
       darkColorScheme: {
         name: val,
-        ...colors[val],
-      },
+        ...colors[val]
+      }
     });
   };
 
@@ -83,8 +81,8 @@ export function ThemeProvider({ children }) {
       ...settings,
       lightColorScheme: {
         name: val,
-        ...colors[val],
-      },
+        ...colors[val]
+      }
     });
   };
 
@@ -94,8 +92,8 @@ export function ThemeProvider({ children }) {
         ...settings,
         primaryColorScheme: {
           name: val,
-          ...colors[val],
-        },
+          ...colors[val]
+        }
       };
     });
   };
@@ -105,8 +103,8 @@ export function ThemeProvider({ children }) {
       ...settings,
       notification: {
         ...settings.notification,
-        position: val,
-      },
+        position: val
+      }
     });
   };
 
@@ -115,8 +113,8 @@ export function ThemeProvider({ children }) {
       ...settings,
       notification: {
         ...settings.notification,
-        isExpanded: val,
-      },
+        isExpanded: val
+      }
     });
   };
 
@@ -125,8 +123,8 @@ export function ThemeProvider({ children }) {
       ...settings,
       notification: {
         ...settings.notification,
-        visibleToasts: val,
-      },
+        visibleToasts: val
+      }
     });
   };
 
@@ -145,18 +143,18 @@ export function ThemeProvider({ children }) {
       lightColorScheme: initialState.lightColorScheme,
       primaryColorScheme: initialState.primaryColorScheme,
       cardSkin: initialState.cardSkin,
-      notification: { ...initialState.notification },
+      notification: { ...initialState.notification }
     });
   };
 
   useIsomorphicEffect(() => {
-    isDark ? _html.classList.add("dark") : _html.classList.remove("dark");
+    isDark ? _html.classList.add('dark') : _html.classList.remove('dark');
   }, [isDark]);
 
   useIsomorphicEffect(() => {
     settings.isMonochrome
-      ? document.body.classList.add("is-monochrome")
-      : document.body.classList.remove("is-monochrome");
+      ? document.body.classList.add('is-monochrome')
+      : document.body.classList.remove('is-monochrome');
   }, [settings.isMonochrome]);
 
   useIsomorphicEffect(() => {
@@ -199,14 +197,13 @@ export function ThemeProvider({ children }) {
         setNotificationMaxCount,
         setCardSkin,
         setSettings,
-        resetTheme,
-      }}
-    >
+        resetTheme
+      }}>
       {children}
     </ThemeContext>
   );
 }
 
 ThemeProvider.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node
 };

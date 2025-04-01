@@ -7,13 +7,13 @@
  * @returns {number[]} - An array containing numbers from start to end.
  */
 export function range(start, end, step = 1) {
-    if (typeof start !== 'number' || typeof end !== 'number' || typeof step !== 'number') {
-        throw new TypeError("Start, end, and step must be numbers.");
-    }
+  if (typeof start !== 'number' || typeof end !== 'number' || typeof step !== 'number') {
+    throw new TypeError('Start, end, and step must be numbers.');
+  }
 
-    const result = [];
-    for (let i = start; step > 0 ? i <= end : i >= end; i += step) {
-        result.push(i);
-    }
-    return result;
+  const result = [];
+  for (let i = start; step > 0 ? i <= end : i >= end; i += step) {
+    result.push(i);
+  }
+  return result;
 }

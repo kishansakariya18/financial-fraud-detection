@@ -1,10 +1,10 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import { forwardRef } from "react";
-import clsx from "clsx";
+import PropTypes from 'prop-types';
+import { forwardRef } from 'react';
+import clsx from 'clsx';
 
 // Local Imports
-import { useDataScrollOverflow, mergeRefs } from "hooks";
+import { useDataScrollOverflow, mergeRefs } from 'hooks';
 
 // ----------------------------------------------------------------------
 
@@ -16,37 +16,36 @@ const ScrollShadow = forwardRef((props, ref) => {
     size = 10,
     offset = 0,
     isEnabled = true,
-    orientation = "vertical",
+    orientation = 'vertical',
     style,
     ...rest
   } = props;
 
-  const Component = component || "div";
+  const Component = component || 'div';
 
   const { ref: domRef } = useDataScrollOverflow({
     offset,
     isEnabled,
-    overflowCheck: orientation,
+    overflowCheck: orientation
   });
 
   return (
     <Component
       {...{
         ref: mergeRefs(domRef, ref),
-        "data-orientation": orientation,
+        'data-orientation': orientation,
         className: clsx(
-          orientation === "vertical" && "overflow-y-auto",
-          orientation === "horizontal" && "overflow-x-auto",
-          orientation === "both" && "overflow-auto",
-          className,
+          orientation === 'vertical' && 'overflow-y-auto',
+          orientation === 'horizontal' && 'overflow-x-auto',
+          orientation === 'both' && 'overflow-auto',
+          className
         ),
         style: {
-          "--scroll-shadow-size": `${size / 4}rem`,
-          ...style,
+          '--scroll-shadow-size': `${size / 4}rem`,
+          ...style
         },
-        ...rest,
-      }}
-    >
+        ...rest
+      }}>
       {children}
     </Component>
   );
@@ -59,10 +58,10 @@ ScrollShadow.propTypes = {
   size: PropTypes.number,
   offset: PropTypes.number,
   isEnabled: PropTypes.bool,
-  orientation: PropTypes.oneOf(["vertical", "horizontal", "both"]),
-  style: PropTypes.object,
+  orientation: PropTypes.oneOf(['vertical', 'horizontal', 'both']),
+  style: PropTypes.object
 };
 
-ScrollShadow.displayName = "ScrollShadow";
+ScrollShadow.displayName = 'ScrollShadow';
 
 export { ScrollShadow };

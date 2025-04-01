@@ -1,7 +1,7 @@
 // Local Imports
-import { usePaginationContext } from "./Pagination.context";
-import { PaginationControl } from "./PaginationControl";
-import { PaginationDots } from "./PaginationDots";
+import { usePaginationContext } from './Pagination.context';
+import { PaginationControl } from './PaginationControl';
+import { PaginationDots } from './PaginationDots';
 
 // ----------------------------------------------------------------------
 
@@ -9,7 +9,7 @@ function PaginationItems() {
   const ctx = usePaginationContext();
 
   const items = ctx.range.map((page, index) => {
-    if (page === "dots") {
+    if (page === 'dots') {
       return <PaginationDots key={index} />;
     }
 
@@ -17,11 +17,10 @@ function PaginationItems() {
       <PaginationControl
         key={index}
         active={page === ctx.active}
-        aria-current={page === ctx.active ? "page" : undefined}
+        aria-current={page === ctx.active ? 'page' : undefined}
         onClick={() => ctx.onChange(page)}
         disabled={ctx.disabled}
-        {...ctx.getItemProps?.(page)}
-      >
+        {...ctx.getItemProps?.(page)}>
         {page}
       </PaginationControl>
     );
@@ -30,6 +29,6 @@ function PaginationItems() {
   return <>{items}</>;
 }
 
-PaginationItems.displayName = "PaginationItems";
+PaginationItems.displayName = 'PaginationItems';
 
 export { PaginationItems };

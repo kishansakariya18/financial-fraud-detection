@@ -1,23 +1,23 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import { Fragment } from "react";
+import PropTypes from 'prop-types';
+import { Fragment } from 'react';
 
 // Local Imports
-import { APP_NAME } from "constants/app.constant";
-import { useDocumentTitle } from "hooks";
+import { APP_NAME } from 'constants/app.constant';
+import { useDocumentTitle } from 'hooks';
 
 // ----------------------------------------------------------------------
 
-const Page = ({ title = "", component = Fragment, children }) => {
+const Page = ({ title = '', component = Fragment, children }) => {
   const Component = component;
-  useDocumentTitle(title + " - " + APP_NAME);
+  useDocumentTitle(title + ' - ' + APP_NAME);
   return <Component>{children}</Component>;
 };
 
 Page.propTypes = {
   children: PropTypes.node.isRequired,
   title: PropTypes.string,
-  component: PropTypes.elementType,
+  component: PropTypes.elementType
 };
 
 export { Page };

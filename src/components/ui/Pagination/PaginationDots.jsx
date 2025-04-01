@@ -1,10 +1,10 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
-import clsx from "clsx";
+import PropTypes from 'prop-types';
+import { EllipsisHorizontalIcon } from '@heroicons/react/20/solid';
+import clsx from 'clsx';
 
 // Local Imports
-import { usePaginationContext } from "./Pagination.context";
+import { usePaginationContext } from './Pagination.context';
 
 // ----------------------------------------------------------------------
 
@@ -15,18 +15,17 @@ const PaginationDots = ({ icon }) => {
   return (
     <div
       className={clsx(
-        "pagination-control pagination-control-icon",
+        'pagination-control pagination-control-icon',
         ctx.classNames?.control,
-        ctx.classNames?.controlIcon,
-      )}
-    >
-      <Icon className={clsx("pagination-icon", ctx.classNames?.icon)} />
+        ctx.classNames?.controlIcon
+      )}>
+      <Icon className={clsx('pagination-icon', ctx.classNames?.icon)} />
     </div>
   );
 };
 
 PaginationDots.propTypes = {
-  icon: PropTypes.elementType,
+  icon: PropTypes.elementType
 };
 
 export { PaginationDots };

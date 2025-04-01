@@ -1,7 +1,7 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import { forwardRef } from "react";
-import clsx from "clsx";
+import PropTypes from 'prop-types';
+import { forwardRef } from 'react';
+import clsx from 'clsx';
 
 // ----------------------------------------------------------------------
 
@@ -10,9 +10,9 @@ const Skeleton = forwardRef((props, ref) => {
   return (
     <div
       className={clsx(
-        "skeleton relative overflow-hidden",
-        animate && "animate-wave before:absolute before:inset-0",
-        className,
+        'skeleton relative overflow-hidden',
+        animate && 'animate-wave before:absolute before:inset-0',
+        className
       )}
       ref={ref}
       {...rest}
@@ -22,9 +22,9 @@ const Skeleton = forwardRef((props, ref) => {
 
 Skeleton.propTypes = {
   animate: PropTypes.bool,
-  className: PropTypes.string,
+  className: PropTypes.string
 };
 
-Skeleton.displayName = "Skeleton";
+Skeleton.displayName = 'Skeleton';
 
 export { Skeleton };

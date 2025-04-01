@@ -1,18 +1,18 @@
 // Import Dependencies
-import { useLocation, useNavigate } from "react-router";
-import { EnvelopeIcon } from "@heroicons/react/24/outline";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import { useLocation, useNavigate } from 'react-router';
+import { EnvelopeIcon } from '@heroicons/react/24/outline';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
 
 // Local Imports
-import Logo from "assets/appLogo.svg?react";
-import { Button, Card, Input } from "components/ui";
-import { forgotPasswordSchema } from "./schema";
-import { Page } from "components/shared/Page";
-import AuthService from "services/auth.services";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { toast } from "sonner";
+import Logo from 'assets/appLogo.svg?react';
+import { Button, Card, Input } from 'components/ui';
+import { forgotPasswordSchema } from './schema';
+import { Page } from 'components/shared/Page';
+import AuthService from 'services/auth.services';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { toast } from 'sonner';
 
 // ----------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ export default function ForgotPassword() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate(state?.path || "/");
+      navigate(state?.path || '/');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -36,13 +36,13 @@ export default function ForgotPassword() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm({
     resolver: yupResolver(forgotPasswordSchema),
     defaultValues: {
-      mobile: "",
-      email: "",
-    },
+      mobile: '',
+      email: ''
+    }
   });
 
   const submitHandler = async (data) => {
@@ -72,7 +72,7 @@ export default function ForgotPassword() {
     if (!isLoading && !error && validateResponse && validateMessage) {
       toast.success(validateMessage);
       navigate(
-        `/reset-password?token=${validateResponse.token}&&mobile=${validateResponse.mobile}&&email=${validateResponse.email}&&otp=${validateResponse.otp}`,
+        `/reset-password?token=${validateResponse.token}&&mobile=${validateResponse.mobile}&&email=${validateResponse.email}&&otp=${validateResponse.otp}`
       );
       setValidateResponse(null);
     }
@@ -89,9 +89,7 @@ export default function ForgotPassword() {
               <h2 className="text-2xl font-semibold text-gray-600 dark:text-dark-100">
                 Welcome Back
               </h2>
-              <p className="text-gray-400 dark:text-dark-300">
-                Confirm To Reset Password
-              </p>
+              <p className="text-gray-400 dark:text-dark-300">Confirm To Reset Password</p>
             </div>
           </div>
           <Card className="mt-5 rounded-lg p-5 lg:p-7">
@@ -106,7 +104,7 @@ export default function ForgotPassword() {
                       strokeWidth="1"
                     />
                   }
-                  {...register("mobile")}
+                  {...register('mobile')}
                   error={errors?.mobile?.message}
                 />
                 <Input
@@ -119,7 +117,7 @@ export default function ForgotPassword() {
                       strokeWidth="1"
                     />
                   }
-                  {...register("email")}
+                  {...register('email')}
                   error={errors?.email?.message}
                 />
               </div>
@@ -127,8 +125,7 @@ export default function ForgotPassword() {
               <div className="mt-4 flex items-center justify-between space-x-2">
                 <a
                   href="/login"
-                  className="text-xs text-gray-400 transition-colors hover:text-gray-800 focus:text-gray-800 dark:text-dark-300 dark:hover:text-dark-100 dark:focus:text-dark-100"
-                >
+                  className="text-xs text-gray-400 transition-colors hover:text-gray-800 focus:text-gray-800 dark:text-dark-300 dark:hover:text-dark-100 dark:focus:text-dark-100">
                   Go To Login ?
                 </a>
               </div>

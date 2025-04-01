@@ -1,28 +1,18 @@
 // Import Dependencies
-import {
-  Popover,
-  PopoverButton,
-  PopoverPanel,
-  Transition,
-} from "@headlessui/react";
-import { ViewColumnsIcon } from "@heroicons/react/24/outline";
-import { Fragment } from "react";
-import PropTypes from "prop-types";
+import { Popover, PopoverButton, PopoverPanel, Transition } from '@headlessui/react';
+import { ViewColumnsIcon } from '@heroicons/react/24/outline';
+import { Fragment } from 'react';
+import PropTypes from 'prop-types';
 
 // Local Imports
-import { Button, Checkbox } from "components/ui";
+import { Button, Checkbox } from 'components/ui';
 
 // ----------------------------------------------------------------------
 
 export function TableColumnVisibility({ table, description, header }) {
   return (
     <Popover className="relative w-full">
-      <PopoverButton
-        isIcon
-        variant="flat"
-        className="size-8 rounded-full"
-        as={Button}
-      >
+      <PopoverButton isIcon variant="flat" className="size-8 rounded-full" as={Button}>
         <ViewColumnsIcon className="size-5" />
       </PopoverButton>
       <Transition
@@ -32,12 +22,10 @@ export function TableColumnVisibility({ table, description, header }) {
         enterTo="opacity-100 translate-y-0"
         leave="transition ease-in"
         leaveFrom="opacity-100 translate-y-0"
-        leaveTo="opacity-0 translate-y-2"
-      >
+        leaveTo="opacity-0 translate-y-2">
         <PopoverPanel
-          anchor={{ to: "bottom end", gap: 8 }}
-          className="absolute w-60 z-[100] rounded-md border border-gray-300 bg-white shadow-lg shadow-gray-200/50 outline-none ring-primary-500/50 focus-visible:outline-none focus-visible:ring dark:border-dark-500 dark:bg-dark-750 dark:shadow-none"
-        >
+          anchor={{ to: 'bottom end', gap: 8 }}
+          className="absolute z-[100] w-60 rounded-md border border-gray-300 bg-white shadow-lg shadow-gray-200/50 outline-none ring-primary-500/50 focus-visible:outline-none focus-visible:ring dark:border-dark-500 dark:bg-dark-750 dark:shadow-none">
           <div className="p-4">
             <h3 className="-mt-1 text-base font-medium tracking-wide text-gray-800 dark:text-dark-100">
               {header}
@@ -57,8 +45,7 @@ export function TableColumnVisibility({ table, description, header }) {
           <Button
             variant="flat"
             className="h-9 w-full rounded-t-none border-t border-gray-300 text-xs+ leading-none dark:border-dark-500"
-            onClick={() => table.resetColumnVisibility()}
-          >
+            onClick={() => table.resetColumnVisibility()}>
             Show All
           </Button>
         </PopoverPanel>
@@ -70,5 +57,5 @@ export function TableColumnVisibility({ table, description, header }) {
 TableColumnVisibility.propTypes = {
   table: PropTypes.object,
   description: PropTypes.string,
-  header: PropTypes.string,
+  header: PropTypes.string
 };

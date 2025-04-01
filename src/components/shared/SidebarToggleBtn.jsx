@@ -1,8 +1,8 @@
 // Import Dependencies
-import clsx from "clsx";
+import clsx from 'clsx';
 
 // Local Imports
-import { useSidebarContext } from "app/contexts/sidebar/context";
+import { useSidebarContext } from 'app/contexts/sidebar/context';
 
 // ----------------------------------------------------------------------
 
@@ -13,10 +13,9 @@ export function SidebarToggleBtn() {
     <button
       onClick={toggle}
       className={clsx(
-        isExpanded && "active",
-        "sidebar-toggle-btn flex size-7 flex-col justify-center space-y-1.5 text-primary-600 outline-none focus:outline-none dark:text-primary-400 ltr:ml-0.5 rtl:mr-0.5",
-      )}
-    >
+        isExpanded && 'active',
+        'sidebar-toggle-btn flex size-7 flex-col justify-center space-y-1.5 text-primary-600 outline-none focus:outline-none dark:text-primary-400 ltr:ml-0.5 rtl:mr-0.5'
+      )}>
       <span />
       <span />
       <span />

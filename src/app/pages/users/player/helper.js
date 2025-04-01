@@ -1,6 +1,6 @@
-import { getDateInUTCToTimeZone } from "helpers/functions";
-import { CheckBadgeIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { TRANSACTION } from "constants/app.constant";
+import { getDateInUTCToTimeZone } from 'helpers/functions';
+import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { TRANSACTION } from 'constants/app.constant';
 
 export const responseMapper = (apiData) => {
   const list = apiData.map((item) => {
@@ -8,10 +8,10 @@ export const responseMapper = (apiData) => {
       id: item.UserID,
       userID: item.UserID,
       userUID: item.UserUID,
-      email: item.Email || "-",
+      email: item.Email || '-',
       referralCode: item.ReferralCode,
       username: item.Username,
-      mobile: item.Mobile || "-",
+      mobile: item.Mobile || '-',
       realCash: item.RealCash,
       realCashAmount: item.RealCashAmount,
       bonus: item.Bonus,
@@ -20,13 +20,9 @@ export const responseMapper = (apiData) => {
       cryptoDeposit: item.CryptoDeposit,
       cryptoWinning: item.CryptoWinning,
       status: playerStatusToApp(item.Status),
-      createdAt: item.DateCreated
-        ? getDateInUTCToTimeZone(item.DateCreated)
-        : "",
-      lastLoginAt: item.LastLoginAt
-        ? getDateInUTCToTimeZone(item.LastLoginAt)
-        : "",
-      isBankVerified: item.IsBankVerified,
+      createdAt: item.DateCreated ? getDateInUTCToTimeZone(item.DateCreated) : '',
+      lastLoginAt: item.LastLoginAt ? getDateInUTCToTimeZone(item.LastLoginAt) : '',
+      isBankVerified: item.IsBankVerified
     };
   });
 
@@ -39,9 +35,9 @@ export const responseMapper = (apiData) => {
 export const playerStatusToApp = (status) => {
   switch (+status) {
     case 1:
-      return "active";
+      return 'active';
     case 0:
-      return "inactive";
+      return 'inactive';
     default:
       break;
   }
@@ -49,9 +45,9 @@ export const playerStatusToApp = (status) => {
 
 export const playerStatusToAPI = (status) => {
   switch (status) {
-    case "active":
+    case 'active':
       return 1;
-    case "inactive":
+    case 'inactive':
       return 0;
     default:
       return null;
@@ -60,17 +56,17 @@ export const playerStatusToAPI = (status) => {
 
 export const playerStatusOptions = [
   {
-    value: "active",
-    label: "Active",
-    color: "success",
-    icon: CheckBadgeIcon,
+    value: 'active',
+    label: 'Active',
+    color: 'success',
+    icon: CheckBadgeIcon
   },
   {
-    value: "inactive",
-    label: "Inactive",
-    color: "error",
-    icon: XCircleIcon,
-  },
+    value: 'inactive',
+    label: 'Inactive',
+    color: 'error',
+    icon: XCircleIcon
+  }
 ];
 
 export const playerTransactionsResponseMapper = (apiData) => {
@@ -91,14 +87,14 @@ export const playerTransactionsResponseMapper = (apiData) => {
       winning:
         parseFloat(item.Winning) > 0
           ? item.Winning
-          : item.TransactionData["Merchandise_Product_name"]
-            ? item.TransactionData["Merchandise_Product_name"]
+          : item.TransactionData['Merchandise_Product_name']
+            ? item.TransactionData['Merchandise_Product_name']
             : 0,
       coin: item.Coin,
       createdAt: getDateInUTCToTimeZone(item.DateCreated),
       status: transactionStatusToAPP(item.Status),
       transactionData: item.TransactionData,
-      admin: item.admin,
+      admin: item.admin
     };
   });
   return { totalRecords, list, userData };
@@ -106,25 +102,23 @@ export const playerTransactionsResponseMapper = (apiData) => {
 
 export const transactionStatusToAPP = (status) => {
   if (+status == 0) {
-    return "pending";
+    return 'pending';
   } else if (+status == 1) {
-    return "success";
+    return 'success';
   } else if (+status == 2) {
-    return "failed";
+    return 'failed';
   }
 };
 export const transactionStatusToAPI = (status) => {
   switch (status) {
     case 'pending':
-      return 0
+      return 0;
     case 'success':
-      return 1
+      return 1;
     case 'failed':
-      return 2
+      return 2;
   }
 };
-
-
 
 export const transactionTypeApiToApp = (status) => {
   if (+status === 0) {
@@ -141,124 +135,116 @@ export const transactionTypeAppToApi = (status) => {
   }
 };
 
-
-export const transactionTypeInWords= (type) => {
+export const transactionTypeInWords = (type) => {
   if (+type === TRANSACTION.TRANSACTION_TYPE.SYSTEM) {
     return 'ADMIN SYSTEM';
   } else if (+type === TRANSACTION.TRANSACTION_TYPE.DEPOSIT) {
     return 'DEPOSIT';
-  }
-  else if (+type === TRANSACTION.TRANSACTION_TYPE.WINNING) {
-      return 'WINNING';
-    }
-  else if (+type === TRANSACTION.TRANSACTION_TYPE.WITHDRAW) {
-      return 'WITHDRAW';
-    }
-  else if (+type === TRANSACTION.TRANSACTION_TYPE.DEPOSIT_TAX) {
-      return 'DEPOSIT TAX';
-    }
-  else if (+type === TRANSACTION.TRANSACTION_TYPE.WITHDRAW_TAX) {
-      return 'WITHDRAW TAX';
-    }
-  else if (+type === TRANSACTION.TRANSACTION_TYPE.BETSLIP) {
-      return 'BET SLIP';
-    }
-  else if (+type === TRANSACTION.TRANSACTION_TYPE.PROMOCODE_BENEFIT) {
+  } else if (+type === TRANSACTION.TRANSACTION_TYPE.WINNING) {
+    return 'WINNING';
+  } else if (+type === TRANSACTION.TRANSACTION_TYPE.WITHDRAW) {
+    return 'WITHDRAW';
+  } else if (+type === TRANSACTION.TRANSACTION_TYPE.DEPOSIT_TAX) {
+    return 'DEPOSIT TAX';
+  } else if (+type === TRANSACTION.TRANSACTION_TYPE.WITHDRAW_TAX) {
+    return 'WITHDRAW TAX';
+  } else if (+type === TRANSACTION.TRANSACTION_TYPE.BETSLIP) {
+    return 'BET SLIP';
+  } else if (+type === TRANSACTION.TRANSACTION_TYPE.PROMOCODE_BENEFIT) {
     return 'PROMOCODE BENEFIT';
   }
 };
 
 export const transactionStatusOption = [
   {
-    value: "pending",
-    label: "Pending",
-    color: "warning",
-    icon: CheckBadgeIcon,
+    value: 'pending',
+    label: 'Pending',
+    color: 'warning',
+    icon: CheckBadgeIcon
   },
   {
-    value: "success",
-    label: "Success",
-    color: "success",
-    icon: XCircleIcon,
+    value: 'success',
+    label: 'Success',
+    color: 'success',
+    icon: XCircleIcon
   },
   {
-    value: "failed",
-    label: "Failed",
-    color: "error",
-    icon: XCircleIcon,
-  },
+    value: 'failed',
+    label: 'Failed',
+    color: 'error',
+    icon: XCircleIcon
+  }
 ];
 
 export const transactionTypeOption = [
   {
-    value: "credit",
-    label: "Credit",
-    color: "success",
+    value: 'credit',
+    label: 'Credit',
+    color: 'success'
   },
   {
-    value: "debit",
-    label: "Debit",
-    color: "warning"
+    value: 'debit',
+    label: 'Debit',
+    color: 'warning'
   }
 ];
 
-
 export const txnTypeOption = [
   {
-    value: "ADMIN_SYSTEM",
-    label: "Admin System",
-    color: "success",
+    value: 'ADMIN_SYSTEM',
+    label: 'Admin System',
+    color: 'success'
   },
   {
-    value: "DEPOSIT",
-    label: "Deposit",
-    color: "primary",
+    value: 'DEPOSIT',
+    label: 'Deposit',
+    color: 'primary'
   },
   {
-    value: "WINNING",
-    label: "Winning",
-    color: "success",
+    value: 'WINNING',
+    label: 'Winning',
+    color: 'success'
   },
   {
-    value: "WITHDRAW",
-    label: "Withdraw",
-    color: "danger",
+    value: 'WITHDRAW',
+    label: 'Withdraw',
+    color: 'danger'
   },
   {
-    value: "DEPOSIT TAX",
-    label: "Deposit Tax",
-    color: "warning",
+    value: 'DEPOSIT TAX',
+    label: 'Deposit Tax',
+    color: 'warning'
   },
   {
-    value: "WITHDRAW TAX",
-    label: "Withdraw Tax",
-    color: "warning",
+    value: 'WITHDRAW TAX',
+    label: 'Withdraw Tax',
+    color: 'warning'
   },
   {
-    value: "BET SLIP",
-    label: "Bet Slip",
-    color: "info",
+    value: 'BET SLIP',
+    label: 'Bet Slip',
+    color: 'info'
   },
   {
-    value: "PROMOCODE_BENEFIT",
-    label: "Promocode Benefit",
-    color: "success",
-  },
+    value: 'PROMOCODE_BENEFIT',
+    label: 'Promocode Benefit',
+    color: 'success'
+  }
 ];
 
 export const txnTypeToAPI = (value) => {
   switch (value) {
-    case "ADMIN_SYSTEM":
+    case 'ADMIN_SYSTEM':
       return TRANSACTION.TRANSACTION_TYPE.SYSTEM;
-    case "DEPOSIT":
+    case 'DEPOSIT':
       return TRANSACTION.TRANSACTION_TYPE.DEPOSIT;
-    case "WITHDRAW":
+    case 'WITHDRAW':
       return TRANSACTION.TRANSACTION_TYPE.WITHDRAW;
-    case "WINNING":
+    case 'WINNING':
       return TRANSACTION.TRANSACTION_TYPE.WINNING;
-    case "BET SLIP":
+    case 'BET SLIP':
       return TRANSACTION.TRANSACTION_TYPE.BETSLIP;
-    case "PROMOCODE_BENEFIT":
+    case 'PROMOCODE_BENEFIT':
       return TRANSACTION.TRANSACTION_TYPE.PROMOCODE_BENEFIT;
     default:
       return null;
@@ -274,7 +260,6 @@ export const loginHistoryResponseMapper = (apiData) => {
       userAgent: data.UserAgent,
       expiredAt: data.ExpiredAt,
       loginAt: data.DateCreated
-
-    }
-  })
-}
+    };
+  });
+};

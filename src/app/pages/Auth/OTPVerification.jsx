@@ -1,22 +1,22 @@
 // Import Dependencies
-import { useLocation, useNavigate, useSearchParams } from "react-router";
-import { EnvelopeIcon } from "@heroicons/react/24/outline";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import { useLocation, useNavigate, useSearchParams } from 'react-router';
+import { EnvelopeIcon } from '@heroicons/react/24/outline';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
 
 // Local Imports
-import Logo from "assets/appLogo.svg?react";
-import { Button, Card, Input } from "components/ui";
+import Logo from 'assets/appLogo.svg?react';
+import { Button, Card, Input } from 'components/ui';
 // import { useAuthContext } from "app/contexts/auth/context";
-import { otpVerificationSchema } from "./schema";
-import { Page } from "components/shared/Page";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useMemo, useState } from "react";
-import { getQueryParams } from "utils/custom.utilities";
-import AuthService from "../../../services/auth.services";
-import { LOCAL_STORAGE } from "constants/app.constant";
-import { toast } from "sonner";
-import { AuthAction } from "store/admin-slice/AuthSlice";
+import { otpVerificationSchema } from './schema';
+import { Page } from 'components/shared/Page';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useMemo, useState } from 'react';
+import { getQueryParams } from 'utils/custom.utilities';
+import AuthService from '../../../services/auth.services';
+import { LOCAL_STORAGE } from 'constants/app.constant';
+import { toast } from 'sonner';
+import { AuthAction } from 'store/admin-slice/AuthSlice';
 
 // ----------------------------------------------------------------------
 
@@ -25,12 +25,12 @@ export default function OTPVerification() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm({
     resolver: yupResolver(otpVerificationSchema),
     defaultValues: {
-      otp: "",
-    },
+      otp: ''
+    }
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -40,22 +40,19 @@ export default function OTPVerification() {
   const { state } = useLocation();
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-   
+
   const [searchParams, setSearchParams] = useSearchParams();
   const [seconds, setSeconds] = useState(30);
-  const [resendOtp, setResendOtp] = useState("");
+  const [resendOtp, setResendOtp] = useState('');
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate(state?.path || "/");
+      navigate(state?.path || '/');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const queryParams = useMemo(
-    () => getQueryParams(searchParams),
-    [searchParams],
-  );
+  const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const submitHandler = async (data) => {
     setIsLoading(true);
@@ -64,25 +61,19 @@ export default function OTPVerification() {
       ...data,
       token: queryParams.token,
       password: queryParams.password,
-      mobile: queryParams.mobile,
+      mobile: queryParams.mobile
     });
     if (result) {
       if (result.status === 200) {
-        localStorage.setItem(
-          LOCAL_STORAGE.AUTH_TOKEN,
-          result.response.data.UserToken,
-        );
-        localStorage.setItem(
-          LOCAL_STORAGE.AUTH_EMAIL,
-          result.response.data?.adminData?.Email,
-        );
+        localStorage.setItem(LOCAL_STORAGE.AUTH_TOKEN, result.response.data.UserToken);
+        localStorage.setItem(LOCAL_STORAGE.AUTH_EMAIL, result.response.data?.adminData?.Email);
         const responseData = await performPostLoginActions();
         setResponse({
           message: result.response.message,
           adminData: result.response.data.adminData,
           appSettings: responseData.appSettings,
           permissions: responseData.permissions.permissions,
-          isMasterAdmin: responseData.permissions.isMasterAdmin,
+          isMasterAdmin: responseData.permissions.isMasterAdmin
         });
       } else {
         setError(result.error);
@@ -101,13 +92,13 @@ export default function OTPVerification() {
       let sportsConfig = {};
 
       for (let i = 0; i < sportsList.length; i++) {
-        let EntryFeeIn = sportsList[i]["EntryFeeIn"] || null;
-        let PrizeIn = sportsList[i]["PrizeIn"] || null;
+        let EntryFeeIn = sportsList[i]['EntryFeeIn'] || null;
+        let PrizeIn = sportsList[i]['PrizeIn'] || null;
 
         if (EntryFeeIn) {
           EntryFeeIn = {
             CURRENCY: EntryFeeIn?.RealCash,
-            COIN: EntryFeeIn?.Coin,
+            COIN: EntryFeeIn?.Coin
           };
         }
 
@@ -115,14 +106,14 @@ export default function OTPVerification() {
           PrizeIn = {
             CURRENCY: PrizeIn?.RealCash,
             COIN: PrizeIn?.Coin,
-            GADGET: PrizeIn?.Gadget,
+            GADGET: PrizeIn?.Gadget
           };
         }
 
-        let sportId = sportsList[i]["SportsID"];
+        let sportId = sportsList[i]['SportsID'];
         sportsConfig[sportId] = {
           ENTRY_FEE_IN: EntryFeeIn,
-          PRIZE_IN: PrizeIn,
+          PRIZE_IN: PrizeIn
         };
       }
 
@@ -145,7 +136,7 @@ export default function OTPVerification() {
 
     return {
       isMasterAdmin,
-      permissions: permissionList,
+      permissions: permissionList
     };
   };
 
@@ -155,14 +146,14 @@ export default function OTPVerification() {
 
     return {
       appSettings,
-      permissions,
+      permissions
     };
   };
 
   if (!isLoading && error) {
     setTimeout(() => {
       toast.error(error);
-      setError("");
+      setError('');
     }, 0);
   }
   // resend otp button handler
@@ -204,35 +195,23 @@ export default function OTPVerification() {
   useEffect(() => {
     if (!isLoading && !error && response) {
       toast.success(response.message);
-      localStorage.setItem(
-        LOCAL_STORAGE.USER_DATA,
-        JSON.stringify(response.adminData),
-      );
-      localStorage.setItem(
-        LOCAL_STORAGE.SETTINGS,
-        JSON.stringify(response.appSettings),
-      );
-      localStorage.setItem(
-        LOCAL_STORAGE.IS_MASTER_ADMIN,
-        response.isMasterAdmin,
-      );
-      localStorage.setItem(
-        LOCAL_STORAGE.PERMISSIONS,
-        JSON.stringify(response.permissions),
-      );
+      localStorage.setItem(LOCAL_STORAGE.USER_DATA, JSON.stringify(response.adminData));
+      localStorage.setItem(LOCAL_STORAGE.SETTINGS, JSON.stringify(response.appSettings));
+      localStorage.setItem(LOCAL_STORAGE.IS_MASTER_ADMIN, response.isMasterAdmin);
+      localStorage.setItem(LOCAL_STORAGE.PERMISSIONS, JSON.stringify(response.permissions));
       dispatch(AuthAction.login(response));
       setTimeout(() => {
-        setResponse('')
-        navigate(state?.path || "/");
+        setResponse('');
+        navigate(state?.path || '/');
       }, 0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
   // resend otp display message
   useEffect(() => {
-    if(resendOtp.message){
+    if (resendOtp.message) {
       toast.success(resendOtp.message);
-      setResendOtp("");
+      setResendOtp('');
     }
   }, [resendOtp]);
   return (
@@ -245,9 +224,7 @@ export default function OTPVerification() {
               <h2 className="text-2xl font-semibold text-gray-600 dark:text-dark-100">
                 Welcome Back
               </h2>
-              <p className="text-gray-400 dark:text-dark-300">
-                Verify OTP, to Continue
-              </p>
+              <p className="text-gray-400 dark:text-dark-300">Verify OTP, to Continue</p>
             </div>
           </div>
           <Card className="mt-5 rounded-lg p-5 lg:p-7">
@@ -262,7 +239,7 @@ export default function OTPVerification() {
                       strokeWidth="1"
                     />
                   }
-                  {...register("otp")}
+                  {...register('otp')}
                   error={errors?.otp?.message}
                 />
               </div>
@@ -272,14 +249,12 @@ export default function OTPVerification() {
                   <a
                     href="##"
                     onClick={handleResendOtp}
-                    className="text-xs text-gray-400 transition-colors hover:text-gray-800 focus:text-gray-800 dark:text-dark-300 dark:hover:text-dark-100 dark:focus:text-dark-100"
-                  >
-                    {"Resend OTP?"}
+                    className="text-xs text-gray-400 transition-colors hover:text-gray-800 focus:text-gray-800 dark:text-dark-300 dark:hover:text-dark-100 dark:focus:text-dark-100">
+                    {'Resend OTP?'}
                   </a>
                 </div>
               ) : (
                 <div className="mt-4 flex items-center justify-between space-x-2">
-                  
                   {`Resend OTP In ${seconds} Seconds`}
                 </div>
               )}

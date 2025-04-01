@@ -10,23 +10,26 @@ import { replaceText } from 'utils/custom.utilities';
 const AdminService = {
   getAllAdmin: async (data) => {
     try {
-      const { pagination , filters } = data
+      const { pagination, filters } = data;
 
-      console.log('data: ', data)
-
+      console.log('data: ', data);
 
       const apiRequestParams = {
         filters: {
           keyword: filters.keyword ? filters.keyword : undefined,
-          status: filters.status ? parseAdminStatusToApi(filters.status): undefined,
-          start_date: filters.startDate ? dayjs(+filters.startDate).format("YYYY-MM-DD HH:mm:ss") : undefined,
-          end_date: filters.endDate ? dayjs(+filters.endDate).hour(23).minute(59).second(59).format("YYYY-MM-DD HH:mm:ss") : undefined
+          status: filters.status ? parseAdminStatusToApi(filters.status) : undefined,
+          start_date: filters.startDate
+            ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
+            : undefined,
+          end_date: filters.endDate
+            ? dayjs(+filters.endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
+            : undefined
         },
         per_page: pagination?.pageSize || 10,
         page: pagination.pageIndex + 1
       };
 
-      console.log('apiRequestParams: ', apiRequestParams)
+      console.log('apiRequestParams: ', apiRequestParams);
 
       const response = await sendRequest({
         url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.ADMIN_USER.ADMIN_LIST}`,
@@ -98,8 +101,7 @@ const AdminService = {
   getAdminRole: async () => {
     try {
       const response = await sendRequest({
-        url:
-          apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.ADMIN_USER.ADMIN_ROLE_LIST,
+        url: apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.ADMIN_USER.ADMIN_ROLE_LIST,
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -169,7 +171,7 @@ const AdminService = {
     } catch (err) {
       console.log('Error', err);
     }
-  },
+  }
   // checkPassword: async (type, password) => {
   //   try {
   //     const endPoint = apiConfig.endPoints.ADMIN_USER.ADMIN_CHECK_PASSWORD;
@@ -233,7 +235,6 @@ const AdminService = {
   //   } catch (error) {
   //     console.log('Error from getAdminLoginHistory ', error);
   //   }
-  }
-
+};
 
 export default AdminService;

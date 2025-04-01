@@ -4,28 +4,28 @@ import {
   ListboxButton,
   ListboxOption,
   ListboxOptions,
-  Transition,
-} from "@headlessui/react";
-import { ChevronDownIcon, XMarkIcon } from "@heroicons/react/20/solid";
-import clsx from "clsx";
-import { Fragment } from "react";
-import PropTypes from "prop-types";
+  Transition
+} from '@headlessui/react';
+import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid';
+import clsx from 'clsx';
+import { Fragment } from 'react';
+import PropTypes from 'prop-types';
 
 // Local Imports
-import { Button, Checkbox, Input } from "components/ui";
-import { DatePicker } from "../form/Datepicker";
+import { Button, Checkbox, Input } from 'components/ui';
+import { DatePicker } from '../form/Datepicker';
 
 // ----------------------------------------------------------------------
 
 export function ColumnFilter({ column }) {
   const columnFilterValue = column?.getFilterValue();
 
-  if (column.columnDef.filter === "dateRange") {
+  if (column.columnDef.filter === 'dateRange') {
     return (
       <div className="[&_.suffix]:w-5">
         <DatePicker
           hasCalenderIcon={false}
-          value={columnFilterValue ?? ""}
+          value={columnFilterValue ?? ''}
           readOnly
           onChange={(date) => {
             if (date.length === 0) {
@@ -37,8 +37,8 @@ export function ColumnFilter({ column }) {
           }}
           options={{
             maxDate: new Date().fp_incr(1),
-            mode: "range",
-            dateFormat: "m.d",
+            mode: 'range',
+            dateFormat: 'm.d'
           }}
           suffix={
             columnFilterValue && (
@@ -46,8 +46,7 @@ export function ColumnFilter({ column }) {
                 onClick={() => column.setFilterValue([null, null])}
                 className="pointer-events-auto size-5 rounded-full"
                 isIcon
-                variant="flat"
-              >
+                variant="flat">
                 <XMarkIcon className="size-4" />
               </Button>
             )
@@ -59,77 +58,65 @@ export function ColumnFilter({ column }) {
     );
   }
 
-  if (column.columnDef.filter === "numberRange") {
+  if (column.columnDef.filter === 'numberRange') {
     return (
       <div className="flex gap-2">
         <Input
           type="number"
-          value={columnFilterValue?.[0] ?? ""}
-          onChange={(e) =>
-            column.setFilterValue((old) => [e.target.value, old?.[1]])
-          }
+          value={columnFilterValue?.[0] ?? ''}
+          onChange={(e) => column.setFilterValue((old) => [e.target.value, old?.[1]])}
           placeholder="Min"
           classNames={{
-            root: "mt-0.5",
-            input:
-              "min-w-[4rem] rounded-none border-0 border-b px-0 pb-1.5 text-xs+",
+            root: 'mt-0.5',
+            input: 'min-w-[4rem] rounded-none border-0 border-b px-0 pb-1.5 text-xs+'
           }}
         />
         <Input
           type="number"
-          value={columnFilterValue?.[1] ?? ""}
-          onChange={(e) =>
-            column.setFilterValue((old) => [old?.[0], e.target.value])
-          }
+          value={columnFilterValue?.[1] ?? ''}
+          onChange={(e) => column.setFilterValue((old) => [old?.[0], e.target.value])}
           placeholder="Max"
           classNames={{
-            root: "mt-0.5",
-            input:
-              "min-w-[4rem] rounded-none border-0 border-b px-0 pb-1.5 text-xs+",
+            root: 'mt-0.5',
+            input: 'min-w-[4rem] rounded-none border-0 border-b px-0 pb-1.5 text-xs+'
           }}
         />
       </div>
     );
   }
 
-  if (column.columnDef.filter === "select") {
+  if (column.columnDef.filter === 'select') {
     return (
       <Listbox
         as="div"
-        value={column.columnDef.options.filter(({ value }) =>
-          columnFilterValue?.includes(value),
-        )}
+        value={column.columnDef.options.filter(({ value }) => columnFilterValue?.includes(value))}
         onChange={(list) => {
           column.setFilterValue(list.map((item) => item.value));
         }}
-        multiple
-      >
+        multiple>
         {({ open }) => (
           <>
             <div className="relative mt-0.5">
               <ListboxButton
                 className={clsx(
-                  "relative w-40 cursor-pointer rounded-none border-b pb-1.5 pt-2 text-start text-xs+ outline-none transition-colors focus:outline-none focus-visible:border-primary-600 dark:focus-visible:border-primary-500 ltr:pr-6 rtl:pl-6",
+                  'relative w-40 cursor-pointer rounded-none border-b pb-1.5 pt-2 text-start text-xs+ outline-none transition-colors focus:outline-none focus-visible:border-primary-600 dark:focus-visible:border-primary-500 ltr:pr-6 rtl:pl-6',
                   open
-                    ? "border-primary-600 dark:border-primary-500"
-                    : "border-gray-300 hover:border-gray-400 dark:border-dark-450 dark:hover:border-dark-400",
-                )}
-              >
+                    ? 'border-primary-600 dark:border-primary-500'
+                    : 'border-gray-300 hover:border-gray-400 dark:border-dark-450 dark:hover:border-dark-400'
+                )}>
                 {columnFilterValue && columnFilterValue.length > 0 ? (
                   <span className="block truncate capitalize">
-                    {columnFilterValue.map((val) => val).join(", ")}
+                    {columnFilterValue.map((val) => val).join(', ')}
                   </span>
                 ) : (
-                  <span className="font-light text-gray-600 dark:text-dark-200">
-                    Select Value
-                  </span>
+                  <span className="font-light text-gray-600 dark:text-dark-200">Select Value</span>
                 )}
 
                 <span className="pointer-events-none absolute inset-y-0 flex items-center ltr:right-0 rtl:left-0">
                   <ChevronDownIcon
                     className={clsx(
-                      "size-4.5 text-gray-400 transition-transform dark:text-dark-300",
-                      open && "rotate-180",
+                      'size-4.5 text-gray-400 transition-transform dark:text-dark-300',
+                      open && 'rotate-180'
                     )}
                     aria-hidden="true"
                   />
@@ -142,26 +129,22 @@ export function ColumnFilter({ column }) {
                 enterTo="opacity-100 translate-y-0"
                 leave="transition ease-in"
                 leaveFrom="opacity-100 translate-y-0"
-                leaveTo="opacity-0 translate-y-2"
-              >
+                leaveTo="opacity-0 translate-y-2">
                 <ListboxOptions className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-lg border border-gray-300 bg-white py-1 text-xs+ capitalize shadow-soft outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none">
                   {column.columnDef.options.map((item) => (
                     <ListboxOption
                       key={item.value}
                       className={({ active }) =>
                         clsx(
-                          "relative flex cursor-pointer select-none items-center justify-between space-x-2 px-3 py-2 text-gray-800 outline-none transition-colors dark:text-dark-100 rtl:space-x-reverse",
-                          active && "bg-gray-100 dark:bg-dark-600",
+                          'relative flex cursor-pointer select-none items-center justify-between space-x-2 px-3 py-2 text-gray-800 outline-none transition-colors dark:text-dark-100 rtl:space-x-reverse',
+                          active && 'bg-gray-100 dark:bg-dark-600'
                         )
                       }
-                      value={item}
-                    >
+                      value={item}>
                       {({ selected }) => (
                         <div className="flex items-center justify-between gap-2">
                           <Checkbox checked={selected} readOnly />
-                          {item.icon && (
-                            <item.icon className="size-4.5 stroke-1" />
-                          )}
+                          {item.icon && <item.icon className="size-4.5 stroke-1" />}
                           <span className="block truncate">{item.label}</span>
                         </div>
                       )}
@@ -178,18 +161,17 @@ export function ColumnFilter({ column }) {
   return (
     <Input
       type="text"
-      value={columnFilterValue ?? ""}
+      value={columnFilterValue ?? ''}
       onChange={(e) => column.setFilterValue(e.target.value)}
       placeholder="Search..."
       classNames={{
-        root: "mt-0.5",
-        input:
-          "min-w-[4rem] rounded-none border-0 border-b px-0 pb-1.5 text-xs+",
+        root: 'mt-0.5',
+        input: 'min-w-[4rem] rounded-none border-0 border-b px-0 pb-1.5 text-xs+'
       }}
     />
   );
 }
 
 ColumnFilter.propTypes = {
-  column: PropTypes.object,
+  column: PropTypes.object
 };

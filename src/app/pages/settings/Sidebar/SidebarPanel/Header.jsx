@@ -1,11 +1,11 @@
 // Import Dependencies
-import { ChevronLeftIcon } from "@heroicons/react/20/solid";
-import { useTranslation } from "react-i18next";
+import { ChevronLeftIcon } from '@heroicons/react/20/solid';
+import { useTranslation } from 'react-i18next';
 
 // Local Imports
-import { useSidebarContext } from "app/contexts/sidebar/context";
-import { Avatar, Button } from "components/ui";
-import { settings } from "app/navigation/settings";
+import { useSidebarContext } from 'app/contexts/sidebar/context';
+import { Avatar, Button } from 'components/ui';
+import { settings } from 'app/navigation/settings';
 
 // ----------------------------------------------------------------------
 
@@ -29,8 +29,7 @@ export function Header() {
         onClick={closeSidebar}
         isIcon
         variant="flat"
-        className="size-7 rounded-full xl:hidden"
-      >
+        className="size-7 rounded-full xl:hidden">
         <ChevronLeftIcon className="size-6 rtl:rotate-180" />
       </Button>
     </div>

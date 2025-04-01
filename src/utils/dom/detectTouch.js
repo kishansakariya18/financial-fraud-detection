@@ -1,7 +1,7 @@
-import { isServer } from "utils/isServer";
+import { isServer } from 'utils/isServer';
 
 export function detectTouch() {
-    if (isServer) return false;
+  if (isServer) return false;
 
-    return window.ontouchstart === null && window.ontouchmove === null && window.ontouchend === null;
+  return window.ontouchstart === null && window.ontouchmove === null && window.ontouchend === null;
 }

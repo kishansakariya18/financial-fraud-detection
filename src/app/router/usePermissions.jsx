@@ -11,7 +11,7 @@ const usePermissions = () => {
       result = true;
     }
     console.log('hasPermission  result: ', result);
-    
+
     return result;
   };
   return { hasPermission };

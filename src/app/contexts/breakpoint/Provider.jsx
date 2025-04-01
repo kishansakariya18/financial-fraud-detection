@@ -1,11 +1,11 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import { useEffect, useRef, useState } from "react";
+import PropTypes from 'prop-types';
+import { useEffect, useRef, useState } from 'react';
 
 // Local Imports
-import { breakpoints } from "configs/breakpoints.config";
-import { isServer } from "utils/isServer";
-import { BreakpointsContext } from "./context";
+import { breakpoints } from 'configs/breakpoints.config';
+import { isServer } from 'utils/isServer';
+import { BreakpointsContext } from './context';
 
 // ----------------------------------------------------------------------
 
@@ -41,15 +41,13 @@ export function BreakpointProvider({ children }) {
     return null;
   }
 
-  return (
-    <BreakpointsContext value={breakpointState}>{children}</BreakpointsContext>
-  );
+  return <BreakpointsContext value={breakpointState}>{children}</BreakpointsContext>;
 }
 
 function getBreakpoint() {
   if (isServer) {
     return {
-      name: "",
+      name: '',
       isXs: false,
       isSm: false,
       isMd: false,
@@ -64,27 +62,27 @@ function getBreakpoint() {
       lgAndUp: false,
       xlAndDown: false,
       xlAndUp: false,
-      ...breakpoints,
+      ...breakpoints
     };
   }
 
   const width = window.innerWidth;
 
-  let name = "";
+  let name = '';
 
   const xs = width < breakpoints.SM;
   const sm = width < breakpoints.MD && !xs;
   const md = width < breakpoints.LG && !(sm || xs);
   const lg = width < breakpoints.XL && !(md || sm || xs);
-  const xl = width < breakpoints["2XL"] && !(lg || md || sm || xs);
-  const the2xl = width >= breakpoints["2XL"];
+  const xl = width < breakpoints['2XL'] && !(lg || md || sm || xs);
+  const the2xl = width >= breakpoints['2XL'];
 
-  if (xs) name = "xs";
-  if (sm) name = "sm";
-  if (md) name = "md";
-  if (lg) name = "lg";
-  if (xl) name = "xl";
-  if (the2xl) name = "2xl";
+  if (xs) name = 'xs';
+  if (sm) name = 'sm';
+  if (md) name = 'md';
+  if (lg) name = 'lg';
+  if (xl) name = 'xl';
+  if (the2xl) name = '2xl';
 
   return {
     name,
@@ -105,10 +103,10 @@ function getBreakpoint() {
     xlAndDown: (xs || sm || md || lg || xl) && !the2xl,
     xlAndUp: !(xs || sm || md || lg) && (xl || the2xl),
 
-    ...breakpoints,
+    ...breakpoints
   };
 }
 
 BreakpointProvider.propTypes = {
-  children: PropTypes.node,
+  children: PropTypes.node
 };

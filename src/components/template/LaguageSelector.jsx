@@ -4,22 +4,22 @@ import {
   ListboxButton,
   ListboxOption,
   ListboxOptions,
-  Transition,
-} from "@headlessui/react";
-import clsx from "clsx";
-import { useState } from "react";
+  Transition
+} from '@headlessui/react';
+import clsx from 'clsx';
+import { useState } from 'react';
 
 // Local Imports
-import { Button, Spinner } from "components/ui";
-import { useLocaleContext } from "app/contexts/locale/context";
-import { locales } from "i18n/langs";
+import { Button, Spinner } from 'components/ui';
+import { useLocaleContext } from 'app/contexts/locale/context';
+import { locales } from 'i18n/langs';
 
 // ----------------------------------------------------------------------
 
 const langs = Object.keys(locales).map((key) => ({
   value: key,
   label: locales[key].label,
-  flag: locales[key].flag,
+  flag: locales[key].flag
 }));
 
 const LanguageSelector = () => {
@@ -40,12 +40,7 @@ const LanguageSelector = () => {
   return (
     <Listbox as="div" value={locale} onChange={onLanguageSelect}>
       <div className="relative">
-        <ListboxButton
-          as={Button}
-          variant="flat"
-          isIcon
-          className="size-9 rounded-full"
-        >
+        <ListboxButton as={Button} variant="flat" isIcon className="size-9 rounded-full">
           {loading ? (
             <Spinner color="primary" className="size-5" />
           ) : (
@@ -62,26 +57,23 @@ const LanguageSelector = () => {
           enterTo="opacity-100 translate-y-0"
           leave="transition ease-in"
           leaveFrom="opacity-100 translate-y-0"
-          leaveTo="opacity-0 translate-y-2"
-        >
+          leaveTo="opacity-0 translate-y-2">
           <ListboxOptions
-            anchor={{ to: "bottom end", gap: 8 }}
-            className="z-[101] w-min min-w-[10rem] overflow-y-auto rounded-lg border border-gray-300 bg-white py-1 font-medium shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-700 dark:shadow-none ltr:right-0 rtl:left-0"
-          >
+            anchor={{ to: 'bottom end', gap: 8 }}
+            className="z-[101] w-min min-w-[10rem] overflow-y-auto rounded-lg border border-gray-300 bg-white py-1 font-medium shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-700 dark:shadow-none ltr:right-0 rtl:left-0">
             {langs.map((lang) => (
               <ListboxOption
                 key={lang.value}
                 className={({ selected, active }) =>
                   clsx(
-                    "relative flex cursor-pointer select-none px-4 py-2 transition-colors",
-                    active && !selected && "bg-gray-100 dark:bg-dark-600",
+                    'relative flex cursor-pointer select-none px-4 py-2 transition-colors',
+                    active && !selected && 'bg-gray-100 dark:bg-dark-600',
                     selected
-                      ? "bg-primary-600 text-white dark:bg-primary-500"
-                      : "text-gray-800 dark:text-dark-100",
+                      ? 'bg-primary-600 text-white dark:bg-primary-500'
+                      : 'text-gray-800 dark:text-dark-100'
                   )
                 }
-                value={lang.value}
-              >
+                value={lang.value}>
                 <div className="flex space-x-3 rtl:space-x-reverse">
                   <img
                     className="size-5"

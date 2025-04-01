@@ -1,33 +1,21 @@
 // Import Dependencies
-import { CalendarIcon } from "@heroicons/react/24/solid";
-import clsx from "clsx";
-import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
-import { Flatpickr } from "./Flatpickr";
+import { CalendarIcon } from '@heroicons/react/24/solid';
+import clsx from 'clsx';
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { Flatpickr } from './Flatpickr';
 
 // Local Imports
-import { Input } from "components/ui/Form/Input";
-import { useLocaleContext } from "app/contexts/locale/context";
-import { useMergedRef } from "hooks";
-import { locales } from "i18n/langs";
+import { Input } from 'components/ui/Form/Input';
+import { useLocaleContext } from 'app/contexts/locale/context';
+import { useMergedRef } from 'hooks';
+import { locales } from 'i18n/langs';
 
 // ----------------------------------------------------------------------
 
 const DatePicker = forwardRef(
   (
-    {
-      options: userOptions,
-      className,
-      isCalendar = false,
-      hasCalenderIcon = true,
-      ...props
-    },
-    ref,
+    { options: userOptions, className, isCalendar = false, hasCalenderIcon = true, ...props },
+    ref
   ) => {
     const fp = useRef(null);
     const { locale } = useLocaleContext();
@@ -50,14 +38,14 @@ const DatePicker = forwardRef(
     const options = {
       inline: isCalendar,
       locale: localeData,
-      ...userOptions,
+      ...userOptions
     };
 
     useEffect(() => {
       const calendarContainer = fp.current?.flatpickr?.calendarContainer;
 
       if (calendarContainer) {
-        calendarContainer.classList.toggle("is-calendar", isCalendar);
+        calendarContainer.classList.toggle('is-calendar', isCalendar);
       }
     }, [isCalendar]);
 
@@ -68,7 +56,7 @@ const DatePicker = forwardRef(
         },
         blur() {
           fp.current.flatpickr.input.blur();
-        },
+        }
       };
     }, []);
 
@@ -76,7 +64,7 @@ const DatePicker = forwardRef(
 
     return (
       <Flatpickr
-        className={clsx("cursor-pointer", isCalendar && "hidden", className)}
+        className={clsx('cursor-pointer', isCalendar && 'hidden', className)}
         options={options}
         ref={mergedRef}
         {...props}
@@ -87,8 +75,7 @@ const DatePicker = forwardRef(
             <Input
               ref={ref}
               prefix={
-                !userOptions?.inline &&
-                hasCalenderIcon && <CalendarIcon className="size-5" />
+                !userOptions?.inline && hasCalenderIcon && <CalendarIcon className="size-5" />
               }
               readOnly
               {...props}
@@ -97,9 +84,9 @@ const DatePicker = forwardRef(
         }}
       />
     );
-  },
+  }
 );
 
-DatePicker.displayName = "DatePicker";
+DatePicker.displayName = 'DatePicker';
 
 export { DatePicker };

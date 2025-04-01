@@ -175,7 +175,7 @@ const AuthService = {
     } catch (err) {
       console.log('Error getCountries: ', err);
     }
-  },
+  }
 };
 
 export default AuthService;

@@ -1,6 +1,6 @@
 const publicRoutes = {
-  id: "public",
-  children: [],
+  id: 'public',
+  children: []
 };
 
 export { publicRoutes };

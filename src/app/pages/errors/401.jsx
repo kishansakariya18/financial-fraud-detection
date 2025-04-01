@@ -1,7 +1,7 @@
 // Local Imports
-import Authorize from "assets/illustrations/authorize.svg?react";
-import { Page } from "components/shared/Page";
-import { useThemeContext } from "app/contexts/theme/context";
+import Authorize from 'assets/illustrations/authorize.svg?react';
+import { Page } from 'components/shared/Page';
+import { useThemeContext } from 'app/contexts/theme/context';
 
 // ----------------------------------------------------------------------
 
@@ -10,7 +10,7 @@ export default function Error401() {
     primaryColorScheme: primary,
     lightColorScheme: light,
     darkColorScheme: dark,
-    isDark,
+    isDark
   } = useThemeContext();
 
   return (
@@ -20,13 +20,11 @@ export default function Error401() {
           <Authorize
             className="w-full"
             style={{
-              "--primary": primary[500],
-              "--dark-500": isDark ? dark[500] : light[700],
+              '--primary': primary[500],
+              '--dark-500': isDark ? dark[500] : light[700]
             }}
           />
-          <p className="pt-4 text-7xl font-bold text-primary-600 dark:text-primary-500">
-            401
-          </p>
+          <p className="pt-4 text-7xl font-bold text-primary-600 dark:text-primary-500">401</p>
           <p className="pt-4 text-xl font-semibold text-gray-800 dark:text-dark-50">
             You are not authorized
           </p>

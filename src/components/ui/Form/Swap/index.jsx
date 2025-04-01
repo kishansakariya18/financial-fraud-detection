@@ -1,10 +1,10 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import { forwardRef } from "react";
-import clsx from "clsx";
+import PropTypes from 'prop-types';
+import { forwardRef } from 'react';
+import clsx from 'clsx';
 
 // Local Imports
-import { useUncontrolled } from "hooks";
+import { useUncontrolled } from 'hooks';
 
 // ----------------------------------------------------------------------
 
@@ -12,7 +12,7 @@ const Swap = forwardRef((props, ref) => {
   const {
     children,
     component,
-    effect = "fade",
+    effect = 'fade',
     value,
     className,
     defaultValue,
@@ -22,13 +22,13 @@ const Swap = forwardRef((props, ref) => {
     ...rest
   } = props;
 
-  const Component = component || "div";
+  const Component = component || 'div';
 
   const [_value, handleChange] = useUncontrolled({
     value,
     defaultValue,
-    finalValue: "on",
-    onChange,
+    finalValue: 'on',
+    onChange
   });
 
   return (
@@ -39,39 +39,36 @@ const Swap = forwardRef((props, ref) => {
       data-disabled
       data-swap-effect={effect}
       className={clsx(
-        "swap relative inline-grid select-none place-content-center",
-        effect === "flip" && "swap-flip",
-        effect === "rotate" && "swap-rotate",
-        _value === "on"
-          ? "swap-active [&_[data-swap-on]]:z-[11]"
-          : "[&_[data-swap-off]]:z-[11]",
-        disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer",
-        className,
+        'swap relative inline-grid select-none place-content-center',
+        effect === 'flip' && 'swap-flip',
+        effect === 'rotate' && 'swap-rotate',
+        _value === 'on' ? 'swap-active [&_[data-swap-on]]:z-[11]' : '[&_[data-swap-off]]:z-[11]',
+        disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer',
+        className
       )}
       onClick={(e) => {
-        !disabled && handleChange(_value === "on" ? "off" : "on");
+        !disabled && handleChange(_value === 'on' ? 'off' : 'on');
         onClick?.(e);
       }}
-      {...rest}
-    >
+      {...rest}>
       {children}
     </Component>
   );
 });
 
-Swap.displayName = "Swap";
+Swap.displayName = 'Swap';
 
 Swap.propTypes = {
-  value: PropTypes.oneOf(["on", "off"]),
-  defaultValue: PropTypes.oneOf(["on", "off"]),
+  value: PropTypes.oneOf(['on', 'off']),
+  defaultValue: PropTypes.oneOf(['on', 'off']),
   onChange: PropTypes.func,
   disabled: PropTypes.bool,
-  effect: PropTypes.oneOf(["fade", "flip", "rotate"]),
+  effect: PropTypes.oneOf(['fade', 'flip', 'rotate']),
   children: PropTypes.node,
   onClick: PropTypes.func,
   className: PropTypes.string,
-  component: PropTypes.elementType,
+  component: PropTypes.elementType
 };
 
-export { SwapOff, SwapOn } from "./createSwapComponent";
+export { SwapOff, SwapOn } from './createSwapComponent';
 export { Swap };

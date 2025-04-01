@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext } from 'react';
 
 /**
  * Creates a context with safety checks to ensure it's used correctly.

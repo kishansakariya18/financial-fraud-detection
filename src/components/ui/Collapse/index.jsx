@@ -1,10 +1,10 @@
 // Import Dependencies
-import { forwardRef } from "react";
-import PropTypes from "prop-types";
+import { forwardRef } from 'react';
+import PropTypes from 'prop-types';
 
 // Local Imports
-import { useCollapse } from "hooks";
-import { Box } from "components/ui";
+import { useCollapse } from 'hooks';
+import { Box } from 'components/ui';
 
 // ----------------------------------------------------------------------
 
@@ -19,13 +19,13 @@ const Collapse = forwardRef((props, ref) => {
     onTransitionEnd,
     ...rest
   } = props;
-  
+
   const getCollapseProps = useCollapse({
     opened,
     transitionDuration,
     transitionTimingFunction,
     min,
-    onTransitionEnd,
+    onTransitionEnd
   });
 
   if (transitionDuration === 0) {
@@ -35,7 +35,7 @@ const Collapse = forwardRef((props, ref) => {
   return <Box {...getCollapseProps({ style, ref, ...rest })}>{children}</Box>;
 });
 
-Collapse.displayName = "Collapse";
+Collapse.displayName = 'Collapse';
 
 Collapse.propTypes = {
   children: PropTypes.node,
@@ -44,7 +44,7 @@ Collapse.propTypes = {
   transitionTimingFunction: PropTypes.string,
   style: PropTypes.object,
   onTransitionEnd: PropTypes.func,
-  min: PropTypes.string,
+  min: PropTypes.string
 };
 
 export { Collapse };

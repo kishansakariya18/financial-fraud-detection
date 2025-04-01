@@ -1,16 +1,16 @@
 // Import Dependencies
-import { lazy, useMemo } from "react";
+import { lazy, useMemo } from 'react';
 
 // Local Imports
-import { useThemeContext } from "app/contexts/theme/context";
-import { Loadable } from "components/shared/Loadable";
-import { SplashScreen } from "components/template/SplashScreen";
+import { useThemeContext } from 'app/contexts/theme/context';
+import { Loadable } from 'components/shared/Loadable';
+import { SplashScreen } from 'components/template/SplashScreen';
 
 // ----------------------------------------------------------------------
 
 const themeLayouts = {
-  "main-layout": lazy(() => import("./MainLayout")),
-  sideblock: lazy(() => import("./Sideblock")),
+  'main-layout': lazy(() => import('./MainLayout')),
+  sideblock: lazy(() => import('./Sideblock'))
 };
 
 export function DynamicLayout() {
@@ -18,7 +18,7 @@ export function DynamicLayout() {
 
   const CurrentLayout = useMemo(
     () => Loadable(themeLayouts[themeLayout], SplashScreen),
-    [themeLayout],
+    [themeLayout]
   );
 
   return <CurrentLayout />;

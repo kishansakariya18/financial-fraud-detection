@@ -1,10 +1,10 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import clsx from "clsx";
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
 
 // Local Imports
-import { PaginationProvider } from "./Pagination.context";
-import { usePagination } from "./usePagination";
+import { PaginationProvider } from './Pagination.context';
+import { usePagination } from './usePagination';
 
 // ----------------------------------------------------------------------
 
@@ -31,19 +31,17 @@ export function Pagination(props) {
     onNextPage,
     onPreviousPage,
     onFirstPage,
-    onLastPage,
+    onLastPage
   } = props;
 
-  const { range, setPage, next, previous, active, first, last } = usePagination(
-    {
-      page: value,
-      initialPage: defaultValue,
-      onChange,
-      total,
-      siblings,
-      boundaries,
-    },
-  );
+  const { range, setPage, next, previous, active, first, last } = usePagination({
+    page: value,
+    initialPage: defaultValue,
+    onChange,
+    total,
+    siblings,
+    boundaries
+  });
 
   const handleNextPage = createEventHandler(onNextPage, next);
   const handlePreviousPage = createEventHandler(onPreviousPage, previous);
@@ -67,16 +65,14 @@ export function Pagination(props) {
         onPrevious: handlePreviousPage,
         onFirst: handleFirstPage,
         onLast: handleLastPage,
-        getItemProps,
-      }}
-    >
+        getItemProps
+      }}>
       <div
         className={clsx(
-          "pagination hide-scrollbar max-w-full overflow-x-auto",
+          'pagination hide-scrollbar max-w-full overflow-x-auto',
           className,
-          classNames?.root,
-        )}
-      >
+          classNames?.root
+        )}>
         {children}
       </div>
     </PaginationProvider>
@@ -98,5 +94,5 @@ Pagination.propTypes = {
   onNextPage: PropTypes.func,
   onPreviousPage: PropTypes.func,
   onFirstPage: PropTypes.func,
-  onLastPage: PropTypes.func,
+  onLastPage: PropTypes.func
 };

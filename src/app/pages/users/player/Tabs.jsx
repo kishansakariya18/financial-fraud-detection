@@ -1,17 +1,13 @@
 // Local Imports
-import { Page } from "components/shared/Page";
-import { Outlet, NavLink, useParams } from "react-router";
+import { Page } from 'components/shared/Page';
+import { Outlet, NavLink, useParams } from 'react-router';
 // import TabNavigation from "./ShiftLeftAnimation";
-import clsx from "clsx";
-import {
-  AdjustmentsVerticalIcon,
-  HomeIcon,
-  ListBulletIcon,
-} from "@heroicons/react/24/outline";
-import { Button, Tab, TabGroup, TabList, TabPanels } from "@headlessui/react";
-import { randomId } from "utils/randomId";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import clsx from 'clsx';
+import { AdjustmentsVerticalIcon, HomeIcon, ListBulletIcon } from '@heroicons/react/24/outline';
+import { Button, Tab, TabGroup, TabList, TabPanels } from '@headlessui/react';
+import { randomId } from 'utils/randomId';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
@@ -23,40 +19,36 @@ export default function Tabs() {
   const tabs = [
     {
       id: randomId(),
-      title: t("details"),
+      title: t('details'),
       path: `/player/${playerId}/tab/details`,
       icon: HomeIcon,
-      index: 0,
+      index: 0
     },
     {
       id: randomId(),
-      title: t("limits"),
+      title: t('limits'),
       path: `/player/${playerId}/tab/limits`,
       icon: AdjustmentsVerticalIcon,
-      index: 1,
+      index: 1
     },
     {
       id: randomId(),
-      title: t("transactions"),
+      title: t('transactions'),
       path: `/player/${playerId}/tab/transactions`,
       icon: ListBulletIcon,
-      index: 2,
+      index: 2
     },
     {
       id: randomId(),
-      title: t("login") + " " + t("history"),
+      title: t('login') + ' ' + t('history'),
       path: `/player/${playerId}/tab/login-history`,
       icon: ListBulletIcon,
-      index: 3,
-    },
+      index: 3
+    }
   ];
 
-  const initialTabIndex = tabs.findIndex((tab) =>
-    location.pathname.includes(tab.path),
-  );
-  const [selectedIndex, setSelectedIndex] = useState(
-    initialTabIndex !== -1 ? initialTabIndex : 0,
-  );
+  const initialTabIndex = tabs.findIndex((tab) => location.pathname.includes(tab.path));
+  const [selectedIndex, setSelectedIndex] = useState(initialTabIndex !== -1 ? initialTabIndex : 0);
 
   return (
     <Page title="Players Tabs">
@@ -66,23 +58,19 @@ export default function Tabs() {
             <TabList className="flex w-max min-w-full px-1.5 py-1">
               {tabs.map((tab) => (
                 <div key={tab.id}>
-                  <NavLink
-                    to={tab.path}
-                    onClick={() => setSelectedIndex(tab.index)}
-                  >
+                  <NavLink to={tab.path} onClick={() => setSelectedIndex(tab.index)}>
                     <Tab
                       key={tab.id}
                       className={({ selected }) =>
                         clsx(
-                          "shrink-0 space-x-2 whitespace-nowrap border-b-2 px-3 py-2 font-medium rtl:space-x-reverse",
+                          'shrink-0 space-x-2 whitespace-nowrap border-b-2 px-3 py-2 font-medium rtl:space-x-reverse',
                           selected
-                            ? "border-primary-600 text-primary-600 dark:border-primary-500 dark:text-primary-400"
-                            : "border-transparent hover:text-gray-800 focus:text-gray-800 dark:hover:text-dark-100 dark:focus:text-dark-100",
+                            ? 'border-primary-600 text-primary-600 dark:border-primary-500 dark:text-primary-400'
+                            : 'border-transparent hover:text-gray-800 focus:text-gray-800 dark:hover:text-dark-100 dark:focus:text-dark-100'
                         )
                       }
                       as={Button}
-                      unstyled="true"
-                    >
+                      unstyled="true">
                       <div className="flex gap-1.5">
                         <tab.icon className="size-4.5" />
                         <span>{tab.title}</span>

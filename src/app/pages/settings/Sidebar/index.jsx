@@ -1,7 +1,7 @@
 // Local Imports
-import { MainPanel } from "app/layouts/MainLayout/Sidebar/MainPanel";
-import { baseNavigation } from "app/navigation";
-import { SidebarPanel } from "./SidebarPanel";
+import { MainPanel } from 'app/layouts/MainLayout/Sidebar/MainPanel';
+import { baseNavigation } from 'app/navigation';
+import { SidebarPanel } from './SidebarPanel';
 
 // ----------------------------------------------------------------------
 

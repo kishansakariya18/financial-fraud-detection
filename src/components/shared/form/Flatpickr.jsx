@@ -1,23 +1,20 @@
-import { Component } from "react";
-import PropTypes from "prop-types";
-import flatpickr from "flatpickr";
+import { Component } from 'react';
+import PropTypes from 'prop-types';
+import flatpickr from 'flatpickr';
 
 const hooks = [
-  "onChange",
-  "onOpen",
-  "onClose",
-  "onMonthChange",
-  "onYearChange",
-  "onReady",
-  "onValueUpdate",
-  "onDayCreate",
+  'onChange',
+  'onOpen',
+  'onClose',
+  'onMonthChange',
+  'onYearChange',
+  'onReady',
+  'onValueUpdate',
+  'onDayCreate'
 ];
-const hookPropType = PropTypes.oneOfType([
-  PropTypes.func,
-  PropTypes.arrayOf(PropTypes.func),
-]);
+const hookPropType = PropTypes.oneOfType([PropTypes.func, PropTypes.arrayOf(PropTypes.func)]);
 
-const callbacks = ["onCreate", "onDestroy"];
+const callbacks = ['onCreate', 'onDestroy'];
 
 const callbackPropTypes = PropTypes.func;
 
@@ -39,15 +36,15 @@ export class Flatpickr extends Component {
       PropTypes.string,
       PropTypes.array,
       PropTypes.object,
-      PropTypes.number,
+      PropTypes.number
     ]),
     children: PropTypes.node,
     className: PropTypes.string,
-    render: PropTypes.func,
+    render: PropTypes.func
   };
 
   static defaultProps = {
-    options: {},
+    options: {}
   };
 
   componentDidUpdate(prevProps) {
@@ -75,7 +72,7 @@ export class Flatpickr extends Component {
     }
 
     if (
-      Object.prototype.hasOwnProperty.call(this.props, "value") &&
+      Object.prototype.hasOwnProperty.call(this.props, 'value') &&
       !(
         this.props.value &&
         Array.isArray(this.props.value) &&
@@ -104,7 +101,7 @@ export class Flatpickr extends Component {
       onClose: () => {
         this.node.blur && this.node.blur();
       },
-      ...this.props.options,
+      ...this.props.options
     };
 
     // Add prop hooks to options
@@ -112,7 +109,7 @@ export class Flatpickr extends Component {
 
     this.flatpickr = flatpickr(this.node, options);
 
-    if (Object.prototype.hasOwnProperty.call(this.props, "value")) {
+    if (Object.prototype.hasOwnProperty.call(this.props, 'value')) {
       this.flatpickr.setDate(this.props.value, false);
     }
 
@@ -138,8 +135,7 @@ export class Flatpickr extends Component {
   };
 
   render() {
-    const { options, defaultValue, value, children, render, ...props } =
-      this.props;
+    const { options, defaultValue, value, children, render, ...props } = this.props;
 
     // Don't pass hooks and callbacks to dom node
     hooks.forEach((hook) => {
@@ -149,19 +145,14 @@ export class Flatpickr extends Component {
       delete props[callback];
     });
 
-    if (render)
-      return render({ ...props, defaultValue, value }, this.handleNodeChange);
+    if (render) return render({ ...props, defaultValue, value }, this.handleNodeChange);
 
     return options.wrap ? (
       <div {...props} ref={this.handleNodeChange}>
         {children}
       </div>
     ) : (
-      <input
-        {...props}
-        defaultValue={defaultValue}
-        ref={this.handleNodeChange}
-      />
+      <input {...props} defaultValue={defaultValue} ref={this.handleNodeChange} />
     );
   }
 }

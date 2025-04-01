@@ -1,4 +1,4 @@
-import { matchPath } from "react-router";
+import { matchPath } from 'react-router';
 
 /**
  * Checks if the given path matches the current pathname.
@@ -8,6 +8,6 @@ import { matchPath } from "react-router";
  * @returns {boolean} - Returns `true` if the path matches the current pathname, otherwise `false`.
  */
 export function isRouteActive(path, pathname) {
-    // Check if the given path matches the current pathname using react-router's matchPath
-    return path ? !!matchPath({ path, end: false }, pathname) : false;
+  // Check if the given path matches the current pathname using react-router's matchPath
+  return path ? !!matchPath({ path, end: false }, pathname) : false;
 }

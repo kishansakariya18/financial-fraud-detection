@@ -1,6 +1,6 @@
 // Import Dependencies
-import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -39,5 +39,5 @@ export function PreviewImg({ file, src, alt, ...rest }) {
 PreviewImg.propTypes = {
   file: PropTypes.object,
   src: PropTypes.string,
-  alt: PropTypes.string,
+  alt: PropTypes.string
 };
