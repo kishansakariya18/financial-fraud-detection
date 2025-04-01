@@ -127,7 +127,7 @@ const AuthService = {
     try {
       const endPoint = apiConfig.endPoints.ADMIN_USER.ADMIN_APPSETTINGS;
       const response = await sendRequest({
-        url: apiConfig.baseURL.REACT_APP_API_URL + endPoint,
+        url: apiConfig.baseURL.API_BASE_URL + endPoint,
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -143,7 +143,7 @@ const AuthService = {
     try {
       const endPoint = apiConfig.endPoints.ADMIN_USER.ADMIN_PERMISSION;
       const response = await sendRequest({
-        url: apiConfig.baseURL.REACT_APP_API_URL + endPoint,
+        url: apiConfig.baseURL.API_BASE_URL + endPoint,
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'

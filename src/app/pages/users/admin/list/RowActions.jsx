@@ -47,7 +47,7 @@ export function RowActions({ row, table }) {
   };
 
   const handleClickView = () => {
-    navigate(`/admin/${row.original.id}/tab`)
+    navigate(`/admin/${row.original.id}/tab/details`)
   }
 
   const openModal = () => {
