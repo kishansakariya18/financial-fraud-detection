@@ -7,5 +7,6 @@ export default {
   printWidth: 100,
   singleQuote: true,
   trailingComma: 'none',
-  bracketSameLine: true
+  bracketSameLine: true,
+  endOfLine: 'auto'
 };
