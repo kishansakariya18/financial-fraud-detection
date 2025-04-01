@@ -1,6 +1,6 @@
 // import { replaceText } from '../helpers/functions';
 
-import { playerStatusToAPI , transactionStatusToAPI, transactionTypeAppToApi, txnTypeToAPI } from "app/pages/users/player/helper";
+import { fundTypeToAPI, playerStatusToAPI , transactionStatusToAPI, transactionTypeAppToApi, txnTypeToAPI } from "app/pages/users/player/helper";
 import apiConfig from "configs/api.config";
 import dayjs from "dayjs";
 import { sendRequest } from "utils/axios";
@@ -62,25 +62,25 @@ const PlayerService = {
       console.log("Error from user referral list", error);
     }
   },
-  userFund: async (reqBody) => {
+  managePlayerFund: async (data) => {
     try {
-      const reqData = {
-        amount: reqBody.amount,
-        userID: reqBody.userID,
-        amountType: reqBody.fundType,
-        type: reqBody.transactionType,
-        fundMessage: reqBody.fundMessage,
-        password: reqBody.password,
+      const requestBody = {
+        amount: data.amount,
+        userID: data.playerId,
+        amountType: fundTypeToAPI(data.fundType),
+        type: transactionTypeAppToApi(data.type),
+        fundMessage: data.fundMessage,
+        password: data.password,
       };
       const endPoint = apiConfig.endPoints.USER.FUND;
-      const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: reqData,
+        body: requestBody,
       });
       return response;
     } catch (error) {
@@ -252,7 +252,7 @@ const PlayerService = {
       console.log("Error from user referral list", error);
     }
   },
-  userTransactionDetail: async (data) => {
+  playerTransactionDetail: async (data) => {
     try {
       const endPoint = apiConfig.endPoints.USER.TRANSACTION_DETAIL;
       console.log("data::", data);
@@ -360,7 +360,7 @@ const PlayerService = {
       console.log("Error from userTransactionList", error);
     }
   },
-  getCommentDetail: async (commentID) => {
+  getNoteDetails: async (commentID) => {
     try {
       const query = {
         commentID,
@@ -381,14 +381,17 @@ const PlayerService = {
       console.log("Error from getCommentDetail", error);
     }
   },
-  getComment: async (userID) => {
+  getPlayerNotes: async (data) => {
     try {
+      const { pagination, playerId } = data 
       const query = {
-        userID,
+        userID: playerId,
+        perPage: pagination?.pageSize,
+        page: pagination.pageIndex + 1,
       };
 
       const endPoint = apiConfig.endPoints.USER.GET_COMMENT;
-      const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
         method: "GET",
@@ -402,14 +405,14 @@ const PlayerService = {
       console.log("Error from getComment", error);
     }
   },
-  deleteComment: async (commentID) => {
+  deletePlayerNote: async (playerId) => {
     try {
       const query = {
-        commentID,
+        commentID: playerId,
       };
 
       const endPoint = apiConfig.endPoints.USER.DELETE_COMMENT;
-      const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
         method: "GET",
@@ -423,17 +426,23 @@ const PlayerService = {
       console.log("Error from deleteComment", error);
     }
   },
-  updateComment: async (data) => {
+  editPlayerNote: async (data) => {
     try {
+
+      const apiBodyData = {
+        commentID: data.noteId,
+        isPinned: data.isPinned,
+        comment: data.note
+      }
       const endPoint = apiConfig.endPoints.USER.UPDATE_COMMENT;
-      const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: data,
+        body: apiBodyData,
       });
       return response;
     } catch (error) {
@@ -467,17 +476,22 @@ const PlayerService = {
       console.log("Error from userLoginHistory", error);
     }
   },
-  AddComment: async (data) => {
+  addPlayerNote: async (data) => {
     try {
+      const reqBody = {
+        userID: data.playerId,
+        comment: data.note,
+        isPinned: data.isPinned
+      }
       const endPoint = apiConfig.endPoints.USER.ADD_COMMENT;
-      const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: data,
+        body: reqBody,
       });
       return response;
     } catch (error) {

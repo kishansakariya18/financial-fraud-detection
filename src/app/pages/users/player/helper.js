@@ -278,3 +278,38 @@ export const loginHistoryResponseMapper = (apiData) => {
     }
   })
 }
+
+
+export const fundTypeOption = [
+  {
+    value: "realCash",
+    label: "RealCash",
+    color: "success",
+  },
+  {
+    value: "winning",
+    label: "Winning",
+    color: "success",
+  }
+];
+
+
+export const fundTypeToAPI = (fundType) => {
+  switch(fundType){
+    case "realCash":
+      return 0;
+    case "winning":
+      return 2; 
+  }
+}
+
+
+export const playerNotesResponseMapper = (apiData) => {
+  return apiData.map((data) => ({
+    id: data.CommentID,
+    note: data.Comment,
+    adminName: data.Admin.Username,
+    isPinned: data.IsPinned ? "Yes" : "No",
+    createdAt: getDateInUTCToTimeZone(data.DateCreated)
+  }))
+}

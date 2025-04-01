@@ -86,5 +86,22 @@
   "transaction": "Transaction",
   "type": "Type",
   "login": "Login",
-  "history": "History"
+  "history": "History",
+  "manage": "Manage",
+  "fund": "Fund",
+  "cancel": "Cancel",
+  "message": "Message",
+  "password": "Password",
+  "amount": "Amount",
+  "notes": "Notes",
+  "note": "Note",
+  "pin": "Pin",
+  "your": "Your",
+  "tabs": "Tabs",
+  "user": "User",
+  "bonus": "Bonus",
+  "currency": "Currency",
+  "opening": "Opening",
+  "closing": "Closing",
+  "currenct": "Current"
 }

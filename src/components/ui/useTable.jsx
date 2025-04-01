@@ -95,7 +95,10 @@ const useTable = ({ columns, fetchData, queryParams, setSearchParams, initialSet
       changeStatus: async () => {
         await fetchTableData();
       },
-      setTableSettings
+      editRow: async () => {
+        await fetchTableData();
+      },
+      setTableSettings,
     },
     enableColumnFilters: tableSettings.enableColumnFilters,
     getCoreRowModel: getCoreRowModel(),

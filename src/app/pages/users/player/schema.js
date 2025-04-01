@@ -75,3 +75,14 @@ export const playerLimitSchema = Yup.object().shape({
   hasWeeklyLossLimit: Yup.boolean(),
   hasMonthlyLossLimit: Yup.boolean(),
 });
+
+
+
+
+export const manageFundSchema = Yup.object().shape({
+  // Personal Information
+  amount: Yup.number("Enter Valid Number").required("Amount Required"),
+  fundType: Yup.string().trim().required("Fund Type Required"),
+  fundMessage: Yup.string().trim().required("Fund Message Required"),
+  type: Yup.string().trim().required("Type Required")
+});

@@ -47,6 +47,18 @@ export const playerRoutes = [
             .default,
         }),
       },
+      {
+        path: "manage-fund",
+        lazy: async () => ({
+          Component: (await import("../../pages/users/player/ManageFund")).default,
+        }),
+      },
+      {
+        path: "player-notes",
+        lazy: async () => ({
+          Component: (await import("../../pages/users/player/player-notes/list")).default,
+        }),
+      },
     ],
   },
 ];
