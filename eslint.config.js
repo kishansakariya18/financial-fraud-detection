@@ -5,6 +5,7 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import eslintConfigPrettier from 'eslint-config-prettier';
+import eslintPluginPrettier from 'eslint-plugin-prettier';
 
 export default [
   eslintConfigPrettier,
@@ -26,6 +27,7 @@ export default [
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
       'jsx-a11y': jsxA11y,
+      prettier: eslintPluginPrettier
     },
     rules: {
       ...js.configs.recommended.rules,
@@ -39,6 +41,8 @@ export default [
         { allowConstantExport: true },
       ],
       'jsx-a11y/alt-text': 'error',
+      'prettier/prettier': 'error',
+      'linebreak-style': ['error', 'unix'],
     },
   },
 ];

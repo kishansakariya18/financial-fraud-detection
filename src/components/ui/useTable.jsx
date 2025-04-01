@@ -1,23 +1,17 @@
-import { useEffect, useState } from "react";
-import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import useDeepCompareEffect from 'use-deep-compare-effect'
+import { useEffect, useState } from 'react';
+import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import useDeepCompareEffect from 'use-deep-compare-effect';
 
-const useTable = ({
-  columns,
-  fetchData,
-  queryParams,
-  setSearchParams,
-  initialSettings = {},
-}) => {
+const useTable = ({ columns, fetchData, queryParams, setSearchParams, initialSettings = {} }) => {
   const [response, setResponse] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   // Initialize pagination from URL or default values
   const [pagination, setPagination] = useState({
     pageIndex: isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex,
     pageSize: isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize,
-    totalCount: 0,
+    totalCount: 0
   });
 
   const [columnFilters, setColumnFilters] = useState([]);
@@ -27,7 +21,7 @@ const useTable = ({
   const [tableSettings, setTableSettings] = useState({
     enableFullScreen: false,
     enableRowDense: false,
-    ...initialSettings.tableSettings,
+    ...initialSettings.tableSettings
   });
 
   // Fetch data from API with pagination + queryParams
@@ -37,14 +31,14 @@ const useTable = ({
       const result = await fetchData({
         ...queryParams, // Keep existing filters from URL
         pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize,
+        pageSize: pagination.pageSize
       });
 
       if (result.status === 200) {
         setResponse(result.data);
         setPagination((prev) => ({
           ...prev,
-          totalCount: result.totalRecords || 0,
+          totalCount: result.totalRecords || 0
         }));
       } else {
         setError(result.error);
@@ -64,18 +58,21 @@ const useTable = ({
     setPagination({
       ...pagination,
       pageIndex,
-      pageSize,
+      pageSize
     });
   }, [queryParams]);
 
   //   Sync pagination with URL
   useEffect(() => {
-    setSearchParams((prevParams) => ({
-      ...Object.fromEntries(prevParams), // Preserve existing query params
-      pageIndex: pagination.pageIndex,
-      pageSize: pagination.pageSize,
-    }), { replace: true });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    setSearchParams(
+      (prevParams) => ({
+        ...Object.fromEntries(prevParams), // Preserve existing query params
+        pageIndex: pagination.pageIndex,
+        pageSize: pagination.pageSize
+      }),
+      { replace: true }
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.pageIndex, pagination.pageSize]);
 
   const table = useReactTable({
@@ -89,7 +86,7 @@ const useTable = ({
       pagination,
       columnVisibility,
       columnPinning,
-      tableSettings,
+      tableSettings
     },
     meta: {
       deleteRow: async () => {
@@ -98,14 +95,14 @@ const useTable = ({
       changeStatus: async () => {
         await fetchTableData();
       },
-      setTableSettings,
+      setTableSettings
     },
     enableColumnFilters: tableSettings.enableColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     onPaginationChange: setPagination,
     onColumnVisibilityChange: setColumnVisibility,
     onColumnPinningChange: setColumnPinning,
-    onColumnFiltersChange: setColumnFilters,
+    onColumnFiltersChange: setColumnFilters
   });
 
   return {
@@ -116,7 +113,7 @@ const useTable = ({
     setPagination,
     setColumnFilters,
     tableSettings,
-    setTableSettings,
+    setTableSettings
   };
 };
 
