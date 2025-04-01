@@ -18,8 +18,8 @@ export default [
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },
-        sourceType: 'module',
-      },
+        sourceType: 'module'
+      }
     },
     settings: { react: { version: 'detect' } },
     plugins: {
@@ -35,14 +35,11 @@ export default [
       ...react.configs['jsx-runtime'].rules,
       ...reactHooks.configs.recommended.rules,
       'react/jsx-no-target-blank': 'off',
-      "react/prop-types": 'off',
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
+      'react/prop-types': 'off',
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       'jsx-a11y/alt-text': 'error',
       'prettier/prettier': 'error',
-      'linebreak-style': ['error', 'unix'],
-    },
-  },
+      'linebreak-style': 'off'
+    }
+  }
 ];
