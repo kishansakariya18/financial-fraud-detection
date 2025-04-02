@@ -7,6 +7,7 @@ import playerRoutes from './routes/player.route';
 import roleRoutes from './routes/role.route';
 import platformRoute from './routes/platform.route';
 import countryRoutes from './routes/country.route';
+import reportsRoutes from './routes/betSlip.route';
 
 // ----------------------------------------------------------------------
 
@@ -23,7 +24,8 @@ const protectedRoutes = {
         ...playerRoutes,
         ...roleRoutes,
         ...platformRoute,
-        ...countryRoutes
+        ...countryRoutes,
+        ...reportsRoutes
       ]
     }
   ]

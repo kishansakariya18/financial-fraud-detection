@@ -1,0 +1,146 @@
+import { CheckBadgeIcon } from '@heroicons/react/24/outline';
+import { getDateInUTCToTimeZone } from 'helpers/functions';
+
+export const parseAdminStatusToApp = (status) => (status ? 'active' : 'inactive');
+
+export const parseAdminStatusToApi = (status) => {
+  let apiStatus = null;
+  if (status === 'inactive') {
+    apiStatus = 0;
+  } else if (status === 'active') {
+    apiStatus = 1;
+  }
+  return apiStatus;
+};
+
+export const translator = (t, text, ns) => t(`${text}`, { ns });
+export const getBatdgeForStage = (type) => {
+  switch (+type) {
+    case 0:
+      return 'betplaced';
+    case 1:
+      return 'result';
+    default:
+      break;
+  }
+};
+export const getStageAppToApi = (type) => {
+  switch (type) {
+    case 'betplaced':
+      return 0;
+    case 'result':
+      return 1;
+    default:
+      break;
+  }
+};
+export const mapType = (item) => {
+  switch (item) {
+    case 'profit':
+      return 1;
+    case 'loss':
+      return 2;
+    case 'neutral':
+      return 3;
+    default:
+      return 0;
+  }
+};
+export const responseMapper = (apiData) => {
+  const resultData = apiData.map((data) => ({
+    id: data.ID,
+    userId: data.UserID,
+    betId: data.BetID,
+    username: data.Username,
+    mobile: data.Mobile,
+    betAmount: data.BetAmount,
+    stage: getBatdgeForStage(data.Stage),
+    referenceId: data.ReferenceID,
+    resultDate: data.ResultDate ? data.ResultDate : '',
+    winAmount: data.WinningAmount,
+    userAmount: amountColorBasedOnType(data.Amount, data.Type),
+    platformAmount: amountColorBasedOnTypeForPlatform(data.Amount, data.Type),
+    type: getBatdgeForType(data.Type),
+    platformType: getBadgeForPlatform(data.Type),
+    createdAt: getDateInUTCToTimeZone(data.Date)
+  }));
+  return resultData;
+};
+export const getBatdgeForType = (type) => {
+  switch (type) {
+    case 'profit':
+      return type;
+    case 'loss':
+      return type;
+    case 'neutral':
+      return type;
+    default:
+      return 'Not decided';
+  }
+};
+export const getBadgeForPlatform = (type) => {
+  switch (type) {
+    case 'profit':
+      return 'loss';
+    case 'loss':
+      return 'profit';
+    case 'neutral':
+      return type;
+    default:
+      return 'Not decided';
+  }
+};
+export const amountColorBasedOnType = (amount, type) => {
+  switch (type) {
+    case 'loss':
+      return `- ${amount}`;
+    case 'profit':
+      return `+ ${amount}`;
+    default:
+      return `${amount}`;
+  }
+};
+export const amountColorBasedOnTypeForPlatform = (amount, type) => {
+  switch (type) {
+    case 'loss':
+      return `+ ${amount}`;
+    case 'profit':
+      return `- ${amount}`;
+    default:
+      return `${amount}`;
+  }
+};
+export const stageOptions = [
+  {
+    value: 'betplaced',
+    label: 'Betplaced',
+    color: 'success',
+    icon: CheckBadgeIcon
+  },
+  {
+    value: 'result',
+    label: 'Result',
+    color: 'success',
+    icon: CheckBadgeIcon
+  }
+];
+export const typeOptions = [
+  {
+    value: 'profit',
+    label: 'Profit',
+    color: 'success',
+    icon: CheckBadgeIcon
+  },
+  {
+    value: 'loss',
+    label: 'Loss',
+    color: 'error',
+    icon: CheckBadgeIcon
+  },
+  {
+    value: 'neutral',
+    label: 'Neutral',
+    color: 'warning',
+    icon: CheckBadgeIcon
+  }
+];

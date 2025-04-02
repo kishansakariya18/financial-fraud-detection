@@ -8,8 +8,6 @@ import { TableSortIcon } from 'components/shared/table/TableSortIcon';
 import { PaginationSection } from 'components/shared/table/PaginationSection';
 
 const TableCard = (props) => {
-  console.log('TableCard');
-
   const { cardSkin } = useThemeContext();
   const { tableSettings, table, loading } = props; // Added loading prop
 

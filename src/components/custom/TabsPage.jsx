@@ -6,12 +6,15 @@ import clsx from 'clsx';
 import { Button, Tab, TabGroup, TabList, TabPanels } from '@headlessui/react';
 // import { useState } from 'react';
 import usePermissions from 'app/router/usePermissions';
+import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
 export default function TabsPage({ tabs }) {
   const initialTabIndex = tabs.findIndex((tab) => location.pathname.includes(tab.path));
   const { hasPermission } = usePermissions();
+  const [selectedIndex, setSelectedIndex] = useState(initialTabIndex !== -1 ? initialTabIndex : 0);
+
   return (
     <Page>
       <TabGroup selectedIndex={initialTabIndex}>

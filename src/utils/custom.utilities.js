@@ -23,7 +23,7 @@ export function replaceText(text, replaceTo, replaceWith) {
 }
 
 export const ConvertDateIntoUTC = (date) => {
-  console.log('typeoftypeoftypeof<<>>', typeof date, '   ', date);
+  console.log('typeoftypeoftypeof ==>', typeof date, '   ', date);
   if (date) {
     if (typeof date == 'string') {
       date = moment(date);
