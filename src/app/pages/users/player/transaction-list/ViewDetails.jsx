@@ -3,16 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
 // Local Imports
-import {
-  Button,
-  GhostSpinner,
-  Table,
-  TBody,
-  Td,
-  Th,
-  THead,
-  Tr,
-} from 'components/ui';
+import { Button, GhostSpinner, Table, TBody, Td, Th, THead, Tr } from 'components/ui';
 import { Page } from 'components/shared/Page';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 import PlayerService from 'services/player.services';
@@ -29,7 +20,7 @@ export function ViewDetails({ transactionId, onClose }) {
   const fetchPlayerDetails = useCallback(async () => {
     setLoading(true);
     const result = await PlayerService.playerTransactionDetail({
-      transactionId,
+      transactionId
     });
 
     if (result.status === 200) {
@@ -75,13 +66,8 @@ export function ViewDetails({ transactionId, onClose }) {
               <p>{response?.RealCashAmount || '0'}</p>
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                {t('status')}
-              </p>
-              <p>
-                {response?.Status >= 0 &&
-                  transactionStatusToAPP(response.Status)}
-              </p>
+              <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('status')}</p>
+              <p>{response?.Status >= 0 && transactionStatusToAPP(response.Status)}</p>
             </div>
 
             <div>
@@ -98,8 +84,7 @@ export function ViewDetails({ transactionId, onClose }) {
                   {headers.map((header, index) => (
                     <Th
                       key={index}
-                      className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100"
-                    >
+                      className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
                       {header}
                     </Th>
                   ))}

@@ -26,7 +26,7 @@ const ManageFund = () => {
 
   const breadcrumbItem = [
     { title: t('player'), path: '/player' },
-    { title: t('manage') + ' ' + t('fund') },
+    { title: t('manage') + ' ' + t('fund') }
   ];
 
   const {
@@ -35,9 +35,9 @@ const ManageFund = () => {
     control,
     formState: { errors },
     reset,
-    watch,
+    watch
   } = useForm({
-    resolver: yupResolver(manageFundSchema),
+    resolver: yupResolver(manageFundSchema)
   });
 
   // Watch selected transaction type
@@ -56,7 +56,7 @@ const ManageFund = () => {
     setError(null);
     const result = await PlayerService.managePlayerFund({
       ...requestObject,
-      playerId,
+      playerId
     });
     if (result) {
       if (result.status === 200 || result.status === 201) {
@@ -104,11 +104,7 @@ const ManageFund = () => {
                 render={({ field }) => (
                   <Listbox
                     data={transactionTypeOption}
-                    value={
-                      transactionTypeOption.find(
-                        (type) => type.value === field.value,
-                      ) || null
-                    }
+                    value={transactionTypeOption.find((type) => type.value === field.value) || null}
                     onChange={(val) => field.onChange(val.value)}
                     name={field.name}
                     label={t('type')}
@@ -127,16 +123,12 @@ const ManageFund = () => {
                   <Listbox
                     data={filteredFundTypeOptions}
                     value={
-                      filteredFundTypeOptions.find(
-                        (option) => option.value === field.value,
-                      ) || null
+                      filteredFundTypeOptions.find((option) => option.value === field.value) || null
                     }
                     onChange={(val) => field.onChange(val.value)}
                     name={field.name}
                     label={t('fund') + ' ' + t('type')}
-                    placeholder={
-                      t('select') + ' ' + t('fund') + ' ' + t('type')
-                    }
+                    placeholder={t('select') + ' ' + t('fund') + ' ' + t('type')}
                     displayField="label"
                     error={errors?.fundType?.message}
                     disabled={filteredFundTypeOptions.length === 0}
@@ -179,19 +171,10 @@ const ManageFund = () => {
           </div>
 
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-            <Button
-              className="min-w-[7rem]"
-              onClick={() => reset()}
-              disabled={loading}
-            >
+            <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
               {t('reset')}
             </Button>
-            <Button
-              type="submit"
-              className="min-w-[7rem]"
-              color="primary"
-              disabled={loading}
-            >
+            <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
               {t('add')}
             </Button>
           </div>

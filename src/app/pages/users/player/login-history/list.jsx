@@ -69,7 +69,7 @@ export default function LoginHistoryList() {
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
       <Toolbar breadcrumbs={breadcrumbs} table={table} pageTitle={pageTitle} />
-      <TableCard tableSettings={tableSettings} table={table} />
+      <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>
   );
 }

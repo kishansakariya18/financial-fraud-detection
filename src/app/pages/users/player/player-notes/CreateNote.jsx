@@ -20,10 +20,8 @@ const CreateNote = ({ onClose = () => {} }) => {
   const { playerId } = useParams();
   const { t } = useTranslation();
 
-
-  console.log('open: ', open)
-  console.log('close: ', close)
-
+  console.log('open: ', open);
+  console.log('close: ', close);
 
   const { handleSubmit, reset, register } = useForm({});
   const [content, setContent] = useState(defaultValue);
@@ -40,12 +38,12 @@ const CreateNote = ({ onClose = () => {} }) => {
     setError(null);
     const result = await PlayerService.addPlayerNote({
       ...requestObject,
-      playerId,
+      playerId
     });
     if (result) {
       if (result.status === 200 || result.status === 201) {
         setResponse(result.response);
-      } else { 
+      } else {
         setError(result.error);
       }
     }
@@ -57,13 +55,12 @@ const CreateNote = ({ onClose = () => {} }) => {
     setError('');
   }
 
-  
   if (!loading && !error && response) {
-    console.log('use effect called')
+    console.log('use effect called');
     toast.success(response.message);
     setResponse(null);
     setContent(defaultValue);
-    onClose()
+    onClose();
     reset();
   }
 
@@ -80,40 +77,20 @@ const CreateNote = ({ onClose = () => {} }) => {
             value={content}
             onChange={handleChange}
             placeholder={
-              t('enter') +
-              ' ' +
-              t('your') +
-              ' ' +
-              t('content') +
-              ' ' +
-              t('here') +
-              '...'
+              t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
             }
           />
-          <div className="border bg-gray-100 p-2">
-          </div>
+          <div className="border bg-gray-100 p-2"></div>
         </div>
 
-        <Checkbox
-          label={t('pin') + ' ' + t('note')}
-          {...register('isPinned')}
-        />
+        <Checkbox label={t('pin') + ' ' + t('note')} {...register('isPinned')} />
       </div>
 
       <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-        <Button
-          className="min-w-[7rem]"
-          onClick={() => reset()}
-          disabled={loading}
-        >
+        <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
           {t('reset')}
         </Button>
-        <Button
-          type="submit"
-          className="min-w-[7rem]"
-          color="primary"
-          disabled={loading}
-        >
+        <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
           {t('add')}
         </Button>
       </div>

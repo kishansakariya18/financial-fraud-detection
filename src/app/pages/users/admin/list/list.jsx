@@ -2,8 +2,6 @@ import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
-
-// Local Imports - UI,Services,Helper,Utils
 import { Toolbar } from './Toolbar';
 import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';

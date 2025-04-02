@@ -9,12 +9,14 @@ import { navigation } from 'app/navigation';
 import { Group } from './Group';
 import { Accordion } from 'components/ui';
 import { isRouteActive } from 'utils/isRouteActive';
+import usePermissions from 'app/router/usePermissions';
 
 // ----------------------------------------------------------------------
 
 export function Menu() {
   const { pathname } = useLocation();
   const { ref } = useRef();
+  const { hasPermission } = usePermissions();
 
   const activeGroup = navigation.find((item) => {
     if (item.path) return isRouteActive(item.path, pathname);
@@ -38,9 +40,12 @@ export function Menu() {
   return (
     <SimpleBar scrollableNodeProps={{ ref }} className="h-full overflow-x-hidden pb-6">
       <Accordion value={expanded} onChange={setExpanded} className="space-y-1">
-        {navigation.map((nav) => (
-          <Group key={nav.id} data={nav} />
-        ))}
+        {navigation.map((nav) => {
+          if (!nav.permission || nav.permission?.some((p) => hasPermission(p))) {
+            return <Group key={nav.id} data={nav} />;
+          }
+          return null;
+        })}
       </Accordion>
     </SimpleBar>
   );

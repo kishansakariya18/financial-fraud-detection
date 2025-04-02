@@ -64,25 +64,21 @@ export function AmountCell({ getValue }) {
   );
 }
 
+export function AddressCell({ getValue }) {
+  const val = getValue();
+  return (
+    <p className="w-48 truncate text-xs+ xl:w-56 2xl:w-64">
+      <Highlight>{val}</Highlight>
+    </p>
+  );
+}
 
-  export function AddressCell({ getValue }) {
-    const val = getValue();
-    return (
-      <p className="w-48 truncate text-xs+ xl:w-56 2xl:w-64">
-        <Highlight >{val}</Highlight>
-      </p>
-    );
-  }
-
-
-  export function CreateMarkupCell( {className = '', style = {}, getValue} ){
-    const val = getValue();
-    return (
-      <>
-        {<div className={className} style={style} dangerouslySetInnerHTML={{ __html: val }}></div>}
-      </>
-    );
-  };
+export function CreateMarkupCell({ className = '', style = {}, getValue }) {
+  const val = getValue();
+  return (
+    <>{<div className={className} style={style} dangerouslySetInnerHTML={{ __html: val }}></div>}</>
+  );
+}
 DateCell.propTypes = {
   getValue: PropTypes.func
 };
@@ -102,9 +98,9 @@ AmountCell.propTypes = {
   getValue: PropTypes.func
 };
 AddressCell.propTypes = {
-  getValue: PropTypes.func,
+  getValue: PropTypes.func
 };
 
 CreateMarkupCell.propTypes = {
-  getValue: PropTypes.func,
+  getValue: PropTypes.func
 };

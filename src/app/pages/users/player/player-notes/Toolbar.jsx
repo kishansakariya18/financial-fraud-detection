@@ -14,7 +14,6 @@ import { CustomModal } from 'components/custom';
 import CreateNote from './CreateNote';
 import { useState } from 'react';
 
-
 export function Toolbar({ table, pageTitle = '' }) {
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -36,9 +35,8 @@ export function Toolbar({ table, pageTitle = '' }) {
       <div
         className={clsx(
           'transition-content flex items-center justify-between gap-4',
-          isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x] pt-4',
-        )}
-      >
+          isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x] pt-4'
+        )}>
         <div className="min-w-0">
           <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
             {pageTitle}
@@ -53,8 +51,7 @@ export function Toolbar({ table, pageTitle = '' }) {
             title={pageTitle}
             btnTitle={t('add') + ' ' + t('note')}
             btnColor={'primary'}
-            isShowBtn={true}
-          >
+            isShowBtn={true}>
             <CreateNote onClose={onCloseDialogBox} />
           </CustomModal>
         </div>
@@ -67,24 +64,18 @@ function SearchInput({ table }) {
   return (
     <Input
       value={table?.getColumn('username')?.getFilterValue() || ''}
-      onChange={(e) =>
-        table.getColumn('username').setFilterValue(e.target.value)
-      }
+      onChange={(e) => table.getColumn('username').setFilterValue(e.target.value)}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
-        root: 'shrink-0',
+        root: 'shrink-0'
       }}
       placeholder="Search Mobile, User..."
     />
   );
 }
 
-function Filters({
-  table,
-  onApplyFilters = () => {},
-  onClearFilters = () => {},
-}) {
+function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }) {
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>
@@ -105,23 +96,17 @@ function Filters({
           title={t('date') + ' ' + t('range')}
           config={{
             maxDate: new Date().fp_incr(1),
-            mode: 'range',
+            mode: 'range'
           }}
         />
       )}
 
       {isFiltered && (
         <div>
-          <Button
-            onClick={onApplyFilters}
-            className="h-8 whitespace-nowrap px-2.5 text-xs"
-          >
+          <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
             {t('search')}
           </Button>
-          <Button
-            onClick={onClearFilters}
-            className="ml-1 h-8 whitespace-nowrap px-2.5 text-xs"
-          >
+          <Button onClick={onClearFilters} className="ml-1 h-8 whitespace-nowrap px-2.5 text-xs">
             {t('reset') + ' ' + t('filter')}
           </Button>
         </div>
@@ -131,13 +116,13 @@ function Filters({
 }
 
 Toolbar.propTypes = {
-  table: PropTypes.object,
+  table: PropTypes.object
 };
 
 SearchInput.propTypes = {
-  table: PropTypes.object,
+  table: PropTypes.object
 };
 
 Filters.propTypes = {
-  table: PropTypes.object,
+  table: PropTypes.object
 };

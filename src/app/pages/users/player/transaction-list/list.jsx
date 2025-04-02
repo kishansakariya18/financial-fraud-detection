@@ -141,7 +141,7 @@ export default function PlayerTransactions() {
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
       />
-      <TableCard tableSettings={tableSettings} table={table} />
+      <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>
   );
 }

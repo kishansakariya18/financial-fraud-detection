@@ -3,7 +3,7 @@ import { FlagIcon } from '@heroicons/react/24/outline';
 
 // Local Imports
 import SettingIcon from 'assets/dualicons/setting.svg?react';
-import { NAV_TYPE_ITEM } from 'constants/app.constant';
+import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
 
 export const country = {
   id: 'country',
@@ -12,6 +12,7 @@ export const country = {
   title: 'Country',
   transKey: 'country',
   Icon: SettingIcon,
+  permission: [PERMISSIONS.COUNTRIES.LIST],
   childs: [
     {
       id: 'country',
@@ -19,7 +20,8 @@ export const country = {
       path: '/country',
       title: 'Country',
       transKey: 'country',
-      Icon: FlagIcon
+      Icon: FlagIcon,
+      permission: PERMISSIONS.COUNTRIES.LIST
     }
   ]
 };

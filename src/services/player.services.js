@@ -23,7 +23,7 @@ const PlayerService = {
           ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
           : undefined,
         endDate: filters.endDate
-          ? dayjs(+filters.endDate).format('YYYY-MM-DD HH:mm:ss')
+          ? dayjs(+filters.endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
           : undefined,
         limit: pagination?.pageSize || 10,
         page: pagination.pageIndex + 1
@@ -100,8 +100,12 @@ const PlayerService = {
         userID: playerId,
         filters: {
           keyword: filters?.keyword || undefined,
-          endDate: ConvertDateIntoUTC(filters?.endDate) || undefined,
-          startDate: ConvertDateIntoUTC(filters?.startDate) || undefined,
+          endDate: filters.endDate
+            ? dayjs(+filters.endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
+            : undefined,
+          startDate: filters.startDate
+            ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
+            : undefined,
           status: filters.status ? transactionStatusToAPI(filters.status) : undefined,
           type: filters?.type ? transactionTypeAppToApi(filters.type) : undefined,
           transactionType: filters?.transactionType
@@ -303,8 +307,8 @@ const PlayerService = {
         WeeklyLossLimit: data?.weeklyLossLimit || undefined,
         MonthlyLossLimit: data?.monthlyLossLimit || undefined,
         ExclusionType: data?.selfExclusionType || undefined,
-        ExclusionStartAt: ConvertDateIntoUTC(data?.exclusionStartAt) || undefined,
-        ExclusionEndAt: ConvertDateIntoUTC(data?.exclusionEndAt) || undefined
+        ExclusionStartAt: dayjs(data.exclusionStartAt).format('YYYY-MM-DD HH:mm:ss') || undefined,
+        ExclusionEndAt: dayjs(data.exclusionEndAt).format('YYYY-MM-DD HH:mm:ss') || undefined
       };
 
       const endPoint = replaceText(

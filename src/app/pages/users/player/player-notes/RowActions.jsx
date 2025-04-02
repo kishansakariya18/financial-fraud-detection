@@ -1,16 +1,6 @@
 // Import Dependencies
-import {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  Transition,
-} from '@headlessui/react';
-import {
-  EllipsisHorizontalIcon,
-  PencilIcon,
-  TrashIcon,
-} from '@heroicons/react/24/outline';
+import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
+import { EllipsisHorizontalIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -22,16 +12,18 @@ import { useTranslation } from 'react-i18next';
 import PlayerService from 'services/player.services';
 import { CustomModal } from 'components/custom';
 import EditNote from './EditNote';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 const confirmMessages = {
   pending: {
     description: 'Are you sure you want to Delete This Note?',
-    actionText: 'Submit',
+    actionText: 'Submit'
   },
   success: {
     title: 'Delete Note',
-    description: 'Note Deleted Successfully',
-  },
+    description: 'Note Deleted Successfully'
+  }
 };
 
 export function RowActions({ row, table }) {
@@ -41,6 +33,7 @@ export function RowActions({ row, table }) {
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { hasPermission } = usePermissions();
 
   const closeModal = () => {
     setDeleteModalOpen(false);
@@ -94,41 +87,40 @@ export function RowActions({ row, table }) {
             enterTo="opacity-100 translate-y-0"
             leave="transition ease-in"
             leaveFrom="opacity-100 translate-y-0"
-            leaveTo="opacity-0 translate-y-2"
-          >
+            leaveTo="opacity-0 translate-y-2">
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
-              className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0"
-            >
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
-                      focus &&
-                        'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100',
-                    )}
-                    onClick={() => setIsDialogOpen(true)}
-                  >
-                    <PencilIcon className="size-4.5 stroke-1" />
-                    <span>{t('edit')}</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    onClick={openModal}
-                    className={clsx(
-                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
-                      focus && 'bg-this/10 dark:bg-this-light/10',
-                    )}
-                  >
-                    <TrashIcon className="size-4.5 stroke-1" />
-                    <span>{t('delete')}</span>
-                  </button>
-                )}
-              </MenuItem>
+              className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
+              {hasPermission(PERMISSIONS.USER.COMMENT_EDIT) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                        focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                      )}
+                      onClick={() => setIsDialogOpen(true)}>
+                      <PencilIcon className="size-4.5 stroke-1" />
+                      <span>{t('edit')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
+              {hasPermission(PERMISSIONS.USER.COMMENT_DELETE) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={openModal}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                        focus && 'bg-this/10 dark:bg-this-light/10'
+                      )}>
+                      <TrashIcon className="size-4.5 stroke-1" />
+                      <span>{t('delete')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
             </MenuItems>
           </Transition>
         </Menu>
@@ -150,18 +142,12 @@ export function RowActions({ row, table }) {
         icon={<PencilIcon className="size-4.5 stroke-1" />}
         btnClassName={clsx(
           'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
-          focus &&
-            'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100',
+          focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
         )}
         onClose={onCloseDialogBox}
         onOpen={onOpenDialogBox}
-        onOk={onOkDialogBox}
-      >
-        <EditNote
-          noteId={row.original.id}
-          onClose={onOkDialogBox}
-          note={row.original.note}
-        />
+        onOk={onOkDialogBox}>
+        <EditNote noteId={row.original.id} onClose={onOkDialogBox} note={row.original.note} />
       </CustomModal>
     </>
   );
@@ -169,5 +155,5 @@ export function RowActions({ row, table }) {
 
 RowActions.propTypes = {
   row: PropTypes.object,
-  table: PropTypes.object,
+  table: PropTypes.object
 };

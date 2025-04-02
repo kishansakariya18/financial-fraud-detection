@@ -10,6 +10,7 @@ import { useDisclosure } from 'hooks';
 import { CollapsibleItem } from './CollapsibleItem';
 import { MenuItem } from './MenuItem';
 import { useThemeContext } from 'app/contexts/theme/context';
+import usePermissions from 'app/router/usePermissions';
 
 // ----------------------------------------------------------------------
 
@@ -17,6 +18,7 @@ export function Group({ data }) {
   const [isOpened, { toggle }] = useDisclosure(true);
   const { t } = useTranslation();
   const { cardSkin } = useThemeContext();
+  const { hasPermission } = usePermissions();
 
   return (
     <div className="pt-3">
@@ -39,14 +41,17 @@ export function Group({ data }) {
       <Collapse in={isOpened}>
         <div className="flex flex-col space-y-1.5">
           {data.childs.map((item) => {
-            switch (item.type) {
-              case NAV_TYPE_COLLAPSE:
-                return <CollapsibleItem key={item.path} data={item} />;
-              case NAV_TYPE_ITEM:
-                return <MenuItem key={item.path} data={item} />;
-              default:
-                return null;
+            if (!item.permission || hasPermission(item.permission)) {
+              switch (item.type) {
+                case NAV_TYPE_COLLAPSE:
+                  return <CollapsibleItem key={item.path} data={item} />;
+                case NAV_TYPE_ITEM:
+                  return <MenuItem key={item.path} data={item} />;
+                default:
+                  return null;
+              }
             }
+            return null;
           })}
         </div>
       </Collapse>
