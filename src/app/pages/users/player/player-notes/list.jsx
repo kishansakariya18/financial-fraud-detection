@@ -1,30 +1,27 @@
-import { useEffect, useMemo } from "react";
-import { toast } from "sonner";
-import { useParams, useSearchParams } from "react-router";
-import { useLockScrollbar } from "hooks";
+import { useEffect, useMemo } from 'react';
+import { toast } from 'sonner';
+import { useParams, useSearchParams } from 'react-router';
+import { useLockScrollbar } from 'hooks';
 
 // Local Imports - UI, Services, Helpers, Utils
-import { columns } from "./columns";
-import TableCard from "components/ui/custom/TableCard";
-import ContentWrapper from "components/ui/custom/ContentWrapper";
-import PlayerService from "services/player.services";
-import { playerNotesResponseMapper } from "../helper";
-import { getQueryParams } from "utils/custom.utilities";
-import { useTranslation } from "react-i18next";
-import useTable from "components/ui/useTable";
-import { Toolbar } from "./Toolbar";
+import { columns } from './columns';
+import TableCard from 'components/ui/custom/TableCard';
+import ContentWrapper from 'components/ui/custom/ContentWrapper';
+import PlayerService from 'services/player.services';
+import { playerNotesResponseMapper } from '../helper';
+import { getQueryParams } from 'utils/custom.utilities';
+import { useTranslation } from 'react-i18next';
+import useTable from 'components/ui/useTable';
+import { Toolbar } from './Toolbar';
 // import { Breadcrumbs } from "components/shared/Breadcrumbs";
 
 export default function PlayerNotes() {
   const { t } = useTranslation();
   const { playerId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t("player") + " " + t("notes");
+  const pageTitle = t('player') + ' ' + t('notes');
 
-  const queryParams = useMemo(
-    () => getQueryParams(searchParams),
-    [searchParams],
-  );
+  const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const fetchPlayers = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
@@ -35,11 +32,11 @@ export default function PlayerNotes() {
     });
 
     if (result.status === 200) {
-      const response = playerNotesResponseMapper(result.response.data)
+      const response = playerNotesResponseMapper(result.response.data);
       return {
         status: 200,
         data: response,
-        totalRecords: parseInt(result.response.totalRecords, 10) || 0,
+        totalRecords: parseInt(result.response.totalRecords, 10) || 0
       };
     }
     return { status: result.status, error: result.error };
@@ -51,15 +48,15 @@ export default function PlayerNotes() {
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ["id"], right: ["actions"] },
+      columnPinning: { left: ['id'], right: ['actions'] },
       tableSettings: {}
-    },
+    }
   });
 
   useEffect(() => {
     if (!isLoading && error) {
       toast.error(error);
-      setError("");
+      setError('');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
@@ -67,11 +64,8 @@ export default function PlayerNotes() {
   useLockScrollbar(tableSettings.enableFullScreen);
 
   return (
-    <ContentWrapper
-      pageTitle={pageTitle}
-      enableFullScreen={tableSettings.enableFullScreen}
-    >
-      <Toolbar table={table} pageTitle={t("player") + " " + t("note")} />
+    <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
+      <Toolbar table={table} pageTitle={t('player') + ' ' + t('note')} />
       <TableCard tableSettings={tableSettings} table={table} />
     </ContentWrapper>
   );

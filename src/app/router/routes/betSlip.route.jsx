@@ -1,12 +1,12 @@
 // import { Navigate } from "react-router";
 
-export const countryRoutes = [
+export const reportsRoutes = [
   {
-    path: 'country',
+    path: 'report',
     lazy: async () => ({
-      Component: (await import('../../pages/country/list/list')).default
+      Component: (await import('../../pages/reports/list/list')).default
     })
   }
 ];
 
-export default countryRoutes;
+export default reportsRoutes;

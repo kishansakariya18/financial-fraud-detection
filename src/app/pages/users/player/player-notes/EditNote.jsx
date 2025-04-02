@@ -33,7 +33,7 @@ const EditNote = ({ noteId, onClose, note: noteText }) => {
     setError(null);
     const result = await PlayerService.editPlayerNote({
       ...requestObject,
-      noteId,
+      noteId
     });
     if (result) {
       if (result.status === 200 || result.status === 201) {
@@ -71,40 +71,20 @@ const EditNote = ({ noteId, onClose, note: noteText }) => {
             value={content}
             onChange={handleChange}
             placeholder={
-              t('enter') +
-              ' ' +
-              t('your') +
-              ' ' +
-              t('content') +
-              ' ' +
-              t('here') +
-              '...'
+              t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
             }
           />
-          <div className="border bg-gray-100 p-2">
-          </div>
+          <div className="border bg-gray-100 p-2"></div>
         </div>
 
-        <Checkbox
-          label={t('pin') + ' ' + t('note')}
-          {...register('isPinned')}
-        />
+        <Checkbox label={t('pin') + ' ' + t('note')} {...register('isPinned')} />
       </div>
 
       <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-        <Button
-          className="min-w-[7rem]"
-          onClick={() => reset()}
-          disabled={loading}
-        >
+        <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
           {t('reset')}
         </Button>
-        <Button
-          type="submit"
-          className="min-w-[7rem]"
-          color="primary"
-          disabled={loading}
-        >
+        <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
           {t('edit')}
         </Button>
       </div>

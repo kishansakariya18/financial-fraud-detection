@@ -1,51 +1,54 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
-import { useParams, useSearchParams } from 'react-router';
+import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
 
-// Local Imports - UI, Services, Helpers, Utils
-import { Toolbar } from './Toolbar';
+// Local Imports - UI,Services,Helper,Utils
+import { BetSlipFilters } from './BetSlipFilters';
 import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 
-import PlayerService from 'services/player.services';
-import { playerTransactionsResponseMapper } from '../helper';
+import { responseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
+import ReportService from '../../../../services/betslip.services';
 
-export default function PlayerTransactions() {
+export default function Reports() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { playerId } = useParams();
-  const pageTitle = t('player') + ' ' + t('transactions');
+  const pageTitle = t('report');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
-  const fetchPlayerTransactions = useCallback(async () => {
+  const fetchReports = async () => {
+    // setError(null);
+    console.log('in side fetch');
+
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
-    const result = await PlayerService.playerTransactions({
+    const result = await ReportService.getBetSlipTransaction({
       pagination: { pageIndex, pageSize },
-      filters: queryParams,
-      playerId
+      filters: queryParams
     });
 
     if (result.status === 200) {
-      const response = playerTransactionsResponseMapper(result.response);
+      console.log('responseMapper(result.response.data):', responseMapper(result.response.data));
+
       return {
         status: 200,
-        data: response.list,
-        totalRecords: response.totalRecords || 0
+        data: responseMapper(result.response.data),
+        totalRecords: parseInt(result.response.totalRecords, 10) || 0
       };
     }
+
     return { status: result.status, error: result.error };
-  }, [queryParams, playerId]);
+  };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
-    fetchData: fetchPlayerTransactions,
+    fetchData: fetchReports,
     queryParams,
     setSearchParams,
     initialSettings: {
@@ -67,14 +70,8 @@ export default function PlayerTransactions() {
     if (queryParams.keyword) {
       filtersFromQuery.push({ id: 'username', value: queryParams.keyword });
     }
-    if (queryParams.status) {
-      filtersFromQuery.push({ id: 'status', value: queryParams.status });
-    }
-    if (queryParams.transactionType) {
-      filtersFromQuery.push({
-        id: 'transactionType',
-        value: queryParams.transactionType
-      });
+    if (queryParams.stage) {
+      filtersFromQuery.push({ id: 'stage', value: queryParams.stage });
     }
     if (queryParams.type) {
       filtersFromQuery.push({ id: 'type', value: queryParams.type });
@@ -91,18 +88,18 @@ export default function PlayerTransactions() {
 
   const applyFilterHandler = () => {
     const filterItems = {};
+    console.log('table.getState().columnFilters:', table.getState().columnFilters);
+
     for (let data of table.getState().columnFilters) {
       if (data.id === 'username') {
         filterItems.keyword = data.value;
       }
-      if (data.id === 'status') {
-        filterItems.status = data.value;
+
+      if (data.id === 'stage') {
+        filterItems.stage = data.value;
       }
       if (data.id === 'type') {
         filterItems.type = data.value;
-      }
-      if (data.id === 'transactionType') {
-        filterItems.transactionType = data.value;
       }
       if (data.id === 'createdAt') {
         filterItems.date = data.value;
@@ -114,11 +111,8 @@ export default function PlayerTransactions() {
       pageIndex: 0,
       pageSize: 10,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
-      ...(filterItems.status && { status: filterItems.status }),
+      ...(filterItems.stage && { stage: filterItems.stage }),
       ...(filterItems.type && { type: filterItems.type }),
-      ...(filterItems.transactionType && {
-        transactionType: filterItems.transactionType
-      }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
       ...(filterItems.date && { endDate: filterItems?.date[1] })
     });
@@ -126,23 +120,27 @@ export default function PlayerTransactions() {
 
   const clearFilterHandler = () => {
     if (!isEmptyObject(queryParams)) {
-      setSearchParams({ pageIndex: 0, pageSize: 10 });
+      setSearchParams({
+        pageIndex: 0,
+        pageSize: 10
+      });
     }
     table.resetColumnFilters();
   };
 
   useLockScrollbar(tableSettings.enableFullScreen);
-  console.log('tableSettings: from tnx list', table);
+  // console.log('tableSettings: from reports', table);
 
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
-      <Toolbar
-        table={table}
+      {/* <Toolbar breadcrumbs={breadcrumbs} table={table} pageTitle={pageTitle} /> */}
+      <BetSlipFilters
         pageTitle={pageTitle}
+        table={table}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
       />
-      <TableCard tableSettings={tableSettings} table={table} />
+      <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>
   );
 }
