@@ -10,7 +10,6 @@ const usePermissions = () => {
     if (permissions?.includes(permission) || +isMasterAdmin === 1) {
       result = true;
     }
-    console.log('hasPermission  result: ', result);
 
     return result;
   };

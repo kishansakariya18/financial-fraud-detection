@@ -149,8 +149,8 @@ const CreateAdmin = () => {
                     value={roles.find((role) => role.value === field.value) || null}
                     onChange={(val) => field.onChange(val.value)}
                     name={field.name}
-                    label={t('roles')}
-                    placeholder={t('select') + ' ' + t('roles')}
+                    label={t('role')}
+                    placeholder={t('select') + ' ' + t('role')}
                     displayField="label"
                     error={errors?.roles?.message}
                   />

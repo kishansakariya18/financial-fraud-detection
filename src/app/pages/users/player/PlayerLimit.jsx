@@ -88,8 +88,6 @@ const PlayerLimit = () => {
             hasMonthlyLossLimit: result.HasMonthlyLossLimit || false
           });
         }
-
-        setExclusionType(result.ExclusionType);
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -127,6 +125,7 @@ const PlayerLimit = () => {
   }
 
   useEffect(() => {
+    console.log('useEffect 2 called');
     if (!loading && !error && response) {
       toast.success(response.message);
       // setResponse(null);
@@ -486,7 +485,7 @@ const PlayerLimit = () => {
                   </div>
                   <div className="pt-2">
                     <div className="max-w-xl">
-                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
+                      <div className="grid gap-4 sm:grid-cols-2">
                         <Controller
                           render={({ field }) => (
                             <Listbox
