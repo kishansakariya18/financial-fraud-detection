@@ -41,17 +41,20 @@ export function Group({ data }) {
       <Collapse in={isOpened}>
         <div className="flex flex-col space-y-1.5">
           {data.childs.map((item) => {
-            if (!item.permission || hasPermission(item.permission)) {
-              switch (item.type) {
-                case NAV_TYPE_COLLAPSE:
+            switch (item.type) {
+              case NAV_TYPE_COLLAPSE:
+                if (!item.permission || item?.permission.some((p) => hasPermission(p))) {
                   return <CollapsibleItem key={item.path} data={item} />;
-                case NAV_TYPE_ITEM:
+                }
+                return null;
+              case NAV_TYPE_ITEM:
+                if (!item.permission || hasPermission(item.permission)) {
                   return <MenuItem key={item.path} data={item} />;
-                default:
-                  return null;
-              }
+                }
+                return null;
+              default:
+                return null;
             }
-            return null;
           })}
         </div>
       </Collapse>

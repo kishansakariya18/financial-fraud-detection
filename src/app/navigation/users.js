@@ -1,35 +1,34 @@
 // Import Dependencies
-import { UserIcon, UsersIcon } from '@heroicons/react/24/outline';
+import { UserGroupIcon, UserIcon, UsersIcon } from '@heroicons/react/24/outline';
 
 // Local Imports
-import SettingIcon from 'assets/dualicons/setting.svg?react';
-import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
+import { NAV_TYPE_COLLAPSE, NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
 
 export const users = {
-  id: 'users',
-  type: NAV_TYPE_ITEM,
-  path: '/users',
+  id: 'users.users',
+  path: '/',
+  type: NAV_TYPE_COLLAPSE,
   title: 'Users',
   transKey: 'nav.users.users',
-  Icon: SettingIcon,
-  permission: [PERMISSIONS.ADMIN.LIST, PERMISSIONS.USER.LIST],
+  Icon: UsersIcon,
+  permission: [PERMISSIONS.USER.LIST, PERMISSIONS.ADMIN.LIST],
   childs: [
     {
-      id: 'admin',
-      type: NAV_TYPE_ITEM,
+      id: 'users.admin',
       path: '/admin',
-      title: 'General',
+      type: NAV_TYPE_ITEM,
+      title: 'Admin',
       transKey: 'nav.users.admin',
       Icon: UserIcon,
       permission: PERMISSIONS.ADMIN.LIST
     },
     {
-      id: 'players',
-      type: NAV_TYPE_ITEM,
+      id: 'users.players',
       path: '/player',
+      type: NAV_TYPE_ITEM,
       title: 'Players',
       transKey: 'nav.users.players',
-      Icon: UsersIcon,
+      Icon: UserGroupIcon,
       permission: PERMISSIONS.USER.LIST
     }
   ]

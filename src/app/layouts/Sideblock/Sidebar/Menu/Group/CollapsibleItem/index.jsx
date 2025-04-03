@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { AccordionButton, AccordionItem, AccordionPanel } from 'components/ui';
 import { MenuItem } from './MenuItem';
 import { useLocaleContext } from 'app/contexts/locale/context';
+import usePermissions from 'app/router/usePermissions';
 
 // ----------------------------------------------------------------------
 
@@ -15,6 +16,7 @@ export function CollapsibleItem({ data }) {
   const { path, transKey, Icon, childs } = data;
   const { t } = useTranslation();
   const { isRtl } = useLocaleContext();
+  const { hasPermission } = usePermissions();
 
   const title = t(transKey) || data.title;
   const ChevronIcon = isRtl ? ChevronLeftIcon : ChevronRightIcon;
@@ -49,9 +51,12 @@ export function CollapsibleItem({ data }) {
             />
           </AccordionButton>
           <AccordionPanel className="flex flex-col space-y-1 px-3 py-1.5">
-            {childs.map((child) => (
-              <MenuItem key={child.id} data={child} />
-            ))}
+            {childs.map((child) => {
+              if (hasPermission(child.permission)) {
+                return <MenuItem key={child.id} data={child} />;
+              }
+              return null;
+            })}
           </AccordionPanel>
         </>
       )}

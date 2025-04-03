@@ -290,3 +290,6 @@ export const PERMISSIONS = {
     DELETE: 'game-delete'
   }
 };
+
+export const DEFAULT_PAGE_INDEX = 0;
+export const DEFAULT_PER_PAGE_RECORD = 10;

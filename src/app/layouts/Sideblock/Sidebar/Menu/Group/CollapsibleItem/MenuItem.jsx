@@ -12,7 +12,7 @@ import { useSidebarContext } from 'app/contexts/sidebar/context';
 // ----------------------------------------------------------------------
 
 export function MenuItem({ data }) {
-  const { id, transKey, path } = data;
+  const { id, transKey, path, Icon } = data;
   const { t } = useTranslation();
   const { lgAndDown } = useBreakpointsContext();
   const { close } = useSidebarContext();
@@ -40,14 +40,23 @@ export function MenuItem({ data }) {
             data-menu-active={isActive}
             className="flex min-w-0 items-center justify-between gap-2.5">
             <div className="flex min-w-0 items-center gap-3">
-              <div
-                className={clsx(
-                  isActive
-                    ? 'bg-primary-600 opacity-80 dark:bg-primary-400'
-                    : 'opacity-50 transition-all',
-                  'size-2 rounded-full border border-current'
-                )}
-              />
+              {Icon ? (
+                <Icon
+                  className={clsx(
+                    'size-5 shrink-0 stroke-[1.5]',
+                    !open && 'opacity-80 group-hover:opacity-100'
+                  )}
+                />
+              ) : (
+                <div
+                  className={clsx(
+                    isActive
+                      ? 'bg-primary-600 opacity-80 dark:bg-primary-400'
+                      : 'opacity-50 transition-all',
+                    'size-2 rounded-full border border-current'
+                  )}
+                />
+              )}
               <span className="truncate">{title}</span>
             </div>
             {info && info.val && (

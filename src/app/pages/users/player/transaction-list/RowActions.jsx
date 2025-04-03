@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { CustomModal } from 'components/custom';
 import { ViewDetails } from './ViewDetails';
 
-export function RowActions({ row, table }) {
+export function RowActions({ row }) {
   const { t } = useTranslation();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -24,7 +24,6 @@ export function RowActions({ row, table }) {
   };
 
   const onOkDialogBox = async () => {
-    await table.options.meta?.editRow(row);
     setIsDialogOpen(false);
   };
 

@@ -307,8 +307,10 @@ const PlayerService = {
         WeeklyLossLimit: data?.weeklyLossLimit || undefined,
         MonthlyLossLimit: data?.monthlyLossLimit || undefined,
         ExclusionType: data?.selfExclusionType || undefined,
-        ExclusionStartAt: dayjs(data.exclusionStartAt).format('YYYY-MM-DD HH:mm:ss') || undefined,
-        ExclusionEndAt: dayjs(data.exclusionEndAt).format('YYYY-MM-DD HH:mm:ss') || undefined
+        ExclusionStartAt: data.exclusionStartAt
+          ? ConvertDateIntoUTC(data.exclusionStartAt)
+          : undefined,
+        ExclusionEndAt: data.exclusionEndAt ? ConvertDateIntoUTC(data.exclusionEndAt) : undefined
       };
 
       const endPoint = replaceText(

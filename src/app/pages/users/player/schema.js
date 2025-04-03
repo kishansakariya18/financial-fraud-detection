@@ -1,61 +1,169 @@
 import * as Yup from 'yup';
 
 export const playerLimitSchema = Yup.object().shape({
-  dailyWagerLimit: Yup.number('Value must be a number')
-    .transform((val) => (isNaN(val) ? null : val))
-    .positive('Daily Wager Limit must be positive')
-    .required('Daily Wager Limit is required'),
-  weeklyWagerLimit: Yup.number('Value must be a number')
-    .transform((val) => (isNaN(val) ? null : val))
-    .positive('Weekly Wager Limit must be positive')
-    .required('Weekly Wager Limit is required'),
-  monthlyWagerLimit: Yup.number('Value must be a number')
-    .transform((val) => (isNaN(val) ? null : val))
-    .positive('Monthly Wager Limit must be positive')
-    .required('Monthly Wager Limit is required'),
+  // Wager Limits
+  dailyWagerLimit: Yup.number()
+    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .when('hasDailyWagerLimit', {
+      is: true,
+      then: (schema) =>
+        schema
+          .required('Daily Wager Limit is required')
+          .positive('Daily Wager Limit must be positive'),
+      otherwise: (schema) =>
+        schema
+          .nullable()
+          .test(
+            'is-empty-or-positive',
+            'Value must be zero or positive value',
+            (val) => val === null || val >= 0
+          )
+    }),
+  weeklyWagerLimit: Yup.number()
+    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .when('hasWeeklyWagerLimit', {
+      is: true,
+      then: (schema) =>
+        schema
+          .required('Weekly Wager Limit is required')
+          .positive('Weekly Wager Limit must be positive'),
+      otherwise: (schema) =>
+        schema
+          .nullable()
+          .test(
+            'is-empty-or-positive',
+            'Value must be zero or positive value',
+            (val) => val === null || val >= 0
+          )
+    }),
+  monthlyWagerLimit: Yup.number()
+    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .when('hasMonthlyWagerLimit', {
+      is: true,
+      then: (schema) =>
+        schema
+          .required('Monthly Wager Limit is required')
+          .positive('Monthly Wager Limit must be positive'),
+      otherwise: (schema) =>
+        schema
+          .nullable()
+          .test(
+            'is-empty-or-positive',
+            'Value must be zero or positive value',
+            (val) => val === null || val >= 0
+          )
+    }),
 
-  dailyDepositLimit: Yup.number('Value must be a number')
-    .transform((val) => (isNaN(val) ? null : val))
-    .positive('Daily Deposit Limit must be positive')
-    .required('Daily Deposit Limit is required'),
-  weeklyDepositLimit: Yup.number('Value must be a number')
-    .transform((val) => (isNaN(val) ? null : val))
-    .positive('Weekly Deposit Limit must be positive')
-    .required('Weekly Deposit Limit is required'),
-  monthlyDepositLimit: Yup.number('Value must be a number')
-    .transform((val) => (isNaN(val) ? null : val))
-    .positive('Monthly Deposit Limit must be positive')
-    .required('Monthly Deposit Limit is required'),
+  // Deposit Limits
+  dailyDepositLimit: Yup.number()
+    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .when('hasDailyDepositLimit', {
+      is: true,
+      then: (schema) =>
+        schema
+          .required('Daily Deposit Limit is required')
+          .positive('Daily Deposit Limit must be positive'),
+      otherwise: (schema) =>
+        schema
+          .nullable()
+          .test(
+            'is-empty-or-positive',
+            'Value must be zero or positive value',
+            (val) => val === null || val >= 0
+          )
+    }),
+  weeklyDepositLimit: Yup.number()
+    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .when('hasWeeklyDepositLimit', {
+      is: true,
+      then: (schema) =>
+        schema
+          .required('Weekly Deposit Limit is required')
+          .positive('Weekly Deposit Limit must be positive'),
+      otherwise: (schema) =>
+        schema
+          .nullable()
+          .test(
+            'is-empty-or-positive',
+            'Value must be zero or positive value',
+            (val) => val === null || val >= 0
+          )
+    }),
+  monthlyDepositLimit: Yup.number()
+    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .when('hasMonthlyDepositLimit', {
+      is: true,
+      then: (schema) =>
+        schema
+          .required('Monthly Deposit Limit is required')
+          .positive('Monthly Deposit Limit must be positive'),
+      otherwise: (schema) =>
+        schema
+          .nullable()
+          .test(
+            'is-empty-or-positive',
+            'Value must be zero or positive value',
+            (val) => val === null || val >= 0
+          )
+    }),
 
-  dailyWithdrawLimit: Yup.number('Value must be a number')
-    .transform((val) => (isNaN(val) ? null : val))
-    .positive('Daily Withdraw Limit must be positive')
-    .required('Daily Withdraw Limit is required'),
-  weeklyWithdrawLimit: Yup.number('Value must be a number')
-    .transform((val) => (isNaN(val) ? null : val))
-    .positive('Weekly Withdraw Limit must be positive')
-    .required('Weekly Withdraw Limit is required'),
-  monthlyWithdrawLimit: Yup.number('Value must be a number')
-    .transform((val) => (isNaN(val) ? null : val))
-    .positive('Monthly Withdraw Limit must be positive')
-    .required('Monthly Withdraw Limit is required'),
+  // Withdraw Limits
+  dailyWithdrawLimit: Yup.number()
+    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .when('hasDailyWithdrawLimit', {
+      is: true,
+      then: (schema) =>
+        schema
+          .required('Daily Withdraw Limit is required')
+          .positive('Daily Withdraw Limit must be positive'),
+      otherwise: (schema) =>
+        schema
+          .nullable()
+          .test(
+            'is-empty-or-positive',
+            'Value must be zero or positive value',
+            (val) => val === null || val >= 0
+          )
+    }),
+  weeklyWithdrawLimit: Yup.number()
+    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .when('hasWeeklyWithdrawLimit', {
+      is: true,
+      then: (schema) =>
+        schema
+          .required('Weekly Withdraw Limit is required')
+          .positive('Weekly Withdraw Limit must be positive'),
+      otherwise: (schema) =>
+        schema
+          .nullable()
+          .test(
+            'is-empty-or-positive',
+            'Value must be zero or positive value',
+            (val) => val === null || val >= 0
+          )
+    }),
+  monthlyWithdrawLimit: Yup.number()
+    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .when('hasMonthlyWithdrawLimit', {
+      is: true,
+      then: (schema) =>
+        schema
+          .required('Monthly Withdraw Limit is required')
+          .positive('Monthly Withdraw Limit must be positive'),
+      otherwise: (schema) =>
+        schema
+          .nullable()
+          .test(
+            'is-empty-or-positive',
+            'Value must be zero or positive value',
+            (val) => val === null || val >= 0
+          )
+    }),
 
-  dailyLossLimit: Yup.number('Value must be a number')
-    .transform((val) => (isNaN(val) ? null : val))
-    .positive('Daily Loss Limit must be positive')
-    .required('Daily Loss Limit is required'),
-  weeklyLossLimit: Yup.number('Value must be a number')
-    .transform((val) => (isNaN(val) ? null : val))
-    .positive('Weekly Loss Limit must be positive')
-    .required('Weekly Loss Limit is required'),
-  monthlyLossLimit: Yup.number('Value must be a number')
-    .transform((val) => (isNaN(val) ? null : val))
-    .positive('Monthly Loss Limit must be positive')
-    .required('Monthly Loss Limit is required'),
-
-  selfExclusionType: Yup.string().trim().required('Self Exclusion Type is required'),
-  exclusionStartAt: Yup.date().required('Exclusion Start Date is required'),
-  exclusionEndAt: Yup.date().required('Exclusion End Date is required'),
+  // Exclusion
+  selfExclusionType: Yup.string().trim().nullable(),
+  exclusionStartAt: Yup.date(),
+  exclusionEndAt: Yup.date(),
 
   // Flags
   hasDailyWagerLimit: Yup.boolean(),
@@ -66,10 +174,7 @@ export const playerLimitSchema = Yup.object().shape({
   hasMonthlyDepositLimit: Yup.boolean(),
   hasDailyWithdrawLimit: Yup.boolean(),
   hasWeeklyWithdrawLimit: Yup.boolean(),
-  hasMonthlyWithdrawLimit: Yup.boolean(),
-  hasDailyLossLimit: Yup.boolean(),
-  hasWeeklyLossLimit: Yup.boolean(),
-  hasMonthlyLossLimit: Yup.boolean()
+  hasMonthlyWithdrawLimit: Yup.boolean()
 });
 
 export const manageFundSchema = Yup.object().shape({
