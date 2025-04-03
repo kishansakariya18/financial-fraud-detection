@@ -2,7 +2,7 @@
 
 export const reportsRoutes = [
   {
-    path: 'report',
+    path: 'report/betslip-transctions',
     lazy: async () => ({
       Component: (await import('../../pages/reports/list/list')).default
     })

@@ -67,6 +67,9 @@ export const PERMISSIONS = {
     USER_LEVEL_LIMITS: 'user-level-risk-mangement',
     VIEW_LOGIN_HISTORY: 'user-login-history-view'
   },
+  REPORT: {
+    BETSLIP_TRANSACTION_VIEW: 'betslip-transaction-view'
+  },
   USER_LIMIT_SETTING: {
     VIEW: 'limit-setting-view',
     UPDATE: 'limit-setting-update'

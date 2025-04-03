@@ -1,25 +1,27 @@
 // Import Dependencies
-import { BookOpenIcon } from '@heroicons/react/24/outline';
+import { BookOpenIcon, QueueListIcon } from '@heroicons/react/24/outline';
 
 // Local Imports
-import SettingIcon from 'assets/dualicons/setting.svg?react';
-import { NAV_TYPE_ITEM } from 'constants/app.constant';
+// import SettingIcon from 'assets/dualicons/setting.svg?react';
+import { NAV_TYPE_COLLAPSE, NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
 
 export const reports = {
   id: 'report',
-  type: NAV_TYPE_ITEM,
+  type: NAV_TYPE_COLLAPSE,
   path: '/report',
-  title: 'report',
+  title: 'Report',
   transKey: 'report',
-  Icon: SettingIcon,
+  Icon: BookOpenIcon,
+  permission: [PERMISSIONS.REPORT.BETSLIP_TRANSACTION_VIEW],
   childs: [
     {
-      id: 'report',
+      id: 'betslip',
       type: NAV_TYPE_ITEM,
-      path: '/report',
-      title: 'report',
-      transKey: 'report',
-      Icon: BookOpenIcon
+      path: '/report/betslip-transctions',
+      title: 'betslip',
+      transKey: 'betslip_transactions',
+      Icon: QueueListIcon,
+      permission: PERMISSIONS.REPORT.BETSLIP_TRANSACTION_VIEW
     }
   ]
 };

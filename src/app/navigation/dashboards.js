@@ -3,6 +3,7 @@ import { NAV_TYPE_ROOT } from 'constants/app.constant';
 import { users } from './users';
 import { platform } from './platoform';
 import { country } from './country';
+import { reports } from './report';
 
 export const dashboards = {
   id: 'dashboards',
@@ -11,5 +12,5 @@ export const dashboards = {
   title: 'Dashboards',
   transKey: 'nav.dashboards.dashboards',
   Icon: DashboardsIcon,
-  childs: [users, platform, country]
+  childs: [users, platform, country, reports]
 };
