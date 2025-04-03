@@ -19,16 +19,18 @@ export function CopyableCell({ getValue, table, highlight }) {
     <div className="flex space-x-1 rtl:space-x-reverse">
       <span>{highlight ? <Highlight query={query}>{val}</Highlight> : val}</span>
 
-      <Button
-        data-tooltip
-        data-tooltip-content={copied ? 'Copied' : 'Copy'}
-        onClick={() => copy(val)}
-        isIcon
-        variant="flat"
-        className="size-5 rounded-full opacity-0 group-hover/td:opacity-100"
-        aria-label="Copy Button">
-        <DocumentDuplicateIcon className="size-3.5" />
-      </Button>
+      {val && val !== '-' && (
+        <Button
+          data-tooltip
+          data-tooltip-content={copied ? 'Copied' : 'Copy'}
+          onClick={() => copy(val)}
+          isIcon
+          variant="flat"
+          className="size-5 rounded-full opacity-0 group-hover/td:opacity-100"
+          aria-label="Copy Button">
+          <DocumentDuplicateIcon className="size-3.5" />
+        </Button>
+      )}
     </div>
   );
 }

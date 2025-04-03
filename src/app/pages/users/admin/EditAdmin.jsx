@@ -5,7 +5,7 @@ import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import { Listbox } from 'components/shared/form/Listbox';
-import { Button, Checkbox, Input } from 'components/ui';
+import { Button, Checkbox, Input, Skeleton } from 'components/ui';
 import { editAdminSchema } from './schema';
 import { CiMobile1 } from 'react-icons/ci';
 import AdminService from 'services/admin.services';
@@ -137,103 +137,109 @@ const EditAdmin = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-          <div className="mt-6 space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Input
-                {...register('userName')}
-                prefix={<UserIcon className="size-5" />}
-                label={t('userName')}
-                error={errors?.userName?.message}
-                placeholder={t('enter') + ' ' + t('userName')}
-              />
-              <Input
-                {...register('firstName')}
-                prefix={<UserIcon className="size-5" />}
-                label={t('firstName')}
-                error={errors?.firstName?.message}
-                placeholder={t('enter') + ' ' + t('firstName')}
-              />
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Input
-                {...register('lastName')}
-                prefix={<UserIcon className="size-5" />}
-                label={t('lastName')}
-                error={errors?.lastName?.message}
-                placeholder={t('enter') + ' ' + t('lastName')}
-              />
-              <Input
-                {...register('email')}
-                prefix={<EnvelopeIcon className="size-5" />}
-                label={t('enter') + ' ' + t('email')}
-                error={errors?.email?.message}
-                placeholder={t('enter') + ' ' + t('email') + ' ' + t('address')}
-              />
-            </div>
+          {loading &&
+            [...Array(10)].map((_, i) => (
+              <Skeleton className="grid gap-4 sm:grid-cols-2" key={i} />
+            ))}
+          {!loading && (
+            <div className="mt-6 space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Input
+                  {...register('userName')}
+                  prefix={<UserIcon className="size-5" />}
+                  label={t('userName')}
+                  error={errors?.userName?.message}
+                  placeholder={t('enter') + ' ' + t('userName')}
+                />
+                <Input
+                  {...register('firstName')}
+                  prefix={<UserIcon className="size-5" />}
+                  label={t('firstName')}
+                  error={errors?.firstName?.message}
+                  placeholder={t('enter') + ' ' + t('firstName')}
+                />
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Input
+                  {...register('lastName')}
+                  prefix={<UserIcon className="size-5" />}
+                  label={t('lastName')}
+                  error={errors?.lastName?.message}
+                  placeholder={t('enter') + ' ' + t('lastName')}
+                />
+                <Input
+                  {...register('email')}
+                  prefix={<EnvelopeIcon className="size-5" />}
+                  label={t('enter') + ' ' + t('email')}
+                  error={errors?.email?.message}
+                  placeholder={t('enter') + ' ' + t('email') + ' ' + t('address')}
+                />
+              </div>
 
-            <div className="grid gap-4 lg:grid-cols-2">
-              <Controller
-                render={({ field }) => (
-                  <Listbox
-                    data={roles}
-                    value={roles.find((role) => role.value === field.value) || null}
-                    onChange={(val) => field.onChange(val.value)}
-                    name={field.name}
-                    label={t('role')}
-                    placeholder={t('select') + ' ' + t('role')}
-                    displayField="label"
-                    error={errors?.roles?.message}
-                  />
-                )}
-                control={control}
-                name="roles"
-              />
+              <div className="grid gap-4 lg:grid-cols-2">
+                <Controller
+                  render={({ field }) => (
+                    <Listbox
+                      data={roles}
+                      value={roles.find((role) => role.value === field.value) || null}
+                      onChange={(val) => field.onChange(val.value)}
+                      name={field.name}
+                      label={t('role')}
+                      placeholder={t('select') + ' ' + t('role')}
+                      displayField="label"
+                      error={errors?.roles?.message}
+                    />
+                  )}
+                  control={control}
+                  name="roles"
+                />
 
-              <Input
-                {...register('password')}
-                prefix={
-                  <LockClosedIcon
-                    className="size-5 transition-colors duration-200"
-                    strokeWidth="1"
-                  />
-                }
-                label={t('enter') + ' ' + t('password')}
-                error={errors?.password?.message}
-                placeholder={t('enter') + ' ' + t('password')}
-              />
+                <Input
+                  {...register('password')}
+                  prefix={
+                    <LockClosedIcon
+                      className="size-5 transition-colors duration-200"
+                      strokeWidth="1"
+                    />
+                  }
+                  label={t('enter') + ' ' + t('password')}
+                  error={errors?.password?.message}
+                  placeholder={t('enter') + ' ' + t('password')}
+                />
+              </div>
+
+              <div className="grid gap-4 lg:grid-cols-2">
+                <Controller
+                  render={({ field }) => (
+                    <Listbox
+                      data={statusOptions}
+                      value={statusOptions.find((status) => status.value === field.value) || null}
+                      onChange={(val) => field.onChange(val.value)}
+                      name={field.name}
+                      label={t('status')}
+                      placeholder={t('select') + ' ' + t('status')}
+                      displayField="label"
+                      error={errors?.status?.message}
+                    />
+                  )}
+                  control={control}
+                  name="status"
+                />
+
+                <Input
+                  {...register('mobile')}
+                  prefix={<CiMobile1 className="size-5" />}
+                  label={t('select') + ' ' + t('mobile')}
+                  error={errors?.mobile?.message}
+                  placeholder={t('select') + ' ' + t('mobile') + ' ' + t('number')}
+                />
+              </div>
+
+              <div className="grid gap-4 lg:grid-cols-2">
+                <Checkbox label={t('isMasterAdmin')} {...register('isMasterAdmin')} />
+              </div>
             </div>
-
-            <div className="grid gap-4 lg:grid-cols-2">
-              <Controller
-                render={({ field }) => (
-                  <Listbox
-                    data={statusOptions}
-                    value={statusOptions.find((status) => status.value === field.value) || null}
-                    onChange={(val) => field.onChange(val.value)}
-                    name={field.name}
-                    label={t('status')}
-                    placeholder={t('select') + ' ' + t('status')}
-                    displayField="label"
-                    error={errors?.status?.message}
-                  />
-                )}
-                control={control}
-                name="status"
-              />
-
-              <Input
-                {...register('mobile')}
-                prefix={<CiMobile1 className="size-5" />}
-                label={t('select') + ' ' + t('mobile')}
-                error={errors?.mobile?.message}
-                placeholder={t('select') + ' ' + t('mobile') + ' ' + t('number')}
-              />
-            </div>
-
-            <div className="grid gap-4 lg:grid-cols-2">
-              <Checkbox label={t('isMasterAdmin')} {...register('isMasterAdmin')} />
-            </div>
-          </div>
+          )}
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
             <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
               {t('update')}

@@ -144,6 +144,7 @@ const ManageFund = () => {
                 {...register('amount')}
                 prefix={<TbCoinRupeeFilled className="size-5" />}
                 label={t('amount')}
+                type="number"
                 error={errors?.amount?.message}
                 placeholder={t('enter') + ' ' + t('amount')}
               />
