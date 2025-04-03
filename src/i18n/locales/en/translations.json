@@ -21,9 +21,6 @@
     "platform": {
       "platform": "Platform",
       "limit": "Platform Limit"
-    },
-    "countries": {
-      "countries": "Country"
     }
   },
   "country": "Country",
