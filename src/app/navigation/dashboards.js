@@ -1,22 +1,15 @@
-import { HomeIcon } from '@heroicons/react/24/outline';
 import DashboardsIcon from 'assets/dualicons/dashboards.svg?react';
-import { NAV_TYPE_ROOT, NAV_TYPE_ITEM } from 'constants/app.constant';
+import { NAV_TYPE_ROOT } from 'constants/app.constant';
+import { users } from './users';
+import { platform } from './platoform';
+import { country } from './country';
 
 export const dashboards = {
   id: 'dashboards',
   type: NAV_TYPE_ROOT,
-  path: '/dashboards',
+  path: '/',
   title: 'Dashboards',
   transKey: 'nav.dashboards.dashboards',
   Icon: DashboardsIcon,
-  childs: [
-    {
-      id: 'dashboards.home',
-      path: '/dashboards/home',
-      type: NAV_TYPE_ITEM,
-      title: 'Home',
-      transKey: 'nav.dashboards.home',
-      Icon: HomeIcon
-    }
-  ]
+  childs: [users, platform, country]
 };

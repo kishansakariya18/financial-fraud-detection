@@ -14,6 +14,7 @@ import { responseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
+import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 
 export default function Player() {
   const { t } = useTranslation();
@@ -23,8 +24,8 @@ export default function Player() {
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const fetchPlayers = async () => {
-    const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
-    const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
+    const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
+    const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
     const result = await PlayerService.playerList({
       pagination: { pageIndex, pageSize },
       filters: queryParams
@@ -34,7 +35,7 @@ export default function Player() {
       return {
         status: 200,
         data: responseMapper(result.response.data),
-        totalRecords: parseInt(result.response.totalRecords, 10) || 0
+        totalRecords: parseInt(result?.response?.totalRecords) || DEFAULT_PER_PAGE_RECORD
       };
     }
     return { status: result.status, error: result.error };
@@ -95,8 +96,8 @@ export default function Player() {
 
     setSearchParams({
       ...queryParams,
-      pageIndex: 0,
-      pageSize: 10,
+      pageIndex: DEFAULT_PAGE_INDEX,
+      pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
       ...(filterItems.status && { status: filterItems.status }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
@@ -106,7 +107,7 @@ export default function Player() {
 
   const clearFilterHandler = () => {
     if (!isEmptyObject(queryParams)) {
-      setSearchParams({ pageIndex: 0, pageSize: 10 });
+      setSearchParams({ pageIndex: DEFAULT_PAGE_INDEX, pageSize: DEFAULT_PER_PAGE_RECORD });
     }
     table.resetColumnFilters();
   };

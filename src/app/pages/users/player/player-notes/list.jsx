@@ -13,7 +13,7 @@ import { getQueryParams } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { Toolbar } from './Toolbar';
-// import { Breadcrumbs } from "components/shared/Breadcrumbs";
+import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 
 export default function PlayerNotes() {
   const { t } = useTranslation();
@@ -24,8 +24,8 @@ export default function PlayerNotes() {
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const fetchPlayers = async () => {
-    const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
-    const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
+    const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
+    const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
     const result = await PlayerService.getPlayerNotes({
       pagination: { pageIndex, pageSize },
       playerId
@@ -36,7 +36,7 @@ export default function PlayerNotes() {
       return {
         status: 200,
         data: response,
-        totalRecords: parseInt(result.response.totalRecords, 10) || 0
+        totalRecords: parseInt(result.response.totalRecords, DEFAULT_PER_PAGE_RECORD) || 0
       };
     }
     return { status: result.status, error: result.error };
@@ -65,7 +65,7 @@ export default function PlayerNotes() {
 
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
-      <Toolbar table={table} pageTitle={t('player') + ' ' + t('note')} />
+      <Toolbar table={table} pageTitle={t('player') + ' ' + t('notes')} />
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>
   );

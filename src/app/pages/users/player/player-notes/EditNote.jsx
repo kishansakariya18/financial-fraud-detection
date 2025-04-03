@@ -85,7 +85,7 @@ const EditNote = ({ noteId, onClose, note: noteText }) => {
           {t('reset')}
         </Button>
         <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
-          {t('edit')}
+          {t('update')}
         </Button>
       </div>
     </form>

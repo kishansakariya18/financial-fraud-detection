@@ -33,7 +33,6 @@ const EditAdmin = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
     control
   } = useForm({
     resolver: yupResolver(editAdminSchema),
@@ -236,11 +235,8 @@ const EditAdmin = () => {
             </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-            <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
-              {t('reset')}
-            </Button>
             <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
-              {t('edit')}
+              {t('update')}
             </Button>
           </div>
         </form>

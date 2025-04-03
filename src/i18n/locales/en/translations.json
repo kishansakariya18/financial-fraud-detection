@@ -2,7 +2,10 @@
   "nav": {
     "dashboards": {
       "dashboards": "Dashboards",
-      "home": "Home"
+      "home": "Home",
+      "users": "Users",
+      "admin": "Admin",
+      "players": "Players"
     },
     "settings": {
       "settings": "Settings",
@@ -104,5 +107,9 @@
   "currency": "Currency",
   "opening": "Opening",
   "closing": "Closing",
-  "currenct": "Current"
+  "current": "Current",
+  "self": "Self",
+  "exclusion": "Exclusion",
+  "startAt": "Start At",
+  "endAt": "End At"
 }

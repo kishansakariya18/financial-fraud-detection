@@ -14,18 +14,18 @@ import { playerTransactionsResponseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
+import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 
 export default function PlayerTransactions() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const { playerId } = useParams();
   const pageTitle = t('player') + ' ' + t('transactions');
-
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const fetchPlayerTransactions = useCallback(async () => {
-    const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
-    const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
+    const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
+    const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
     const result = await PlayerService.playerTransactions({
       pagination: { pageIndex, pageSize },
       filters: queryParams,
@@ -111,8 +111,8 @@ export default function PlayerTransactions() {
 
     setSearchParams({
       ...queryParams,
-      pageIndex: 0,
-      pageSize: 10,
+      pageIndex: DEFAULT_PAGE_INDEX,
+      pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
       ...(filterItems.status && { status: filterItems.status }),
       ...(filterItems.type && { type: filterItems.type }),
@@ -126,7 +126,7 @@ export default function PlayerTransactions() {
 
   const clearFilterHandler = () => {
     if (!isEmptyObject(queryParams)) {
-      setSearchParams({ pageIndex: 0, pageSize: 10 });
+      setSearchParams({ pageIndex: DEFAULT_PAGE_INDEX, pageSize: DEFAULT_PER_PAGE_RECORD });
     }
     table.resetColumnFilters();
   };

@@ -13,6 +13,7 @@ import { responseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
+import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 
 export default function Admin() {
   const { t } = useTranslation();
@@ -23,8 +24,8 @@ export default function Admin() {
 
   const fetchAdmin = async () => {
     // setError(null);
-    const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
-    const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
+    const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
+    const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
     const result = await AdminService.getAllAdmin({
       pagination: { pageIndex, pageSize },
       filters: queryParams

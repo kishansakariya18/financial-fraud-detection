@@ -13,6 +13,7 @@ import { getQueryParams } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { Toolbar } from './Toolbar';
+import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 // import { Breadcrumbs } from "components/shared/Breadcrumbs";
 
 export default function LoginHistoryList() {
@@ -26,8 +27,8 @@ export default function LoginHistoryList() {
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const fetchPlayers = async () => {
-    const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
-    const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
+    const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
+    const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
     const result = await PlayerService.getPlayerLoginHistory({
       pagination: { pageIndex, pageSize },
       filters: queryParams,

@@ -66,16 +66,12 @@ const PlayerLimit = () => {
             weeklyLossLimit: result.WeeklyLossLimit,
             monthlyLossLimit: result.MonthlyLossLimit,
             selfExclusionType: result.ExclusionType,
-            exclusionStartAt: getDateInUTCToTimeZone(
-              result.ExclusionStartAt,
-              'Asia/Kolkata',
-              'YYYY-MM-DD HH:mm'
-            ),
-            exclusionEndAt: getDateInUTCToTimeZone(
-              result.ExclusionEndAt,
-              'Asia/Kolkata',
-              'YYYY-MM-DD HH:mm'
-            ),
+            exclusionStartAt: result.ExclusionStartAt
+              ? getDateInUTCToTimeZone(result.ExclusionStartAt, 'Asia/Kolkata', 'YYYY-MM-DD HH:mm')
+              : '',
+            exclusionEndAt: result.ExclusionEndAt
+              ? getDateInUTCToTimeZone(result.ExclusionEndAt, 'Asia/Kolkata', 'YYYY-MM-DD HH:mm')
+              : '',
 
             // Flags
             hasDailyWagerLimit: result.HasDailyBetWageLimit,
@@ -87,15 +83,17 @@ const PlayerLimit = () => {
             hasDailyWithdrawLimit: result.HasMaxWithdrawPerDayLimit,
             hasWeeklyWithdrawLimit: result.HasMaxWithdrawPerWeekLimit,
             hasMonthlyWithdrawLimit: result.HasMaxWithdrawPerMonthLimit,
-            hasDailyLossLimit: result.HasDailyLossLimit,
-            hasWeeklyLossLimit: result.HasWeeklyLossLimit,
-            hasMonthlyLossLimit: result.HasMonthlyLossLimit
+            hasDailyLossLimit: result.HasDailyLossLimit || false,
+            hasWeeklyLossLimit: result.HasWeeklyLossLimit || false,
+            hasMonthlyLossLimit: result.HasMonthlyLossLimit || false
           });
         }
+
+        setExclusionType(result.ExclusionType);
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playerId, reset]);
+  }, [playerId, response]);
 
   const fetchUserDetails = async () => {
     setDetailLoading(true);
@@ -131,8 +129,7 @@ const PlayerLimit = () => {
   useEffect(() => {
     if (!loading && !error && response) {
       toast.success(response.message);
-      setResponse(null);
-      fetchUserDetails();
+      // setResponse(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
@@ -187,6 +184,7 @@ const PlayerLimit = () => {
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
+                          type="number"
                         />
                       </div>
                     </div>
@@ -212,6 +210,7 @@ const PlayerLimit = () => {
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
+                          type="number"
                         />
                       </div>
                     </div>
@@ -237,6 +236,7 @@ const PlayerLimit = () => {
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
+                          type="number"
                         />
                       </div>
                     </div>
@@ -261,6 +261,7 @@ const PlayerLimit = () => {
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
+                          type="number"
                         />
                       </div>
                     </div>
@@ -285,6 +286,7 @@ const PlayerLimit = () => {
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
+                          type="number"
                         />
                       </div>
                     </div>
@@ -309,6 +311,7 @@ const PlayerLimit = () => {
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
+                          type="number"
                         />
                       </div>
                     </div>
@@ -333,6 +336,7 @@ const PlayerLimit = () => {
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
+                          type="number"
                         />
                       </div>
                     </div>
@@ -357,6 +361,7 @@ const PlayerLimit = () => {
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
+                          type="number"
                         />
                       </div>
                     </div>
@@ -381,6 +386,7 @@ const PlayerLimit = () => {
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
+                          type="number"
                         />
                       </div>
                     </div>
@@ -416,6 +422,7 @@ const PlayerLimit = () => {
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
+                          type="number"
                         />
                       </div>
                     </div>
@@ -440,6 +447,7 @@ const PlayerLimit = () => {
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
+                          type="number"
                         />
                       </div>
                     </div>
@@ -456,6 +464,7 @@ const PlayerLimit = () => {
                     <div className="max-w-xl">
                       <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
                         <Input
+                          type="number"
                           {...register('monthlyLossLimit')}
                           error={errors?.monthlyLossLimit?.message}
                           id="monthlyLossLimit"
@@ -489,7 +498,15 @@ const PlayerLimit = () => {
                               }
                               onChange={(val) => handleChangeExclusionType(field, val)}
                               name={field.name}
-                              placeholder="Select Self Exclusion Type"
+                              placeholder={
+                                t('select') +
+                                ' ' +
+                                t('self') +
+                                ' ' +
+                                t('exclusion') +
+                                ' ' +
+                                t('type')
+                              }
                               displayField="label"
                               error={errors?.selfExclusionType?.message}
                             />
@@ -507,7 +524,7 @@ const PlayerLimit = () => {
                                 <DatePicker
                                   onChange={onChange}
                                   value={value || ''}
-                                  label="Exclusion Start At"
+                                  label={t('exclusion') + ' ' + t('startAt')}
                                   error={errors?.exclusionStartAt?.message}
                                   options={{
                                     disableMobile: true,
@@ -526,7 +543,7 @@ const PlayerLimit = () => {
                                 <DatePicker
                                   onChange={onChange}
                                   value={value || ''}
-                                  label="Exclusion End At"
+                                  label={t('exclusion') + ' ' + t('endAt')}
                                   error={errors?.exclusionEndAt?.message}
                                   options={{
                                     disableMobile: true,
