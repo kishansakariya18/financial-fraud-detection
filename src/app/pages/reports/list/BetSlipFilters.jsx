@@ -14,6 +14,8 @@ import { t } from 'i18next';
 import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { stageOptions, typeOptions } from '../helper';
+import { useSearchParams } from 'react-router';
+import { ExportCSV } from 'components/custom/export';
 
 // ----------------------------------------------------------------------
 
@@ -25,6 +27,8 @@ export function BetSlipFilters({
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const [searchParams] = useSearchParams();
+  console.log('table.getState().columnFilters: inside', Object.fromEntries([...searchParams]));
 
   return (
     <div className="table-toolbar">
@@ -38,8 +42,8 @@ export function BetSlipFilters({
             {pageTitle}
           </h2>
         </div>
+        <ExportCSV filters={Object.fromEntries([...searchParams])} />
       </div>
-
       {isXs ? (
         <>
           <div
@@ -63,25 +67,27 @@ export function BetSlipFilters({
           </div>
         </>
       ) : (
-        <div
-          className={clsx(
-            'custom-scrollbar transition-content flex justify-between space-x-4 overflow-x-auto pb-1 pt-4 rtl:space-x-reverse',
-            isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x]'
-          )}
-          style={{
-            '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)'
-          }}>
-          <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
-            <SearchInput table={table} />
-            <Filters
-              table={table}
-              onApplyFilters={onApplyFilters}
-              onClearFilters={onClearFilters}
-            />
-          </div>
+        <>
+          <div
+            className={clsx(
+              'custom-scrollbar transition-content flex justify-between space-x-4 overflow-x-auto pb-1 pt-4 rtl:space-x-reverse',
+              isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x]'
+            )}
+            style={{
+              '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)'
+            }}>
+            <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
+              <SearchInput table={table} />
+              <Filters
+                table={table}
+                onApplyFilters={onApplyFilters}
+                onClearFilters={onClearFilters}
+              />
+            </div>
 
-          <TableConfig table={table} />
-        </div>
+            <TableConfig table={table} />
+          </div>
+        </>
       )}
     </div>
   );
@@ -97,7 +103,7 @@ function SearchInput({ table }) {
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
         root: 'shrink-0'
       }}
-      placeholder="Search Username,UserID,  . . ."
+      placeholder="Search Username . . ."
     />
   );
 }

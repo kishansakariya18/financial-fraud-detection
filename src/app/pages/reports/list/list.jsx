@@ -88,7 +88,7 @@ export default function Reports() {
 
   const applyFilterHandler = () => {
     const filterItems = {};
-    console.log('table.getState().columnFilters:', table.getState().columnFilters);
+    // console.log('table.getState().columnFilters:', table.getState().columnFilters);
 
     for (let data of table.getState().columnFilters) {
       if (data.id === 'username') {
@@ -139,6 +139,7 @@ export default function Reports() {
         table={table}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
+        // filters= {}
       />
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>

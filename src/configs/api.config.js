@@ -379,7 +379,8 @@ export const apiConfig = {
       CATEGORY_LIST: '/admin/casino-management/games/categories'
     },
     REPORTS: {
-      BETSLIP: '/admin/reports/betslip-transactions'
+      BETSLIP: '/admin/reports/betslip-transactions',
+      BETSLIP_EXPORT: '/admin/reports/betslip'
     }
   }
 };
