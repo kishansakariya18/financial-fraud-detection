@@ -37,7 +37,7 @@ export function RowActions({ row, table }) {
   };
 
   const handleClickView = () => {
-    navigate(`/admin/${row.original.id}/tab/details`);
+    navigate(`/admin/${row.original.adminUID}/tab/details`);
   };
 
   const openModal = () => {
@@ -48,7 +48,7 @@ export function RowActions({ row, table }) {
 
   const handleDeleteRows = useCallback(async () => {
     setConfirmDeleteLoading(true);
-    const result = await AdminService.changeAdminStatus(row.original.id);
+    const result = await AdminService.changeAdminStatus(row.original.adminUID);
     if (result.status === 200) {
       table.options.meta?.deleteRow(row);
       setDeleteSuccess(true);
@@ -100,7 +100,7 @@ export function RowActions({ row, table }) {
                       'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
                       focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
                     )}
-                    onClick={() => navigate(`/admin/${row.original.id}/edit`)}>
+                    onClick={() => navigate(`/admin/${row.original.adminUID}/edit`)}>
                     <PencilIcon className="size-4.5 stroke-1" />
                     <span>{t('edit')}</span>
                   </button>

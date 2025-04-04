@@ -34,7 +34,7 @@ export const apiConfig = {
     },
     USER: {
       SET_EXCLUSION: '/admin/user/:userID/set-exclusion',
-      DETAIL: '/admin//users/detail/:userID',
+      DETAIL: '/admin//users/detail/:userUID',
       LIST: '/admin/users/list',
       REFERRAL_LIST: '/admin/users/referral/:userID',
       FUND: '/admin/users/fund',

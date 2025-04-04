@@ -68,7 +68,7 @@ const PlayerService = {
     try {
       const requestBody = {
         amount: data.amount,
-        userID: data.playerId,
+        userUID: data.playerId,
         amountType: fundTypeToAPI(data.fundType),
         type: transactionTypeAppToApi(data.type),
         fundMessage: data.fundMessage,
@@ -97,7 +97,7 @@ const PlayerService = {
         perPage: pagination?.pageSize
       };
       const body = {
-        userID: playerId,
+        userUID: playerId,
         filters: {
           keyword: filters?.keyword || undefined,
           endDate: filters.endDate
@@ -200,10 +200,10 @@ const PlayerService = {
       console.log('Error from userTransactionList', error);
     }
   },
-  changePlayerStatus: async (userID) => {
+  changePlayerStatus: async (playerId) => {
     try {
       const body = {
-        userID
+        userUID: playerId
       };
       const endPoint = apiConfig.endPoints.USER.CHANGE_STATUS;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
@@ -240,9 +240,9 @@ const PlayerService = {
       console.log('Error from userRestBankCount', error);
     }
   },
-  userDetail: async (userID) => {
+  userDetail: async (playerId) => {
     try {
-      const endPoint = replaceText(apiConfig.endPoints.USER.DETAIL, ':userID', userID);
+      const endPoint = replaceText(apiConfig.endPoints.USER.DETAIL, ':userUID', playerId);
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
@@ -277,9 +277,8 @@ const PlayerService = {
       console.log('Error from user referral list', error);
     }
   },
-  updateRiskManagementFields: async (data, userID) => {
+  updateUserLimit: async (data, playerId) => {
     try {
-      console.log('data; ', data);
       const apiBodyData = {
         HasDailyBetWageLimit: data.hasDailyWagerLimit,
         HasWeeklyBetWageLimit: data.hasWeeklyWagerLimit,
@@ -316,7 +315,7 @@ const PlayerService = {
       const endPoint = replaceText(
         apiConfig.endPoints.USER.UPDATE_RISK_MANAGEMENT,
         ':userID',
-        userID
+        playerId
       );
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
@@ -329,7 +328,7 @@ const PlayerService = {
       });
       return response;
     } catch (error) {
-      console.log('Error from Risk management Update', error);
+      console.log('Error from User Level Limit Update', error);
     }
   },
   getAllUserTransactionList: async (reqBody) => {
@@ -390,7 +389,7 @@ const PlayerService = {
     try {
       const { pagination, playerId } = data;
       const query = {
-        userID: playerId,
+        userUID: playerId,
         perPage: pagination?.pageSize,
         page: pagination.pageIndex + 1
       };
@@ -410,10 +409,10 @@ const PlayerService = {
       console.log('Error from getComment', error);
     }
   },
-  deletePlayerNote: async (playerId) => {
+  deletePlayerNote: async (commentId) => {
     try {
       const query = {
-        commentID: playerId
+        commentID: commentId
       };
 
       const endPoint = apiConfig.endPoints.USER.DELETE_COMMENT;
@@ -479,7 +478,7 @@ const PlayerService = {
   addPlayerNote: async (data) => {
     try {
       const reqBody = {
-        userID: data.playerId,
+        userUID: data.playerId,
         comment: data.note,
         isPinned: data.isPinned
       };

@@ -108,7 +108,7 @@ const PlayerLimit = () => {
   const updatePlayerLimit = async (requestObject) => {
     setLoading(true);
     setError(null);
-    const result = await PlayerService.updateRiskManagementFields(requestObject, playerId);
+    const result = await PlayerService.updateUserLimit(requestObject, playerId);
     if (result) {
       if (result.status === 200 || result.status === 201) {
         setResponse(result.response);
