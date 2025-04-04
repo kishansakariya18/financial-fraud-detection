@@ -18,6 +18,7 @@ export const translator = (t, text, ns) => t(`${text}`, { ns });
 export const responseMapper = (apiData) => {
   const resultData = apiData.map((data) => ({
     id: data.AdminID,
+    adminUID: data.AdminUID,
     username: data.Username,
     firstname: data.FirstName,
     lastname: data.LastName,
@@ -31,6 +32,20 @@ export const responseMapper = (apiData) => {
   }));
   return resultData;
 };
+
+export const loginHistoryResponseMapper = (apiData) => {
+  return apiData.map((data) => {
+    return {
+      id: data.ID,
+      adminId: data.AdminID,
+      ip: data.Ip,
+      userAgent: data.UserAgent,
+      expiredAt: data.ExpiredAt,
+      loginAt: data.DateCreated
+    };
+  });
+};
+
 export const adminDetailResponseMapper = (data) => {
   const resultData = {
     ...data,

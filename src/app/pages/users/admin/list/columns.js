@@ -19,6 +19,13 @@ export const columns = [
     cell: IdCell,
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.adminUID, {
+    id: 'adminUID',
+    label: 'Admin UID',
+    header: 'Admin UID',
+    cell: CopyableCell,
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.username, {
     id: 'username',
     label: 'Username',

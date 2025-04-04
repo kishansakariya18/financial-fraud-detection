@@ -121,7 +121,7 @@ const EditAdmin = () => {
   }
 
   const onSubmit = async (data) => {
-    await editAdminApi({ ...data, adminId });
+    await editAdminApi({ ...data, adminUID: adminId });
   };
   return (
     <Page title={pageTitle}>

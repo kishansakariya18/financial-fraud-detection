@@ -99,8 +99,8 @@ export default function Admin() {
 
     setSearchParams({
       ...queryParams,
-      pageIndex: 0,
-      pageSize: 10,
+      pageIndex: DEFAULT_PAGE_INDEX,
+      pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
       ...(filterItems.status && { status: filterItems.status }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),

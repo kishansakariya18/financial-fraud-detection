@@ -3,9 +3,7 @@ import apiConfig from '../configs/api.config';
 import { sendRequest } from '../utils/axios';
 import dayjs from 'dayjs';
 import { replaceText } from 'utils/custom.utilities';
-// import dayjs from 'dayjs';
-// import { parseAdminStatusToApi } from '../pages/admin/helper';
-// import { replaceText } from '../helpers/functions';
+import { DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 
 const AdminService = {
   getAllAdmin: async (data) => {
@@ -25,7 +23,7 @@ const AdminService = {
             ? dayjs(+filters.endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
             : undefined
         },
-        per_page: pagination?.pageSize || 10,
+        per_page: pagination?.pageSize || DEFAULT_PER_PAGE_RECORD,
         page: pagination.pageIndex + 1
       };
 
@@ -61,12 +59,12 @@ const AdminService = {
       console.log('Error', err);
     }
   },
-  changeAdminStatus: async (id) => {
+  changeAdminStatus: async (adminUID) => {
     try {
       const endPoint = replaceText(
         apiConfig.endPoints.ADMIN_USER.ADMIN_CHANGE_STATUS,
         ':adminId',
-        id
+        adminUID
       );
       const response = await sendRequest({
         url: apiConfig.baseURL.API_BASE_URL + endPoint,
@@ -153,10 +151,8 @@ const AdminService = {
         status: parseAdminStatusToApi(data.status),
         is_master_admin: data.isMasterAdmin ? 1 : 0,
         role: data.roles,
-        adminId: data.adminId
+        adminUID: data.adminUID
       };
-
-      console.log(requestObject);
 
       const response = await sendRequest({
         url: apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.ADMIN_USER.ADMIN_EDIT,
@@ -170,6 +166,32 @@ const AdminService = {
       return response;
     } catch (err) {
       console.log('Error', err);
+    }
+  },
+  getAdminLoginHistory: async (body) => {
+    try {
+      const { pagination, adminUID } = body;
+      const query = {
+        page: pagination.pageIndex + 1,
+        perPage: pagination.pageSize
+      };
+      const endPoint = replaceText(
+        apiConfig.endPoints.ADMIN_USER.ADMIN_LOGIN_HISTORY,
+        ':adminID',
+        adminUID
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        params: query
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from getAdminLoginHistory ', error);
     }
   }
   // checkPassword: async (type, password) => {
@@ -215,26 +237,6 @@ const AdminService = {
   //     console.log('error in update profile: ', error);
   //   }
   // },
-  // getAdminLoginHistory: async (reqBody) => {
-  //   try {
-  //     const query = {
-  //       page: +reqBody.currentPage,
-  //       perPage: +reqBody.perPage
-  //     };
-  //     const endPoint = replaceText(apiConfig.endPoints.ADMIN_USER.ADMIN_LOGIN_HISTORY, ':adminID', reqBody.adminID);
-  //     const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
-  //     const response = await sendRequest({
-  //       url: apiURL,
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       },
-  //       params: query
-  //     });
-  //     return response;
-  //   } catch (error) {
-  //     console.log('Error from getAdminLoginHistory ', error);
-  //   }
 };
 
 export default AdminService;

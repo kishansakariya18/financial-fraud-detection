@@ -40,7 +40,7 @@ export function RowActions({ row, table }) {
   };
 
   const handleClickView = () => {
-    navigate(`/player/${row.original.id}/tab/details`);
+    navigate(`/player/${row.original.userUID}/tab/details`);
   };
 
   const openModal = () => {
@@ -51,7 +51,7 @@ export function RowActions({ row, table }) {
 
   const handleChangeStatus = useCallback(async () => {
     setConfirmDeleteLoading(true);
-    const result = await PlayerService.changePlayerStatus(row.original.id);
+    const result = await PlayerService.changePlayerStatus(row.original.userUID);
     if (result.status === 200) {
       table.options.meta?.changeStatus(row);
       setChangeStatusSuccess(true);

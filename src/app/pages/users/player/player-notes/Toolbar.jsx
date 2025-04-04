@@ -52,7 +52,7 @@ export function Toolbar({ table, pageTitle = '' }) {
             btnTitle={t('add') + ' ' + t('note')}
             btnColor={'primary'}
             isShowBtn={true}>
-            <CreateNote onClose={onCloseDialogBox} />
+            <CreateNote onClose={onOkDialogBox} />
           </CustomModal>
         </div>
       </div>
