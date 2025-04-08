@@ -73,7 +73,6 @@ const CreateNote = ({ onClose = () => {} }) => {
       <div className="mt-2 space-y-4">
         <div className="max-w-xl">
           <TextEditor
-            label={t('enter') + ' ' + t('note') + ' ' + t('here') + '...'}
             value={content}
             onChange={handleChange}
             placeholder={

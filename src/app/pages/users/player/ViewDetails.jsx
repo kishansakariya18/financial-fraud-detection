@@ -64,13 +64,6 @@ export function ViewDetails() {
             ))
           ) : (
             <Card className="h-full p-4 sm:p-5">
-              <h5 className="text-lg font-medium text-gray-800 dark:text-dark-100">
-                {t('details')}
-              </h5>
-              <p className="text-sm text-gray-500 dark:text-dark-200">
-                {t('details') + ' ' + t('regarding') + ' ' + t('player')}
-              </p>
-
               <h6 className="mt-8 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
                 {t('player') + ' ' + t('information')}
               </h6>

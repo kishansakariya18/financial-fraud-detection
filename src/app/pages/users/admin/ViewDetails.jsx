@@ -50,13 +50,8 @@ const ViewDetails = () => {
 
         <div className="col-span-12 sm:col-span-8 lg:col-span-9">
           <Card className="h-full p-4 sm:p-5">
-            <h5 className="text-lg font-medium text-gray-800 dark:text-dark-100">{t('details')}</h5>
-            <p className="text-sm text-gray-500 dark:text-dark-200">
-              {t('details') + ' ' + t('regarding') + ' ' + t('admin')}
-            </p>
-
-            <h6 className="mt-8 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
-              {t('information')}:
+            <h6 className="mt-4 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
+              {t('admin') + ' ' + t('information')}:
             </h6>
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div>

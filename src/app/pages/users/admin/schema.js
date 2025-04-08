@@ -18,7 +18,7 @@ export const createAdminSchema = Yup.object().shape({
     .required('Enter Your Mobile Number')
     .length(10, 'Mobile Number Must Contain 10 Digits')
     .matches(/^[0-9\-s]+$/, 'Enter Correct Mobile Number'),
-  status: Yup.string().trim().required('Select Your Status'),
+  status: Yup.string().trim().required('Select Status'),
   roles: Yup.string().trim().required('Select Admin Role'),
   isMasterAdmin: Yup.boolean()
 });

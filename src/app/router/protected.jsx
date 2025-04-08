@@ -8,6 +8,7 @@ import roleRoutes from './routes/role.route';
 import platformRoute from './routes/platform.route';
 import countryRoutes from './routes/country.route';
 import reportsRoutes from './routes/betSlip.route';
+import paymentRoute from './routes/payment.route';
 
 // ----------------------------------------------------------------------
 
@@ -25,7 +26,8 @@ const protectedRoutes = {
         ...roleRoutes,
         ...platformRoute,
         ...countryRoutes,
-        ...reportsRoutes
+        ...reportsRoutes,
+        ...paymentRoute
       ]
     }
   ]
