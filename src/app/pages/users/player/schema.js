@@ -179,7 +179,8 @@ export const playerLimitSchema = Yup.object().shape({
 
 export const manageFundSchema = Yup.object().shape({
   // Personal Information
-  amount: Yup.number('Enter Valid Number')
+  amount: Yup.number('Amount Must Be number')
+    .transform((val) => (isNaN(val) ? null : val))
     .required('Amount Required')
     .positive('Amount Must Be Positive'),
   fundType: Yup.string().trim().required('Fund Type Required'),

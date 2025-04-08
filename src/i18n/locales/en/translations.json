@@ -111,5 +111,15 @@
   "self": "Self",
   "exclusion": "Exclusion",
   "startAt": "Start At",
-  "endAt": "End At"
+  "endAt": "End At",
+  "payment": "Payment",
+  "betslip": "Bet Slip",
+  "deposit": "Deposit",
+  "withdraw": "Withdraw",
+  "winning": "Winning",
+  "option": "Option",
+  "bet": "Bet",
+  "odd": "Odd",
+  "promoCode": "Promo Code",
+  "game": "Game"
 }

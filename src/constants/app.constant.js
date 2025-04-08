@@ -41,6 +41,13 @@ export const TRANSACTION = {
   }
 };
 
+export const PAYMENT_OPT = {
+  DEPOSIT: 1,
+  WITHDRAW: 2,
+  WINNING: 3,
+  BETSLIP: 4
+};
+
 export const PERMISSIONS = {
   ROLES: {
     VIEW: 'roles-view',
