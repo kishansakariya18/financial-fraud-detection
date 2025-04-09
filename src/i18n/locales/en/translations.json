@@ -122,5 +122,16 @@
   "bet": "Bet",
   "odd": "Odd",
   "promoCode": "Promo Code",
-  "game": "Game"
+  "game": "Game",
+  "playerKyc": "Player KYC",
+  "document": "Document",
+  "rejectReason": "Reject Reason",
+  "identification": "Identification",
+  "frontImage": "Front Image",
+  "backImage": "Back Image",
+  "bank": "Bank",
+  "submit": "Submit",
+  "account": "Account",
+  "reject": "Reject",
+  "logout_success": "You have been logged out successfully."
 }

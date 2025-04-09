@@ -5,6 +5,7 @@ import { platform } from './platoform';
 import { country } from './country';
 import { reports } from './report';
 import { payment } from './payment';
+import { playerKyc } from './player-kyc';
 
 export const dashboards = {
   id: 'dashboards',
@@ -13,5 +14,5 @@ export const dashboards = {
   title: 'Dashboards',
   transKey: 'nav.dashboards.dashboards',
   Icon: DashboardsIcon,
-  childs: [users, platform, country, payment, reports]
+  childs: [users, platform, country, payment, reports, playerKyc]
 };

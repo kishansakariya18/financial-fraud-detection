@@ -9,8 +9,8 @@ export const createAdminSchema = Yup.object().shape({
     .trim()
     .required('Password Required')
     .matches(
-      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-      'Minimum 8 Character Required, Atleast One Letter and One Number'
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+      'Minimum 8 Character Required, Atleast One Letter and One Number and One Special Character'
     ),
   email: Yup.string().trim().required('Email Required').email('Invalid Email'),
   mobile: Yup.string()
@@ -31,10 +31,10 @@ export const editAdminSchema = Yup.object().shape({
     .trim()
     .test(
       'password-validation',
-      'Minimum 8 characters, at least one letter and one number',
+      'Minimum 8 Character Required, Atleast One Letter and One Number and One Special Character',
       (value) => {
         if (!value || value.length === 0) return true; // skip if empty
-        return /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(value);
+        return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(value);
       }
     ),
   email: Yup.string().trim().required('Email Required').email('Invalid Email'),

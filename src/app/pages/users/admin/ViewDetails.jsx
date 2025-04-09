@@ -3,15 +3,17 @@
 import { useEffect, useState } from 'react';
 
 // Local Imports
-import { Card, GhostSpinner } from 'components/ui';
+import { Button, Card, GhostSpinner } from 'components/ui';
 // import { useKYCFormContext } from "../KYCFormContext";
 // import { declarationSchema } from "../schema";
 import AdminService from 'services/admin.services';
 import { useParams } from 'react-router';
 import { Page } from 'components/shared/Page';
 import { parseAdminStatusToApp } from './helper';
-import { getDateInUTCToTimeZone } from 'helpers/functions';
+import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
 import { useTranslation } from 'react-i18next';
+import { DocumentDuplicateIcon } from '@heroicons/react/24/outline';
+import { useClipboard } from 'hooks';
 
 const ViewDetails = () => {
   //   const kycFormCtx = useKYCFormContext();
@@ -20,6 +22,7 @@ const ViewDetails = () => {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState('');
   const [error, setError] = useState('');
+  const { copied, copy } = useClipboard({ timeout: 2000 });
 
   const { adminId } = useParams();
 
@@ -74,25 +77,53 @@ const ViewDetails = () => {
                 <p>{response?.LastName}</p>
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('email')}:
-                </p>
-                <p>{response?.Email}</p>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('email')}</p>
+                <div className="flex space-x-1 rtl:space-x-reverse">
+                  <span> {response?.Email || '-'}</span>
+                  {response.Email && (
+                    <Button
+                      data-tooltip
+                      data-tooltip-content={copied ? 'Copied' : 'Copy'}
+                      onClick={() => copy(response?.Email)}
+                      isIcon
+                      variant="flat"
+                      className="size-5 rounded-full group-hover/td:opacity-100"
+                      aria-label="Copy Button">
+                      <DocumentDuplicateIcon className="size-3.5" />
+                    </Button>
+                  )}
+                </div>
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                   {t('mobile')}:
                 </p>
-                <p>
+                <span>
                   {response?.dialCode || '+91'} {response?.Mobile}
-                </p>
+                </span>
+
+                {response.Mobile && (
+                  <Button
+                    data-tooltip
+                    data-tooltip-content={copied ? 'Copied' : 'Copy'}
+                    onClick={() => copy(response?.Mobile)}
+                    isIcon
+                    variant="flat"
+                    className="size-5 rounded-full group-hover/td:opacity-100"
+                    aria-label="Copy Button">
+                    <DocumentDuplicateIcon className="size-3.5" />
+                  </Button>
+                )}
               </div>
 
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                   {t('status')}:
                 </p>
-                <p>{+response.Status >= 0 && parseAdminStatusToApp(+response?.Status)}</p>
+                <p>
+                  {+response.Status >= 0 &&
+                    capitalizeFirstLetter(parseAdminStatusToApp(response.Status))}
+                </p>
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">

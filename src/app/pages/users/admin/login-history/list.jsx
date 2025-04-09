@@ -31,8 +31,6 @@ export default function LoginHistoryList() {
       adminUID: adminId
     });
 
-    console.log('result?.response?.totalRecords: ', result?.response?.totalRecords);
-
     if (result.status === 200) {
       return {
         status: 200,
@@ -50,7 +48,7 @@ export default function LoginHistoryList() {
     setSearchParams,
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
-      tableSettings: {},
+      tableSettings: { enableFullScreen: false, enableRowDense: false },
       columnVisibility: { expiredAt: false }
     }
   });
