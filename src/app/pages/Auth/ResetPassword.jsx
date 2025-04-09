@@ -201,7 +201,7 @@ export default function ResetPassword() {
                 </div>
               )}
 
-              <Button type="submit" className="mt-5 w-full" color="primary">
+              <Button type="submit" className="mt-5 w-full" color="primary" disabled={isLoading}>
                 Verify OTP
               </Button>
             </form>

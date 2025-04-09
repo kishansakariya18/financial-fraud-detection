@@ -10,6 +10,7 @@ import { AuthAction } from 'store/admin-slice/AuthSlice';
 import { useDispatch } from 'react-redux';
 import { LOCAL_STORAGE } from 'constants/app.constant';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 const links = [
   {
@@ -33,9 +34,11 @@ const links = [
 export function Profile() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { t } = useTranslation();
   const logoutHandler = (e) => {
     e.preventDefault();
-    toast.success('Logout Successfully');
+    toast.success(t('logout_success'));
     dispatch(AuthAction.logout());
     localStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN);
     localStorage.removeItem(LOCAL_STORAGE.USER_DATA);

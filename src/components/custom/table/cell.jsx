@@ -55,7 +55,7 @@ export function BadgeCell({ getValue, column }) {
   const optionData = column.columnDef.meta?.optionData || [];
   const option = optionData.find((item) => item.value === val);
 
-  return <Badge color={option.color}>{option.label}</Badge>;
+  return <Badge color={option?.color}>{option.label}</Badge>;
 }
 
 export function AmountCell({ getValue }) {

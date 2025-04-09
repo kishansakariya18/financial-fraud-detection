@@ -11,3 +11,7 @@ export function getDateInUTCToTimeZone(
 export function getTimezone() {
   return Intl.DateTimeFormat().resolvedOptions().timeZone;
 }
+
+export function capitalizeFirstLetter(val) {
+  return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+}

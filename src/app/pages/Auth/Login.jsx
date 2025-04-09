@@ -234,7 +234,7 @@ export default function Login() {
                 </a>
               </div>
 
-              <Button type="submit" className="mt-5 w-full" color="primary">
+              <Button type="submit" className="mt-5 w-full" color="primary" disabled={isLoading}>
                 Sign In
               </Button>
             </form>

@@ -229,9 +229,9 @@ const EditAdmin = () => {
                 <Input
                   {...register('mobile')}
                   prefix={<CiMobile1 className="size-5" />}
-                  label={t('select') + ' ' + t('mobile')}
+                  label={t('enter') + ' ' + t('mobile')}
                   error={errors?.mobile?.message}
-                  placeholder={t('select') + ' ' + t('mobile') + ' ' + t('number')}
+                  placeholder={t('enter') + ' ' + t('mobile') + ' ' + t('number')}
                 />
               </div>
 

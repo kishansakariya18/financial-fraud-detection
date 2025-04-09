@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 
 const confirmMessages = {
   pending: {
-    description: 'Are you sure you want to change Status of the Admin?',
+    description: "Are you sure you want to update this admin's status?",
     actionText: 'Submit'
   },
   success: {

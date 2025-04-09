@@ -48,6 +48,17 @@ export const PAYMENT_OPT = {
   BETSLIP: 4
 };
 
+export const DOCUMENT_TYPE = {
+  DOCUMENT: 1,
+  BANK: 2
+};
+
+export const DOCUMENT_STATUS = {
+  PENDING: 0,
+  APPROVED: 1,
+  REJECTED: 2
+};
+
 export const PERMISSIONS = {
   ROLES: {
     VIEW: 'roles-view',

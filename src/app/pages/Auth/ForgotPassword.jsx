@@ -130,7 +130,7 @@ export default function ForgotPassword() {
                 </a>
               </div>
 
-              <Button type="submit" className="mt-5 w-full" color="primary">
+              <Button type="submit" className="mt-5 w-full" color="primary" disabled={isLoading}>
                 Reset Password
               </Button>
             </form>
