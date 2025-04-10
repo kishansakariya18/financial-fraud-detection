@@ -6,7 +6,6 @@ import { NAV_TYPE_COLLAPSE, NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.con
 
 export const users = {
   id: 'users.users',
-  path: '/',
   type: NAV_TYPE_COLLAPSE,
   title: 'Users',
   transKey: 'nav.users.users',

@@ -17,7 +17,6 @@ export const CustomModal = ({
   show = false,
   onOpen = () => {},
   onClose = () => {},
-  onOk = () => {},
   isShowBtn = false
 }) => {
   const saveRef = useRef(null);
@@ -64,7 +63,7 @@ export const CustomModal = ({
                   {title}
                 </DialogTitle>
                 <Button
-                  onClick={onOk}
+                  onClick={onClose}
                   variant="flat"
                   isIcon
                   className="size-7 rounded-full ltr:-mr-1.5 rtl:-ml-1.5">
