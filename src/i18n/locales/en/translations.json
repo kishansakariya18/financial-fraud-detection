@@ -23,6 +23,8 @@
       "limit": "Platform Limit"
     }
   },
+  "casino_category": "Category",
+  "casino_management": "Casino Management",
   "betslip_transactions": "Betslip Transactions",
   "report": "Report",
   "country": "Country",

@@ -8,7 +8,6 @@ import { NAV_TYPE_COLLAPSE, NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.con
 export const reports = {
   id: 'report',
   type: NAV_TYPE_COLLAPSE,
-  path: '/report',
   title: 'Report',
   transKey: 'report',
   Icon: BookOpenIcon,

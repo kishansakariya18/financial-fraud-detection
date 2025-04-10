@@ -103,6 +103,9 @@ const useTable = ({ columns, fetchData, queryParams, setSearchParams, initialSet
       editRow: async () => {
         await fetchTableData(false);
       },
+      fetchNewList: async (value) => {
+        await fetchTableData(value);
+      },
       setTableSettings
     },
     enableColumnFilters: tableSettings.enableColumnFilters,
