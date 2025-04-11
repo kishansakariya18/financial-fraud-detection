@@ -1,5 +1,6 @@
 // Import Dependencies
-import { UserGroupIcon, UserIcon, UsersIcon } from '@heroicons/react/24/outline';
+import { UserCircleIcon } from '@heroicons/react/20/solid';
+import { UserGroupIcon, UsersIcon } from '@heroicons/react/24/outline';
 
 // Local Imports
 import { NAV_TYPE_COLLAPSE, NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
@@ -19,7 +20,7 @@ export const users = {
       type: NAV_TYPE_ITEM,
       title: 'Admin',
       transKey: 'nav.users.admin',
-      Icon: UserIcon,
+      Icon: UserCircleIcon,
       permission: PERMISSIONS.ADMIN.LIST
     },
     {

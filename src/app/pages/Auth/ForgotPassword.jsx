@@ -13,10 +13,12 @@ import AuthService from 'services/auth.services';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
 export default function ForgotPassword() {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -87,17 +89,17 @@ export default function ForgotPassword() {
             <Logo className="mx-auto size-16" />
             <div className="mt-4">
               <h2 className="text-2xl font-semibold text-gray-600 dark:text-dark-100">
-                Welcome Back
+                {t('welcome_back')}
               </h2>
-              <p className="text-gray-400 dark:text-dark-300">Confirm To Reset Password</p>
+              <p className="text-gray-400 dark:text-dark-300">{t('confirm_to_reset')}</p>
             </div>
           </div>
           <Card className="mt-5 rounded-lg p-5 lg:p-7">
             <form onSubmit={handleSubmit(submitHandler)} autoComplete="off">
               <div className="space-y-4">
                 <Input
-                  label="Mobile"
-                  placeholder="Enter Mobile"
+                  label={t('mobile')}
+                  placeholder={t('enter') + ' ' + t('mobile')}
                   prefix={
                     <EnvelopeIcon
                       className="size-5 transition-colors duration-200"
@@ -108,8 +110,8 @@ export default function ForgotPassword() {
                   error={errors?.mobile?.message}
                 />
                 <Input
-                  label="Email"
-                  placeholder="Enter Email"
+                  label={t('email')}
+                  placeholder={t('enter') + ' ' + t('email')}
                   type="email"
                   prefix={
                     <EnvelopeIcon
@@ -126,12 +128,12 @@ export default function ForgotPassword() {
                 <a
                   href="/login"
                   className="text-xs text-gray-400 transition-colors hover:text-gray-800 focus:text-gray-800 dark:text-dark-300 dark:hover:text-dark-100 dark:focus:text-dark-100">
-                  Go To Login ?
+                  {t('go_to_login')}
                 </a>
               </div>
 
               <Button type="submit" className="mt-5 w-full" color="primary" disabled={isLoading}>
-                Reset Password
+                {t('reset') + ' ' + t('password')}
               </Button>
             </form>
           </Card>

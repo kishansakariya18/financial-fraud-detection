@@ -17,6 +17,7 @@ import AuthService from '../../../services/auth.services';
 import { LOCAL_STORAGE } from 'constants/app.constant';
 import { toast } from 'sonner';
 import { AuthAction } from 'store/admin-slice/AuthSlice';
+import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
@@ -44,6 +45,8 @@ export default function OTPVerification() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [seconds, setSeconds] = useState(30);
   const [resendOtp, setResendOtp] = useState('');
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -222,17 +225,17 @@ export default function OTPVerification() {
             <Logo className="mx-auto size-16" />
             <div className="mt-4">
               <h2 className="text-2xl font-semibold text-gray-600 dark:text-dark-100">
-                Welcome Back
+                {t('welcome_back')}
               </h2>
-              <p className="text-gray-400 dark:text-dark-300">Verify OTP, to Continue</p>
+              <p className="text-gray-400 dark:text-dark-300">{t('verify_otp_to_continue')}</p>
             </div>
           </div>
           <Card className="mt-5 rounded-lg p-5 lg:p-7">
             <form onSubmit={handleSubmit(submitHandler)} autoComplete="off">
               <div className="space-y-4">
                 <Input
-                  label="Enter OTP"
-                  placeholder="Enter OTP Here"
+                  label={t('enter') + ' OTP'}
+                  placeholder={t('enter') + ' ' + 'OTP' + ' ' + t('here')}
                   prefix={
                     <EnvelopeIcon
                       className="size-5 transition-colors duration-200"
@@ -250,7 +253,7 @@ export default function OTPVerification() {
                     href="##"
                     onClick={handleResendOtp}
                     className="text-xs text-gray-400 transition-colors hover:text-gray-800 focus:text-gray-800 dark:text-dark-300 dark:hover:text-dark-100 dark:focus:text-dark-100">
-                    {'Resend OTP?'}
+                    {t('resend') + ' OTP?'}
                   </a>
                 </div>
               ) : (
@@ -260,15 +263,10 @@ export default function OTPVerification() {
               )}
 
               <Button type="submit" className="mt-5 w-full" color="primary" disabled={isLoading}>
-                Verify OTP
+                {t('verify')} OTP
               </Button>
             </form>
           </Card>
-          <div className="mt-8 flex justify-center text-xs text-gray-400 dark:text-dark-300">
-            <a href="##">Privacy Notice</a>
-            <div className="mx-2.5 my-0.5 w-px bg-gray-200 dark:bg-dark-500"></div>
-            <a href="##">Term of service</a>
-          </div>
         </div>
       </main>
     </Page>

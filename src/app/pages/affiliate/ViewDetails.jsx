@@ -6,16 +6,15 @@ import { useEffect, useState } from 'react';
 import { Button, Card, Skeleton } from 'components/ui';
 import { useNavigate, useParams } from 'react-router';
 import { Page } from 'components/shared/Page';
-import { playerStatusToApp } from './helper';
-import { getDateInUTCToTimeZone } from 'helpers/functions';
-import PlayerService from 'services/player.services';
-import { showImage } from 'utils/showImage';
+import { affiliateStatusToApp } from './helper';
+import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
 import { useClipboard } from 'hooks';
 import { DocumentDuplicateIcon } from '@heroicons/react/20/solid';
 import { toast } from 'sonner';
-const breadcrumbs = [{ title: 'Players', path: '/player' }, { title: 'Details' }];
+import AffiliateService from 'services/affiliate.services';
+const breadcrumbs = [{ title: 'Affiliates', path: '/affiliate' }, { title: 'Details' }];
 
 export function ViewDetails() {
   const { t } = useTranslation();
@@ -23,13 +22,13 @@ export function ViewDetails() {
   const [response, setResponse] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { playerId } = useParams();
-  const pageTitle = t('player') + ' ' + t('details');
+  const { affiliateId } = useParams();
+  const pageTitle = t('affiliate') + ' ' + t('details');
   const { copied, copy } = useClipboard({ timeout: 2000 });
 
   const fetchPlayerDetails = async () => {
     setLoading(true);
-    const result = await PlayerService.userDetail(playerId);
+    const result = await AffiliateService.getAffiliateDetail(affiliateId);
 
     if (result.status === 200) {
       const apiData = result.response.data;
@@ -43,7 +42,7 @@ export function ViewDetails() {
   useEffect(() => {
     fetchPlayerDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playerId]);
+  }, [affiliateId]);
 
   if (!loading && error) {
     toast.error(error);
@@ -71,7 +70,7 @@ export function ViewDetails() {
           ) : (
             <Card className="h-full p-4 sm:p-5">
               <h6 className="mt-8 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
-                {t('player') + ' ' + t('information')}
+                {t('affiliate') + ' ' + t('information')}
               </h6>
               <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <div>
@@ -79,6 +78,24 @@ export function ViewDetails() {
                     {t('userName')}
                   </p>
                   <p>{response?.Username}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('firstName')}
+                  </p>
+                  <p>{response?.FirstName}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('lastName')}
+                  </p>
+                  <p>{response?.LastName}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('balance')}
+                  </p>
+                  <p>{response?.Balance}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
@@ -121,48 +138,15 @@ export function ViewDetails() {
                     </Button>
                   </div>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('realCash')}
-                  </p>
-                  <p>{response?.RealCash || '0'}</p>
-                </div>
 
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('status')}
                   </p>
-                  <p>{+response.Status >= 0 && playerStatusToApp(+response?.Status)}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('gender')}
+                  <p>
+                    {+response.Status >= 0 &&
+                      capitalizeFirstLetter(affiliateStatusToApp(+response?.Status))}
                   </p>
-                  <p>{response?.Gender}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">DOB:</p>
-                  <p>{response?.DOB || '-'}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('address')}
-                  </p>
-                  <div className="flex space-x-1 rtl:space-x-reverse">
-                    <span>{response?.Address || '-'}</span>
-                    {response.Address && (
-                      <Button
-                        data-tooltip
-                        data-tooltip-content={copied ? 'Copied' : 'Copy'}
-                        onClick={() => copy(response?.Address)}
-                        isIcon
-                        variant="flat"
-                        className="size-5 rounded-full group-hover/td:opacity-100"
-                        aria-label="Copy Button">
-                        <DocumentDuplicateIcon className="size-3.5" />
-                      </Button>
-                    )}
-                  </div>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
@@ -191,19 +175,10 @@ export function ViewDetails() {
                   </p>
                   <p>{getDateInUTCToTimeZone(response?.DateCreated)}</p>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('image') + ' ' + t('preview')}
-                  </p>
-                  <div className="mt-2">
-                    {response?.ImageName && showImage('user', response?.ImageName)}
-                    {response?.ImageName}
-                  </div>
-                </div>
               </div>
 
               <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-                <Button className="min-w-[7rem]" onClick={() => navigate('/player')}>
+                <Button className="min-w-[7rem]" onClick={() => navigate('/affiliate')}>
                   {t('back')}
                 </Button>
               </div>

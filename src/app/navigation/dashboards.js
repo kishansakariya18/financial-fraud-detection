@@ -6,6 +6,7 @@ import { country } from './country';
 import { payment } from './payment';
 import { playerKyc } from './player-kyc';
 import { reports } from './report';
+import { affliate } from './affiliates';
 
 export const dashboards = {
   id: 'dashboards',
@@ -14,5 +15,5 @@ export const dashboards = {
   title: 'Dashboards',
   transKey: 'nav.dashboards.dashboards',
   Icon: DashboardsIcon,
-  childs: [users, platform, country, payment, reports, playerKyc]
+  childs: [users, platform, country, payment, reports, playerKyc, affliate]
 };

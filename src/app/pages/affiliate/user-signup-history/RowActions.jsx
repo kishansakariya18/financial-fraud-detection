@@ -8,59 +8,62 @@ import PropTypes from 'prop-types';
 // Local Imports
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
-import AdminService from 'services/admin.services';
 import { TbStatusChange } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
+import AffiliateService from 'services/affiliate.services';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const { hasPermission } = usePermissions();
+  const [chnageStatusModalOpen, setChangeStatusModalOpen] = useState(false);
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
-  const [deleteSuccess, setDeleteSuccess] = useState(false);
-  const [deleteError, setDeleteError] = useState(false);
+  const [changeStatusSuccess, setChangeStatusSuccess] = useState(false);
+  const [changeStatusError, setChangeStatusError] = useState(false);
   const navigate = useNavigate();
 
   const confirmMessages = {
     pending: {
-      description: t('admin_status_desc'),
+      description: t('affiliate_status_desc'),
       actionText: t('submit')
     },
     success: {
-      title: t('admin') + ' ' + t('status') + ' ' + t('changed'),
-      description: t('admin_status_suceess')
+      title: t('affiliate') + ' ' + t('status') + ' ' + t('changed'),
+      description: t('affiliate_status_suceess')
     }
   };
 
   const closeModal = () => {
-    setDeleteModalOpen(false);
+    setChangeStatusModalOpen(false);
   };
 
   const handleClickView = () => {
-    navigate(`/admin/${row.original.adminUID}/tab/details`);
+    navigate(`/affiliate/${row.original.affiliateUID}/tab/details`);
   };
 
   const openModal = () => {
-    setDeleteModalOpen(true);
-    setDeleteError(false);
-    setDeleteSuccess(false);
+    setChangeStatusModalOpen(true);
+    setChangeStatusError(false);
+    setChangeStatusSuccess(false);
   };
 
-  const handleDeleteRows = useCallback(async () => {
+  const handleChangeStatus = useCallback(async () => {
     setConfirmDeleteLoading(true);
-    const result = await AdminService.changeAdminStatus(row.original.adminUID);
+    const result = await AffiliateService.AffiliateStatus(row.original.affiliateUID);
     if (result.status === 200) {
-      table.options.meta?.deleteRow(row);
-      setDeleteSuccess(true);
+      table.options.meta?.changeStatus(row);
+      setChangeStatusSuccess(true);
     } else {
-      setDeleteError(true);
+      setChangeStatusError(true);
     }
 
     setConfirmDeleteLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [row]);
 
-  const state = deleteError ? 'error' : deleteSuccess ? 'success' : 'pending';
+  const state = changeStatusError ? 'error' : changeStatusSuccess ? 'success' : 'pending';
 
   return (
     <>
@@ -80,6 +83,21 @@ export function RowActions({ row, table }) {
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
               className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
+              {hasPermission(PERMISSIONS.AFFILIATES.LIST) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                        focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                      )}
+                      onClick={handleClickView}>
+                      <EyeIcon className="size-4.5 stroke-1" />
+                      <span>{t('view')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
               <MenuItem>
                 {({ focus }) => (
                   <button
@@ -87,48 +105,37 @@ export function RowActions({ row, table }) {
                       'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
                       focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
                     )}
-                    onClick={handleClickView}>
-                    <EyeIcon className="size-4.5 stroke-1" />
-                    <span>{t('view')}</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
-                      focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
-                    )}
-                    onClick={() => navigate(`/admin/${row.original.adminUID}/edit`)}>
+                    onClick={() => navigate(`/affiliate/${row.original.affiliateUID}/edit`)}>
                     <PencilIcon className="size-4.5 stroke-1" />
                     <span>{t('edit')}</span>
                   </button>
                 )}
               </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    onClick={openModal}
-                    className={clsx(
-                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
-                      focus && 'bg-this/10 dark:bg-this-light/10'
-                    )}>
-                    <TbStatusChange className="size-4.5 stroke-1" />
-                    <span>{t('change') + ' ' + t('status')}</span>
-                  </button>
-                )}
-              </MenuItem>
+              {hasPermission(PERMISSIONS.AFFILIATES.CHANGE_STATUS) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={openModal}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                        focus && 'bg-this/10 dark:bg-this-light/10'
+                      )}>
+                      <TbStatusChange className="size-4.5 stroke-1" />
+                      <span>{t('change') + ' ' + t('status')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
             </MenuItems>
           </Transition>
         </Menu>
       </div>
 
       <ConfirmModal
-        show={deleteModalOpen}
+        show={chnageStatusModalOpen}
         onClose={closeModal}
         messages={confirmMessages}
-        onOk={handleDeleteRows}
+        onOk={handleChangeStatus}
         confirmLoading={confirmDeleteLoading}
         state={state}
       />

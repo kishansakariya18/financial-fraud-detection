@@ -10,6 +10,7 @@ import countryRoutes from './routes/country.route';
 import reportsRoutes from './routes/betSlip.route';
 import paymentRoute from './routes/payment.route';
 import userKycRoute from './routes/user-kyc.routes';
+import affiliateRoutes from './routes/affiliate.route';
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +30,8 @@ const protectedRoutes = {
         ...countryRoutes,
         ...reportsRoutes,
         ...paymentRoute,
-        ...userKycRoute
+        ...userKycRoute,
+        ...affiliateRoutes
       ]
     }
   ]
