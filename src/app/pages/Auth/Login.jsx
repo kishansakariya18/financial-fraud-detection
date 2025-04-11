@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AuthAction } from 'store/admin-slice/AuthSlice';
 import { LOCAL_STORAGE } from 'constants/app.constant';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
@@ -40,6 +41,7 @@ export default function Login() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const [validateResponse, setValidateResponse] = useState(null);
   const [validateMessage, setValidateMessage] = useState(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -190,7 +192,7 @@ export default function Login() {
             <Logo className="mx-auto size-16" />
             <div className="mt-4">
               <h2 className="text-2xl font-semibold text-gray-600 dark:text-dark-100">
-                Welcome Back
+                {t('welcome_back')}
               </h2>
               <p className="text-gray-400 dark:text-dark-300">Please sign in to continue</p>
             </div>
@@ -199,8 +201,8 @@ export default function Login() {
             <form onSubmit={handleSubmit(submitHandler)} autoComplete="off">
               <div className="space-y-4">
                 <Input
-                  label="Mobile"
-                  placeholder="Enter Mobile"
+                  label={t('mobile')}
+                  placeholder={t('enter') + ' ' + t('mobile')}
                   prefix={
                     <EnvelopeIcon
                       className="size-5 transition-colors duration-200"
@@ -211,8 +213,8 @@ export default function Login() {
                   error={errors?.mobile?.message}
                 />
                 <Input
-                  label="Password"
-                  placeholder="Enter Password"
+                  label={t('password')}
+                  placeholder={t('enter') + ' ' + t('password')}
                   type="password"
                   prefix={
                     <LockClosedIcon
@@ -230,12 +232,12 @@ export default function Login() {
                 <a
                   href="/forgot-password"
                   className="text-xs text-gray-400 transition-colors hover:text-gray-800 focus:text-gray-800 dark:text-dark-300 dark:hover:text-dark-100 dark:focus:text-dark-100">
-                  Forgot Password?
+                  {t('forgot') + ' ' + t('password')} ?
                 </a>
               </div>
 
               <Button type="submit" className="mt-5 w-full" color="primary" disabled={isLoading}>
-                Sign In
+                {t('signIn')}
               </Button>
             </form>
           </Card>

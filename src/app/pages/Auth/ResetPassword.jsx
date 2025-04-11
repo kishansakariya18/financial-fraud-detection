@@ -14,6 +14,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'sonner';
 import { getQueryParams } from 'utils/custom.utilities';
+import { useTranslation } from 'react-i18next';
 
 export default function ResetPassword() {
   const {
@@ -34,7 +35,7 @@ export default function ResetPassword() {
   const [error, setError] = useState(null);
   const [response, setResponse] = useState(null);
   const navigate = useNavigate();
-  //   const { t } = useTranslation();
+  const { t } = useTranslation();
   const { state } = useLocation();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -138,9 +139,9 @@ export default function ResetPassword() {
             <Logo className="mx-auto size-16" />
             <div className="mt-4">
               <h2 className="text-2xl font-semibold text-gray-600 dark:text-dark-100">
-                Welcome Back
+                {t('welcome_back')}
               </h2>
-              <p className="text-gray-400 dark:text-dark-300">Reset Your Password To Continue</p>
+              <p className="text-gray-400 dark:text-dark-300">{t('reset_to_continue')}</p>
             </div>
           </div>
           <Card className="mt-5 rounded-lg p-5 lg:p-7">
@@ -148,7 +149,7 @@ export default function ResetPassword() {
               <div className="space-y-4">
                 <Input
                   label="OTP"
-                  placeholder="Enter OTP"
+                  placeholder={t('enter') + ' ' + t('otp')}
                   prefix={
                     <EnvelopeIcon
                       className="size-5 transition-colors duration-200"
@@ -159,8 +160,8 @@ export default function ResetPassword() {
                   error={errors?.otp?.message}
                 />
                 <Input
-                  label="New Password"
-                  placeholder="Enter New Password"
+                  label={t('new') + ' ' + t('password')}
+                  placeholder={t('enter') + ' ' + t('new') + ' ' + t('password')}
                   type="password"
                   prefix={
                     <LockClosedIcon
@@ -172,8 +173,8 @@ export default function ResetPassword() {
                   error={errors?.password?.message}
                 />
                 <Input
-                  label="Confirm Password"
-                  placeholder="Enter Confirm Password"
+                  label={t('confirm') + ' ' + t('password')}
+                  placeholder={t('enter') + ' ' + t('confirm') + ' ' + t('password')}
                   type="password"
                   prefix={
                     <LockClosedIcon
@@ -192,17 +193,17 @@ export default function ResetPassword() {
                     href="##"
                     onClick={handleResendOtp}
                     className="text-xs text-gray-400 transition-colors hover:text-gray-800 focus:text-gray-800 dark:text-dark-300 dark:hover:text-dark-100 dark:focus:text-dark-100">
-                    {'Resend OTP?'}
+                    {t('resend') + ' ' + t('otp') + '?'}
                   </a>
                 </div>
               ) : (
                 <div className="mt-4 flex items-center justify-between space-x-2">
-                  {`Resend OTP In ${seconds} Seconds`}
+                  {`${t('resend') + ' ' + t('otp')} In ${seconds} Seconds`}
                 </div>
               )}
 
               <Button type="submit" className="mt-5 w-full" color="primary" disabled={isLoading}>
-                Verify OTP
+                {t('verify') + ' ' + t('otp')}
               </Button>
             </form>
           </Card>

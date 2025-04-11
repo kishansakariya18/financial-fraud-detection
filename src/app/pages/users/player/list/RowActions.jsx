@@ -15,17 +15,6 @@ import PlayerService from 'services/player.services';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
 
-const confirmMessages = {
-  pending: {
-    description: 'Are you sure you want to change Status of the Player?',
-    actionText: 'Submit'
-  },
-  success: {
-    title: 'Player Status Changed',
-    description: 'Player Status has been changed successfully'
-  }
-};
-
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
   const { hasPermission } = usePermissions();
@@ -34,6 +23,17 @@ export function RowActions({ row, table }) {
   const [changeStatusSuccess, setChangeStatusSuccess] = useState(false);
   const [changeStatusError, setChangeStatusError] = useState(false);
   const navigate = useNavigate();
+
+  const confirmMessages = {
+    pending: {
+      description: t('player_status_desc'),
+      actionText: t('submit')
+    },
+    success: {
+      title: t('player') + ' ' + t('status') + ' ' + t('changed'),
+      description: t('player_status_suceess')
+    }
+  };
 
   const closeModal = () => {
     setChangeStatusModalOpen(false);
