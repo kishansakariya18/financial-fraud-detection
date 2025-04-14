@@ -72,10 +72,10 @@ export const getBatdgeForType = (type) => {
       return type;
     case 'loss':
       return type;
-    case 'neutral':
+    case 'not-decided':
       return type;
     default:
-      return 'Not decided';
+      return 'not-decided';
   }
 };
 export const getBadgeForPlatform = (type) => {
@@ -84,10 +84,10 @@ export const getBadgeForPlatform = (type) => {
       return 'loss';
     case 'loss':
       return 'profit';
-    case 'neutral':
+    case 'not-decided':
       return type;
     default:
-      return 'Not decided';
+      return 'not-decided';
   }
 };
 export const amountColorBasedOnType = (amount, type) => {
@@ -138,7 +138,7 @@ export const typeOptions = [
     icon: CheckBadgeIcon
   },
   {
-    value: 'neutral',
+    value: 'not-decided',
     label: 'Neutral',
     color: 'warning',
     icon: CheckBadgeIcon

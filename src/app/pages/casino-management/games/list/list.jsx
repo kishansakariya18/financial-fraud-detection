@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
 
 // Local Imports - UI,Services,Helper,Utils
-import { ProviderFilters } from './providerFilters';
+import { ProviderFilters } from './gamesFilters';
 import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
@@ -13,19 +13,19 @@ import { responseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
-import ProviderService from 'services/provider.services';
+import GamesService from 'services/games.services';
 
-export default function Provider() {
+export default function Games() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('casino_provider');
+  const pageTitle = t('casino_games');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const fetchProvider = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
-    const result = await ProviderService.getProviderList({
+    const result = await GamesService.getGamesList({
       pagination: { pageIndex, pageSize },
       filters: queryParams
     });

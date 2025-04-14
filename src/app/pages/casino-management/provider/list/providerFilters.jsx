@@ -13,13 +13,13 @@ import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
-import { stageOptions, typeOptions } from '../helper';
-import { useSearchParams } from 'react-router';
-import { ExportCSV } from 'components/custom/export';
+import { statusOptions } from '../helper';
+// import { useSearchParams } from 'react-router';
+// import { CreateCategory } from '../CreateCategory';
 
 // ----------------------------------------------------------------------
 
-export function BetSlipFilters({
+export function ProviderFilters({
   table,
   onApplyFilters = () => {},
   onClearFilters = () => {},
@@ -27,7 +27,7 @@ export function BetSlipFilters({
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
-  const [searchParams] = useSearchParams();
+  // const [searchParams] = useSearchParams();
   // console.log('table.getState().columnFilters: inside', Object.fromEntries([...searchParams]));
 
   return (
@@ -42,7 +42,7 @@ export function BetSlipFilters({
             {pageTitle}
           </h2>
         </div>
-        <ExportCSV filters={Object.fromEntries([...searchParams])} />
+        {/* <CreateCategory tableFetch={table.options.meta?.fetchNewList(false)} /> */}
       </div>
       {isXs ? (
         <>
@@ -96,14 +96,14 @@ export function BetSlipFilters({
 function SearchInput({ table }) {
   return (
     <Input
-      value={table?.getColumn('username')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('username').setFilterValue(e.target.value)}
+      value={table?.getColumn('name')?.getFilterValue() || ''}
+      onChange={(e) => table.getColumn('name').setFilterValue(e.target.value)}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
         root: 'shrink-0'
       }}
-      placeholder="Search Username . . ."
+      placeholder="Search Name . . ."
     />
   );
 }
@@ -112,21 +112,11 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>
-      {table.getColumn('stage') && (
+      {table.getColumn('status') && (
         <FacedtedFilter
-          options={stageOptions}
-          column={table.getColumn('stage')}
-          title="Stage"
-          Icon={MapPinIcon}
-          isMultiple={false}
-          showCheckbox={false}
-        />
-      )}
-      {table.getColumn('type') && (
-        <FacedtedFilter
-          options={typeOptions}
-          column={table.getColumn('type')}
-          title="User's Type"
+          options={statusOptions}
+          column={table.getColumn('status')}
+          title="Status"
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}
@@ -156,7 +146,7 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
   );
 }
 
-BetSlipFilters.propTypes = {
+ProviderFilters.propTypes = {
   table: PropTypes.object
 };
 

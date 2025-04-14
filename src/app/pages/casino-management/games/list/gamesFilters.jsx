@@ -14,12 +14,12 @@ import { t } from 'i18next';
 import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { statusOptions } from '../helper';
-import { useSearchParams } from 'react-router';
-import { CreateCategory } from '../CreateCategory';
+// import { useSearchParams } from 'react-router';
+// import { CreateCategory } from '../CreateCategory';
 
 // ----------------------------------------------------------------------
 
-export function CategoryFilters({
+export function ProviderFilters({
   table,
   onApplyFilters = () => {},
   onClearFilters = () => {},
@@ -27,8 +27,8 @@ export function CategoryFilters({
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
-  const [searchParams] = useSearchParams();
-  console.log('table.getState().columnFilters: inside', Object.fromEntries([...searchParams]));
+  // const [searchParams] = useSearchParams();
+  // console.log('table.getState().columnFilters: inside', Object.fromEntries([...searchParams]));
 
   return (
     <div className="table-toolbar">
@@ -42,7 +42,7 @@ export function CategoryFilters({
             {pageTitle}
           </h2>
         </div>
-        <CreateCategory tableFetch={table.options.meta?.fetchNewList(false)} />
+        {/* <CreateCategory tableFetch={table.options.meta?.fetchNewList(false)} /> */}
       </div>
       {isXs ? (
         <>
@@ -146,7 +146,7 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
   );
 }
 
-CategoryFilters.propTypes = {
+ProviderFilters.propTypes = {
   table: PropTypes.object
 };
 

@@ -1,5 +1,10 @@
 // Import Dependencies
-import { CircleStackIcon, QueueListIcon } from '@heroicons/react/24/outline';
+import {
+  CircleStackIcon,
+  PuzzlePieceIcon,
+  UserPlusIcon,
+  ViewColumnsIcon
+} from '@heroicons/react/24/outline';
 
 // Local Imports
 // import SettingIcon from 'assets/dualicons/setting.svg?react';
@@ -19,8 +24,26 @@ export const casinoManagement = {
       path: '/casino/category/list',
       title: 'Category List',
       transKey: 'casino_category',
-      Icon: QueueListIcon,
+      Icon: ViewColumnsIcon,
       permission: PERMISSIONS.CATEGORY.VIEW
+    },
+    {
+      id: 'casino_provider',
+      type: NAV_TYPE_ITEM,
+      path: '/casino/provider/list',
+      title: 'Provider List',
+      transKey: 'casino_provider',
+      Icon: UserPlusIcon,
+      permission: PERMISSIONS.PROVIDER.VIEW
+    },
+    {
+      id: 'casino_games',
+      type: NAV_TYPE_ITEM,
+      path: '/casino/games/list',
+      title: 'Games List',
+      transKey: 'casino_games',
+      Icon: PuzzlePieceIcon,
+      permission: PERMISSIONS.PROVIDER.VIEW
     }
   ]
 };
