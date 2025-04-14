@@ -10,7 +10,7 @@ export const responseMapper = (apiData) => {
     id: data.ID,
     name: data.Name,
     status: parseAdminStatusToApp(data.Status),
-    createdAt: getDateInUTCToTimeZone(data.updatedAt),
+    createdAt: getDateInUTCToTimeZone(data.DateCreated),
     updatedAt: getDateInUTCToTimeZone(data.DateModified)
   }));
   return resultData;

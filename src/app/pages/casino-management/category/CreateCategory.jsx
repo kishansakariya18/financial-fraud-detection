@@ -10,7 +10,7 @@ import CategoryService from 'services/category.services';
 import { toast } from 'sonner';
 import { validateSchema } from './validate';
 
-export function CreateCategory() {
+export function CreateCategory({ tableFetch }) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
@@ -42,6 +42,7 @@ export function CreateCategory() {
   };
   if (!loading && !error && response) {
     toast.success(response.message);
+    tableFetch(false);
     handleState(false);
     setResponse(null);
   }

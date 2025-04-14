@@ -1,5 +1,6 @@
 import { parseCategoryStatusToApi } from 'app/pages/casino-management/category/helper';
 import apiConfig from 'configs/api.config';
+import { getEndDate, getStartDate } from 'helpers/functions';
 import { sendRequest } from 'utils/axios';
 import { replaceText } from 'utils/custom.utilities';
 
@@ -18,8 +19,8 @@ const CategoryService = {
       const apiRequestParams = {
         status: status ? parseCategoryStatusToApi(status) : undefined,
         keyword: keyword || undefined,
-        startDate: startDate || undefined,
-        endDate: endDate || undefined
+        startDate: startDate ? getStartDate(startDate) : undefined,
+        endDate: endDate ? getEndDate(endDate) : undefined
       };
 
       const response = await sendRequest({

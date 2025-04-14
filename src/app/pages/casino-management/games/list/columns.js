@@ -6,8 +6,6 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { IdCell, BoldCell, BadgeCell, DateCell } from '../../../../../components/custom/table/cell';
 import { statusOptions } from '../helper';
 
-// ----------------------------------------------------------------------
-
 const columnHelper = createColumnHelper();
 
 export const columns = [
@@ -22,6 +20,34 @@ export const columns = [
     id: 'name',
     label: 'Name',
     header: 'Name',
+    cell: BoldCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.provider, {
+    id: 'provider',
+    label: 'Provider',
+    header: 'Provider',
+    cell: BoldCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.aggregatorCategory, {
+    id: 'aggregatorCategory',
+    label: 'Aggregator Category',
+    header: 'Aggregator Category',
+    cell: BoldCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.minBetAmount, {
+    id: 'minBetAmount',
+    label: 'MinBet Amount',
+    header: 'MinBet Amount',
+    cell: BoldCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.maxBetAmount, {
+    id: 'maxBetAmount',
+    label: 'MaxBet Amount',
+    header: 'MaxBet Amount',
     cell: BoldCell,
     enableSorting: false
   }),
@@ -50,6 +76,7 @@ export const columns = [
     filterFn: 'inNumberRange',
     enableSorting: false
   })
+
   // columnHelper.display({
   //   id: 'actions',
   //   label: 'Row Actions',

@@ -25,6 +25,10 @@ export const responseMapper = (apiData) => {
   return apiData.map((item) => ({
     id: item.ID,
     name: item.Name,
+    minBetAmount: item.MinBetAmount || '-',
+    maxBetAmount: item.MaxBetAmount || '-',
+    provider: item?.provider?.Name || '-',
+    aggregatorCategory: item?.aggregatorCategory?.Name || '-',
     status: parseProviderStatusToApp(item.Status),
     createdAt: getDateInUTCToTimeZone(item.DateCreated),
     updatedAt: getDateInUTCToTimeZone(item.DateModified)
