@@ -160,5 +160,9 @@
   "signup": "Sign Up",
   "playerLoss": "Player Loss",
   "per": "Per",
-  "setting": "Setting"
+  "setting": "Setting",
+  "total": "Total",
+  "payout": "Payout",
+  "approve": "Approve",
+  "confirmation": "Confirmation"
 }

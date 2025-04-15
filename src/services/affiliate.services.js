@@ -1,8 +1,13 @@
-import { affiliateStatusToApi } from 'app/pages/affiliate/helper';
+import {
+  affiliateStatusToApi,
+  affiliateTransactionToAPI,
+  parsePayoutStatusToAPI
+} from 'app/pages/affiliate/helper';
+import { transactionTypeAppToApi } from 'app/pages/users/player/helper';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
 import { sendRequest } from 'utils/axios';
-import { ConvertDateIntoUTC, replaceText } from 'utils/custom.utilities';
+import { replaceText } from 'utils/custom.utilities';
 
 const AffiliateService = {
   getAffiliateList: async (data) => {
@@ -165,15 +170,24 @@ const AffiliateService = {
       console.log('Error', err);
     }
   },
-  UserJoinedList: async (state) => {
+  playerJoinedList: async (data) => {
     try {
+      const { pagination, filters, affiliateUID } = data;
       const body = {
-        affiliateID: state.affiliateID,
-        filters: state.filters
+        affiliateUID: affiliateUID,
+        filters: {
+          keyword: filters.keyword ? filters.keyword : undefined,
+          startDate: filters.startDate
+            ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
+            : undefined,
+          endDate: filters.endDate
+            ? dayjs(+filters.endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
+            : undefined
+        }
       };
       const reqQuery = {
-        page: state.currentPage,
-        perPage: state.perPage
+        page: pagination.pageIndex + 1,
+        perPage: pagination.pageSize
       };
       const endPoint = apiConfig.endPoints.AFFILIATE.USER_JOINED_LIST;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
@@ -191,15 +205,27 @@ const AffiliateService = {
       console.log('Error from UserJoinedList', error);
     }
   },
-  affiliateTransactionList: async (state) => {
+  affiliateTransactionList: async (data) => {
     try {
+      const { pagination, filters, affiliateUID } = data;
       const body = {
-        affiliateID: state.affiliateID,
-        filters: state.filters
+        affiliateUID,
+        filters: {
+          keyword: filters.keyword ? filters.keyword : undefined,
+          type: filters.transactionType
+            ? affiliateTransactionToAPI(filters.transactionType)
+            : undefined,
+          startDate: filters.startDate
+            ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
+            : undefined,
+          endDate: filters.endDate
+            ? dayjs(+filters.endDate).format('YYYY-MM-DD HH:mm:ss')
+            : undefined
+        }
       };
       const reqQuery = {
-        page: state.currentPage,
-        perPage: state.perPage
+        page: pagination.pageIndex + 1,
+        perPage: pagination.pageSize
       };
       const endPoint = apiConfig.endPoints.AFFILIATE.TRANSACTION_LIST;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
@@ -217,16 +243,25 @@ const AffiliateService = {
       console.log('Error from affiliateTransactionList: ', error);
     }
   },
-  getPayoutHistory: async (state, affiliateId) => {
+  getPayoutHistory: async (data) => {
     try {
-      const filters = {
-        // status: parsePayoutStatusToAPI(state.filters?.status), //TODO make sure to enable and define function
-        startDate: ConvertDateIntoUTC(state.filters?.startDate),
-        endDate: ConvertDateIntoUTC(state.filters?.endDate)
+      const { affiliateUID, filters, pagination } = data;
+
+      const apiBody = {
+        affiliateUID,
+        filters: {
+          status: filters.status ? parsePayoutStatusToAPI(filters?.status) : undefined,
+          startDate: filters.startDate
+            ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
+            : undefined,
+          endDate: filters.endDate
+            ? dayjs(+filters.endDate).format('YYYY-MM-DD HH:mm:ss')
+            : undefined
+        }
       };
       const reqQuery = {
-        page: state.currentPage,
-        perPage: state.perPage
+        page: pagination.pageIndex + 1,
+        perPage: pagination.pageSize
       };
 
       const response = await sendRequest({
@@ -235,7 +270,7 @@ const AffiliateService = {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: { affiliateId: affiliateId, filters },
+        body: apiBody,
         params: reqQuery
       });
 
@@ -247,9 +282,9 @@ const AffiliateService = {
   updatePayoutRequest: async (data) => {
     try {
       const bodyData = {
-        affiliateId: data.affiliateId,
+        affiliateUID: data.affiliateUID,
         payoutRequestId: data.payoutRequestId,
-        status: data.status,
+        status: parsePayoutStatusToAPI(data.status),
         rejectReason: data.rejectReason ? data.rejectReason.trim() : ''
       };
 
@@ -267,12 +302,12 @@ const AffiliateService = {
       console.log('err: ', error);
     }
   },
-  affiliateFund: async (reqBody) => {
+  manageAffiliateFund: async (reqBody) => {
     try {
       const reqData = {
         amount: reqBody.amount,
-        affiliateID: reqBody.affiliateID,
-        type: reqBody.transactionType,
+        affiliateUID: reqBody.affiliateUID,
+        type: transactionTypeAppToApi(reqBody.type),
         fundMessage: reqBody.fundMessage,
         password: reqBody.password
       };
@@ -291,16 +326,17 @@ const AffiliateService = {
       console.log('Error from affiliateFund', error);
     }
   },
-  getAffiliateLoginHistory: async (reqBody) => {
+  getAffiliateLoginHistory: async (data) => {
     try {
+      const { pagination, affiliateUID } = data;
       const query = {
-        page: +reqBody.currentPage,
-        perPage: +reqBody.perPage
+        page: pagination.pageIndex + 1,
+        perPage: pagination.pageSize
       };
       const endPoint = replaceText(
         apiConfig.endPoints.AFFILIATE.AFFILIATE_LOGIN_HISTORY,
         ':affiliateID',
-        reqBody.affiliateID
+        affiliateUID
       );
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({

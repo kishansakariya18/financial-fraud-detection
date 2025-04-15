@@ -15,7 +15,7 @@ export function ViewDetails({ transactionId, onClose }) {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState('');
   const [error, setError] = useState('');
-  const pageTitle = t('player') + ' ' + t('details');
+  const pageTitle = t('transaction') + ' ' + t('details');
 
   const fetchPlayerDetails = useCallback(async () => {
     setLoading(true);

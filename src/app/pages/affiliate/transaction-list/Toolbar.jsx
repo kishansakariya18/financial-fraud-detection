@@ -1,5 +1,5 @@
 // Import Dependencies
-import { MagnifyingGlassIcon, MapPinIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
@@ -10,8 +10,7 @@ import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
-import { affiliateStatusOptions } from '../helper';
-import { useNavigate } from 'react-router';
+import { affiliateTransactionTypeOption } from '../helper';
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +21,6 @@ export function Toolbar({
   onClearFilters = () => {}
 }) {
   const { isXs } = useBreakpointsContext();
-  const navigate = useNavigate();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
   return (
@@ -32,19 +30,11 @@ export function Toolbar({
           'transition-content flex items-center justify-between gap-4',
           isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x] pt-4'
         )}>
-        <div className="min-w-0">
+        <div className="min-w-2">
           <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
             {pageTitle}
           </h2>
         </div>
-
-        <Button
-          className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
-          color="primary"
-          onClick={() => navigate('/affiliate/create')}>
-          <PlusIcon className="size-5" />
-          <span>{t('create') + ' ' + t('affiliate')}</span>
-        </Button>
       </div>
 
       {isXs ? (
@@ -113,11 +103,11 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>
-      {table.getColumn('status') && (
+      {table.getColumn('transactionType') && (
         <FacedtedFilter
-          options={affiliateStatusOptions}
-          column={table.getColumn('status')}
-          title={t('status')}
+          options={affiliateTransactionTypeOption}
+          column={table.getColumn('transactionType')}
+          title={t('transaction') + ' ' + t('type')}
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}

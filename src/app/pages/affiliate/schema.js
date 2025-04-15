@@ -120,3 +120,13 @@ export const editAffiliateSchema = Yup.object().shape({
       otherwise: (schema) => schema.notRequired()
     })
 });
+
+export const manageFundSchema = Yup.object().shape({
+  // Personal Information
+  amount: Yup.number('Amount Must Be number')
+    .transform((val) => (isNaN(val) ? null : val))
+    .required('Amount Required')
+    .positive('Amount Must Be Positive'),
+  fundMessage: Yup.string().trim().required('Fund Message Required'),
+  type: Yup.string().trim().required('Type Required')
+});
