@@ -1,5 +1,5 @@
 // Import Dependencies
-import { UserPlusIcon } from '@heroicons/react/24/outline';
+import { UsersIcon } from '@heroicons/react/20/solid';
 
 // Local Imports
 import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
@@ -10,6 +10,6 @@ export const affliate = {
   path: '/affiliate',
   title: 'Affiliates',
   transKey: 'affiliates',
-  Icon: UserPlusIcon,
+  Icon: UsersIcon,
   permission: PERMISSIONS.AFFILIATES.LIST
 };

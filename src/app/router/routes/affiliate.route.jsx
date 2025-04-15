@@ -21,7 +21,7 @@ export const affiliateRoutes = [
   {
     path: 'affiliate/:affiliateId/tab',
     lazy: async () => ({
-      Component: (await import('../../pages/affiliate/ViewDetails')).default
+      Component: (await import('../../pages/affiliate/Tabs')).default
     }),
     children: [
       {
@@ -44,27 +44,27 @@ export const affiliateRoutes = [
         }
       },
       {
-        path: 'limits',
+        path: 'player-list',
         lazy: async () => {
-          const { default: PlayerLimit } = await import('../../pages/users/player/PlayerLimit');
+          const { default: PlayerList } = await import('../../pages/affiliate/player-list/list');
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.USER.USER_LEVEL_LIMITS}>
-                <PlayerLimit />
+              <PrivateRoute permission={PERMISSIONS.AFFILIATES.USER_SIGNUP_LIST}>
+                <PlayerList />
               </PrivateRoute>
             )
           };
         }
       },
       {
-        path: 'transactions',
+        path: 'transaction-list',
         lazy: async () => {
           const { default: TransactionList } = await import(
-            '../../pages/users/player/transaction-list/list'
+            '../../pages/affiliate/transaction-list/list'
           );
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.USER.TRANSACTION}>
+              <PrivateRoute permission={PERMISSIONS.AFFILIATES.TRANSACTIONS}>
                 <TransactionList />
               </PrivateRoute>
             )
@@ -75,12 +75,27 @@ export const affiliateRoutes = [
         path: 'login-history',
         lazy: async () => {
           const { default: LoginHistory } = await import(
-            '../../pages/users/player/login-history/list'
+            '../../pages/affiliate/login-history/list'
           );
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.USER.VIEW_LOGIN_HISTORY}>
+              <PrivateRoute permission={PERMISSIONS.AFFILIATES.VIEW_LOGIN_HISTORY}>
                 <LoginHistory />
+              </PrivateRoute>
+            )
+          };
+        }
+      },
+      {
+        path: 'payout-history',
+        lazy: async () => {
+          const { default: PayoutHistory } = await import(
+            '../../pages/affiliate/payout-history/list'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.AFFILIATES.PAYOUT}>
+                <PayoutHistory />
               </PrivateRoute>
             )
           };
@@ -89,26 +104,11 @@ export const affiliateRoutes = [
       {
         path: 'manage-fund',
         lazy: async () => {
-          const { default: ManageFund } = await import('../../pages/users/player/ManageFund');
+          const { default: ManageFund } = await import('../../pages/affiliate/ManageFund');
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.USER.ADD_MONEY}>
+              <PrivateRoute permission={PERMISSIONS.AFFILIATES.ADD_MONEY}>
                 <ManageFund />
-              </PrivateRoute>
-            )
-          };
-        }
-      },
-      {
-        path: 'player-notes',
-        lazy: async () => {
-          const { default: PlayerNoteList } = await import(
-            '../../pages/users/player/player-notes/list'
-          );
-          return {
-            Component: () => (
-              <PrivateRoute permission={PERMISSIONS.USER.COMMENT_VIEW}>
-                <PlayerNoteList />
               </PrivateRoute>
             )
           };

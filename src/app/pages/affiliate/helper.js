@@ -1,6 +1,8 @@
 import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 import { HiXCircle } from 'react-icons/hi';
+import { playerStatusToApp, transactionStatusToAPP } from '../users/player/helper';
+import { PAYOUT_STATUS, TRANSACTION } from 'constants/app.constant';
 
 export const affiliateListResponseMapper = (apiData) => {
   const list = apiData.map((item) => {
@@ -22,8 +24,9 @@ export const affiliateListResponseMapper = (apiData) => {
   return { totalPage, totalRecords, list };
 };
 
-export const userListResponseMapper = (apiData) => {
-  const list = apiData.data.map((item) => {
+export const playerListResponseMapper = (apiData) => {
+  console.log('apiData', apiData);
+  const list = apiData.map((item) => {
     return {
       userID: item.UserID,
       userUID: item.UserUID,
@@ -40,10 +43,10 @@ export const userListResponseMapper = (apiData) => {
       coin: item.Coin,
       cryptoDeposit: item.CryptoDeposit,
       cryptoWinning: item.CryptoWinning,
-      status: affiliateStatusToApp(item.Status),
-      dateCreated: getDateInUTCToTimeZone(item.DateCreated),
+      status: playerStatusToApp(item.Status),
+      createdAt: item.DateCreated ? getDateInUTCToTimeZone(item.DateCreated) : '-',
       lastLoginAt: item.LastLoginAt ? getDateInUTCToTimeZone(item.LastLoginAt) : '-',
-      isBankVerified: item.IsBankVerified
+      isBankVerified: item.IsBankVerified ? 'Yes' : 'No'
     };
   });
   const totalPage = apiData.totalPages;
@@ -54,14 +57,18 @@ export const userListResponseMapper = (apiData) => {
 export const transactionResponseMapper = (apiData) => {
   const list = apiData.data.map((item) => {
     return {
+      id: item.AffiliateTransactionID,
+      transactionUID: item.AffiliateTransactionUID,
       userName: item?.user?.Username || '-',
       mobile: item?.user?.Mobile || '-',
       email: item?.user?.Email || '-',
       description: transactionTypeToDescription(item?.TransactionType),
+      status: transactionStatusToAPP(item?.Status),
       type: transactionTypeApiToApp(item?.Type),
       amount: item.Amount,
       commission: item.Commission,
-      dateCreated: getDateInUTCToTimeZone(item.DateCreated)
+      transactionType: affiliateTransactionTypeToAPP(item.TransactionType),
+      createdAt: getDateInUTCToTimeZone(item.DateCreated)
     };
   });
   const totalPage = apiData.totalPages;
@@ -79,6 +86,19 @@ export const transactionResponseMapper = (apiData) => {
     affiliateData,
     list
   };
+};
+
+export const loginHistoryResponseMapper = (apiData) => {
+  return apiData.map((data) => {
+    return {
+      id: data.ID,
+      adminId: data.AdminID,
+      ip: data.Ip,
+      userAgent: data.UserAgent,
+      expiredAt: data.ExpiredAt,
+      loginAt: data.DateCreated
+    };
+  });
 };
 
 export const affiliateStatusToApp = (status) => {
@@ -125,17 +145,69 @@ export const affiliateStatusOptions = [
 ];
 
 export const transactionTypeToDescription = (status) => {
-  if (+status === 8) {
-    return 'Signup';
-  } else if (+status === 10) {
-    return 'Deposit';
-  } else if (+status === 11) {
-    return 'User Loss';
-  } else if (+status === 0) {
-    return 'System';
+  if (+status === TRANSACTION.TRANSACTION_TYPE.AFFILIATE_COMMISION_ON_USER_SIGNUP) {
+    return 'signup';
+  } else if (+status === TRANSACTION.TRANSACTION_TYPE.AFFILIATE_COMMISION_ON_USER_DEPOSIT) {
+    return 'deposit';
+  } else if (+status === TRANSACTION.TRANSACTION_TYPE.AFFILIATE_COMMISION_ON_USER_LOSS) {
+    return 'userLoss';
+  } else if (+status === TRANSACTION.TRANSACTION_TYPE.SYSTEM) {
+    return 'system';
+  } else if (+status === TRANSACTION.TRANSACTION_TYPE.AFFILIATE_PAYOUT) {
+    return 'payout';
   }
   return '-';
 };
+
+export const affiliateTransactionTypeToAPP = (type) => {
+  if (+type === TRANSACTION.TRANSACTION_TYPE.AFFILIATE_COMMISION_ON_USER_SIGNUP) {
+    return 'signup';
+  } else if (+type === TRANSACTION.TRANSACTION_TYPE.AFFILIATE_COMMISION_ON_USER_DEPOSIT) {
+    return 'deposit';
+  } else if (+type === TRANSACTION.TRANSACTION_TYPE.AFFILIATE_COMMISION_ON_USER_LOSS) {
+    return 'userLoss';
+  } else if (+type === TRANSACTION.TRANSACTION_TYPE.SYSTEM) {
+    return 'system';
+  } else if (+type === TRANSACTION.TRANSACTION_TYPE.AFFILIATE_PAYOUT) {
+    return 'payout';
+  }
+};
+
+export const affiliateTransactionToAPI = (type) => {
+  switch (type) {
+    case 'signup':
+      return TRANSACTION.TRANSACTION_TYPE.AFFILIATE_COMMISION_ON_USER_SIGNUP;
+    case 'deposit':
+      return TRANSACTION.TRANSACTION_TYPE.AFFILIATE_COMMISION_ON_USER_DEPOSIT;
+    case 'userLoss':
+      return TRANSACTION.TRANSACTION_TYPE.AFFILIATE_COMMISION_ON_USER_LOSS;
+    case 'system':
+      return TRANSACTION.TRANSACTION_TYPE.SYSTEM;
+    case 'payout':
+      return TRANSACTION.TRANSACTION_TYPE.AFFILIATE_PAYOUT;
+    default:
+      return null;
+  }
+};
+
+export const affiliateTransactionTypeOption = [
+  {
+    value: 'signup',
+    label: 'SignUp'
+  },
+  {
+    value: 'deposit',
+    label: 'Deposit'
+  },
+  {
+    value: 'userLoss',
+    label: 'User Loss'
+  },
+  {
+    value: 'system',
+    label: 'System'
+  }
+];
 
 export const payoutHistoryResponseMapper = (data) => {
   return data.map((apiData) => {
@@ -144,21 +216,39 @@ export const payoutHistoryResponseMapper = (data) => {
       amount: apiData.PayoutTransaction.Commission,
       requestedAt: getDateInUTCToTimeZone(apiData.DateCreated),
       updatedAt: getDateInUTCToTimeZone(apiData.DateModified),
-      rejectReason: apiData.RejectReason,
+      rejectReason: apiData.RejectReason || '-',
       status: parsePayoutStatusToApp(apiData.Status),
       transactionStatus: parsePayoutTxnStatusToApp(apiData.PayoutTransaction.Status)
     };
   });
 };
 
+export const payoutStatusOptions = [
+  {
+    value: 'pending',
+    label: 'Pending',
+    color: 'warning'
+  },
+  {
+    value: 'rejected',
+    label: 'Rejected',
+    color: 'error'
+  },
+  {
+    value: 'approved',
+    label: 'Approved',
+    color: 'success'
+  }
+];
+
 export const parsePayoutStatusToAPI = (status) => {
   switch (status) {
     case 'pending':
-      return 0;
+      return PAYOUT_STATUS.PENDING;
     case 'rejected':
-      return 2;
+      return PAYOUT_STATUS.REJECTED;
     case 'approved':
-      return 1;
+      return PAYOUT_STATUS.APPROVED;
     default:
       break;
   }
@@ -166,11 +256,11 @@ export const parsePayoutStatusToAPI = (status) => {
 
 const parsePayoutStatusToApp = (status) => {
   switch (+status) {
-    case 1:
+    case PAYOUT_STATUS.APPROVED:
       return 'approved';
-    case 2:
+    case PAYOUT_STATUS.REJECTED:
       return 'rejected';
-    case 0:
+    case PAYOUT_STATUS.PENDING:
       return 'pending';
     default:
       break;
@@ -188,6 +278,36 @@ const parsePayoutTxnStatusToApp = (status) => {
       break;
   }
 };
+export const parsePayoutTxnStatusToApi = (status) => {
+  switch (status) {
+    case 'success':
+      return 1;
+    case 'failure':
+      return 2;
+    case 'pending':
+      return 0;
+    default:
+      return -1; // or null, depending on how you want to handle invalid input
+  }
+};
+
+export const payoutTxnStatusOptions = [
+  {
+    value: 'pending',
+    label: 'Pending',
+    color: 'warning'
+  },
+  {
+    value: 'failure', // or 'rejected' if you're using that term in your app
+    label: 'Failure',
+    color: 'error'
+  },
+  {
+    value: 'success',
+    label: 'Success',
+    color: 'success'
+  }
+];
 
 // export const getBadgeDesignForApprovalStatus = (status) => {
 //   switch (status) {
@@ -226,9 +346,9 @@ export const affiliateDetailResponseMapper = (data) => {
 
 export const transactionTypeApiToApp = (status) => {
   if (+status === 0) {
-    return 'Credit';
+    return 'credit';
   } else if (+status === 1) {
-    return 'Debit';
+    return 'debit';
   }
 };
 

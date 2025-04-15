@@ -26,7 +26,7 @@ export function ViewDetails() {
   const pageTitle = t('affiliate') + ' ' + t('details');
   const { copied, copy } = useClipboard({ timeout: 2000 });
 
-  const fetchPlayerDetails = async () => {
+  const fetchAffiliateDetails = async () => {
     setLoading(true);
     const result = await AffiliateService.getAffiliateDetail(affiliateId);
 
@@ -40,7 +40,7 @@ export function ViewDetails() {
   };
 
   useEffect(() => {
-    fetchPlayerDetails();
+    fetchAffiliateDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [affiliateId]);
 

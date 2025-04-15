@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
-import { useSearchParams } from 'react-router';
+import { useParams, useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
 
 // Local Imports - UI, Services, Helpers, Utils
@@ -12,32 +12,33 @@ import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
-import { affiliateListResponseMapper } from '../helper';
+import { playerListResponseMapper } from '../helper';
 import AffiliateService from 'services/affiliate.services';
 
-export default function Affiliates() {
+export default function AffiliatePlayers() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('affiliate') + ' ' + t('list');
+  const pageTitle = t('player') + ' ' + t('list');
+  const { affiliateId } = useParams();
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const fetchPlayers = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
-    const result = await AffiliateService.getAffiliateList({
+    const result = await AffiliateService.playerJoinedList({
       pagination: { pageIndex, pageSize },
-      filters: queryParams
+      filters: queryParams,
+      affiliateUID: affiliateId
     });
-    console.log('result: ', result.response);
 
-    const apiData = affiliateListResponseMapper(result.response.data);
+    const apiData = playerListResponseMapper(result.response.data);
 
     if (result.status === 200) {
       return {
         status: 200,
         data: apiData.list,
-        totalRecords: parseInt(result?.response?.totalRecords) || DEFAULT_PER_PAGE_RECORD
+        totalRecords: parseInt(result?.response?.totalRecords)
       };
     }
     return { status: result.status, error: result.error };
@@ -49,7 +50,7 @@ export default function Affiliates() {
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'] },
       tableSettings: { enableFullScreen: false },
       columnVisibility: { firstName: false, lastName: false }
     }
