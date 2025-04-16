@@ -5,7 +5,10 @@ export const createAffiliateSchema = Yup.object().shape({
   firstName: Yup.string().trim().required('First Name Required'),
   lastName: Yup.string().trim().required('Last Name Required'),
   userName: Yup.string().trim().required('User Name Required'),
-  referralCode: Yup.string().trim().required('Referral Code Required'),
+  referralCode: Yup.string()
+    .trim()
+    .required('Referral Code Required')
+    .matches(/^[A-Za-z0-9]{10}$/, 'Must Be 10 Character, and Not Special Charater Allowed'),
   password: Yup.string()
     .trim()
     .required('Password Required')
@@ -69,7 +72,10 @@ export const editAffiliateSchema = Yup.object().shape({
   firstName: Yup.string().trim().required('First Name Required'),
   lastName: Yup.string().trim().required('Last Name Required'),
   userName: Yup.string().trim().required('User Name Required'),
-  referralCode: Yup.string().trim().required('Referral Code Required'),
+  referralCode: Yup.string()
+    .trim()
+    .required('Referral Code Required')
+    .matches(/^[A-Za-z0-9]{10}$/, 'Must Be 10 Character, and Not Special Charater Allowed.'),
   email: Yup.string().trim().required('Email Required').email('Invalid Email'),
   mobile: Yup.string()
     .trim()
