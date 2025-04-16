@@ -1,5 +1,5 @@
 import { getDateInUTCToTimeZone } from 'helpers/functions';
-import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { CheckBadgeIcon, ClockIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { TRANSACTION } from 'constants/app.constant';
 
 export const responseMapper = (apiData) => {
@@ -160,13 +160,13 @@ export const transactionStatusOption = [
     value: 'pending',
     label: 'Pending',
     color: 'warning',
-    icon: CheckBadgeIcon
+    icon: ClockIcon
   },
   {
     value: 'success',
     label: 'Success',
     color: 'success',
-    icon: XCircleIcon
+    icon: CheckBadgeIcon
   },
   {
     value: 'failed',
@@ -245,7 +245,7 @@ export const txnTypeToAPI = (value) => {
     case 'BET SLIP':
       return TRANSACTION.TRANSACTION_TYPE.BETSLIP;
     case 'PROMOCODE_BENEFIT':
-      return TRANSACTION.TRANSACTION_TYPE.PROMOCODE_BENEFIT;
+      return TRANSACTION.TRANSACTION_TYPE.DEPOSIT_PROMO_CODE_BENEFIT;
     default:
       return null;
   }

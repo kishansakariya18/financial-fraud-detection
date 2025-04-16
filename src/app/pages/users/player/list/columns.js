@@ -55,8 +55,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row.realCash, {
     id: 'realCash',
-    header: 'RealCash',
-    label: 'RealCash',
+    header: 'Real Cash',
+    label: 'Real Cash',
     cell: AmountCell,
     enableSorting: false
   }),

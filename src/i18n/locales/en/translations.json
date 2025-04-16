@@ -34,6 +34,7 @@
   "country": "Country",
   "add": "Add",
   "edit": "Edit",
+  "delete": "Delete",
   "roles": "Roles",
   "role": "Role",
   "save": "Save",
@@ -171,5 +172,10 @@
   "total": "Total",
   "payout": "Payout",
   "approve": "Approve",
-  "confirmation": "Confirmation"
+  "confirmation": "Confirmation",
+  "success": "Success",
+  "failed": "Failed",
+  "country_status_desc": "Are you sure you want to update this Country's status ?",
+  "country_status_suceess": "Country Status has been changed successfully",
+  "requested": "Requested"
 }

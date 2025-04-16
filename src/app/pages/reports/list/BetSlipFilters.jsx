@@ -142,16 +142,18 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           }}
         />
       )}
-      {isFiltered && (
-        <div>
-          <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
-            {t('search')}
-          </Button>
-          <Button onClick={onClearFilters} className="ml-1 h-8 whitespace-nowrap px-2.5 text-xs">
-            {t('reset') + ' ' + t('filter')}
-          </Button>
-        </div>
-      )}
+
+      <div>
+        <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
+          {t('search')}
+        </Button>
+        <Button
+          onClick={onClearFilters}
+          className="ml-1 h-8 whitespace-nowrap px-2.5 text-xs"
+          disabled={!isFiltered}>
+          {t('reset') + ' ' + t('filter')}
+        </Button>
+      </div>
     </>
   );
 }

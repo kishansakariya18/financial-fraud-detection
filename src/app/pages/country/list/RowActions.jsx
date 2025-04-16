@@ -13,19 +13,19 @@ import { TbStatusChange } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
 import CountryService from 'services/country.services';
 
-const confirmMessages = {
-  pending: {
-    description: 'Are you sure you want to change Status of the Admin?',
-    actionText: 'Submit'
-  },
-  success: {
-    title: 'Admin Status Changed',
-    description: 'Admin Status has been changed successfully'
-  }
-};
-
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
+
+  const confirmMessages = {
+    pending: {
+      description: t('country_status_desc'),
+      actionText: t('submit')
+    },
+    success: {
+      title: t('country') + ' ' + t('status') + ' ' + t('changed'),
+      description: t('country_status_suceess')
+    }
+  };
   const [statusModalOpen, setStatusModalOpen] = useState(false);
   const [confirmStatusLoading, setConfirmStatusLoading] = useState(false);
   const [statusSuccess, setStatusSuccess] = useState(false);

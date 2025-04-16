@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 // Local Imports
 import { Button, GhostSpinner, Table, TBody, Td, Th, THead, Tr } from 'components/ui';
 import { Page } from 'components/shared/Page';
-import { getDateInUTCToTimeZone } from 'helpers/functions';
+import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
 import PlayerService from 'services/player.services';
 import { useTranslation } from 'react-i18next';
 import { transactionStatusToAPP } from '../helper';
@@ -67,7 +67,10 @@ export function ViewDetails({ transactionId, onClose }) {
             </div>
             <div>
               <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('status')}</p>
-              <p>{response?.Status >= 0 && transactionStatusToAPP(response.Status)}</p>
+              <p>
+                {response?.Status >= 0 &&
+                  capitalizeFirstLetter(transactionStatusToAPP(response.Status))}
+              </p>
             </div>
 
             <div>

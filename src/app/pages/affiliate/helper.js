@@ -202,10 +202,6 @@ export const affiliateTransactionTypeOption = [
   {
     value: 'userLoss',
     label: 'User Loss'
-  },
-  {
-    value: 'system',
-    label: 'System'
   }
 ];
 

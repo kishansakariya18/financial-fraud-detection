@@ -2,9 +2,18 @@ import * as Yup from 'yup';
 
 export const createAdminSchema = Yup.object().shape({
   // Personal Information
-  firstName: Yup.string().trim().required('First Name Required'),
-  lastName: Yup.string().trim().required('Last Name Required'),
-  userName: Yup.string().trim().required('User Name Required'),
+  firstName: Yup.string()
+    .trim()
+    .required('First Name Required')
+    .max(40, 'Maximum 40 Characters Allowed'),
+  lastName: Yup.string()
+    .trim()
+    .required('Last Name Required')
+    .max(40, 'Maximum 40 Characters Allowed'),
+  userName: Yup.string()
+    .trim()
+    .required('User Name Required')
+    .max(40, 'Maximum 40 Characters Allowed'),
   password: Yup.string()
     .trim()
     .required('Password Required')
@@ -24,9 +33,18 @@ export const createAdminSchema = Yup.object().shape({
 });
 export const editAdminSchema = Yup.object().shape({
   // Personal Information
-  firstName: Yup.string().trim().required('First Name Required'),
-  lastName: Yup.string().trim().required('Last Name Required'),
-  userName: Yup.string().trim().required('User Name Required'),
+  firstName: Yup.string()
+    .trim()
+    .required('First Name Required')
+    .max(40, 'Maximum 40 Characters Allowed'),
+  lastName: Yup.string()
+    .trim()
+    .required('Last Name Required')
+    .max(40, 'Maximum 40 Characters Allowed'),
+  userName: Yup.string()
+    .trim()
+    .required('User Name Required')
+    .max(40, 'Maximum 40 Characters Allowed'),
   password: Yup.string()
     .trim()
     .test(

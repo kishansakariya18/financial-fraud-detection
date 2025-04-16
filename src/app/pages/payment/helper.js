@@ -10,6 +10,6 @@ export const paymentOption = [
 
 export const paymentStatusOption = [
   // { label: "Pending", value: 0 },
-  { label: t('success', { ns: 'glossary' }), value: 1 },
-  { label: t('failure', { ns: 'glossary' }), value: 2 }
+  { label: t('success'), value: 1 },
+  { label: t('failed'), value: 2 }
 ];

@@ -27,6 +27,7 @@ export function RowActions({ row, table }) {
   };
 
   const onOkDialogBox = async () => {
+    table.options.meta?.editRow(row);
     setIsDialogOpen(false);
   };
 
@@ -85,7 +86,7 @@ export function RowActions({ row, table }) {
         <UpdatePayout
           transactionId={row.original.id}
           onClose={onCloseDialogBox}
-          onOk={onOpenDialogBox}
+          onOk={onOkDialogBox}
           affiliate={table.getState()?.affiliate}
           row={row}
         />
