@@ -20,3 +20,6 @@ export const showImage = (
     </Link>
   );
 };
+export const getImageURL = (destPath, key) => {
+  return `${apiConfig.baseURL.S3_URL}/${destPath}/${key}`;
+};

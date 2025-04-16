@@ -1,6 +1,6 @@
 // Import Dependencies
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
-import { EllipsisHorizontalIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { EllipsisHorizontalIcon, FlagIcon, PencilIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -11,30 +11,32 @@ import { Button } from 'components/ui';
 
 import { TbEdit, TbStatusChange } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
-import CategoryService from 'services/category.services';
+import ProviderService from 'services/provider.services';
 import { CustomModal } from 'components/custom';
-import { EditCategory } from '../EditCategory';
+import { EditProvider } from '../EditProvider';
+import { useNavigate } from 'react-router';
 
 const confirmMessages = {
   pending: {
-    description: 'Are you sure you want to change Status of the Category?',
+    description: 'Are you sure you want to change Status of the Provider?',
     actionText: 'Submit'
   },
   success: {
-    title: 'Category Status Changed',
-    description: 'Category Status has been changed successfully'
+    title: 'Provider Status Changed',
+    description: 'Provider Status has been changed successfully'
   }
 };
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
+  // console.log('row.origina::', row.original);
 
   const [statusModalOpen, setStatusModalOpen] = useState(false);
   const [confirmStatusLoading, setConfirmStatusLoading] = useState(false);
   const [statusSuccess, setStatusSuccess] = useState(false);
   const [statusError, setStatusError] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
+  const navigate = useNavigate();
   const onOpenDialogBox = () => {
     setIsDialogOpen(true);
   };
@@ -49,16 +51,14 @@ export function RowActions({ row, table }) {
   const closeModal = () => {
     setStatusModalOpen(false);
   };
-
   const openModal = () => {
     setStatusModalOpen(true);
     setStatusError(false);
     setStatusSuccess(false);
   };
-
   const handleChangeStatusRows = useCallback(async () => {
     setConfirmStatusLoading(true);
-    const result = await CategoryService.changeCategoryStatus(row.original.id);
+    const result = await ProviderService.changeProviderStatus(row.original.id);
     if (result.status === 200) {
       console.log('table.options: ', table.options);
 
@@ -114,7 +114,24 @@ export function RowActions({ row, table }) {
                       focus && 'bg-this/10 dark:bg-this-light/10'
                     )}>
                     <TbEdit className="size-4.5 stroke-1" />
-                    <span>{t('Edit') + ' ' + t('casino_category')}</span>
+                    <span>{t('Edit') + ' ' + t('casino_provider')}</span>
+                  </button>
+                )}
+              </MenuItem>
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    className={clsx(
+                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                      focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                    )}
+                    onClick={() =>
+                      navigate(
+                        `/casino/provider/restricted-countries/${row.original.providerUID}/list`
+                      )
+                    }>
+                    <FlagIcon className="size-4.5 stroke-1" />
+                    <span>{t('restricted_country')}</span>
                   </button>
                 )}
               </MenuItem>
@@ -124,8 +141,8 @@ export function RowActions({ row, table }) {
       </div>
       <CustomModal
         show={isDialogOpen}
-        title={t('casino_category') + ' ' + t('details')}
-        btnTitle={t('casino_category') + ' ' + t('details')}
+        title={t('casino_provider') + ' ' + t('details')}
+        btnTitle={t('casino_provider') + ' ' + t('details')}
         icon={<PencilIcon className="size-4.5 stroke-1" />}
         btnClassName={clsx(
           'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
@@ -134,9 +151,10 @@ export function RowActions({ row, table }) {
         onClose={onCloseDialogBox}
         onOpen={onOpenDialogBox}
         onOk={onOkDialogBox}>
-        <EditCategory
-          categoryId={row.original.id}
-          value={row.original.name}
+        <EditProvider
+          providerName={row.original.name}
+          providerId={row.original.id}
+          value={row.original.image}
           closeModal={onOkDialogBox}
         />
       </CustomModal>
