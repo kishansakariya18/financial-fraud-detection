@@ -235,9 +235,7 @@ const CreatePayment = () => {
                 name="betUID"
                 label={t('bet') + ' ' + 'UID'}
                 placeholder={t('enter') + ' ' + t('bet') + ' ' + 'UID'}
-                {...register('betUID', {
-                  required: 'BetUID is required'
-                })}
+                {...register('betUID')}
                 error={errors?.betUID?.message}
               />
             )}

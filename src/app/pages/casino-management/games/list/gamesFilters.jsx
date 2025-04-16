@@ -5,17 +5,21 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 // Local Imports
-import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
+// import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 // import { RangeFilter } from "components/shared/table/RangeFilter";
 import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
+import { DateFilter } from 'components/shared/table/DateFilter';
+import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { statusOptions } from '../helper';
+// import { useSearchParams } from 'react-router';
+// import { CreateCategory } from '../CreateCategory';
 
 // ----------------------------------------------------------------------
 
-export function CountryFilters({
+export function ProviderFilters({
   table,
   onApplyFilters = () => {},
   onClearFilters = () => {},
@@ -23,6 +27,8 @@ export function CountryFilters({
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  // const [searchParams] = useSearchParams();
+  // console.log('table.getState().columnFilters: inside', Object.fromEntries([...searchParams]));
 
   return (
     <div className="table-toolbar">
@@ -36,8 +42,8 @@ export function CountryFilters({
             {pageTitle}
           </h2>
         </div>
+        {/* <CreateCategory tableFetch={table.options.meta?.fetchNewList(false)} /> */}
       </div>
-
       {isXs ? (
         <>
           <div
@@ -61,25 +67,27 @@ export function CountryFilters({
           </div>
         </>
       ) : (
-        <div
-          className={clsx(
-            'custom-scrollbar transition-content flex justify-between space-x-4 overflow-x-auto pb-1 pt-4 rtl:space-x-reverse',
-            isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x]'
-          )}
-          style={{
-            '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)'
-          }}>
-          <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
-            <SearchInput table={table} />
-            <Filters
-              table={table}
-              onApplyFilters={onApplyFilters}
-              onClearFilters={onClearFilters}
-            />
-          </div>
+        <>
+          <div
+            className={clsx(
+              'custom-scrollbar transition-content flex justify-between space-x-4 overflow-x-auto pb-1 pt-4 rtl:space-x-reverse',
+              isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x]'
+            )}
+            style={{
+              '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)'
+            }}>
+            <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
+              <SearchInput table={table} />
+              <Filters
+                table={table}
+                onApplyFilters={onApplyFilters}
+                onClearFilters={onClearFilters}
+              />
+            </div>
 
-          <TableConfig table={table} />
-        </div>
+            <TableConfig table={table} />
+          </div>
+        </>
       )}
     </div>
   );
@@ -88,14 +96,14 @@ export function CountryFilters({
 function SearchInput({ table }) {
   return (
     <Input
-      value={table?.getColumn('countryName')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('countryName').setFilterValue(e.target.value)}
+      value={table?.getColumn('name')?.getFilterValue() || ''}
+      onChange={(e) => table.getColumn('name').setFilterValue(e.target.value)}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
         root: 'shrink-0'
       }}
-      placeholder="Search Country Name, Code . . ."
+      placeholder="Search Name . . ."
     />
   );
 }
@@ -114,6 +122,16 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           showCheckbox={false}
         />
       )}
+      {table.getColumn('createdAt') && (
+        <DateFilter
+          column={table.getColumn('createdAt')}
+          title={t('date') + ' ' + t('range')}
+          config={{
+            maxDate: new Date().fp_incr(1),
+            mode: 'range'
+          }}
+        />
+      )}
 
       <div>
         <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
@@ -130,7 +148,7 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
   );
 }
 
-CountryFilters.propTypes = {
+ProviderFilters.propTypes = {
   table: PropTypes.object
 };
 

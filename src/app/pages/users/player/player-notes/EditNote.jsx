@@ -10,12 +10,14 @@ import Quill from 'quill'; // Ensure Quill is imported
 // import { useParams } from 'react-router';
 import { Delta, TextEditor } from 'components/shared/form/TextEditor';
 
-const defaultValue = new Delta();
 const EditNote = ({ noteId, onClose, note: noteText }) => {
+  console.log('note text: ', noteText);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const [htmlContent, setHtmlContent] = useState(noteText);
+
+  const defaultValue = new Delta([{ insert: noteText }]);
 
   const { t } = useTranslation();
   const { handleSubmit, reset, register } = useForm({});

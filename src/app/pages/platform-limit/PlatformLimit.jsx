@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { Button, Checkbox, Input } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import PlatformLimitService from 'services/platform.services';
 import { updatePlatformLimitSchema } from './schema';
 import { useTranslation } from 'react-i18next';
@@ -16,8 +15,6 @@ const PlatformLimit = () => {
   const [loading, setLoading] = useState(false);
 
   const [response, setResponse] = useState(null);
-
-  const breadcrumbItem = [{ title: 'Platform', path: '/platform-limit' }, { title: 'Limit' }];
 
   const pageTitle = t('platform') + ' ' + t('limit');
 
@@ -96,10 +93,6 @@ const PlatformLimit = () => {
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
             {pageTitle}
           </h2>
-          <div className="hidden self-stretch py-1 sm:flex">
-            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
-          </div>
-          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
@@ -136,10 +129,7 @@ const PlatformLimit = () => {
                 placeholder="Enter Win Limit"
               />
             </div>
-
-            <div className="ml-1 grid gap-4 lg:grid-cols-2">
-              <Checkbox label={t('checkCalenderTime')} {...register('isCheckCaladerTime')} />
-            </div>
+            <Checkbox label={t('checkCalenderTime')} {...register('isCheckCaladerTime')} />
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
             <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>

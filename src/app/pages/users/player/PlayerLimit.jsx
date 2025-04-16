@@ -24,8 +24,8 @@ const exclusionTimeOptions = [
   { label: '1 month', value: '3' },
   { label: '6 month', value: '4' },
   { label: '12 month', value: '5' },
-  { label: 'custom', value: '6' },
-  { label: 'permanent', value: '7' }
+  { label: 'Custom', value: '6' },
+  { label: 'Permenent', value: '7' }
 ];
 
 const PlayerLimit = () => {

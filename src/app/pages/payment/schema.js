@@ -1,3 +1,4 @@
+import { PAYMENT_OPT } from 'constants/app.constant';
 import * as Yup from 'yup';
 
 export const createPaymentSchema = Yup.object().shape({
@@ -7,5 +8,13 @@ export const createPaymentSchema = Yup.object().shape({
     .required('Amount Required')
     .positive('Amount Must Be Positive'),
   payment: Yup.number().required('Select Payment Option'),
-  paymentStatus: Yup.number().required('Select Status')
+  paymentStatus: Yup.number().required('Select Status'),
+  gameId: Yup.number().when('payment', {
+    is: PAYMENT_OPT.BETSLIP,
+    then: (schema) => schema.required('Select Game')
+  }),
+  betUID: Yup.string().when('payment', {
+    is: PAYMENT_OPT.WINNING,
+    then: (schema) => schema.required('BetUID Required')
+  })
 });

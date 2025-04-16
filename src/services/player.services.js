@@ -16,6 +16,8 @@ const PlayerService = {
   playerList: async (data) => {
     try {
       const { pagination, filters } = data;
+      console.log('filters: ', filters);
+
       const apiRequestParams = {
         keyword: filters.keyword ? filters.keyword : undefined,
         status: filters.status ? playerStatusToAPI(filters.status) : undefined,

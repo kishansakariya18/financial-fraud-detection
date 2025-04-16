@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { Button, Card, Input, Radio, Skeleton } from 'components/ui';
 import { useNavigate, useParams } from 'react-router';
 import { Page } from 'components/shared/Page';
-import { getDateInUTCToTimeZone } from 'helpers/functions';
+import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
 import { useTranslation } from 'react-i18next';
 import { useClipboard } from 'hooks';
 import { DocumentDuplicateIcon } from '@heroicons/react/20/solid';
@@ -14,6 +14,7 @@ import { parseUserKycStatusToApp } from './helper';
 import { toast } from 'sonner';
 import { DOCUMENT_STATUS, DOCUMENT_TYPE } from 'constants/app.constant';
 import { showImage } from 'utils/showImage';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 export function ViewDetails() {
   const { t } = useTranslation();
@@ -24,6 +25,10 @@ export function ViewDetails() {
   const { documentId } = useParams();
   const pageTitle = t('playerKyc') + ' ' + t('details');
   const { copied, copy } = useClipboard({ timeout: 2000 });
+  const breadcrumbItem = [
+    { title: t('player') + ' ' + t('kyc'), path: '/player-kyc' },
+    { title: t('update') }
+  ];
 
   const [selected, setSelected] = useState('');
   const [rejectReason, setRejectReason] = useState('');
@@ -84,6 +89,11 @@ export function ViewDetails() {
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
             {pageTitle}
           </h2>
+
+          <div className="hidden self-stretch py-1 sm:flex">
+            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          </div>
+          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
 
         <div className="col-span-12 sm:col-span-8 lg:col-span-9">
@@ -192,7 +202,9 @@ export function ViewDetails() {
                   </p>
                   <p>
                     {+response.Status >= 0 &&
-                      parseUserKycStatusToApp(+response?.Status).toUpperCase()}
+                      capitalizeFirstLetter(
+                        parseUserKycStatusToApp(+response?.Status).toUpperCase()
+                      )}
                   </p>
                 </div>
 

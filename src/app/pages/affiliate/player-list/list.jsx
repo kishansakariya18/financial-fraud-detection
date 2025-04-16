@@ -98,7 +98,6 @@ export default function AffiliatePlayers() {
     }
 
     setSearchParams({
-      ...queryParams,
       pageIndex: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),

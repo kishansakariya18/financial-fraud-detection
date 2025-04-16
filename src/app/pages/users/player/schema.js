@@ -184,6 +184,9 @@ export const manageFundSchema = Yup.object().shape({
     .required('Amount Required')
     .positive('Amount Must Be Positive'),
   fundType: Yup.string().trim().required('Fund Type Required'),
-  fundMessage: Yup.string().trim().required('Fund Message Required'),
+  fundMessage: Yup.string()
+    .trim()
+    .required('Fund Message Required')
+    .max(100, 'Fund Message Should Not More Than 100 Characters'),
   type: Yup.string().trim().required('Type Required')
 });

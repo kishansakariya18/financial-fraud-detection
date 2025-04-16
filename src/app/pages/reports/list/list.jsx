@@ -14,6 +14,7 @@ import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import ReportService from '../../../../services/betslip.services';
+import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 
 export default function Reports() {
   const { t } = useTranslation();
@@ -39,7 +40,7 @@ export default function Reports() {
       return {
         status: 200,
         data: responseMapper(result.response.data),
-        totalRecords: parseInt(result.response.totalRecords, 10) || 0
+        totalRecords: parseInt(result.response.totalRecords)
       };
     }
 
@@ -107,9 +108,8 @@ export default function Reports() {
     }
 
     setSearchParams({
-      ...queryParams,
-      pageIndex: 0,
-      pageSize: 10,
+      pageIndex: DEFAULT_PAGE_INDEX,
+      pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
       ...(filterItems.stage && { stage: filterItems.stage }),
       ...(filterItems.type && { type: filterItems.type }),
