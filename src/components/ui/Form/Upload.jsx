@@ -15,6 +15,7 @@ const Upload = forwardRef((props, ref) => {
     accept,
     name,
     form,
+    setPreview = () => {},
     disabled,
     capture,
     inputProps,
@@ -27,9 +28,12 @@ const Upload = forwardRef((props, ref) => {
   };
 
   const handleChange = (event) => {
+    // console.log('event:', event.currentTarget.files[0]);
+
     if (multiple) {
       onChange(Array.from(event.currentTarget.files));
     } else {
+      setPreview(URL.createObjectURL(event.currentTarget.files[0]));
       onChange(event.currentTarget.files[0] || null);
     }
   };

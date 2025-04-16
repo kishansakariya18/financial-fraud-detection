@@ -100,7 +100,7 @@ const GameService = {
       const endpoint = replaceText(apiConfig.endPoints.GAME.CHANGE_STATUS, ':gameId', gameId);
 
       const response = await sendRequest({
-        url: apiConfig.baseURL.REACT_APP_API_URL + endpoint,
+        url: apiConfig.baseURL.API_BASE_URL + endpoint,
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'

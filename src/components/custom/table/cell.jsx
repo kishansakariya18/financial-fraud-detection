@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 // Local Imports
 import { Highlight } from 'components/shared/Highlight';
 import { ensureString } from 'utils/ensureString';
-import { Badge } from 'components/ui';
+import { Badge, Checkbox } from 'components/ui';
 
 export function DateCell({ getValue }) {
   // const { locale } = useLocaleContext();
@@ -77,6 +77,35 @@ export function CreateMarkupCell({ className = '', style = {}, getValue }) {
   const val = getValue();
   return (
     <>{<div className={className} style={style} dangerouslySetInnerHTML={{ __html: val }}></div>}</>
+  );
+}
+export function SelectHeader({ table }) {
+  return (
+    <div className="flex items-center justify-center">
+      <Checkbox
+        className="size-4.5"
+        color="error"
+        checked={table.getIsAllRowsSelected()}
+        indeterminate={table.getIsSomeRowsSelected()}
+        onChange={table.getToggleAllRowsSelectedHandler()}
+      />
+    </div>
+  );
+}
+
+export function SelectCell({ checked, row, onChange }) {
+  // console.log('select cell recived', { checked, row, onChange });
+
+  return (
+    <div className="flex items-center justify-center">
+      <Checkbox
+        className="size-4.5"
+        checked={checked?.includes(row.original.id)}
+        disabled={!row.getCanSelect()}
+        indeterminate={row.getIsSomeSelected()}
+        onChange={() => onChange(row.original.id)}
+      />
+    </div>
   );
 }
 DateCell.propTypes = {

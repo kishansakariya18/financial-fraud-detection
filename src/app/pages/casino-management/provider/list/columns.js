@@ -2,7 +2,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 
 // Local Imports
-// import { RowActions } from './RowActions';
+import { RowActions } from './RowActions';
 import { IdCell, BoldCell, BadgeCell, DateCell } from '../../../../../components/custom/table/cell';
 import { statusOptions } from '../helper';
 
@@ -49,12 +49,12 @@ export const columns = [
     cell: DateCell,
     filterFn: 'inNumberRange',
     enableSorting: false
+  }),
+  columnHelper.display({
+    id: 'actions',
+    label: 'Row Actions',
+    header: 'Actions',
+    cell: RowActions,
+    enableSorting: false
   })
-  // columnHelper.display({
-  //   id: 'actions',
-  //   label: 'Row Actions',
-  //   header: 'Actions',
-  //   cell: RowActions,
-  //   enableSorting: false
-  // })
 ];

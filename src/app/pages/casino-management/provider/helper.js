@@ -1,5 +1,7 @@
 import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
+
 import { getDateInUTCToTimeZone } from 'helpers/functions';
+import { getImageURL } from 'utils/showImage';
 
 export const parseProviderStatusToApi = (status) => {
   switch (status) {
@@ -24,10 +26,24 @@ export const parseProviderStatusToApp = (status) => {
 export const responseMapper = (apiData) => {
   return apiData.map((item) => ({
     id: item.ID,
+    providerUID: item.ProviderUID,
     name: item.Name,
+    image: item.Image ? getImageURL('providers', item.Image) : null,
     status: parseProviderStatusToApp(item.Status),
     createdAt: getDateInUTCToTimeZone(item.DateCreated),
     updatedAt: getDateInUTCToTimeZone(item.DateModified)
+  }));
+};
+export const restrictedCountryMapper = (apiData) => {
+  return apiData.map((item) => ({
+    id: item.CountryID,
+    name: item?.country?.CountryName
+  }));
+};
+export const countryMapper = (apiData) => {
+  return apiData.map((item) => ({
+    id: item.CountryID,
+    name: item?.CountryName
   }));
 };
 export const statusOptions = [
