@@ -28,8 +28,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row.username, {
     id: 'username',
-    label: 'Name',
-    header: 'Name',
+    label: 'User Name',
+    header: 'User Name',
     cell: CopyableCell,
     enableSorting: false
   }),

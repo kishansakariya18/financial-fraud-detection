@@ -150,8 +150,10 @@ export const transactionTypeInWords = (type) => {
     return 'WITHDRAW TAX';
   } else if (+type === TRANSACTION.TRANSACTION_TYPE.BETSLIP) {
     return 'BET SLIP';
-  } else if (+type === TRANSACTION.TRANSACTION_TYPE.PROMOCODE_BENEFIT) {
+  } else if (+type === TRANSACTION.TRANSACTION_TYPE.DEPOSIT_PROMO_CODE_BENEFIT) {
     return 'PROMOCODE BENEFIT';
+  } else if (+type === TRANSACTION.TRANSACTION_TYPE.ROLLBACK) {
+    return 'ROLLBACK';
   }
 };
 
@@ -211,16 +213,6 @@ export const txnTypeOption = [
     color: 'danger'
   },
   {
-    value: 'DEPOSIT TAX',
-    label: 'Deposit Tax',
-    color: 'warning'
-  },
-  {
-    value: 'WITHDRAW TAX',
-    label: 'Withdraw Tax',
-    color: 'warning'
-  },
-  {
     value: 'BET SLIP',
     label: 'Bet Slip',
     color: 'info'
@@ -228,6 +220,11 @@ export const txnTypeOption = [
   {
     value: 'PROMOCODE_BENEFIT',
     label: 'Promocode Benefit',
+    color: 'success'
+  },
+  {
+    value: 'ROLLBACK',
+    label: 'RollBack',
     color: 'success'
   }
 ];
@@ -246,6 +243,8 @@ export const txnTypeToAPI = (value) => {
       return TRANSACTION.TRANSACTION_TYPE.BETSLIP;
     case 'PROMOCODE_BENEFIT':
       return TRANSACTION.TRANSACTION_TYPE.DEPOSIT_PROMO_CODE_BENEFIT;
+    case 'ROLLBACK':
+      return TRANSACTION.TRANSACTION_TYPE.ROLLBACK;
     default:
       return null;
   }

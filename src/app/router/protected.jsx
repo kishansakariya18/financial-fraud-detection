@@ -9,9 +9,10 @@ import platformRoute from './routes/platform.route';
 import countryRoutes from './routes/country.route';
 import reportsRoutes from './routes/betSlip.route';
 import paymentRoute from './routes/payment.route';
-import userKycRoute from './routes/user-kyc.routes';
+import userKycRoute from './routes/player-kyc.routes';
 import casinoRoutes from './routes/casino.route';
 import affiliateRoutes from './routes/affiliate.route';
+import segmentationRoutes from './routes/segmentation.route';
 
 // ----------------------------------------------------------------------
 
@@ -33,7 +34,8 @@ const protectedRoutes = {
         ...paymentRoute,
         ...userKycRoute,
         ...casinoRoutes,
-        ...affiliateRoutes
+        ...affiliateRoutes,
+        ...segmentationRoutes
       ]
     }
   ]

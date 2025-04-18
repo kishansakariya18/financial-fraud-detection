@@ -19,7 +19,7 @@ export function RowActions({ row }) {
   const navigate = useNavigate();
 
   const handleClickView = () => {
-    navigate(`/user-kyc/${row.original.id}/tab/details`);
+    navigate(`/player-kyc/${row.original.id}/tab/details`);
   };
 
   return (

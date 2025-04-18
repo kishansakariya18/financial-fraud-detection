@@ -11,7 +11,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('details'),
-      path: `/user-kyc/${documentId}/tab/details`,
+      path: `/player-kyc/${documentId}/tab/details`,
       icon: HomeIcon
     }
   ];

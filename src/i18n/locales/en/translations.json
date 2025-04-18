@@ -177,5 +177,20 @@
   "failed": "Failed",
   "country_status_desc": "Are you sure you want to update this Country's status ?",
   "country_status_suceess": "Country Status has been changed successfully",
-  "requested": "Requested"
+  "requested": "Requested",
+  "segmentation": "Segmentation",
+  "segmentation_status_desc": "Are you sure you want to update this Segmentation's status ?",
+  "segmentation_status_suceess": "Segmentation Status has been changed successfully",
+  "countries": "Countries",
+  "kyc": "KYC",
+  "minimum": "Minimum",
+  "maximum": "Maximum",
+  "group": "Group",
+  "age": "Age",
+  "loss": "Loss",
+  "money": "Money",
+  "referral": "Referral",
+  "count": "Count",
+  "won": "Won",
+  "search_desc": "Search Mobile, User..."
 }

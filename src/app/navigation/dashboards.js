@@ -8,6 +8,7 @@ import { payment } from './payment';
 import { playerKyc } from './player-kyc';
 import { casinoManagement } from './casino-management';
 import { affliate } from './affiliates';
+import { segmentation } from './segmentation';
 
 export const dashboards = {
   id: 'dashboards',
@@ -16,5 +17,15 @@ export const dashboards = {
   title: 'Dashboards',
   transKey: 'nav.dashboards.dashboards',
   Icon: DashboardsIcon,
-  childs: [users, platform, country, payment, reports, playerKyc, casinoManagement, affliate]
+  childs: [
+    users,
+    platform,
+    country,
+    payment,
+    reports,
+    playerKyc,
+    casinoManagement,
+    affliate,
+    segmentation
+  ]
 };

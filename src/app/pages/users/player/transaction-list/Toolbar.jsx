@@ -92,7 +92,7 @@ function SearchInput({ table }) {
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
         root: 'shrink-0'
       }}
-      placeholder="Search Mobile, User..."
+      placeholder={t('search') + ' ' + t('userName') + ' ' + 'Tra' + '...'}
     />
   );
 }

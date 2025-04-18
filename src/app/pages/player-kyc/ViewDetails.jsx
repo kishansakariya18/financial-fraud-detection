@@ -289,7 +289,7 @@ export function ViewDetails() {
                     {t('update')}
                   </Button>
                 )}
-                <Button className="min-w-[7rem]" onClick={() => navigate('/user-kyc')}>
+                <Button className="min-w-[7rem]" onClick={() => navigate('/player-kyc')}>
                   {t('back')}
                 </Button>
               </div>

@@ -1,31 +1,29 @@
 // Import Dependencies
 import { MagnifyingGlassIcon, MapPinIcon, PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
-// import { TbCurrencyDollar } from "react-icons/tb";
 import PropTypes from 'prop-types';
 
 // Local Imports
 import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
-// import { RangeFilter } from "components/shared/table/RangeFilter";
 import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
-import { useNavigate } from 'react-router';
 import { t } from 'i18next';
-import { statusOptions } from '../helper';
+import { segmentationStatusOptions } from '../helper';
+import { useNavigate } from 'react-router';
 
 // ----------------------------------------------------------------------
 
 export function Toolbar({
   table,
+  pageTitle = '',
   onApplyFilters = () => {},
-  onClearFilters = () => {},
-  pageTitle = ''
+  onClearFilters = () => {}
 }) {
   const { isXs } = useBreakpointsContext();
-  const navigate = useNavigate();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const navigate = useNavigate();
 
   return (
     <div className="table-toolbar">
@@ -43,9 +41,9 @@ export function Toolbar({
         <Button
           className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
           color="primary"
-          onClick={() => navigate('/admin/create')}>
+          onClick={() => navigate('/segmentation/create')}>
           <PlusIcon className="size-5" />
-          <span>{t('create') + ' ' + t('admin')}</span>
+          <span>{t('create') + ' ' + t('segmentation')}</span>
         </Button>
       </div>
 
@@ -99,8 +97,8 @@ export function Toolbar({
 function SearchInput({ table }) {
   return (
     <Input
-      value={table?.getColumn('username')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('username').setFilterValue(e.target.value)}
+      value={table?.getColumn('name')?.getFilterValue() || ''}
+      onChange={(e) => table.getColumn('name').setFilterValue(e.target.value)}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
@@ -117,9 +115,9 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
     <>
       {table.getColumn('status') && (
         <FacedtedFilter
-          options={statusOptions}
+          options={segmentationStatusOptions}
           column={table.getColumn('status')}
-          title="Status"
+          title={t('status')}
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}

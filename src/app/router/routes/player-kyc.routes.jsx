@@ -4,7 +4,7 @@ import { Navigate } from 'react-router';
 
 export const userKycRoute = [
   {
-    path: 'user-kyc',
+    path: 'player-kyc',
     lazy: async () => {
       const { default: UserKycList } = await import('../../pages/player-kyc/list/list');
       return {
@@ -17,7 +17,7 @@ export const userKycRoute = [
     }
   },
   {
-    path: 'user-kyc/:documentId/tab',
+    path: 'player-kyc/:documentId/tab',
     lazy: async () => ({
       Component: (await import('../../pages/player-kyc/Tabs')).default
     }),

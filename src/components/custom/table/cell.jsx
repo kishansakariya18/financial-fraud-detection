@@ -40,10 +40,12 @@ export function BoldCell({ getValue, column, table }) {
 
   const name = getValue();
 
+  console.log('name: ', name);
+
   return (
     <div className="flex items-center space-x-4 rtl:space-x-reverse">
       <span className="font-medium text-gray-800 dark:text-dark-100">
-        <Highlight query={[globalQuery, columnQuery]}>{name}</Highlight>
+        <Highlight query={[globalQuery, columnQuery]}>{name || 'not-found'}</Highlight>
       </span>
     </div>
   );
