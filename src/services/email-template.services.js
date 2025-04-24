@@ -31,7 +31,7 @@ const EmailTemplateService = {
     try {
       const reqBody = {
         title: data.title,
-        slug: stringToSlug(data.title),
+        slug: data.slug,
         heading: data.heading,
         template: data.template,
         to: data.to,

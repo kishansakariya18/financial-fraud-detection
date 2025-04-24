@@ -12,9 +12,9 @@ import RoleService from 'services/role.services';
 const AddRole = () => {
   const { t } = useTranslation();
 
-  const pageTitle = t('add') + ' ' + t('role') || 'Add Role';
-  const roleName = t('role') + ' ' + t('name') || 'Role Name';
-  const save = t('save') || 'Save';
+  const pageTitle = t('add') + ' ' + t('role');
+  const roleName = t('role') + ' ' + t('name');
+  const save = t('save');
   const [response, setResponse] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
