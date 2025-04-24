@@ -14,7 +14,7 @@ import usePermissions from 'app/router/usePermissions';
 
 // ----------------------------------------------------------------------
 
-export function Group({ key, data }) {
+export function Group({ data }) {
   const [isOpened, { toggle }] = useDisclosure(true);
   const { t } = useTranslation();
   const { cardSkin } = useThemeContext();
@@ -38,7 +38,7 @@ export function Group({ key, data }) {
             cardSkin === 'bordered' ? 'dark:from-dark-900' : 'dark:from-dark-750'
           )}></div>
       </div>
-      <Collapse in={isOpened} key={key}>
+      <Collapse in={isOpened} key={data.id}>
         <div className="flex flex-col space-y-1.5">
           {data.childs.map((item) => {
             switch (item.type) {

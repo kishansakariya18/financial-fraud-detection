@@ -17,13 +17,14 @@ const AffiliateService = {
         page: pagination.pageIndex + 1,
         limit: pagination?.pageSize,
         keyword: filters?.keyword,
-        startDate: filters.startDate
+        startDate: filters?.startDate
           ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
           : undefined,
-        endDate: filters.endDate
+        endDate: filters?.endDate
           ? dayjs(+filters.endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
           : undefined,
-        status: filters?.status ? affiliateStatusToApi(filters.status) : undefined
+        status: filters?.status ? affiliateStatusToApi(filters.status) : undefined,
+        ...(!pagination && { pagination: false })
       };
       const endPoint = apiConfig.endPoints.AFFILIATE.AFFILIATE_LIST;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;

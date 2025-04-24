@@ -13,6 +13,8 @@ import userKycRoute from './routes/player-kyc.routes';
 import casinoRoutes from './routes/casino.route';
 import affiliateRoutes from './routes/affiliate.route';
 import segmentationRoutes from './routes/segmentation.route';
+import emailTemplateRoute from './routes/email-template.route';
+import promocodeRoute from './routes/promocode.route';
 
 // ----------------------------------------------------------------------
 
@@ -35,7 +37,9 @@ const protectedRoutes = {
         ...userKycRoute,
         ...casinoRoutes,
         ...affiliateRoutes,
-        ...segmentationRoutes
+        ...segmentationRoutes,
+        ...emailTemplateRoute,
+        ...promocodeRoute
       ]
     }
   ]

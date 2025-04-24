@@ -12,16 +12,17 @@ const SegmentationService = {
       const apiRequestParams = {
         filters: {
           keyword: filters?.keyword || undefined,
-          status: filters.status ? parseSegmentationStatusToAPI(filters.status) : undefined,
-          startDate: filters.startDate
+          status: filters?.status ? parseSegmentationStatusToAPI(filters.status) : undefined,
+          startDate: filters?.startDate
             ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
             : undefined,
-          endDate: filters.endDate
+          endDate: filters?.endDate
             ? dayjs(+filters.endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
             : undefined
         },
-        per_page: pagination.pageSize,
-        page: pagination.pageIndex + 1
+        per_page: pagination ? pagination.pageSize : undefined,
+        page: pagination ? pagination.pageIndex + 1 : undefined,
+        ...(!pagination && { pagination: false })
       };
 
       let apiURL = `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.SEGMENTATION.LIST}`;

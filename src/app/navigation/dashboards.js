@@ -9,6 +9,8 @@ import { playerKyc } from './player-kyc';
 import { casinoManagement } from './casino-management';
 import { affliate } from './affiliates';
 import { segmentation } from './segmentation';
+import { emailTemplate } from './email-template';
+import { peomocode } from './promocode';
 
 export const dashboards = {
   id: 'dashboards',
@@ -26,6 +28,8 @@ export const dashboards = {
     playerKyc,
     casinoManagement,
     affliate,
-    segmentation
+    segmentation,
+    emailTemplate,
+    peomocode
   ]
 };
