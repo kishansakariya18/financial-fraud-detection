@@ -1,7 +1,6 @@
 import { emailTemplateStatusToAPI } from 'app/pages/email-template/helper';
 import apiConfig from 'configs/api.config';
 import { sendRequest } from 'utils/axios';
-import { stringToSlug } from 'utils/stringToSlug';
 
 const EmailTemplateService = {
   emailTemplateList: async (data) => {

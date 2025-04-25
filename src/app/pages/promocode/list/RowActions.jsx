@@ -1,6 +1,6 @@
 // Import Dependencies
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
-import { EllipsisHorizontalIcon, EyeIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { EllipsisHorizontalIcon, EyeIcon /* PencilIcon */ } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 // Local Imports
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
-import { TbStatusChange } from 'react-icons/tb';
+// import { TbStatusChange } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import usePermissions from 'app/router/usePermissions';
@@ -43,11 +43,11 @@ export function RowActions({ row, table }) {
     navigate(`/promocode/${row.original.id}/tab/details`);
   };
 
-  const openModal = () => {
-    setChangeStatusModalOpen(true);
-    setChangeStatusError(false);
-    setChangeStatusSuccess(false);
-  };
+  // const openModal = () => {
+  //   setChangeStatusModalOpen(true);
+  //   setChangeStatusError(false);
+  //   setChangeStatusSuccess(false);
+  // };
 
   const handleChangeStatus = useCallback(async () => {
     setConfirmDeleteLoading(true);
@@ -98,20 +98,7 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
-                      focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
-                    )}
-                    onClick={() => navigate(`/affiliate/${row.original.affiliateUID}/edit`)}>
-                    <PencilIcon className="size-4.5 stroke-1" />
-                    <span>{t('edit')}</span>
-                  </button>
-                )}
-              </MenuItem>
-              {hasPermission(PERMISSIONS.AFFILIATES.CHANGE_STATUS) && (
+              {/* {hasPermission(PERMISSIONS.AFFILIATES.CHANGE_STATUS) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -125,7 +112,7 @@ export function RowActions({ row, table }) {
                     </button>
                   )}
                 </MenuItem>
-              )}
+              )} */}
             </MenuItems>
           </Transition>
         </Menu>

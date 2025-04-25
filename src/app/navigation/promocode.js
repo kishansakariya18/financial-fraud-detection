@@ -1,5 +1,5 @@
 // Local Imports
-import { ArchiveBoxArrowDownIcon } from '@heroicons/react/24/outline';
+import { ReceiptPercentIcon } from '@heroicons/react/24/outline';
 import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
 
 export const peomocode = {
@@ -8,6 +8,6 @@ export const peomocode = {
   path: '/promocode',
   title: 'Promo Code',
   transKey: 'promocode',
-  Icon: ArchiveBoxArrowDownIcon,
+  Icon: ReceiptPercentIcon,
   permission: PERMISSIONS.DEPOSIT_PROMOCODE.LIST
 };
