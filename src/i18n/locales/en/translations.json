@@ -209,6 +209,7 @@
   "min": "Min",
   "max": "Max",
   "isOnlyFirstDeposit": "Only For First Deposit",
+  "isOnlySecondDeposit": "Only For Second Deposit",
   "description": "Description",
   "allowedPerUser": "Allowed Per User",
   "displayMode": "Display Mode",

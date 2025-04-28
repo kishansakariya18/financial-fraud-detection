@@ -91,6 +91,7 @@ const CreatePromocode = () => {
 
   const type = watch('type');
   const isOnlyFirstDeposit = watch('isOnlyFirstDeposit');
+  const isOnlySecondDeposit = watch('isOnlySecondDeposit');
 
   const createPromocodeAPI = async (requestObject) => {
     setLoading(true);
@@ -129,6 +130,7 @@ const CreatePromocode = () => {
     toast.success(response.message);
 
     setResponse(null);
+    reset();
   }
 
   const handleInfluencerSegmentationChange = (event) => {
@@ -161,6 +163,8 @@ const CreatePromocode = () => {
       influencerSegIds,
       segmentationIds
     };
+    console.log('{ ...data, ...apiData }: ', { ...data, ...apiData });
+
     await createPromocodeAPI({ ...data, ...apiData });
   };
   return (
@@ -240,7 +244,6 @@ const CreatePromocode = () => {
                     label={t('fixed')}
                     value="fixed"
                     checked={discountType === 'fixed'}
-                    defaultChecked
                     onChange={(e) => setDiscountType(e.target.value)}
                   />
                   <Radio
@@ -412,8 +415,9 @@ const CreatePromocode = () => {
               />
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
               <Checkbox {...register('isOnlyFirstDeposit')} label={t('isOnlyFirstDeposit')} />
+              <Checkbox {...register('isOnlySecondDeposit')} label={t('isOnlySecondDeposit')} />
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
@@ -425,7 +429,7 @@ const CreatePromocode = () => {
                 type="number"
                 placeholder={t('enter') + ' ' + t('promocode') + ' ' + t('quantity')}
               />
-              {!isOnlyFirstDeposit && (
+              {!(isOnlyFirstDeposit || isOnlySecondDeposit) && (
                 <Input
                   key={'allowedPerUser'}
                   {...register('allowedPerUser')}

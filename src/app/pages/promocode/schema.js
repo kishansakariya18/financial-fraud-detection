@@ -50,6 +50,7 @@ export const createPromocodeSchema = Yup.object().shape({
   endDate: Yup.date().required('End date is required'),
 
   isOnlyFirstDeposit: Yup.boolean(),
+  isOnlySecondDeposit: Yup.boolean(),
 
   promocodeQty: Yup.number()
     .typeError('Quantity must be a number')
@@ -59,8 +60,8 @@ export const createPromocodeSchema = Yup.object().shape({
   allowedPerUser: Yup.number()
     .transform((val) => (isNaN(val) ? undefined : val))
     .nullable()
-    .when('isOnlyFirstDeposit', {
-      is: (val) => val === false,
+    .when(['isOnlyFirstDeposit', 'isOnlySecondDeposit'], {
+      is: (first, second) => first === false && second === false,
       then: (schema) => schema.required('Allowed Per User is required').min(1, 'Must be at least 1')
     })
 });

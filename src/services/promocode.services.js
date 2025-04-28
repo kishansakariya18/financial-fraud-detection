@@ -107,7 +107,8 @@ const PromoCodeService = {
         EndDate: data.endDate
           ? dayjs(+data.endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
           : undefined,
-        FirstDepositOnly: data.firstDepositOnly,
+        FirstDepositOnly: data.isOnlyFirstDeposit,
+        SecondDepositOnly: data.isOnlyFirstDeposit,
         MinAmount: data.minAmount || 0,
         MaxAmount: data.maxAmount || 0,
         ExactAmount: data.exactAmount || 0
