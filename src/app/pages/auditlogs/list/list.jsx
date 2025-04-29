@@ -7,7 +7,7 @@ import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 
-import RoleService from '../../../../services/role.services';
+import AuditLogsService from '../../../../services/audit-logs.services';
 
 import { responseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
@@ -15,17 +15,17 @@ import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 
-export default function Roles() {
+export default function AuditLogs() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('roles');
+  const pageTitle = t('audit_logs');
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
-  const fetchRoles = async () => {
+  const fetchApiLogs = async () => {
     // setError(null);
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
-    const result = await RoleService.roleList({
+    const result = await AuditLogsService.auditLogsList({
       pagination: { pageIndex, pageSize },
       filters: queryParams
     });
@@ -34,7 +34,7 @@ export default function Roles() {
       return {
         status: 200,
         data: responseMapper(result.response.data),
-        totalRecords: parseInt(result.response.total_records, 10) || 0
+        totalRecords: parseInt(result.response.total_record, 10) || 0
       };
     }
 
@@ -43,7 +43,7 @@ export default function Roles() {
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
-    fetchData: fetchRoles,
+    fetchData: fetchApiLogs,
     queryParams,
     setSearchParams,
     initialSettings: {
@@ -52,7 +52,7 @@ export default function Roles() {
       columnVisibility: { firstname: false }
     }
   });
-  console.log('table data is : ', table);
+  console.log('table log', table.rowCount);
 
   useEffect(() => {
     if (!isLoading && error) {
@@ -65,7 +65,7 @@ export default function Roles() {
   useEffect(() => {
     const filtersFromQuery = [];
     if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'RoleName', value: queryParams.keyword });
+      filtersFromQuery.push({ id: 'moduleName', value: queryParams.keyword });
     }
 
     setColumnFilters(filtersFromQuery);
@@ -75,15 +75,21 @@ export default function Roles() {
   const applyFilterHandler = () => {
     const filterItems = {};
     for (let data of table.getState().columnFilters) {
-      if (data.id === 'roleName') {
+      if (data.id === 'moduleName') {
         filterItems.keyword = data.value;
+      }
+
+      if (data.id === 'createdAt') {
+        filterItems.date = data.value;
       }
     }
 
     setSearchParams({
       pageIndex: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PER_PAGE_RECORD,
-      ...(filterItems.keyword && { keyword: filterItems.keyword })
+      ...(filterItems.keyword && { keyword: filterItems.keyword }),
+      ...(filterItems.date && { startDate: filterItems.date[0] }),
+      ...(filterItems.date && { endDate: filterItems?.date[1] })
     });
   };
 

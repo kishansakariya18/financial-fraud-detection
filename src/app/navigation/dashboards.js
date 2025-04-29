@@ -10,6 +10,7 @@ import { casinoManagement } from './casino-management';
 import { affliate } from './affiliates';
 import { segmentation } from './segmentation';
 import { roles } from './roles';
+import { auditlogs } from './auditlogs';
 
 export const dashboards = {
   id: 'dashboards',
@@ -28,6 +29,7 @@ export const dashboards = {
     playerKyc,
     casinoManagement,
     affliate,
-    segmentation
+    segmentation,
+    auditlogs
   ]
 };

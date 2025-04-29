@@ -31,12 +31,6 @@ export const roleRoutes = [
           Component: (await import('../../pages/roles/EditRole')).default
         })
       }
-      // {
-      //   path: 'delete/:rolePermissionId',
-      //   lazy: async () => ({
-      //     Component: (await import('../../pages/roles/DeleteRole')).default
-      //   })
-      // }
     ]
   }
 ];

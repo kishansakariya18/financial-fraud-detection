@@ -194,5 +194,6 @@
   "referral": "Referral",
   "count": "Count",
   "won": "Won",
-  "search_desc": "Search Mobile, User..."
+  "search_desc": "Search Mobile, User...",
+  "audit_logs":"Audit Logs"
 }

@@ -35,8 +35,10 @@ export const roleDetailMapper = (apiData) => {
 };
 
 export const responseMapper = (apiData) => {
+  let i = 1;
   const resultData = apiData.map((data) => ({
     id: data.RolePermissionID,
+    srn: i++,
     roleName: data.RoleName,
     createBy: data.Username,
     createdAt: getDateInUTCToTimeZone(data.DateCreated)
