@@ -9,6 +9,7 @@ import { playerKyc } from './player-kyc';
 import { casinoManagement } from './casino-management';
 import { affliate } from './affiliates';
 import { segmentation } from './segmentation';
+import { roles } from './roles';
 
 export const dashboards = {
   id: 'dashboards',
@@ -22,6 +23,7 @@ export const dashboards = {
     platform,
     country,
     payment,
+    roles,
     reports,
     playerKyc,
     casinoManagement,

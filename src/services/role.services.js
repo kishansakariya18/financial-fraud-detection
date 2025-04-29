@@ -1,7 +1,37 @@
 import { replaceText } from 'utils/custom.utilities';
 import apiConfig from '../configs/api.config';
 import { sendRequest } from '../utils/axios';
+import { DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 const RoleService = {
+  roleList: async (data) => {
+    try {
+      const { pagination, filters } = data;
+
+      console.log('data: ', data);
+      const apiRequestParams = {
+        filters: {
+          keyword: filters.keyword ? filters.keyword : undefined
+        },
+        per_page: pagination?.pageSize || DEFAULT_PER_PAGE_RECORD,
+        page: pagination.pageIndex + 1
+      };
+
+      console.log('apiRequestParams: ', apiRequestParams);
+      const endPoint = apiConfig.endPoints.ROLES.LIST;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: apiRequestParams
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from role Permission List', error);
+    }
+  },
   rolePermissionList: async () => {
     try {
       const endPoint = apiConfig.endPoints.ROLES.PERMISSION_LIST;
@@ -67,6 +97,26 @@ const RoleService = {
         rolePermissionID: data.rolePermissionID
       };
       const endPoint = apiConfig.endPoints.ROLES.EDIT;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: reqData
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from Edit role permission', error);
+    }
+  },
+  deleteRole: async (rolePermissionId) => {
+    try {
+      const reqData = {
+        rolePermissionID: rolePermissionId
+      };
+      const endPoint = apiConfig.endPoints.ROLES.DELETE;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,

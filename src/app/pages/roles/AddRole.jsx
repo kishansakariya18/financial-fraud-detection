@@ -8,6 +8,7 @@ import { Button, Card, Input } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { rolePermissionListMapper } from './helper';
 import RoleService from 'services/role.services';
+import { useNavigate } from 'react-router';
 
 const AddRole = () => {
   const { t } = useTranslation();
@@ -69,6 +70,8 @@ const AddRole = () => {
     formState: { errors }
   } = useForm();
 
+  const navigate = useNavigate();
+
   const onSubmit = async (data) => {
     data.permissionsIdList = checkedList;
     console.log('data::', data);
@@ -98,6 +101,9 @@ const AddRole = () => {
     toast('Role created successfully', {
       invert: true
     });
+    setTimeout(() => {
+      navigate('/roles');
+    }, 0);
     setSubmitResponse(null);
     reset();
   }
