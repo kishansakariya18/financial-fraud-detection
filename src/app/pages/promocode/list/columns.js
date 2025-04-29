@@ -77,6 +77,20 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.firstDepositOnly, {
+    id: 'firstDeposit',
+    label: 'First Deposit',
+    header: 'First Deposit',
+    cell: BoldCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.secondDepositOnly, {
+    id: 'secondDeposit',
+    label: 'Second Deposit',
+    header: 'Second Deposit',
+    cell: BoldCell,
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.status, {
     id: 'status',
     label: 'Status',

@@ -86,7 +86,8 @@ export const promocodeListResponseMapper = (apiData) => {
     status: parsePromoCodeStatus(data.Status),
     state: parsePromoCodeStateToApp(data.State),
     hasUserSegmentation: data.HasUserSegmentation ? 1 : 0,
-    firstDepositOnly: data.FirstDepositOnly
+    firstDepositOnly: data.FirstDepositOnly ? 'Yes' : 'No',
+    secondDepositOnly: data.SecondDepositOnly ? 'Yes' : 'No'
   }));
   return resultData;
 };

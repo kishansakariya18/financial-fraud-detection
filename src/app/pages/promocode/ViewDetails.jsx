@@ -113,6 +113,18 @@ export function ViewDetails() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('firstDepositOnly')}
+                  </p>
+                  <p>{response?.FirstDepositOnly ? 'Yes' : 'No'}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('secondDepositOnly')}
+                  </p>
+                  <p>{response?.SecondDepositOnly ? 'Yes' : 'No'}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('amount')}
                   </p>
                   <p>{response?.Amount}</p>

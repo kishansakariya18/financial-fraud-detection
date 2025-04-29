@@ -219,5 +219,7 @@
   "usageLimit": "Usage Limit",
   "expiration": "Expiration",
   "state": "State",
-  "visibility": "Visibility"
+  "visibility": "Visibility",
+  "firstDepositOnly": "First Deposit Only",
+  "secondDepositOnly": "Second Deposit Only"
 }
