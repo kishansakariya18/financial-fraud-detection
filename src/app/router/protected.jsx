@@ -5,6 +5,7 @@ import dashboardRoute from './routes/dashboard.route';
 import adminRoute from './routes/admin.route';
 import playerRoutes from './routes/player.route';
 import roleRoutes from './routes/role.route';
+import auditlogsRoutes from './routes/auditlogs.route';
 import platformRoute from './routes/platform.route';
 import countryRoutes from './routes/country.route';
 import reportsRoutes from './routes/betSlip.route';
@@ -30,6 +31,7 @@ const protectedRoutes = {
         ...adminRoute,
         ...playerRoutes,
         ...roleRoutes,
+        ...auditlogsRoutes,
         ...platformRoute,
         ...countryRoutes,
         ...reportsRoutes,

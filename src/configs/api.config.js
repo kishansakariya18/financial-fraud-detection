@@ -21,7 +21,8 @@ export const apiConfig = {
       DELETE: '/admin/roles/delete'
     },
     AUDIT_LOGS: {
-      VIEW: '/admin/audit-logs/list'
+      VIEW: '/admin/audit-logs/list',
+      DETAIL: '/admin/audit-logs/:Id'
     },
     USER_ENQUIRY: {
       LIST: '/admin/enquiry/list'

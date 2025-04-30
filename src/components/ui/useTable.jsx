@@ -80,6 +80,8 @@ const useTable = ({ columns, fetchData, queryParams, setSearchParams, initialSet
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pagination.pageIndex, pagination.pageSize]);
 
+  console.log('pagination in use table >> ', pagination);
+
   const table = useReactTable({
     data: response,
     columns,

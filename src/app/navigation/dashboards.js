@@ -11,6 +11,8 @@ import { affliate } from './affiliates';
 import { segmentation } from './segmentation';
 import { emailTemplate } from './email-template';
 import { peomocode } from './promocode';
+import { roles } from './roles';
+import { auditlogs } from './auditlogs';
 
 export const dashboards = {
   id: 'dashboards',
@@ -24,12 +26,14 @@ export const dashboards = {
     platform,
     country,
     payment,
+    roles,
     reports,
     playerKyc,
     casinoManagement,
     affliate,
     segmentation,
     emailTemplate,
-    peomocode
+    peomocode,
+    auditlogs
   ]
 };

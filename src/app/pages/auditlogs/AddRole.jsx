@@ -6,53 +6,16 @@ import { useTranslation } from 'react-i18next';
 import { Page } from 'components/shared/Page';
 import { Button, Card, Input } from 'components/ui';
 import { useEffect, useState } from 'react';
-import { roleDetailMapper, rolePermissionListMapper } from './helper';
+import { rolePermissionListMapper } from './helper';
 import RoleService from 'services/role.services';
-// import { useParams } from 'react-router';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 
-const EditRole = () => {
-  const { rolePermissionId } = useParams();
+const AddRole = () => {
   const { t } = useTranslation();
 
-  const pageTitle = t('edit') + ' ' + t('role');
-  const roleName = t('role') + ' ' + t('name');
-  const update = t('update');
-  //* === Get api state for Edit ===
-  const [isDetailLoading, setDetailLoading] = useState(false);
-  const [detailError, setDetailError] = useState(null);
-  const [detail, setDetail] = useState({});
-  const fetchRoleDetail = async (rolePermissionId) => {
-    setDetailLoading(true);
-    const result = await RoleService.roleDetail(rolePermissionId);
-    if (result) {
-      if (result.status === 200) {
-        const apiData = result.response.data;
-        const resultData = roleDetailMapper(apiData);
-        console.log('resultData', resultData);
-        setDetail(resultData);
-        setCheckedList(resultData.permissionIDs);
-      } else {
-        setDetailError(result.error);
-      }
-    }
-    setDetailLoading(false);
-  };
-
-  // TODO: remove below code and implement loader
-  if (!isDetailLoading && detailError) {
-    // toast.error(detailError, config.TOAST_UI);
-    setDetailError(null);
-  }
-  if (!isDetailLoading && !detailError && detail) {
-    // toast.success(detail.message, config.TOAST_UI);
-  }
-  useEffect(() => {
-    if (rolePermissionId) {
-      fetchRoleDetail(rolePermissionId);
-    }
-  }, [rolePermissionId]);
-
+  const pageTitle = t('add') + ' ' + t('role') || 'Add Role';
+  const roleName = t('role') + ' ' + t('name') || 'Role Name';
+  const save = t('save') || 'Save';
   const [response, setResponse] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -111,11 +74,10 @@ const EditRole = () => {
 
   const onSubmit = async (data) => {
     data.permissionsIdList = checkedList;
-    data.rolePermissionID = rolePermissionId;
     console.log('data::', data);
 
     setSubmitLoading(true);
-    const result = await RoleService.roleEdit(data);
+    const result = await RoleService.roleSubmit(data);
 
     if (result) {
       if (result.status === 200 || result.status === 201) {
@@ -183,21 +145,18 @@ const EditRole = () => {
             <div className="col-span-12">
               <Card className="p-4 sm:px-5">
                 <div className="mt-5 space-y-5">
-                  {
-                    <Input
-                      id="roleName"
-                      className={`form-control ${errors.roleName ? 'is-invalid' : ''}`}
-                      defaultValue={rolePermissionId ? detail.roleName : ''}
-                      type="text"
-                      name="roleName"
-                      label={roleName}
-                      placeholder="Enter Role Name"
-                      {...register('roleName', {
-                        required: 'Role name is required'
-                      })}
-                      error={errors?.roleName?.message}
-                    />
-                  }
+                  <Input
+                    id="roleName"
+                    className={`form-control ${errors.roleName ? 'is-invalid' : ''}`}
+                    type="text"
+                    name="roleName"
+                    label={roleName}
+                    placeholder="Enter Role Name"
+                    {...register('roleName', {
+                      required: 'Role name is required'
+                    })}
+                    error={errors?.roleName?.message}
+                  />
                   <div className="flex flex-col">
                     <div>
                       {response?.length > 0 &&
@@ -218,14 +177,14 @@ const EditRole = () => {
                                     key={permissionObj.permissionID}
                                     className={`my-2 mr-2`}
                                     color={
-                                      checkedList?.includes(permissionObj.permissionID)
+                                      checkedList.includes(permissionObj.permissionID)
                                         ? 'primary'
                                         : ''
                                     }
                                     variant="outlined"
                                     onClick={() =>
                                       handleCheck(
-                                        !checkedList?.includes(permissionObj.permissionID),
+                                        !checkedList.includes(permissionObj.permissionID),
                                         permissionObj,
                                         item?.permissionList
                                       )
@@ -247,7 +206,7 @@ const EditRole = () => {
         <div className="flex !flex-row-reverse flex-col items-center space-y-4 py-5 sm:flex-row sm:space-y-0 lg:py-6">
           <div className="flex gap-2">
             <Button className="min-w-[7rem]" color="primary" type="submit" form="add-role-form">
-              {update}
+              {save}
             </Button>
           </div>
         </div>
@@ -256,4 +215,4 @@ const EditRole = () => {
   );
 };
 
-export default EditRole;
+export default AddRole;
