@@ -138,6 +138,7 @@
   "frontImage": "Front Image",
   "backImage": "Back Image",
   "bank": "Bank",
+  "pan": "PAN",
   "submit": "Submit",
   "account": "Account",
   "reject": "Reject",
@@ -195,5 +196,7 @@
   "count": "Count",
   "won": "Won",
   "search_desc": "Search Mobile, User...",
-  "audit_logs":"Audit Logs"
+  "audit_logs":"Audit Logs",
+  "comment": "Comment",
+  "last_login_ip": "Last Login IP"
 }
