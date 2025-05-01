@@ -138,6 +138,7 @@
   "frontImage": "Front Image",
   "backImage": "Back Image",
   "bank": "Bank",
+  "pan": "PAN",
   "submit": "Submit",
   "account": "Account",
   "reject": "Reject",
@@ -224,5 +225,7 @@
   "visibility": "Visibility",
   "firstDepositOnly": "First Deposit Only",
   "secondDepositOnly": "Second Deposit Only",
-  "audit_logs":"Audit Logs"
+  "audit_logs":"Audit Logs",
+  "comment": "Comment",
+  "last_login_ip": "Last Login IP"
 }

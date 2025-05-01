@@ -200,8 +200,35 @@ export function ViewDetails() {
                     {response?.ImageName}
                   </div>
                 </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('last_login_ip')}
+                  </p>
+                  <p>{response?.LastLoginIP || 'N/A'}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('pan') + t('status')}
+                  </p>
+                  <p>
+                    {response?.PanDetail !== null &&
+                    (response?.IsPanVerified === 1 || response?.IsPanVerified === true)
+                      ? `${response.PanDetail} (Verified)`
+                      : `Pending`}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('bank') + t('status')}
+                  </p>
+                  <p>
+                    {response?.BankDetail !== null &&
+                    (response?.IsBankVerified === 1 || response?.IsBankVerified === true)
+                      ? `${response.BankDetail} (Verified)`
+                      : `Pending`}
+                  </p>
+                </div>
               </div>
-
               <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
                 <Button className="min-w-[7rem]" onClick={() => navigate('/player')}>
                   {t('back')}
