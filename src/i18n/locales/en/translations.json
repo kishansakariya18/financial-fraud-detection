@@ -2,6 +2,7 @@
   "nav": {
     "dashboards": {
       "dashboards": "Dashboards",
+      "dashboard": "Dashboard",
       "home": "Home",
       "users": "Users",
       "admin": "Admin",

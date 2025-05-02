@@ -2,46 +2,54 @@ import { useEffect, useState } from 'react';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 
-const useTable = ({ columns, fetchData, queryParams, setSearchParams, initialSettings = {} }) => {
+const useTable = ({
+  columns,
+  fetchData,
+  queryParams = {},
+  setSearchParams = null,
+  initialSettings = {},
+  paginationEnabled = true // ✅ optional prop
+}) => {
   const [response, setResponse] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Initialize pagination from URL or default values
   const [pagination, setPagination] = useState({
-    pageIndex: isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex,
-    pageSize: isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize,
+    pageIndex: +queryParams.pageIndex || 0,
+    pageSize: +queryParams.pageSize || 10,
     totalCount: 0
   });
 
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState(initialSettings.columnVisibility || {});
   const [columnPinning, setColumnPinning] = useState(initialSettings.columnPinning || {});
-
   const [tableSettings, setTableSettings] = useState({
     enableFullScreen: false,
     enableRowDense: false,
     ...initialSettings.tableSettings
   });
 
-  // Fetch data from API with pagination + queryParams
   const fetchTableData = async (loading = true) => {
-    if (loading) {
-      setIsLoading(true);
-    }
+    if (loading) setIsLoading(true);
     try {
-      const result = await fetchData({
-        ...queryParams, // Keep existing filters from URL
-        pageIndex: pagination.pageIndex,
-        pageSize: pagination.pageSize
-      });
+      const params = paginationEnabled
+        ? {
+            ...queryParams,
+            pageIndex: pagination.pageIndex,
+            pageSize: pagination.pageSize
+          }
+        : queryParams;
+
+      const result = await fetchData(params);
 
       if (result.status === 200) {
         setResponse(result.data);
-        setPagination((prev) => ({
-          ...prev,
-          totalCount: result.totalRecords || 0
-        }));
+        if (paginationEnabled) {
+          setPagination((prev) => ({
+            ...prev,
+            totalCount: result.totalRecords || result.data?.length || 0
+          }));
+        }
       } else {
         setError(result.error);
       }
@@ -49,73 +57,76 @@ const useTable = ({ columns, fetchData, queryParams, setSearchParams, initialSet
       setError(err.message);
     }
 
-    if (loading) {
-      setIsLoading(false);
-    }
+    if (loading) setIsLoading(false);
   };
 
-  // Re-fetch data when pagination or queryParams change
   useDeepCompareEffect(() => {
     fetchTableData();
-    const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
-    const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
 
-    setPagination({
-      ...pagination,
-      pageIndex,
-      pageSize
-    });
+    if (
+      paginationEnabled &&
+      (queryParams.pageIndex !== undefined || queryParams.pageSize !== undefined)
+    ) {
+      setPagination((prev) => ({
+        ...prev,
+        pageIndex: +queryParams.pageIndex || 0,
+        pageSize: +queryParams.pageSize || 10
+      }));
+    }
   }, [queryParams]);
 
-  //   Sync pagination with URL
+  // ✅ Update URL only if pagination is enabled
   useEffect(() => {
+    if (!paginationEnabled || typeof setSearchParams !== 'function') return;
+
     setSearchParams(
       (prevParams) => ({
-        ...Object.fromEntries(prevParams), // Preserve existing query params
+        ...Object.fromEntries(prevParams),
         pageIndex: pagination.pageIndex,
         pageSize: pagination.pageSize
       }),
       { replace: true }
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pagination.pageIndex, pagination.pageSize]);
-
-  console.log('pagination in use table >> ', pagination);
+  }, [pagination.pageIndex, pagination.pageSize, setSearchParams, paginationEnabled]);
 
   const table = useReactTable({
     data: response,
     columns,
-    manualPagination: true,
-    rowCount: pagination.totalCount,
+    ...(paginationEnabled
+      ? {
+          manualPagination: true,
+          rowCount: pagination.totalCount,
+          state: {
+            pagination,
+            columnFilters,
+            columnVisibility,
+            columnPinning,
+            tableSettings
+          },
+          onPaginationChange: setPagination
+        }
+      : {
+          manualPagination: false,
+          state: {
+            columnFilters,
+            columnVisibility,
+            columnPinning,
+            tableSettings
+          }
+        }),
     manualFiltering: true,
-    state: {
-      columnFilters,
-      pagination,
-      columnVisibility,
-      columnPinning,
-      tableSettings
-    },
     meta: {
-      deleteRow: async () => {
-        await fetchTableData(false);
-      },
-      changeStatus: async () => {
-        await fetchTableData(false);
-      },
-      editRow: async () => {
-        await fetchTableData(false);
-      },
-      fetchNewList: async (value) => {
-        await fetchTableData(value);
-      },
+      deleteRow: async () => await fetchTableData(false),
+      changeStatus: async () => await fetchTableData(false),
+      editRow: async () => await fetchTableData(false),
+      fetchNewList: async (value) => await fetchTableData(value),
       setTableSettings
     },
     enableColumnFilters: tableSettings.enableColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    onPaginationChange: setPagination,
+    onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
-    onColumnPinningChange: setColumnPinning,
-    onColumnFiltersChange: setColumnFilters
+    onColumnPinningChange: setColumnPinning
   });
 
   return {
@@ -123,7 +134,9 @@ const useTable = ({ columns, fetchData, queryParams, setSearchParams, initialSet
     isLoading,
     error,
     setError,
-    setPagination,
+    ...(paginationEnabled && {
+      setPagination
+    }),
     setColumnFilters,
     tableSettings,
     setTableSettings
