@@ -5,7 +5,7 @@ import { CopyableCell } from 'components/shared/table/CopyableCell';
 const columnHelper = createColumnHelper();
 
 export const columns = [
-  columnHelper.accessor((row) => row.name, {
+  columnHelper.accessor((row) => row.Name, {
     id: 'name',
     label: 'Name',
     header: 'Name',

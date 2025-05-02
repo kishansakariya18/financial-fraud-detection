@@ -13,18 +13,12 @@ import TopGames from './top-game-list/list';
 import TopPlayers from './top-player-list/list';
 
 export default function Home() {
-  const [response, setResponse] = useState({});
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [cardResponse, setCardResponse] = useState({});
   const [cardError, setCardError] = useState(null);
   const [isCardLoading, setIsCardLoading] = useState(false);
   const [depositResponse, setDepositResponse] = useState(null);
   const [depositError, setDepositError] = useState(null);
   const [isDepositLoading, setIsDepositLoading] = useState(false);
-  const [withdrawResponse, setWithdrawResponse] = useState(null);
-  const [withdrawError, setWithdrawError] = useState(null);
-  const [isWithdrawLoading, setIsWithdrawLoading] = useState(false);
   const [ggrResponse, setGGRResponse] = useState(null);
   const [ggrError, setGGRError] = useState(null);
   const [isGGRLoading, setIsGGRLoading] = useState(false);
@@ -41,45 +35,10 @@ export default function Home() {
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [countryError, setCountryError] = useState(null);
   const [selectedTimeRage, setSelectedTimeRange] = useState(1);
-  const [kpiSummaryResponse, setKPISummaryResponse] = useState(null);
-  const [kpiSummaryError, setKPISummaryError] = useState(null);
-  const [isKPISummaryLoading, setIsKPISummaryLoading] = useState(false);
   const [casinoResponse, setCasinoResponse] = useState(null);
   const [casinoError, setCasinoError] = useState(null);
   const [isCasinoLoading, setIsCasinoLoading] = useState(false);
-  const [playersResponse, setPlayersResponse] = useState(null);
-  const [playersError, setPlayersError] = useState(null);
-  const [isPlayersLoading, setIsPlayersLoading] = useState(false);
-  const [playerTimeRange, setPlayerTimeRange] = useState(1);
-  const [playerFilter, setPlayerFilter] = useState(1);
-  const [gamesResponse, setGamesResponse] = useState(null);
-  const [gamesError, setGamesError] = useState(null);
-  const [isGamesLoading, setIsGamesLoading] = useState(false);
-  const [gameTimeRage, setGameTimeRange] = useState(1);
-  const [gameFilter, setGameFilter] = useState(1);
   const [redata, setRedata] = useState([]);
-
-  const playersFilterOptions = [
-    {
-      value: 1,
-      label: 'Top Wagered'
-    },
-    {
-      value: 2,
-      label: 'Top Payout'
-    }
-  ];
-
-  const gamesFilterOptions = [
-    {
-      value: 1,
-      label: 'Top Wagered'
-    },
-    {
-      value: 2,
-      label: 'Top Payout'
-    }
-  ];
 
   const timeRangeOptions = [
     { value: 1, label: 'Last 30 days' },
@@ -730,67 +689,6 @@ export default function Home() {
     setIsDemographicLoading(false);
   };
 
-  const fetchKPISummary = async () => {
-    try {
-      setIsKPISummaryLoading(true);
-      const result = await DashboardService.getKPISummary();
-      if (result.status === 200) {
-        setKPISummaryResponse(result.response.data);
-      } else {
-        setKPISummaryError(result.error);
-      }
-    } catch (error) {
-      console.log('errr fetchKPISummary: ', error);
-    }
-    setIsKPISummaryLoading(false);
-  };
-
-  const fetchTopGames = async () => {
-    try {
-      setIsGamesLoading(true);
-
-      const data = {};
-
-      data.timeRangeType = gameTimeRage ? gameTimeRage : 1;
-      data.type = gameFilter ? gameFilter : 1;
-
-      console.log('fetchTopGames: ', data);
-
-      const result = await DashboardService.getTopGames(data);
-      if (result.status === 200) {
-        setGamesResponse(result.response.data);
-      } else {
-        setGamesError(result.error);
-      }
-    } catch (error) {
-      console.log('errr fetchTopPlayers: ', error);
-    }
-    setIsGamesLoading(false);
-  };
-
-  const fetchTopPlayers = async () => {
-    try {
-      setIsPlayersLoading(true);
-
-      const data = {};
-
-      data.timeRangeType = playerTimeRange ? playerTimeRange : 1;
-      data.type = playerFilter ? playerFilter : 1;
-
-      console.log('fetchTopPlayers: ', data);
-
-      const result = await DashboardService.getTopPlayers(data);
-      if (result.status === 200) {
-        setPlayersResponse(result.response.data);
-      } else {
-        setPlayersError(result.error);
-      }
-    } catch (error) {
-      console.log('errr fetchTopPlayers: ', error);
-    }
-    setIsPlayersLoading(false);
-  };
-
   const fetchCountryList = async () => {
     console.log('fetchCountryList');
     const result = await AuthService.getCountries();
@@ -877,10 +775,7 @@ export default function Home() {
     fetchActivePlayers();
     fetchDemographicReport();
     fetchCountryList();
-    fetchKPISummary();
     fetchCasinoStats();
-    fetchTopPlayers();
-    fetchTopGames();
   }, []);
 
   return (
@@ -889,7 +784,7 @@ export default function Home() {
         <div className="min-w-0">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
             <DashboardCard
-              label="Total Deposits"
+              label={`${t('total')}  ${t('deposits')}`}
               value="3,889,357,000"
               gradientFrom="from-info"
               gradientTo="to-info-darker"
@@ -897,7 +792,7 @@ export default function Home() {
               maskShape="is-reuleaux-triangle"
             />
             <DashboardCard
-              label="Total Withdrawals"
+              label={`${t('total')}  ${t('withdrawals')}`}
               value="855,129,000"
               gradientFrom="from-amber-400"
               gradientTo="to-orange-600"
@@ -905,7 +800,7 @@ export default function Home() {
               maskShape="is-diamond"
             />
             <DashboardCard
-              label="GGR"
+              label={`${t('ggr')}`}
               value="3,667,357"
               gradientFrom="from-pink-500"
               gradientTo="to-rose-500"
@@ -913,7 +808,7 @@ export default function Home() {
               maskShape="is-hexagon-2"
             />
             <DashboardCard
-              label="Net Profit"
+              label={`${t('net')} ${t('profit')}`}
               value="748,229"
               gradientFrom="from-amber-400"
               gradientTo="to-orange-600"
@@ -921,7 +816,7 @@ export default function Home() {
               maskShape="is-reuleaux-triangle"
             />
             <DashboardCard
-              label="Today's Registrations"
+              label={`${t('today')} ${t('registrations')}`}
               value="6,333"
               gradientFrom="from-pink-500"
               gradientTo="to-rose-500"
@@ -929,7 +824,7 @@ export default function Home() {
               maskShape="is-diamond"
             />
             <DashboardCard
-              label="Total Players"
+              label={`${t('total')} ${t('players')}`}
               value="580,443"
               gradientFrom="from-info"
               gradientTo="to-info-darker"
@@ -937,7 +832,7 @@ export default function Home() {
               maskShape="is-hexagon-2"
             />
             <DashboardCard
-              label="Total Players Balance"
+              label={`${t('total')} ${t('players')} ${t('balance')}`}
               value="580,443"
               gradientFrom="from-amber-400"
               gradientTo="to-orange-600"
@@ -945,7 +840,7 @@ export default function Home() {
               maskShape="is-reuleaux-triangle"
             />
             <DashboardCard
-              label="Total Providers"
+              label={`${t('total')} ${t('providers')}`}
               value="5"
               gradientFrom="from-info"
               gradientTo="to-info-darker"
@@ -956,7 +851,7 @@ export default function Home() {
           <div className="-mx-2 flex flex-wrap pt-2">
             {!isDepositLoading && depositResponse && (
               <div className="mb-4 w-full px-2 md:w-1/2" id="chart-container">
-                <Chart data={depositResponse} title={'deposit'} />
+                <Chart data={depositResponse} title={t('deposit')} />
               </div>
             )}
             {!isDepositLoading && !depositResponse && <div className="mb-4 w-full px-2 md:w-1/2" />}
@@ -973,25 +868,25 @@ export default function Home() {
 
             {!isCasinoLoading && casinoResponse && (
               <div className="mb-4 w-full px-2 md:w-1/2">
-                <Chart data={casinoResponse} title={'casino'} />
+                <Chart data={casinoResponse} title={t('casino')} />
               </div>
             )}
             {!isCasinoLoading && !casinoResponse && <div className="mb-4 w-full px-2 md:w-1/2" />}
 
             {!isGGRLoading && ggrResponse && (
               <div className="mb-4 w-full px-2">
-                <Chart data={ggrResponse} title={'ggr'} />
+                <Chart data={ggrResponse} title={`${t('ggr')} ${t('report')}`} />
               </div>
             )}
 
             {!isLoggedInLoading && loggedInResponse && (
               <div className="mb-4 w-full px-2 md:w-1/3">
-                <Chart data={loggedInResponse} title={'logged In'} />
+                <Chart data={loggedInResponse} title={`${t('loggedIn')} ${t('players')}`} />
               </div>
             )}
             {!isActivePlayersLoading && activePlayersResponse && (
               <div className="mb-4 w-full px-2 md:w-2/3">
-                <Chart data={activePlayersResponse} title={'active'} />
+                <Chart data={activePlayersResponse} title={`${t('active')} ${t('players')}`} />
               </div>
             )}
 
@@ -1029,7 +924,7 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="w-full">
-                    <Chart data={demographicResponse} title={'demographic'} />
+                    <Chart data={demographicResponse} title={t('demographic')} />
                   </div>
                 </Card>
               </div>

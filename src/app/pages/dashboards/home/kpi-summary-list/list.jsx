@@ -6,8 +6,11 @@ import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import useTable from 'components/ui/useTable';
 import DashboardService from 'services/dashboard.services';
+import { t } from 'i18next';
 
 export default function KPISummaryList() {
+  const title = `${t('kpi')} ${t('summary')}`;
+
   const fetchKPISummaryList = async () => {
     const result = await DashboardService.getKPISummary({
       filters: {}
@@ -40,21 +43,21 @@ export default function KPISummaryList() {
       toast.error(error);
       setError('');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
   useEffect(() => {
     const filtersFromQuery = [];
 
     setColumnFilters(filtersFromQuery);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useLockScrollbar(tableSettings.enableFullScreen);
 
   return (
     <div className="mb-4 w-full">
-      <h2 className="px-[--margin-x] text-xl">KPI Summary</h2>
+      <h2 className="px-[--margin-x] text-sm+ font-medium uppercase tracking-wide text-gray-800 dark:text-dark-100">
+        {title}
+      </h2>
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </div>
   );
