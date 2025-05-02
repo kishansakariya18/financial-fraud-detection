@@ -66,7 +66,7 @@ export default function TopPlayers() {
 
   return (
     <div className="mb-4 w-full">
-      <h2 className="px-6 text-xl">Top Players</h2>
+      <h2 className="px-[--margin-x] text-xl">Top Players</h2>
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </div>
   );

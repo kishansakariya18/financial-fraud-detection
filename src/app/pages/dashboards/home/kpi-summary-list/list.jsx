@@ -54,7 +54,7 @@ export default function KPISummaryList() {
 
   return (
     <div className="mb-4 w-full">
-      <h2 className="px-6 text-xl">KPI Summary</h2>
+      <h2 className="px-[--margin-x] text-xl">KPI Summary</h2>
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </div>
   );

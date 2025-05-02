@@ -66,7 +66,7 @@ export default function TopGames() {
 
   return (
     <div className="mb-4 w-full">
-      <h2 className="px-6 text-xl">Top Games</h2>
+      <h2 className="px-[--margin-x] text-xl">Top Games</h2>
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </div>
   );

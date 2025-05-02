@@ -35,8 +35,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row.delta, {
     id: 'delta',
-    label: 'Delta',
-    header: 'Delta',
+    label: 'Delta (%)',
+    header: 'Delta (%)',
     cell: AmountCell,
     enableSorting: false
   })
