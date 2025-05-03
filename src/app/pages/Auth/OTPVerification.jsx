@@ -68,7 +68,7 @@ export default function OTPVerification() {
     });
     if (result) {
       if (result.status === 200) {
-        localStorage.setItem(LOCAL_STORAGE.AUTH_TOKEN, result.response.data.UserToken);
+        localStorage.setItem(LOCAL_STORAGE.AUTH_TOKEN, result.response.data.AdminSessionToken);
         localStorage.setItem(LOCAL_STORAGE.AUTH_EMAIL, result.response.data?.adminData?.Email);
         const responseData = await performPostLoginActions();
         setResponse({
@@ -89,40 +89,6 @@ export default function OTPVerification() {
     const result = await AuthService.loadInitialSettings();
     const appSettingData = result.response.data || null;
 
-    if (appSettingData) {
-      const sportsList = appSettingData.SportsList;
-
-      let sportsConfig = {};
-
-      for (let i = 0; i < sportsList.length; i++) {
-        let EntryFeeIn = sportsList[i]['EntryFeeIn'] || null;
-        let PrizeIn = sportsList[i]['PrizeIn'] || null;
-
-        if (EntryFeeIn) {
-          EntryFeeIn = {
-            CURRENCY: EntryFeeIn?.RealCash,
-            COIN: EntryFeeIn?.Coin
-          };
-        }
-
-        if (PrizeIn) {
-          PrizeIn = {
-            CURRENCY: PrizeIn?.RealCash,
-            COIN: PrizeIn?.Coin,
-            GADGET: PrizeIn?.Gadget
-          };
-        }
-
-        let sportId = sportsList[i]['SportsID'];
-        sportsConfig[sportId] = {
-          ENTRY_FEE_IN: EntryFeeIn,
-          PRIZE_IN: PrizeIn
-        };
-      }
-
-      appSettingData.Config = sportsConfig;
-    }
-
     return appSettingData;
   };
 
@@ -130,7 +96,7 @@ export default function OTPVerification() {
     const result = await AuthService.loadAdminPermissions();
     const permissionData = result?.response?.data || {};
 
-    const isMasterAdmin = permissionData?.MasterAdmin || 0;
+    const isMasterAdmin = permissionData?.IsSuperAdmin || 0;
     const permissions = permissionData?.permissions || [];
 
     const permissionList = permissions.map((permission) => {
