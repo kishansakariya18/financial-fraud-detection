@@ -95,7 +95,7 @@ export function ViewDetails() {
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('balance')}
                   </p>
-                  <p>{response?.Balance}</p>
+                  <p>{response?.CommissionBalance}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
@@ -144,8 +144,8 @@ export function ViewDetails() {
                     {t('status')}
                   </p>
                   <p>
-                    {+response.Status >= 0 &&
-                      capitalizeFirstLetter(affiliateStatusToApp(+response?.Status))}
+                    {+response.AccountStatus >= 0 &&
+                      capitalizeFirstLetter(affiliateStatusToApp(+response?.AccountStatus))}
                   </p>
                 </div>
                 <div>
