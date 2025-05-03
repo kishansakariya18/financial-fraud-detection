@@ -7,7 +7,7 @@ export const emailTemplateDetailResponseMapper = (apiData) => {
     emailTemplateId: apiData?.EmailTemplateID,
     title: apiData?.Title,
     slug: apiData?.Slug,
-    heading: apiData?.Heading,
+    heading: apiData?.Subject,
     template: apiData?.Template,
     to: apiData?.ToEmail,
     cc: apiData?.CC,
