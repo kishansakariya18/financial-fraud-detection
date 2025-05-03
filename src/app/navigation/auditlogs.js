@@ -8,7 +8,7 @@ export const auditlogs = {
   type: NAV_TYPE_ITEM,
   path: '/auditlogs',
   title: 'Audit Logs',
-  transKey: 'Auditlogs',
+  transKey: 'auditlogs',
   Icon: CommandLineIcon,
   permission: PERMISSIONS.AUDIT_LOG.VIEW
 };

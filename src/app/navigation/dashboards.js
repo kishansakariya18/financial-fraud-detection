@@ -13,6 +13,7 @@ import { emailTemplate } from './email-template';
 import { peomocode } from './promocode';
 import { roles } from './roles';
 import { auditlogs } from './auditlogs';
+import { pages } from './pages';
 
 export const dashboards = {
   id: 'dashboards',
@@ -25,6 +26,7 @@ export const dashboards = {
     users,
     platform,
     country,
+    pages,
     payment,
     roles,
     reports,

@@ -197,6 +197,7 @@
   "won": "Won",
   "search_desc": "Search Mobile, User...",
   "emailTemplate": "Email Template",
+  "pages": "Pages",
   "slug": "Slug",
   "title": "Title",
   "template": "Template",
@@ -227,5 +228,6 @@
   "secondDepositOnly": "Second Deposit Only",
   "audit_logs":"Audit Logs",
   "comment": "Comment",
-  "last_login_ip": "Last Login IP"
+  "last_login_ip": "Last Login IP",
+  "auditlogs": "Audit Logs"
 }
