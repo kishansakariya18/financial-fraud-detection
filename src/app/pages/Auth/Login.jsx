@@ -57,7 +57,7 @@ export default function Login() {
     if (result) {
       if (result.status === 200) {
         if (!result.response.data?.mfaEnabled) {
-          localStorage.setItem(LOCAL_STORAGE.AUTH_TOKEN, result.response.data.UserToken);
+          localStorage.setItem(LOCAL_STORAGE.AUTH_TOKEN, result.response.data.AdminSessionToken);
           const responseData = await performPostLoginActions();
           setResponse({
             message: result.response.message,
@@ -90,7 +90,7 @@ export default function Login() {
       if (isMfaEnabled) {
         // localStorage.setItem(LOCAL_STORAGE.AUTH_PASSWORD, validateResponse.userPassword);
         // localStorage.setItem(LOCAL_STORAGE.TWO_STEP_MODE, 'login');
-        redirectTo = `/otp-verification?token=${validateResponse.token}&&mobile=${validateResponse.mobile}&&UserToken=${validateResponse.UserToken}&&password=${validateResponse.userPassword}`;
+        redirectTo = `/otp-verification?token=${validateResponse.token}&&mobile=${validateResponse.mobile}&&UserToken=${validateResponse.AdminSessionToken}&&password=${validateResponse.userPassword}`;
       } else {
         localStorage.setItem(LOCAL_STORAGE.AUTH_EMAIL, response?.adminData?.Email);
         localStorage.setItem(LOCAL_STORAGE.USER_DATA, JSON.stringify(response.adminData));
@@ -120,40 +120,6 @@ export default function Login() {
     const result = await AuthService.loadInitialSettings();
     const appSettingData = result.response.data || null;
 
-    if (appSettingData) {
-      const sportsList = appSettingData.SportsList;
-
-      let sportsConfig = {};
-
-      for (let i = 0; i < sportsList.length; i++) {
-        let EntryFeeIn = sportsList[i]['EntryFeeIn'] || null;
-        let PrizeIn = sportsList[i]['PrizeIn'] || null;
-
-        if (EntryFeeIn) {
-          EntryFeeIn = {
-            CURRENCY: EntryFeeIn?.RealCash,
-            COIN: EntryFeeIn?.Coin
-          };
-        }
-
-        if (PrizeIn) {
-          PrizeIn = {
-            CURRENCY: PrizeIn?.RealCash,
-            COIN: PrizeIn?.Coin,
-            GADGET: PrizeIn?.Gadget
-          };
-        }
-
-        let sportId = sportsList[i]['SportsID'];
-        sportsConfig[sportId] = {
-          ENTRY_FEE_IN: EntryFeeIn,
-          PRIZE_IN: PrizeIn
-        };
-      }
-
-      appSettingData.Config = sportsConfig;
-    }
-
     return appSettingData;
   };
 
@@ -161,7 +127,7 @@ export default function Login() {
     const result = await AuthService.loadAdminPermissions();
     const permissionData = result?.response?.data || {};
 
-    const isMasterAdmin = permissionData?.MasterAdmin || 0;
+    const isMasterAdmin = permissionData?.IsSuperAdmin || 0;
     const permissions = permissionData?.permissions || [];
 
     const permissionList = permissions.map((permission) => {

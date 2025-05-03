@@ -26,9 +26,9 @@ export const responseMapper = (apiData) => {
     role: data.Role,
     email: data.Email,
     createdAt: getDateInUTCToTimeZone(data.DateCreated),
-    isMasterAdmin: data.MasterAdmin,
+    isMasterAdmin: data.IsSuperAdmin,
     lastLoginAt: data.LastLoginAt ? getDateInUTCToTimeZone(data.LastLoginAt) : '',
-    status: parseAdminStatusToApp(data.Status)
+    status: parseAdminStatusToApp(data.AccountStatus)
   }));
   return resultData;
 };
@@ -50,7 +50,7 @@ export const adminDetailResponseMapper = (data) => {
   const resultData = {
     ...data,
     Status: parseAdminStatusToApp(data.Status),
-    MasterAdmin: data.MasterAdmin ? 'yes' : 'no'
+    MasterAdmin: data.IsSuperAdmin ? 'yes' : 'no'
   };
   return resultData;
 };
