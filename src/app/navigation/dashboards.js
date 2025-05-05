@@ -1,5 +1,6 @@
 import DashboardsIcon from 'assets/dualicons/dashboards.svg?react';
-import { NAV_TYPE_ROOT } from 'constants/app.constant';
+import MonitorIcon from 'assets/nav-icons/monitor.svg?react';
+import { NAV_TYPE_ITEM, NAV_TYPE_ROOT } from 'constants/app.constant';
 import { users } from './users';
 import { platform } from './platoform';
 import { country } from './country';
@@ -23,6 +24,14 @@ export const dashboards = {
   transKey: 'nav.dashboards.dashboards',
   Icon: DashboardsIcon,
   childs: [
+    {
+      id: 'dashboard',
+      path: '/dashboards/home',
+      type: NAV_TYPE_ITEM,
+      title: 'Dashboard',
+      transKey: 'nav.dashboards.dashboard',
+      Icon: MonitorIcon
+    },
     users,
     platform,
     country,

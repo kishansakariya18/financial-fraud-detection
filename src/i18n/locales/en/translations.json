@@ -2,6 +2,7 @@
   "nav": {
     "dashboards": {
       "dashboards": "Dashboards",
+      "dashboard": "Dashboard",
       "home": "Home",
       "users": "Users",
       "admin": "Admin",
@@ -26,8 +27,10 @@
   "remove": "Remove",
   "casino_provider": "Provider",
   "casino_games": "Games",
+  "games": "Games",
   "casino_category": "Category",
   "restricted_country":"Restricted Countries",
+  "casino":"Casino",
   "casino_management": "Casino Management",
   "betslip_transactions": "Betslip Transactions",
   "report": "Report",
@@ -229,5 +232,19 @@
   "audit_logs":"Audit Logs",
   "comment": "Comment",
   "last_login_ip": "Last Login IP",
-  "auditlogs": "Audit Logs"
+  "auditlogs": "Audit Logs",
+  "top": "Top",
+  "kpi": "KPI",
+  "summary": "Summary",
+  "ggr": "GGR",
+  "loggedIn": "LoggedIn",
+  "active": "Active",
+  "demographic": "Demographic",
+  "deposits": "Deposits",
+  "withdrawals": "Withdrawals",
+  "net": "Net",
+  "profit": "Profit",
+  "today": "Today",
+  "registrations": "Registrations",
+  "providers": "Providers"
 }

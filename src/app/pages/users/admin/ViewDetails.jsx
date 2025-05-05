@@ -121,8 +121,8 @@ const ViewDetails = () => {
                   {t('status')}:
                 </p>
                 <p>
-                  {+response.Status >= 0 &&
-                    capitalizeFirstLetter(parseAdminStatusToApp(response.Status))}
+                  {+response.AccountStatus >= 0 &&
+                    capitalizeFirstLetter(parseAdminStatusToApp(response.AccountStatus))}
                 </p>
               </div>
               <div>
@@ -133,7 +133,7 @@ const ViewDetails = () => {
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('role')}:</p>
-                <p>{response?.Role}</p>
+                <p>{response?.role?.RoleName}</p>
               </div>
             </div>
 
