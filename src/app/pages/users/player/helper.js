@@ -288,7 +288,7 @@ export const fundTypeToAPI = (fundType) => {
 export const playerNotesResponseMapper = (apiData) => {
   return apiData.map((data) => ({
     id: data.CommentID,
-    note: data.Comment,
+    note: data.CommentText,
     adminName: data.Admin.Username,
     isPinned: data.IsPinned ? 'Yes' : 'No',
     createdAt: getDateInUTCToTimeZone(data.DateCreated)
