@@ -29,9 +29,11 @@ export const apiConfig = {
     },
     PAGE: {
       LIST: '/admin/pages/list',
-      DETAIL: '/admin/pages/view/:pageId',
-      TOGGLE_STATUS: '/admin/pages/change-status',
-      EDIT: '/admin/pages/update'
+      ADD: '/admin/pages/add',
+      TOGGLE_STATUS: '/admin/pages/:pageID/change-status',
+      DELETE: '/admin/pages/:pageID/delete',
+      DETAIL: '/admin/pages/detail',
+      UPDATE: '/admin/pages/update'
     },
     USER: {
       SET_EXCLUSION: '/admin/user/:userID/set-exclusion',

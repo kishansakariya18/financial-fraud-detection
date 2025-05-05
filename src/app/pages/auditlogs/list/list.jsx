@@ -67,6 +67,12 @@ export default function AuditLogs() {
     if (queryParams.keyword) {
       filtersFromQuery.push({ id: 'moduleName', value: queryParams.keyword });
     }
+    if (queryParams.startDate && queryParams.endDate) {
+      filtersFromQuery.push({
+        id: 'createdAt',
+        value: [+queryParams.startDate, +queryParams.endDate]
+      });
+    }
 
     setColumnFilters(filtersFromQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps

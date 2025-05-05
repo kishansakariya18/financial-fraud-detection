@@ -1,32 +1,32 @@
 // Local Imports
-import { Box, Button, Input, Skeleton, Switch } from 'components/ui';
+import { Box, Input, Skeleton, Switch } from 'components/ui';
 import { Page } from 'components/shared/Page';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { Navigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
 import PlayerService from 'services/player.services';
 import { ContextualHelp } from 'components/shared/ContextualHelp';
 import { playerLimitSchema } from './schema';
-// import { Listbox } from 'components/shared/form/Listbox';
-// import { DatePicker } from 'components/shared/form/Datepicker';
+import { Listbox } from 'components/shared/form/Listbox';
+import { DatePicker } from 'components/shared/form/Datepicker';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
 const breadcrumbs = [{ title: 'Players', path: '/player' }, { title: 'Limit' }];
-// const exclusionTimeOptions = [
-//   { label: '1 day', value: '1' },
-//   { label: '7 day', value: '2' },
-//   { label: '1 month', value: '3' },
-//   { label: '6 month', value: '4' },
-//   { label: '12 month', value: '5' },
-//   { label: 'Custom', value: '6' },
-//   { label: 'Permenent', value: '7' }
-// ];
+const exclusionTimeOptions = [
+  { label: '1 day', value: '1' },
+  { label: '7 day', value: '2' },
+  { label: '1 month', value: '3' },
+  { label: '6 month', value: '4' },
+  { label: '12 month', value: '5' },
+  { label: 'Custom', value: '6' },
+  { label: 'Permenent', value: '7' }
+];
 
 const PlayerLimit = () => {
   const [error, setError] = useState('');
@@ -34,7 +34,7 @@ const PlayerLimit = () => {
   const [detailLoading, setDetailLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const { playerId } = useParams();
-  // const [exclusionType, setExclusionType] = useState('');
+  const [exclusionType, setExclusionType] = useState('');
   const { t } = useTranslation();
   const pageTitle = t('player') + ' ' + t('limit');
 
@@ -42,8 +42,8 @@ const PlayerLimit = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors }
-    // control
+    formState: { errors },
+    control
   } = useForm({
     resolver: yupResolver(playerLimitSchema)
   });
@@ -137,10 +137,10 @@ const PlayerLimit = () => {
     await updatePlayerLimit(data);
   };
 
-  // const handleChangeExclusionType = (field, val) => {
-  //   field.onChange(val.value);
-  //   setExclusionType(val.value);
-  // };
+  const handleChangeExclusionType = (field, val) => {
+    field.onChange(val.value);
+    setExclusionType(val.value);
+  };
 
   return (
     <Page title={pageTitle}>
@@ -184,7 +184,7 @@ const PlayerLimit = () => {
                           id="dailyWagerLimit"
                           {...register('dailyWagerLimit')}
                           error={errors?.dailyWagerLimit?.message}
-                          placeholder="Enter Daily Wager Limit"
+                          placeholder=""
                           classNames={{
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
@@ -216,7 +216,7 @@ const PlayerLimit = () => {
                           {...register('weeklyWagerLimit')}
                           error={errors?.weeklyWagerLimit?.message}
                           id="weeklyWagerLimit"
-                          placeholder="Enter Weekly Wager Limit"
+                          placeholder=""
                           classNames={{
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
@@ -248,7 +248,7 @@ const PlayerLimit = () => {
                           {...register('monthlyWagerLimit')}
                           error={errors?.monthlyWagerLimit?.message}
                           id="monthlyWagerLimit"
-                          placeholder="Enter Monthly Wager Limit"
+                          placeholder=""
                           classNames={{
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
@@ -279,7 +279,7 @@ const PlayerLimit = () => {
                           {...register('dailyDepositLimit')}
                           error={errors?.dailyDepositLimit?.message}
                           id="dailyDepositLimit"
-                          placeholder="Enter Daily Deposit Limit"
+                          placeholder=""
                           classNames={{
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
@@ -310,7 +310,7 @@ const PlayerLimit = () => {
                           {...register('weeklyDepositLimit')}
                           error={errors?.weeklyDepositLimit?.message}
                           id="weeklyDepositLimit"
-                          placeholder="Enter Weekly Deposit Limit"
+                          placeholder=""
                           classNames={{
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
@@ -341,7 +341,7 @@ const PlayerLimit = () => {
                           {...register('monthlyDepositLimit')}
                           error={errors?.monthlyDepositLimit?.message}
                           id="monthlyDepositLimit"
-                          placeholder="Enter Monthly Deposit Limit"
+                          placeholder=""
                           classNames={{
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
@@ -372,7 +372,7 @@ const PlayerLimit = () => {
                           {...register('dailyWithdrawLimit')}
                           error={errors?.dailyWithdrawLimit?.message}
                           id="dailyWithdrawLimit"
-                          placeholder="Enter Daily Withdraw Limit"
+                          placeholder=""
                           classNames={{
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
@@ -403,7 +403,7 @@ const PlayerLimit = () => {
                           {...register('weeklyWithdrawLimit')}
                           error={errors?.weeklyWithdrawLimit?.message}
                           id="weeklyWithdrawLimit"
-                          placeholder="Enter Weekly Withdraw Limit"
+                          placeholder=""
                           classNames={{
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
@@ -434,7 +434,7 @@ const PlayerLimit = () => {
                           {...register('monthlyWithdrawLimit')}
                           error={errors?.monthlyWithdrawLimit?.message}
                           id="monthlyWithdrawLimit"
-                          placeholder="Enter Monthly Withdraw Limit"
+                          placeholder=""
                           classNames={{
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
@@ -476,7 +476,7 @@ const PlayerLimit = () => {
                           {...register('dailyLossLimit')}
                           error={errors?.dailyLossLimit?.message}
                           id="dailyLossLimit"
-                          placeholder="Enter Daily Loss Limit"
+                          placeholder=""
                           classNames={{
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
@@ -507,7 +507,7 @@ const PlayerLimit = () => {
                           {...register('weeklyLossLimit')}
                           error={errors?.weeklyLossLimit?.message}
                           id="weeklyLossLimit"
-                          placeholder="Enter Weekly Loss Limit"
+                          placeholder=""
                           classNames={{
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
@@ -539,7 +539,7 @@ const PlayerLimit = () => {
                           {...register('monthlyLossLimit')}
                           error={errors?.monthlyLossLimit?.message}
                           id="monthlyLossLimit"
-                          placeholder="Enter Monthly Loss Limit"
+                          placeholder=""
                           classNames={{
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
@@ -549,7 +549,7 @@ const PlayerLimit = () => {
                     </div>
                   </div>
                 </Box>
-                {/* <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
+                <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
                   <div>
                     <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
                       {t('selfExclusionTime')}
@@ -633,16 +633,16 @@ const PlayerLimit = () => {
                       </div>
                     </div>
                   </div>
-                </Box> */}
+                </Box>
               </>
             )}
           </div>
 
-          <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
+          {/* <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
             <Button className="min-w-[7rem]" onClick={() => Navigate('/player')}>
               {t('back')}
             </Button>
-          </div>
+          </div> */}
         </form>
       </div>
     </Page>

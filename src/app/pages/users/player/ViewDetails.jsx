@@ -208,7 +208,7 @@ export function ViewDetails() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('pan') + t('status')}
+                    {t('pan') + ' ' + t('status')}
                   </p>
                   <p>
                     {response?.PanDetail !== null &&
@@ -219,7 +219,7 @@ export function ViewDetails() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('bank') + t('status')}
+                    {t('bank') + ' ' + t('status')}
                   </p>
                   <p>
                     {response?.BankDetail !== null &&

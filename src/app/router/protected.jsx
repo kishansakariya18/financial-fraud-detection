@@ -16,6 +16,7 @@ import affiliateRoutes from './routes/affiliate.route';
 import segmentationRoutes from './routes/segmentation.route';
 import emailTemplateRoute from './routes/email-template.route';
 import promocodeRoute from './routes/promocode.route';
+import pagesRoute from './routes/pages.route';
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +42,8 @@ const protectedRoutes = {
         ...affiliateRoutes,
         ...segmentationRoutes,
         ...emailTemplateRoute,
-        ...promocodeRoute
+        ...promocodeRoute,
+        ...pagesRoute
       ]
     }
   ]
