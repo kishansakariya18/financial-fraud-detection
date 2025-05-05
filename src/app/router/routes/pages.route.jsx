@@ -2,8 +2,6 @@ import { PERMISSIONS } from 'constants/app.constant';
 import PrivateRoute from '../private';
 import { Navigate } from 'react-router';
 
-console.log('rerere');
-
 export const pagesRoute = [
   {
     path: 'pages',

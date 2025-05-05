@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
-import EmailTemplateService from 'services/email-template.services';
+import PagesService from 'services/pages.services';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
@@ -26,12 +26,12 @@ export function RowActions({ row, table }) {
 
   const confirmMessages = {
     pending: {
-      description: t('affiliate_status_desc'),
+      description: t('pages_status_desc'),
       actionText: t('submit')
     },
     success: {
       title: t('page') + ' ' + t('status') + ' ' + t('changed'),
-      description: t('affiliate_status_suceess')
+      description: t('pages_status_suceess')
     }
   };
 
@@ -40,7 +40,7 @@ export function RowActions({ row, table }) {
   };
 
   const handleClickView = () => {
-    navigate(`/email-template/${row.original.id}/edit`);
+    navigate(`/pages/${row.original.id}/edit`);
   };
 
   const openModal = () => {
@@ -51,7 +51,7 @@ export function RowActions({ row, table }) {
 
   const handleChangeStatus = useCallback(async () => {
     setConfirmDeleteLoading(true);
-    const result = await EmailTemplateService.AffiliateStatus(row.original.affiliateUID);
+    const result = await PagesService.pagesChangeStatus(row.original.id);
     if (result.status === 200) {
       table.options.meta?.changeStatus(row);
       setChangeStatusSuccess(true);
@@ -83,7 +83,7 @@ export function RowActions({ row, table }) {
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
               className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
-              {hasPermission(PERMISSIONS.AFFILIATES.LIST) && (
+              {hasPermission(PERMISSIONS.PAGE.LIST) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -111,7 +111,7 @@ export function RowActions({ row, table }) {
                   </button>
                 )}
               </MenuItem>
-              {hasPermission(PERMISSIONS.AFFILIATES.CHANGE_STATUS) && (
+              {hasPermission(PERMISSIONS.PAGE.STATUS) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button

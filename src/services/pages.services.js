@@ -3,14 +3,16 @@ import apiConfig from 'configs/api.config';
 import { sendRequest } from 'utils/axios';
 import { replaceText } from 'utils/custom.utilities';
 
-const EmailTemplateService = {
+const PagesService = {
   pagesList: async (data) => {
     try {
       const { filters, pagination } = data;
       const reqBody = {
         page: pagination.pageIndex + 1,
         limit: pagination.pageSize,
-        keyword: filters?.keyword || undefined
+        keyword: filters?.keyword || undefined,
+        status: filters?.status ? pagesStatusToAPI(filters.status) : undefined,
+        ...(!pagination && { pagination: false })
       };
       const endPoint = apiConfig.endPoints.PAGE.LIST;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
@@ -126,4 +128,4 @@ const EmailTemplateService = {
   }
 };
 
-export default EmailTemplateService;
+export default PagesService;

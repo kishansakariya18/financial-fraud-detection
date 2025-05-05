@@ -9,15 +9,15 @@ export const pagesListResponseMapper = (apiData) => {
       srn: i++,
       id: item?.PageID,
       name: item?.Name,
-      status: pagesStatusToAPP(item?.Status)
+      status: pagesStatusToAPP(item?.IsActive)
     };
   });
   return { list, totalRecords };
 };
 export const pagesStatusToAPP = (status) => {
-  if (status == 0) {
+  if (status === 0) {
     return 'inactive';
-  } else if (status == 1) {
+  } else if (status === 1) {
     return 'active';
   }
 };

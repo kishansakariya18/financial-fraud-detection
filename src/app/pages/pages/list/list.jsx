@@ -84,14 +84,11 @@ export default function Pages() {
   const applyFilterHandler = () => {
     const filterItems = {};
     for (let data of table.getState().columnFilters) {
-      if (data.id === 'title') {
+      if (data.id === 'name') {
         filterItems.keyword = data.value;
       }
       if (data.id === 'status') {
         filterItems.status = data.value;
-      }
-      if (data.id === 'createdAt') {
-        filterItems.date = data.value;
       }
     }
 
@@ -99,9 +96,7 @@ export default function Pages() {
       pageIndex: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
-      ...(filterItems.status && { status: filterItems.status }),
-      ...(filterItems.date && { startDate: filterItems.date[0] }),
-      ...(filterItems.date && { endDate: filterItems?.date[1] })
+      ...(filterItems.status && { status: filterItems.status })
     });
   };
 

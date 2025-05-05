@@ -1,19 +1,20 @@
 // Import Dependencies
-import { MagnifyingGlassIcon, MapPinIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
+// import { PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 // Local Imports
-import { DateFilter } from 'components/shared/table/DateFilter';
+// import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
-import { useNavigate } from 'react-router';
+// import { useNavigate } from 'react-router';
 import { pagesOptions } from '../helper';
-import usePermissions from 'app/router/usePermissions';
-import { PERMISSIONS } from 'constants/app.constant';
+// import usePermissions from 'app/router/usePermissions';
+// import { PERMISSIONS } from 'constants/app.constant';
 
 // ----------------------------------------------------------------------
 
@@ -24,8 +25,8 @@ export function Toolbar({
   onClearFilters = () => {}
 }) {
   const { isXs } = useBreakpointsContext();
-  const navigate = useNavigate();
-  const { hasPermission } = usePermissions();
+  // const navigate = useNavigate();
+  // const { hasPermission } = usePermissions();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
   return (
@@ -41,7 +42,7 @@ export function Toolbar({
           </h2>
         </div>
 
-        {hasPermission(PERMISSIONS.PAGE.ADD) && (
+        {/* {hasPermission(PERMISSIONS.PAGE.ADD) && (
           <Button
             className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
             color="primary"
@@ -49,7 +50,7 @@ export function Toolbar({
             <PlusIcon className="size-5" />
             <span>{t('add') + ' ' + t('emailTemplate')}</span>
           </Button>
-        )}
+        )} */}
       </div>
 
       {isXs ? (
@@ -102,14 +103,14 @@ export function Toolbar({
 function SearchInput({ table }) {
   return (
     <Input
-      value={table?.getColumn('title')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('title').setFilterValue(e.target.value)}
+      value={table?.getColumn('name')?.getFilterValue() || ''}
+      onChange={(e) => table.getColumn('name').setFilterValue(e.target.value)}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
         root: 'shrink-0'
       }}
-      placeholder={t('search_desc')}
+      placeholder={t('page_search_desc')}
     />
   );
 }
@@ -128,18 +129,6 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           showCheckbox={false}
         />
       )}
-
-      {table.getColumn('createdAt') && (
-        <DateFilter
-          column={table.getColumn('createdAt')}
-          title={t('date') + ' ' + t('range')}
-          config={{
-            maxDate: new Date().fp_incr(1),
-            mode: 'range'
-          }}
-        />
-      )}
-
       <div>
         <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
           {t('search')}
