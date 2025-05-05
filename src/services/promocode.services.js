@@ -88,8 +88,8 @@ const PromoCodeService = {
     try {
       const requestObject = {
         PromoCode: data.promocode,
-        Type: data.type,
-        Currency: currencyTypeToAPI(data.currency),
+        DepositRequirementType: data.type,
+        BenefitCurrencyType: currencyTypeToAPI(data.currency),
         DiscountType: discountTypeToAPI(data.discountType),
         InfluencerSegmentationType: influencerSegTypeToAPI(data.influencerSegType),
         SegmentationType: segmentationTypeToAPI(data.segmentationType),
@@ -100,15 +100,15 @@ const PromoCodeService = {
         UsageLimit: data.promocodeQty,
         UserLimit: data.allowedPerUser || 0,
         Description: data.description,
-        Visibility: displayTypeToAPI(data.displayMode),
+        IsPubliclyVisible: displayTypeToAPI(data.displayMode),
         StartDate: data.startDate
           ? dayjs(+data.startDate).format('YYYY-MM-DD HH:mm:ss')
           : undefined,
         EndDate: data.endDate
           ? dayjs(+data.endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
           : undefined,
-        FirstDepositOnly: data.isOnlyFirstDeposit,
-        SecondDepositOnly: data.isOnlyFirstDeposit,
+        IsFirstDepositOnly: data.isOnlyFirstDeposit,
+        IsSecondDepositOnly: data.isOnlyFirstDeposit,
         MinAmount: data.minAmount || 0,
         MaxAmount: data.maxAmount || 0,
         ExactAmount: data.exactAmount || 0

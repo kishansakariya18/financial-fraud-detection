@@ -245,5 +245,12 @@
   "today": "Today",
   "registrations": "Registrations",
   "providers": "Providers",
-  "heading": "Heading"
+  "heading": "Heading",
+  "isPublicVisible": "Is Public Visible",
+  "benefit": "Benefit",
+  "depositRequirement": "Deposit Requirement",
+  "isFirstDepositOnly": "Is First Deposit Only",
+  "isSecondDepositOnly": "Is Second Deposit Only",
+  "record": "Record",
+  "unique": "Unique"
 }

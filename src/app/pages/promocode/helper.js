@@ -74,27 +74,28 @@ export const promocodeListResponseMapper = (apiData) => {
   const resultData = apiData.map((data) => ({
     id: data.PromoCodeID,
     promoCodeName: data.PromoCode,
-    type: data?.Type ? 'Deposit In Range' : 'Exact Deposit',
+    type: data?.DepositRequirementType ? 'Deposit In Range' : 'Exact Deposit',
     discountType: data?.DiscountType ? 'Percentage' : 'Fixed',
     segmentationType: data?.SegmentationType,
-    currency: data?.Currency === 1 ? 'Bonus' : 'Real Cash',
+    currency: data?.BenefitCurrencyType === 1 ? 'Bonus' : 'Real Cash',
     amount: data.Amount,
     createdAt: getDateInUTCToTimeZone(data.StartDate),
     endDate: getDateInUTCToTimeZone(data.EndDate),
     endDateOriginal: getDateInUTCToTimeZone(data.EndDate),
-    visibility: data?.Visibility ? 'Private' : 'Public',
-    status: parsePromoCodeStatus(data.Status),
+    visibility: data?.IsPubliclyVisible ? 'Private' : 'Public',
+    status: parsePromoCodeStatus(data.PromoCodeStatus),
     state: parsePromoCodeStateToApp(data.State),
     hasUserSegmentation: data.HasUserSegmentation ? 1 : 0,
-    firstDepositOnly: data.FirstDepositOnly ? 'Yes' : 'No',
-    secondDepositOnly: data.SecondDepositOnly ? 'Yes' : 'No'
+    // firstDepositOnly: data.FirstDepositOnly ? 'Yes' : 'No',
+    secondDepositOnly: data.IsSecondDepositOnly ? 'Yes' : 'No',
+    firstDepositOnly: data.IsFirstDepositOnly ? 'Yes' : 'No'
   }));
   return resultData;
 };
 
 export const historyResponseMapper = (apiData) => {
   const resultData = apiData.map((data) => ({
-    id: data.HistoryID,
+    id: data.PromoCodeHistoryID,
     userName: data?.User?.Username || '',
     mobile: data?.User?.Mobile || '',
     depositAmount: data?.DepositAmount || 0,
@@ -199,16 +200,16 @@ export const segmentationTypeToAPP = (value) => {
 export const displayTypeToAPP = (value) => {
   switch (+value) {
     case 0:
-      return 'public';
+      return 'Yes';
     case 1:
-      return 'private';
+      return 'No';
     default:
       return '';
   }
 };
 
 export const currencyTypeToAPP = (value) => {
-  switch (value) {
+  switch (+value) {
     case 0:
       return 'realCash';
     case 1:
@@ -221,7 +222,7 @@ export const currencyTypeToAPP = (value) => {
 };
 
 export const discountTypeToAPP = (value) => {
-  switch (value) {
+  switch (+value) {
     case 1:
       return 'Percentage';
     case 0:

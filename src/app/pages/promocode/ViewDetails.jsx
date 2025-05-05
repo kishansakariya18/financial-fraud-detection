@@ -21,6 +21,8 @@ import {
   segmentationTypeToAPP,
   typeToAPP
 } from './helper';
+import { useClipboard } from 'hooks';
+import { DocumentDuplicateIcon } from '@heroicons/react/20/solid';
 
 export function ViewDetails() {
   const { t } = useTranslation();
@@ -30,7 +32,7 @@ export function ViewDetails() {
   const navigate = useNavigate();
   const { promocodeId } = useParams();
   const pageTitle = t('promocode') + ' ' + t('details');
-  // const { copied, copy } = useClipboard({ timeout: 2000 });
+  const { copied, copy } = useClipboard({ timeout: 2000 });
 
   const breadcrumbs = [{ title: t('promocode'), path: '/promocode' }, { title: 'Details' }];
 
@@ -85,13 +87,26 @@ export function ViewDetails() {
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('promocode')}
                   </p>
-                  <p>{response?.PromoCode}</p>
+                  <div className="flex space-x-1 rtl:space-x-reverse">
+                    <span> {response?.PromoCode || '-'}</span>
+
+                    <Button
+                      data-tooltip
+                      data-tooltip-content={copied ? 'Copied' : 'Copy'}
+                      onClick={() => copy(response?.PromoCode)}
+                      isIcon
+                      variant="flat"
+                      className="size-5 rounded-full group-hover/td:opacity-100"
+                      aria-label="Copy Button">
+                      <DocumentDuplicateIcon className="size-3.5" />
+                    </Button>
+                  </div>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('status')}
+                    {t('promocode') + ' ' + t('status')}
                   </p>
-                  <p>{capitalizeFirstLetter(parsePromoCodeStatus(response?.Status))}</p>
+                  <p>{capitalizeFirstLetter(parsePromoCodeStatus(response?.PromoCodeStatus))}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
@@ -101,27 +116,27 @@ export function ViewDetails() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('currency')}
+                    {t('benefit') + ' ' + t('currency') + ' ' + t('type')}
                   </p>
-                  <p>{capitalizeFirstLetter(currencyTypeToAPP(response?.Currency))}</p>
+                  <p>{capitalizeFirstLetter(currencyTypeToAPP(response?.BenefitCurrencyType))}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('type')}
+                    {t('depositRequirement') + ' ' + t('type')}
                   </p>
-                  <p>{capitalizeFirstLetter(typeToAPP(response?.Type))}</p>
+                  <p>{capitalizeFirstLetter(typeToAPP(response?.DepositRequirementType))}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('firstDepositOnly')}
+                    {t('isFirstDepositOnly')}
                   </p>
-                  <p>{response?.FirstDepositOnly ? 'Yes' : 'No'}</p>
+                  <p>{response?.IsFirstDepositOnly ? 'Yes' : 'No'}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('secondDepositOnly')}
+                    {t('isSecondDepositOnly')}
                   </p>
-                  <p>{response?.SecondDepositOnly ? 'Yes' : 'No'}</p>
+                  <p>{response?.IsSecondDepositOnly ? 'Yes' : 'No'}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
@@ -179,9 +194,9 @@ export function ViewDetails() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('visibility')}
+                    {t('isPublicVisible')}
                   </p>
-                  <p>{capitalizeFirstLetter(displayTypeToAPP(response?.Visibility))}</p>
+                  <p>{capitalizeFirstLetter(displayTypeToAPP(response?.IsPubliclyVisible))}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
