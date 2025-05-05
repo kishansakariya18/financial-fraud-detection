@@ -27,7 +27,7 @@ export default function RestrictedCountry() {
     setChecked((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]));
   };
   //   console.log('providerId:', providerId);
-  const columns = countryColumns({ selectedIds: checked, handleCheck });
+  const columns = countryColumns({ selectedIds: checked, handleCheck, actionLabel: 'Add' });
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const fetchCountry = async () => {
