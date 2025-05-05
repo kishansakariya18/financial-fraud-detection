@@ -131,6 +131,9 @@ const CreatePromocode = () => {
 
     setResponse(null);
     reset();
+    setCurrency('realCash');
+    setDiscountType('fixed');
+    setDisplayMode('public');
   }
 
   const handleInfluencerSegmentationChange = (event) => {
@@ -150,9 +153,6 @@ const CreatePromocode = () => {
     setSegmentationIds(values);
   };
 
-  console.log('influencerSegIds: ', influencerSegIds);
-  console.log('segIds: ', segmentationIds);
-
   const onSubmit = async (data) => {
     const apiData = {
       displayMode,
@@ -161,7 +161,8 @@ const CreatePromocode = () => {
       discountType,
       description: htmlContent,
       influencerSegIds,
-      segmentationIds
+      segmentationIds,
+      currency
     };
     console.log('{ ...data, ...apiData }: ', { ...data, ...apiData });
 
@@ -203,7 +204,7 @@ const CreatePromocode = () => {
                     )}
                     onChange={(val) => field.onChange(val.value)}
                     name={field.name}
-                    label={t('type')}
+                    label={t('depositRequirement') + ' ' + t('type')}
                     placeholder={t('select') + ' ' + t('type')}
                     displayField="label"
                     error={errors?.type?.message}
@@ -319,7 +320,6 @@ const CreatePromocode = () => {
               )}
             </div>
             <div>
-              <p className="mb-2 mt-2">Diposit in Range</p>
               <div className="grid gap-4 sm:grid-cols-2">
                 {+type === PROMOCODE.TYPE.EXACT_DEPOSIT && (
                   <Input
@@ -331,22 +331,31 @@ const CreatePromocode = () => {
                   />
                 )}
                 {+type === PROMOCODE.TYPE.DEPOSIT_IN_RANGE && (
-                  <>
-                    <Input
-                      key={'min-amount'}
-                      {...register('minAmount')}
-                      label={t('min') + ' ' + t('amount')}
-                      error={errors?.minAmount?.message}
-                      placeholder={t('min') + ' ' + t('amount')}
-                    />
-                    <Input
-                      key={'max-amount'}
-                      {...register('maxAmount')}
-                      label={t('max') + ' ' + t('amount')}
-                      error={errors?.maxAmount?.message}
-                      placeholder={t('max') + ' ' + t('amount')}
-                    />
-                  </>
+                  <div>
+                    <div className="mb-2 mt-2">
+                      <span>Diposit in Range </span>
+                    </div>
+                    <div className={'grid gap-4 sm:grid-cols-2'}>
+                      <Input
+                        key={'min-amount'}
+                        {...register('minAmount')}
+                        label={t('min') + ' ' + t('amount')}
+                        error={errors?.minAmount?.message}
+                        placeholder={t('min') + ' ' + t('amount')}
+                        step={'0.01'}
+                        type="number"
+                      />
+                      <Input
+                        key={'max-amount'}
+                        {...register('maxAmount')}
+                        label={t('max') + ' ' + t('amount')}
+                        error={errors?.maxAmount?.message}
+                        placeholder={t('max') + ' ' + t('amount')}
+                        step={'0.01'}
+                        type="number"
+                      />
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
@@ -364,6 +373,8 @@ const CreatePromocode = () => {
                 label={t('discount')}
                 error={errors?.dicount?.message}
                 placeholder={t('enter') + ' ' + t('amount')}
+                step={'0.01'}
+                type="number"
               />
               {type === PROMOCODE.TYPE.DEPOSIT_IN_RANGE && (
                 <Input

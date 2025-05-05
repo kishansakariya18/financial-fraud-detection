@@ -175,12 +175,12 @@ export default function AffiliateTransactions() {
             <Checkbox
               color="info"
               disabled
-              checked={affiliateDataRef.current?.SignupComissionEnabled}
+              checked={affiliateDataRef.current?.IsSignupCommissionEnabled}
               label={t('per') + ' ' + t('signup')}
             />
           </div>
           <p className="mt-2 text-xs+">
-            {t('per') + ' ' + t('signup')} : {affiliateDataRef.current?.SignupComission}
+            {t('per') + ' ' + t('signup')} : {affiliateDataRef.current?.SignupCommissionAmount}
           </p>
         </div>
         <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
@@ -188,12 +188,12 @@ export default function AffiliateTransactions() {
             <Checkbox
               color="info"
               disabled
-              checked={affiliateDataRef.current?.DepositComissionEnabled}
+              checked={affiliateDataRef.current?.IsDepositCommissionEnabled}
               label={t('per') + ' ' + t('deposit')}
             />
           </div>
           <p className="mt-2 text-xs+">
-            {t('per') + ' ' + t('deposit')} : {affiliateDataRef.current?.DepositComission}
+            {t('per') + ' ' + t('deposit')} : {affiliateDataRef.current?.DepositCommissionAmount}
           </p>
         </div>
         <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
@@ -201,12 +201,12 @@ export default function AffiliateTransactions() {
             <Checkbox
               color="info"
               disabled
-              checked={affiliateDataRef.current?.UserLossComissionEnabled}
+              checked={affiliateDataRef.current?.IsUserLossCommissionEnabled}
               label={t('user') + ' ' + t('loss')}
             />
           </div>
           <p className="mt-2 text-xs+">
-            {t('user') + ' ' + t('loss')} : {affiliateDataRef.current?.UserLossComission}
+            {t('user') + ' ' + t('loss')} : {affiliateDataRef.current?.UserLossCommissionAmount}
           </p>
         </div>
       </div>
