@@ -108,7 +108,7 @@ const CreatePayment = () => {
       if (result.status === 200 || result.status === 201) {
         const gameListData = apiData.map((data) => {
           return {
-            value: data.ID,
+            value: data.GameID,
             label: data.Name
           };
         });
@@ -157,7 +157,7 @@ const CreatePayment = () => {
         await deposit(postData);
         break;
       case PAYMENT_OPT.WINNING:
-        postData.betId = data.betId;
+        postData.betId = data.betUID;
         await winning(postData);
         break;
       case PAYMENT_OPT.WITHDRAW:

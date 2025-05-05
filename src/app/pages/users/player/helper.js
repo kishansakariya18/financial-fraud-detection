@@ -77,7 +77,7 @@ export const playerTransactionsResponseMapper = (apiData) => {
       id: item.TransactionID,
       transactionUID: item.TransactionUID,
       username: userData.username,
-      type: transactionTypeApiToApp(item.Type),
+      type: transactionTypeApiToApp(item.CreditDebitType),
       customMessage: item.CustomMessage,
       realCash: item.RealCash,
       bonus: item.Bonus,
@@ -92,7 +92,7 @@ export const playerTransactionsResponseMapper = (apiData) => {
             : 0,
       coin: item.Coin,
       createdAt: getDateInUTCToTimeZone(item.DateCreated),
-      status: transactionStatusToAPP(item.Status),
+      status: transactionStatusToAPP(item.TransactionStatus),
       transactionData: item.TransactionData,
       admin: item.admin
     };
