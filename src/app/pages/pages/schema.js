@@ -1,11 +1,8 @@
 import * as Yup from 'yup';
 
-export const emailTemplateSchema = Yup.object().shape({
+export const pagesSchema = Yup.object().shape({
   // Personal Information
-  title: Yup.string().trim().required('Title Required'),
-  heading: Yup.string().trim().required('Heading Required'),
-  to: Yup.string().trim().required('To Required').email('Enter Valid Email'),
-  cc: Yup.string().trim().email('Enter Valid Email'),
-  bcc: Yup.string().trim().email('Enter Valid Email'),
+  name: Yup.string().trim().required('Name Required'),
+  content: Yup.string().trim().required('Content Required'),
   status: Yup.string().trim().required('Select Status')
 });

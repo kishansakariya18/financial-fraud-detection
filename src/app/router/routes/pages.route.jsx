@@ -32,9 +32,9 @@ export const pagesRoute = [
     }
   },
   {
-    path: 'pages/:templateId/edit',
+    path: 'pages/:pageID/edit',
     lazy: async () => {
-      const { default: EditEmailTemplate } = await import('../../pages/pages/EditEmailTemplate');
+      const { default: EditEmailTemplate } = await import('../../pages/pages/EditPages');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.EMAIL_TEMPLATE.EDIT}>
