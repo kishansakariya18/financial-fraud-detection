@@ -19,7 +19,7 @@ export const responseMapper = (apiData) => {
     id: data.CountryID,
     countryName: data.CountryName,
     countryCode: data.CountryCode,
-    status: parseAdminStatusToApp(data.Status)
+    status: parseAdminStatusToApp(data.IsActive)
   }));
   return resultData;
 };

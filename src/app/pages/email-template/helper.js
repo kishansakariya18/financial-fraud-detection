@@ -8,9 +8,9 @@ export const emailtemplateListResponseMapper = (apiData) => {
       id: item?.EmailTemplateID,
       title: item?.Title,
       slug: item?.Slug,
-      heading: item?.Heading,
+      heading: item?.Subject,
       template: item?.Template,
-      status: emailTemplateStatusToAPP(item?.Status),
+      status: emailTemplateStatusToAPP(item?.IsActive),
       createdAt: getDateInUTCToTimeZone(item?.DateCreated),
       dateModified: getDateInUTCToTimeZone(item?.DateModified)
     };
@@ -22,12 +22,12 @@ export const emailtemplateDetailResponseMapper = (apiData) => {
     emailTemplateID: apiData?.EmailTemplateID,
     title: apiData?.Title,
     slug: apiData?.Slug,
-    heading: apiData?.Heading,
+    heading: apiData?.Subject,
     template: apiData?.Template,
     to: apiData?.ToEmail,
     cc: apiData?.CC,
     bcc: apiData?.BCC,
-    status: emailTemplateStatusToAPP(apiData?.Status),
+    status: emailTemplateStatusToAPP(apiData?.IsActive),
     dateCreated: getDateInUTCToTimeZone(apiData?.DateCreated),
     dateModified: getDateInUTCToTimeZone(apiData?.DateModified)
   };

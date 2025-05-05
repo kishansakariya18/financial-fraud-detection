@@ -58,7 +58,12 @@ export default function KPISummaryList() {
       <h2 className="px-[--margin-x] text-sm+ font-medium uppercase tracking-wide text-gray-800 dark:text-dark-100">
         {title}
       </h2>
-      <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
+      <TableCard
+        tableSettings={tableSettings}
+        table={table}
+        loading={isLoading}
+        paginationEnabled={false}
+      />
     </div>
   );
 }

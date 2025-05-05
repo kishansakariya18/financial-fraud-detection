@@ -118,7 +118,12 @@ export default function TopGames() {
         </div>
       </div>
 
-      <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
+      <TableCard
+        tableSettings={tableSettings}
+        table={table}
+        loading={isLoading}
+        paginationEnabled={false}
+      />
     </div>
   );
 }
