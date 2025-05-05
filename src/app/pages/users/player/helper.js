@@ -19,7 +19,7 @@ export const responseMapper = (apiData) => {
       coin: item.Coin,
       cryptoDeposit: item.CryptoDeposit,
       cryptoWinning: item.CryptoWinning,
-      status: playerStatusToApp(item.Status),
+      status: playerStatusToApp(item.AccountStatus),
       createdAt: item.DateCreated ? getDateInUTCToTimeZone(item.DateCreated) : '',
       lastLoginAt: item.LastLoginAt ? getDateInUTCToTimeZone(item.LastLoginAt) : '',
       isBankVerified: item.IsBankVerified

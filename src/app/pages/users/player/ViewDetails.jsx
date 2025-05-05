@@ -212,7 +212,7 @@ export function ViewDetails() {
                   </p>
                   <p>
                     {response?.PanDetail !== null &&
-                    (response?.IsPanVerified === 1 || response?.IsPanVerified === true)
+                    (response?.IsKYCVerified === 1 || response?.IsKYCVerified === true)
                       ? `${response.PanDetail} (Verified)`
                       : `Pending`}
                   </p>
