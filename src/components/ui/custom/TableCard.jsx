@@ -123,7 +123,7 @@ const TableCard = (props) => {
           </Table>
         </div>
 
-        {!loading && !paginationEnabled && table.getCoreRowModel().rows.length > 0 && (
+        {!loading && paginationEnabled && table.getCoreRowModel().rows.length > 0 && (
           <div
             className={clsx(
               'px-4 pb-4 sm:px-5 sm:pt-4',
