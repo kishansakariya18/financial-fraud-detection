@@ -42,9 +42,7 @@ export default function TopGames() {
 
     console.log('fetchTopGames: ', data);
 
-    const result = await DashboardService.getTopGames({
-      data
-    });
+    const result = await DashboardService.getTopGames(data);
     console.log('result: ', result.response);
 
     const apiData = result.response.data;

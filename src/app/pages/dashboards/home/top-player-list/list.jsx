@@ -42,9 +42,7 @@ export default function TopPlayers() {
 
     console.log('fetchTopPlayers: ', data);
 
-    const result = await DashboardService.getTopPlayers({
-      data
-    });
+    const result = await DashboardService.getTopPlayers(data);
     console.log('result: ', result.response);
 
     const apiData = result.response.data;
