@@ -274,7 +274,6 @@ const CreatePayment = () => {
                 label={t('promoCode')}
                 error={errors?.promoCode?.message}
                 placeholder={t('enter') + ' ' + t('promoCode')}
-                type="number"
               />
             )}
           </div>
