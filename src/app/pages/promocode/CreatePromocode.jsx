@@ -114,7 +114,7 @@ const CreatePromocode = () => {
 
   const influencerOptions = affiliateList.map((affiliate) => {
     return {
-      value: affiliate.AffiliatesID,
+      value: affiliate.AffiliateID,
       label: affiliate.FirstName + ' ' + affiliate.LastName
     };
   });
