@@ -57,7 +57,7 @@ export const responseMapper = (apiData) => {
     stage: getBatdgeForStage(data.Stage),
     referenceId: data.ReferenceID,
     resultDate: data.ResultDate ? data.ResultDate : '',
-    winAmount: data.WinningAmount,
+    winAmount: data.WinningAmount || '-',
     userAmount: amountColorBasedOnType(data.Amount, data.OutcomeType),
     platformAmount: amountColorBasedOnTypeForPlatform(data.Amount, data.OutcomeType),
     type: getBatdgeForType(data.OutcomeType),
