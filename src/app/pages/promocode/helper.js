@@ -84,7 +84,7 @@ export const promocodeListResponseMapper = (apiData) => {
     endDateOriginal: getDateInUTCToTimeZone(data.EndDate),
     visibility: data?.IsPubliclyVisible ? 'Private' : 'Public',
     status: parsePromoCodeStatus(data.PromoCodeStatus),
-    state: parsePromoCodeStateToApp(data.State),
+    state: parsePromoCodeStateToApp(data.PromoCodeState),
     hasUserSegmentation: data.HasUserSegmentation ? 1 : 0,
     // firstDepositOnly: data.FirstDepositOnly ? 'Yes' : 'No',
     secondDepositOnly: data.IsSecondDepositOnly ? 'Yes' : 'No',

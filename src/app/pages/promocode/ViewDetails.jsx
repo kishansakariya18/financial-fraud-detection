@@ -112,7 +112,7 @@ export function ViewDetails() {
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('state')}
                   </p>
-                  <p>{capitalizeFirstLetter(parsePromoCodeStateToApp(response?.State))}</p>
+                  <p>{capitalizeFirstLetter(parsePromoCodeStateToApp(response?.PromoCodeState))}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">

@@ -101,8 +101,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row.state, {
     id: 'state',
-    label: 'State',
-    header: 'State',
+    label: 'PromoCode State',
+    header: 'PromoCode State',
     meta: { optionData: promocodeStateOptions },
     cell: BadgeCell,
     enableSorting: false
