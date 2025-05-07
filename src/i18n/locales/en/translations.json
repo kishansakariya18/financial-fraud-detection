@@ -202,6 +202,7 @@
   "won": "Won",
   "search_desc": "Search Mobile, User...",
   "page_search_desc": "Search page name",
+  "audit_log_search_desc": "Search Module, Event...",
   "emailTemplate": "Email Template",
   "pages": "Pages",
   "slug": "Slug",

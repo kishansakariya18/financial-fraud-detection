@@ -22,6 +22,7 @@ const EditRole = () => {
   const [isDetailLoading, setDetailLoading] = useState(false);
   const [detailError, setDetailError] = useState(null);
   const [detail, setDetail] = useState({});
+  const [response, setResponse] = useState([]);
   const fetchRoleDetail = async (rolePermissionId) => {
     setDetailLoading(true);
     const result = await RoleService.roleDetail(rolePermissionId);
@@ -53,7 +54,6 @@ const EditRole = () => {
     }
   }, [rolePermissionId]);
 
-  const [response, setResponse] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -136,7 +136,7 @@ const EditRole = () => {
     setSubmitError(null);
   }
   if (!isSubmitLoading && !submitError && submitResponse) {
-    toast('Role created successfully', {
+    toast.success('Role created successfully', {
       invert: true
     });
     setTimeout(() => {

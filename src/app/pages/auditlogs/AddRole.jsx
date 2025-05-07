@@ -98,9 +98,7 @@ const AddRole = () => {
     setSubmitError(null);
   }
   if (!isSubmitLoading && !submitError && submitResponse) {
-    toast('Role created successfully', {
-      invert: true
-    });
+    toast.success('Role created successfully');
     setTimeout(() => {
       navigate('/roles');
     }, 0);
