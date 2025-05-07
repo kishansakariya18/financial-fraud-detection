@@ -13,7 +13,7 @@ const ReportService = {
 
       const apiQueryParams = {
         perPage: pagination.pageSize,
-        page: pagination.pageIndex
+        page: pagination.pageIndex + 1
       };
 
       const apiRequestParams = {
