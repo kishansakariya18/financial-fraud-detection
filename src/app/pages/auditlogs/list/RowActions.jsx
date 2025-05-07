@@ -46,20 +46,6 @@ export function RowActions({ row, table }) {
   //   setDeleteSuccess(false);
   // };
 
-  const handleDeleteRows = useCallback(async () => {
-    setConfirmDeleteLoading(true);
-    const result = await RoleService.deleteRole(row.original.id);
-    if (result.status === 200) {
-      table.options.meta?.deleteRow(row);
-      setDeleteSuccess(true);
-    } else {
-      setDeleteError(true);
-    }
-
-    setConfirmDeleteLoading(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [row]);
-
   const state = deleteError ? 'error' : deleteSuccess ? 'success' : 'pending';
 
   return (

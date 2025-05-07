@@ -98,7 +98,7 @@ const AddRole = () => {
     setSubmitError(null);
   }
   if (!isSubmitLoading && !submitError && submitResponse) {
-    toast('Role created successfully', {
+    toast.success('Role created successfully', {
       invert: true
     });
     setTimeout(() => {
