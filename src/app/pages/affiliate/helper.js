@@ -7,7 +7,7 @@ import { PAYOUT_STATUS, TRANSACTION } from 'constants/app.constant';
 export const affiliateListResponseMapper = (apiData) => {
   const list = apiData.map((item) => {
     return {
-      id: item.AffiliatesID,
+      id: item.AffiliateID,
       affiliateUID: item.AffiliatesUID,
       email: item.Email || '-',
       referralCode: item.ReferralCode,
