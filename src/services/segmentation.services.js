@@ -45,6 +45,25 @@ const SegmentationService = {
       console.log('Error getSegmentationList: ', err);
     }
   },
+  getAllSegmentationList: async () => {
+    try {
+      let apiURL = `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.SEGMENTATION.ALL_LIST}`;
+
+      if (apiURL) {
+        const response = await sendRequest({
+          url: apiURL,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        return response;
+      }
+      return null;
+    } catch (err) {
+      console.log('Error getSegmentationList: ', err);
+    }
+  },
   getSegmentationDetails: async (id) => {
     try {
       const endPoint = replaceText(apiConfig.endPoints.SEGMENTATION.DETAIL, ':segmentationId', id);

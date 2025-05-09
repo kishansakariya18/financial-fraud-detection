@@ -152,7 +152,7 @@ const PlayerLimit = () => {
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
           </div>
-          <Breadcrumbs items={breadcrumbs} className="max-sm:hidden" />
+          {/* <Breadcrumbs items={breadcrumbs} className="max-sm:hidden" /> */}
         </div>
 
         <form onSubmit={handleSubmit(handlePlayerLimitUpdate)}>

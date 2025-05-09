@@ -15,6 +15,7 @@ import { peomocode } from './promocode';
 import { roles } from './roles';
 import { auditlogs } from './auditlogs';
 import { pages } from './pages';
+import { crm } from './crm';
 
 export const dashboards = {
   id: 'dashboards',
@@ -45,6 +46,7 @@ export const dashboards = {
     segmentation,
     emailTemplate,
     peomocode,
-    auditlogs
+    auditlogs,
+    crm
   ]
 };
