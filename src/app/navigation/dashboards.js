@@ -14,8 +14,9 @@ import { emailTemplate } from './email-template';
 import { peomocode } from './promocode';
 import { roles } from './roles';
 import { auditlogs } from './auditlogs';
+import { getAiChatBot } from './ai-chat';
 
-export const dashboards = {
+export const dashboards = () => ({
   id: 'dashboards',
   type: NAV_TYPE_ROOT,
   path: '/',
@@ -43,6 +44,7 @@ export const dashboards = {
     segmentation,
     emailTemplate,
     peomocode,
-    auditlogs
+    auditlogs,
+    getAiChatBot()
   ]
-};
+});
