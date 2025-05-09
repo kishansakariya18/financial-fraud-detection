@@ -326,6 +326,9 @@ export const PERMISSIONS = {
     EDIT: 'game-edit',
     CHANGE_STATUS: 'game-chnage-status',
     DELETE: 'game-delete'
+  },
+  CRM: {
+    VIEW: 'crm-view'
   }
 };
 

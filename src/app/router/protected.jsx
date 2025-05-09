@@ -17,6 +17,7 @@ import segmentationRoutes from './routes/segmentation.route';
 import emailTemplateRoute from './routes/email-template.route';
 import promocodeRoute from './routes/promocode.route';
 import pagesRoute from './routes/pages.route';
+import crmRoute from './routes/crm.route';
 
 // ----------------------------------------------------------------------
 
@@ -43,7 +44,8 @@ const protectedRoutes = {
         ...segmentationRoutes,
         ...emailTemplateRoute,
         ...promocodeRoute,
-        ...pagesRoute
+        ...pagesRoute,
+        ...crmRoute
       ]
     }
   ]

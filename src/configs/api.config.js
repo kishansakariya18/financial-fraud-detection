@@ -332,6 +332,7 @@ export const apiConfig = {
     API_LOGS: '/admin/api-logs',
     SEGMENTATION: {
       LIST: '/admin/segmentation/list',
+      ALL_LIST: '/admin/segmentation/allList',
       DETAIL: '/admin/segmentation/:segmentationId/details',
       ADD_EDIT: '/admin/segmentation/add-edit',
       COUNTRY_LIST: '/admin/segmentation/countries',
@@ -384,6 +385,9 @@ export const apiConfig = {
     REPORTS: {
       BETSLIP: '/admin/reports/betslip-transactions',
       BETSLIP_EXPORT: '/admin/reports/betslip'
+    },
+    CRM: {
+      SEND: '/admin/crm/sendNotification'
     }
   }
 };
