@@ -17,21 +17,6 @@ export const pagesRoute = [
     }
   },
   {
-    path: 'pages/add',
-    lazy: async () => {
-      const { default: CreateEmailTemplate } = await import(
-        '../../pages/pages/CreateEmailTemplate'
-      );
-      return {
-        Component: () => (
-          <PrivateRoute permission={PERMISSIONS.EMAIL_TEMPLATE.ADD}>
-            <CreateEmailTemplate />
-          </PrivateRoute>
-        )
-      };
-    }
-  },
-  {
     path: 'pages/:pageID/edit',
     lazy: async () => {
       const { default: EditEmailTemplate } = await import('../../pages/pages/EditPages');
@@ -53,19 +38,6 @@ export const pagesRoute = [
       {
         index: true,
         element: <Navigate to="details" />
-      },
-      {
-        path: 'add',
-        lazy: async () => {
-          const { CreateEmailTemplate } = await import('../../pages/pages/CreateEmailTemplate');
-          return {
-            Component: () => (
-              <PrivateRoute permission={PERMISSIONS.USER_KYC.VIEW}>
-                <CreateEmailTemplate />
-              </PrivateRoute>
-            )
-          };
-        }
       }
     ]
   }
