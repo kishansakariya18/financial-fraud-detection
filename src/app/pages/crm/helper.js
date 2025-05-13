@@ -62,14 +62,14 @@ export const sendOptions = [
   {
     key: 'email',
     value: 'email',
-    label: 'Electronic Mail',
+    label: 'Electronic Mail (Email)',
     color: 'success',
     icon: CheckBadgeIcon
   },
   {
     key: 'sms',
     value: 'sms',
-    label: 'Short Message Service',
+    label: 'Short Message Service (SMS)',
     color: 'success',
     icon: CheckBadgeIcon
   },

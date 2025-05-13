@@ -162,7 +162,7 @@ const Send = () => {
               />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
-            <Input
+              <Input
                 key={'subject'}
                 {...register('subject')}
                 label={t('subject')}

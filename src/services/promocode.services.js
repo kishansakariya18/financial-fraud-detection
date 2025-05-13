@@ -138,7 +138,7 @@ const PromoCodeService = {
   changePromocodeStatus: async (id) => {
     try {
       const endPoint = replaceText(
-        apiConfig.endPoints.BASKETBALL.DEPOSIT_PROMOCODE.PROMOCODE_CHANGE_STATUS,
+        apiConfig.endPoints.DEPOSIT_PROMOCODE.PROMOCODE_CHANGE_STATUS,
         ':promocodeId',
         id
       );
@@ -173,7 +173,7 @@ const PromoCodeService = {
         page: pagination.pageIndex + 1
       };
       const endPoint = replaceText(
-        apiConfig.endPoints.BASKETBALL.DEPOSIT_PROMOCODE.PROMOCODE_HISTORY,
+        apiConfig.endPoints.DEPOSIT_PROMOCODE.PROMOCODE_HISTORY,
         ':promocodeId',
         promocodeId
       );
@@ -202,8 +202,10 @@ const PromoCodeService = {
   },
   getSegmentationDetail: async (id) => {
     try {
+      console.log('promocode id: ', id);
+
       const endPoint = replaceText(
-        apiConfig.endPoints.BASKETBALL.DEPOSIT_PROMOCODE.PROMOCODE_SEGMENTATION,
+        apiConfig.endPoints.DEPOSIT_PROMOCODE.PROMOCODE_SEGMENTATION,
         ':promocodeId',
         id
       );
@@ -214,6 +216,8 @@ const PromoCodeService = {
           'Content-Type': 'application/json'
         }
       });
+
+      console.log('response: ', response);
 
       return response;
     } catch (err) {
@@ -249,7 +253,7 @@ const PromoCodeService = {
   removeSegmentationData: async (id) => {
     try {
       const endPoint = replaceText(
-        apiConfig.endPoints.BASKETBALL.DEPOSIT_PROMOCODE.PROMOCODE_SEGMENTATION,
+        apiConfig.endPoints.DEPOSIT_PROMOCODE.PROMOCODE_SEGMENTATION,
         ':promocodeId',
         id
       );
@@ -271,7 +275,7 @@ const PromoCodeService = {
       console.log('deletePromoCode: ');
 
       const endPoint = replaceText(
-        apiConfig.endPoints.BASKETBALL.DEPOSIT_PROMOCODE.PROMOCODE_DELETE,
+        apiConfig.endPoints.DEPOSIT_PROMOCODE.PROMOCODE_DELETE,
         ':promocodeId',
         id
       );

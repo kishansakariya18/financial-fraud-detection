@@ -27,7 +27,7 @@ export function RowActions({ row, table }) {
   };
 
   const onOkDialogBox = async () => {
-    table.options.meta?.editRow(row);
+    await table.options.meta?.fetchNewList();
     setIsDialogOpen(false);
   };
 

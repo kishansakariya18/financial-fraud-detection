@@ -30,6 +30,14 @@ export default function Tabs() {
       icon: BiHistory,
       index: 0,
       permission: PERMISSIONS.DEPOSIT_PROMOCODE.USER_LIST
+    },
+    {
+      id: randomId(),
+      title: t('segmentation') + ' ' + t('list'),
+      path: `/promocode/${promocodeId}/tab/segmentation-list`,
+      icon: BiHistory,
+      index: 0,
+      permission: PERMISSIONS.DEPOSIT_PROMOCODE.SEGMENTATION
     }
   ];
 
