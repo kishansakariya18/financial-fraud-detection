@@ -54,6 +54,21 @@ export const promocodeRoute = [
             )
           };
         }
+      },
+      {
+        path: 'segmentation-list',
+        lazy: async () => {
+          const { default: SegmentationList } = await import(
+            '../../pages/promocode/segmentation/list'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.DEPOSIT_PROMOCODE.SEGMENTATION}>
+                <SegmentationList />
+              </PrivateRoute>
+            )
+          };
+        }
       }
     ]
   },
