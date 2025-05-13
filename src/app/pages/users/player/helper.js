@@ -1,5 +1,10 @@
 import { getDateInUTCToTimeZone } from 'helpers/functions';
-import { CheckBadgeIcon, ClockIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import {
+  ArchiveBoxIcon,
+  CheckBadgeIcon,
+  ClockIcon,
+  XCircleIcon
+} from '@heroicons/react/24/outline';
 import { TRANSACTION } from 'constants/app.constant';
 
 export const responseMapper = (apiData) => {
@@ -27,9 +32,6 @@ export const responseMapper = (apiData) => {
   });
 
   return list;
-  //   const totalPage = apiData.totalPages;
-  //   const totalRecords = apiData.totalRecords;
-  //   return { totalPage, totalRecords, list };
 };
 
 export const playerStatusToApp = (status) => {
@@ -38,6 +40,8 @@ export const playerStatusToApp = (status) => {
       return 'active';
     case 0:
       return 'inactive';
+    case 2:
+      return 'blocked';
     default:
       break;
   }
@@ -49,6 +53,8 @@ export const playerStatusToAPI = (status) => {
       return 1;
     case 'inactive':
       return 0;
+    case 'blocked':
+      return 2;
     default:
       return null;
   }
@@ -66,6 +72,12 @@ export const playerStatusOptions = [
     label: 'Inactive',
     color: 'error',
     icon: XCircleIcon
+  },
+  {
+    value: 'blocked',
+    label: 'Blocked',
+    color: 'error',
+    icon: ArchiveBoxIcon
   }
 ];
 

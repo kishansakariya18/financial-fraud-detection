@@ -65,7 +65,9 @@ export function BadgeCell({ getValue, column }) {
 
 export function AmountCell({ getValue }) {
   return (
-    <p className="text-sm+ font-medium text-gray-800 dark:text-dark-100">{getValue().toFixed(2)}</p>
+    <p className="text-sm+ font-medium text-gray-800 dark:text-dark-100">
+      {getValue()?.toFixed(2)}
+    </p>
   );
 }
 

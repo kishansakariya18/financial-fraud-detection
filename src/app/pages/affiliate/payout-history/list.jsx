@@ -101,9 +101,6 @@ export default function PayoutHistory() {
       if (data.id === 'requestedAt') {
         filterItems.date = data.value;
       }
-      if (data.id === 'status') {
-        filterItems.status = data.value;
-      }
     }
 
     setSearchParams({
@@ -134,7 +131,7 @@ export default function PayoutHistory() {
         <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
           <div className="flex justify-between space-x-1">
             <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
-              {affiliateData?.Balance}
+              {affiliateData?.CommissionBalance}
             </p>
             <RiCashFill className="size-8" />
           </div>
