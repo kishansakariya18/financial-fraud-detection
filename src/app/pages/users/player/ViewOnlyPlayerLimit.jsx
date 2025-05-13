@@ -1,7 +1,6 @@
 // Local Imports
 import { Box, Input, Skeleton, Switch } from 'components/ui';
 import { Page } from 'components/shared/Page';
-import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { useParams } from 'react-router';
@@ -17,7 +16,6 @@ import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
-const breadcrumbs = [{ title: 'Players', path: '/player' }, { title: 'Limit' }];
 const exclusionTimeOptions = [
   { label: '1 day', value: '1' },
   { label: '7 day', value: '2' },
