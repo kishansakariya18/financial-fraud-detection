@@ -141,15 +141,6 @@ const Send = () => {
                 control={control}
                 name="channel"
               />
-              <Input
-                key={'subject'}
-                {...register('subject')}
-                label={t('subject')}
-                error={errors?.subject?.message}
-                placeholder={t('enter') + ' ' + t('subject')}
-              />
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
               <Controller
                 render={({ field }) => (
                   <Listbox
@@ -168,6 +159,15 @@ const Send = () => {
                 )}
                 control={control}
                 name="segmentationID"
+              />
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+            <Input
+                key={'subject'}
+                {...register('subject')}
+                label={t('subject')}
+                error={errors?.subject?.message}
+                placeholder={t('enter') + ' ' + t('subject')}
               />
               <TextEditor
                 key={'description'}
