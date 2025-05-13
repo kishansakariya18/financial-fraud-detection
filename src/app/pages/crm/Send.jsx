@@ -90,9 +90,9 @@ const Send = () => {
   if (!loading && !error && response) {
     toast.success(response.message);
     setTimeout(() => {
-      navigate('/crm');
+      navigate('/crm', { replace: true });
     }, 0);
-
+    window.location.reload();
     setResponse(null);
   }
 
