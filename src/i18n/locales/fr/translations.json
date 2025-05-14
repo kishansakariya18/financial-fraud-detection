@@ -263,5 +263,6 @@
   "isFirstDepositOnly": "Est-ce que le premier dépôt est uniquement",
   "isSecondDepositOnly": "Est-ce que le deuxième dépôt est uniquement",
   "record": "Enregistrer",
-  "unique": "Unique"
+  "unique": "Unique",
+  "content": "Contenu"
 }

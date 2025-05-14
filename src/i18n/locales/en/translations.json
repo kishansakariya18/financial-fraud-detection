@@ -263,5 +263,6 @@
   "isFirstDepositOnly": "Is First Deposit Only",
   "isSecondDepositOnly": "Is Second Deposit Only",
   "record": "Record",
-  "unique": "Unique"
+  "unique": "Unique",
+  "content": "Content"
 }

@@ -11,18 +11,11 @@ import { CopyableCell } from '../../../../components/shared/table/CopyableCell';
 const columnHelper = createColumnHelper();
 
 export const columns = [
-  columnHelper.accessor((row) => row.srn, {
-    id: 'srn',
-    label: 'Sr. No.',
-    header: 'Sr. No.',
+  columnHelper.accessor((row) => row.id, {
+    id: 'id',
+    label: 'Audit Log ID',
+    header: 'Audit Log ID',
     cell: IdCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => row.username, {
-    id: 'username',
-    label: 'Username',
-    header: 'Username',
-    cell: CopyableCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.moduleName, {
@@ -36,6 +29,13 @@ export const columns = [
     id: 'eventName',
     label: 'Event Name',
     header: 'Event Name',
+    cell: CopyableCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.username, {
+    id: 'username',
+    label: 'Username',
+    header: 'Username',
     cell: CopyableCell,
     enableSorting: false
   }),

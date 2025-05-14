@@ -11,10 +11,10 @@ import { CopyableCell } from '../../../../components/shared/table/CopyableCell';
 const columnHelper = createColumnHelper();
 
 export const columns = [
-  columnHelper.accessor((row) => row.srn, {
-    id: 'srn',
-    label: 'Sr. No',
-    header: 'Sr. No',
+  columnHelper.accessor((row) => row.id, {
+    id: 'id',
+    label: 'Role Permission ID',
+    header: 'Role Permission ID',
     cell: IdCell,
     enableSorting: false
   }),

@@ -5,7 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Button, Input } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
 import PagesService from 'services/pages.services';
@@ -14,7 +14,7 @@ import { TextEditor } from 'components/shared/form/TextEditor';
 import Quill, { Delta } from 'quill';
 import { Listbox } from 'components/shared/form/Listbox';
 import { pagesOptions, pagesStatusToAPP } from './helper';
-import { stringToPagekey } from 'utils/stringToSlug';
+// import { stringToPagekey } from 'utils/stringToSlug';
 
 const EditPages = () => {
   const [error, setError] = useState('');
@@ -31,15 +31,17 @@ const EditPages = () => {
     handleSubmit,
     formState: { errors },
     control,
-    watch,
+    // watch,
     reset
   } = useForm({
     resolver: yupResolver(pagesSchema)
   });
 
+  const navigate = useNavigate();
+
   const [content, setContent] = useState(new Delta([{ insert: htmlContent }]));
 
-  const name = watch('name');
+  // const name = watch('name');
 
   const handleChange = (val) => {
     setContent(val);
@@ -114,6 +116,9 @@ const EditPages = () => {
 
   if (!loading && !error && response) {
     toast.success(response.message);
+    setTimeout(() => {
+      navigate('/pages');
+    }, 0);
     setResponse(null);
     fetchPagesDetails();
   }
@@ -143,65 +148,8 @@ const EditPages = () => {
                 label={t('name')}
                 error={errors?.name?.message}
                 placeholder={t('enter') + ' ' + t('name')}
-              />
-              <Input
-                {...register('pageKey')}
-                key={'pageKey'}
-                label={t('pageKey')}
-                value={name ? stringToPagekey(name) : undefined}
-                error={errors?.pageKey?.message}
-                placeholder={t('enter') + ' ' + t('pageKey')}
                 disabled
               />
-            </div>
-            {/* <div className="grid gap-4 sm:grid-cols-1">
-              <Input
-                key={'heading'}
-                {...register('heading')}
-                label={t('heading')}
-                error={errors?.heading?.message}
-                placeholder={t('enter') + ' ' + t('heading')}
-              />
-            </div> */}
-            <div className="grid gap-8 sm:grid-cols-2">
-              <div className="mt-1 max-w-xl">
-                <TextEditor
-                  key={'content'}
-                  value={content}
-                  label={t('content')}
-                  onChange={handleChange}
-                  placeholder={
-                    t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
-                  }
-                />
-              </div>
-            </div>
-
-            {/* <div className="grid gap-4 sm:grid-cols-1">
-              <Input
-                {...register('to')}
-                key={'to'}
-                label={t('to')}
-                error={errors?.to?.message}
-                placeholder={t('enter') + ' ' + t('to')}
-              />
-              <Input
-                {...register('cc')}
-                label={'CC'}
-                key={'cc'}
-                error={errors?.cc?.message}
-                placeholder={t('enter') + ' ' + 'CC'}
-              />
-              <Input
-                {...register('bcc')}
-                label={'BCC'}
-                key={'bcc'}
-                error={errors?.bcc?.message}
-                placeholder={t('enter') + ' ' + 'BCC'}
-              />
-            </div> */}
-
-            <div className="grid gap-4 sm:grid-cols-2">
               <Controller
                 render={({ field }) => (
                   <Listbox
@@ -219,6 +167,35 @@ const EditPages = () => {
                 control={control}
                 name="status"
               />
+              {/* <Input
+                {...register('pageKey')}
+                key={'pageKey'}
+                label={t('pageKey')}
+                value={name ? name : undefined}
+                error={errors?.pageKey?.message}
+                placeholder={t('enter') + ' ' + t('pageKey')}
+                disabled
+              /> */}
+            </div>
+            <div className="grid gap-8 sm:grid-cols-2">
+              <div className="mt-1 max-w-xl">
+                <label className="mb-1 block text-sm font-medium text-gray-600">
+                  {t('content')}
+                </label>
+
+                <div className="flex h-40 flex-col">
+                  <TextEditor
+                    key="content"
+                    // label={t('content')}
+                    value={content}
+                    onChange={handleChange}
+                    placeholder={
+                      t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
+                    }
+                    className="h-40 w-full resize-none overflow-auto whitespace-pre p-2 outline-none"
+                  />
+                </div>
+              </div>
             </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">

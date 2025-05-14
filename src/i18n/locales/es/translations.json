@@ -263,5 +263,6 @@
   "isFirstDepositOnly": "Es solo el primer depósito",
   "isSecondDepositOnly": "Es solo el segundo depósito",
   "record": "Registro",
-  "unique": "Único"
+  "unique": "Único",
+  "content": "Contenido"
 }

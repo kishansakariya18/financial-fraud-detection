@@ -306,3 +306,28 @@ export const playerNotesResponseMapper = (apiData) => {
     createdAt: getDateInUTCToTimeZone(data.DateCreated)
   }));
 };
+
+export const selfExclusionMapper = (ExclusionType) => {
+  //0 - none, 1- 1Day, 2 - 7Days, 3 - 1Month, 4-6month, 5-12month, 6- Custom, 7-Permanent
+  console.log('hrererereree >>>.', ExclusionType);
+  switch (ExclusionType) {
+    case 0:
+      return 'None';
+    case 1:
+      return '1 Day';
+    case 2:
+      return '7 Day';
+    case 3:
+      return '1 Month';
+    case 4:
+      return '6 Month';
+    case 5:
+      return '12 Month';
+    case 6:
+      return 'Custom';
+    case 7:
+      return 'Permanent';
+    default:
+      return 'None';
+  }
+};

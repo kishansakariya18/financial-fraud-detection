@@ -34,18 +34,18 @@ export const playerRoutes = [
           const { ViewDetails: PlayerDetails } = await import(
             '../../pages/users/player/ViewDetails'
           );
-          const { default: PlayerLimit } = await import(
-            '../../pages/users/player/ViewOnlyPlayerLimit'
-          );
+          // const { default: PlayerLimit } = await import(
+          //   '../../pages/users/player/ViewOnlyPlayerLimit'
+          // );
           return {
             Component: () => (
               <>
                 <PrivateRoute permission={PERMISSIONS.USER.LIST}>
                   <PlayerDetails />
                 </PrivateRoute>
-                <PrivateRoute permission={PERMISSIONS.USER.USER_LEVEL_LIMITS}>
+                {/* <PrivateRoute permission={PERMISSIONS.USER.USER_LEVEL_LIMITS}>
                   <PlayerLimit />
-                </PrivateRoute>
+                </PrivateRoute> */}
               </>
             )
           };
