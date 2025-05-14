@@ -40,7 +40,7 @@ export function RowActions({ row, table }) {
   };
 
   const handleClickView = () => {
-    navigate(`/pages/${row.original.id}/edit`);
+    navigate(`/pages/${row.original.id}/view`);
   };
 
   const openModal = () => {

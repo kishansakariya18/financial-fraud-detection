@@ -6,11 +6,11 @@ export const pagesRoute = [
   {
     path: 'pages',
     lazy: async () => {
-      const { default: EmailTemplateList } = await import('../../pages/pages/list/list');
+      const { default: PageList } = await import('../../pages/pages/list/list');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.EMAIL_TEMPLATE.LIST}>
-            <EmailTemplateList />
+            <PageList />
           </PrivateRoute>
         )
       };
@@ -19,11 +19,24 @@ export const pagesRoute = [
   {
     path: 'pages/:pageID/edit',
     lazy: async () => {
-      const { default: EditEmailTemplate } = await import('../../pages/pages/EditPages');
+      const { default: EditPage } = await import('../../pages/pages/EditPages');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.EMAIL_TEMPLATE.EDIT}>
-            <EditEmailTemplate />
+            <EditPage />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'pages/:pageID/view',
+    lazy: async () => {
+      const { default: ViewPage } = await import('../../pages/pages/ViewDetails');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.EMAIL_TEMPLATE.LIST}>
+            <ViewPage />
           </PrivateRoute>
         )
       };
