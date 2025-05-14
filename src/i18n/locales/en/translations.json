@@ -265,5 +265,13 @@
   "record": "Record",
   "unique": "Unique",
   "content": "Content",
-  "page": "Page"
+  "page": "Page",
+  "module": "Module",
+  "event": "Event",
+  "old": "Old",
+  "value": "Values",
+  "ipAddress": "IP Address",
+  "userAgent": "User Agent",
+  "url": "Url",
+  "createdBy": "Created By"
 }

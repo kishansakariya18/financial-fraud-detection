@@ -14,3 +14,11 @@ export const responseMapper = (apiData) => {
 
   return resultData;
 };
+
+export const pagesStatusToAPP = (status) => {
+  if (status === 0) {
+    return 'inactive';
+  } else if (status === 1) {
+    return 'active';
+  }
+};

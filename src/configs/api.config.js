@@ -23,7 +23,7 @@ export const apiConfig = {
     },
     AUDIT_LOGS: {
       VIEW: '/admin/audit-logs/list',
-      DETAIL: '/admin/audit-logs/:Id'
+      DETAIL: '/admin/audit-logs/view/:Id'
     },
     USER_ENQUIRY: {
       LIST: '/admin/enquiry/list'

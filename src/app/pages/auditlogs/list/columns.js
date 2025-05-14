@@ -2,7 +2,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 
 // Local Imports
-// import { RowActions } from './RowActions';
+import { RowActions } from './RowActions';
 import { IdCell, DateCell } from '../../../../components/custom/table/cell';
 import { CopyableCell } from '../../../../components/shared/table/CopyableCell';
 
@@ -46,12 +46,12 @@ export const columns = [
     cell: DateCell,
     filterFn: 'inNumberRange',
     enableSorting: false
+  }),
+  columnHelper.display({
+    id: 'actions',
+    label: 'Row Actions',
+    header: 'Actions',
+    cell: RowActions,
+    enableSorting: false
   })
-  // columnHelper.display({
-  //   id: 'actions',
-  //   label: 'Row Actions',
-  //   header: 'Actions',
-  //   cell: RowActions,
-  //   enableSorting: false
-  // })
 ];

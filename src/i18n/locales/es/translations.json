@@ -265,5 +265,13 @@
   "record": "Registro",
   "unique": "Único",
   "content": "Contenido",
-  "page": "Página"
+  "page": "Página",
+  "module": "Módulo",
+  "event": "Evento",
+  "old": "Viejo",
+  "value": "Valores",
+  "ip_address": "Dirección IP",
+  "user_agent": "Agente de usuario",
+  "url": "URL",
+  "createdBy": "Creado por"
 }

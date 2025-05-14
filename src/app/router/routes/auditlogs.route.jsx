@@ -15,6 +15,19 @@ export const auditlogsRoute = [
         )
       };
     }
+  },
+  {
+    path: 'auditlogs/:auditLogID/view',
+    lazy: async () => {
+      const { default: ViewPage } = await import('../../pages/auditlogs/ViewDetails');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.EMAIL_TEMPLATE.LIST}>
+            <ViewPage />
+          </PrivateRoute>
+        )
+      };
+    }
   }
   // {
   //   path: 'auditlogs/:Id/tab',

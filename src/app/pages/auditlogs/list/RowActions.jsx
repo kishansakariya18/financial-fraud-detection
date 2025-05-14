@@ -2,42 +2,45 @@
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
 import { EllipsisHorizontalIcon, EyeIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
-import { Fragment, useCallback, useState } from 'react';
+import { Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 // Local Imports
-import { ConfirmModal } from 'components/shared/ConfirmModal';
+// import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
-import RoleService from 'services/role.services';
+// import RoleService from 'services/role.services';
 // import { TbStatusChange } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { PERMISSIONS } from 'constants/app.constant';
+import usePermissions from 'app/router/usePermissions';
 
-export function RowActions({ row, table }) {
+export function RowActions({ row }) {
   const { t } = useTranslation();
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
-  const [deleteSuccess, setDeleteSuccess] = useState(false);
-  const [deleteError, setDeleteError] = useState(false);
+  const { hasPermission } = usePermissions();
+  // const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  // const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
+  // const [deleteSuccess, setDeleteSuccess] = useState(false);
+  // const [deleteError, setDeleteError] = useState(false);
   const navigate = useNavigate();
 
-  const confirmMessages = {
-    pending: {
-      description: t('role_delete_desc'),
-      actionText: t('submit')
-    },
-    success: {
-      title: t('admin') + ' ' + t('delete_success'),
-      description: t('admin_status_suceess')
-    }
-  };
+  // const confirmMessages = {
+  //   pending: {
+  //     description: t('role_delete_desc'),
+  //     actionText: t('submit')
+  //   },
+  //   success: {
+  //     title: t('admin') + ' ' + t('delete_success'),
+  //     description: t('admin_status_suceess')
+  //   }
+  // };
 
-  const closeModal = () => {
-    setDeleteModalOpen(false);
-  };
+  // const closeModal = () => {
+  //   setDeleteModalOpen(false);
+  // };
 
   const handleClickView = () => {
-    navigate(`/admin/${row.original.adminUID}/tab/details`);
+    navigate(`/auditlogs/${row.original.id}/view`);
   };
 
   // const openModal = () => {
@@ -46,7 +49,7 @@ export function RowActions({ row, table }) {
   //   setDeleteSuccess(false);
   // };
 
-  const state = deleteError ? 'error' : deleteSuccess ? 'success' : 'pending';
+  // const state = deleteError ? 'error' : deleteSuccess ? 'success' : 'pending';
 
   return (
     <>
@@ -66,19 +69,21 @@ export function RowActions({ row, table }) {
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
               className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
-                      focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
-                    )}
-                    onClick={handleClickView}>
-                    <EyeIcon className="size-4.5 stroke-1" />
-                    <span>{t('view')}</span>
-                  </button>
-                )}
-              </MenuItem>
+              {hasPermission(PERMISSIONS.AUDIT_LOG.VIEW) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                        focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                      )}
+                      onClick={handleClickView}>
+                      <EyeIcon className="size-4.5 stroke-1" />
+                      <span>{t('view')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
               {/* <MenuItem>
                 {({ focus }) => (
                   <button
@@ -110,14 +115,14 @@ export function RowActions({ row, table }) {
         </Menu>
       </div>
 
-      <ConfirmModal
+      {/* <ConfirmModal
         show={deleteModalOpen}
         onClose={closeModal}
         messages={confirmMessages}
         onOk={handleDeleteRows}
         confirmLoading={confirmDeleteLoading}
         state={state}
-      />
+      /> */}
     </>
   );
 }

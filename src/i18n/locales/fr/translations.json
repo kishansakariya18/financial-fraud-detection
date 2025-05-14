@@ -265,5 +265,13 @@
   "record": "Enregistrer",
   "unique": "Unique",
   "content": "Contenu",
-  "page": "Page"
+  "page": "Page",
+  "module": "Module",
+  "event": "Événement",
+  "old": "Vieux",
+  "value": "Valeurs",
+  "ip_address": "Adresse IP",
+  "user_agent": "Agent utilisateur",
+  "url": "URL",
+  "createdBy": "Créé par"
 }
