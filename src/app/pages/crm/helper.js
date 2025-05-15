@@ -58,8 +58,8 @@ export const mapSegmentationOptions = (apiData) => {
       icon: CheckBadgeIcon
     }));
   } else {
-    const defaultOption = { label: 'No options available', value: '' };
-    options = [defaultOption];
+    const defaultops = { label: 'No options available', value: '' };
+    options = [defaultops];
   }
   return options;
 };

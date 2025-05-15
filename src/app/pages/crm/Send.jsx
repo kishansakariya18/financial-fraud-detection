@@ -48,7 +48,7 @@ const Send = () => {
   });
 
   const [content, setContent] = useState(defaultValue);
-  const [segmentationOptions, setSegmentationOptions] = useState(defaultValue);
+  const [segmentationOptions, setSegmentationOptions] = useState([]);
   // const title = watch('title');
 
   //fetch user segmentation list
@@ -150,7 +150,10 @@ const Send = () => {
                   <Listbox
                     key={'segmentationID'}
                     data={segmentationOptions}
-                    value={segmentationOptions}
+                    value={
+                      segmentationOptions.find((item) => item.value === field.value) ||
+                      segmentationOptions
+                    }
                     onChange={(val) => field.onChange(val.value)}
                     name={field.name}
                     label={t('segmentation')}

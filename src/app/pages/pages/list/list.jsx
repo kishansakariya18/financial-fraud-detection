@@ -36,7 +36,7 @@ export default function Pages() {
       return {
         status: 200,
         data: apiData.list,
-        totalRecords: parseInt(result?.response?.totalRecords) || DEFAULT_PER_PAGE_RECORD
+        totalRecords: parseInt(apiData?.totalRecords) || DEFAULT_PER_PAGE_RECORD
       };
     }
     return { status: result.status, error: result.error };
@@ -65,7 +65,7 @@ export default function Pages() {
   useEffect(() => {
     const filtersFromQuery = [];
     if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'title', value: queryParams.keyword });
+      filtersFromQuery.push({ id: 'name', value: queryParams.keyword });
     }
     if (queryParams.status) {
       filtersFromQuery.push({ id: 'status', value: queryParams.status });
