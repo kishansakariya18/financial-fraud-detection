@@ -1,4 +1,3 @@
-import { pagesStatusToAPI } from 'app/pages/pages/helper';
 import apiConfig from 'configs/api.config';
 import { sendRequest } from 'utils/axios';
 import { replaceText } from 'utils/custom.utilities';
@@ -11,7 +10,7 @@ const PagesService = {
         page: pagination.pageIndex + 1,
         limit: pagination.pageSize,
         keyword: filters?.keyword || undefined,
-        status: filters?.status ? pagesStatusToAPI(filters.status) : undefined,
+        status: filters?.status ? filters.status : undefined,
         ...(!pagination && { pagination: false })
       };
       const endPoint = apiConfig.endPoints.PAGE.LIST;
@@ -34,7 +33,7 @@ const PagesService = {
       const reqBody = {
         name: data.name,
         content: data.content,
-        status: pagesStatusToAPI(data.status)
+        status: data.status
       };
       const endPoint = apiConfig.endPoints.PAGE.ADD;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
@@ -57,7 +56,7 @@ const PagesService = {
         pageID: data.pageID,
         name: data.name,
         content: data.content,
-        status: pagesStatusToAPI(data.status)
+        status: data.status
       };
       const endPoint = apiConfig.endPoints.PAGE.UPDATE;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;

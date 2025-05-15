@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
@@ -30,9 +31,9 @@ export default function Pages() {
       filters: queryParams
     });
 
-    const apiData = pagesListResponseMapper(result.response);
-
     if (result.status === 200) {
+      const apiData = pagesListResponseMapper(result.response);
+    // console.log('data is ', apiData); return false;
       return {
         status: 200,
         data: apiData.list,
@@ -108,6 +109,7 @@ export default function Pages() {
   };
 
   useLockScrollbar(tableSettings.enableFullScreen);
+console.log('table is ', table);
 
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>

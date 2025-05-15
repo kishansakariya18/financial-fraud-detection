@@ -4,16 +4,17 @@ import { createColumnHelper } from '@tanstack/react-table';
 // Local Imports
 import { RowActions } from './RowActions';
 import { IdCell, BadgeCell } from '../../../../components/custom/table/cell';
+// import { IdCell } from '../../../../components/custom/table/cell';
 // import { CopyableCell } from '../../../../components/shared/table/CopyableCell';
 import { pagesOptions } from '../helper';
 
 const columnHelper = createColumnHelper();
 
 export const columns = [
-  columnHelper.accessor((row) => row.srn, {
-    id: 'srn',
-    label: 'Sr. No',
-    header: 'Sr. No',
+  columnHelper.accessor((row) => row.id, {
+    id: 'id',
+    label: 'Page ID',
+    header: 'Page ID',
     cell: IdCell,
     enableSorting: false
   }),
