@@ -65,7 +65,7 @@ export default function Roles() {
   useEffect(() => {
     const filtersFromQuery = [];
     if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'RoleName', value: queryParams.keyword });
+      filtersFromQuery.push({ id: 'roleName', value: queryParams.keyword });
     }
 
     setColumnFilters(filtersFromQuery);

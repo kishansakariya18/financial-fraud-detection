@@ -179,22 +179,16 @@ const EditPages = () => {
             </div>
             <div className="grid gap-8 sm:grid-cols-2">
               <div className="mt-1 max-w-xl">
-                <label className="mb-1 block text-sm font-medium text-gray-600">
-                  {t('content')}
-                </label>
-
-                <div className="flex h-40 flex-col">
-                  <TextEditor
-                    key="content"
-                    // label={t('content')}
-                    value={content}
-                    onChange={handleChange}
-                    placeholder={
-                      t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
-                    }
-                    className="h-40 w-full resize-none overflow-auto whitespace-pre p-2 outline-none"
-                  />
-                </div>
+                <TextEditor
+                  key="content"
+                  label={t('content')}
+                  value={content}
+                  onChange={handleChange}
+                  placeholder={
+                    t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
+                  }
+                  className="[&_.ql-editor]:max-h-80 [&_.ql-editor]:min-h-[12rem]"
+                />
               </div>
             </div>
           </div>

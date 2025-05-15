@@ -48,14 +48,20 @@ import { CheckBadgeIcon } from '@heroicons/react/24/outline';
 // };
 
 export const mapSegmentationOptions = (apiData) => {
-  const resultData = apiData.map((data) => ({
-    key: data.UserSegmentID,
-    value: data.UserSegmentID,
-    label: data.Name || 'Segmentation ' + data.UserSegmentID,
-    color: 'success',
-    icon: CheckBadgeIcon
-  }));
-  return resultData;
+  let options = [];
+  if (apiData.length > 0) {
+    options = apiData.map((data) => ({
+      key: data.UserSegmentID,
+      value: data.UserSegmentID,
+      label: data.Name || 'Segmentation ' + data.UserSegmentID,
+      color: 'success',
+      icon: CheckBadgeIcon
+    }));
+  } else {
+    const defaultOption = { label: 'No options available', value: '' };
+    options = [defaultOption];
+  }
+  return options;
 };
 
 export const sendOptions = [

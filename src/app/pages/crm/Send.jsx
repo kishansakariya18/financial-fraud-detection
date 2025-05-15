@@ -5,7 +5,6 @@ import { Controller, useForm } from 'react-hook-form';
 import { Button, Input } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { useNavigate } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
 import CrmService from 'services/crm.services';
@@ -33,7 +32,6 @@ const Send = () => {
 
   // const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
-  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -42,7 +40,11 @@ const Send = () => {
     // watch,
     reset
   } = useForm({
-    resolver: yupResolver(crmSchema)
+    resolver: yupResolver(crmSchema),
+    defaultValues: {
+      channel: null,
+      segmentationID: defaultValue
+    }
   });
 
   const [content, setContent] = useState(defaultValue);
@@ -75,6 +77,7 @@ const Send = () => {
     if (result) {
       if (result.status === 200 || result.status === 201) {
         setResponse(result.response);
+        restForm();
       } else {
         setError(result.error);
       }
@@ -89,10 +92,6 @@ const Send = () => {
 
   if (!loading && !error && response) {
     toast.success(response.message);
-    setTimeout(() => {
-      navigate('/crm', { replace: true });
-    }, 0);
-    window.location.reload();
     setResponse(null);
   }
 
@@ -107,6 +106,11 @@ const Send = () => {
   useEffect(() => {
     fetchSegmentations();
   }, []);
+
+  const restForm = () => {
+    setContent(defaultValue);
+    reset();
+  };
 
   return (
     <Page title={t('create') + ' ' + t('crm')}>
@@ -129,7 +133,7 @@ const Send = () => {
                   <Listbox
                     key={'channel'}
                     data={sendOptions}
-                    value={sendOptions.find((channel) => channel.value === field.value) || null}
+                    value={defaultValue}
                     onChange={(val) => field.onChange(val.value)}
                     name={field.name}
                     label={t('channel')}
@@ -146,15 +150,13 @@ const Send = () => {
                   <Listbox
                     key={'segmentationID'}
                     data={segmentationOptions}
-                    // value={null}
-                    onChange={(val) => {
-                      field.onChange(val.value);
-                    }}
+                    value={segmentationOptions}
+                    onChange={(val) => field.onChange(val.value)}
                     name={field.name}
-                    label={t('segmentation') + ' ' + t('list')}
+                    label={t('segmentation')}
                     placeholder={t('select') + ' ' + t('segmentation')}
                     displayField="label"
-                    error={errors?.to?.message}
+                    error={errors?.segmentationID?.message}
                   />
                 )}
                 control={control}
@@ -169,19 +171,22 @@ const Send = () => {
                 error={errors?.subject?.message}
                 placeholder={t('enter') + ' ' + t('subject')}
               />
-              <TextEditor
-                key={'description'}
-                value={content}
-                label={t('description')}
-                onChange={handleChange}
-                placeholder={
-                  t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
-                }
-              />
+              <div className="mt-1 max-w-xl">
+                <TextEditor
+                  key={'description'}
+                  value={content}
+                  label={t('description')}
+                  onChange={handleChange}
+                  placeholder={
+                    t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
+                  }
+                  className="[&_.ql-editor]:max-h-80 [&_.ql-editor]:min-h-[12rem]"
+                />
+              </div>
             </div>
           </div>
           <div className="mt-12 flex justify-end space-x-3 rtl:space-x-reverse">
-            <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
+            <Button className="min-w-[7rem]" onClick={() => restForm()} disabled={loading}>
               {t('reset')}
             </Button>
             <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>

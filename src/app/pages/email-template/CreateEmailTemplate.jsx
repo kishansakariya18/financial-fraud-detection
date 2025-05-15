@@ -135,6 +135,7 @@ const CreateEmailTemplate = () => {
                   placeholder={
                     t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
                   }
+                  className="[&_.ql-editor]:max-h-80 [&_.ql-editor]:min-h-[12rem]"
                 />
               </div>
             </div>
