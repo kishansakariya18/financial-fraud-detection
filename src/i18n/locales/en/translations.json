@@ -264,14 +264,10 @@
   "isSecondDepositOnly": "Is Second Deposit Only",
   "record": "Record",
   "unique": "Unique",
-<<<<<<< HEAD
   "page": "Page",
   "pageKey": "Page Key",
   "content": "Content",
-  "quantity": "Quantity"
-=======
-  "content": "Content",
-  "page": "Page",
+  "quantity": "Quantity",
   "module": "Module",
   "event": "Event",
   "old": "Old",
@@ -280,5 +276,4 @@
   "userAgent": "User Agent",
   "url": "Url",
   "createdBy": "Created By"
->>>>>>> 7d7603a60decf0f5b95da914b43d9399e527fcbc
 }
