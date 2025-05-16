@@ -1,5 +1,10 @@
 import { getDateInUTCToTimeZone } from 'helpers/functions';
-import { CheckBadgeIcon, ClockIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import {
+  ArchiveBoxIcon,
+  CheckBadgeIcon,
+  ClockIcon,
+  XCircleIcon
+} from '@heroicons/react/24/outline';
 import { TRANSACTION } from 'constants/app.constant';
 
 export const responseMapper = (apiData) => {
@@ -19,7 +24,7 @@ export const responseMapper = (apiData) => {
       coin: item.Coin,
       cryptoDeposit: item.CryptoDeposit,
       cryptoWinning: item.CryptoWinning,
-      status: playerStatusToApp(item.Status),
+      status: playerStatusToApp(item.AccountStatus),
       createdAt: item.DateCreated ? getDateInUTCToTimeZone(item.DateCreated) : '',
       lastLoginAt: item.LastLoginAt ? getDateInUTCToTimeZone(item.LastLoginAt) : '',
       isBankVerified: item.IsBankVerified
@@ -27,9 +32,6 @@ export const responseMapper = (apiData) => {
   });
 
   return list;
-  //   const totalPage = apiData.totalPages;
-  //   const totalRecords = apiData.totalRecords;
-  //   return { totalPage, totalRecords, list };
 };
 
 export const playerStatusToApp = (status) => {
@@ -38,6 +40,8 @@ export const playerStatusToApp = (status) => {
       return 'active';
     case 0:
       return 'inactive';
+    case 2:
+      return 'blocked';
     default:
       break;
   }
@@ -49,6 +53,8 @@ export const playerStatusToAPI = (status) => {
       return 1;
     case 'inactive':
       return 0;
+    case 'blocked':
+      return 2;
     default:
       return null;
   }
@@ -66,6 +72,12 @@ export const playerStatusOptions = [
     label: 'Inactive',
     color: 'error',
     icon: XCircleIcon
+  },
+  {
+    value: 'blocked',
+    label: 'Blocked',
+    color: 'error',
+    icon: ArchiveBoxIcon
   }
 ];
 
@@ -77,7 +89,7 @@ export const playerTransactionsResponseMapper = (apiData) => {
       id: item.TransactionID,
       transactionUID: item.TransactionUID,
       username: userData.username,
-      type: transactionTypeApiToApp(item.Type),
+      type: transactionTypeApiToApp(item.CreditDebitType),
       customMessage: item.CustomMessage,
       realCash: item.RealCash,
       bonus: item.Bonus,
@@ -92,7 +104,7 @@ export const playerTransactionsResponseMapper = (apiData) => {
             : 0,
       coin: item.Coin,
       createdAt: getDateInUTCToTimeZone(item.DateCreated),
-      status: transactionStatusToAPP(item.Status),
+      status: transactionStatusToAPP(item.TransactionStatus),
       transactionData: item.TransactionData,
       admin: item.admin
     };
@@ -288,9 +300,34 @@ export const fundTypeToAPI = (fundType) => {
 export const playerNotesResponseMapper = (apiData) => {
   return apiData.map((data) => ({
     id: data.CommentID,
-    note: data.Comment,
+    note: data.CommentText,
     adminName: data.Admin.Username,
     isPinned: data.IsPinned ? 'Yes' : 'No',
     createdAt: getDateInUTCToTimeZone(data.DateCreated)
   }));
+};
+
+export const selfExclusionMapper = (ExclusionType) => {
+  //0 - none, 1- 1Day, 2 - 7Days, 3 - 1Month, 4-6month, 5-12month, 6- Custom, 7-Permanent
+  console.log('hrererereree >>>.', ExclusionType);
+  switch (ExclusionType) {
+    case 0:
+      return 'None';
+    case 1:
+      return '1 Day';
+    case 2:
+      return '7 Day';
+    case 3:
+      return '1 Month';
+    case 4:
+      return '6 Month';
+    case 5:
+      return '12 Month';
+    case 6:
+      return 'Custom';
+    case 7:
+      return 'Permanent';
+    default:
+      return 'None';
+  }
 };

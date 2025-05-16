@@ -14,10 +14,10 @@ export const parseProviderStatusToApi = (status) => {
   }
 };
 export const parseProviderStatusToApp = (status) => {
-  switch (+status) {
-    case 1:
+  switch (status) {
+    case true:
       return 'active';
-    case 0:
+    case false:
       return 'inactive';
     default:
       return undefined;
@@ -25,11 +25,11 @@ export const parseProviderStatusToApp = (status) => {
 };
 export const responseMapper = (apiData) => {
   return apiData.map((item) => ({
-    id: item.ID,
+    id: item.ProviderID,
     providerUID: item.ProviderUID,
     name: item.Name,
     image: item.Image ? getImageURL('providers', item.Image) : null,
-    status: parseProviderStatusToApp(item.Status),
+    status: parseProviderStatusToApp(item.IsActive),
     createdAt: getDateInUTCToTimeZone(item.DateCreated),
     updatedAt: getDateInUTCToTimeZone(item.DateModified)
   }));

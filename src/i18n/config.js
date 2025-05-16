@@ -19,7 +19,7 @@ i18n
     },
     fallbackLng: defaultTheme.fallbackLang,
     lng: localStorage.getItem('i18nextLng') || defaultTheme.defaultLang,
-    supportedLngs: ['en', 'es', 'ar', 'zh-cn'],
+    supportedLngs: ['en', 'fr', 'es', 'ar', 'zh-cn'],
     ns: ['translations'],
     defaultNS: 'translations',
     interpolation: {
@@ -27,6 +27,6 @@ i18n
     },
     lowerCaseLng: true,
     debug: false
-  }).languages = ['en', 'es', 'ar', 'zh-cn'];
+  }).languages = ['en', 'fr', 'es', 'ar', 'zh-cn'];
 
 export default i18n;

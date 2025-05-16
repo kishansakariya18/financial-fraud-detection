@@ -47,9 +47,9 @@ const EditAdmin = () => {
             lastName: result.LastName || '',
             email: result.Email || '',
             roles: result.RoleID,
-            status: parseAdminStatusToApp(result.Status) || 'inactive',
+            status: parseAdminStatusToApp(result.AccountStatus) || 'inactive',
             mobile: result.Mobile || '',
-            isMasterAdmin: result.MasterAdmin || false
+            isMasterAdmin: result.IsSuperAdmin || false
           };
         }
       }

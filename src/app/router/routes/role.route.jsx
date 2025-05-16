@@ -1,4 +1,6 @@
-import { Navigate } from 'react-router';
+import { PERMISSIONS } from 'constants/app.constant';
+// import { Navigate } from 'react-router';
+import PrivateRoute from '../private';
 
 export const roleRoutes = [
   {
@@ -6,7 +8,16 @@ export const roleRoutes = [
     children: [
       {
         index: true,
-        element: <Navigate to="/add" />
+        lazy: async () => {
+          const { default: RoleList } = await import('../../pages/roles/list/list');
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.ROLES.VIEW}>
+                <RoleList />
+              </PrivateRoute>
+            )
+          };
+        }
       },
       {
         path: 'add',

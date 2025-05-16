@@ -3,10 +3,10 @@ import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 export const segmentationResponseMapper = (apiData) => {
   const resultData = apiData.map((data) => ({
-    id: data.Id,
+    id: data.UserSegmentID,
     name: data.Name,
     count: data?.Count || '0',
-    status: parseSegmentationStatusToAPP(data?.Status),
+    status: parseSegmentationStatusToAPP(data?.IsActive),
     createdAt: getDateInUTCToTimeZone(data.DateCreated)
   }));
   return resultData;

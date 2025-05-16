@@ -54,6 +54,9 @@ export function BoldCell({ getValue, column, table }) {
 export function BadgeCell({ getValue, column }) {
   const val = getValue();
 
+  // console.log('val: ', val);
+  // console.log('optionData: ', column.columnDef.meta?.optionData);
+
   const optionData = column.columnDef.meta?.optionData || [];
   const option = optionData.find((item) => item.value === val);
 
@@ -62,7 +65,9 @@ export function BadgeCell({ getValue, column }) {
 
 export function AmountCell({ getValue }) {
   return (
-    <p className="text-sm+ font-medium text-gray-800 dark:text-dark-100">{getValue().toFixed(2)}</p>
+    <p className="text-sm+ font-medium text-gray-800 dark:text-dark-100">
+      {getValue()?.toFixed(2)}
+    </p>
   );
 }
 

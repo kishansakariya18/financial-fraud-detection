@@ -157,7 +157,7 @@ const AuthService = {
   },
   getCountries: async () => {
     try {
-      let apiURL = `${apiConfig.baseURL.REACT_APP_API_URL}${apiConfig.endPoints.ADMIN_USER.ADMIN_COUNTRY_LIST}`;
+      let apiURL = `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.ADMIN_USER.ADMIN_COUNTRY_LIST}`;
 
       if (apiURL) {
         const response = await sendRequest({

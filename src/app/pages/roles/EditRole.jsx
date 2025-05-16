@@ -8,19 +8,21 @@ import { Button, Card, Input } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { roleDetailMapper, rolePermissionListMapper } from './helper';
 import RoleService from 'services/role.services';
-import { useParams } from 'react-router';
+// import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 const EditRole = () => {
   const { rolePermissionId } = useParams();
   const { t } = useTranslation();
 
-  const pageTitle = t('edit') + ' ' + t('role') || 'Edit Role';
-  const roleName = t('role') + ' ' + t('name') || 'Role Name';
-  const update = t('update') || 'Update';
+  const pageTitle = t('edit') + ' ' + t('role');
+  const roleName = t('role') + ' ' + t('name');
+  const update = t('update');
   //* === Get api state for Edit ===
   const [isDetailLoading, setDetailLoading] = useState(false);
   const [detailError, setDetailError] = useState(null);
   const [detail, setDetail] = useState({});
+  const [response, setResponse] = useState([]);
   const fetchRoleDetail = async (rolePermissionId) => {
     setDetailLoading(true);
     const result = await RoleService.roleDetail(rolePermissionId);
@@ -37,6 +39,8 @@ const EditRole = () => {
     }
     setDetailLoading(false);
   };
+
+  // TODO: remove below code and implement loader
   if (!isDetailLoading && detailError) {
     // toast.error(detailError, config.TOAST_UI);
     setDetailError(null);
@@ -50,7 +54,6 @@ const EditRole = () => {
     }
   }, [rolePermissionId]);
 
-  const [response, setResponse] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -104,6 +107,8 @@ const EditRole = () => {
     formState: { errors }
   } = useForm();
 
+  const navigate = useNavigate();
+
   const onSubmit = async (data) => {
     data.permissionsIdList = checkedList;
     data.rolePermissionID = rolePermissionId;
@@ -131,9 +136,12 @@ const EditRole = () => {
     setSubmitError(null);
   }
   if (!isSubmitLoading && !submitError && submitResponse) {
-    toast('Role created successfully', {
+    toast.success('Role created successfully', {
       invert: true
     });
+    setTimeout(() => {
+      navigate('/roles');
+    }, 0);
     setSubmitResponse(null);
     reset();
   }

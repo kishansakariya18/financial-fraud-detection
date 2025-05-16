@@ -68,18 +68,18 @@ const EditAffiliate = () => {
             email: result.Email,
             mobile: result.Mobile,
             referralCode: result.ReferralCode,
-            status: affiliateStatusToApp(result.Status),
+            status: affiliateStatusToApp(result.AccountStatus),
             password: '', // leave empty for security
             confirmPassword: '',
-            perSignup: result.SignupComissionEnabled,
-            signupCommission: result.SignupComission,
-            signupCommissionType: result.SignupComissionType,
-            perDeposit: result.DepositComissionEnabled,
-            depositCommission: result.DepositComission,
-            depositCommissionType: result.DepositComissionType,
-            perPlayerLoss: result.UserLossComissionEnabled,
-            playerLossCommission: result.UserLossComission,
-            playerLossCommissionType: result.UserLossComissionType
+            perSignup: result.IsSignupCommissionEnabled,
+            signupCommission: result.SignupCommissionAmount,
+            signupCommissionType: result.SignupCommissionType,
+            perDeposit: result.IsDepositCommissionEnabled,
+            depositCommission: result.DepositCommissionAmount,
+            depositCommissionType: result.DepositCommissionType,
+            perPlayerLoss: result.IsUserLossCommissionEnabled,
+            playerLossCommission: result.UserLossCommissionAmount,
+            playerLossCommissionType: result.UserLossCommissionType
           };
 
           reset(mappedData);

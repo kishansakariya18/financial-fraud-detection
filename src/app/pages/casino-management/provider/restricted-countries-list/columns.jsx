@@ -6,14 +6,14 @@ import { IdCell, BoldCell, SelectCell } from '../../../../../components/custom/t
 
 // ----------------------------------------------------------------------
 
-export const countryColumns = ({ selectedIds, handleCheck }) => {
+export const countryColumns = ({ selectedIds, handleCheck, actionLabel }) => {
   const columnHelper = createColumnHelper();
 
   return [
     columnHelper.display({
       id: 'select',
-      label: 'Remove',
-      header: 'Remove',
+      label: actionLabel,
+      header: actionLabel,
       cell: (cell) => SelectCell({ checked: selectedIds, row: cell.row, onChange: handleCheck }),
       enableSorting: false
     }),

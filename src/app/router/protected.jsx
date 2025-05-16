@@ -5,6 +5,7 @@ import dashboardRoute from './routes/dashboard.route';
 import adminRoute from './routes/admin.route';
 import playerRoutes from './routes/player.route';
 import roleRoutes from './routes/role.route';
+import auditlogsRoutes from './routes/auditlogs.route';
 import platformRoute from './routes/platform.route';
 import countryRoutes from './routes/country.route';
 import reportsRoutes from './routes/betSlip.route';
@@ -13,6 +14,10 @@ import userKycRoute from './routes/player-kyc.routes';
 import casinoRoutes from './routes/casino.route';
 import affiliateRoutes from './routes/affiliate.route';
 import segmentationRoutes from './routes/segmentation.route';
+import emailTemplateRoute from './routes/email-template.route';
+import promocodeRoute from './routes/promocode.route';
+import pagesRoute from './routes/pages.route';
+import crmRoute from './routes/crm.route';
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +33,7 @@ const protectedRoutes = {
         ...adminRoute,
         ...playerRoutes,
         ...roleRoutes,
+        ...auditlogsRoutes,
         ...platformRoute,
         ...countryRoutes,
         ...reportsRoutes,
@@ -35,7 +41,11 @@ const protectedRoutes = {
         ...userKycRoute,
         ...casinoRoutes,
         ...affiliateRoutes,
-        ...segmentationRoutes
+        ...segmentationRoutes,
+        ...emailTemplateRoute,
+        ...promocodeRoute,
+        ...pagesRoute,
+        ...crmRoute
       ]
     }
   ]

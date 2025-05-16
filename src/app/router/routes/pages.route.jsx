@@ -1,0 +1,59 @@
+import { PERMISSIONS } from 'constants/app.constant';
+import PrivateRoute from '../private';
+import { Navigate } from 'react-router';
+
+export const pagesRoute = [
+  {
+    path: 'pages',
+    lazy: async () => {
+      const { default: PageList } = await import('../../pages/pages/list/list');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.EMAIL_TEMPLATE.LIST}>
+            <PageList />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'pages/:pageID/edit',
+    lazy: async () => {
+      const { default: EditPage } = await import('../../pages/pages/EditPages');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.EMAIL_TEMPLATE.EDIT}>
+            <EditPage />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'pages/:pageID/view',
+    lazy: async () => {
+      const { default: ViewPage } = await import('../../pages/pages/ViewDetails');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.EMAIL_TEMPLATE.LIST}>
+            <ViewPage />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'pages/:id/tab',
+    lazy: async () => ({
+      Component: (await import('../../pages/player-kyc/Tabs')).default
+    }),
+    children: [
+      {
+        index: true,
+        element: <Navigate to="details" />
+      }
+    ]
+  }
+];
+
+export default pagesRoute;

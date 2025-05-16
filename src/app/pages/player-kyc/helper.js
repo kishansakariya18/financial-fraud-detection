@@ -9,27 +9,27 @@ export const userKYCResponseMapper = (apiData, type) => {
       return {
         id: data.DocumentID,
         userId: data.user.UserID,
-        accountNumber: data.Number,
-        name: data.Name,
-        type: +data.Type === DOCUMENT_TYPE.DOCUMENT ? 'document' : 'bank',
+        accountNumber: data.DocumentIdentifier,
+        name: data.NameOnDocument,
+        type: +data.DocumentType === DOCUMENT_TYPE.DOCUMENT ? 'document' : 'bank',
         bankCode: data.CustomData.BankCode || '',
         bankName: data.CustomData.BankName || '',
         username: data.user.Username || '',
         mobile: data.user.Mobile || '',
-        status: parseUserKycStatusToApp(data.Status),
+        status: parseUserKycStatusToApp(data.DocumentStatus),
         date: getDateInUTCToTimeZone(data.DateCreated)
       };
     } else {
       return {
         id: data.DocumentID,
         userId: data.user.UserID,
-        number: data.Number,
-        name: data.Name,
+        number: data.DocumentIdentifier,
+        name: data.NameOnDocument,
         username: data.user.Username || '',
         mobile: data.user.Mobile || '',
-        status: parseUserKycStatusToApp(data.Status),
+        status: parseUserKycStatusToApp(data.DocumentStatus),
         date: getDateInUTCToTimeZone(data.DateCreated),
-        type: +data.Type === DOCUMENT_TYPE.DOCUMENT ? 'document' : 'bank'
+        type: +data.DocumentType === DOCUMENT_TYPE.DOCUMENT ? 'document' : 'bank'
       };
     }
   });

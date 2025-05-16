@@ -7,7 +7,7 @@ import { PAYOUT_STATUS, TRANSACTION } from 'constants/app.constant';
 export const affiliateListResponseMapper = (apiData) => {
   const list = apiData.map((item) => {
     return {
-      id: item.AffiliatesID,
+      id: item.AffiliateID,
       affiliateUID: item.AffiliatesUID,
       email: item.Email || '-',
       referralCode: item.ReferralCode,
@@ -15,7 +15,7 @@ export const affiliateListResponseMapper = (apiData) => {
       lastName: item.LastName,
       username: item.Username,
       mobile: item.Mobile || '-',
-      status: affiliateStatusToApp(item.Status),
+      status: affiliateStatusToApp(item.AccountStatus),
       createdAt: getDateInUTCToTimeZone(item.DateCreated)
     };
   });
@@ -63,10 +63,10 @@ export const transactionResponseMapper = (apiData) => {
       mobile: item?.user?.Mobile || '-',
       email: item?.user?.Email || '-',
       description: transactionTypeToDescription(item?.TransactionType),
-      status: transactionStatusToAPP(item?.Status),
-      type: transactionTypeApiToApp(item?.Type),
-      amount: item.Amount,
-      commission: item.Commission,
+      status: transactionStatusToAPP(item?.TransactionStatus),
+      type: transactionTypeApiToApp(item?.CreditDebitType),
+      amount: item.SourceAmount,
+      commission: item.CommissionAmount,
       transactionType: affiliateTransactionTypeToAPP(item.TransactionType),
       createdAt: getDateInUTCToTimeZone(item.DateCreated)
     };
@@ -91,9 +91,9 @@ export const transactionResponseMapper = (apiData) => {
 export const loginHistoryResponseMapper = (apiData) => {
   return apiData.map((data) => {
     return {
-      id: data.ID,
+      id: data.AffiliateLoginHistoryID,
       adminId: data.AdminID,
-      ip: data.Ip,
+      ip: data.IPAddress,
       userAgent: data.UserAgent,
       expiredAt: data.ExpiredAt,
       loginAt: data.DateCreated
@@ -217,13 +217,13 @@ export const affiliateTransactionTypeOption = [
 export const payoutHistoryResponseMapper = (data) => {
   return data.map((apiData) => {
     return {
-      id: apiData.ID,
-      amount: apiData.PayoutTransaction.Commission,
+      id: apiData.AffiliatePayoutRequestID,
+      amount: apiData.PayoutTransaction.CommissionAmount,
       requestedAt: getDateInUTCToTimeZone(apiData.DateCreated),
       updatedAt: getDateInUTCToTimeZone(apiData.DateModified),
       rejectReason: apiData.RejectReason || '-',
-      status: parsePayoutStatusToApp(apiData.Status),
-      transactionStatus: parsePayoutTxnStatusToApp(apiData.PayoutTransaction.Status)
+      status: parsePayoutStatusToApp(apiData.PayoutRequestStatus),
+      transactionStatus: parsePayoutTxnStatusToApp(apiData.PayoutTransaction.TransactionStatus)
     };
   });
 };
@@ -345,7 +345,7 @@ export const affiliateDetailResponseMapper = (data) => {
     LastName: data.LastName,
     Mobile: data.Mobile,
     Email: data.Email,
-    Balance: data.Balance
+    Balance: data.CommissionBalance
   };
 };
 

@@ -80,7 +80,7 @@ const UpdatePayout = ({ onOk, onClose, affiliate, row }) => {
           <div>
             <p>{t('current') + ' ' + t('balance')}</p>
             <p className="this:info mt-0.5 text-2xl font-medium text-this dark:text-this-lighter">
-              {affiliate?.Balance}
+              {affiliate?.CommissionBalance}
             </p>
           </div>
           <Avatar

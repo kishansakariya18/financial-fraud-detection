@@ -23,13 +23,13 @@ export const parseProviderStatusToApp = (status) => {
 };
 export const responseMapper = (apiData) => {
   return apiData.map((item) => ({
-    id: item.ID,
+    id: item.GameID,
     name: item.Name,
     minBetAmount: item.MinBetAmount || '-',
     maxBetAmount: item.MaxBetAmount || '-',
     provider: item?.provider?.Name || '-',
     aggregatorCategory: item?.aggregatorCategory?.Name || '-',
-    status: parseProviderStatusToApp(item.Status),
+    status: parseProviderStatusToApp(item.IsActive),
     createdAt: getDateInUTCToTimeZone(item.DateCreated),
     updatedAt: getDateInUTCToTimeZone(item.DateModified)
   }));

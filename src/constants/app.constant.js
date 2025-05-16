@@ -326,8 +326,18 @@ export const PERMISSIONS = {
     EDIT: 'game-edit',
     CHANGE_STATUS: 'game-chnage-status',
     DELETE: 'game-delete'
+  },
+  CRM: {
+    VIEW: 'crm-view'
   }
 };
 
 export const DEFAULT_PAGE_INDEX = 0;
 export const DEFAULT_PER_PAGE_RECORD = 10;
+
+export const PROMOCODE = {
+  TYPE: {
+    EXACT_DEPOSIT: 0,
+    DEPOSIT_IN_RANGE: 1
+  }
+};

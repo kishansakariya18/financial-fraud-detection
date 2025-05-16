@@ -11,7 +11,6 @@ import Quill from 'quill'; // Ensure Quill is imported
 import { Delta, TextEditor } from 'components/shared/form/TextEditor';
 
 const EditNote = ({ noteId, onClose, note: noteText }) => {
-  console.log('note text: ', noteText);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);

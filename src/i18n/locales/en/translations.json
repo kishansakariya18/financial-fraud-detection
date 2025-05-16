@@ -2,6 +2,7 @@
   "nav": {
     "dashboards": {
       "dashboards": "Dashboards",
+      "dashboard": "Dashboard",
       "home": "Home",
       "users": "Users",
       "admin": "Admin",
@@ -23,11 +24,14 @@
       "limit": "Platform Limit"
     }
   },
+  "aiChat": "AI Chat",
   "remove": "Remove",
   "casino_provider": "Provider",
   "casino_games": "Games",
+  "games": "Games",
   "casino_category": "Category",
   "restricted_country":"Restricted Countries",
+  "casino":"Casino",
   "casino_management": "Casino Management",
   "betslip_transactions": "Betslip Transactions",
   "report": "Report",
@@ -35,6 +39,7 @@
   "add": "Add",
   "edit": "Edit",
   "delete": "Delete",
+  "delete_success": "Deleted Successfully",
   "roles": "Roles",
   "role": "Role",
   "save": "Save",
@@ -137,6 +142,7 @@
   "frontImage": "Front Image",
   "backImage": "Back Image",
   "bank": "Bank",
+  "pan": "PAN",
   "submit": "Submit",
   "account": "Account",
   "reject": "Reject",
@@ -145,11 +151,13 @@
   "player_status_suceess": "Player Status has been changed successfully",
   "admin_status_desc": "Are you sure you want to update this Admin's status ?",
   "admin_status_suceess": "Admin Status has been changed successfully",
+  "role_delete_desc": "Are you sure you want to delete this role ?",
   "changed": "Changed",
   "welcome_back": "Welcome Back",
   "forgot": "Forgot",
   "signIn": "Sign In",
   "verify": "Verify",
+  "send": "Send",
   "resend": "Resend",
   "here": "Here",
   "verify_otp_to_continue": "Verify OTP, to Continue",
@@ -164,6 +172,8 @@
   "balance": "Balance",
   "affiliate_status_desc": "Are you sure you want to update this Affiliate's status ?",
   "affiliate_status_suceess": "Affiliate Status has been changed successfully" ,
+  "pages_status_desc": "Are you sure you want to update this Page's status ?",
+  "pages_status_suceess": "Page Status has been changed successfully" ,
   "commission": "Commission",
   "signup": "Sign Up",
   "playerLoss": "Player Loss",
@@ -254,8 +264,21 @@
   "isSecondDepositOnly": "Is Second Deposit Only",
   "record": "Record",
   "unique": "Unique",
+<<<<<<< HEAD
   "page": "Page",
   "pageKey": "Page Key",
   "content": "Content",
   "quantity": "Quantity"
+=======
+  "content": "Content",
+  "page": "Page",
+  "module": "Module",
+  "event": "Event",
+  "old": "Old",
+  "value": "Values",
+  "ipAddress": "IP Address",
+  "userAgent": "User Agent",
+  "url": "Url",
+  "createdBy": "Created By"
+>>>>>>> 7d7603a60decf0f5b95da914b43d9399e527fcbc
 }

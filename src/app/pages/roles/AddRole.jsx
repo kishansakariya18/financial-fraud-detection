@@ -8,13 +8,14 @@ import { Button, Card, Input } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { rolePermissionListMapper } from './helper';
 import RoleService from 'services/role.services';
+import { useNavigate } from 'react-router';
 
 const AddRole = () => {
   const { t } = useTranslation();
 
-  const pageTitle = t('add') + ' ' + t('role') || 'Add Role';
-  const roleName = t('role') + ' ' + t('name') || 'Role Name';
-  const save = t('save') || 'Save';
+  const pageTitle = t('add') + ' ' + t('role');
+  const roleName = t('role') + ' ' + t('name');
+  const save = t('save');
   const [response, setResponse] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -69,6 +70,8 @@ const AddRole = () => {
     formState: { errors }
   } = useForm();
 
+  const navigate = useNavigate();
+
   const onSubmit = async (data) => {
     data.permissionsIdList = checkedList;
     console.log('data::', data);
@@ -95,9 +98,12 @@ const AddRole = () => {
     setSubmitError(null);
   }
   if (!isSubmitLoading && !submitError && submitResponse) {
-    toast('Role created successfully', {
+    toast.success('Role created successfully', {
       invert: true
     });
+    setTimeout(() => {
+      navigate('/roles');
+    }, 0);
     setSubmitResponse(null);
     reset();
   }

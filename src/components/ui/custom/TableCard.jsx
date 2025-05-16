@@ -9,7 +9,7 @@ import { PaginationSection } from 'components/shared/table/PaginationSection';
 
 const TableCard = (props) => {
   const { cardSkin } = useThemeContext();
-  const { tableSettings, table, loading } = props; // Added loading prop
+  const { tableSettings, table, loading, paginationEnabled = true } = props; // Added loading prop
 
   return (
     <div
@@ -123,7 +123,7 @@ const TableCard = (props) => {
           </Table>
         </div>
 
-        {!loading && table.getCoreRowModel().rows.length > 0 && (
+        {!loading && paginationEnabled && table.getCoreRowModel().rows.length > 0 && (
           <div
             className={clsx(
               'px-4 pb-4 sm:px-5 sm:pt-4',

@@ -1,7 +1,8 @@
 export const apiConfig = {
   baseURL: {
     API_BASE_URL: import.meta.env.VITE_API_URL,
-    S3_URL: import.meta.env.VITE_S3_URL
+    S3_URL: import.meta.env.VITE_S3_URL,
+    AI_CHAT_URL: import.meta.env.VITE_AI_CHAT_URL
   },
   endPoints: {
     AUTH: {
@@ -21,16 +22,19 @@ export const apiConfig = {
       DELETE: '/admin/roles/delete'
     },
     AUDIT_LOGS: {
-      VIEW: '/admin/audit-logs/list'
+      VIEW: '/admin/audit-logs/list',
+      DETAIL: '/admin/audit-logs/view/:Id'
     },
     USER_ENQUIRY: {
       LIST: '/admin/enquiry/list'
     },
     PAGE: {
       LIST: '/admin/pages/list',
-      DETAIL: '/admin/pages/view/:pageId',
-      TOGGLE_STATUS: '/admin/pages/change-status',
-      EDIT: '/admin/pages/update'
+      ADD: '/admin/pages/add',
+      TOGGLE_STATUS: '/admin/pages/:pageID/change-status',
+      DELETE: '/admin/pages/:pageID/delete',
+      DETAIL: '/admin/pages/detail',
+      UPDATE: '/admin/pages/update'
     },
     USER: {
       SET_EXCLUSION: '/admin/user/:userID/set-exclusion',
@@ -329,6 +333,7 @@ export const apiConfig = {
     API_LOGS: '/admin/api-logs',
     SEGMENTATION: {
       LIST: '/admin/segmentation/list',
+      ALL_LIST: '/admin/segmentation/allList',
       DETAIL: '/admin/segmentation/:segmentationId/details',
       ADD_EDIT: '/admin/segmentation/add-edit',
       COUNTRY_LIST: '/admin/segmentation/countries',
@@ -381,6 +386,9 @@ export const apiConfig = {
     REPORTS: {
       BETSLIP: '/admin/reports/betslip-transactions',
       BETSLIP_EXPORT: '/admin/reports/betslip'
+    },
+    CRM: {
+      SEND: '/admin/crm/sendNotification'
     }
   }
 };

@@ -25,10 +25,7 @@ export function ViewDetails() {
   const { documentId } = useParams();
   const pageTitle = t('playerKyc') + ' ' + t('details');
   const { copied, copy } = useClipboard({ timeout: 2000 });
-  const breadcrumbItem = [
-    { title: t('player') + ' ' + t('kyc'), path: '/player-kyc' },
-    { title: t('update') }
-  ];
+  const breadcrumbItem = [{ title: t('playerKyc'), path: '/player-kyc' }, { title: t('update') }];
 
   const [selected, setSelected] = useState('');
   const [rejectReason, setRejectReason] = useState('');

@@ -7,9 +7,9 @@ export const translator = (t, text, ns) => t(`${text}`, { ns });
 
 export const responseMapper = (apiData) => {
   const resultData = apiData.map((data) => ({
-    id: data.ID,
+    id: data.CategoryID,
     name: data.Name,
-    status: parseAdminStatusToApp(data.Status),
+    status: parseAdminStatusToApp(data.IsActive),
     createdAt: getDateInUTCToTimeZone(data.DateCreated),
     updatedAt: getDateInUTCToTimeZone(data.DateModified)
   }));

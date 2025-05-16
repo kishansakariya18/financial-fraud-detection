@@ -1,3 +1,5 @@
+import { getDateInUTCToTimeZone } from 'helpers/functions';
+
 export const translator = (t, text, ns) => t(`${text}`, { ns });
 
 export const rolePermissionListMapper = (apiData) => {
@@ -30,4 +32,14 @@ export const roleDetailMapper = (apiData) => {
     permissionIDs: apiData?.PermissionID?.split(',')?.map((item) => +item),
     status: apiData.Status
   };
+};
+
+export const responseMapper = (apiData) => {
+  const resultData = apiData.map((data) => ({
+    id: data.RolePermissionID,
+    roleName: data.RoleName,
+    createBy: data.Username,
+    createdAt: getDateInUTCToTimeZone(data.DateCreated)
+  }));
+  return resultData;
 };

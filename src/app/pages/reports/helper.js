@@ -47,7 +47,7 @@ export const mapType = (item) => {
 };
 export const responseMapper = (apiData) => {
   const resultData = apiData.map((data) => ({
-    id: data.ID,
+    id: data.UserBetOutcomeID,
     userId: data.UserID,
     betPlacementId: data.BetPlacementTransactionID,
     username: data.Username,
@@ -56,11 +56,11 @@ export const responseMapper = (apiData) => {
     stage: getBatdgeForStage(data.Stage),
     betWinningTxnId: data.BetWinningTransactionID,
     resultDate: data.ResultDate ? data.ResultDate : '',
-    winAmount: data.WinningAmount,
-    userAmount: amountColorBasedOnType(data.Amount, data.Type),
-    platformAmount: amountColorBasedOnTypeForPlatform(data.Amount, data.Type),
-    type: getBatdgeForType(data.Type),
-    platformType: getBadgeForPlatform(data.Type),
+    winAmount: data.WinningAmount || '-',
+    userAmount: amountColorBasedOnType(data.Amount, data.OutcomeType),
+    platformAmount: amountColorBasedOnTypeForPlatform(data.Amount, data.OutcomeType),
+    type: getBatdgeForType(data.OutcomeType),
+    platformType: getBadgeForPlatform(data.OutcomeType),
     createdAt: getDateInUTCToTimeZone(data.Date)
   }));
   return resultData;

@@ -23,3 +23,16 @@ export function stringToSlug(str) {
 
   return str;
 }
+export function stringToPagekey(str) {
+  if (typeof str !== 'string') {
+    throw new TypeError('Input must be a string.');
+  }
+  str = str
+    .trim()
+    .toLowerCase()
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join('');
+
+  return str;
+}

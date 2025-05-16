@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { Button, Card, Skeleton } from 'components/ui';
 import { useNavigate, useParams } from 'react-router';
 import { Page } from 'components/shared/Page';
-import { playerStatusToApp } from './helper';
+import { playerStatusToApp, selfExclusionMapper } from './helper';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 import PlayerService from 'services/player.services';
 import { showImage } from 'utils/showImage';
@@ -200,8 +200,120 @@ export function ViewDetails() {
                     {response?.ImageName}
                   </div>
                 </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('last_login_ip')}
+                  </p>
+                  <p>{response?.LastLoginIP || 'N/A'}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('pan') + ' ' + t('status')}
+                  </p>
+                  <p>
+                    {response?.PanDetail !== null &&
+                    (response?.IsKYCVerified === 1 || response?.IsKYCVerified === true)
+                      ? `${response.PanDetail} (Verified)`
+                      : `Pending`}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('bank') + ' ' + t('status')}
+                  </p>
+                  <p>
+                    {response?.BankDetail !== null &&
+                    (response?.IsBankVerified === 1 || response?.IsBankVerified === true)
+                      ? `${response.BankDetail} (Verified)`
+                      : `Pending`}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('selfExclusionTime')} ${response?.ExclusionType === '0' ? selfExclusionMapper(response?.ExclusionType) : selfExclusionMapper(response?.ExclusionType)}`}
+                  </p>
+                  <p>
+                    {response.ExclusionStartAt &&
+                      `Starts : ${response?.ExclusionType === '0' ? '-' : getDateInUTCToTimeZone(response?.ExclusionStartAt)}`}
+                  </p>
+                  <p>
+                    {response.ExclusionEndAt &&
+                      `Ends : ${response?.ExclusionType === '0' ? '-' : getDateInUTCToTimeZone(response?.ExclusionEndAt)}`}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('dailyWagerLimit')} ${response?.HasDailyBetWageLimit === true ? '✅' : '❌'}`}
+                  </p>
+                  <p>{response?.BetDailyWageLimit}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('weeklyWagerLimit')} ${response?.HasWeeklyBetWageLimit === true ? '✅' : '❌'}`}
+                  </p>
+                  <p>{response?.BetWeeklyWageLimit}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('monthlyWagerLimit')} ${response?.HasMonthlyBetWageLimit === true ? '✅' : '❌'}`}
+                  </p>
+                  <p>{response?.BetMonthlyWageLimit}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('dailyDepositLimit')} ${response?.HasMaxDepositPerDayLimit === true ? '✅' : '❌'}`}
+                  </p>
+                  <p>{response?.MaxDepositPerDay}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('weeklyDepositLimit')} ${response?.HasMaxDepositPerWeekLimit === true ? '✅' : '❌'}`}
+                  </p>
+                  <p>{response?.MaxDepositPerWeek}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('monthlyDepositLimit')} ${response?.HasMaxDepositPerMonthLimit === true ? '✅' : '❌'}`}
+                  </p>
+                  <p>{response?.MaxDepositPerMonth}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('dailyWithdrawLimit')} ${response?.HasMaxWithdrawPerDayLimit === true ? '✅' : '❌'}`}
+                  </p>
+                  <p>{response?.MaxWithdrawPerDay}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('weeklyWithdrawLimit')} ${response?.HasMaxWithdrawPerWeekLimit === true ? '✅' : '❌'}`}
+                  </p>
+                  <p>{response?.MaxWithdrawPerWeek}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('monthlyWithdrawLimit')} ${response?.HasMaxWithdrawPerMonthLimit === true ? '✅' : '❌'}`}
+                  </p>
+                  <p>{response?.MaxWithdrawPerMonth}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('dailyLossLimit')} ${response?.HasDailyLossLimit === true ? '✅' : '❌'}`}
+                  </p>
+                  <p>{response?.DailyLossLimit}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('weeklyLossLimit')} ${response?.HasWeeklyLossLimit === true ? '✅' : '❌'}`}
+                  </p>
+                  <p>{response?.WeeklyLossLimit}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('monthlyLossLimit')} ${response?.HasMonthlyLossLimit === true ? '✅' : '❌'}`}
+                  </p>
+                  <p>{response?.MonthlyLossLimit}</p>
+                </div>
               </div>
-
               <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
                 <Button className="min-w-[7rem]" onClick={() => navigate('/player')}>
                   {t('back')}
