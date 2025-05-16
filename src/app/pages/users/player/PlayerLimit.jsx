@@ -52,6 +52,7 @@ const PlayerLimit = () => {
     if (playerId) {
       fetchUserDetails().then((result) => {
         if (result) {
+          setExclusionType(result.ExclusionType);
           reset({
             dailyWagerLimit: result.BetDailyWageLimit,
             weeklyWagerLimit: result.BetWeeklyWageLimit,

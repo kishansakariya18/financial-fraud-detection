@@ -1,4 +1,4 @@
-import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { CheckBadgeIcon, NoSymbolIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 import { HiXCircle } from 'react-icons/hi';
 import { playerStatusToApp, transactionStatusToAPP } from '../users/player/helper';
@@ -106,8 +106,10 @@ export const affiliateStatusToApp = (status) => {
     return 'inactive';
   } else if (+status === 1) {
     return 'active';
-  } else {
+  } else if (+status === 2) {
     return 'blocked';
+  } else {
+    return 'deactivated';
   }
 };
 
@@ -118,8 +120,9 @@ export const affiliateStatusToApi = (status) => {
     case 'active':
       return 1;
     case 'blocked':
-    default:
       return 2;
+    case 'deactivated':
+      return 3;
   }
 };
 
@@ -141,6 +144,12 @@ export const affiliateStatusOptions = [
     label: 'Blocked',
     color: 'error',
     icon: HiXCircle
+  },
+  {
+    value: 'deactivated',
+    label: 'Deactivated',
+    color: 'error',
+    icon: NoSymbolIcon
   }
 ];
 

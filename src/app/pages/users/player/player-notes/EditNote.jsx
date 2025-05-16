@@ -17,17 +17,21 @@ const EditNote = ({ noteId, onClose, note: noteText }) => {
   const [response, setResponse] = useState(null);
   const [htmlContent, setHtmlContent] = useState(noteText);
 
-  const defaultValue = new Delta([{ insert: noteText }]);
-
   const { t } = useTranslation();
   const { handleSubmit, reset, register } = useForm({});
-  const [content, setContent] = useState(defaultValue);
+  const [content, setContent] = useState(new Delta([{ insert: htmlContent }]));
+  const [textError, setTextError] = useState('');
 
   const handleChange = (val) => {
     setContent(val);
     const quill = new Quill(document.createElement('div'));
     quill.setContents(val);
-    setHtmlContent(quill.root.innerHTML);
+    const html = quill.root.innerHTML;
+    setHtmlContent(html);
+    const plainText = html.replace(/<(.|\n)*?>/g, '').trim();
+    if (plainText) {
+      setTextError('');
+    }
   };
 
   const editNoteAPI = async (requestObject) => {
@@ -55,7 +59,7 @@ const EditNote = ({ noteId, onClose, note: noteText }) => {
   if (!loading && !error && response) {
     toast.success(response.message);
     setResponse(null);
-    setContent(defaultValue);
+    setContent(new Delta([{ insert: htmlContent }]));
     onClose();
     reset();
   }
@@ -74,6 +78,7 @@ const EditNote = ({ noteId, onClose, note: noteText }) => {
             placeholder={
               t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
             }
+            error={textError && textError}
           />
           <div className="border bg-gray-100 p-2"></div>
         </div>

@@ -2,11 +2,8 @@
 import { createColumnHelper } from '@tanstack/react-table';
 
 // Local Imports
-// import { RowActions } from './RowActions';
 import { IdCell, BoldCell, BadgeCell, DateCell } from '../../../../components/custom/table/cell';
 import { stageOptions, typeOptions } from '../helper';
-// import { statusOptions } from '../helper';
-
 // ----------------------------------------------------------------------
 
 const columnHelper = createColumnHelper();
@@ -26,17 +23,17 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.betId, {
-    id: 'betId',
-    label: 'Bet ID',
-    header: 'Bet ID',
+  columnHelper.accessor((row) => row.betPlacementId, {
+    id: 'betPlacementId',
+    label: 'Bet Placement ID',
+    header: 'Bet Placement ID',
     cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.referenceId, {
-    id: 'referenceId',
-    label: 'Reference ID',
-    header: 'Reference ID',
+  columnHelper.accessor((row) => row.betWinningTxnId, {
+    id: 'betWinningTxnId',
+    label: 'Bet Winning Txn ID',
+    header: 'Bet Winning Txn ID',
     cell: BoldCell,
     enableSorting: false
   }),
@@ -117,11 +114,4 @@ export const columns = [
     filterFn: 'inNumberRange',
     enableSorting: false
   })
-  // columnHelper.display({
-  //   id: 'actions',
-  //   label: 'Row Actions',
-  //   header: 'Actions',
-  //   cell: RowActions,
-  //   enableSorting: false
-  // })
 ];

@@ -1,4 +1,3 @@
-import { CheckBadgeIcon } from '@heroicons/react/24/outline';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 export const parseAdminStatusToApp = (status) => (status ? 'active' : 'inactive');
@@ -50,12 +49,12 @@ export const responseMapper = (apiData) => {
   const resultData = apiData.map((data) => ({
     id: data.ID,
     userId: data.UserID,
-    betId: data.BetID,
+    betPlacementId: data.BetPlacementTransactionID,
     username: data.Username,
     mobile: data.Mobile,
     betAmount: data.BetAmount,
     stage: getBatdgeForStage(data.Stage),
-    referenceId: data.ReferenceID,
+    betWinningTxnId: data.BetWinningTransactionID,
     resultDate: data.ResultDate ? data.ResultDate : '',
     winAmount: data.WinningAmount,
     userAmount: amountColorBasedOnType(data.Amount, data.Type),
@@ -114,33 +113,28 @@ export const stageOptions = [
   {
     value: 'betplaced',
     label: 'Betplaced',
-    color: 'success',
-    icon: CheckBadgeIcon
+    color: 'success'
   },
   {
     value: 'result',
     label: 'Result',
-    color: 'success',
-    icon: CheckBadgeIcon
+    color: 'success'
   }
 ];
 export const typeOptions = [
   {
     value: 'profit',
     label: 'Profit',
-    color: 'success',
-    icon: CheckBadgeIcon
+    color: 'success'
   },
   {
     value: 'loss',
     label: 'Loss',
-    color: 'error',
-    icon: CheckBadgeIcon
+    color: 'error'
   },
   {
     value: 'not-decided',
     label: 'Neutral',
-    color: 'warning',
-    icon: CheckBadgeIcon
+    color: 'warning'
   }
 ];

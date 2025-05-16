@@ -253,9 +253,9 @@ export const txnTypeToAPI = (value) => {
 export const loginHistoryResponseMapper = (apiData) => {
   return apiData.map((data) => {
     return {
-      id: data.ID,
+      id: data.UserLoginHistoryID,
       userId: data.UserID,
-      ip: data.Ip,
+      ip: data.IPAddress,
       userAgent: data.UserAgent,
       expiredAt: data.ExpiredAt,
       loginAt: data.DateCreated

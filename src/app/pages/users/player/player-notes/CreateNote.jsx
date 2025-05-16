@@ -20,17 +20,20 @@ const CreateNote = ({ onClose = () => {} }) => {
   const { playerId } = useParams();
   const { t } = useTranslation();
 
-  console.log('open: ', open);
-  console.log('close: ', close);
-
   const { handleSubmit, reset, register } = useForm({});
   const [content, setContent] = useState(defaultValue);
+  const [textError, setTextError] = useState('');
 
   const handleChange = (val) => {
     setContent(val);
     const quill = new Quill(document.createElement('div')); // Temporary Quill instance
     quill.setContents(val);
-    setHtmlContent(quill.root.innerHTML);
+    const html = quill.root.innerHTML;
+    setHtmlContent(html);
+    const plainText = html.replace(/<(.|\n)*?>/g, '').trim();
+    if (plainText) {
+      setTextError('');
+    }
   };
 
   const createNoteAPI = async (requestObject) => {
@@ -65,6 +68,12 @@ const CreateNote = ({ onClose = () => {} }) => {
   }
 
   const onSubmit = async (data) => {
+    const contentHTML = htmlContent?.replace(/<(.|\n)*?>/g, '').trim(); // Strip HTML tags
+
+    if (!contentHTML) {
+      setTextError('Note Content is required');
+      return;
+    }
     await createNoteAPI({ ...data, note: htmlContent });
   };
 
@@ -78,6 +87,7 @@ const CreateNote = ({ onClose = () => {} }) => {
             placeholder={
               t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
             }
+            error={textError && textError}
           />
           <div className="border bg-gray-100 p-2"></div>
         </div>
