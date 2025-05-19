@@ -63,6 +63,29 @@ const ViewDetails = () => {
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                  {t('module') + ' ' + t('name')}:
+                </p>
+                <p>{response?.ModuleName}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                  {t('event') + ' ' + t('name')}:
+                </p>
+                <p>{response?.EventName}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('url')}:</p>
+                <p>{response?.URL}</p>
+              </div>
+
+              <div>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                  {t('ipAddress')}:
+                </p>
+                <p>{response?.IPAddress}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                   {t('createdBy')}:
                 </p>
                 <p>
@@ -83,31 +106,9 @@ const ViewDetails = () => {
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('module') + ' ' + t('name')}:
+                  {t('createdAt')}:
                 </p>
-                <p>{response?.ModuleName}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('event') + ' ' + t('name')}:
-                </p>
-                <p>{response?.EventName}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('ipAddress')}:
-                </p>
-                <p>{response?.IPAddress}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('userAgent')}:
-                </p>
-                <p>{response?.UserAgent}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('url')}:</p>
-                <p>{response?.URL}</p>
+                <p>{getDateInUTCToTimeZone(response?.DateCreated)}</p>
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
@@ -124,12 +125,6 @@ const ViewDetails = () => {
                 <pre className="overflow-auto rounded bg-gray-100 p-4 text-sm">
                   {JSON.stringify(response?.NewValues, null, 2)}
                 </pre>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('createdAt')}:
-                </p>
-                <p>{getDateInUTCToTimeZone(response?.DateCreated)}</p>
               </div>
             </div>
             <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">

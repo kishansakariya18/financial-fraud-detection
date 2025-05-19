@@ -91,7 +91,7 @@
   "realCash": "Real Cash",
   "gender": "Gender",
   "address": "Address",
-  "createdAt": "Created At",
+  "createdAt": "Action At",
   "image": "Image",
   "preview": "Preview",
   "back": "Back",
@@ -287,5 +287,5 @@
   "ipAddress": "IP Address",
   "userAgent": "User Agent",
   "url": "Url",
-  "createdBy": "Created By"
+  "createdBy": "Action By"
 }

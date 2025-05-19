@@ -91,7 +91,7 @@
   "realCash": "Argent réel",
   "gender": "Genre",
   "address": "Adresse",
-  "createdAt": "Créé à",
+  "createdAt": "Action à",
   "image": "Image",
   "preview": "Aperçu",
   "back": "Dos",
@@ -285,5 +285,5 @@
   "ip_address": "Adresse IP",
   "user_agent": "Agent utilisateur",
   "url": "URL",
-  "createdBy": "Créé par"
+  "createdBy": "Action par"
 }
