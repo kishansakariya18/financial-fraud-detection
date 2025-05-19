@@ -133,7 +133,8 @@ const Send = () => {
                   <Listbox
                     key={'channel'}
                     data={sendOptions}
-                    value={defaultValue}
+                    // value={sendOptions}
+                    value={sendOptions.find((item) => item.value === field.value) || sendOptions}
                     onChange={(val) => field.onChange(val.value)}
                     name={field.name}
                     label={t('channel')}
@@ -183,7 +184,7 @@ const Send = () => {
                   placeholder={
                     t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
                   }
-                  className="[&_.ql-editor]:max-h-80 [&_.ql-editor]:min-h-[12rem]"
+                  className="[&_.ql-editor]:max-h-40 [&_.ql-editor]:min-h-[12rem]"
                 />
               </div>
             </div>
