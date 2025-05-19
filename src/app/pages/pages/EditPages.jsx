@@ -14,9 +14,10 @@ import { TextEditor } from 'components/shared/form/TextEditor';
 import Quill, { Delta } from 'quill';
 import { Listbox } from 'components/shared/form/Listbox';
 import { pagesOptions, pagesStatusToAPP } from './helper';
-// import { stringToPagekey } from 'utils/stringToSlug';
+import { useNavigate } from 'react-router';
 
 const EditPages = () => {
+  const navigate = useNavigate();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { pageID } = useParams();
@@ -57,6 +58,9 @@ const EditPages = () => {
     if (result) {
       if (result.status === 200 || result.status === 201) {
         setResponse(result.response);
+        setTimeout(() => {
+          navigate('/pages');
+        }, 0);
       } else {
         setError(result.error);
       }
@@ -148,7 +152,6 @@ const EditPages = () => {
                 label={t('name')}
                 error={errors?.name?.message}
                 placeholder={t('enter') + ' ' + t('name')}
-                disabled
               />
               <Controller
                 render={({ field }) => (
@@ -171,18 +174,27 @@ const EditPages = () => {
                 {...register('pageKey')}
                 key={'pageKey'}
                 label={t('pageKey')}
-                value={name ? name : undefined}
+                value={name ? stringToPagekey(name) : undefined}
                 error={errors?.pageKey?.message}
                 placeholder={t('enter') + ' ' + t('pageKey')}
                 disabled
               /> */}
             </div>
+            {/* <div className="grid gap-4 sm:grid-cols-1">
+              <Input
+                key={'heading'}
+                {...register('heading')}
+                label={t('heading')}
+                error={errors?.heading?.message}
+                placeholder={t('enter') + ' ' + t('heading')}
+              />
+            </div> */}
             <div className="grid gap-8 sm:grid-cols-2">
               <div className="mt-1 max-w-xl">
                 <TextEditor
-                  key="content"
-                  label={t('content')}
+                  key={'content'}
                   value={content}
+                  label={t('content')}
                   onChange={handleChange}
                   placeholder={
                     t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
