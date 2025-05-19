@@ -7,37 +7,39 @@ export const pagesListResponseMapper = (apiData) => {
     return {
       id: item?.PageID,
       name: item?.Name,
-      status: item?.IsActive
+      status: pagesStatusToAPP(item?.IsActive)
     };
   });
+  console.log('data is >>> ', list);
+
   return { list, totalRecords };
 };
 export const pagesStatusToAPP = (status) => {
-  if (status === 'Inactive') {
+  if (status === 0) {
     return 'inactive';
-  } else if (status === 'Active') {
+  } else if (status === 1) {
     return 'active';
   }
 };
 export const pagesStatusToAPI = (status) => {
   if (status == 'inactive') {
-    return 'Inactive';
+    return 0;
   } else if (status == 'active') {
-    return 'Active';
+    return 1;
   }
 };
 
 export const pagesOptions = [
   {
     key: 'active',
-    value: 'Active',
+    value: 'active',
     label: 'Active',
     color: 'success',
     icon: CheckBadgeIcon
   },
   {
     key: 'inactive',
-    value: 'Inactive',
+    value: 'inactive',
     label: 'Inactive',
     color: 'error',
     icon: XCircleIcon
