@@ -219,6 +219,29 @@ const EditPages = () => {
                 control={control}
                 name="status"
               />
+              {/* <Input
+                {...register('pageKey')}
+                key={'pageKey'}
+                label={t('pageKey')}
+                value={name ? name : undefined}
+                error={errors?.pageKey?.message}
+                placeholder={t('enter') + ' ' + t('pageKey')}
+                disabled
+              /> */}
+            </div>
+            <div className="grid gap-8 sm:grid-cols-2">
+              <div className="mt-1 max-w-xl">
+                <TextEditor
+                  key="content"
+                  label={t('content')}
+                  value={content}
+                  onChange={handleChange}
+                  placeholder={
+                    t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
+                  }
+                  className="[&_.ql-editor]:max-h-40 [&_.ql-editor]:min-h-[12rem]"
+                />
+              </div>
             </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">

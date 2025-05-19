@@ -69,257 +69,375 @@ export function ViewDetails() {
               <Skeleton key={i} className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" />
             ))
           ) : (
-            <Card className="h-full p-4 sm:p-5">
-              <h6 className="mt-8 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
-                {t('player') + ' ' + t('information')}
-              </h6>
-              <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('userName')}
-                  </p>
-                  <p>{response?.Username}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('email')}
-                  </p>
-                  <div className="flex space-x-1 rtl:space-x-reverse">
-                    <span> {response?.Email || '-'}</span>
-                    {response.Email && (
+            <>
+              <Card className="h-350 p-4 sm:p-5">
+                <h6 className="mt-8 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
+                  {t('player') + ' ' + t('information')}
+                </h6>
+                <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('userName')}
+                    </p>
+                    <p>{response?.Username}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('email')}
+                    </p>
+                    <div className="flex space-x-1 rtl:space-x-reverse">
+                      <span> {response?.Email || '-'}</span>
+                      {response.Email && (
+                        <Button
+                          data-tooltip
+                          data-tooltip-content={copied ? 'Copied' : 'Copy'}
+                          onClick={() => copy(response?.Email)}
+                          isIcon
+                          variant="flat"
+                          className="size-5 rounded-full group-hover/td:opacity-100"
+                          aria-label="Copy Button">
+                          <DocumentDuplicateIcon className="size-3.5" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('mobile')}
+                    </p>
+
+                    <div className="flex space-x-1 rtl:space-x-reverse">
+                      <span>
+                        {response?.dialCode || '+91'} {response?.Mobile}
+                      </span>
                       <Button
                         data-tooltip
                         data-tooltip-content={copied ? 'Copied' : 'Copy'}
-                        onClick={() => copy(response?.Email)}
+                        onClick={() => copy(response?.Mobile)}
                         isIcon
                         variant="flat"
                         className="size-5 rounded-full group-hover/td:opacity-100"
                         aria-label="Copy Button">
                         <DocumentDuplicateIcon className="size-3.5" />
                       </Button>
-                    )}
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('mobile')}
-                  </p>
-
-                  <div className="flex space-x-1 rtl:space-x-reverse">
-                    <span>
-                      {response?.dialCode || '+91'} {response?.Mobile}
-                    </span>
-                    <Button
-                      data-tooltip
-                      data-tooltip-content={copied ? 'Copied' : 'Copy'}
-                      onClick={() => copy(response?.Mobile)}
-                      isIcon
-                      variant="flat"
-                      className="size-5 rounded-full group-hover/td:opacity-100"
-                      aria-label="Copy Button">
-                      <DocumentDuplicateIcon className="size-3.5" />
-                    </Button>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('realCash')}
+                    </p>
+                    <p>{response?.RealCash || '0'}</p>
                   </div>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('realCash')}
-                  </p>
-                  <p>{response?.RealCash || '0'}</p>
-                </div>
 
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('status')}
-                  </p>
-                  <p>{+response.Status >= 0 && playerStatusToApp(+response?.Status)}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('gender')}
-                  </p>
-                  <p>{response?.Gender}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">DOB:</p>
-                  <p>{response?.DOB || '-'}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('address')}
-                  </p>
-                  <div className="flex space-x-1 rtl:space-x-reverse">
-                    <span>{response?.Address || '-'}</span>
-                    {response.Address && (
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('status')}
+                    </p>
+                    <p>{+response.Status >= 0 && playerStatusToApp(+response?.Status)}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('gender')}
+                    </p>
+                    <p>{response?.Gender}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">DOB:</p>
+                    <p>{response?.DOB || '-'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('address')}
+                    </p>
+                    <div className="flex space-x-1 rtl:space-x-reverse">
+                      <span>{response?.Address || '-'}</span>
+                      {response.Address && (
+                        <Button
+                          data-tooltip
+                          data-tooltip-content={copied ? 'Copied' : 'Copy'}
+                          onClick={() => copy(response?.Address)}
+                          isIcon
+                          variant="flat"
+                          className="size-5 rounded-full group-hover/td:opacity-100"
+                          aria-label="Copy Button">
+                          <DocumentDuplicateIcon className="size-3.5" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('referralCode')}
+                    </p>
+
+                    <div className="flex space-x-1 rtl:space-x-reverse">
+                      <span>{response?.ReferralCode}</span>
+
                       <Button
                         data-tooltip
                         data-tooltip-content={copied ? 'Copied' : 'Copy'}
-                        onClick={() => copy(response?.Address)}
+                        onClick={() => copy(response?.ReferralCode)}
                         isIcon
                         variant="flat"
                         className="size-5 rounded-full group-hover/td:opacity-100"
                         aria-label="Copy Button">
                         <DocumentDuplicateIcon className="size-3.5" />
                       </Button>
-                    )}
+                    </div>
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('createdAt')}:
+                    </p>
+                    <p>{getDateInUTCToTimeZone(response?.DateCreated)}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('image') + ' ' + t('preview')}
+                    </p>
+                    <div className="mt-2">
+                      {response?.ImageName && showImage('user', response?.ImageName)}
+                      {response?.ImageName}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('last_login_ip')}
+                    </p>
+                    <p>{response?.LastLoginIP || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('pan') + ' ' + t('status')}
+                    </p>
+                    <p>
+                      {response?.PanDetail !== null &&
+                      (response?.IsKYCVerified === 1 || response?.IsKYCVerified === true)
+                        ? `${response.PanDetail} (Verified)`
+                        : `Pending`}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('bank') + ' ' + t('status')}
+                    </p>
+                    <p>
+                      {response?.BankDetail !== null &&
+                      (response?.IsBankVerified === 1 || response?.IsBankVerified === true)
+                        ? `${response.BankDetail} (Verified)`
+                        : `Pending`}
+                    </p>
                   </div>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('referralCode')}
-                  </p>
 
-                  <div className="flex space-x-1 rtl:space-x-reverse">
-                    <span>{response?.ReferralCode}</span>
-
-                    <Button
-                      data-tooltip
-                      data-tooltip-content={copied ? 'Copied' : 'Copy'}
-                      onClick={() => copy(response?.ReferralCode)}
-                      isIcon
-                      variant="flat"
-                      className="size-5 rounded-full group-hover/td:opacity-100"
-                      aria-label="Copy Button">
-                      <DocumentDuplicateIcon className="size-3.5" />
-                    </Button>
+                <h6 className="mt-8 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
+                  {t('player') + ' ' + t('limit')}
+                </h6>
+                <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('dailyWagerLimit')}`}
+                    </p>
+                    <p>{response?.HasDailyBetWageLimit === true ? 'Active' : 'Inactive'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('weeklyWagerLimit')}`}
+                    </p>
+                    <p>{response?.HasWeeklyBetWageLimit === true ? 'Active' : 'Inactive'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('monthlyWagerLimit')}`}
+                    </p>
+                    <p>{response?.HasMonthlyBetWageLimit === true ? 'Active' : 'Inactive'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('dailyWagerValue')}`}
+                    </p>
+                    <p>
+                      {response?.HasDailyBetWageLimit === true ? response?.BetDailyWageLimit : '-'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('weeklyWagerValue')}`}
+                    </p>
+                    <p>
+                      {response?.HasWeeklyBetWageLimit === true
+                        ? response?.BetWeeklyWageLimit
+                        : '-'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('monthlyWagerValue')}`}
+                    </p>
+                    <p>
+                      {response?.HasMonthlyBetWageLimit === true
+                        ? response?.BetMonthlyWageLimit
+                        : '-'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('dailyDepositLimit')}`}
+                    </p>
+                    <p>{response?.HasMaxDepositPerDayLimit === true ? 'Active' : 'Inactive'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('weeklyDepositLimit')}`}
+                    </p>
+                    <p>{response?.HasMaxDepositPerWeekLimit === true ? 'Active' : 'Inactive'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('monthlyDepositLimit')}`}
+                    </p>
+                    <p>{response?.HasMaxDepositPerMonthLimit === true ? 'Active' : 'Inactive'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('dailyDepositValue')}`}
+                    </p>
+                    <p>
+                      {response?.HasMaxDepositPerDayLimit === true
+                        ? response?.MaxDepositPerDay
+                        : '-'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('weeklyDepositValue')}`}
+                    </p>
+                    <p>
+                      {response?.HasMaxDepositPerWeekLimit === true
+                        ? response?.MaxDepositPerWeek
+                        : '-'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('monthlyDepositValue')}`}
+                    </p>
+                    <p>
+                      {response?.HasMaxDepositPerMonthLimit === true
+                        ? response?.MaxDepositPerMonth
+                        : '-'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('dailyWithdrawLimit')}`}
+                    </p>
+                    <p>{response?.HasMaxWithdrawPerDayLimit === true ? 'Active' : 'Inactive'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('weeklyWithdrawLimit')}`}
+                    </p>
+                    <p>{response?.HasMaxWithdrawPerWeekLimit === true ? 'Active' : 'Inactive'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('monthlyWithdrawLimit')}`}
+                    </p>
+                    <p>{response?.HasMaxWithdrawPerMonthLimit === true ? 'Active' : 'Inactive'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('dailyWithdrawValue')}`}
+                    </p>
+                    <p>
+                      {response?.HasMaxWithdrawPerDayLimit === true
+                        ? response?.MaxWithdrawPerDay
+                        : '-'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('weeklyWithdrawValue')} ${response?.HasMaxWithdrawPerWeekLimit === true ? '[Active]' : '[Inactive]'}`}
+                    </p>
+                    <p>
+                      {response?.HasMaxWithdrawPerWeekLimit === true
+                        ? response?.MaxWithdrawPerWeek
+                        : '-'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('monthlyWithdrawValue')} ${response?.HasMaxWithdrawPerMonthLimit === true ? '[Active]' : '[Inactive]'}`}
+                    </p>
+                    <p>
+                      {response?.HasMaxWithdrawPerMonthLimit === true
+                        ? response?.MaxWithdrawPerMonth
+                        : '-'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('dailyLossLimit')}`}
+                    </p>
+                    <p>{response?.HasDailyLossLimit === true ? 'Active' : 'Inactive'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('weeklyLossLimit')}`}
+                    </p>
+                    <p>{response?.HasWeeklyLossLimit === true ? 'Active' : 'Inactive'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('monthlyLossLimit')}`}
+                    </p>
+                    <p>{response?.HasMonthlyLossLimit === true ? 'Active' : 'Inactive'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('dailyLossLimit')}`}
+                    </p>
+                    <p>{response?.HasDailyLossLimit === true ? response?.DailyLossLimit : '-'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('weeklyLossLimit')}`}
+                    </p>
+                    <p>{response?.HasWeeklyLossLimit === true ? response?.WeeklyLossLimit : '-'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('monthlyLossLimit')}`}
+                    </p>
+                    <p>
+                      {response?.HasMonthlyLossLimit === true ? response?.MonthlyLossLimit : '-'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('selfExclusionTime')} ${selfExclusionMapper(response?.ExclusionType)}`}
+                    </p>
+                    <p>{`${selfExclusionMapper(response?.ExclusionType)}`}</p>
+                    <p>
+                      {response.ExclusionStartAt &&
+                        `Starts : ${response?.ExclusionType === '0' ? '-' : getDateInUTCToTimeZone(response?.ExclusionStartAt)}`}
+                    </p>
+                    <p>
+                      {response.ExclusionEndAt &&
+                        `Ends : ${response?.ExclusionType === '0' ? '-' : getDateInUTCToTimeZone(response?.ExclusionEndAt)}`}
+                    </p>
+                    <p>{!response.ExclusionStartAt || !response.ExclusionEndAt ? '-' : ''}</p>
                   </div>
                 </div>
-
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('createdAt')}:
-                  </p>
-                  <p>{getDateInUTCToTimeZone(response?.DateCreated)}</p>
+                <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
+                  <Button className="min-w-[7rem]" onClick={() => navigate('/player')}>
+                    {t('back')}
+                  </Button>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('image') + ' ' + t('preview')}
-                  </p>
-                  <div className="mt-2">
-                    {response?.ImageName && showImage('user', response?.ImageName)}
-                    {response?.ImageName}
-                  </div>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('last_login_ip')}
-                  </p>
-                  <p>{response?.LastLoginIP || 'N/A'}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('pan') + ' ' + t('status')}
-                  </p>
-                  <p>
-                    {response?.PanDetail !== null &&
-                    (response?.IsKYCVerified === 1 || response?.IsKYCVerified === true)
-                      ? `${response.PanDetail} (Verified)`
-                      : `Pending`}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('bank') + ' ' + t('status')}
-                  </p>
-                  <p>
-                    {response?.BankDetail !== null &&
-                    (response?.IsBankVerified === 1 || response?.IsBankVerified === true)
-                      ? `${response.BankDetail} (Verified)`
-                      : `Pending`}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {`${t('selfExclusionTime')} ${response?.ExclusionType === '0' ? selfExclusionMapper(response?.ExclusionType) : selfExclusionMapper(response?.ExclusionType)}`}
-                  </p>
-                  <p>
-                    {response.ExclusionStartAt &&
-                      `Starts : ${response?.ExclusionType === '0' ? '-' : getDateInUTCToTimeZone(response?.ExclusionStartAt)}`}
-                  </p>
-                  <p>
-                    {response.ExclusionEndAt &&
-                      `Ends : ${response?.ExclusionType === '0' ? '-' : getDateInUTCToTimeZone(response?.ExclusionEndAt)}`}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {`${t('dailyWagerLimit')} ${response?.HasDailyBetWageLimit === true ? '✅' : '❌'}`}
-                  </p>
-                  <p>{response?.BetDailyWageLimit}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {`${t('weeklyWagerLimit')} ${response?.HasWeeklyBetWageLimit === true ? '✅' : '❌'}`}
-                  </p>
-                  <p>{response?.BetWeeklyWageLimit}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {`${t('monthlyWagerLimit')} ${response?.HasMonthlyBetWageLimit === true ? '✅' : '❌'}`}
-                  </p>
-                  <p>{response?.BetMonthlyWageLimit}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {`${t('dailyDepositLimit')} ${response?.HasMaxDepositPerDayLimit === true ? '✅' : '❌'}`}
-                  </p>
-                  <p>{response?.MaxDepositPerDay}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {`${t('weeklyDepositLimit')} ${response?.HasMaxDepositPerWeekLimit === true ? '✅' : '❌'}`}
-                  </p>
-                  <p>{response?.MaxDepositPerWeek}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {`${t('monthlyDepositLimit')} ${response?.HasMaxDepositPerMonthLimit === true ? '✅' : '❌'}`}
-                  </p>
-                  <p>{response?.MaxDepositPerMonth}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {`${t('dailyWithdrawLimit')} ${response?.HasMaxWithdrawPerDayLimit === true ? '✅' : '❌'}`}
-                  </p>
-                  <p>{response?.MaxWithdrawPerDay}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {`${t('weeklyWithdrawLimit')} ${response?.HasMaxWithdrawPerWeekLimit === true ? '✅' : '❌'}`}
-                  </p>
-                  <p>{response?.MaxWithdrawPerWeek}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {`${t('monthlyWithdrawLimit')} ${response?.HasMaxWithdrawPerMonthLimit === true ? '✅' : '❌'}`}
-                  </p>
-                  <p>{response?.MaxWithdrawPerMonth}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {`${t('dailyLossLimit')} ${response?.HasDailyLossLimit === true ? '✅' : '❌'}`}
-                  </p>
-                  <p>{response?.DailyLossLimit}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {`${t('weeklyLossLimit')} ${response?.HasWeeklyLossLimit === true ? '✅' : '❌'}`}
-                  </p>
-                  <p>{response?.WeeklyLossLimit}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {`${t('monthlyLossLimit')} ${response?.HasMonthlyLossLimit === true ? '✅' : '❌'}`}
-                  </p>
-                  <p>{response?.MonthlyLossLimit}</p>
-                </div>
-              </div>
-              <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-                <Button className="min-w-[7rem]" onClick={() => navigate('/player')}>
-                  {t('back')}
-                </Button>
-              </div>
-            </Card>
+              </Card>
+            </>
           )}
         </div>
       </div>
