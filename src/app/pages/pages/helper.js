@@ -3,15 +3,15 @@ import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
 
 export const pagesListResponseMapper = (apiData) => {
   const totalRecords = apiData?.total_record;
+  let i = 1;
   const list = apiData?.data?.map((item) => {
     return {
+      srn: i++,
       id: item?.PageID,
       name: item?.Name,
       status: pagesStatusToAPP(item?.IsActive)
     };
   });
-  console.log('data is >>> ', list);
-
   return { list, totalRecords };
 };
 export const pagesStatusToAPP = (status) => {

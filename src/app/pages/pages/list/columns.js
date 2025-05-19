@@ -4,7 +4,6 @@ import { createColumnHelper } from '@tanstack/react-table';
 // Local Imports
 import { RowActions } from './RowActions';
 import { IdCell, BadgeCell } from '../../../../components/custom/table/cell';
-// import { IdCell } from '../../../../components/custom/table/cell';
 // import { CopyableCell } from '../../../../components/shared/table/CopyableCell';
 import { pagesOptions } from '../helper';
 
