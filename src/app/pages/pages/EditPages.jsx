@@ -5,7 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Button, Input } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
 import PagesService from 'services/pages.services';
@@ -14,7 +14,6 @@ import { TextEditor } from 'components/shared/form/TextEditor';
 import Quill, { Delta } from 'quill';
 import { Listbox } from 'components/shared/form/Listbox';
 import { pagesOptions, pagesStatusToAPP } from './helper';
-import { stringToPagekey } from 'utils/stringToSlug';
 
 const EditPages = () => {
   const [error, setError] = useState('');
@@ -31,15 +30,17 @@ const EditPages = () => {
     handleSubmit,
     formState: { errors },
     control,
-    watch,
+    // watch,
     reset
   } = useForm({
     resolver: yupResolver(pagesSchema)
   });
 
+  const navigate = useNavigate();
+
   const [content, setContent] = useState(new Delta([{ insert: htmlContent }]));
 
-  const name = watch('name');
+  // const name = watch('name');
 
   const handleChange = (val) => {
     setContent(val);
@@ -55,6 +56,9 @@ const EditPages = () => {
     if (result) {
       if (result.status === 200 || result.status === 201) {
         setResponse(result.response);
+        setTimeout(() => {
+          navigate('/pages');
+        }, 0);
       } else {
         setError(result.error);
       }
@@ -114,6 +118,9 @@ const EditPages = () => {
 
   if (!loading && !error && response) {
     toast.success(response.message);
+    setTimeout(() => {
+      navigate('/pages');
+    }, 0);
     setResponse(null);
     fetchPagesDetails();
   }
@@ -122,11 +129,11 @@ const EditPages = () => {
     await editPagesAPI({ ...data, content: htmlContent, pageID: pageID });
   };
   return (
-    <Page title={t('edit') + ' ' + t('page')}>
+    <Page title={t('edit') + ' ' + t('emailTemplate')}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
         <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
-            {t('edit') + ' ' + t('page') + ' ' + t('form')}
+            {t('edit') + ' ' + t('emailTemplate') + ' ' + t('form')}
           </h2>
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
@@ -144,64 +151,6 @@ const EditPages = () => {
                 error={errors?.name?.message}
                 placeholder={t('enter') + ' ' + t('name')}
               />
-              <Input
-                {...register('pageKey')}
-                key={'pageKey'}
-                label={t('pageKey')}
-                value={name ? stringToPagekey(name) : undefined}
-                error={errors?.pageKey?.message}
-                placeholder={t('enter') + ' ' + t('pageKey')}
-                disabled
-              />
-            </div>
-            {/* <div className="grid gap-4 sm:grid-cols-1">
-              <Input
-                key={'heading'}
-                {...register('heading')}
-                label={t('heading')}
-                error={errors?.heading?.message}
-                placeholder={t('enter') + ' ' + t('heading')}
-              />
-            </div> */}
-            <div className="grid gap-8 sm:grid-cols-2">
-              <div className="mt-1 max-w-xl">
-                <TextEditor
-                  key={'content'}
-                  value={content}
-                  label={t('content')}
-                  onChange={handleChange}
-                  placeholder={
-                    t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
-                  }
-                />
-              </div>
-            </div>
-
-            {/* <div className="grid gap-4 sm:grid-cols-1">
-              <Input
-                {...register('to')}
-                key={'to'}
-                label={t('to')}
-                error={errors?.to?.message}
-                placeholder={t('enter') + ' ' + t('to')}
-              />
-              <Input
-                {...register('cc')}
-                label={'CC'}
-                key={'cc'}
-                error={errors?.cc?.message}
-                placeholder={t('enter') + ' ' + 'CC'}
-              />
-              <Input
-                {...register('bcc')}
-                label={'BCC'}
-                key={'bcc'}
-                error={errors?.bcc?.message}
-                placeholder={t('enter') + ' ' + 'BCC'}
-              />
-            </div> */}
-
-            <div className="grid gap-4 sm:grid-cols-2">
               <Controller
                 render={({ field }) => (
                   <Listbox
@@ -223,18 +172,27 @@ const EditPages = () => {
                 {...register('pageKey')}
                 key={'pageKey'}
                 label={t('pageKey')}
-                value={name ? name : undefined}
+                value={name ? stringToPagekey(name) : undefined}
                 error={errors?.pageKey?.message}
                 placeholder={t('enter') + ' ' + t('pageKey')}
                 disabled
               /> */}
             </div>
+            {/* <div className="grid gap-4 sm:grid-cols-1">
+              <Input
+                key={'heading'}
+                {...register('heading')}
+                label={t('heading')}
+                error={errors?.heading?.message}
+                placeholder={t('enter') + ' ' + t('heading')}
+              />
+            </div> */}
             <div className="grid gap-8 sm:grid-cols-2">
               <div className="mt-1 max-w-xl">
                 <TextEditor
-                  key="content"
-                  label={t('content')}
+                  key={'content'}
                   value={content}
+                  label={t('content')}
                   onChange={handleChange}
                   placeholder={
                     t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
