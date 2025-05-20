@@ -17,6 +17,7 @@ import { TextEditor } from 'components/shared/form/TextEditor';
 import Quill, { Delta } from 'quill';
 import AffiliateService from 'services/affiliate.services';
 import SegmentationService from 'services/segmentation.services';
+import GamesService from 'services/games.services';
 import { createPromocodeSchema } from './schema';
 const defaultValue = new Delta();
 
@@ -32,9 +33,15 @@ const CreatePromocode = () => {
   const [displayMode, setDisplayMode] = useState('public');
   const [affiliateList, setAffiliateList] = useState([]);
   const [segmentationList, setSegmentationList] = useState([]);
+  const [getCoreRequired, setCodeRequired] = useState('0');
+  const [claimSettlement, setClaimSettlement] = useState('2');
+  const [stackableWithOtherBonus, setStackableWithOtherBonus] = useState('0');
+  const [wagringAppliedGames, setWagringAppliedGames] = useState('all');
+  const [wagringGamesList, setWagringdGamesList] = useState([]);
 
   const [segmentationIds, setSegmentationIds] = useState([]);
   const [influencerSegIds, setInfluencerSegIds] = useState([]);
+  const [wagersAppliedGameIds, setWagersAppliedGameIds] = useState([]);
 
   const [response, setResponse] = useState(null);
   const { t } = useTranslation();
@@ -63,10 +70,30 @@ const CreatePromocode = () => {
       }
     }
   };
+  const fetchWageringGamesList = async () => {
+    console.log('wagering callled');
+    const filters = {
+      status: 1
+    };
+
+    const result = await GamesService.getGamesList({
+      pagination: { page: 1, perPage: 10 },
+      filters,
+      isPaginationRequired: false
+    });
+    if (result) {
+      if (result.status === 200) {
+        setWagringdGamesList(result.response.data);
+      } else {
+        toast.error(result.error);
+      }
+    }
+  };
 
   useEffect(() => {
     fetchInfluencerList();
     fetchSegmentationList();
+    fetchWageringGamesList();
   }, []);
 
   const {
@@ -126,6 +153,13 @@ const CreatePromocode = () => {
     };
   });
 
+  const wagerGamesOptions = wagringGamesList.map((game) => {
+    return {
+      value: game.GameID,
+      label: game.Name
+    };
+  });
+
   if (!loading && !error && response) {
     toast.success(response.message);
 
@@ -152,6 +186,14 @@ const CreatePromocode = () => {
     });
     setSegmentationIds(values);
   };
+  const handleWagerAppliedGamesChange = (event) => {
+    const options = Array.from(event.target.selectedOptions);
+    const values = options.map((option) => {
+      console.log(`Value: ${option.value}, Data Type: ${option.dataset.type}`);
+      return option.value;
+    });
+    setWagersAppliedGameIds(values);
+  };
 
   const onSubmit = async (data) => {
     const apiData = {
@@ -162,7 +204,11 @@ const CreatePromocode = () => {
       description: htmlContent,
       influencerSegIds,
       segmentationIds,
-      currency
+      currency,
+      getCoreRequired,
+      claimSettlement,
+      stackableWithOtherBonus,
+      wagersAppliedGameIds
     };
     console.log('{ ...data, ...apiData }: ', { ...data, ...apiData });
 
@@ -314,6 +360,110 @@ const CreatePromocode = () => {
                   onChange={handleSegmentationChange}
                   multiple
                   data={segmentationOptions}
+                />
+              )}
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Input
+                key={'wagering'}
+                {...register('wagering')}
+                label={`${t('wagering')} (Ex : 10x,20x)`}
+                error={errors?.wagering?.message}
+                placeholder={t('enter') + ' ' + t('amount')}
+                step={'1'}
+                type="number"
+              />
+              <Input
+                key={'wagerFreeBounus'}
+                prefix={<PercentBadgeIcon className="size-5" />}
+                {...register('wagerFreeBounus')}
+                label={`${t('wagerFreeBounus')} (%)`}
+                error={errors?.wagerFreeBounus?.message}
+                placeholder={t('enter') + ' ' + t('amount')}
+                step={'1'}
+                type="number"
+              />
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <p className="mb-1">{t('codeRequired')}</p>
+                <div className="flex flex-wrap gap-2">
+                  <Radio
+                    label={t('no')}
+                    value="0"
+                    checked={getCoreRequired === '0'}
+                    onChange={(e) => setCodeRequired(e.target.value)}
+                  />
+                  <Radio
+                    label={t('yes')}
+                    value="1"
+                    checked={getCoreRequired === '1'}
+                    onChange={(e) => setCodeRequired(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div>
+                <p className="mb-1">{t('claimSettlement')}</p>
+                <div className="flex flex-wrap gap-2">
+                  <Radio
+                    label={t('manulaCredit')}
+                    value="2"
+                    checked={claimSettlement === '2'}
+                    onChange={(e) => setClaimSettlement(e.target.value)}
+                  />
+                  <Radio
+                    label={t('audoCredit')}
+                    value="1"
+                    checked={claimSettlement === '1'}
+                    onChange={(e) => setClaimSettlement(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <p className="mb-1">{t('stackableWithOtherBonus')}</p>
+                <div className="flex flex-wrap gap-2">
+                  <Radio
+                    label={t('no')}
+                    value="0"
+                    checked={stackableWithOtherBonus === '0'}
+                    onChange={(e) => setStackableWithOtherBonus(e.target.value)}
+                  />
+                  <Radio
+                    label={t('yes')}
+                    value="1"
+                    checked={stackableWithOtherBonus === '1'}
+                    onChange={(e) => setStackableWithOtherBonus(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <p className="mb-1">{t('wagering') + ' ' + t('appliedGames')}</p>
+                <div className="flex flex-wrap gap-2">
+                  <Radio
+                    label={t('all')}
+                    value="all"
+                    checked={wagringAppliedGames === 'all'}
+                    onChange={(e) => setWagringAppliedGames(e.target.value)}
+                  />
+                  <Radio
+                    label={t('specific')}
+                    value="specific"
+                    checked={wagringAppliedGames === 'specific'}
+                    onChange={(e) => setWagringAppliedGames(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {wagringAppliedGames === 'specific' && (
+                <Select
+                  label={t('select') + ' ' + t('wagering') + ' ' + t('appliedGames')}
+                  onChange={handleWagerAppliedGamesChange}
+                  multiple
+                  data={wagerGamesOptions}
                 />
               )}
             </div>

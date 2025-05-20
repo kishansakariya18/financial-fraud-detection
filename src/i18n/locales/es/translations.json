@@ -292,5 +292,12 @@
   "yes": "Sí",
   "no": "No",
   "start": "Comienza",
-  "end": "Finaliza"
+  "end": "Finaliza",
+  "wagering": "Apuestas",
+  "wagerFreeBounus": "Bono sin requisitos de apuesta",
+  "codeRequired": "¿Código requerido?",
+  "claimSettlement": "Liquidación de reclamaciones",
+  "audoCredit": "Crédito automático",
+  "manulaCredit": "Reclamación manual",
+  "stackableWithOtherBonus": "Apilable con otras bonificaciones"
 }

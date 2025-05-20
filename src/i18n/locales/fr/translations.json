@@ -292,5 +292,12 @@
   "yes": "Oui",
   "no": "Non",
   "start": "Commence",
-  "end": "Fin"
+  "end": "Fin",
+  "wagering": "Paris",
+  "wagerFreeBounus": "Bonus sans mise",
+  "codeRequired": "Code requis ?",
+  "claimSettlement": "Règlement des réclamations",
+  "audoCredit": "Crédit auto",
+  "manulaCredit": "Réclamation manuelle",
+  "stackableWithOtherBonus": "Cumulable avec d'autres bonus"
 }

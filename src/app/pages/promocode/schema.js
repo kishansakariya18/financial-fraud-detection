@@ -70,5 +70,20 @@ export const createPromocodeSchema = Yup.object().shape({
     })
     .when(['promocodeQty'], (qty, schema) =>
       schema.max(qty, 'Allowed Per User cannot be more than PromoCode Quantity')
-    )
+    ),
+
+  wagering: Yup.number()
+    .transform((value, originalValue) => (originalValue === '' ? undefined : value)) // allow empty string to become undefined
+    .nullable()
+    .notRequired()
+    .typeError('Wagering must be a number')
+    .min(2, 'Wagering must be greater than 1'),
+
+  wagerFreeBounus: Yup.number()
+    .transform((value, originalValue) => (originalValue === '' ? undefined : value)) // allow empty string to become undefined
+    .nullable()
+    .notRequired()
+    .typeError('Wager-Free Bounu must be a number')
+    .min(1, 'Wager-Free Bounu must be greater than 1')
+    .max(100, 'Wager-Free Bounu must be less than equals to 100')
 });

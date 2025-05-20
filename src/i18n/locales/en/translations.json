@@ -294,5 +294,14 @@
   "yes": "Yes",
   "no": "No",
   "start": "Starts",
-  "end": "Ends"
+  "end": "Ends",
+  "wagering": "Wagering",
+  "wagerFreeBounus": "Wager-Free Bounus",
+  "codeRequired": "Code Required ?",
+  "claimSettlement": "Claim Settlement",
+  "audoCredit": "Auto-Credit",
+  "manulaCredit": "Manual Claim",
+  "stackableWithOtherBonus": "Stackable with Other Bonuses",
+  
+  "appliedGames": "Applied Games"
 }
