@@ -105,7 +105,19 @@ const EditRole = () => {
     handleSubmit,
     reset,
     formState: { errors }
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      roleName: detail.roleName
+    }
+  });
+
+  useEffect(() => {
+    if (detail?.roleName) {
+      reset({
+        roleName: detail.roleName
+      });
+    }
+  }, [detail]);
 
   const navigate = useNavigate();
 
@@ -187,7 +199,7 @@ const EditRole = () => {
                     <Input
                       id="roleName"
                       className={`form-control ${errors.roleName ? 'is-invalid' : ''}`}
-                      defaultValue={rolePermissionId ? detail.roleName : ''}
+                      defaultValue={detail.roleName}
                       type="text"
                       name="roleName"
                       label={roleName}

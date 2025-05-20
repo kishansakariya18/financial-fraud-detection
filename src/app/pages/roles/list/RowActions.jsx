@@ -12,6 +12,7 @@ import RoleService from 'services/role.services';
 import { TbStatusChange } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
@@ -52,6 +53,12 @@ export function RowActions({ row, table }) {
     if (result.status === 200) {
       table.options.meta?.deleteRow(row);
       setDeleteSuccess(true);
+      toast.success('Role deleted successfully', {
+        invert: true
+      });
+      setTimeout(() => {
+        navigate('/roles');
+      }, 0);
     } else {
       setDeleteError(true);
     }
@@ -115,7 +122,7 @@ export function RowActions({ row, table }) {
                       focus && 'bg-this/10 dark:bg-this-light/10'
                     )}>
                     <TbStatusChange className="size-4.5 stroke-1" />
-                    <span>{t('delete') + ' ' + t('role')}</span>
+                    <span>{`${t('Delete')}  ${t('role')}`}</span>
                   </button>
                 )}
               </MenuItem>
