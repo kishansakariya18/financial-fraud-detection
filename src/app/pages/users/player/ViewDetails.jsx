@@ -239,19 +239,19 @@ export function ViewDetails() {
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {`${t('dailyWagerLimit')}`}
                     </p>
-                    <p>{response?.HasDailyBetWageLimit === true ? 'Active' : 'Inactive'}</p>
+                    <p>{response?.HasDailyBetWageLimit === true ? t('yes') : t('no')}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {`${t('weeklyWagerLimit')}`}
                     </p>
-                    <p>{response?.HasWeeklyBetWageLimit === true ? 'Active' : 'Inactive'}</p>
+                    <p>{response?.HasWeeklyBetWageLimit === true ? t('yes') : t('no')}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {`${t('monthlyWagerLimit')}`}
                     </p>
-                    <p>{response?.HasMonthlyBetWageLimit === true ? 'Active' : 'Inactive'}</p>
+                    <p>{response?.HasMonthlyBetWageLimit === true ? t('yes') : t('no')}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
@@ -285,19 +285,19 @@ export function ViewDetails() {
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {`${t('dailyDepositLimit')}`}
                     </p>
-                    <p>{response?.HasMaxDepositPerDayLimit === true ? 'Active' : 'Inactive'}</p>
+                    <p>{response?.HasMaxDepositPerDayLimit === true ? t('yes') : t('no')}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {`${t('weeklyDepositLimit')}`}
                     </p>
-                    <p>{response?.HasMaxDepositPerWeekLimit === true ? 'Active' : 'Inactive'}</p>
+                    <p>{response?.HasMaxDepositPerWeekLimit === true ? t('yes') : t('no')}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {`${t('monthlyDepositLimit')}`}
                     </p>
-                    <p>{response?.HasMaxDepositPerMonthLimit === true ? 'Active' : 'Inactive'}</p>
+                    <p>{response?.HasMaxDepositPerMonthLimit === true ? t('yes') : t('no')}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
@@ -333,19 +333,19 @@ export function ViewDetails() {
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {`${t('dailyWithdrawLimit')}`}
                     </p>
-                    <p>{response?.HasMaxWithdrawPerDayLimit === true ? 'Active' : 'Inactive'}</p>
+                    <p>{response?.HasMaxWithdrawPerDayLimit === true ? t('yes') : t('no')}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {`${t('weeklyWithdrawLimit')}`}
                     </p>
-                    <p>{response?.HasMaxWithdrawPerWeekLimit === true ? 'Active' : 'Inactive'}</p>
+                    <p>{response?.HasMaxWithdrawPerWeekLimit === true ? t('yes') : t('no')}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {`${t('monthlyWithdrawLimit')}`}
                     </p>
-                    <p>{response?.HasMaxWithdrawPerMonthLimit === true ? 'Active' : 'Inactive'}</p>
+                    <p>{response?.HasMaxWithdrawPerMonthLimit === true ? t('yes') : t('no')}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
@@ -359,7 +359,7 @@ export function ViewDetails() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('weeklyWithdrawValue')} ${response?.HasMaxWithdrawPerWeekLimit === true ? '[Active]' : '[Inactive]'}`}
+                      {`${t('weeklyWithdrawValue')}`}
                     </p>
                     <p>
                       {response?.HasMaxWithdrawPerWeekLimit === true
@@ -369,7 +369,7 @@ export function ViewDetails() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('monthlyWithdrawValue')} ${response?.HasMaxWithdrawPerMonthLimit === true ? '[Active]' : '[Inactive]'}`}
+                      {`${t('monthlyWithdrawValue')}`}
                     </p>
                     <p>
                       {response?.HasMaxWithdrawPerMonthLimit === true
@@ -381,35 +381,35 @@ export function ViewDetails() {
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {`${t('dailyLossLimit')}`}
                     </p>
-                    <p>{response?.HasDailyLossLimit === true ? 'Active' : 'Inactive'}</p>
+                    <p>{response?.HasDailyLossLimit === true ? t('yes') : t('no')}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {`${t('weeklyLossLimit')}`}
                     </p>
-                    <p>{response?.HasWeeklyLossLimit === true ? 'Active' : 'Inactive'}</p>
+                    <p>{response?.HasWeeklyLossLimit === true ? t('yes') : t('no')}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {`${t('monthlyLossLimit')}`}
                     </p>
-                    <p>{response?.HasMonthlyLossLimit === true ? 'Active' : 'Inactive'}</p>
+                    <p>{response?.HasMonthlyLossLimit === true ? t('yes') : t('no')}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('dailyLossLimit')}`}
+                      {`${t('dailyLossValue')}`}
                     </p>
                     <p>{response?.HasDailyLossLimit === true ? response?.DailyLossLimit : '-'}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('weeklyLossLimit')}`}
+                      {`${t('weeklyLossValue')}`}
                     </p>
                     <p>{response?.HasWeeklyLossLimit === true ? response?.WeeklyLossLimit : '-'}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('monthlyLossLimit')}`}
+                      {`${t('monthlyLossValue')}`}
                     </p>
                     <p>
                       {response?.HasMonthlyLossLimit === true ? response?.MonthlyLossLimit : '-'}
@@ -417,16 +417,47 @@ export function ViewDetails() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('selfExclusionTime')} ${selfExclusionMapper(response?.ExclusionType)}`}
+                      {`${t('oneTimeBetLimit')}`}
+                    </p>
+                    <p>{response?.HasBetLimit === true ? t('yes') : t('no')}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('oneTimeWinLimit')}`}
+                    </p>
+                    <p>{response?.HasWinLimit === true ? t('yes') : t('no')}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('selfExclusionTime')}`}
                     </p>
                     <p>{`${selfExclusionMapper(response?.ExclusionType)}`}</p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('oneTimeBetValue')}`}
+                    </p>
+                    <p>{response?.HasBetLimit === true ? response?.BetLimit : '-'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('oneTimeWinValue')}`}
+                    </p>
+                    <p>{response?.HasWinLimit === true ? response?.WinLimit : '-'}</p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('selfExclusionDate')}`}
+                    </p>
                     <p>
                       {response.ExclusionStartAt &&
-                        `Starts : ${response?.ExclusionType === '0' ? '-' : getDateInUTCToTimeZone(response?.ExclusionStartAt)}`}
+                        `${t('start')} : ${response?.ExclusionType === '0' ? '-' : getDateInUTCToTimeZone(response?.ExclusionStartAt)}`}
                     </p>
                     <p>
                       {response.ExclusionEndAt &&
-                        `Ends : ${response?.ExclusionType === '0' ? '-' : getDateInUTCToTimeZone(response?.ExclusionEndAt)}`}
+                        `${t('end')} : ${response?.ExclusionType === '0' ? '-' : getDateInUTCToTimeZone(response?.ExclusionEndAt)}`}
                     </p>
                     <p>{!response.ExclusionStartAt || !response.ExclusionEndAt ? '-' : ''}</p>
                   </div>
