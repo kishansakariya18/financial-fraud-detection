@@ -6,12 +6,17 @@ import { LanguageSelector } from 'components/template/LaguageSelector';
 import { SidebarToggleBtn } from 'components/shared/SidebarToggleBtn';
 import { Profile } from '../Profile';
 import { useThemeContext } from 'app/contexts/theme/context';
+import { Button } from '@headlessui/react';
+import { RiRobot2Line } from 'react-icons/ri';
+import apiConfig from 'configs/api.config';
+// import { ChatBubbleBottomCenterIcon } from '@heroicons/react/24/outline';
 
 // ----------------------------------------------------------------------
 
 export function Header() {
   const { cardSkin } = useThemeContext();
-
+  // `${apiConfig.baseURL.AI_CHAT_URL}?token=${token}
+  const token = localStorage.getItem('AuthToken');
   return (
     <header
       className={clsx(
@@ -22,8 +27,17 @@ export function Header() {
         <SidebarToggleBtn />
       </div>
 
-      <div className="flex items-center gap-2 sm:flex-1">
+      <div className="flex items-center gap-3 sm:flex-1">
         <div className="flex-1"></div>
+        <Button
+          unstyled
+          onClick={() => window.open(`${apiConfig.baseURL.AI_CHAT_URL}?token=${token}`)}
+          className="gap-2 rounded-lg bg-gradient-to-r from-green-400 to-blue-600 px-5 py-2 text-xs+ text-white duration-100 ease-out [contain:paint] hover:opacity-[.85] focus:opacity-[.85] active:translate-y-px">
+          <div className="flex gap-2">
+            <RiRobot2Line className="size-5" />
+            <span className="max-sm:hidden">Try Bux AI</span>
+          </div>
+        </Button>
         <LanguageSelector />
         <Profile />
       </div>

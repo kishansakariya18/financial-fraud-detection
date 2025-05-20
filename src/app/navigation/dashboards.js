@@ -16,7 +16,7 @@ import { roles } from './roles';
 import { auditlogs } from './auditlogs';
 import { pages } from './pages';
 import { crm } from './crm';
-import { getAiChatBot } from './ai-chat';
+// import { getAiChatBot } from './ai-chat';`
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -48,7 +48,6 @@ export const dashboards = () => ({
     emailTemplate,
     peomocode,
     auditlogs,
-    crm,
-    getAiChatBot()
+    crm
   ]
 });

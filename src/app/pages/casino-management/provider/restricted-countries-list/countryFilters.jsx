@@ -56,9 +56,11 @@ export function RestrictedCountryFilters({
           </Button>
         )}
       </div>
-      <div className="ml-7 mt-2">
-        <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
-      </div>
+      {breadcrumbItem && (
+        <div className="ml-7 mt-2">
+          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
+        </div>
+      )}
       {isXs ? (
         <>
           <div
