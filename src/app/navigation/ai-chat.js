@@ -1,7 +1,7 @@
 // ai-chat.js
-import { ArchiveBoxArrowDownIcon } from '@heroicons/react/24/outline';
 import apiConfig from 'configs/api.config';
 import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
+import { RiRobot2Line } from 'react-icons/ri';
 
 export function getAiChatBot() {
   const token = localStorage.getItem('AuthToken');
@@ -13,7 +13,7 @@ export function getAiChatBot() {
     path: `${apiConfig.baseURL.AI_CHAT_URL}?token=${token}`,
     title: 'AI Chat',
     transKey: 'aiChat',
-    Icon: ArchiveBoxArrowDownIcon,
+    Icon: RiRobot2Line,
     permission: PERMISSIONS.EMAIL_TEMPLATE.LIST
   };
 }

@@ -24,7 +24,6 @@ export function MenuItem({ data }) {
   const handleMenuItemClick = () => lgAndDown && close();
 
   const isExternal = /^https?:\/\//.test(path);
-  console.log('Path in menuitems', path);
 
   return (
     <div className="relative flex px-3">
