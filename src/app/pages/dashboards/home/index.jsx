@@ -612,8 +612,8 @@ export default function Home() {
       data.timeRangeType = selectedTimeRage ? selectedTimeRage : 1;
 
       if (selectedCountry?.length) {
-        // const contryIds = selectedCountry.map((s) => s.value);
-        data.countries = selectedCountry;
+        const contryIds = selectedCountry.map((s) => s.value);
+        data.countries = contryIds;
       }
 
       console.log('getDemographicReport');
@@ -703,22 +703,9 @@ export default function Home() {
     }
   };
 
-  const influencerOptions = countryOptions.map((country) => {
-    return {
-      value: country.CountryID,
-      label: country.CountryName
-    };
-  });
-
-  const handleCountryChange = (event) => {
-    // setSelectedCountry(selected);
-    setCountryError(event ? '' : 'Countries are required.');
-    const options = Array.from(event.target.selectedOptions);
-    const values = options.map((option) => {
-      console.log(`Value: ${option.value}, Data Type: ${option.dataset.type}`);
-      return option.value;
-    });
-    setSelectedCountry(values);
+  const handleCountryChange = (selected) => {
+    setSelectedCountry(selected);
+    setCountryError(selected ? '' : 'Countries are required.');
   };
 
   function toggleFullScreen() {
@@ -916,11 +903,14 @@ export default function Home() {
                       />
                     </div>
                     <div className="w-full px-2 sm:w-1/4">
-                      <Select
+                      <CustomSelect
+                        id="Countries"
+                        showLabel={false}
+                        options={countryOptions}
+                        isMulti={true}
+                        error={countryError}
                         value={selectedCountry}
                         onChange={handleCountryChange}
-                        multiple
-                        data={countryOptions}
                       />
                     </div>
                     <div className="w-full px-2 sm:w-1/6">
