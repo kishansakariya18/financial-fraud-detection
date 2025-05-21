@@ -17,6 +17,7 @@ import { auditlogs } from './auditlogs';
 import { pages } from './pages';
 import { crm } from './crm';
 import { getAiChatBot } from './ai-chat';
+import { frontend } from './front-end';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -38,6 +39,7 @@ export const dashboards = () => ({
     platform,
     country,
     pages,
+    frontend,
     payment,
     roles,
     reports,

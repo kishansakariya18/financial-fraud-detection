@@ -28,6 +28,15 @@ export const LOCAL_STORAGE = {
   LANGUAGE: 'language'
 };
 
+export const HOME_CATEGORY_STATUS = {
+  ACTIVE: 1,
+  INACTIVE: 0
+};
+export const HOME_GAME_STATUS = {
+  ACTIVE: 1,
+  INACTIVE: 0
+};
+
 export const PAYOUT_STATUS = {
   PENDING: 0,
   APPROVED: 1,
@@ -329,6 +338,17 @@ export const PERMISSIONS = {
   },
   CRM: {
     VIEW: 'crm-view'
+  },
+  FRONTEND: {
+    VIEW: 'frontend-home-category-list',
+    ADD_HOME_CATEGORY: 'frontend-home-add-category',
+    EDIT_HOME_CATEGORY: 'frontend-home-edit-category',
+    CHANGE_HOME_CATEGORY_STATUS: 'frontend-change-home-category-status',
+    REORDER_HOME_CATEGORY: 'frontend-reorder-home-category',
+    VIEW_HOME_GAMES: 'frontend-home-game-list',
+    ADD_HOME_GAMES: 'frontend-add-home-games',
+    CHANGE_HOME_GAME_STATUS: 'frontend-change-home-game-status',
+    REORDER_HOME_GAMES: 'frontend-reorder-home-games'
   }
 };
 

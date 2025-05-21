@@ -18,6 +18,7 @@ import emailTemplateRoute from './routes/email-template.route';
 import promocodeRoute from './routes/promocode.route';
 import pagesRoute from './routes/pages.route';
 import crmRoute from './routes/crm.route';
+import homeCategoryRoute from './routes/home-category.route';
 
 // ----------------------------------------------------------------------
 
@@ -45,7 +46,8 @@ const protectedRoutes = {
         ...emailTemplateRoute,
         ...promocodeRoute,
         ...pagesRoute,
-        ...crmRoute
+        ...crmRoute,
+        ...homeCategoryRoute
       ]
     }
   ]
