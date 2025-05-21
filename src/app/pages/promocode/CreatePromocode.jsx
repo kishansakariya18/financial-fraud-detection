@@ -38,7 +38,6 @@ const CreatePromocode = () => {
   const [stackableWithOtherBonus, setStackableWithOtherBonus] = useState('0');
   const [wagringAppliedGames, setWagringAppliedGames] = useState('all');
   const [wagringGamesList, setWagringdGamesList] = useState([]);
-
   const [segmentationIds, setSegmentationIds] = useState([]);
   const [influencerSegIds, setInfluencerSegIds] = useState([]);
   const [wagersAppliedGameIds, setWagersAppliedGameIds] = useState([]);
@@ -168,6 +167,10 @@ const CreatePromocode = () => {
     setCurrency('realCash');
     setDiscountType('fixed');
     setDisplayMode('public');
+    setCodeRequired('0');
+    setClaimSettlement('2');
+    setStackableWithOtherBonus('0');
+    setWagringAppliedGames('all');
   }
 
   const handleInfluencerSegmentationChange = (event) => {
@@ -208,6 +211,7 @@ const CreatePromocode = () => {
       getCoreRequired,
       claimSettlement,
       stackableWithOtherBonus,
+      wagringAppliedGames,
       wagersAppliedGameIds
     };
     console.log('{ ...data, ...apiData }: ', { ...data, ...apiData });
