@@ -299,5 +299,7 @@
   "claimSettlement": "Règlement des réclamations",
   "audoCredit": "Crédit auto",
   "manulaCredit": "Réclamation manuelle",
-  "stackableWithOtherBonus": "Cumulable avec d'autres bonus"
+  "stackableWithOtherBonus": "Cumulable avec d'autres bonus",
+  "appliedGames": "Jeux appliqués",
+  "isCodeRequired": "Le code est-il requis ?"
 }

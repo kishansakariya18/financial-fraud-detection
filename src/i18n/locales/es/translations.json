@@ -299,5 +299,7 @@
   "claimSettlement": "Liquidación de reclamaciones",
   "audoCredit": "Crédito automático",
   "manulaCredit": "Reclamación manual",
-  "stackableWithOtherBonus": "Apilable con otras bonificaciones"
+  "stackableWithOtherBonus": "Apilable con otras bonificaciones",
+  "appliedGames": "Juegos Aplicados",
+  "isCodeRequired": "¿Se requiere código?"
 }
