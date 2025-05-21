@@ -389,6 +389,19 @@ export const apiConfig = {
     },
     CRM: {
       SEND: '/admin/crm/sendNotification'
+    },
+    HOME_PAGE: {
+      HOME_CATEGORY_LIST: '/admin/home-page/home-category/list',
+      CHANGE_HOME_CATEGORY_STATUS: '/admin/home-page/home-category/:homeCategoryId/change-status',
+      CHANGE_HOME_GAME_STATUS:
+        '/admin/home-page/home-category/home-game/:homePageGameId/change-status',
+      GET_CATEGORY: '/admin/home-page/home-category/get-category',
+      EDIT_HOME_CATEGORY: '/admin/home-page/home-category/edit-category',
+      HOME_GAME_LIST: '/admin/home-page/home-category/home-game/list',
+      ADD_HOME_GAME_LIST: '/admin/home-page/home-category/home-game/add-game-list',
+      ADD_HOME_GAMES: '/admin/home-page/home-category/home-game/add-games',
+      REORDER_CATEGORY: '/admin/home-page/home-category/reorder-category',
+      REORDER_GAMES: '/admin/home-page/home-category/home-game/reorder-games'
     }
   }
 };

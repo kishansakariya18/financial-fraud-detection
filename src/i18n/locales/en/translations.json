@@ -303,5 +303,14 @@
   "manulaCredit": "Manual Claim",
   "stackableWithOtherBonus": "Stackable with Other Bonuses",
   "appliedGames": "Applied Games",
-  "isCodeRequired": "Is Code Required ?"
+  "isCodeRequired": "Is Code Required ?",
+  "homeCategory": "Home Category",
+  "homeCategory_status_desc": "Are you sure you want to update this Home Category's status ?",
+  "homeGame_status_desc": "Are you sure you want to update this Home Game's status ?",
+  "homeCategory_status_suceess": "Home Category Status has been changed successfully",
+  "homeGame_status_suceess": "Home Game Status has been changed successfully",
+  "category": "Category",
+  "homeGame": "Home Game",
+  "frontend": "Front End",
+  "reorder": "Reorder"
 }

@@ -19,13 +19,13 @@ import { useTranslation } from 'react-i18next';
 
 const breadcrumbs = [{ title: 'Players', path: '/player' }, { title: 'Limit' }];
 const exclusionTimeOptions = [
-  { label: '1 day', value: '1' },
-  { label: '7 day', value: '2' },
-  { label: '1 month', value: '3' },
-  { label: '6 month', value: '4' },
-  { label: '12 month', value: '5' },
-  { label: 'Custom', value: '6' },
-  { label: 'Permenent', value: '7' }
+  { label: '1 day', value: 1 },
+  { label: '7 day', value: 2 },
+  { label: '1 month', value: 3 },
+  { label: '6 month', value: 4 },
+  { label: '12 month', value: 5 },
+  { label: 'Custom', value: 6 },
+  { label: 'Permenent', value: 7 }
 ];
 
 const PlayerLimit = () => {
@@ -48,6 +48,8 @@ const PlayerLimit = () => {
     resolver: yupResolver(playerLimitSchema)
   });
 
+  console.log('errors: ', errors);
+
   useEffect(() => {
     if (playerId) {
       fetchUserDetails().then((result) => {
@@ -69,10 +71,10 @@ const PlayerLimit = () => {
             selfExclusionType: result.ExclusionType,
             exclusionStartAt: result.ExclusionStartAt
               ? getDateInUTCToTimeZone(result.ExclusionStartAt, 'Asia/Kolkata', 'YYYY-MM-DD HH:mm')
-              : '',
+              : null,
             exclusionEndAt: result.ExclusionEndAt
               ? getDateInUTCToTimeZone(result.ExclusionEndAt, 'Asia/Kolkata', 'YYYY-MM-DD HH:mm')
-              : '',
+              : null,
 
             // Flags
             hasDailyWagerLimit: result.HasDailyBetWageLimit,
@@ -109,6 +111,8 @@ const PlayerLimit = () => {
   const updatePlayerLimit = async (requestObject) => {
     setLoading(true);
     setError(null);
+
+    console.log('requestObject: ', requestObject);
     const result = await PlayerService.updateUserLimit(requestObject, playerId);
     if (result) {
       if (result.status === 200 || result.status === 201) {

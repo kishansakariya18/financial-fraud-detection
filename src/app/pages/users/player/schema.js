@@ -161,21 +161,17 @@ export const playerLimitSchema = Yup.object().shape({
     }),
 
   // Exclusion
-  selfExclusionType: Yup.string().trim().nullable(),
-  exclusionStartAt: Yup.date()
-    .nullable()
-    .when('selfExclusionType', {
-      is: (type) => type !== null && +type == 5,
-      then: (schema) => schema.required('Self Exclusion Start At is required'),
-      otherwise: (schema) => schema.nullable()
-    }),
-  exclusionEndAt: Yup.date()
-    .nullable()
-    .when('selfExclusionType', {
-      is: (type) => type !== null && +type == 5,
-      then: (schema) => schema.required('Self Exclusion End At is required'),
-      otherwise: (schema) => schema.nullable()
-    }),
+  selfExclusionType: Yup.number().nullable(),
+  exclusionStartAt: Yup.date().when('selfExclusionType', {
+    is: (type) => type !== null && +type === 6,
+    then: (schema) => schema.required('Self Exclusion Start At is required'),
+    otherwise: (schema) => schema.nullable()
+  }),
+  exclusionEndAt: Yup.date().when('selfExclusionType', {
+    is: (type) => type !== null && +type === 6,
+    then: (schema) => schema.required('Self Exclusion End At is required'),
+    otherwise: (schema) => schema.nullable()
+  }),
 
   // Flags
   hasDailyWagerLimit: Yup.boolean(),
