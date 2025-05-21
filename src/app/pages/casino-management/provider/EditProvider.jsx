@@ -1,7 +1,7 @@
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
 import { Page } from 'components/shared/Page';
 import { Button, Circlebar, Upload } from 'components/ui';
-import RenderImage from 'components/ui/custom/imageRender';
+import RenderImage from 'components/ui/custom/ImageRender';
 import { t } from 'i18next';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
