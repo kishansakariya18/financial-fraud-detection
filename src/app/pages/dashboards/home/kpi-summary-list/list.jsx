@@ -9,7 +9,7 @@ import DashboardService from 'services/dashboard.services';
 import { t } from 'i18next';
 
 export default function KPISummaryList() {
-  const title = `${t('kpi')} ${t('summaryyyyyyyyyyyyyyyyyyy')}`;
+  const title = `${t('kpi')} ${t('summaryyyyyyyyyyyyyyyyyyy22222')}`;
 
   const fetchKPISummaryList = async () => {
     const result = await DashboardService.getKPISummary({
