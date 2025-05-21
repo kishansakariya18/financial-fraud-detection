@@ -220,6 +220,68 @@ export function ViewDetails() {
 
               <div className="my-4 h-px bg-gray-200 dark:bg-dark-500"></div>
 
+              <h6 className="mt-8 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
+                {t('Wagering') + ' ' + t('information')}
+              </h6>
+              <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('Wagering')}
+                  </p>
+                  <div className="flex space-x-1 rtl:space-x-reverse">
+                    <span> {response?.WageringRequirementX || '-'}</span>
+                    {response?.WageringRequirementX && (
+                      <Button
+                        data-tooltip
+                        data-tooltip-content={copied ? 'Copied' : 'Copy'}
+                        onClick={() => copy(response?.WageringRequirementX)}
+                        isIcon
+                        variant="flat"
+                        className="size-5 rounded-full group-hover/td:opacity-100"
+                        aria-label="Copy Button">
+                        <DocumentDuplicateIcon className="size-3.5" />
+                      </Button>
+                    )}
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('wagerFreeBounus')}
+                  </p>
+                  <p>{response?.WagerFreeDepositMatchPercentage || '-'}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('isCodeRequired')}
+                  </p>
+                  <p>{response?.IsPromoCodeRequired === 1 ? t('yes') : t('no')}</p>
+                </div>
+
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('claimSettlement')}
+                  </p>
+                  <p>
+                    {response?.BonusActivationMechanism === 1 ? t('audoCredit') : t('manulaCredit')}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('stackableWithOtherBonus')}
+                  </p>
+                  <p>{response?.IsStackableWithOtherBonuses === 1 ? t('yes') : t('no')}</p>
+                </div>
+
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('wagering') + ' ' + t('appliedGames')}
+                  </p>
+                  <p>{response?.WageringContributionType === 'all' ? t('all') : t('specific')}</p>
+                </div>
+              </div>
+              <div className="my-4 h-px bg-gray-200 dark:bg-dark-500"></div>
+
               <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
                 <Button className="min-w-[7rem]" onClick={() => navigate('/promocode')}>
                   {t('back')}

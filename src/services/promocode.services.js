@@ -113,10 +113,11 @@ const PromoCodeService = {
         MaxAmount: data.maxAmount || 0,
         ExactAmount: data.exactAmount || 0,
         Wagering: data.wagering || 0,
-        WagerFreeBounus: data.wagerFreeBounus || 0,
+        WagerFreeBonus: data.wagerFreeBounus || 0,
         CodeRequired: data.getCoreRequired,
         ClaimSettlement: data.claimSettlement,
         StackableWithOtherBonus: data.stackableWithOtherBonus,
+        WagringAppliedGames: data.wagringAppliedGames,
         WagersAppliedGameIds: data.wagersAppliedGameIds || []
       };
 
