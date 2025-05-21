@@ -2,7 +2,7 @@
 import { Page } from 'components/shared/Page';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
-import { Button, Checkbox, Input, Radio, Select } from 'components/ui';
+import { Button, Checkbox, Input, Radio } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
@@ -19,6 +19,7 @@ import AffiliateService from 'services/affiliate.services';
 import SegmentationService from 'services/segmentation.services';
 import GamesService from 'services/games.services';
 import { createPromocodeSchema } from './schema';
+import { CustomSelect } from 'components/custom/CustomSelect';
 const defaultValue = new Delta();
 
 const CreatePromocode = () => {
@@ -41,6 +42,9 @@ const CreatePromocode = () => {
   const [segmentationIds, setSegmentationIds] = useState([]);
   const [influencerSegIds, setInfluencerSegIds] = useState([]);
   const [wagersAppliedGameIds, setWagersAppliedGameIds] = useState([]);
+  const [wagersAppliedGameError, setWagersAppliedGameError] = useState(null);
+  const [segmentationOptionsError, setSegmentationOptionsError] = useState(null);
+  const [influencerError, setInfluencerError] = useState(null);
 
   const [response, setResponse] = useState(null);
   const { t } = useTranslation();
@@ -146,10 +150,11 @@ const CreatePromocode = () => {
   });
 
   const segmentationOptions = segmentationList.map((segmentation) => {
-    return {
-      value: segmentation.Id,
+    const mapping = {
+      value: segmentation.UserSegmentID,
       label: segmentation.Name
     };
+    return mapping;
   });
 
   const wagerGamesOptions = wagringGamesList.map((game) => {
@@ -170,32 +175,26 @@ const CreatePromocode = () => {
     setCodeRequired('0');
     setClaimSettlement('2');
     setStackableWithOtherBonus('0');
+    setInfluencerSegType('all');
+    setSegmentationType('all');
     setWagringAppliedGames('all');
+    setWagersAppliedGameIds([]);
+    setSegmentationIds([]);
+    setInfluencerSegIds([]);
   }
 
-  const handleInfluencerSegmentationChange = (event) => {
-    const options = Array.from(event.target.selectedOptions);
-    const values = options.map((option) => {
-      console.log(`Value: ${option.value}, Data Type: ${option.dataset.type}`);
-      return option.value;
-    });
-    setInfluencerSegIds(values);
+  const handleInfluencerSegmentationChange = (selected) => {
+    setInfluencerSegIds(selected);
+    setInfluencerError(selected ? '' : 'AffiliateID required.');
   };
-  const handleSegmentationChange = (event) => {
-    const options = Array.from(event.target.selectedOptions);
-    const values = options.map((option) => {
-      console.log(`Value: ${option.value}, Data Type: ${option.dataset.type}`);
-      return option.value;
-    });
-    setSegmentationIds(values);
+  const handleSegmentationChange = (selected) => {
+    setSegmentationIds(selected);
+    setSegmentationOptionsError(selected ? '' : 'SegmentationID required.');
   };
-  const handleWagerAppliedGamesChange = (event) => {
-    const options = Array.from(event.target.selectedOptions);
-    const values = options.map((option) => {
-      console.log(`Value: ${option.value}, Data Type: ${option.dataset.type}`);
-      return option.value;
-    });
-    setWagersAppliedGameIds(values);
+
+  const handleWagerAppliedGamesChange = (selected) => {
+    setWagersAppliedGameIds(selected);
+    setWagersAppliedGameError(selected ? '' : 'GameID required.');
   };
 
   const onSubmit = async (data) => {
@@ -329,11 +328,14 @@ const CreatePromocode = () => {
               </div>
 
               {influencerSegType === 'specific' && (
-                <Select
-                  label={t('select') + ' ' + t('influencer') + ' ' + t('segmentation')}
+                <CustomSelect
+                  id="wagerGamesOptions"
+                  showLabel={t('select') + ' ' + t('segmentation')}
+                  options={influencerOptions}
+                  isMulti={true}
+                  error={influencerError}
+                  value={influencerSegIds}
                   onChange={handleInfluencerSegmentationChange}
-                  multiple
-                  data={influencerOptions}
                 />
               )}
             </div>
@@ -358,12 +360,14 @@ const CreatePromocode = () => {
               </div>
 
               {segmentationType === 'specific' && (
-                <Select
-                  label={t('select') + ' ' + t('segmentation')}
-                  // defaultValue={['USA']}
+                <CustomSelect
+                  id="wagerGamesOptions"
+                  showLabel={t('select') + ' ' + t('segmentation')}
+                  options={segmentationOptions}
+                  isMulti={true}
+                  error={segmentationOptionsError}
+                  value={segmentationIds}
                   onChange={handleSegmentationChange}
-                  multiple
-                  data={segmentationOptions}
                 />
               )}
             </div>
@@ -463,11 +467,14 @@ const CreatePromocode = () => {
               </div>
 
               {wagringAppliedGames === 'specific' && (
-                <Select
-                  label={t('select') + ' ' + t('wagering') + ' ' + t('appliedGames')}
+                <CustomSelect
+                  id="wagerGamesOptions"
+                  showLabel={t('select') + ' ' + t('wagering') + ' ' + t('appliedGames')}
+                  options={wagerGamesOptions}
+                  isMulti={true}
+                  error={wagersAppliedGameError}
+                  value={wagersAppliedGameIds}
                   onChange={handleWagerAppliedGamesChange}
-                  multiple
-                  data={wagerGamesOptions}
                 />
               )}
             </div>

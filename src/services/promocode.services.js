@@ -86,6 +86,18 @@ const PromoCodeService = {
   },
   createPromocode: async (data) => {
     try {
+      if (data.segmentationIds.length) {
+        const TempSegmentationIds = data.segmentationIds.map((s) => s.value);
+        data.segmentationIds = TempSegmentationIds;
+      }
+      if (data.influencerSegIds.length) {
+        const TempAffiliateIds = data.influencerSegIds.map((s) => s.value);
+        data.influencerSegIds = TempAffiliateIds;
+      }
+      if (data.wagersAppliedGameIds.length) {
+        const TempWagersAppliedGameIds = data.wagersAppliedGameIds.map((s) => s.value);
+        data.wagersAppliedGameIds = TempWagersAppliedGameIds;
+      }
       const requestObject = {
         PromoCode: data.promocode,
         DepositRequirementType: data.type,
