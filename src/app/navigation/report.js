@@ -52,15 +52,15 @@ export const reports = {
       transKey: 'playerBalance',
       Icon: QueueListIcon,
       permission: PERMISSIONS.REPORT.PLAYER_BALANCE_REPORT_VIEW
-    },
-    {
-      id: 'depositBalance',
-      type: NAV_TYPE_ITEM,
-      path: '/report/deposit-balance/list',
-      title: 'depositBalance',
-      transKey: 'depositBalance',
-      Icon: QueueListIcon,
-      permission: PERMISSIONS.REPORT.PLAYER_BALANCE_REPORT_VIEW
     }
+    // {
+    //   id: 'depositBalance',
+    //   type: NAV_TYPE_ITEM,
+    //   path: '/report/deposit-balance/list',
+    //   title: 'depositBalance',
+    //   transKey: 'depositBalance',
+    //   Icon: QueueListIcon,
+    //   permission: PERMISSIONS.REPORT.PLAYER_BALANCE_REPORT_VIEW
+    // }
   ]
 };
