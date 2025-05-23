@@ -483,6 +483,56 @@ const PlayerLimit = () => {
                   </div>
                 </Box>
                 <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
+                  <div className="mt-1.5 flex items-center justify-between">
+                    <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
+                      {t('oneTimeBetLimit')}
+                    </h2>
+                    <Switch {...register('hasOneTimeBetLimit')} label="" />
+                  </div>
+                  <div className="pt-2">
+                    <div className="max-w-xl">
+                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
+                        <Input
+                          type="number"
+                          {...register('oneTimeBetLimit')}
+                          error={errors?.oneTimeBetLimit?.message}
+                          id="oneTimeBetLimit"
+                          placeholder="Enter One Time Bet Limit"
+                          classNames={{
+                            root: 'flex-1',
+                            input: 'relative rounded-none hover:z-1 focus:z-1'
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </Box>
+                <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
+                  <div className="mt-1.5 flex items-center justify-between">
+                    <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
+                      {t('oneTimeWinLimit')}
+                    </h2>
+                    <Switch {...register('hasOneTimeWinLimit')} label="" />
+                  </div>
+                  <div className="pt-2">
+                    <div className="max-w-xl">
+                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
+                        <Input
+                          type="number"
+                          {...register('oneTimeWinLimit')}
+                          error={errors?.oneTimeWinLimit?.message}
+                          id="oneTimeWinLimit"
+                          placeholder="Enter One Time Win Limit"
+                          classNames={{
+                            root: 'flex-1',
+                            input: 'relative rounded-none hover:z-1 focus:z-1'
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </Box>
+                <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
                   <div>
                     <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
                       {t('selfExclusionTime')}

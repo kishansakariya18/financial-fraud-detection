@@ -112,7 +112,14 @@ export const PERMISSIONS = {
     VIEW_LOGIN_HISTORY: 'user-login-history-view'
   },
   REPORT: {
-    BETSLIP_TRANSACTION_VIEW: 'betslip-transaction-view'
+    BETSLIP_REPORT_VIEW: 'betslip-report-view',
+    DEPOSIT_REPORT_VIEW: 'deposit-report-view',
+    WITHDRAW_REPORT_VIEW: 'withdraw-report-view',
+    BETSLIP_EXPORT_REPORT: 'betslip-export-report',
+    DEPOSIT_EXPORT_REPORT: 'deposit-export-report',
+    WITHDRAW_EXPORT_REPORT: 'withdraw-export-report',
+    PLAYER_BALANCE_REPORT_VIEW: 'player-balance-report-view',
+    PLAYER_BALANCE_EXPORT_REPORT: 'player-balance-export-report'
   },
   USER_LIMIT_SETTING: {
     VIEW: 'limit-setting-view',

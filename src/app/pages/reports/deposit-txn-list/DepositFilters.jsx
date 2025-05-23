@@ -1,30 +1,27 @@
 // Import Dependencies
 import { MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
-// import { TbCurrencyDollar } from "react-icons/tb";
 import PropTypes from 'prop-types';
 
 // Local Imports
-// import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
-// import { RangeFilter } from "components/shared/table/RangeFilter";
 import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
-import { getStageAppToApi, mapType, stageOptions, typeOptions } from '../helper';
 import { useSearchParams } from 'react-router';
 import { ExportCSV } from 'components/custom/export';
+import { transactionStatusOption, transactionStatusToAPI } from 'app/pages/users/player/helper';
 import { getQueryParams } from 'utils/custom.utilities';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
 import usePermissions from 'app/router/usePermissions';
-import { PERMISSIONS } from 'constants/app.constant';
+import { PERMISSIONS, TRANSACTION } from 'constants/app.constant';
 
 // ----------------------------------------------------------------------
 
-export function BetSlipFilters({
+export function DepositFiilters({
   table,
   onApplyFilters = () => {},
   onClearFilters = () => {},
@@ -33,9 +30,8 @@ export function BetSlipFilters({
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
   const [searchParams] = useSearchParams();
-  const { hasPermission } = usePermissions();
-
   const filters = getQueryParams(searchParams);
+  const { hasPermission } = usePermissions();
 
   return (
     <div className="table-toolbar">
@@ -49,10 +45,10 @@ export function BetSlipFilters({
             {pageTitle}
           </h2>
         </div>
-        {hasPermission(PERMISSIONS.REPORT.BETSLIP_EXPORT_REPORT) && (
+        {hasPermission(PERMISSIONS.REPORT.DEPOSIT_EXPORT_REPORT) && (
           <ExportCSV
             filters={Object.fromEntries([...searchParams])}
-            url={`${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.REPORTS.BETSLIP_EXPORT}?startDate=${filters.startDate ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&endDate=${filters.endDate ? String(dayjs(+filters.endDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&keyword=${filters.keyword || ''}&stage=${filters.stage ? getStageAppToApi(filters.stage) : ''}&type=${filters.type ? mapType(filters.type) : ''}`}
+            url={`${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.REPORTS.TRANSACTIONS_EXPORT}?startDate=${filters.startDate ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&endDate=${filters.endDate ? String(dayjs(+filters.endDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&keyword=${filters.keyword || ''}&status=${filters?.status ? transactionStatusToAPI(filters.status) : ''}&&transactionType=${TRANSACTION.TRANSACTION_TYPE.DEPOSIT}`}
           />
         )}
       </div>
@@ -124,21 +120,11 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>
-      {table.getColumn('stage') && (
+      {table.getColumn('status') && (
         <FacedtedFilter
-          options={stageOptions}
-          column={table.getColumn('stage')}
-          title="Stage"
-          Icon={MapPinIcon}
-          isMultiple={false}
-          showCheckbox={false}
-        />
-      )}
-      {table.getColumn('type') && (
-        <FacedtedFilter
-          options={typeOptions}
-          column={table.getColumn('type')}
-          title="User's Type"
+          options={transactionStatusOption}
+          column={table.getColumn('status')}
+          title="Status"
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}
@@ -170,7 +156,7 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
   );
 }
 
-BetSlipFilters.propTypes = {
+DepositFiilters.propTypes = {
   table: PropTypes.object
 };
 

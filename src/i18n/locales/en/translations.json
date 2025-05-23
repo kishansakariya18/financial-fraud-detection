@@ -34,6 +34,8 @@
   "casino":"Casino",
   "casino_management": "Casino Management",
   "betslip_transactions": "Betslip Transactions",
+  "deposit_transactions": "Deposit Transactions",
+  "withdraw_transactions": "Withdraw Transactions",
   "report": "Report",
   "country": "Country",
   "add": "Add",
@@ -312,5 +314,7 @@
   "category": "Category",
   "homeGame": "Home Game",
   "frontend": "Front End",
-  "reorder": "Reorder"
+  "reorder": "Reorder",
+  "betSlip": "Bet Slip",
+  "playerBalance": "Player Balance"
 }

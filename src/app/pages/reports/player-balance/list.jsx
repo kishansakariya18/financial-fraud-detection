@@ -4,42 +4,37 @@ import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
 
 // Local Imports - UI,Services,Helper,Utils
-import { BetSlipFilters } from './BetSlipFilters';
 import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 
-import { responseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import ReportService from '../../../../services/report.services';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
+import { playerBalanceResponseMapper } from '../helper';
+import { PlayerBalanceFilters } from './PlayerBalanceFilters';
 
-export default function Reports() {
+export default function PlayerBalanceReport() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('betSlip') + ' ' + t('report');
+  const pageTitle = t('player') + ' ' + t('balance') + ' ' + t('report');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
-  const fetchReports = async () => {
-    // setError(null);
-    console.log('in side fetch');
-
-    const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
-    const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
-    const result = await ReportService.getBetSlipTransaction({
+  const fetchUsers = async () => {
+    const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
+    const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
+    const result = await ReportService.getPlayerBalance({
       pagination: { pageIndex, pageSize },
       filters: queryParams
     });
 
     if (result.status === 200) {
-      console.log('responseMapper(result.response.data):', responseMapper(result.response.data));
-
       return {
         status: 200,
-        data: responseMapper(result.response.data),
+        data: playerBalanceResponseMapper(result.response.data),
         totalRecords: parseInt(result.response.totalRecords)
       };
     }
@@ -49,11 +44,11 @@ export default function Reports() {
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
-    fetchData: fetchReports,
+    fetchData: fetchUsers,
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'] },
       tableSettings: {}
     }
   });
@@ -71,12 +66,10 @@ export default function Reports() {
     if (queryParams.keyword) {
       filtersFromQuery.push({ id: 'username', value: queryParams.keyword });
     }
-    if (queryParams.stage) {
-      filtersFromQuery.push({ id: 'stage', value: queryParams.stage });
+    if (queryParams.status) {
+      filtersFromQuery.push({ id: 'status', value: queryParams.status });
     }
-    if (queryParams.type) {
-      filtersFromQuery.push({ id: 'type', value: queryParams.type });
-    }
+
     if (queryParams.startDate && queryParams.endDate) {
       filtersFromQuery.push({
         id: 'createdAt',
@@ -95,12 +88,8 @@ export default function Reports() {
       if (data.id === 'username') {
         filterItems.keyword = data.value;
       }
-
-      if (data.id === 'stage') {
-        filterItems.stage = data.value;
-      }
-      if (data.id === 'type') {
-        filterItems.type = data.value;
+      if (data.id === 'status') {
+        filterItems.status = data.value;
       }
       if (data.id === 'createdAt') {
         filterItems.date = data.value;
@@ -111,8 +100,7 @@ export default function Reports() {
       pageIndex: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
-      ...(filterItems.stage && { stage: filterItems.stage }),
-      ...(filterItems.type && { type: filterItems.type }),
+      ...(filterItems.status && { status: filterItems.status }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
       ...(filterItems.date && { endDate: filterItems?.date[1] })
     });
@@ -121,8 +109,8 @@ export default function Reports() {
   const clearFilterHandler = () => {
     if (!isEmptyObject(queryParams)) {
       setSearchParams({
-        pageIndex: 0,
-        pageSize: 10
+        pageIndex: DEFAULT_PAGE_INDEX,
+        pageSize: DEFAULT_PER_PAGE_RECORD
       });
     }
     table.resetColumnFilters();
@@ -134,12 +122,11 @@ export default function Reports() {
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
       {/* <Toolbar breadcrumbs={breadcrumbs} table={table} pageTitle={pageTitle} /> */}
-      <BetSlipFilters
+      <PlayerBalanceFilters
         pageTitle={pageTitle}
         table={table}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
-        // filters= {}
       />
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>

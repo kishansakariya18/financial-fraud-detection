@@ -385,7 +385,13 @@ export const apiConfig = {
     },
     REPORTS: {
       BETSLIP: '/admin/reports/betslip-transactions',
-      BETSLIP_EXPORT: '/admin/reports/betslip'
+      BETSLIP_EXPORT: '/admin/reports/betslip',
+      TRANSACTIONS: '/admin/reports/get-transactions',
+      TRANSACTIONS_EXPORT: '/admin/reports/transactions/export',
+      PLAYER_BALANCE_LIST: '/admin/reports/player-balance/list',
+      PLAYER_BALANCE_EXPORT: '/admin/reports/player-balance/export',
+      DEPOSIT_BONUS_LIST: '/admin/reports/deposit-bonus/list',
+      DEPOSIT_BONUS_EXPORT: '/admin/reports/deposit-bonus/export'
     },
     CRM: {
       SEND: '/admin/crm/sendNotification'
