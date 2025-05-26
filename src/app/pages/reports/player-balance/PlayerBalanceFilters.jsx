@@ -10,14 +10,14 @@ import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
-import { useSearchParams } from 'react-router';
-import { ExportCSV } from 'components/custom/export';
-import { playerStatusOptions, playerStatusToAPI } from 'app/pages/users/player/helper';
-import { getQueryParams } from 'utils/custom.utilities';
-import apiConfig from 'configs/api.config';
-import dayjs from 'dayjs';
-import usePermissions from 'app/router/usePermissions';
-import { PERMISSIONS } from 'constants/app.constant';
+// import { useSearchParams } from 'react-router';
+// import { ExportCSV } from 'components/custom/export';
+import { playerStatusOptions } from 'app/pages/users/player/helper';
+// import { getQueryParams } from 'utils/custom.utilities';
+// import apiConfig from 'configs/api.config';
+// import dayjs from 'dayjs';
+// import usePermissions from 'app/router/usePermissions';
+// import { PERMISSIONS } from 'constants/app.constant';
 
 export function PlayerBalanceFilters({
   table,
@@ -27,9 +27,9 @@ export function PlayerBalanceFilters({
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
-  const [searchParams] = useSearchParams();
-  const filters = getQueryParams(searchParams);
-  const { hasPermission } = usePermissions();
+  // const [searchParams] = useSearchParams();
+  // const filters = getQueryParams(searchParams);
+  // const { hasPermission } = usePermissions();
 
   return (
     <div className="table-toolbar">
@@ -43,12 +43,12 @@ export function PlayerBalanceFilters({
             {pageTitle}
           </h2>
         </div>
-        {hasPermission(PERMISSIONS.REPORT.PLAYER_BALANCE_EXPORT_REPORT) && (
+        {/* {hasPermission(PERMISSIONS.REPORT.PLAYER_BALANCE_EXPORT_REPORT) && (
           <ExportCSV
             filters={Object.fromEntries([...searchParams])}
             url={`${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.REPORTS.PLAYER_BALANCE_EXPORT}?startDate=${filters.startDate ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&endDate=${filters.endDate ? String(dayjs(+filters.endDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&keyword=${filters.keyword || ''}&status=${filters?.status ? playerStatusToAPI(filters.status) : ''}`}
           />
-        )}
+        )} */}
       </div>
       {isXs ? (
         <>

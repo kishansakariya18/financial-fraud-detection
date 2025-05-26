@@ -5,7 +5,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 
 // Local Imports
-import Logo from 'assets/appLogo.svg?react';
+import LightThemeLogo from 'assets/appLogo_light_theme.svg?react';
+import DarkThemeLogo from 'assets/appLogo_dark_theme.svg?react';
 import { Button, Card, Checkbox, Input } from 'components/ui';
 import { loginSchema } from './schema';
 import { Page } from 'components/shared/Page';
@@ -16,6 +17,7 @@ import { AuthAction } from 'store/admin-slice/AuthSlice';
 import { LOCAL_STORAGE } from 'constants/app.constant';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { useThemeContext } from 'app/contexts/theme/context';
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +43,8 @@ export default function Login() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const [validateResponse, setValidateResponse] = useState(null);
   const [validateMessage, setValidateMessage] = useState(null);
+  const { isDark } = useThemeContext();
+
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -155,7 +159,7 @@ export default function Login() {
       <main className="min-h-100vh grid w-full grow grid-cols-1 place-items-center">
         <div className="w-full max-w-[26rem] p-4 sm:px-5">
           <div className="text-center">
-            <Logo className="mx-auto size-16" />
+            {isDark ? <DarkThemeLogo /> : <LightThemeLogo />}
             <div className="mt-4">
               <h2 className="text-2xl font-semibold text-gray-600 dark:text-dark-100">
                 {t('welcome_back')}

@@ -1,4 +1,5 @@
 import apiConfig from 'configs/api.config';
+import dayjs from 'dayjs';
 import { sendRequest } from 'utils/axios';
 
 const DashboardService = {
@@ -34,14 +35,28 @@ const DashboardService = {
     }
   },
 
-  getDepositStats: async () => {
+  getDepositStats: async (filters) => {
     try {
+      const startDate = dayjs(filters?.startDate).format('YYYY-MM-DD HH:mm:ss');
+      const endDate = dayjs(filters?.endDate)
+        .hour(23)
+        .minute(59)
+        .second(59)
+        .format('YYYY-MM-DD HH:mm:ss');
+
+      const apiData = {
+        filters: {
+          startDate,
+          endDate
+        }
+      };
       const response = await sendRequest({
         url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.DASHBOARD.DEPOSIT_STATS}`,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        body: apiData
       });
 
       return response;
@@ -66,14 +81,28 @@ const DashboardService = {
     }
   },
 
-  getGGRReport: async () => {
+  getGGRReport: async (filters) => {
     try {
+      const startDate = dayjs(filters?.startDate).format('YYYY-MM-DD HH:mm:ss');
+      const endDate = dayjs(filters?.endDate)
+        .hour(23)
+        .minute(59)
+        .second(59)
+        .format('YYYY-MM-DD HH:mm:ss');
+
+      const apiData = {
+        filters: {
+          startDate,
+          endDate
+        }
+      };
       const response = await sendRequest({
         url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.DASHBOARD.GGR_REPORT}`,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        body: apiData
       });
 
       return response;
@@ -82,14 +111,32 @@ const DashboardService = {
     }
   },
 
-  getLoggedInPlayers: async () => {
+  getLoggedInPlayers: async (filters) => {
     try {
+      const startDate = dayjs(filters?.startDate).format('YYYY-MM-DD HH:mm:ss');
+      const endDate = dayjs(filters?.endDate)
+        .hour(23)
+        .minute(59)
+        .second(59)
+        .format('YYYY-MM-DD HH:mm:ss');
+
+      console.log('LOGGEDIN PLAYERS - startDate: ', startDate);
+      console.log('LOGGEDIN PLAYERS - endDate: ', endDate);
+
+      const apiData = {
+        filters: {
+          startDate,
+          endDate
+        }
+      };
+
       const response = await sendRequest({
         url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.DASHBOARD.LOGGED_IN_PLAYERS}`,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        body: apiData
       });
 
       return response;
@@ -98,14 +145,31 @@ const DashboardService = {
     }
   },
 
-  getActivePlayers: async () => {
+  getActivePlayers: async (filters) => {
     try {
+      const startDate = dayjs(filters?.startDate).format('YYYY-MM-DD HH:mm:ss');
+      const endDate = dayjs(filters?.endDate)
+        .hour(23)
+        .minute(59)
+        .second(59)
+        .format('YYYY-MM-DD HH:mm:ss');
+
+      console.log('active player - startDate: ', startDate);
+      console.log('active player - endDate: ', endDate);
+
+      const apiData = {
+        filters: {
+          startDate,
+          endDate
+        }
+      };
       const response = await sendRequest({
         url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.DASHBOARD.ACTIVE_PLAYERS}`,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        body: apiData
       });
 
       return response;
@@ -149,14 +213,28 @@ const DashboardService = {
     }
   },
 
-  getCasinoStats: async () => {
+  getCasinoStats: async (filters) => {
     try {
+      const startDate = dayjs(filters?.startDate).format('YYYY-MM-DD HH:mm:ss');
+      const endDate = dayjs(filters?.endDate)
+        .hour(23)
+        .minute(59)
+        .second(59)
+        .format('YYYY-MM-DD HH:mm:ss');
+
+      const apiData = {
+        filters: {
+          startDate,
+          endDate
+        }
+      };
       const response = await sendRequest({
         url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.DASHBOARD.CASINO_STATS}`,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        body: apiData
       });
 
       return response;

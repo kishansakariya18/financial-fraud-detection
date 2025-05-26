@@ -57,7 +57,9 @@ const ReportService = {
       const apiRequestParams = {
         keyword: keyword || undefined,
         startDate: startDate ? dayjs(+startDate).format('YYYY-MM-DD HH:mm:ss') : undefined,
-        endDate: endDate ? dayjs(+endDate).format('YYYY-MM-DD HH:mm:ss') : undefined,
+        endDate: endDate
+          ? dayjs(+endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
+          : undefined,
         status: status ? transactionStatusToAPI(status) : undefined,
         transactionType: TRANSACTION.TRANSACTION_TYPE.DEPOSIT
       };

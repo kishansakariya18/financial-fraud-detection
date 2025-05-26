@@ -18,10 +18,9 @@ import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS, TRANSACTION } from 'constants/app.constant';
-
 // ----------------------------------------------------------------------
 
-export function DepositFiilters({
+export function DepositFilters({
   table,
   onApplyFilters = () => {},
   onClearFilters = () => {},
@@ -48,7 +47,17 @@ export function DepositFiilters({
         {hasPermission(PERMISSIONS.REPORT.DEPOSIT_EXPORT_REPORT) && (
           <ExportCSV
             filters={Object.fromEntries([...searchParams])}
-            url={`${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.REPORTS.TRANSACTIONS_EXPORT}?startDate=${filters.startDate ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&endDate=${filters.endDate ? String(dayjs(+filters.endDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&keyword=${filters.keyword || ''}&status=${filters?.status ? transactionStatusToAPI(filters.status) : ''}&&transactionType=${TRANSACTION.TRANSACTION_TYPE.DEPOSIT}`}
+            url={`${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.REPORTS.TRANSACTIONS_EXPORT}?startDate=${filters.startDate ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&endDate=${
+              filters.endDate
+                ? String(
+                    dayjs(+filters.endDate)
+                      .hour(23)
+                      .minute(59)
+                      .second(59)
+                      .format('YYYY-MM-DD HH:mm:ss')
+                  )
+                : ''
+            }&keyword=${filters.keyword || ''}&status=${filters?.status ? transactionStatusToAPI(filters.status) : ''}&&transactionType=${TRANSACTION.TRANSACTION_TYPE.DEPOSIT}`}
           />
         )}
       </div>
@@ -156,7 +165,7 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
   );
 }
 
-DepositFiilters.propTypes = {
+DepositFilters.propTypes = {
   table: PropTypes.object
 };
 

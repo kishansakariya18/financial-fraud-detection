@@ -15,8 +15,6 @@ import { DatePicker } from 'components/shared/form/Datepicker';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 import { useTranslation } from 'react-i18next';
 
-// ----------------------------------------------------------------------
-
 const breadcrumbs = [{ title: 'Players', path: '/player' }, { title: 'Limit' }];
 const exclusionTimeOptions = [
   { label: '1 day', value: 1 },
@@ -532,91 +530,93 @@ const PlayerLimit = () => {
                     </div>
                   </div>
                 </Box>
-                <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
-                  <div>
-                    <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                      {t('selfExclusionTime')}
-                    </h2>
-                  </div>
-                  <div className="pt-2">
-                    <div className="max-w-xl">
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <Controller
-                          render={({ field }) => (
-                            <Listbox
-                              data={exclusionTimeOptions}
-                              value={
-                                exclusionTimeOptions.find(
-                                  (exclusionTime) => +exclusionTime.value === +field.value
-                                ) || null
-                              }
-                              onChange={(val) => handleChangeExclusionType(field, val)}
-                              name={field.name}
-                              placeholder={
-                                t('select') +
-                                ' ' +
-                                t('self') +
-                                ' ' +
-                                t('exclusion') +
-                                ' ' +
-                                t('type')
-                              }
-                              displayField="label"
-                              error={errors?.selfExclusionType?.message}
-                            />
-                          )}
-                          control={control}
-                          name="selfExclusionType"
-                        />
-                      </div>
+                <div>
+                  <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
+                    <div>
+                      <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
+                        {t('selfExclusionTime')}
+                      </h2>
+                    </div>
+                    <div className="pt-2">
+                      <div className="max-w-xl">
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <Controller
+                            render={({ field }) => (
+                              <Listbox
+                                data={exclusionTimeOptions}
+                                value={
+                                  exclusionTimeOptions.find(
+                                    (exclusionTime) => +exclusionTime.value === +field.value
+                                  ) || null
+                                }
+                                onChange={(val) => handleChangeExclusionType(field, val)}
+                                name={field.name}
+                                placeholder={
+                                  t('select') +
+                                  ' ' +
+                                  t('self') +
+                                  ' ' +
+                                  t('exclusion') +
+                                  ' ' +
+                                  t('type')
+                                }
+                                displayField="label"
+                                error={errors?.selfExclusionType?.message}
+                              />
+                            )}
+                            control={control}
+                            name="selfExclusionType"
+                          />
+                        </div>
 
-                      <div>
-                        {+exclusionType === 6 && (
-                          <div className="flex flex-wrap gap-2 pt-1.5">
-                            <Controller
-                              render={({ field: { onChange, value, ...rest } }) => (
-                                <DatePicker
-                                  onChange={onChange}
-                                  value={value || ''}
-                                  label={t('exclusion') + ' ' + t('startAt')}
-                                  error={errors?.exclusionStartAt?.message}
-                                  options={{
-                                    disableMobile: true,
-                                    enableTime: true,
-                                    time_24hr: true
-                                  }}
-                                  placeholder="Choose date..."
-                                  {...rest}
-                                />
-                              )}
-                              control={control}
-                              name="exclusionStartAt"
-                            />
-                            <Controller
-                              render={({ field: { onChange, value, ...rest } }) => (
-                                <DatePicker
-                                  onChange={onChange}
-                                  value={value || ''}
-                                  label={t('exclusion') + ' ' + t('endAt')}
-                                  error={errors?.exclusionEndAt?.message}
-                                  options={{
-                                    disableMobile: true,
-                                    enableTime: true,
-                                    time_24hr: true
-                                  }}
-                                  placeholder="Choose date..."
-                                  {...rest}
-                                />
-                              )}
-                              control={control}
-                              name="exclusionEndAt"
-                            />
-                          </div>
-                        )}
+                        <div>
+                          {+exclusionType === 6 && (
+                            <div className="flex flex-wrap gap-2 pt-1.5">
+                              <Controller
+                                render={({ field: { onChange, value, ...rest } }) => (
+                                  <DatePicker
+                                    onChange={onChange}
+                                    value={value || ''}
+                                    label={t('exclusion') + ' ' + t('startAt')}
+                                    error={errors?.exclusionStartAt?.message}
+                                    options={{
+                                      disableMobile: true,
+                                      enableTime: true,
+                                      time_24hr: true
+                                    }}
+                                    placeholder="Choose date..."
+                                    {...rest}
+                                  />
+                                )}
+                                control={control}
+                                name="exclusionStartAt"
+                              />
+                              <Controller
+                                render={({ field: { onChange, value, ...rest } }) => (
+                                  <DatePicker
+                                    onChange={onChange}
+                                    value={value || ''}
+                                    label={t('exclusion') + ' ' + t('endAt')}
+                                    error={errors?.exclusionEndAt?.message}
+                                    options={{
+                                      disableMobile: true,
+                                      enableTime: true,
+                                      time_24hr: true
+                                    }}
+                                    placeholder="Choose date..."
+                                    {...rest}
+                                  />
+                                )}
+                                control={control}
+                                name="exclusionEndAt"
+                              />
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Box>
+                  </Box>
+                </div>
               </>
             )}
           </div>

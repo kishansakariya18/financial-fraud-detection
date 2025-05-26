@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import ReportService from '../../../../services/report.services';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
-import { DepositFiilters } from './DepositFilters';
+import { DepositFilters } from './DepositFilters';
 
 export default function DepositTxnReports() {
   const { t } = useTranslation();
@@ -24,9 +24,6 @@ export default function DepositTxnReports() {
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const fetchReports = async () => {
-    // setError(null);
-    console.log('in side fetch');
-
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
     const result = await ReportService.getDepositTransactions({
@@ -112,8 +109,8 @@ export default function DepositTxnReports() {
   const clearFilterHandler = () => {
     if (!isEmptyObject(queryParams)) {
       setSearchParams({
-        pageIndex: 0,
-        pageSize: 10
+        pageIndex: DEFAULT_PAGE_INDEX,
+        pageSize: DEFAULT_PER_PAGE_RECORD
       });
     }
     table.resetColumnFilters();
@@ -125,7 +122,7 @@ export default function DepositTxnReports() {
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
       {/* <Toolbar breadcrumbs={breadcrumbs} table={table} pageTitle={pageTitle} /> */}
-      <DepositFiilters
+      <DepositFilters
         pageTitle={pageTitle}
         table={table}
         onApplyFilters={applyFilterHandler}

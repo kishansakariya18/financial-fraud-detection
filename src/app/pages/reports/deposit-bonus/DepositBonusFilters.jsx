@@ -21,7 +21,7 @@ import { PERMISSIONS, TRANSACTION } from 'constants/app.constant';
 
 // ----------------------------------------------------------------------
 
-export function DepositFiilters({
+export function DepositFilters({
   table,
   onApplyFilters = () => {},
   onClearFilters = () => {},
@@ -32,6 +32,8 @@ export function DepositFiilters({
   const [searchParams] = useSearchParams();
   const filters = getQueryParams(searchParams);
   const { hasPermission } = usePermissions();
+
+  console.log('created at: ', table.getColumn('createdAt'));
 
   return (
     <div className="table-toolbar">
@@ -118,6 +120,8 @@ function SearchInput({ table }) {
 
 function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }) {
   const isFiltered = table.getState().columnFilters.length > 0;
+
+  console.log('table.getState().columnFilters: ', table.getState().columnFilters);
   return (
     <>
       {table.getColumn('status') && (
@@ -135,6 +139,7 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           column={table.getColumn('createdAt')}
           title={t('date') + ' ' + t('range')}
           config={{
+            minDate: new Date().fp_incr(-60),
             maxDate: new Date().fp_incr(1),
             mode: 'range'
           }}
@@ -156,7 +161,7 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
   );
 }
 
-DepositFiilters.propTypes = {
+DepositFilters.propTypes = {
   table: PropTypes.object
 };
 

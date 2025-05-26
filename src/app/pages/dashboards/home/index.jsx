@@ -3,7 +3,7 @@ import { Chart } from 'components/custom/Chart';
 import { CustomSelect } from 'components/custom/CustomSelect';
 import { DashboardCard } from 'components/custom/DashboardCard';
 import { Page } from 'components/shared/Page';
-import { Button, Card, Select } from 'components/ui';
+import { Button, Card, Select, Skeleton } from 'components/ui';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import AuthService from 'services/auth.services';
@@ -11,6 +11,10 @@ import DashboardService from 'services/dashboard.services';
 import KPISummaryList from './kpi-summary-list/list';
 import TopGames from './top-game-list/list';
 import TopPlayers from './top-player-list/list';
+import { DatePicker } from 'components/shared/form/Datepicker';
+import dayjs from 'dayjs';
+import { getEndDate } from 'helpers/functions';
+import { useLocaleContext } from 'app/contexts/locale/context';
 
 export default function Home() {
   const [cardResponse, setCardResponse] = useState({});
@@ -39,6 +43,18 @@ export default function Home() {
   const [casinoError, setCasinoError] = useState(null);
   const [isCasinoLoading, setIsCasinoLoading] = useState(false);
   const [redata, setRedata] = useState([]);
+  const { locale } = useLocaleContext();
+
+  const [dateFilters, setDateFilters] = useState({
+    startDate: dayjs().locale(locale).subtract(15, 'days').format('YYYY-MM-DD'),
+    endDate: dayjs().locale(locale).format('YYYY-MM-DD')
+  });
+
+  const [dateFilterApplied, setDateFilterApplied] = useState(false);
+
+  const onDateChange = (data) => {
+    setDateFilters({ startDate: data[0], endDate: data[1] });
+  };
 
   const timeRangeOptions = [
     { value: 1, label: 'Last 30 days' },
@@ -80,11 +96,9 @@ export default function Home() {
   const fetchDepositStats = async () => {
     try {
       setIsDepositLoading(true);
-      const result = await DashboardService.getDepositStats();
+      const result = await DashboardService.getDepositStats(dateFilters);
 
       if (result.status === 200) {
-        console.log('result.response.data', result.response.data);
-
         const data = result.response.data;
         setRedata(data);
 
@@ -277,11 +291,9 @@ export default function Home() {
   const fetchCasinoStats = async () => {
     try {
       setIsCasinoLoading(true);
-      const result = await DashboardService.getCasinoStats();
+      const result = await DashboardService.getCasinoStats(dateFilters);
 
       if (result.status === 200) {
-        console.log('result.response.data', result.response.data);
-
         const data = result.response.data;
 
         setCasinoResponse({
@@ -369,7 +381,7 @@ export default function Home() {
   const fetchGGRReport = async () => {
     try {
       setIsGGRLoading(true);
-      const result = await DashboardService.getGGRReport();
+      const result = await DashboardService.getGGRReport(dateFilters);
 
       if (result.status === 200) {
         console.log('result.response.data', result.response.data);
@@ -467,7 +479,7 @@ export default function Home() {
   const fetchLoggedInPlayers = async () => {
     try {
       setIsLoggedInLoading(true);
-      const result = await DashboardService.getLoggedInPlayers();
+      const result = await DashboardService.getLoggedInPlayers(dateFilters);
 
       if (result.status === 200) {
         console.log('result.response.data', result.response.data);
@@ -530,7 +542,7 @@ export default function Home() {
   const fetchActivePlayers = async () => {
     try {
       setIsActivePlayersLoading(true);
-      const result = await DashboardService.getActivePlayers();
+      const result = await DashboardService.getActivePlayers(dateFilters);
 
       if (result.status === 200) {
         console.log('result.response.data', result.response.data);
@@ -776,7 +788,17 @@ export default function Home() {
     fetchDemographicReport();
     fetchCountryList();
     fetchCasinoStats();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dateFilterApplied]);
+
+  const onDateResetFilters = () => {
+    setDateFilters({
+      startDate: dayjs().locale(locale).subtract(15, 'days').format('YYYY-MM-DD'),
+      endDate: dayjs().locale(locale).format('YYYY-MM-DD')
+    });
+
+    setDateFilterApplied(false);
+  };
 
   return (
     <Page title="Homepage">
@@ -848,6 +870,34 @@ export default function Home() {
               maskShape="is-diamond"
             />
           </div>
+
+          <div className="m-2 flex w-full flex-wrap items-center gap-2">
+            <DatePicker
+              onChange={onDateChange}
+              options={{
+                mode: 'range',
+                dateFormat: 'Y-m-d',
+                defaultDate: [dateFilters?.startDate, dateFilters?.endDate]
+              }}
+              placeholder="Choose date..."
+            />
+
+            <Button
+              type="submit"
+              color="primary"
+              className="rounded px-4 py-2 font-semibold text-white"
+              onClick={() => setDateFilterApplied(true)}>
+              Apply
+            </Button>
+            <Button
+              type="submit"
+              color="warning"
+              className="rounded px-4 py-2 font-semibold text-white"
+              onClick={onDateResetFilters}>
+              Reset
+            </Button>
+          </div>
+
           <div className="-mx-2 flex flex-wrap pt-2">
             {!isDepositLoading && depositResponse && (
               <div className="mb-4 w-full px-2 md:w-1/2" id="chart-container">

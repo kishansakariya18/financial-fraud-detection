@@ -52,7 +52,17 @@ export function BetSlipFilters({
         {hasPermission(PERMISSIONS.REPORT.BETSLIP_EXPORT_REPORT) && (
           <ExportCSV
             filters={Object.fromEntries([...searchParams])}
-            url={`${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.REPORTS.BETSLIP_EXPORT}?startDate=${filters.startDate ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&endDate=${filters.endDate ? String(dayjs(+filters.endDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&keyword=${filters.keyword || ''}&stage=${filters.stage ? getStageAppToApi(filters.stage) : ''}&type=${filters.type ? mapType(filters.type) : ''}`}
+            url={`${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.REPORTS.BETSLIP_EXPORT}?startDate=${filters.startDate ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&endDate=${
+              filters.endDate
+                ? String(
+                    dayjs(+filters.endDate)
+                      .hour(23)
+                      .minute(59)
+                      .second(59)
+                      .format('YYYY-MM-DD HH:mm:ss')
+                  )
+                : ''
+            }&keyword=${filters.keyword || ''}&stage=${filters.stage ? getStageAppToApi(filters.stage) : ''}&type=${filters.type ? mapType(filters.type) : ''}`}
           />
         )}
       </div>
