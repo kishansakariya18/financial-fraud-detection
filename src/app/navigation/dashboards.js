@@ -5,7 +5,7 @@ import { users } from './users';
 import { platform } from './platoform';
 import { country } from './country';
 import { reports } from './report';
-import { payment } from './payment';
+// import { payment } from './payment';
 import { playerKyc } from './player-kyc';
 import { casinoManagement } from './casino-management';
 import { affliate } from './affiliates';
@@ -40,7 +40,7 @@ export const dashboards = () => ({
     country,
     pages,
     frontend,
-    payment,
+    // payment,
     roles,
     reports,
     playerKyc,

@@ -1,4 +1,3 @@
-import { DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import { arrayMove } from '@dnd-kit/sortable';
 import { useEffect, useState } from 'react';
 import HomePageService from 'services/home-page.services';
@@ -8,6 +7,7 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 import clsx from 'clsx';
+import { useNavigate } from 'react-router';
 
 export default function ReOrderCategory() {
   const [categoryList, setCategoryList] = useState([]);
@@ -15,11 +15,9 @@ export default function ReOrderCategory() {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [submitResponse, setSubmitResponse] = useState(null);
   const [submitError, setSubmitError] = useState(null);
+  const navigate = useNavigate();
 
   const { t } = useTranslation();
-
-  console.log('categoryList: ', categoryList);
-  console.log('updatedData: ', updatedData);
 
   const columns = [
     { accessorKey: 'draggable', header: 'Drag' },
@@ -36,8 +34,6 @@ export default function ReOrderCategory() {
       }
     });
 
-    console.log('result ::> ', result);
-
     if (result && result.status === 200) {
       const apiData = result.response.data;
 
@@ -53,7 +49,7 @@ export default function ReOrderCategory() {
       return {
         status: 200,
         data: apiData,
-        totalRecords: parseInt(result?.response?.totalRecords) || DEFAULT_PER_PAGE_RECORD
+        totalRecords: parseInt(result?.response?.totalRecords)
       };
     }
     return { status: result.status, error: result.error };
@@ -62,7 +58,7 @@ export default function ReOrderCategory() {
   if (!submitLoading && !submitError && submitResponse) {
     toast.success(submitResponse);
     setSubmitResponse('');
-    // fetchHomeCategoryList();
+    navigate('/home-category');
   }
   if (!submitLoading && submitError) {
     toast.error(submitError);
@@ -72,8 +68,6 @@ export default function ReOrderCategory() {
   const updateHomeCategoryData = async () => {
     try {
       setSubmitLoading(true);
-
-      console.log('updatedData: ', updatedData);
       const result = await HomePageService.reorderCategory({ updatedCategories: updatedData });
 
       if (result.status === 200) {
@@ -130,6 +124,7 @@ export default function ReOrderCategory() {
               type="button"
               className="ml-6 mt-4"
               color="primary"
+              disabled={!updatedData || updatedData.length === 0}
               onClick={updateHomeCategoryData}>
               {t('submit')}
             </Button>

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { toast } from 'sonner';
-import { useParams, useSearchParams } from 'react-router';
+import { NavLink, useParams, useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
 
 // Local Imports - UI, Services, Helpers, Utils
@@ -193,7 +193,8 @@ export default function AffiliateTransactions() {
             />
           </div>
           <p className="mt-2 text-xs+">
-            {t('per') + ' ' + t('deposit')} : {affiliateDataRef.current?.DepositCommissionAmount}
+            {t('per') + ' ' + t('deposit')} : {affiliateDataRef.current?.DepositCommissionAmount}{' '}
+            {+affiliateDataRef.current?.DepositCommissionType === 1 ? '%' : ''}
           </p>
         </div>
         <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
@@ -207,8 +208,19 @@ export default function AffiliateTransactions() {
           </div>
           <p className="mt-2 text-xs+">
             {t('user') + ' ' + t('loss')} : {affiliateDataRef.current?.UserLossCommissionAmount}
+            {+affiliateDataRef.current?.UserLossCommissionType === 1 ? '%' : ''}
           </p>
         </div>
+      </div>
+
+      <div className="m-6 rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
+        <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('Link')}</p>
+        <NavLink
+          target="_blank"
+          to={`https://web-demo-backoffice-betnexus.sourcecodelab.co/${affiliateDataRef.current?.ReferralCode}`}
+          className="tracking-wide text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500">
+          {`https://web-demo-backoffice-betnexus.sourcecodelab.co/${affiliateDataRef.current?.ReferralCode}`}
+        </NavLink>
       </div>
 
       <Toolbar

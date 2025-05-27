@@ -9,10 +9,13 @@ import PropTypes from 'prop-types';
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
 
-import { TbStatusChange } from 'react-icons/tb';
+import { TbEdit, TbStatusChange } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
 
 import GameService from 'services/game.services';
+import { useNavigate } from 'react-router';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 const confirmMessages = {
   pending: {
@@ -20,7 +23,7 @@ const confirmMessages = {
     actionText: 'Submit'
   },
   success: {
-    title: 'GAme Status Changed',
+    title: 'Game Status Changed',
     description: 'Game Status has been changed successfully'
   }
 };
@@ -32,6 +35,8 @@ export function RowActions({ row, table }) {
   const [confirmStatusLoading, setConfirmStatusLoading] = useState(false);
   const [statusSuccess, setStatusSuccess] = useState(false);
   const [statusError, setStatusError] = useState(false);
+  const { hasPermission } = usePermissions();
+  const navigate = useNavigate();
 
   const closeModal = () => {
     setStatusModalOpen(false);
@@ -46,10 +51,7 @@ export function RowActions({ row, table }) {
   const handleChangeStatusRows = useCallback(async () => {
     setConfirmStatusLoading(true);
     const result = await GameService.changeGameStatus(row.original.id);
-    console.log('result:', result);
     if (result.status === 200) {
-      console.log('table.options: ', table.options);
-
       table.options.meta?.deleteRow(row);
       setStatusSuccess(true);
     } else {
@@ -80,19 +82,36 @@ export function RowActions({ row, table }) {
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
               className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    onClick={openModal}
-                    className={clsx(
-                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
-                      focus && 'bg-this/10 dark:bg-this-light/10'
-                    )}>
-                    <TbStatusChange className="size-4.5 stroke-1" />
-                    <span>{t('change') + ' ' + t('status')}</span>
-                  </button>
-                )}
-              </MenuItem>
+              {hasPermission(PERMISSIONS.GAME.CHANGE_STATUS) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={openModal}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                        focus && 'bg-this/10 dark:bg-this-light/10'
+                      )}>
+                      <TbStatusChange className="size-4.5 stroke-1" />
+                      <span>{t('change') + ' ' + t('status')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
+              {hasPermission(PERMISSIONS.GAME.EDIT) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={() => navigate(`/casino/games/${row.original.gameUID}/edit`)}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                        focus && 'bg-this/10 dark:bg-this-light/10'
+                      )}>
+                      <TbEdit className="size-4.5 stroke-1" />
+                      <span>{t('edit') + ' ' + t('game')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
             </MenuItems>
           </Transition>
         </Menu>

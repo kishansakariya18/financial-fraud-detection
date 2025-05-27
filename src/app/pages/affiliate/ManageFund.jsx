@@ -132,9 +132,9 @@ const ManageFund = () => {
               <Input
                 {...register('password')}
                 prefix={<LockClosedIcon className="size-5" />}
-                label={t('password')}
+                label={t('transaction') + ' ' + t('password')}
                 error={errors?.password?.message}
-                placeholder={t('enter') + ' ' + t('password')}
+                placeholder={t('enter') + ' ' + t('transaction') + ' ' + t('password')}
               />
             </div>
           </div>

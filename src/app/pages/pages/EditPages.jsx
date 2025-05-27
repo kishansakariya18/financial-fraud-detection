@@ -129,11 +129,11 @@ const EditPages = () => {
     await editPagesAPI({ ...data, content: htmlContent, pageID: pageID });
   };
   return (
-    <Page title={t('edit') + ' ' + t('emailTemplate')}>
+    <Page title={t('edit') + ' ' + t('page')}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
         <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
-            {t('edit') + ' ' + t('emailTemplate') + ' ' + t('form')}
+            {t('edit') + ' ' + t('page') + ' ' + t('form')}
           </h2>
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>

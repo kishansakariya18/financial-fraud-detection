@@ -5,7 +5,6 @@ import { Controller, useForm } from 'react-hook-form';
 import { Button, Input, Textarea } from 'components/ui';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
 import PlayerService from 'services/player.services';
 import { Listbox } from 'components/shared/form/Listbox';
@@ -23,11 +22,6 @@ const ManageFund = () => {
 
   const { playerId } = useParams();
   const { t } = useTranslation();
-
-  const breadcrumbItem = [
-    { title: t('player'), path: '/player' },
-    { title: t('manage') + ' ' + t('fund') }
-  ];
 
   const {
     register,
@@ -93,7 +87,6 @@ const ManageFund = () => {
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
           </div>
-          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
@@ -164,9 +157,9 @@ const ManageFund = () => {
               <Input
                 {...register('password')}
                 prefix={<LockClosedIcon className="size-5" />}
-                label={t('password')}
+                label={t('transaction') + ' ' + t('password')}
                 error={errors?.password?.message}
-                placeholder={t('enter') + ' ' + t('password')}
+                placeholder={t('enter') + ' ' + t('transaction') + ' ' + t('password')}
               />
             </div>
           </div>

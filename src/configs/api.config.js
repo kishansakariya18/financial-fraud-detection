@@ -376,12 +376,13 @@ export const apiConfig = {
     },
     GAME: {
       LIST: '/admin/casino-management/games/list',
+      DETAILS: '/admin/casino-management/games/:gameUID/details',
       CREATE: '/admin/casino-management/games/create',
       EDIT: '/admin/casino-management/games/:gameId/edit',
       CHANGE_STATUS: '/admin/casino-management/games/:gameId/change-status',
       DELETE: '/admin/casino-management/games/:gameId/delete',
       PROVIDER_LIST: '/admin/casino-management/games/providers',
-      CATEGORY_LIST: '/admin/casino-management/games/categories'
+      CATEGORY_LIST: '/admin/casino-management/category/list'
     },
     REPORTS: {
       BETSLIP: '/admin/reports/betslip-transactions',

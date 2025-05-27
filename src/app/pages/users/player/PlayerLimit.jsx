@@ -1,7 +1,6 @@
 // Local Imports
 import { Box, Button, Input, Skeleton, Switch } from 'components/ui';
 import { Page } from 'components/shared/Page';
-import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { useParams } from 'react-router';
@@ -15,7 +14,6 @@ import { DatePicker } from 'components/shared/form/Datepicker';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 import { useTranslation } from 'react-i18next';
 
-const breadcrumbs = [{ title: 'Players', path: '/player' }, { title: 'Limit' }];
 const exclusionTimeOptions = [
   { label: '1 day', value: 1 },
   { label: '7 day', value: 2 },
@@ -155,7 +153,6 @@ const PlayerLimit = () => {
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
           </div>
-          <Breadcrumbs items={breadcrumbs} className="max-sm:hidden" />
         </div>
 
         <form onSubmit={handleSubmit(handlePlayerLimitUpdate)}>

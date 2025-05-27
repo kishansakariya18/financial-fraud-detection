@@ -316,5 +316,8 @@
   "frontend": "Front End",
   "reorder": "Reorder",
   "betSlip": "Bet Slip",
-  "playerBalance": "Player Balance"
+  "playerBalance": "Player Balance",
+  "maxBetAmount": "Max Bet Amount",
+  "minBetAmount": "Min Bet Amount",
+  "categories": "Categories"
 }

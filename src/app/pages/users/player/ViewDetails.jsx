@@ -7,15 +7,15 @@ import { Button, Card, Skeleton } from 'components/ui';
 import { useNavigate, useParams } from 'react-router';
 import { Page } from 'components/shared/Page';
 import { playerStatusToApp, selfExclusionMapper } from './helper';
-import { getDateInUTCToTimeZone } from 'helpers/functions';
+import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
 import PlayerService from 'services/player.services';
-import { showImage } from 'utils/showImage';
-import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+// import { showImage } from 'utils/showImage';
 import { useTranslation } from 'react-i18next';
 import { useClipboard } from 'hooks';
 import { DocumentDuplicateIcon } from '@heroicons/react/20/solid';
 import { toast } from 'sonner';
-const breadcrumbs = [{ title: 'Players', path: '/player' }, { title: 'Details' }];
+import RenderImage from 'components/ui/custom/ImageRender';
+import apiConfig from 'configs/api.config';
 
 export function ViewDetails() {
   const { t } = useTranslation();
@@ -60,7 +60,6 @@ export function ViewDetails() {
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
           </div>
-          <Breadcrumbs items={breadcrumbs} className="max-sm:hidden" />
         </div>
 
         <div className="col-span-12 sm:col-span-8 lg:col-span-9">
@@ -80,6 +79,18 @@ export function ViewDetails() {
                       {t('userName')}
                     </p>
                     <p>{response?.Username}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('firstName')}
+                    </p>
+                    <p>{response?.FirstName || '-'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('lastName')}
+                    </p>
+                    <p>{response?.LastName || '-'}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
@@ -128,12 +139,21 @@ export function ViewDetails() {
                     </p>
                     <p>{response?.RealCash || '0'}</p>
                   </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('bonus')}
+                    </p>
+                    <p>{response?.Bonus || '0'}</p>
+                  </div>
 
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {t('status')}
                     </p>
-                    <p>{+response.Status >= 0 && playerStatusToApp(+response?.Status)}</p>
+                    <p>
+                      {+response.AccountStatus >= 0 &&
+                        capitalizeFirstLetter(playerStatusToApp(+response?.AccountStatus))}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
@@ -197,7 +217,13 @@ export function ViewDetails() {
                       {t('image') + ' ' + t('preview')}
                     </p>
                     <div className="mt-2">
-                      {response?.ImageName && showImage('user', response?.ImageName)}
+                      {/* {response?.ImageName && showImage('user', response?.ImageName)} */}
+                      {response?.ImageName && (
+                        <RenderImage
+                          value={`${apiConfig.baseURL.S3_URL}/user/${response?.ImageName}`}
+                          id={'gameImage'}
+                        />
+                      )}
                       {response?.ImageName}
                     </div>
                   </div>

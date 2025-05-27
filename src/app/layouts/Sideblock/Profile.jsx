@@ -35,15 +35,14 @@ export function Profile() {
 
   const userData = useSelector((data) => data.auth.userData);
 
-  console.log('user data: ', userData);
-
   return (
     <Popover className="relative flex">
       <PopoverButton
         as={Avatar}
         size={9}
         role="button"
-        src="/images/100x100.png"
+        name={userData?.FirstName + ' ' + userData?.LastName}
+        src={null}
         indicator={<AvatarDot color="success" className="-m-0.5 size-3 ltr:right-0 rtl:left-0" />}
       />
       <Transition
@@ -59,7 +58,11 @@ export function Profile() {
           {({ close }) => (
             <>
               <div className="flex items-center gap-4 rounded-t-lg bg-gray-100 px-4 py-5 dark:bg-dark-800">
-                <Avatar size={14} src="/images/100x100.png" />
+                <Avatar
+                  size={14}
+                  src={null}
+                  name={userData?.FirstName + ' ' + userData?.LastName}
+                />
                 <div>
                   <Link
                     className="text-base font-medium text-gray-700 hover:text-primary-600 focus:text-primary-600 dark:text-dark-100 dark:hover:text-primary-400 dark:focus:text-primary-400"

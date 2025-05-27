@@ -48,7 +48,7 @@ export const mapType = (item) => {
 };
 export const responseMapper = (apiData) => {
   const resultData = apiData.map((data) => ({
-    id: data.UserBetOutcomeID,
+    id: data.ID,
     userId: data.UserID,
     betPlacementId: data.BetPlacementTransactionID,
     username: data.Username,

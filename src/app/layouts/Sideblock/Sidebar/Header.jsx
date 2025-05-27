@@ -15,9 +15,6 @@ import { useThemeContext } from 'app/contexts/theme/context';
 export function Header() {
   const { close } = useSidebarContext();
   const { isDark } = useThemeContext();
-
-  console.log('theme: ', isDark);
-
   return (
     <header className="relative flex h-[61px] shrink-0 items-center justify-between ltr:pr-4 rtl:pl-2 rtl:pr-3">
       {/* <div className="flex items-center justify-start gap-4 pt-3"> */}
