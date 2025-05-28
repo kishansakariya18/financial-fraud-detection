@@ -192,6 +192,50 @@ const GameService = {
     } catch (error) {
       console.log('error: ', error);
     }
+  },
+  getGameSegmnetation: async (gameId) => {
+    try {
+      const endpoint = replaceText(
+        apiConfig.endPoints.GAME.GET_GAME_SEGMENTATION,
+        ':gameId',
+        gameId
+      );
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${endpoint}`,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error game getGameSegmnetation: ', err);
+    }
+  },
+  addGameSegmnetation: async (gameId, segments) => {
+    try {
+      console.log('segments', segments);
+      const endpoint = replaceText(
+        apiConfig.endPoints.GAME.ADD_GAME_SEGMENTATION,
+        ':gameId',
+        gameId
+      );
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${endpoint}`,
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          segments
+        }
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error game addGameSegmnetation: ', err);
+    }
   }
 };
 
