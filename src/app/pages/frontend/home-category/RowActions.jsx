@@ -167,7 +167,12 @@ export function RowActions({ row, table }) {
         onClose={onCloseDialogBox}
         onOpen={onOpenDialogBox}
         onOk={onOkDialogBox}>
-        <EditHomeCategory onClose={onOkDialogBox} homeCategoryId={row?.original?.id} />
+        <EditHomeCategory
+          onClose={onOkDialogBox}
+          homeCategoryId={row?.original?.id}
+          categoryName={row?.original?.category}
+          categoryId={row?.original?.categoryId}
+        />
       </CustomModal>
     </>
   );

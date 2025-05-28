@@ -152,8 +152,6 @@ const EditGame = () => {
                 error={errors?.gameName?.message}
                 placeholder={t('enter') + ' ' + t('game') + ' ' + t('name')}
               />
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
               <Controller
                 render={({ field }) => (
                   <Listbox

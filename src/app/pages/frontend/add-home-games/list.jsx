@@ -86,12 +86,12 @@ export default function AddHomeGames() {
   if (!submitLoading && !submitError && submitResponse) {
     toast.success(submitResponse);
     table.options?.meta?.fetchNewList();
-
     setSubmitResponse('');
-    // navigate(`/casino/provider/restricted-countries/${providerId}/list`);
+    setChecked([]);
   }
   if (!submitLoading && submitError) {
     toast.error(submitError);
+    setSubmitError('');
   }
 
   useEffect(() => {

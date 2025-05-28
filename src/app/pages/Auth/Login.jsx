@@ -1,6 +1,7 @@
 // Import Dependencies
 import { useLocation, useNavigate } from 'react-router';
 import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 
@@ -18,6 +19,7 @@ import { LOCAL_STORAGE } from 'constants/app.constant';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { useThemeContext } from 'app/contexts/theme/context';
+import { useDisclosure } from 'hooks';
 
 // ----------------------------------------------------------------------
 
@@ -46,6 +48,7 @@ export default function Login() {
   const { isDark } = useThemeContext();
 
   const { t } = useTranslation();
+  const [show, { toggle }] = useDisclosure();
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -184,13 +187,20 @@ export default function Login() {
                 />
                 <Input
                   label={t('password')}
+                  type={show ? 'text' : 'password'}
                   placeholder={t('enter') + ' ' + t('password')}
-                  type="password"
-                  prefix={
-                    <LockClosedIcon
-                      className="size-5 transition-colors duration-200"
-                      strokeWidth="1"
-                    />
+                  prefix={<LockClosedIcon className="size-4.5" />}
+                  suffix={
+                    <Button
+                      variant="flat"
+                      className="pointer-events-auto size-6 shrink-0 rounded-full p-0"
+                      onClick={toggle}>
+                      {show ? (
+                        <EyeSlashIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
+                      ) : (
+                        <EyeIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
+                      )}
+                    </Button>
                   }
                   {...register('password')}
                   error={errors?.password?.message}

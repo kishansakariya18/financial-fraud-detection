@@ -8,7 +8,7 @@ import { reports } from './report';
 // import { payment } from './payment';
 import { playerKyc } from './player-kyc';
 import { casinoManagement } from './casino-management';
-import { affliate } from './affiliates';
+// import { affliate } from './affiliates';
 import { segmentation } from './segmentation';
 import { emailTemplate } from './email-template';
 import { peomocode } from './promocode';
@@ -36,16 +36,16 @@ export const dashboards = () => ({
       Icon: MonitorIcon
     },
     users,
+    roles,
     platform,
     country,
     pages,
     frontend,
     // payment,
-    roles,
     reports,
     playerKyc,
     casinoManagement,
-    affliate,
+    // affliate,
     segmentation,
     emailTemplate,
     peomocode,

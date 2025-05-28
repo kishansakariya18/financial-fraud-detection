@@ -64,6 +64,8 @@ const PlayerLimit = () => {
             dailyLossLimit: result.DailyLossLimit,
             weeklyLossLimit: result.WeeklyLossLimit,
             monthlyLossLimit: result.MonthlyLossLimit,
+            oneTimeBetLimit: result.BetLimit,
+            oneTimeWinLimit: result.WinLimit,
             selfExclusionType: result.ExclusionType,
             exclusionStartAt: result.ExclusionStartAt
               ? getDateInUTCToTimeZone(result.ExclusionStartAt, 'Asia/Kolkata', 'YYYY-MM-DD HH:mm')
@@ -84,7 +86,9 @@ const PlayerLimit = () => {
             hasMonthlyWithdrawLimit: result.HasMaxWithdrawPerMonthLimit,
             hasDailyLossLimit: result.HasDailyLossLimit || false,
             hasWeeklyLossLimit: result.HasWeeklyLossLimit || false,
-            hasMonthlyLossLimit: result.HasMonthlyLossLimit || false
+            hasMonthlyLossLimit: result.HasMonthlyLossLimit || false,
+            hasOneTimeBetLimit: result.HasBetLimit || false,
+            hasOneTimeWinLimit: result.HasWinLimit || false
           });
         }
       });
@@ -617,7 +621,6 @@ const PlayerLimit = () => {
               </>
             )}
           </div>
-
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
             <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
               {t('reset')}

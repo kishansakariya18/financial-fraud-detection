@@ -78,6 +78,29 @@ const HomePageService = {
       console.log('Error', err);
     }
   },
+  deleteHomeGame: async (homePageGameId) => {
+    try {
+      console.log('homePageGameId ::>>> ', homePageGameId);
+
+      const endpoint = replaceText(
+        apiConfig.endPoints.HOME_PAGE.DELETE_HOME_GAME,
+        ':homePageGameId',
+        homePageGameId
+      );
+
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${endpoint}`,
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
   getCategories: async () => {
     try {
       const response = await sendRequest({

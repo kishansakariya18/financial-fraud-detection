@@ -408,7 +408,8 @@ export const apiConfig = {
       ADD_HOME_GAME_LIST: '/admin/home-page/home-category/home-game/add-game-list',
       ADD_HOME_GAMES: '/admin/home-page/home-category/home-game/add-games',
       REORDER_CATEGORY: '/admin/home-page/home-category/reorder-category',
-      REORDER_GAMES: '/admin/home-page/home-category/home-game/reorder-games'
+      REORDER_GAMES: '/admin/home-page/home-category/home-game/reorder-games',
+      DELETE_HOME_GAME: '/admin/home-page/home-category/home-game/:homePageGameId/delete'
     }
   }
 };

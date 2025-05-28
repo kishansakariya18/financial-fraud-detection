@@ -871,9 +871,10 @@ export default function Home() {
             />
           </div>
 
-          <div className="m-2 flex w-full flex-wrap items-center gap-2">
+          <div className="mt-2 flex w-full flex-wrap items-center gap-2">
             <DatePicker
               onChange={onDateChange}
+              className="w-full sm:w-[250px] md:w-[300px] lg:w-[350px] xl:w-[400px]"
               options={{
                 mode: 'range',
                 dateFormat: 'Y-m-d',
@@ -899,6 +900,24 @@ export default function Home() {
           </div>
 
           <div className="-mx-2 flex flex-wrap pt-2">
+            {isDepositLoading && (
+              <div className="mb-4 w-full px-2 md:w-1/2">
+                <div className="flex flex-col border border-gray-150 dark:border-dark-600">
+                  <div className="flex space-x-5 px-5 py-4 rtl:space-x-reverse">
+                    {/* <Skeleton className="size-16 rounded-full" /> */}
+                    <div className="flex flex-1 flex-col justify-between py-2">
+                      <Skeleton className="h-3 w-full rounded" />
+                      <Skeleton className="h-3 w-full rounded" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-48 w-full" />
+                  <div className="w-full px-6 py-4">
+                    <Skeleton className="h-3 w-full rounded" />
+                    <Skeleton className="mt-4 h-3 w-8/12 rounded" />
+                  </div>
+                </div>
+              </div>
+            )}
             {!isDepositLoading && depositResponse && (
               <div className="mb-4 w-full px-2 md:w-1/2" id="chart-container">
                 <Chart data={depositResponse} title={t('deposit')} />
@@ -916,6 +935,26 @@ export default function Home() {
     <div className="w-full md:w-1/2 px-2 mb-4" />
   )} */}
 
+            {isCasinoLoading && (
+              <div className="mb-4 w-full px-2 md:w-1/2">
+                <div className="flex flex-col border border-gray-150 dark:border-dark-600">
+                  <div className="flex space-x-5 px-5 py-4 rtl:space-x-reverse">
+                    {/* <Skeleton className="size-16 rounded-full" /> */}
+                    <div className="flex flex-1 flex-col justify-between py-2">
+                      <Skeleton className="h-3 w-full rounded" />
+                      <Skeleton className="h-3 w-full rounded" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-48 w-full" />
+                  <div className="w-full px-6 py-4">
+                    <Skeleton className="h-3 w-full rounded" />
+                    <Skeleton className="mt-4 h-3 w-8/12 rounded" />
+                  </div>
+                </div>
+                {/* <Skeleton className="col-span-12 sm:col-span-6 lg:col-span-7 xl:col-span-8" /> */}
+              </div>
+            )}
+
             {!isCasinoLoading && casinoResponse && (
               <div className="mb-4 w-full px-2 md:w-1/2">
                 <Chart data={casinoResponse} title={t('casino')} />
@@ -923,9 +962,48 @@ export default function Home() {
             )}
             {!isCasinoLoading && !casinoResponse && <div className="mb-4 w-full px-2 md:w-1/2" />}
 
+            {isGGRLoading && (
+              <div className="mb-4 w-full px-2">
+                <div className="flex flex-col border border-gray-150 dark:border-dark-600">
+                  <div className="flex space-x-5 px-5 py-4 rtl:space-x-reverse">
+                    {/* <Skeleton className="size-16 rounded-full" /> */}
+                    <div className="flex flex-1 flex-col justify-between py-2">
+                      <Skeleton className="h-3 w-full rounded" />
+                      <Skeleton className="h-3 w-full rounded" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-48 w-full" />
+                  <div className="w-full px-6 py-4">
+                    <Skeleton className="h-3 w-full rounded" />
+                    <Skeleton className="mt-4 h-3 w-8/12 rounded" />
+                  </div>
+                </div>
+                {/* <Skeleton className="col-span-12 sm:col-span-6 lg:col-span-7 xl:col-span-8" /> */}
+              </div>
+            )}
+
             {!isGGRLoading && ggrResponse && (
               <div className="mb-4 w-full px-2">
                 <Chart data={ggrResponse} title={`${t('ggr')} ${t('report')}`} />
+              </div>
+            )}
+
+            {isLoggedInLoading && (
+              <div className="mb-4 w-full px-2 md:w-1/2">
+                <div className="flex flex-col border border-gray-150 dark:border-dark-600">
+                  <div className="flex space-x-5 px-5 py-4 rtl:space-x-reverse">
+                    {/* <Skeleton className="size-16 rounded-full" /> */}
+                    <div className="flex flex-1 flex-col justify-between py-2">
+                      <Skeleton className="h-3 w-full rounded" />
+                      <Skeleton className="h-3 w-full rounded" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-48 w-full" />
+                  <div className="w-full px-6 py-4">
+                    <Skeleton className="h-3 w-full rounded" />
+                    <Skeleton className="mt-4 h-3 w-8/12 rounded" />
+                  </div>
+                </div>
               </div>
             )}
 
@@ -934,9 +1012,47 @@ export default function Home() {
                 <Chart data={loggedInResponse} title={`${t('loggedIn')} ${t('players')}`} />
               </div>
             )}
+
+            {isActivePlayersLoading && (
+              <div className="mb-4 w-full px-2 md:w-2/3">
+                <div className="flex flex-col border border-gray-150 dark:border-dark-600">
+                  <div className="flex space-x-5 px-5 py-4 rtl:space-x-reverse">
+                    {/* <Skeleton className="size-16 rounded-full" /> */}
+                    <div className="flex flex-1 flex-col justify-between py-2">
+                      <Skeleton className="h-3 w-full rounded" />
+                      <Skeleton className="h-3 w-full rounded" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-48 w-full" />
+                  <div className="w-full px-6 py-4">
+                    <Skeleton className="h-3 w-full rounded" />
+                    <Skeleton className="mt-4 h-3 w-8/12 rounded" />
+                  </div>
+                </div>
+              </div>
+            )}
             {!isActivePlayersLoading && activePlayersResponse && (
               <div className="mb-4 w-full px-2 md:w-2/3">
                 <Chart data={activePlayersResponse} title={`${t('active')} ${t('players')}`} />
+              </div>
+            )}
+
+            {isDemographicLoading && (
+              <div className="mb-4 w-full px-2">
+                <div className="flex flex-col border border-gray-150 dark:border-dark-600">
+                  <div className="flex space-x-5 px-5 py-4 rtl:space-x-reverse">
+                    {/* <Skeleton className="size-16 rounded-full" /> */}
+                    <div className="flex flex-1 flex-col justify-between py-2">
+                      <Skeleton className="h-3 w-full rounded" />
+                      <Skeleton className="h-3 w-full rounded" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-48 w-full" />
+                  <div className="w-full px-6 py-4">
+                    <Skeleton className="h-3 w-full rounded" />
+                    <Skeleton className="mt-4 h-3 w-8/12 rounded" />
+                  </div>
+                </div>
               </div>
             )}
 

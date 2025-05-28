@@ -11,7 +11,7 @@ export const users = {
   title: 'Users',
   transKey: 'nav.users.users',
   Icon: UsersIcon,
-  permission: [PERMISSIONS.USER.LIST, PERMISSIONS.ADMIN.LIST],
+  permission: [PERMISSIONS.USER.LIST, PERMISSIONS.ADMIN.LIST, PERMISSIONS.AFFILIATES.LIST],
   childs: [
     {
       id: 'users.admin',
@@ -30,6 +30,15 @@ export const users = {
       transKey: 'nav.users.players',
       Icon: UserGroupIcon,
       permission: PERMISSIONS.USER.LIST
+    },
+    {
+      id: 'affiliate',
+      type: NAV_TYPE_ITEM,
+      path: '/affiliate',
+      title: 'Affiliates',
+      transKey: 'affiliates',
+      Icon: UsersIcon,
+      permission: PERMISSIONS.AFFILIATES.LIST
     }
   ]
 };

@@ -355,7 +355,8 @@ export const PERMISSIONS = {
     VIEW_HOME_GAMES: 'frontend-home-game-list',
     ADD_HOME_GAMES: 'frontend-add-home-games',
     CHANGE_HOME_GAME_STATUS: 'frontend-change-home-game-status',
-    REORDER_HOME_GAMES: 'frontend-reorder-home-games'
+    REORDER_HOME_GAMES: 'frontend-reorder-home-games',
+    DELETE_HOME_GAME: 'frontend-delete-home-game'
   },
   BUX_AI: {
     VIEW: 'bux-ai-view'

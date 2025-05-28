@@ -8,6 +8,8 @@ import { useTranslation } from 'react-i18next';
 // import { useParams } from 'react-router';
 import { Listbox } from 'components/shared/form/Listbox';
 import HomePageService from 'services/home-page.services';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { changeCategorySchema } from './schema';
 
 const EditHomeCategory = ({ onClose, homeCategoryId }) => {
   const [error, setError] = useState('');
@@ -22,7 +24,9 @@ const EditHomeCategory = ({ onClose, homeCategoryId }) => {
     reset,
     control,
     formState: { errors }
-  } = useForm({});
+  } = useForm({
+    resolver: yupResolver(changeCategorySchema)
+  });
 
   const editHomeCategory = async (requestObject) => {
     setLoading(true);
