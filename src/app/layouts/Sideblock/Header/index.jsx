@@ -29,10 +29,9 @@ export function Header() {
       <div className="contents xl:hidden">
         <SidebarToggleBtn />
       </div>
-
-      {hasPermission(PERMISSIONS.BUX_AI.VIEW) && (
-        <div className="flex items-center gap-3 sm:flex-1">
-          <div className="flex-1"></div>
+      <div className="flex items-center gap-3 sm:flex-1">
+        <div className="flex-1"></div>
+        {hasPermission(PERMISSIONS.BUX_AI.VIEW) && (
           <Button
             unstyled
             onClick={() => window.open(`${apiConfig.baseURL.AI_CHAT_URL}?token=${token}`)}
@@ -42,10 +41,10 @@ export function Header() {
               <span className="max-sm:hidden">Try Bux AI</span>
             </div>
           </Button>
-          <LanguageSelector />
-          <Profile />
-        </div>
-      )}
+        )}
+        <LanguageSelector />
+        <Profile />
+      </div>
     </header>
   );
 }

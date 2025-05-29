@@ -320,5 +320,13 @@
   "maxBetAmount": "Max Bet Amount",
   "minBetAmount": "Min Bet Amount",
   "categories": "Categories",
-  "delete_key": "Delete"
+  "delete_key": "Delete",
+  "appearance": "Appearance",
+  "appearance_desc" : "Customize the appearance of the app. Select Theme colors and mode, to change the look ofthe app.",
+  "primary": "Primary",
+  "secondary": "Secondary",
+  "font": "Font",
+  "color": "Color",
+  "appearance_status_desc": "Are you sure you want to update this Appearance's status ?",
+  "appearance_status_suceess": "Appearance Status has been changed successfully"
 }
