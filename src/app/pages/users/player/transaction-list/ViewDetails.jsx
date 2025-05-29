@@ -41,7 +41,7 @@ export function ViewDetails({ transactionId, onClose }) {
 
   return (
     <Page title={pageTitle}>
-      <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
+      <div className="transition-content grid w-full grid-rows-[auto_1fr] pb-8">
         <div className="col-span-12 sm:col-span-8 lg:col-span-9">
           <h6 className="mt-2 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
             {t('information')}
@@ -68,8 +68,8 @@ export function ViewDetails({ transactionId, onClose }) {
             <div>
               <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('status')}</p>
               <p>
-                {response?.Status >= 0 &&
-                  capitalizeFirstLetter(transactionStatusToAPP(response.Status))}
+                {response?.TransactionStatus >= 0 &&
+                  capitalizeFirstLetter(transactionStatusToAPP(response.TransactionStatus))}
               </p>
             </div>
 

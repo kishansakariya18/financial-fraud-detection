@@ -379,10 +379,11 @@ export const apiConfig = {
       DETAILS: '/admin/casino-management/games/:gameUID/details',
       CREATE: '/admin/casino-management/games/create',
       EDIT: '/admin/casino-management/games/:gameId/edit',
-      CHANGE_STATUS: '/admin/casino-management/games/:gameId/change-status',
       DELETE: '/admin/casino-management/games/:gameId/delete',
       PROVIDER_LIST: '/admin/casino-management/games/providers',
-      CATEGORY_LIST: '/admin/casino-management/category/list'
+      CATEGORY_LIST: '/admin/casino-management/category/list',
+      GET_GAME_SEGMENTATION: '/admin/casino-management/games/:gameId/segmentation',
+      ADD_GAME_SEGMENTATION: '/admin/casino-management/games/:gameId/segmentation'
     },
     REPORTS: {
       BETSLIP: '/admin/reports/betslip-transactions',

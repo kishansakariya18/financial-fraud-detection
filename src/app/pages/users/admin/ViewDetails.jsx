@@ -59,6 +59,12 @@ const ViewDetails = () => {
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                  {t('adminUid')}:
+                </p>
+                <p>{response?.AdminUID}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                   {t('userName')}:
                 </p>
                 <p>{response?.Username}</p>
@@ -132,8 +138,22 @@ const ViewDetails = () => {
                 <p>{getDateInUTCToTimeZone(response?.DateCreated)}</p>
               </div>
               <div>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                  {t('isSuperAdmin')}:
+                </p>
+                <p>{response?.IsSuperAdmin ? t('yes') : t('no')}</p>
+              </div>
+              <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('role')}:</p>
                 <p>{response?.role?.RoleName}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                  {t('lastLoginAt')}:
+                </p>
+                <p>
+                  {response?.LastLoginAt ? getDateInUTCToTimeZone(response?.LastLoginAt) : 'N/A'}
+                </p>
               </div>
             </div>
 
