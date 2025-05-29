@@ -1,6 +1,6 @@
 // Import Dependencies
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
-import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
+import { EllipsisHorizontalIcon, NewspaperIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -16,6 +16,8 @@ import GameService from 'services/game.services';
 import { useNavigate } from 'react-router';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
+import { CustomModal } from 'components/custom';
+import AddEditSegmentation from './AddEditSegmentation';
 
 const confirmMessages = {
   pending: {
@@ -37,6 +39,7 @@ export function RowActions({ row, table }) {
   const [statusError, setStatusError] = useState(false);
   const { hasPermission } = usePermissions();
   const navigate = useNavigate();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const closeModal = () => {
     setStatusModalOpen(false);
@@ -62,6 +65,16 @@ export function RowActions({ row, table }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [row]);
 
+  const onOpenDialogBox = () => {
+    setIsDialogOpen(true);
+  };
+  const onCloseDialogBox = () => {
+    setIsDialogOpen(false);
+  };
+  const onOkDialogBox = async () => {
+    await table.options.meta?.editRow(row);
+    setIsDialogOpen(false);
+  };
   const state = statusError ? 'error' : statusSuccess ? 'success' : 'pending';
 
   return (
@@ -98,19 +111,34 @@ export function RowActions({ row, table }) {
                 </MenuItem>
               )}
               {hasPermission(PERMISSIONS.GAME.EDIT) && (
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      onClick={() => navigate(`/casino/games/${row.original.gameUID}/edit`)}
-                      className={clsx(
-                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
-                        focus && 'bg-this/10 dark:bg-this-light/10'
-                      )}>
-                      <TbEdit className="size-4.5 stroke-1" />
-                      <span>{t('edit') + ' ' + t('game')}</span>
-                    </button>
-                  )}
-                </MenuItem>
+                <>
+                  <MenuItem>
+                    {({ focus }) => (
+                      <button
+                        onClick={() => navigate(`/casino/games/${row.original.gameUID}/edit`)}
+                        className={clsx(
+                          'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                          focus && 'bg-this/10 dark:bg-this-light/10'
+                        )}>
+                        <TbEdit className="size-4.5 stroke-1" />
+                        <span>{t('edit') + ' ' + t('game')}</span>
+                      </button>
+                    )}
+                  </MenuItem>
+                  <MenuItem>
+                    {({ focus }) => (
+                      <button
+                        className={clsx(
+                          'flex h-9 w-full items-center space-x-2 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                          focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                        )}
+                        onClick={() => setIsDialogOpen(true)}>
+                        <NewspaperIcon className="size-4.5 stroke-1" />
+                        <span>{t('add') + ' ' + t('segmentation')}</span>
+                      </button>
+                    )}
+                  </MenuItem>
+                </>
               )}
             </MenuItems>
           </Transition>
@@ -125,6 +153,21 @@ export function RowActions({ row, table }) {
         confirmLoading={confirmStatusLoading}
         state={state}
       />
+
+      <CustomModal
+        show={isDialogOpen}
+        title={t('add') + ' ' + t('segmentation')}
+        btnTitle={t('segmentation')}
+        icon={<NewspaperIcon className="size-4.5 stroke-1" />}
+        btnClassName={clsx(
+          'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+          focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+        )}
+        onClose={onCloseDialogBox}
+        onOpen={onOpenDialogBox}
+        onOk={onOkDialogBox}>
+        <AddEditSegmentation onClose={onOkDialogBox} gameId={row?.original?.gameUID} />
+      </CustomModal>
     </>
   );
 }
