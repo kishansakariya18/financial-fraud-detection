@@ -294,6 +294,8 @@ const PlayerService = {
         HasDailyLossLimit: data.hasDailyLossLimit,
         HasWeeklyLossLimit: data.hasWeeklyLossLimit,
         HasMonthlyLossLimit: data.hasMonthlyLossLimit,
+        HasBetLimit: data?.hasOneTimeBetLimit,
+        HasWinLimit: data?.hasOneTimeWinLimit,
 
         BetDailyWageLimit: data?.dailyWagerLimit || undefined,
         BetWeeklyWageLimit: data?.weeklyWagerLimit || undefined,
@@ -311,7 +313,9 @@ const PlayerService = {
         ExclusionStartAt: data.exclusionStartAt
           ? ConvertDateIntoUTC(data.exclusionStartAt)
           : undefined,
-        ExclusionEndAt: data.exclusionEndAt ? ConvertDateIntoUTC(data.exclusionEndAt) : undefined
+        ExclusionEndAt: data.exclusionEndAt ? ConvertDateIntoUTC(data.exclusionEndAt) : undefined,
+        BetLimit: data?.oneTimeBetLimit || undefined,
+        WinLimit: data?.oneTimeWinLimit || undefined
       };
 
       const endPoint = replaceText(

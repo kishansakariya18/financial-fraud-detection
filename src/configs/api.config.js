@@ -376,16 +376,24 @@ export const apiConfig = {
     },
     GAME: {
       LIST: '/admin/casino-management/games/list',
+      DETAILS: '/admin/casino-management/games/:gameUID/details',
       CREATE: '/admin/casino-management/games/create',
       EDIT: '/admin/casino-management/games/:gameId/edit',
-      CHANGE_STATUS: '/admin/casino-management/games/:gameId/change-status',
       DELETE: '/admin/casino-management/games/:gameId/delete',
       PROVIDER_LIST: '/admin/casino-management/games/providers',
-      CATEGORY_LIST: '/admin/casino-management/games/categories'
+      CATEGORY_LIST: '/admin/casino-management/category/list',
+      GET_GAME_SEGMENTATION: '/admin/casino-management/games/:gameId/segmentation',
+      ADD_GAME_SEGMENTATION: '/admin/casino-management/games/:gameId/segmentation'
     },
     REPORTS: {
       BETSLIP: '/admin/reports/betslip-transactions',
-      BETSLIP_EXPORT: '/admin/reports/betslip'
+      BETSLIP_EXPORT: '/admin/reports/betslip',
+      TRANSACTIONS: '/admin/reports/get-transactions',
+      TRANSACTIONS_EXPORT: '/admin/reports/transactions/export',
+      PLAYER_BALANCE_LIST: '/admin/reports/player-balance/list',
+      PLAYER_BALANCE_EXPORT: '/admin/reports/player-balance/export',
+      DEPOSIT_BONUS_LIST: '/admin/reports/deposit-bonus/list',
+      DEPOSIT_BONUS_EXPORT: '/admin/reports/deposit-bonus/export'
     },
     CRM: {
       SEND: '/admin/crm/sendNotification'
@@ -401,7 +409,8 @@ export const apiConfig = {
       ADD_HOME_GAME_LIST: '/admin/home-page/home-category/home-game/add-game-list',
       ADD_HOME_GAMES: '/admin/home-page/home-category/home-game/add-games',
       REORDER_CATEGORY: '/admin/home-page/home-category/reorder-category',
-      REORDER_GAMES: '/admin/home-page/home-category/home-game/reorder-games'
+      REORDER_GAMES: '/admin/home-page/home-category/home-game/reorder-games',
+      DELETE_HOME_GAME: '/admin/home-page/home-category/home-game/:homePageGameId/delete'
     }
   }
 };

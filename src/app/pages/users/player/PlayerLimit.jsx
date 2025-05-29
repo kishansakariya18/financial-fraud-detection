@@ -1,7 +1,6 @@
 // Local Imports
 import { Box, Button, Input, Skeleton, Switch } from 'components/ui';
 import { Page } from 'components/shared/Page';
-import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { useParams } from 'react-router';
@@ -15,9 +14,6 @@ import { DatePicker } from 'components/shared/form/Datepicker';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 import { useTranslation } from 'react-i18next';
 
-// ----------------------------------------------------------------------
-
-const breadcrumbs = [{ title: 'Players', path: '/player' }, { title: 'Limit' }];
 const exclusionTimeOptions = [
   { label: '1 day', value: 1 },
   { label: '7 day', value: 2 },
@@ -68,6 +64,8 @@ const PlayerLimit = () => {
             dailyLossLimit: result.DailyLossLimit,
             weeklyLossLimit: result.WeeklyLossLimit,
             monthlyLossLimit: result.MonthlyLossLimit,
+            oneTimeBetLimit: result.BetLimit,
+            oneTimeWinLimit: result.WinLimit,
             selfExclusionType: result.ExclusionType,
             exclusionStartAt: result.ExclusionStartAt
               ? getDateInUTCToTimeZone(result.ExclusionStartAt, 'Asia/Kolkata', 'YYYY-MM-DD HH:mm')
@@ -88,7 +86,9 @@ const PlayerLimit = () => {
             hasMonthlyWithdrawLimit: result.HasMaxWithdrawPerMonthLimit,
             hasDailyLossLimit: result.HasDailyLossLimit || false,
             hasWeeklyLossLimit: result.HasWeeklyLossLimit || false,
-            hasMonthlyLossLimit: result.HasMonthlyLossLimit || false
+            hasMonthlyLossLimit: result.HasMonthlyLossLimit || false,
+            hasOneTimeBetLimit: result.HasBetLimit || false,
+            hasOneTimeWinLimit: result.HasWinLimit || false
           });
         }
       });
@@ -157,7 +157,6 @@ const PlayerLimit = () => {
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
           </div>
-          <Breadcrumbs items={breadcrumbs} className="max-sm:hidden" />
         </div>
 
         <form onSubmit={handleSubmit(handlePlayerLimitUpdate)}>
@@ -558,94 +557,145 @@ const PlayerLimit = () => {
                   </div>
                 </Box>
                 <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
-                  <div>
+                  <div className="mt-1.5 flex items-center justify-between">
                     <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                      {t('selfExclusionTime')}
+                      {t('oneTimeBetLimit')}
                     </h2>
+                    <Switch {...register('hasOneTimeBetLimit')} label="" />
                   </div>
                   <div className="pt-2">
                     <div className="max-w-xl">
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <Controller
-                          render={({ field }) => (
-                            <Listbox
-                              data={exclusionTimeOptions}
-                              value={
-                                exclusionTimeOptions.find(
-                                  (exclusionTime) => +exclusionTime.value === +field.value
-                                ) || null
-                              }
-                              onChange={(val) => handleChangeExclusionType(field, val)}
-                              name={field.name}
-                              placeholder={
-                                t('select') +
-                                ' ' +
-                                t('self') +
-                                ' ' +
-                                t('exclusion') +
-                                ' ' +
-                                t('type')
-                              }
-                              displayField="label"
-                              error={errors?.selfExclusionType?.message}
-                            />
-                          )}
-                          control={control}
-                          name="selfExclusionType"
+                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
+                        <Input
+                          type="number"
+                          {...register('oneTimeBetLimit')}
+                          error={errors?.oneTimeBetLimit?.message}
+                          id="oneTimeBetLimit"
+                          placeholder="Enter One Time Bet Limit"
+                          classNames={{
+                            root: 'flex-1',
+                            input: 'relative rounded-none hover:z-1 focus:z-1'
+                          }}
                         />
-                      </div>
-
-                      <div>
-                        {+exclusionType === 6 && (
-                          <div className="flex flex-wrap gap-2 pt-1.5">
-                            <Controller
-                              render={({ field: { onChange, value, ...rest } }) => (
-                                <DatePicker
-                                  onChange={onChange}
-                                  value={value || ''}
-                                  label={t('exclusion') + ' ' + t('startAt')}
-                                  error={errors?.exclusionStartAt?.message}
-                                  options={{
-                                    disableMobile: true,
-                                    enableTime: true,
-                                    time_24hr: true
-                                  }}
-                                  placeholder="Choose date..."
-                                  {...rest}
-                                />
-                              )}
-                              control={control}
-                              name="exclusionStartAt"
-                            />
-                            <Controller
-                              render={({ field: { onChange, value, ...rest } }) => (
-                                <DatePicker
-                                  onChange={onChange}
-                                  value={value || ''}
-                                  label={t('exclusion') + ' ' + t('endAt')}
-                                  error={errors?.exclusionEndAt?.message}
-                                  options={{
-                                    disableMobile: true,
-                                    enableTime: true,
-                                    time_24hr: true
-                                  }}
-                                  placeholder="Choose date..."
-                                  {...rest}
-                                />
-                              )}
-                              control={control}
-                              name="exclusionEndAt"
-                            />
-                          </div>
-                        )}
                       </div>
                     </div>
                   </div>
                 </Box>
+                <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
+                  <div className="mt-1.5 flex items-center justify-between">
+                    <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
+                      {t('oneTimeWinLimit')}
+                    </h2>
+                    <Switch {...register('hasOneTimeWinLimit')} label="" />
+                  </div>
+                  <div className="pt-2">
+                    <div className="max-w-xl">
+                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
+                        <Input
+                          type="number"
+                          {...register('oneTimeWinLimit')}
+                          error={errors?.oneTimeWinLimit?.message}
+                          id="oneTimeWinLimit"
+                          placeholder="Enter One Time Win Limit"
+                          classNames={{
+                            root: 'flex-1',
+                            input: 'relative rounded-none hover:z-1 focus:z-1'
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </Box>
+                <div>
+                  <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
+                    <div>
+                      <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
+                        {t('selfExclusionTime')}
+                      </h2>
+                    </div>
+                    <div className="pt-2">
+                      <div className="max-w-xl">
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <Controller
+                            render={({ field }) => (
+                              <Listbox
+                                data={exclusionTimeOptions}
+                                value={
+                                  exclusionTimeOptions.find(
+                                    (exclusionTime) => +exclusionTime.value === +field.value
+                                  ) || null
+                                }
+                                onChange={(val) => handleChangeExclusionType(field, val)}
+                                name={field.name}
+                                placeholder={
+                                  t('select') +
+                                  ' ' +
+                                  t('self') +
+                                  ' ' +
+                                  t('exclusion') +
+                                  ' ' +
+                                  t('type')
+                                }
+                                displayField="label"
+                                error={errors?.selfExclusionType?.message}
+                              />
+                            )}
+                            control={control}
+                            name="selfExclusionType"
+                          />
+                        </div>
+
+                        <div>
+                          {+exclusionType === 6 && (
+                            <div className="flex flex-wrap gap-2 pt-1.5">
+                              <Controller
+                                render={({ field: { onChange, value, ...rest } }) => (
+                                  <DatePicker
+                                    onChange={onChange}
+                                    value={value || ''}
+                                    label={t('exclusion') + ' ' + t('startAt')}
+                                    error={errors?.exclusionStartAt?.message}
+                                    options={{
+                                      disableMobile: true,
+                                      enableTime: true,
+                                      time_24hr: true
+                                    }}
+                                    placeholder="Choose date..."
+                                    {...rest}
+                                  />
+                                )}
+                                control={control}
+                                name="exclusionStartAt"
+                              />
+                              <Controller
+                                render={({ field: { onChange, value, ...rest } }) => (
+                                  <DatePicker
+                                    onChange={onChange}
+                                    value={value || ''}
+                                    label={t('exclusion') + ' ' + t('endAt')}
+                                    error={errors?.exclusionEndAt?.message}
+                                    options={{
+                                      disableMobile: true,
+                                      enableTime: true,
+                                      time_24hr: true
+                                    }}
+                                    placeholder="Choose date..."
+                                    {...rest}
+                                  />
+                                )}
+                                control={control}
+                                name="exclusionEndAt"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </Box>
+                </div>
               </>
             )}
           </div>
-
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
             <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
               {t('reset')}

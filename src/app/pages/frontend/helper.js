@@ -6,6 +6,7 @@ export const homeCategoryResponse = (apiData) => {
     return {
       id: data.HomePageCategoryID,
       category: data.category.Name,
+      categoryId: data.CategoryID,
       orderNumber: data.OrderNumber,
       status: parseHomeCategoryStatusToApp(data.IsActive)
     };

@@ -38,11 +38,15 @@ const ProviderService = {
       console.log('Error', err);
     }
   },
-  editProvider: async (providerId, file) => {
+  editProvider: async (providerId, data, file) => {
     try {
       const endPoints = replaceText(apiConfig.endPoints.PROVIDER.EDIT, ':providerId', providerId);
 
+      console.log('data: ::> ', data);
+
       const formData = new FormData();
+
+      formData.append('name', data.providerName);
 
       if (file && file.name) {
         formData.append('image', file, file.name);

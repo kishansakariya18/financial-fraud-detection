@@ -112,7 +112,14 @@ export const PERMISSIONS = {
     VIEW_LOGIN_HISTORY: 'user-login-history-view'
   },
   REPORT: {
-    BETSLIP_TRANSACTION_VIEW: 'betslip-transaction-view'
+    BETSLIP_REPORT_VIEW: 'betslip-report-view',
+    DEPOSIT_REPORT_VIEW: 'deposit-report-view',
+    WITHDRAW_REPORT_VIEW: 'withdraw-report-view',
+    BETSLIP_EXPORT_REPORT: 'betslip-export-report',
+    DEPOSIT_EXPORT_REPORT: 'deposit-export-report',
+    WITHDRAW_EXPORT_REPORT: 'withdraw-export-report',
+    PLAYER_BALANCE_REPORT_VIEW: 'player-balance-report-view',
+    PLAYER_BALANCE_EXPORT_REPORT: 'player-balance-export-report'
   },
   USER_LIMIT_SETTING: {
     VIEW: 'limit-setting-view',
@@ -348,7 +355,11 @@ export const PERMISSIONS = {
     VIEW_HOME_GAMES: 'frontend-home-game-list',
     ADD_HOME_GAMES: 'frontend-add-home-games',
     CHANGE_HOME_GAME_STATUS: 'frontend-change-home-game-status',
-    REORDER_HOME_GAMES: 'frontend-reorder-home-games'
+    REORDER_HOME_GAMES: 'frontend-reorder-home-games',
+    DELETE_HOME_GAME: 'frontend-delete-home-game'
+  },
+  BUX_AI: {
+    VIEW: 'bux-ai-view'
   }
 };
 

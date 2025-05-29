@@ -16,7 +16,7 @@ export const casinoManagement = {
   title: 'Casino Management',
   transKey: 'casino_management',
   Icon: CircleStackIcon,
-  permission: [PERMISSIONS.CATEGORY.VIEW],
+  permission: [PERMISSIONS.CATEGORY.VIEW, PERMISSIONS.PROVIDER.VIEW, PERMISSIONS.GAME.VIEW],
   childs: [
     {
       id: 'casino_category',
@@ -43,7 +43,7 @@ export const casinoManagement = {
       title: 'Games List',
       transKey: 'casino_games',
       Icon: PuzzlePieceIcon,
-      permission: PERMISSIONS.PROVIDER.VIEW
+      permission: PERMISSIONS.GAME.VIEW
     }
   ]
 };

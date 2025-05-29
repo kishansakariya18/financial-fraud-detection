@@ -5,7 +5,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 
 // Local Imports
-import Logo from 'assets/appLogo.svg?react';
 import { Button, Card, Input } from 'components/ui';
 import { resetPasswordSchema } from './schema';
 import { Page } from 'components/shared/Page';
@@ -15,6 +14,9 @@ import { useSelector } from 'react-redux';
 import { toast } from 'sonner';
 import { getQueryParams } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
+import { useThemeContext } from 'app/contexts/theme/context';
+import LightThemeLogo from 'assets/appLogo_light_theme.svg?react';
+import DarkThemeLogo from 'assets/appLogo_dark_theme.svg?react';
 
 export default function ResetPassword() {
   const {
@@ -30,6 +32,8 @@ export default function ResetPassword() {
       confirmPassword: ''
     }
   });
+
+  const { isDark } = useThemeContext();
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -136,7 +140,7 @@ export default function ResetPassword() {
       <main className="min-h-100vh grid w-full grow grid-cols-1 place-items-center">
         <div className="w-full max-w-[26rem] p-4 sm:px-5">
           <div className="text-center">
-            <Logo className="mx-auto size-16" />
+            {isDark ? <DarkThemeLogo /> : <LightThemeLogo />}
             <div className="mt-4">
               <h2 className="text-2xl font-semibold text-gray-600 dark:text-dark-100">
                 {t('welcome_back')}

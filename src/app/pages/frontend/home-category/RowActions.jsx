@@ -1,11 +1,6 @@
 // Import Dependencies
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
-import {
-  ArrowPathRoundedSquareIcon,
-  EllipsisHorizontalIcon,
-  PencilIcon,
-  PuzzlePieceIcon
-} from '@heroicons/react/24/outline';
+import { EllipsisHorizontalIcon, PencilIcon, PuzzlePieceIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -146,21 +141,6 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              {hasPermission(PERMISSIONS.FRONTEND.REORDER_HOME_CATEGORY) && (
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      className={clsx(
-                        'flex h-9 w-full items-center space-x-2 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
-                        focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
-                      )}
-                      onClick={() => navigate(`/home-category/reorder-category`)}>
-                      <ArrowPathRoundedSquareIcon className="size-4.5 stroke-1" />
-                      <span>{t('reorder') + ' ' + t('category')}</span>
-                    </button>
-                  )}
-                </MenuItem>
-              )}
             </MenuItems>
           </Transition>
         </Menu>
@@ -187,7 +167,12 @@ export function RowActions({ row, table }) {
         onClose={onCloseDialogBox}
         onOpen={onOpenDialogBox}
         onOk={onOkDialogBox}>
-        <EditHomeCategory onClose={onOkDialogBox} homeCategoryId={row?.original?.id} />
+        <EditHomeCategory
+          onClose={onOkDialogBox}
+          homeCategoryId={row?.original?.id}
+          categoryName={row?.original?.category}
+          categoryId={row?.original?.categoryId}
+        />
       </CustomModal>
     </>
   );

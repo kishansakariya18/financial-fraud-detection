@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 // Local Imports
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
-import { TbStatusChange } from 'react-icons/tb';
+import { TbTrash } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
 import HomePageService from 'services/home-page.services';
 import usePermissions from 'app/router/usePermissions';
@@ -25,12 +25,13 @@ export function RowActions({ row, table }) {
 
   const confirmMessages = {
     pending: {
-      description: t('homeGame_status_desc'),
+      title: t('delete_key') + ' ' + t('homeGame'),
+      description: t('homeGame_delete_desc'),
       actionText: t('submit')
     },
     success: {
-      title: t('homeGame') + ' ' + t('status') + ' ' + t('changed'),
-      description: t('homeGame_status_suceess')
+      title: t('delete_key') + ' ' + t('homeGame'),
+      description: t('homeGame_delete_success')
     }
   };
 
@@ -47,7 +48,7 @@ export function RowActions({ row, table }) {
   const handleChangeStatus = useCallback(async () => {
     setConfirmDeleteLoading(true);
 
-    const result = await HomePageService.changeHomeGameStatus(row.original.id);
+    const result = await HomePageService.deleteHomeGame(row.original.id);
     if (result.status === 200) {
       table.options.meta?.changeStatus(row);
       setChangeStatusSuccess(true);
@@ -79,7 +80,7 @@ export function RowActions({ row, table }) {
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
               className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
-              {hasPermission(PERMISSIONS.FRONTEND.CHANGE_HOME_GAME_STATUS) && (
+              {hasPermission(PERMISSIONS.FRONTEND.DELETE_HOME_GAME) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -88,8 +89,8 @@ export function RowActions({ row, table }) {
                         'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
                         focus && 'bg-this/10 dark:bg-this-light/10'
                       )}>
-                      <TbStatusChange className="size-4.5 stroke-1" />
-                      <span>{t('change') + ' ' + t('status')}</span>
+                      <TbTrash className="size-4.5 stroke-1" />
+                      <span>{t('delete_key')}</span>
                     </button>
                   )}
                 </MenuItem>

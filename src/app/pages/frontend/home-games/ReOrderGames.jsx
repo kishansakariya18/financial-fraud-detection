@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 import clsx from 'clsx';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 export default function ReOrderGames() {
   const [gameList, setGameList] = useState([]);
@@ -16,13 +16,11 @@ export default function ReOrderGames() {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [submitResponse, setSubmitResponse] = useState(null);
   const [submitError, setSubmitError] = useState(null);
+  const navigate = useNavigate();
 
   const { t } = useTranslation();
 
   const { homeCategoryId } = useParams();
-
-  console.log('categoryList: ', gameList);
-  console.log('updatedData: ', updatedData);
 
   const columns = [
     { accessorKey: 'draggable', header: 'Drag' },
@@ -63,8 +61,11 @@ export default function ReOrderGames() {
 
   if (!submitLoading && !submitError && submitResponse) {
     toast.success(submitResponse);
-    setSubmitResponse('');
-    // fetchHomeCategoryList();
+
+    setTimeout(() => {
+      setSubmitResponse('');
+      navigate(`/home-games/${homeCategoryId}/list`);
+    }, 0);
   }
   if (!submitLoading && submitError) {
     toast.error(submitError);
@@ -74,8 +75,6 @@ export default function ReOrderGames() {
   const updateHomeCategoryData = async () => {
     try {
       setSubmitLoading(true);
-
-      console.log('updatedData: ', updatedData);
       const result = await HomePageService.reorderGames({ updatedGames: updatedData });
 
       if (result.status === 200) {
@@ -108,7 +107,6 @@ export default function ReOrderGames() {
 
             if (oldIndex !== -1 && newIndex !== -1) {
               const newData = arrayMove(oldData, oldIndex, newIndex);
-              console.log('new Data: ', newData);
 
               let order = 0;
               const updatedData = [];
@@ -135,6 +133,7 @@ export default function ReOrderGames() {
               type="button"
               className="ml-6 mt-4"
               color="primary"
+              disabled={!updatedData || updatedData.length === 0}
               onClick={updateHomeCategoryData}>
               {t('submit')}
             </Button>

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 // Local Imports
 import { Button, Card, Skeleton } from 'components/ui';
-import { useNavigate, useParams } from 'react-router';
+import { NavLink, useNavigate, useParams } from 'react-router';
 import { Page } from 'components/shared/Page';
 import { affiliateStatusToApp } from './helper';
 import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
@@ -174,6 +174,18 @@ export function ViewDetails() {
                     {t('createdAt')}:
                   </p>
                   <p>{getDateInUTCToTimeZone(response?.DateCreated)}</p>
+                </div>
+
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('Link')}
+                  </p>
+                  <NavLink
+                    target="_blank"
+                    to={`https://web-demo-backoffice-betnexus.sourcecodelab.co/${response?.ReferralCode}`}
+                    className="tracking-wide text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500">
+                    {`https://web-demo-backoffice-betnexus.sourcecodelab.co/${response?.ReferralCode}`}
+                  </NavLink>
                 </div>
               </div>
 

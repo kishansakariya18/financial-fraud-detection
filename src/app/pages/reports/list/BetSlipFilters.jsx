@@ -13,9 +13,14 @@ import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
-import { stageOptions, typeOptions } from '../helper';
+import { getStageAppToApi, mapType, stageOptions, typeOptions } from '../helper';
 import { useSearchParams } from 'react-router';
 import { ExportCSV } from 'components/custom/export';
+import { getQueryParams } from 'utils/custom.utilities';
+import apiConfig from 'configs/api.config';
+import dayjs from 'dayjs';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 // ----------------------------------------------------------------------
 
@@ -28,7 +33,9 @@ export function BetSlipFilters({
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
   const [searchParams] = useSearchParams();
-  // console.log('table.getState().columnFilters: inside', Object.fromEntries([...searchParams]));
+  const { hasPermission } = usePermissions();
+
+  const filters = getQueryParams(searchParams);
 
   return (
     <div className="table-toolbar">
@@ -42,7 +49,22 @@ export function BetSlipFilters({
             {pageTitle}
           </h2>
         </div>
-        <ExportCSV filters={Object.fromEntries([...searchParams])} />
+        {hasPermission(PERMISSIONS.REPORT.BETSLIP_EXPORT_REPORT) && (
+          <ExportCSV
+            filters={Object.fromEntries([...searchParams])}
+            url={`${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.REPORTS.BETSLIP_EXPORT}?startDate=${filters.startDate ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&endDate=${
+              filters.endDate
+                ? String(
+                    dayjs(+filters.endDate)
+                      .hour(23)
+                      .minute(59)
+                      .second(59)
+                      .format('YYYY-MM-DD HH:mm:ss')
+                  )
+                : ''
+            }&keyword=${filters.keyword || ''}&stage=${filters.stage ? getStageAppToApi(filters.stage) : ''}&type=${filters.type ? mapType(filters.type) : ''}`}
+          />
+        )}
       </div>
       {isXs ? (
         <>

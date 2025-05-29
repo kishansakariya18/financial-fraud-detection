@@ -13,13 +13,13 @@ import { responseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
-import ReportService from '../../../../services/betslip.services';
+import ReportService from '../../../../services/report.services';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 
 export default function Reports() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('report');
+  const pageTitle = t('betSlip') + ' ' + t('report');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 

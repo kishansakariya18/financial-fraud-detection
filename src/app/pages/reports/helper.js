@@ -1,4 +1,5 @@
 import { getDateInUTCToTimeZone } from 'helpers/functions';
+import { playerStatusToApp, transactionStatusToAPP } from '../users/player/helper';
 
 export const parseAdminStatusToApp = (status) => (status ? 'active' : 'inactive');
 
@@ -47,7 +48,7 @@ export const mapType = (item) => {
 };
 export const responseMapper = (apiData) => {
   const resultData = apiData.map((data) => ({
-    id: data.UserBetOutcomeID,
+    id: data.ID,
     userId: data.UserID,
     betPlacementId: data.BetPlacementTransactionID,
     username: data.Username,
@@ -62,6 +63,33 @@ export const responseMapper = (apiData) => {
     type: getBatdgeForType(data.OutcomeType),
     platformType: getBadgeForPlatform(data.OutcomeType),
     createdAt: getDateInUTCToTimeZone(data.Date)
+  }));
+  return resultData;
+};
+export const depositTransactionResponseMapper = (apiData) => {
+  const resultData = apiData.map((data) => ({
+    id: data.TransactionID,
+    transactionUID: data.TransactionUID,
+    userId: data.user.UserID,
+    username: data.user.Username,
+    mobile: data.user.Mobile,
+    amount: parseFloat(data.RealCash) + parseFloat(data.Winning),
+    status: transactionStatusToAPP(data.TransactionStatus),
+    createdAt: getDateInUTCToTimeZone(data.DateCreated)
+  }));
+  return resultData;
+};
+export const playerBalanceResponseMapper = (apiData) => {
+  const resultData = apiData.map((data) => ({
+    id: data.UserID,
+    userUID: data.UserUID,
+    username: data.Username,
+    mobile: data.Mobile,
+    realCash: data.RealCash,
+    winning: data.Winning,
+    bonus: data.Bonus,
+    status: playerStatusToApp(data.AccountStatus),
+    createdAt: getDateInUTCToTimeZone(data.DateCreated)
   }));
   return resultData;
 };

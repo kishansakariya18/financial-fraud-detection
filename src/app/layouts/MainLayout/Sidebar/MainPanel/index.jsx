@@ -4,7 +4,8 @@ import { Link } from 'react-router';
 import clsx from 'clsx';
 
 // Local Imports
-import Logo from 'assets/appLogo.svg?react';
+import LightThemeLogo from 'assets/appLogo_light_theme.svg?react';
+import DarkThemeLogo from 'assets/appLogo_dark_theme.svg?react';
 import { Menu } from './Menu';
 import { Item } from './Menu/Item';
 import { Profile } from '../../Profile';
@@ -16,6 +17,8 @@ import { settings } from 'app/navigation/settings';
 export function MainPanel({ nav, setActiveSegment, activeSegment }) {
   const { cardSkin } = useThemeContext();
 
+  const { isDark } = useThemeContext();
+
   return (
     <div className="main-panel">
       <div
@@ -25,9 +28,7 @@ export function MainPanel({ nav, setActiveSegment, activeSegment }) {
         )}>
         {/* Application Logo */}
         <div className="flex pt-3.5">
-          <Link to="/">
-            <Logo className="size-10 text-primary-600 dark:text-primary-400" />
-          </Link>
+          <Link to="/">{isDark ? <DarkThemeLogo /> : <LightThemeLogo />}</Link>
         </div>
 
         <Menu nav={nav} activeSegment={activeSegment} setActiveSegment={setActiveSegment} />

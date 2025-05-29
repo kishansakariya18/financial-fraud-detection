@@ -3,7 +3,7 @@ import { Chart } from 'components/custom/Chart';
 import { CustomSelect } from 'components/custom/CustomSelect';
 import { DashboardCard } from 'components/custom/DashboardCard';
 import { Page } from 'components/shared/Page';
-import { Button, Card, Select } from 'components/ui';
+import { Button, Card, Select, Skeleton } from 'components/ui';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import AuthService from 'services/auth.services';
@@ -11,6 +11,10 @@ import DashboardService from 'services/dashboard.services';
 import KPISummaryList from './kpi-summary-list/list';
 import TopGames from './top-game-list/list';
 import TopPlayers from './top-player-list/list';
+import { DatePicker } from 'components/shared/form/Datepicker';
+import dayjs from 'dayjs';
+import { getEndDate } from 'helpers/functions';
+import { useLocaleContext } from 'app/contexts/locale/context';
 
 export default function Home() {
   const [cardResponse, setCardResponse] = useState({});
@@ -39,6 +43,18 @@ export default function Home() {
   const [casinoError, setCasinoError] = useState(null);
   const [isCasinoLoading, setIsCasinoLoading] = useState(false);
   const [redata, setRedata] = useState([]);
+  const { locale } = useLocaleContext();
+
+  const [dateFilters, setDateFilters] = useState({
+    startDate: dayjs().locale(locale).subtract(15, 'days').format('YYYY-MM-DD'),
+    endDate: dayjs().locale(locale).format('YYYY-MM-DD')
+  });
+
+  const [dateFilterApplied, setDateFilterApplied] = useState(false);
+
+  const onDateChange = (data) => {
+    setDateFilters({ startDate: data[0], endDate: data[1] });
+  };
 
   const timeRangeOptions = [
     { value: 1, label: 'Last 30 days' },
@@ -80,11 +96,9 @@ export default function Home() {
   const fetchDepositStats = async () => {
     try {
       setIsDepositLoading(true);
-      const result = await DashboardService.getDepositStats();
+      const result = await DashboardService.getDepositStats(dateFilters);
 
       if (result.status === 200) {
-        console.log('result.response.data', result.response.data);
-
         const data = result.response.data;
         setRedata(data);
 
@@ -277,11 +291,9 @@ export default function Home() {
   const fetchCasinoStats = async () => {
     try {
       setIsCasinoLoading(true);
-      const result = await DashboardService.getCasinoStats();
+      const result = await DashboardService.getCasinoStats(dateFilters);
 
       if (result.status === 200) {
-        console.log('result.response.data', result.response.data);
-
         const data = result.response.data;
 
         setCasinoResponse({
@@ -369,7 +381,7 @@ export default function Home() {
   const fetchGGRReport = async () => {
     try {
       setIsGGRLoading(true);
-      const result = await DashboardService.getGGRReport();
+      const result = await DashboardService.getGGRReport(dateFilters);
 
       if (result.status === 200) {
         console.log('result.response.data', result.response.data);
@@ -467,7 +479,7 @@ export default function Home() {
   const fetchLoggedInPlayers = async () => {
     try {
       setIsLoggedInLoading(true);
-      const result = await DashboardService.getLoggedInPlayers();
+      const result = await DashboardService.getLoggedInPlayers(dateFilters);
 
       if (result.status === 200) {
         console.log('result.response.data', result.response.data);
@@ -530,7 +542,7 @@ export default function Home() {
   const fetchActivePlayers = async () => {
     try {
       setIsActivePlayersLoading(true);
-      const result = await DashboardService.getActivePlayers();
+      const result = await DashboardService.getActivePlayers(dateFilters);
 
       if (result.status === 200) {
         console.log('result.response.data', result.response.data);
@@ -776,7 +788,17 @@ export default function Home() {
     fetchDemographicReport();
     fetchCountryList();
     fetchCasinoStats();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dateFilterApplied]);
+
+  const onDateResetFilters = () => {
+    setDateFilters({
+      startDate: dayjs().locale(locale).subtract(15, 'days').format('YYYY-MM-DD'),
+      endDate: dayjs().locale(locale).format('YYYY-MM-DD')
+    });
+
+    setDateFilterApplied(false);
+  };
 
   return (
     <Page title="Homepage">
@@ -848,7 +870,54 @@ export default function Home() {
               maskShape="is-diamond"
             />
           </div>
+
+          <div className="mt-2 flex w-full flex-wrap items-center gap-2">
+            <DatePicker
+              onChange={onDateChange}
+              className="w-full sm:w-[250px] md:w-[300px] lg:w-[350px] xl:w-[400px]"
+              options={{
+                mode: 'range',
+                dateFormat: 'Y-m-d',
+                defaultDate: [dateFilters?.startDate, dateFilters?.endDate]
+              }}
+              placeholder="Choose date..."
+            />
+
+            <Button
+              type="submit"
+              color="primary"
+              className="rounded px-4 py-2 font-semibold text-white"
+              onClick={() => setDateFilterApplied(true)}>
+              Apply
+            </Button>
+            <Button
+              type="submit"
+              color="warning"
+              className="rounded px-4 py-2 font-semibold text-white"
+              onClick={onDateResetFilters}>
+              Reset
+            </Button>
+          </div>
+
           <div className="-mx-2 flex flex-wrap pt-2">
+            {isDepositLoading && (
+              <div className="mb-4 w-full px-2 md:w-1/2">
+                <div className="flex flex-col border border-gray-150 dark:border-dark-600">
+                  <div className="flex space-x-5 px-5 py-4 rtl:space-x-reverse">
+                    {/* <Skeleton className="size-16 rounded-full" /> */}
+                    <div className="flex flex-1 flex-col justify-between py-2">
+                      <Skeleton className="h-3 w-full rounded" />
+                      <Skeleton className="h-3 w-full rounded" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-48 w-full" />
+                  <div className="w-full px-6 py-4">
+                    <Skeleton className="h-3 w-full rounded" />
+                    <Skeleton className="mt-4 h-3 w-8/12 rounded" />
+                  </div>
+                </div>
+              </div>
+            )}
             {!isDepositLoading && depositResponse && (
               <div className="mb-4 w-full px-2 md:w-1/2" id="chart-container">
                 <Chart data={depositResponse} title={t('deposit')} />
@@ -866,6 +935,26 @@ export default function Home() {
     <div className="w-full md:w-1/2 px-2 mb-4" />
   )} */}
 
+            {isCasinoLoading && (
+              <div className="mb-4 w-full px-2 md:w-1/2">
+                <div className="flex flex-col border border-gray-150 dark:border-dark-600">
+                  <div className="flex space-x-5 px-5 py-4 rtl:space-x-reverse">
+                    {/* <Skeleton className="size-16 rounded-full" /> */}
+                    <div className="flex flex-1 flex-col justify-between py-2">
+                      <Skeleton className="h-3 w-full rounded" />
+                      <Skeleton className="h-3 w-full rounded" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-48 w-full" />
+                  <div className="w-full px-6 py-4">
+                    <Skeleton className="h-3 w-full rounded" />
+                    <Skeleton className="mt-4 h-3 w-8/12 rounded" />
+                  </div>
+                </div>
+                {/* <Skeleton className="col-span-12 sm:col-span-6 lg:col-span-7 xl:col-span-8" /> */}
+              </div>
+            )}
+
             {!isCasinoLoading && casinoResponse && (
               <div className="mb-4 w-full px-2 md:w-1/2">
                 <Chart data={casinoResponse} title={t('casino')} />
@@ -873,9 +962,48 @@ export default function Home() {
             )}
             {!isCasinoLoading && !casinoResponse && <div className="mb-4 w-full px-2 md:w-1/2" />}
 
+            {isGGRLoading && (
+              <div className="mb-4 w-full px-2">
+                <div className="flex flex-col border border-gray-150 dark:border-dark-600">
+                  <div className="flex space-x-5 px-5 py-4 rtl:space-x-reverse">
+                    {/* <Skeleton className="size-16 rounded-full" /> */}
+                    <div className="flex flex-1 flex-col justify-between py-2">
+                      <Skeleton className="h-3 w-full rounded" />
+                      <Skeleton className="h-3 w-full rounded" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-48 w-full" />
+                  <div className="w-full px-6 py-4">
+                    <Skeleton className="h-3 w-full rounded" />
+                    <Skeleton className="mt-4 h-3 w-8/12 rounded" />
+                  </div>
+                </div>
+                {/* <Skeleton className="col-span-12 sm:col-span-6 lg:col-span-7 xl:col-span-8" /> */}
+              </div>
+            )}
+
             {!isGGRLoading && ggrResponse && (
               <div className="mb-4 w-full px-2">
                 <Chart data={ggrResponse} title={`${t('ggr')} ${t('report')}`} />
+              </div>
+            )}
+
+            {isLoggedInLoading && (
+              <div className="mb-4 w-full px-2 md:w-1/2">
+                <div className="flex flex-col border border-gray-150 dark:border-dark-600">
+                  <div className="flex space-x-5 px-5 py-4 rtl:space-x-reverse">
+                    {/* <Skeleton className="size-16 rounded-full" /> */}
+                    <div className="flex flex-1 flex-col justify-between py-2">
+                      <Skeleton className="h-3 w-full rounded" />
+                      <Skeleton className="h-3 w-full rounded" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-48 w-full" />
+                  <div className="w-full px-6 py-4">
+                    <Skeleton className="h-3 w-full rounded" />
+                    <Skeleton className="mt-4 h-3 w-8/12 rounded" />
+                  </div>
+                </div>
               </div>
             )}
 
@@ -884,9 +1012,47 @@ export default function Home() {
                 <Chart data={loggedInResponse} title={`${t('loggedIn')} ${t('players')}`} />
               </div>
             )}
+
+            {isActivePlayersLoading && (
+              <div className="mb-4 w-full px-2 md:w-2/3">
+                <div className="flex flex-col border border-gray-150 dark:border-dark-600">
+                  <div className="flex space-x-5 px-5 py-4 rtl:space-x-reverse">
+                    {/* <Skeleton className="size-16 rounded-full" /> */}
+                    <div className="flex flex-1 flex-col justify-between py-2">
+                      <Skeleton className="h-3 w-full rounded" />
+                      <Skeleton className="h-3 w-full rounded" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-48 w-full" />
+                  <div className="w-full px-6 py-4">
+                    <Skeleton className="h-3 w-full rounded" />
+                    <Skeleton className="mt-4 h-3 w-8/12 rounded" />
+                  </div>
+                </div>
+              </div>
+            )}
             {!isActivePlayersLoading && activePlayersResponse && (
               <div className="mb-4 w-full px-2 md:w-2/3">
                 <Chart data={activePlayersResponse} title={`${t('active')} ${t('players')}`} />
+              </div>
+            )}
+
+            {isDemographicLoading && (
+              <div className="mb-4 w-full px-2">
+                <div className="flex flex-col border border-gray-150 dark:border-dark-600">
+                  <div className="flex space-x-5 px-5 py-4 rtl:space-x-reverse">
+                    {/* <Skeleton className="size-16 rounded-full" /> */}
+                    <div className="flex flex-1 flex-col justify-between py-2">
+                      <Skeleton className="h-3 w-full rounded" />
+                      <Skeleton className="h-3 w-full rounded" />
+                    </div>
+                  </div>
+                  <Skeleton className="h-48 w-full" />
+                  <div className="w-full px-6 py-4">
+                    <Skeleton className="h-3 w-full rounded" />
+                    <Skeleton className="mt-4 h-3 w-8/12 rounded" />
+                  </div>
+                </div>
               </div>
             )}
 

@@ -15,8 +15,6 @@ import usePermissions from 'app/router/usePermissions';
 // ----------------------------------------------------------------------
 
 export function Group({ data }) {
-  console.log('inside group');
-
   const [isOpened, { toggle }] = useDisclosure(true);
   const { t } = useTranslation();
   const { cardSkin } = useThemeContext();

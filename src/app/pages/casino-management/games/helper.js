@@ -24,6 +24,7 @@ export const parseProviderStatusToApp = (status) => {
 export const responseMapper = (apiData) => {
   return apiData.map((item) => ({
     id: item.GameID,
+    gameUID: item.GameUID,
     name: item.Name,
     minBetAmount: item.MinBetAmount || '-',
     maxBetAmount: item.MaxBetAmount || '-',

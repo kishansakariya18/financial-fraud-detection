@@ -36,6 +36,12 @@ export const casinoRoutes = [
     lazy: async () => ({
       Component: (await import('../../pages/casino-management/games/list/list')).default
     })
+  },
+  {
+    path: '/casino/games/:gameUID/edit',
+    lazy: async () => ({
+      Component: (await import('../../pages/casino-management/games/EditGame')).default
+    })
   }
 ];
 

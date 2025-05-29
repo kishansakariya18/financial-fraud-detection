@@ -11,7 +11,11 @@ export const reports = {
   title: 'Report',
   transKey: 'report',
   Icon: BookOpenIcon,
-  permission: [PERMISSIONS.REPORT.BETSLIP_TRANSACTION_VIEW],
+  permission: [
+    PERMISSIONS.REPORT.BETSLIP_REPORT_VIEW,
+    PERMISSIONS.REPORT.DEPOSIT_REPORT_VIEW,
+    PERMISSIONS.REPORT.WITHDRAW_REPORT_VIEW
+  ],
   childs: [
     {
       id: 'betslip',
@@ -20,7 +24,43 @@ export const reports = {
       title: 'betslip',
       transKey: 'betslip_transactions',
       Icon: QueueListIcon,
-      permission: PERMISSIONS.REPORT.BETSLIP_TRANSACTION_VIEW
+      permission: PERMISSIONS.REPORT.BETSLIP_REPORT_VIEW
+    },
+    {
+      id: 'depositTransaction',
+      type: NAV_TYPE_ITEM,
+      path: '/report/deposit-transctions',
+      title: 'depsositTransaction',
+      transKey: 'deposit_transactions',
+      Icon: QueueListIcon,
+      permission: PERMISSIONS.REPORT.DEPOSIT_REPORT_VIEW
+    },
+    {
+      id: 'withdrawTransaction',
+      type: NAV_TYPE_ITEM,
+      path: '/report/withdraw-transctions',
+      title: 'withdrawTransaction',
+      transKey: 'withdraw_transactions',
+      Icon: QueueListIcon,
+      permission: PERMISSIONS.REPORT.WITHDRAW_REPORT_VIEW
+    },
+    {
+      id: 'playerBalance',
+      type: NAV_TYPE_ITEM,
+      path: '/report/player-balance/list',
+      title: 'playerBalance',
+      transKey: 'playerBalance',
+      Icon: QueueListIcon,
+      permission: PERMISSIONS.REPORT.PLAYER_BALANCE_REPORT_VIEW
     }
+    // {
+    //   id: 'depositBalance',
+    //   type: NAV_TYPE_ITEM,
+    //   path: '/report/deposit-balance/list',
+    //   title: 'depositBalance',
+    //   transKey: 'depositBalance',
+    //   Icon: QueueListIcon,
+    //   permission: PERMISSIONS.REPORT.PLAYER_BALANCE_REPORT_VIEW
+    // }
   ]
 };

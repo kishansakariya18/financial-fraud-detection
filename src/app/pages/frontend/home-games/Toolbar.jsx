@@ -1,5 +1,10 @@
 // Import Dependencies
-import { MagnifyingGlassIcon, MapPinIcon, PlusIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowPathRoundedSquareIcon,
+  MagnifyingGlassIcon,
+  MapPinIcon,
+  PlusIcon
+} from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
@@ -11,12 +16,8 @@ import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { homeGameStatusOptions } from '../helper';
 import { useNavigate } from 'react-router';
-import { RiOrderPlayFill } from 'react-icons/ri';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
-
-// ----------------------------------------------------------------------
-
 export function Toolbar({
   table,
   pageTitle = '',
@@ -57,7 +58,7 @@ export function Toolbar({
               className="ml-2 h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
               color="primary"
               onClick={() => navigate(`/home-games/${homeCategoryId}/reorder-games`)}>
-              <RiOrderPlayFill className="size-5" />
+              <ArrowPathRoundedSquareIcon className="size-5" />
               <span>{t('reorder') + ' ' + t('games')}</span>
             </Button>
           )}
@@ -121,7 +122,7 @@ function SearchInput({ table }) {
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
         root: 'shrink-0'
       }}
-      placeholder={t('search_desc')}
+      placeholder={t('search') + ' ' + t('games') + ' ...'}
     />
   );
 }

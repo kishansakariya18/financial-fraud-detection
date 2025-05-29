@@ -1,6 +1,7 @@
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Page } from 'components/shared/Page';
-import { Button, Circlebar, Upload } from 'components/ui';
+import { Button, Circlebar, Input, Upload } from 'components/ui';
 import RenderImage from 'components/ui/custom/ImageRender';
 import { t } from 'i18next';
 import { useRef, useState } from 'react';
@@ -8,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import ProviderService from 'services/provider.services';
 
 import { toast } from 'sonner';
+import { editProviderSchema } from './schema';
 
 export function EditProvider({ providerName = '', value = '', providerId, closeModal = () => {} }) {
   const [error, setError] = useState('');
@@ -15,14 +17,24 @@ export function EditProvider({ providerName = '', value = '', providerId, closeM
   const [preview, setPreview] = useState();
   const uploadRef = useRef();
   const [loading, setLoading] = useState(false);
+  const [isUpdated, setIsUpdated] = useState(false);
 
   const [response, setResponse] = useState(null);
-  const { handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    resolver: yupResolver(editProviderSchema),
+    defaultValues: {
+      providerName
+    }
+  });
 
-  const editProviderApi = async () => {
+  const editProviderApi = async (data) => {
     setLoading(true);
     setError(null);
-    const result = await ProviderService.editProvider(providerId, file);
+    const result = await ProviderService.editProvider(providerId, data, file);
     if (result) {
       if (result.status === 200 || result.status === 201) {
         setResponse(result.response);
@@ -34,9 +46,9 @@ export function EditProvider({ providerName = '', value = '', providerId, closeM
     setLoading(false);
   };
   if (!loading && !error && response) {
-    closeModal();
     toast.success(response.message);
     setResponse(null);
+    closeModal();
   }
   if (!loading && error) {
     toast.error(error);
@@ -49,14 +61,30 @@ export function EditProvider({ providerName = '', value = '', providerId, closeM
   };
 
   return (
-    <Page title={t('casino_category')}>
+    <Page title={t('casino_provider')}>
       {!loading && (
         <div className="transition-content grid w-full grid-rows-[auto_1fr] pb-1">
           <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-            <div className="font-medium">{t('casino_provider') + ' : ' + providerName}</div>
+            <div className="mt-6 space-y-4">
+              <Input
+                {...register('providerName', {
+                  onChange: () => setIsUpdated(true)
+                })}
+                label={t('casino_provider') + ' ' + t('name')}
+                error={errors?.providerName?.message}
+                placeholder={t('enter') + ' ' + t('casino_provider') + ' ' + t('name')}
+              />
+            </div>
             <div className="mt-5 space-y-4">
               <div className="grid gap-4 sm:grid-cols-1">
-                <RenderImage preview={preview} value={value} id={'providerImage'} label="Icon :" />
+                {(value || preview) && (
+                  <RenderImage
+                    preview={preview}
+                    value={value}
+                    id={'providerImage'}
+                    label="Icon :"
+                  />
+                )}
                 <Upload
                   onChange={setFile}
                   ref={uploadRef}
@@ -87,7 +115,11 @@ export function EditProvider({ providerName = '', value = '', providerId, closeM
             </div>
 
             <div className="mt-5 flex justify-end space-x-3 rtl:space-x-reverse">
-              <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
+              <Button
+                type="submit"
+                className="min-w-[7rem]"
+                color="primary"
+                disabled={loading || !isUpdated}>
                 {t('update')}
               </Button>
             </div>

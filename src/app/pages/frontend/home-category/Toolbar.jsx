@@ -1,5 +1,9 @@
 // Import Dependencies
-import { MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowPathRoundedSquareIcon,
+  MagnifyingGlassIcon,
+  MapPinIcon
+} from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
@@ -10,6 +14,9 @@ import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { homeCategoryStatusOptions } from '../helper';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
+import { useNavigate } from 'react-router';
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +28,8 @@ export function Toolbar({
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const { hasPermission } = usePermissions();
+  const navigate = useNavigate();
 
   return (
     <div className="table-toolbar">
@@ -34,6 +43,15 @@ export function Toolbar({
             {pageTitle}
           </h2>
         </div>
+        {hasPermission(PERMISSIONS.FRONTEND.REORDER_HOME_CATEGORY) && (
+          <Button
+            className="ml-2 h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
+            color="primary"
+            onClick={() => navigate(`/home-category/reorder-category`)}>
+            <ArrowPathRoundedSquareIcon className="size-5" />
+            <span>{t('reorder') + ' ' + t('categories')}</span>
+          </Button>
+        )}
       </div>
 
       {isXs ? (
@@ -93,7 +111,7 @@ function SearchInput({ table }) {
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
         root: 'shrink-0'
       }}
-      placeholder={t('search_desc')}
+      placeholder={t('search') + ' ' + t('category' + '...')}
     />
   );
 }

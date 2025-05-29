@@ -40,8 +40,6 @@ export function BoldCell({ getValue, column, table }) {
 
   const name = getValue();
 
-  console.log('name: ', name);
-
   return (
     <div className="flex items-center space-x-4 rtl:space-x-reverse">
       <span className="font-medium text-gray-800 dark:text-dark-100">

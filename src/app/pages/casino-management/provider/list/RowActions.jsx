@@ -29,7 +29,6 @@ const confirmMessages = {
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
-  // console.log('row.origina::', row.original);
 
   const [statusModalOpen, setStatusModalOpen] = useState(false);
   const [confirmStatusLoading, setConfirmStatusLoading] = useState(false);
@@ -114,7 +113,7 @@ export function RowActions({ row, table }) {
                       focus && 'bg-this/10 dark:bg-this-light/10'
                     )}>
                     <TbEdit className="size-4.5 stroke-1" />
-                    <span>{t('Edit') + ' ' + t('casino_provider')}</span>
+                    <span>{t('edit') + ' ' + t('casino_provider')}</span>
                   </button>
                 )}
               </MenuItem>
