@@ -14,11 +14,14 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { manageFundSchema } from './schema';
 import { useParams } from 'react-router';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
+import { useDisclosure } from 'hooks';
 
 const ManageFund = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
+  const [show, { toggle }] = useDisclosure();
 
   const { playerId } = useParams();
   const { t } = useTranslation();
@@ -157,9 +160,22 @@ const ManageFund = () => {
               <Input
                 {...register('password')}
                 prefix={<LockClosedIcon className="size-5" />}
+                type={show ? 'text' : 'password'}
                 label={t('transaction') + ' ' + t('password')}
                 error={errors?.password?.message}
                 placeholder={t('enter') + ' ' + t('transaction') + ' ' + t('password')}
+                suffix={
+                  <Button
+                    variant="flat"
+                    className="pointer-events-auto size-6 shrink-0 rounded-full p-0"
+                    onClick={toggle}>
+                    {show ? (
+                      <EyeSlashIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
+                    ) : (
+                      <EyeIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
+                    )}
+                  </Button>
+                }
               />
             </div>
           </div>
