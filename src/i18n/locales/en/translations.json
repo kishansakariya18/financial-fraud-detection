@@ -333,5 +333,10 @@
   "monthlyWithdrawLimitDesc": "If enabled, sets the maximum total amount a user can withdraw in a single month.",
   "dailyLossLimitDesc": "If enabled, sets the maximum net loss a user can incur in a single day.",
   "weeklyLossLimitDesc": "If enabled, sets the maximum net loss a user can incur in a single week.",
-  "monthlyLossLimitDesc": "If enabled, sets the maximum net loss a user can incur in a single month."
+  "monthlyLossLimitDesc": "If enabled, sets the maximum net loss a user can incur in a single month.",
+  "userUid": "UserUID",
+  "lastLoginAt": "Last login At",
+  "loginCount": "Login Count",
+  "adminUid": "AdminUID",
+  "isSuperAdmin": "Is Super Admin?"
 }
