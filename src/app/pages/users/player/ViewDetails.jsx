@@ -76,6 +76,12 @@ export function ViewDetails() {
                 <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('userUid')}
+                    </p>
+                    <p>{response?.UserUID}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {t('userName')}
                     </p>
                     <p>{response?.Username}</p>
@@ -232,6 +238,18 @@ export function ViewDetails() {
                       {t('last_login_ip')}
                     </p>
                     <p>{response?.LastLoginIP || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('lastLoginAt')}
+                    </p>
+                    <p>{getDateInUTCToTimeZone(response?.LastLoginAt) || 'N/A'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('loginCount')}
+                    </p>
+                    <p>{response?.LoginCount}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
