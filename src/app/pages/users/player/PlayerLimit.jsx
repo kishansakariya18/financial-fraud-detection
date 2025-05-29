@@ -189,6 +189,13 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          suffix={
+                            <ContextualHelp
+                              title={t('dailyWagerLimit')}
+                              anchor={{ to: 'bottom', gap: 8 }}
+                              content={<p>{t('dailyWagerLimitDesc')}</p>}
+                            />
+                          }
                         />
                       </div>
                     </div>
@@ -215,6 +222,13 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          suffix={
+                            <ContextualHelp
+                              title={t('weeklyWagerLimit')}
+                              anchor={{ to: 'bottom', gap: 8 }}
+                              content={<p>{t('weeklyWagerLimitDesc')}</p>}
+                            />
+                          }
                         />
                       </div>
                     </div>
@@ -241,6 +255,13 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          suffix={
+                            <ContextualHelp
+                              title={t('monthlyWagerLimit')}
+                              anchor={{ to: 'bottom', gap: 8 }}
+                              content={<p>{t('monthlyWagerLimitDesc')}</p>}
+                            />
+                          }
                         />
                       </div>
                     </div>
@@ -266,6 +287,13 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          suffix={
+                            <ContextualHelp
+                              title={t('dailyDepositLimit')}
+                              anchor={{ to: 'bottom', gap: 8 }}
+                              content={<p>{t('dailyDepositLimitDesc')}</p>}
+                            />
+                          }
                         />
                       </div>
                     </div>
@@ -291,6 +319,13 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          suffix={
+                            <ContextualHelp
+                              title={t('weeklyDepositLimit')}
+                              anchor={{ to: 'bottom', gap: 8 }}
+                              content={<p>{t('weeklyDepositLimitDesc')}</p>}
+                            />
+                          }
                         />
                       </div>
                     </div>
@@ -316,6 +351,13 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          suffix={
+                            <ContextualHelp
+                              title={t('weeklyDepositLimit')}
+                              anchor={{ to: 'bottom', gap: 8 }}
+                              content={<p>{t('monthlyDepositLimitDesc')}</p>}
+                            />
+                          }
                         />
                       </div>
                     </div>
@@ -341,6 +383,13 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          suffix={
+                            <ContextualHelp
+                              title={t('dailyWithdrawLimit')}
+                              anchor={{ to: 'bottom', gap: 8 }}
+                              content={<p>{t('dailyWithdrawLimitDesc')}</p>}
+                            />
+                          }
                         />
                       </div>
                     </div>
@@ -366,6 +415,13 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          suffix={
+                            <ContextualHelp
+                              title={t('weeklyWithdrawLimit')}
+                              anchor={{ to: 'bottom', gap: 8 }}
+                              content={<p>{t('weeklyWithdrawLimitDesc')}</p>}
+                            />
+                          }
                         />
                       </div>
                     </div>
@@ -391,6 +447,13 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          suffix={
+                            <ContextualHelp
+                              title={t('monthlyWithdrawLimit')}
+                              anchor={{ to: 'bottom', gap: 8 }}
+                              content={<p>{t('monthlyWithdrawLimitDesc')}</p>}
+                            />
+                          }
                         />
                       </div>
                     </div>
@@ -402,15 +465,6 @@ const PlayerLimit = () => {
                       <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
                         {t('dailyLossLimit')}
                       </h2>
-                      <ContextualHelp
-                        title="What is a Contextual help ?"
-                        content={
-                          <p>
-                            Contextual help shows a user extra information about the state of an
-                            adjacent component, or a total view.
-                          </p>
-                        }
-                      />
                     </div>
                     <Switch {...register('hasDailyLossLimit')} label="" />
                   </div>
@@ -427,6 +481,13 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          suffix={
+                            <ContextualHelp
+                              title={t('dailyLossLimit')}
+                              anchor={{ to: 'bottom', gap: 8 }}
+                              content={<p>{t('dailyLossLimitDesc')}</p>}
+                            />
+                          }
                         />
                       </div>
                     </div>
@@ -452,6 +513,13 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          suffix={
+                            <ContextualHelp
+                              title={t('weeklyLossLimit')}
+                              anchor={{ to: 'bottom', gap: 8 }}
+                              content={<p>{t('weeklyLossLimitDesc')}</p>}
+                            />
+                          }
                         />
                       </div>
                     </div>
@@ -477,6 +545,13 @@ const PlayerLimit = () => {
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
+                          suffix={
+                            <ContextualHelp
+                              title={t('monthlyLossLimit')}
+                              anchor={{ to: 'bottom', gap: 8 }}
+                              content={<p>{t('monthlyLossLimitDesc')}</p>}
+                            />
+                          }
                         />
                       </div>
                     </div>

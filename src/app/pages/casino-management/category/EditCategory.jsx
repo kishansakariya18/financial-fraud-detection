@@ -1,4 +1,3 @@
-import { ChevronDoubleRightIcon } from '@heroicons/react/24/outline';
 import { Page } from 'components/shared/Page';
 import { Button, Input } from 'components/ui';
 import { t } from 'i18next';
@@ -57,7 +56,6 @@ export function EditCategory({ value = '', categoryId, closeModal = () => {} }) 
             <div className="grid gap-4 sm:grid-cols-1">
               <Input
                 {...register('name')}
-                prefix={<ChevronDoubleRightIcon className="size-5" />}
                 label={t('casino_category') + ' ' + t('name')}
                 error={errors?.userName?.message}
                 placeholder={t('enter') + ' ' + t('casino_category')}

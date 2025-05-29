@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import PlatformLimitService from 'services/platform.services';
 import { updatePlatformLimitSchema } from './schema';
 import { useTranslation } from 'react-i18next';
+import { ContextualHelp } from 'components/shared/ContextualHelp';
 
 const PlatformLimit = () => {
   const { t } = useTranslation();
@@ -100,36 +101,71 @@ const PlatformLimit = () => {
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
                 {...register('dailyDepositLimit')}
-                label={t('dailyDepositLimit')}
+                label={t('dailyDepositLimitPlatform')}
                 type="number"
                 error={errors?.dailyDepositLimit?.message}
                 placeholder="Enter Daily Deposit Limit"
+                suffix={
+                  <ContextualHelp
+                    title={t('dailyDepositLimitPlatform')}
+                    anchor={{ to: 'bottom', gap: 8 }}
+                    content={<p>{t('dailyDepositLimitPlatformDesc')}</p>}
+                  />
+                }
               />
               <Input
                 {...register('dailyWithdrawLimit')}
-                label={t('dailyWithdrawLimit')}
+                label={t('dailyWithdrawLimitPlatform')}
                 type="number"
                 error={errors?.dailyWithdrawLimit?.message}
                 placeholder="Enter Daily Withdraw Limit"
+                suffix={
+                  <ContextualHelp
+                    title={t('dailyWithdrawLimitPlatform')}
+                    anchor={{ to: 'bottom', gap: 8 }}
+                    content={<p>{t('dailyWithdrawLimitPlatformDesc')}</p>}
+                  />
+                }
               />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
                 {...register('oneTimeBetLimit')}
-                label={t('oneTimeBetLimit')}
+                label={t('oneTimeWinLimitPlatform')}
                 type="number"
                 error={errors?.oneTimeBetLimit?.message}
                 placeholder="Enter Bet Limit"
+                suffix={
+                  <ContextualHelp
+                    title={t('oneTimeWinLimitPlatform')}
+                    anchor={{ to: 'bottom', gap: 8 }}
+                    content={<p>{t('oneTimeBetLimitPlatformDesc')}</p>}
+                  />
+                }
               />
               <Input
                 {...register('oneTimeWinLimit')}
-                label={t('oneTimeWinLimit')}
+                label={t('oneTimeWinLimitPlatform')}
                 type="number"
                 error={errors?.oneTimeWinLimit?.message}
                 placeholder="Enter Win Limit"
+                suffix={
+                  <ContextualHelp
+                    title={t('oneTimeWinLimitPlatform')}
+                    anchor={{ to: 'bottom', gap: 8 }}
+                    content={<p>{t('oneTimeWinLimitPlatformDesc')}</p>}
+                  />
+                }
               />
             </div>
-            <Checkbox label={t('checkCalenderTime')} {...register('isCheckCaladerTime')} />
+            <div className="flex items-center gap-2">
+              <Checkbox label={t('checkCalenderTime')} {...register('isCheckCaladerTime')} />
+              <ContextualHelp
+                title={t('checkCalenderTime')}
+                anchor={{ to: 'bottom', gap: 8 }}
+                content={<p>{t('checkCalenderTimeDesc')}</p>}
+              />
+            </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
             <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
