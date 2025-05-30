@@ -41,6 +41,14 @@ export function CountryFilters({
       </div>
       <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
         <DashboardCard
+          label={dummyCards.Country.TOTAL_COUNTRY.key}
+          value={dummyCards.Country.TOTAL_COUNTRY.value}
+          gradientFrom={dummyCards.Country.TOTAL_COUNTRY.gradientFrom}
+          gradientTo={dummyCards.Country.TOTAL_COUNTRY.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+        <DashboardCard
           label={dummyCards.Country.ACTIVE_COUNTRY.key}
           value={dummyCards.Country.ACTIVE_COUNTRY.value}
           gradientFrom={dummyCards.Country.ACTIVE_COUNTRY.gradientFrom}
@@ -53,14 +61,6 @@ export function CountryFilters({
           value={dummyCards.Country.INACTIVE_COUNTRY.value}
           gradientFrom={dummyCards.Country.INACTIVE_COUNTRY.gradientFrom}
           gradientTo={dummyCards.Country.INACTIVE_COUNTRY.gradientTo}
-          textColor="text-sky-100"
-          maskShape="is-reuleaux-triangle"
-        />
-        <DashboardCard
-          label={dummyCards.Country.TOTAL_COUNTRY.key}
-          value={dummyCards.Country.TOTAL_COUNTRY.value}
-          gradientFrom={dummyCards.Country.TOTAL_COUNTRY.gradientFrom}
-          gradientTo={dummyCards.Country.TOTAL_COUNTRY.gradientTo}
           textColor="text-sky-100"
           maskShape="is-reuleaux-triangle"
         />
