@@ -5,7 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Button, Input } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
 import EmailTemplateService from 'services/email-template.services';
@@ -17,6 +17,7 @@ import { emailTemplateOptions, emailTemplateStatusToAPP } from './helper';
 import { stringToSlug } from 'utils/stringToSlug';
 
 const EditEmailTemplate = () => {
+  const navigate = useNavigate();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { templateId } = useParams();
@@ -26,6 +27,7 @@ const EditEmailTemplate = () => {
   const [htmlContent, setHtmlContent] = useState('');
 
   const { t } = useTranslation();
+  // console.log('htmlContent:', htmlContent);
 
   const breadcrumbItem = [
     { title: t('emailTemplate'), path: '/email-template' },
@@ -47,6 +49,8 @@ const EditEmailTemplate = () => {
   const title = watch('title');
 
   const handleChange = (val) => {
+    // console.log('handleChange: ', val);
+
     setContent(val);
     const quill = new Quill(document.createElement('div'));
     quill.setContents(val);
@@ -59,6 +63,8 @@ const EditEmailTemplate = () => {
   };
 
   const editEmailTemplateAPI = async (requestObject) => {
+    // console.log('requestObject: ', requestObject);
+
     setLoading(true);
     setError(null);
     const result = await EmailTemplateService.emailTemplateUpdate(requestObject);
@@ -74,7 +80,6 @@ const EditEmailTemplate = () => {
   const fetchEmailTemplateDetails = async () => {
     try {
       const result = await EmailTemplateService.emailTemplateDetail(templateId);
-
       if (result) {
         if (result.status === 200 || result.status === 201) {
           return result.response.data;
@@ -105,8 +110,7 @@ const EditEmailTemplate = () => {
           quill.root.innerHTML = result?.BodyHtml || '';
           quill.setContents(result?.BodyHtml);
           const delta = quill.getContents();
-
-          setHtmlContent(result?.Template || '');
+          setHtmlContent(result?.BodyHtml || '');
 
           setContent(delta);
 
@@ -124,6 +128,7 @@ const EditEmailTemplate = () => {
 
   if (!loading && !error && response) {
     toast.success(response.message);
+    navigate('/email-template');
     setResponse(null);
     fetchEmailTemplateDetails();
   }
