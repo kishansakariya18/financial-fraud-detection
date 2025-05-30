@@ -1,15 +1,27 @@
 import { emailTemplateStatusToAPI } from 'app/pages/email-template/helper';
 import apiConfig from 'configs/api.config';
+import dayjs from 'dayjs';
 import { sendRequest } from 'utils/axios';
 
 const EmailTemplateService = {
   emailTemplateList: async (data) => {
     try {
       const { filters, pagination } = data;
+      console.log('filters:', filters);
+
       const reqBody = {
         page: pagination.pageIndex + 1,
         limit: pagination.pageSize,
-        keyword: filters?.keyword || undefined
+        filters: {
+          keyword: filters?.keyword || undefined,
+          status: emailTemplateStatusToAPI(filters?.status),
+          endDate: filters.endDate
+            ? dayjs(+filters.endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
+            : undefined,
+          startDate: filters.startDate
+            ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
+            : undefined
+        }
       };
       const endPoint = apiConfig.endPoints.EMAIL_TEMPLATE.LIST;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
