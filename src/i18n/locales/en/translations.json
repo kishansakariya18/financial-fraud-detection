@@ -22,7 +22,8 @@
     "platform": {
       "platform": "Platform",
       "limit": "Platform Limit"
-    }
+    },
+    "banner": "Banner"
   },
   "aiChat": "AI Chat",
   "remove": "Remove",

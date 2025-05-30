@@ -247,6 +247,7 @@ export const PERMISSIONS = {
     }
   },
   BANNER: {
+    LIST: 'banner-view',
     ADD: 'banner-add',
     EDIT: 'banner-edit',
     VIEW: 'banner-view',

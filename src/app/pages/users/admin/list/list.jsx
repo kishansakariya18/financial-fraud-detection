@@ -50,7 +50,7 @@ export default function Admin() {
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
       tableSettings: {},
-      columnVisibility: { firstname: false }
+      columnVisibility: { firstname: false, lastname: false, adminUID: false }
     }
   });
 

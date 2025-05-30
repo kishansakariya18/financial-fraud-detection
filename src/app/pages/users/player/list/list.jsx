@@ -49,7 +49,7 @@ export default function Player() {
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
       tableSettings: {},
-      columnVisibility: { username: false }
+      columnVisibility: { userUID: false }
     }
   });
 
