@@ -12,6 +12,7 @@ import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { segmentationStatusOptions } from '../helper';
 import { useNavigate } from 'react-router';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 // ----------------------------------------------------------------------
 
@@ -19,7 +20,8 @@ export function Toolbar({
   table,
   pageTitle = '',
   onApplyFilters = () => {},
-  onClearFilters = () => {}
+  onClearFilters = () => {},
+  breadcrumbItem
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
@@ -36,6 +38,10 @@ export function Toolbar({
           <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
             {pageTitle}
           </h2>
+          <div className="hidden self-stretch py-1 sm:flex">
+            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          </div>
+          {breadcrumbItem && <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />}
         </div>
 
         <Button
@@ -97,14 +103,14 @@ export function Toolbar({
 function SearchInput({ table }) {
   return (
     <Input
-      value={table?.getColumn('name')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('name').setFilterValue(e.target.value)}
+      value={table?.getColumn('username')?.getFilterValue() || ''}
+      onChange={(e) => table.getColumn('username').setFilterValue(e.target.value)}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
         root: 'shrink-0'
       }}
-      placeholder={t('search') + ' ' + t('name') + ' ...'}
+      placeholder={t('search') + ' ' + t('username') + ' ...'}
     />
   );
 }

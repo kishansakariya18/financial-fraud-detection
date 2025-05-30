@@ -219,7 +219,7 @@ export const PERMISSIONS = {
   },
   CONTEST_PROMOCODE: {
     LIST: 'contest-promo-code-view',
-    USER_LIST: 'contest-promo-code-user-list',
+    USER_LIST: 'contest-promo-code-player-list',
     CHANGE_STATUS: 'contest-promo-code-change-status',
     DELETE: 'contest-promo-code-delete'
   },
@@ -296,7 +296,8 @@ export const PERMISSIONS = {
     LIST: 'segmentation-view',
     ADD: 'segmentation-add',
     EDIT: 'segmentation-add',
-    CHANGE_STATUS: 'segmentation-change-status'
+    CHANGE_STATUS: 'segmentation-change-status',
+    PLAYER_LIST: 'segmentation-player-list'
   },
   COMMUNICATION_DASHBOARD: {
     LIST: 'ublist-view',

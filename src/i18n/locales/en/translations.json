@@ -371,5 +371,7 @@
   "configuration": "Configuration",
   "isSignupCommissionEnabled": "Is Signup Commission Enabled?",
   "isDepositCommissionEnabled": "Is Deposit Commission Enabled?",
-  "isUserLossCommissionEnabled": "Is User Loss Commission Enabled?"
+  "isUserLossCommissionEnabled": "Is User Loss Commission Enabled?",
+  "segmented": "Segmented",
+  "username": "Username"
 }
