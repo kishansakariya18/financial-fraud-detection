@@ -14,6 +14,8 @@ import { t } from 'i18next';
 import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { statusOptions } from '../helper';
+import { DashboardCard } from 'components/custom/DashboardCard';
+import { dummyCards } from 'helpers/functions';
 // import { useSearchParams } from 'react-router';
 // import { CreateCategory } from '../CreateCategory';
 
@@ -43,6 +45,41 @@ export function ProviderFilters({
           </h2>
         </div>
         {/* <CreateCategory tableFetch={table.options.meta?.fetchNewList(false)} /> */}
+      </div>
+
+      <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
+        <DashboardCard
+          label={dummyCards.Provider.TOTAL_PROVIDER.key}
+          value={dummyCards.Provider.TOTAL_PROVIDER.value}
+          gradientFrom={dummyCards.Provider.TOTAL_PROVIDER.gradientFrom}
+          gradientTo={dummyCards.Provider.TOTAL_PROVIDER.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+        <DashboardCard
+          label={dummyCards.Provider.ACTIVE_PROVIDER.key}
+          value={dummyCards.Provider.ACTIVE_PROVIDER.value}
+          gradientFrom={dummyCards.Provider.ACTIVE_PROVIDER.gradientFrom}
+          gradientTo={dummyCards.Provider.ACTIVE_PROVIDER.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+        <DashboardCard
+          label={dummyCards.Provider.INACTIVE_PROVIDER.key}
+          value={dummyCards.Provider.INACTIVE_PROVIDER.value}
+          gradientFrom={dummyCards.Provider.INACTIVE_PROVIDER.gradientFrom}
+          gradientTo={dummyCards.Provider.INACTIVE_PROVIDER.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+        <DashboardCard
+          label={dummyCards.Provider.TOTAL_GAMES.key}
+          value={dummyCards.Provider.TOTAL_GAMES.value}
+          gradientFrom={dummyCards.Provider.TOTAL_GAMES.gradientFrom}
+          gradientTo={dummyCards.Provider.TOTAL_GAMES.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
       </div>
       {isXs ? (
         <>

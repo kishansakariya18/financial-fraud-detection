@@ -38,6 +38,7 @@ const EditAffiliate = () => {
     formState: { errors },
     reset,
     watch,
+    setValue,
     control
   } = useForm({
     resolver: yupResolver(editAffiliateSchema)
@@ -114,7 +115,19 @@ const EditAffiliate = () => {
 
     setResponse(null);
   }
-
+  useEffect(() => {
+    if (!perSignup) {
+      setValue('signupCommission', null);
+    }
+    if (!perDeposit) {
+      setValue('depositCommissionType', null);
+      setValue('depositCommission', null);
+    }
+    if (!perPlayerLoss) {
+      setValue('playerLossCommissionType', null);
+      setValue('playerLossCommission', null);
+    }
+  }, [perSignup, perDeposit, perPlayerLoss, setValue]);
   const onSubmit = async (data) => {
     await editAffiliateAPI({ affiliateUID: affiliateId, ...data });
   };
@@ -213,7 +226,7 @@ const EditAffiliate = () => {
                 <Checkbox label={t('per') + ' ' + t('signup')} {...register('perSignup')} />
               </div>
 
-              {perSignup && (
+              {
                 <div>
                   <Input
                     {...register('signupCommission')}
@@ -221,16 +234,17 @@ const EditAffiliate = () => {
                     error={errors?.signupCommission?.message}
                     placeholder={t('enter') + ' ' + t('signup') + ' ' + t('commission')}
                     type="number"
+                    disabled={!perSignup}
                   />
                 </div>
-              )}
+              }
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
                 <Checkbox label={t('per') + ' ' + t('deposit')} {...register('perDeposit')} />
               </div>
 
-              {perDeposit && (
+              {
                 <>
                   <div>
                     <Controller
@@ -252,6 +266,7 @@ const EditAffiliate = () => {
                             ' ' +
                             t('type')
                           }
+                          disabled={!perDeposit}
                           displayField="label"
                           error={errors?.depositCommissionType?.message}
                         />
@@ -262,6 +277,7 @@ const EditAffiliate = () => {
                   </div>
                   <div>
                     <Input
+                      disabled={!perDeposit}
                       {...register('depositCommission')}
                       prefix={<BiMoney className="size-5" />}
                       error={errors?.depositCommission?.message}
@@ -270,14 +286,14 @@ const EditAffiliate = () => {
                     />
                   </div>
                 </>
-              )}
+              }
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
                 <Checkbox label={t('per') + ' ' + t('playerLoss')} {...register('perPlayerLoss')} />
               </div>
 
-              {perPlayerLoss && (
+              {
                 <>
                   <div>
                     <Controller
@@ -300,10 +316,12 @@ const EditAffiliate = () => {
                             ' ' +
                             t('type')
                           }
+                          disabled={!perPlayerLoss}
                           displayField="label"
                           error={errors?.playerLossCommissionType?.message}
                         />
                       )}
+                      // disabled={!perPlayerLoss}
                       control={control}
                       name="playerLossCommissionType"
                     />
@@ -311,6 +329,7 @@ const EditAffiliate = () => {
                   <div>
                     <Input
                       {...register('playerLossCommission')}
+                      disabled={!perPlayerLoss}
                       prefix={<BiMoney className="size-5" />}
                       error={errors?.playerLossCommission?.message}
                       placeholder={t('enter') + ' ' + t('playerLoss') + ' ' + t('comission')}
@@ -318,7 +337,7 @@ const EditAffiliate = () => {
                     />
                   </div>
                 </>
-              )}
+              }
             </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">

@@ -12,6 +12,8 @@ import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { useNavigate } from 'react-router';
 import { promocodeStatusOptions } from '../helper';
+import { DashboardCard } from 'components/custom/DashboardCard';
+import { dummyCards } from 'helpers/functions';
 
 // ----------------------------------------------------------------------
 
@@ -46,7 +48,40 @@ export function Toolbar({
           <span>{t('create') + ' ' + t('promocode')}</span>
         </Button>
       </div>
-
+      <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
+        <DashboardCard
+          label={dummyCards.PromoCode.TOTAL_PROMOCODE.key}
+          value={dummyCards.PromoCode.TOTAL_PROMOCODE.value}
+          gradientFrom={dummyCards.PromoCode.TOTAL_PROMOCODE.gradientFrom}
+          gradientTo={dummyCards.PromoCode.TOTAL_PROMOCODE.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+        <DashboardCard
+          label={dummyCards.PromoCode.TOTAL_DEPOSITS.key}
+          value={dummyCards.PromoCode.TOTAL_DEPOSITS.value}
+          gradientFrom={dummyCards.PromoCode.TOTAL_DEPOSITS.gradientFrom}
+          gradientTo={dummyCards.PromoCode.TOTAL_DEPOSITS.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+        <DashboardCard
+          label={dummyCards.PromoCode.TOTAL_REWARDS.key}
+          value={dummyCards.PromoCode.TOTAL_REWARDS.value}
+          gradientFrom={dummyCards.PromoCode.TOTAL_REWARDS.gradientFrom}
+          gradientTo={dummyCards.PromoCode.TOTAL_REWARDS.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+        <DashboardCard
+          label={dummyCards.PromoCode.TOTAL_WAGERING.key}
+          value={dummyCards.PromoCode.TOTAL_WAGERING.value}
+          gradientFrom={dummyCards.PromoCode.TOTAL_WAGERING.gradientFrom}
+          gradientTo={dummyCards.PromoCode.TOTAL_WAGERING.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+      </div>
       {isXs ? (
         <>
           <div

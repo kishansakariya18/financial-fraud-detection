@@ -8,7 +8,7 @@ import { Listbox } from 'components/shared/form/Listbox';
 import { Button, Checkbox, Input } from 'components/ui';
 import { createAffiliateSchema } from './schema';
 import { CiMobile1 } from 'react-icons/ci';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
@@ -38,6 +38,7 @@ const CreateAffiliate = () => {
     formState: { errors },
     reset,
     watch,
+    setValue,
     control
   } = useForm({
     resolver: yupResolver(createAffiliateSchema)
@@ -78,6 +79,20 @@ const CreateAffiliate = () => {
   const onSubmit = async (data) => {
     await createAffiliateAPI(data);
   };
+  useEffect(() => {
+    if (!perSignup) {
+      setValue('signupCommission', null);
+    }
+    if (!perDeposit) {
+      setValue('depositCommissionType', null);
+      setValue('depositCommission', null);
+    }
+    if (!perPlayerLoss) {
+      setValue('playerLossCommissionType', null);
+      setValue('playerLossCommission', null);
+    }
+  }, [perSignup, perDeposit, perPlayerLoss, setValue]);
+
   return (
     <Page title={t('create') + ' ' + t('affiliate')}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
@@ -200,7 +215,7 @@ const CreateAffiliate = () => {
                 <Checkbox label={t('per') + ' ' + t('signup')} {...register('perSignup')} />
               </div>
 
-              {perSignup && (
+              {
                 <div>
                   <Input
                     {...register('signupCommission')}
@@ -208,16 +223,17 @@ const CreateAffiliate = () => {
                     error={errors?.signupCommission?.message}
                     placeholder={t('enter') + ' ' + t('signup') + ' ' + t('commission')}
                     type="number"
+                    disabled={!perSignup}
                   />
                 </div>
-              )}
+              }
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
                 <Checkbox label={t('per') + ' ' + t('deposit')} {...register('perDeposit')} />
               </div>
 
-              {perDeposit && (
+              {
                 <>
                   <div>
                     <Controller
@@ -239,6 +255,7 @@ const CreateAffiliate = () => {
                             ' ' +
                             t('type')
                           }
+                          disabled={!perDeposit}
                           displayField="label"
                           error={errors?.depositCommissionType?.message}
                         />
@@ -249,6 +266,7 @@ const CreateAffiliate = () => {
                   </div>
                   <div>
                     <Input
+                      disabled={!perDeposit}
                       {...register('depositCommission')}
                       prefix={<BiMoney className="size-5" />}
                       error={errors?.depositCommission?.message}
@@ -257,14 +275,14 @@ const CreateAffiliate = () => {
                     />
                   </div>
                 </>
-              )}
+              }
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
                 <Checkbox label={t('per') + ' ' + t('playerLoss')} {...register('perPlayerLoss')} />
               </div>
 
-              {perPlayerLoss && (
+              {
                 <>
                   <div>
                     <Controller
@@ -287,10 +305,12 @@ const CreateAffiliate = () => {
                             ' ' +
                             t('type')
                           }
+                          disabled={!perPlayerLoss}
                           displayField="label"
                           error={errors?.playerLossCommissionType?.message}
                         />
                       )}
+                      // disabled={!perPlayerLoss}
                       control={control}
                       name="playerLossCommissionType"
                     />
@@ -298,6 +318,7 @@ const CreateAffiliate = () => {
                   <div>
                     <Input
                       {...register('playerLossCommission')}
+                      disabled={!perPlayerLoss}
                       prefix={<BiMoney className="size-5" />}
                       error={errors?.playerLossCommission?.message}
                       placeholder={t('enter') + ' ' + t('playerLoss') + ' ' + t('comission')}
@@ -305,7 +326,7 @@ const CreateAffiliate = () => {
                     />
                   </div>
                 </>
-              )}
+              }
             </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">

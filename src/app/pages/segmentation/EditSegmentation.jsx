@@ -31,6 +31,7 @@ const EditSegmentation = () => {
     register,
     handleSubmit,
     watch,
+    setValue,
     control,
     formState: { errors },
     reset
@@ -78,6 +79,44 @@ const EditSegmentation = () => {
       setError(result.error);
     }
   };
+  useEffect(() => {
+    console.log('countryCheck:', countryCheck);
+
+    if (!kyc) setValue('kycType', null);
+    if (!countryCheck) setValue('countries', null);
+
+    if (!ageGroup) setValue('minAge', null);
+    if (!ageGroup) setValue('maxAge', null);
+
+    if (!genderCheck) setValue('gender', null);
+
+    if (!loginCounter) setValue('maxLoginCount', null);
+    if (!loginCounter) setValue('minLoginCount', null);
+
+    if (!referral) setValue('minReferral', null);
+    if (!referral) setValue('maxReferral', null);
+
+    if (!moneyDeposit) setValue('maxDeposit', null);
+    if (!moneyDeposit) setValue('minDeposit', null);
+
+    if (!moneyWon) setValue('maxWon', null);
+    if (!moneyWon) setValue('minWon', null);
+
+    if (!moneyLoss) setValue('lossAmount', null);
+    if (!moneyLoss) setValue('maxLoss', null);
+    if (!moneyLoss) setValue('minLoss', null);
+  }, [
+    kyc,
+    countryCheck,
+    ageGroup,
+    genderCheck,
+    loginCounter,
+    referral,
+    moneyDeposit,
+    moneyWon,
+    moneyLoss,
+    setValue
+  ]);
 
   useEffect(() => {
     console.log('called');
@@ -90,7 +129,6 @@ const EditSegmentation = () => {
             // Gender
             genderCheck: result?.Filters?.GenderCheck === 'on',
             gender: result?.Filters?.Gender || null,
-
             // Age
             ageGroup: result?.Filters?.AgeCheck === 'on',
             minAge: result?.Filters?.MinAge ? Number(result?.Filters?.MinAge) : null,
@@ -208,16 +246,19 @@ const EditSegmentation = () => {
                 <Checkbox label={t('kyc')} {...register('kyc')} />
               </div>
 
-              {kyc && (
+              {
                 <>
                   <div>
                     <Controller
                       render={({ field }) => (
                         <Listbox
                           data={kycOptions}
-                          value={kycOptions.find((opt) => opt.value === field.value) || null}
+                          value={
+                            (kyc && kycOptions.find((opt) => opt.value === field.value)) || null
+                          }
                           onChange={(val) => field.onChange(val.value)}
                           name={field.name}
+                          disabled={!kyc}
                           placeholder={t('select') + ' ' + t('kyc') + ' ' + t('option')}
                           displayField="label"
                           error={errors?.playerLossCommissionType?.message}
@@ -228,20 +269,21 @@ const EditSegmentation = () => {
                     />
                   </div>
                 </>
-              )}
+              }
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
                 <Checkbox label={t('countries')} {...register('countryCheck')} />
               </div>
 
-              {countryCheck && (
+              {
                 <>
                   <div>
                     <Controller
                       render={({ field }) => (
                         <Listbox
                           data={countryOptions}
+                          disabled={!countryCheck}
                           value={countryOptions.find((opt) => opt.value === field.value) || null}
                           onChange={(val) => field.onChange(val.value)}
                           name={field.name}
@@ -255,38 +297,41 @@ const EditSegmentation = () => {
                     />
                   </div>
                 </>
-              )}
+              }
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
                 <Checkbox label={t('age') + ' ' + t('group')} {...register('ageGroup')} />
               </div>
-              {ageGroup && (
+              {
                 <>
                   <Input
                     {...register('minAge')}
                     error={errors?.minAge?.message}
                     placeholder={t('enter') + ' ' + t('minimum') + ' ' + t('age')}
                     type="number"
+                    disabled={!ageGroup}
                   />
                   <Input
                     {...register('maxAge')}
                     error={errors?.maxAge?.message}
                     placeholder={t('enter') + ' ' + t('maximum') + ' ' + t('age')}
                     type="number"
+                    disabled={!ageGroup}
                   />
                 </>
-              )}
+              }
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
                 <Checkbox label={t('gender')} {...register('genderCheck')} />
               </div>
-              {genderCheck && (
+              {
                 <Controller
                   render={({ field }) => (
                     <Listbox
                       data={genderOptions}
+                      disabled={!genderCheck}
                       value={genderOptions.find((opt) => opt.value === field.value) || null}
                       onChange={(val) => field.onChange(val.value)}
                       name={field.name}
@@ -298,112 +343,122 @@ const EditSegmentation = () => {
                   control={control}
                   name="gender"
                 />
-              )}
+              }
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
                 <Checkbox label={t('login') + ' ' + t('counter')} {...register('loginCounter')} />
               </div>
-              {loginCounter && (
+              {
                 <>
                   <Input
+                    disabled={!loginCounter}
                     {...register('minLoginCount')}
                     error={errors?.minLoginCount?.message}
                     placeholder={t('minimum') + ' ' + t('login') + ' ' + t('count')}
                     type="number"
                   />
                   <Input
+                    disabled={!loginCounter}
                     {...register('maxLoginCount')}
                     error={errors?.maxLoginCount?.message}
                     placeholder={t('maximum') + ' ' + t('login') + ' ' + t('count')}
                     type="number"
                   />
                 </>
-              )}
+              }
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
                 <Checkbox label={t('referral')} {...register('referral')} />
               </div>
-              {referral && (
+              {
                 <>
                   <Input
                     {...register('minReferral')}
                     error={errors?.minReferral?.message}
                     placeholder={t('minimum') + ' ' + t('referral') + ' ' + t('count')}
                     type="number"
+                    disabled={!referral}
                   />
                   <Input
+                    disabled={!referral}
                     {...register('maxReferral')}
                     error={errors?.maxReferral?.message}
                     placeholder={t('maximum') + ' ' + t('referral') + ' ' + t('count')}
                     type="number"
                   />
                 </>
-              )}
+              }
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
                 <Checkbox label={t('money') + ' ' + t('deposit')} {...register('moneyDeposit')} />
               </div>
-              {moneyDeposit && (
+              {
                 <>
                   <Input
                     {...register('minDeposit')}
                     error={errors?.minDeposit?.message}
                     placeholder={t('minimum') + ' ' + t('deposit')}
                     type="number"
+                    disabled={!moneyDeposit}
                   />
                   <Input
                     {...register('maxDeposit')}
                     error={errors?.maxDeposit?.message}
                     placeholder={t('maximum') + ' ' + t('deposit')}
                     type="number"
+                    disabled={!moneyDeposit}
                   />
                 </>
-              )}
+              }
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
                 <Checkbox label={t('money') + ' ' + t('won')} {...register('moneyWon')} />
               </div>
-              {moneyWon && (
+              {
                 <>
                   <Input
                     {...register('minWon')}
                     error={errors?.minWon?.message}
                     placeholder={t('minimum') + ' ' + t('won')}
                     type="number"
+                    disabled={!moneyWon}
                   />
                   <Input
                     {...register('maxWon')}
                     error={errors?.maxWon?.message}
                     placeholder={t('maximum') + ' ' + t('won')}
                     type="number"
+                    disabled={!moneyWon}
                   />
                 </>
-              )}
+              }
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
                 <Checkbox label={t('money') + ' ' + t('loss')} {...register('moneyLoss')} />
               </div>
-              {moneyLoss && (
+              {
                 <>
                   <Input
+                    disabled={!moneyLoss}
                     {...register('minLoss')}
                     error={errors?.minLoss?.message}
                     placeholder={t('minimum') + ' ' + t('loss')}
                     type="number"
                   />
                   <Input
+                    disabled={!moneyLoss}
                     {...register('maxLoss')}
                     error={errors?.maxLoss?.message}
                     placeholder={t('maximum') + ' ' + t('loss')}
                     type="number"
                   />
                 </>
-              )}
+              }
             </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">

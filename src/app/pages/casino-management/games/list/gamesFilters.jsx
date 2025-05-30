@@ -14,6 +14,8 @@ import { t } from 'i18next';
 import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { statusOptions } from '../helper';
+import { DashboardCard } from 'components/custom/DashboardCard';
+import { dummyCards } from 'helpers/functions';
 // import { useSearchParams } from 'react-router';
 // import { CreateCategory } from '../CreateCategory';
 
@@ -43,6 +45,24 @@ export function ProviderFilters({
           </h2>
         </div>
         {/* <CreateCategory tableFetch={table.options.meta?.fetchNewList(false)} /> */}
+      </div>
+      <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
+        <DashboardCard
+          label={dummyCards.Games.TOTAL_GAMES.key}
+          value={dummyCards.Games.TOTAL_GAMES.value}
+          gradientFrom={dummyCards.Games.TOTAL_GAMES.gradientFrom}
+          gradientTo={dummyCards.Games.TOTAL_GAMES.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+        <DashboardCard
+          label={dummyCards.Games.TOTAL_PROVIDER.key}
+          value={dummyCards.Games.TOTAL_PROVIDER.value}
+          gradientFrom={dummyCards.Games.TOTAL_PROVIDER.gradientFrom}
+          gradientTo={dummyCards.Games.TOTAL_PROVIDER.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
       </div>
       {isXs ? (
         <>
