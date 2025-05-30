@@ -11,6 +11,8 @@ import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { playerStatusOptions } from '../helper';
 import { t } from 'i18next';
+import { DashboardCard } from 'components/custom/DashboardCard';
+import { dummyCards } from 'helpers/functions';
 
 // ----------------------------------------------------------------------
 
@@ -36,7 +38,40 @@ export function Toolbar({
           </h2>
         </div>
       </div>
-
+      <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
+        <DashboardCard
+          label={dummyCards.User.TOTAL_USERS.key}
+          value={dummyCards.User.TOTAL_USERS.value}
+          gradientFrom={dummyCards.User.TOTAL_USERS.gradientFrom}
+          gradientTo={dummyCards.User.TOTAL_USERS.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+        <DashboardCard
+          label={dummyCards.User.INACTIVE_USERS.key}
+          value={dummyCards.User.INACTIVE_USERS.value}
+          gradientFrom={dummyCards.User.INACTIVE_USERS.gradientFrom}
+          gradientTo={dummyCards.User.INACTIVE_USERS.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+        <DashboardCard
+          label={dummyCards.User.TOTAL_REALCASH.key}
+          value={dummyCards.User.TOTAL_REALCASH.value}
+          gradientFrom={dummyCards.User.TOTAL_REALCASH.gradientFrom}
+          gradientTo={dummyCards.User.TOTAL_REALCASH.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+        <DashboardCard
+          label={dummyCards.User.TOTAL_BONUS.key}
+          value={dummyCards.User.TOTAL_BONUS.value}
+          gradientFrom={dummyCards.User.TOTAL_BONUS.gradientFrom}
+          gradientTo={dummyCards.User.TOTAL_BONUS.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+      </div>
       {isXs ? (
         <>
           <div

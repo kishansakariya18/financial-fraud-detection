@@ -16,6 +16,8 @@ import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { statusOptions } from '../helper';
 // import { useSearchParams } from 'react-router';
 import { CreateCategory } from '../CreateCategory';
+import { DashboardCard } from 'components/custom/DashboardCard';
+import { dummyCards } from 'helpers/functions';
 
 // ----------------------------------------------------------------------
 
@@ -43,6 +45,32 @@ export function CategoryFilters({
           </h2>
         </div>
         <CreateCategory tableFetch={table.options.meta?.fetchNewList} />
+      </div>
+      <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
+        <DashboardCard
+          label={dummyCards.Category.TOTAL_CATEGORIES.key}
+          value={dummyCards.Category.TOTAL_CATEGORIES.value}
+          gradientFrom={dummyCards.Category.TOTAL_CATEGORIES.gradientFrom}
+          gradientTo={dummyCards.Category.TOTAL_CATEGORIES.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+        <DashboardCard
+          label={dummyCards.Category.ACTIVE_CATEGORIES.key}
+          value={dummyCards.Category.ACTIVE_CATEGORIES.value}
+          gradientFrom={dummyCards.Category.ACTIVE_CATEGORIES.gradientFrom}
+          gradientTo={dummyCards.Category.ACTIVE_CATEGORIES.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+        <DashboardCard
+          label={dummyCards.Category.INACTIVE_CATEGORIES.key}
+          value={dummyCards.Category.INACTIVE_CATEGORIES.value}
+          gradientFrom={dummyCards.Category.INACTIVE_CATEGORIES.gradientFrom}
+          gradientTo={dummyCards.Category.INACTIVE_CATEGORIES.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
       </div>
       {isXs ? (
         <>

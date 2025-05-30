@@ -14,6 +14,8 @@ import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { useNavigate } from 'react-router';
 import { t } from 'i18next';
 import { statusOptions } from '../helper';
+import { DashboardCard } from 'components/custom/DashboardCard';
+import { dummyCards } from 'helpers/functions';
 
 // ----------------------------------------------------------------------
 
@@ -48,7 +50,24 @@ export function Toolbar({
           <span>{t('create') + ' ' + t('admin')}</span>
         </Button>
       </div>
-
+      <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
+        <DashboardCard
+          label={dummyCards.Admin.TOTAL_ADMIN.key}
+          value={dummyCards.Admin.TOTAL_ADMIN.value}
+          gradientFrom={dummyCards.Admin.TOTAL_ADMIN.gradientFrom}
+          gradientTo={dummyCards.Admin.TOTAL_ADMIN.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+        <DashboardCard
+          label={dummyCards.Admin.ACTIVE_ADMIN.key}
+          value={dummyCards.Admin.ACTIVE_ADMIN.value}
+          gradientFrom={dummyCards.Admin.ACTIVE_ADMIN.gradientFrom}
+          gradientTo={dummyCards.Admin.ACTIVE_ADMIN.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+      </div>
       {isXs ? (
         <>
           <div

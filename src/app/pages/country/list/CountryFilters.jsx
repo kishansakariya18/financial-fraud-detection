@@ -12,6 +12,8 @@ import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { statusOptions } from '../helper';
+import { DashboardCard } from 'components/custom/DashboardCard';
+import { dummyCards } from 'helpers/functions';
 
 // ----------------------------------------------------------------------
 
@@ -37,7 +39,32 @@ export function CountryFilters({
           </h2>
         </div>
       </div>
-
+      <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
+        <DashboardCard
+          label={dummyCards.Country.ACTIVE_COUNTRY.key}
+          value={dummyCards.Country.ACTIVE_COUNTRY.value}
+          gradientFrom={dummyCards.Country.ACTIVE_COUNTRY.gradientFrom}
+          gradientTo={dummyCards.Country.ACTIVE_COUNTRY.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+        <DashboardCard
+          label={dummyCards.Country.INACTIVE_COUNTRY.key}
+          value={dummyCards.Country.INACTIVE_COUNTRY.value}
+          gradientFrom={dummyCards.Country.INACTIVE_COUNTRY.gradientFrom}
+          gradientTo={dummyCards.Country.INACTIVE_COUNTRY.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+        <DashboardCard
+          label={dummyCards.Country.TOTAL_COUNTRY.key}
+          value={dummyCards.Country.TOTAL_COUNTRY.value}
+          gradientFrom={dummyCards.Country.TOTAL_COUNTRY.gradientFrom}
+          gradientTo={dummyCards.Country.TOTAL_COUNTRY.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+      </div>
       {isXs ? (
         <>
           <div

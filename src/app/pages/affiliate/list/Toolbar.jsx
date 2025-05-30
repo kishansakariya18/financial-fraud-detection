@@ -12,6 +12,8 @@ import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { affiliateStatusOptions } from '../helper';
 import { useNavigate } from 'react-router';
+import { DashboardCard } from 'components/custom/DashboardCard';
+import { dummyCards } from 'helpers/functions';
 
 // ----------------------------------------------------------------------
 
@@ -46,7 +48,40 @@ export function Toolbar({
           <span>{t('create') + ' ' + t('affiliate')}</span>
         </Button>
       </div>
-
+      <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
+        <DashboardCard
+          label={dummyCards.Affiliate.TOTAL_AFFILIATE.key}
+          value={dummyCards.Affiliate.TOTAL_AFFILIATE.value}
+          gradientFrom={dummyCards.Affiliate.TOTAL_AFFILIATE.gradientFrom}
+          gradientTo={dummyCards.Affiliate.TOTAL_AFFILIATE.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+        <DashboardCard
+          label={dummyCards.Affiliate.TOTAL_SIGNUP_USERS.key}
+          value={dummyCards.Affiliate.TOTAL_SIGNUP_USERS.value}
+          gradientFrom={dummyCards.Affiliate.TOTAL_SIGNUP_USERS.gradientFrom}
+          gradientTo={dummyCards.Affiliate.TOTAL_SIGNUP_USERS.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+        <DashboardCard
+          label={dummyCards.Affiliate.TOTAL_DEPOSITS.key}
+          value={dummyCards.Affiliate.TOTAL_DEPOSITS.value}
+          gradientFrom={dummyCards.Affiliate.TOTAL_DEPOSITS.gradientFrom}
+          gradientTo={dummyCards.Affiliate.TOTAL_DEPOSITS.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+        <DashboardCard
+          label={dummyCards.Affiliate.TOTAL_COMMISSION.key}
+          value={dummyCards.Affiliate.TOTAL_COMMISSION.value}
+          gradientFrom={dummyCards.Affiliate.TOTAL_COMMISSION.gradientFrom}
+          gradientTo={dummyCards.Affiliate.TOTAL_COMMISSION.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
+      </div>
       {isXs ? (
         <>
           <div
