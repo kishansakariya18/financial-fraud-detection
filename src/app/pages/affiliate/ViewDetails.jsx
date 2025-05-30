@@ -235,6 +235,19 @@ export function ViewDetails() {
                   </p>
                   <p>{response?.UserLossCommissionAmount || '0'}</p>
                 </div>
+                <div></div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('deposit') + ' ' + t('commission') + ' ' + t('type')}`}
+                  </p>
+                  <p>{response?.DepositCommissionType ? t('percentage') : t('fixed')}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('user') + ' ' + t('loss') + ' ' + t('commission') + ' ' + t('type')}`}
+                  </p>
+                  <p>{response?.UserLossCommissionType ? t('percentage') : t('fixed')}</p>
+                </div>
               </div>
 
               <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
