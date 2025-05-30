@@ -113,6 +113,24 @@ export function SelectCell({ checked, row, onChange }) {
     </div>
   );
 }
+
+export function ThemeSwatchCell({ getValue }) {
+  const colors = getValue(); // This gets the array from the accessor
+  if (!Array.isArray(colors) || !colors.length) return null;
+
+  return (
+    <div className="flex items-center gap-2">
+      {colors.map((color, index) => (
+        <div
+          key={index}
+          className="h-6 w-6 rounded-full border shadow"
+          style={{ backgroundColor: color }}
+          title={color}
+        />
+      ))}
+    </div>
+  );
+}
 DateCell.propTypes = {
   getValue: PropTypes.func
 };
@@ -136,5 +154,9 @@ AddressCell.propTypes = {
 };
 
 CreateMarkupCell.propTypes = {
+  getValue: PropTypes.func
+};
+
+ThemeSwatchCell.propTypes = {
   getValue: PropTypes.func
 };

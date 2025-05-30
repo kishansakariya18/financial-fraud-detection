@@ -176,15 +176,6 @@ const Send = () => {
               />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
-              <Input
-                key={'subject'}
-                {...register('subject')}
-                label={t('subject')}
-                error={errors?.subject?.message}
-                placeholder={t('enter') + ' ' + t('subject')}
-              />
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
               <Controller
                 render={({ field }) => (
                   <Listbox
@@ -219,6 +210,15 @@ const Send = () => {
                   name="deliveryDateTime"
                 />
               )}
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Input
+                key={'subject'}
+                {...register('subject')}
+                label={t('subject')}
+                error={errors?.subject?.message}
+                placeholder={t('enter') + ' ' + t('subject')}
+              />
             </div>
             <div className="grid gap-4 sm:grid-cols-1">
               <div className="mt-1">

@@ -2,6 +2,14 @@ export const appearanceResponse = (apiData) => {
   return apiData.map((item) => ({
     id: item.AppearanceID,
     name: item.Name,
+    themePreview: [
+      item.PrimaryColor,
+      item.SecondaryColor,
+      item.FontColor1,
+      item.FontColor2,
+      item.FontColor3,
+      item.FontColor4
+    ],
     primaryColor: item.PrimaryColor,
     secondaryColor: item.SecondaryColor,
     fontColor1: item.FontColor1,

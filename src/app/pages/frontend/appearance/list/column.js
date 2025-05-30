@@ -1,7 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { RowActions } from './RowActions';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
-import { BadgeCell, IdCell } from 'components/custom/table/cell';
+import { BadgeCell, IdCell, ThemeSwatchCell } from 'components/custom/table/cell';
 import { appearanceStatusOptions } from '../helper';
 
 const columnHelper = createColumnHelper();
@@ -19,6 +19,13 @@ export const columns = [
     header: 'Name',
     label: 'Name',
     cell: CopyableCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.themePreview, {
+    id: 'themePreview',
+    header: 'Theme Preview',
+    label: 'Theme Preview',
+    cell: ThemeSwatchCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.primaryColor, {
