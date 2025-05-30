@@ -63,15 +63,7 @@ export function Toolbar({ table, pageTitle = '' }) {
           style={{
             '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)'
           }}>
-          {/* <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
-            <SearchInput table={table} />
-            <Filters
-              table={table}
-              onApplyFilters={onApplyFilters}
-              onClearFilters={onClearFilters}
-            />
-          </div> */}
-
+          <div></div>
           <TableConfig table={table} />
         </div>
       )}

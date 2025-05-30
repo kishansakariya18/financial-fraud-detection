@@ -51,7 +51,7 @@ export default function Affiliates() {
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
       tableSettings: { enableFullScreen: false },
-      columnVisibility: { firstName: false, lastName: false }
+      columnVisibility: { firstName: false, lastName: false, affiliateUID: false }
     }
   });
 

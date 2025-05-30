@@ -42,6 +42,7 @@ export function Toolbar({ table, pageTitle = '' }) {
           style={{
             '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)'
           }}>
+          <div></div>
           <TableConfig table={table} />
         </div>
       )}
