@@ -355,5 +355,10 @@
   "lastLoginAt": "Last login At",
   "loginCount": "Login Count",
   "adminUid": "AdminUID",
-  "isSuperAdmin": "Is Super Admin?"
+  "isSuperAdmin": "Is Super Admin?",
+  "sendType": "Send",
+  "immediate": "Immediate",
+  "schedule": "Schedule",
+  "deliveryDateTime": "Delivery DateTime"
+
 }

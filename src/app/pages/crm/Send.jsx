@@ -14,6 +14,8 @@ import Quill, { Delta } from 'quill';
 import { Listbox } from 'components/shared/form/Listbox';
 import { mapSegmentationOptions, sendOptions } from './helper';
 import SegmentationService from 'services/segmentation.services';
+import { DatePicker } from 'components/shared/form/Datepicker';
+
 // import { getQueryParams } from 'utils/custom.utilities';
 // import { DEFAULT_PAGE_INDEX } from 'constants/app.constant';
 // import { stringToSlug } from 'utils/stringToSlug';
@@ -22,11 +24,16 @@ const defaultValue = new Delta();
 const Send = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
   // const [searchParams, setSearchParams] = useSearchParams();
+
+  const SendTimeType = [
+    { value: 1, label: t('immediate') },
+    { value: 2, label: t('schedule') }
+  ];
 
   const [response, setResponse] = useState(null);
   const [htmlContent, setHtmlContent] = useState('');
-  const { t } = useTranslation();
 
   const breadcrumbItem = [{ title: t('crm'), path: '/crm' }, { title: t('send') }];
 
@@ -37,11 +44,12 @@ const Send = () => {
     handleSubmit,
     formState: { errors },
     control,
-    // watch,
+    watch,
     reset
   } = useForm({
     resolver: yupResolver(crmSchema),
     defaultValues: {
+      sendType: 1,
       channel: null,
       segmentationID: defaultValue
     }
@@ -49,7 +57,7 @@ const Send = () => {
 
   const [content, setContent] = useState(defaultValue);
   const [segmentationOptions, setSegmentationOptions] = useState([]);
-  // const title = watch('title');
+  const watchSentType = watch('sendType');
 
   //fetch user segmentation list
   const fetchSegmentations = async () => {
@@ -175,7 +183,45 @@ const Send = () => {
                 error={errors?.subject?.message}
                 placeholder={t('enter') + ' ' + t('subject')}
               />
-              <div className="mt-1 max-w-xl">
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Controller
+                render={({ field }) => (
+                  <Listbox
+                    key={'sendType'}
+                    data={SendTimeType}
+                    value={SendTimeType.find((item) => item.value === field.value) || SendTimeType}
+                    onChange={(val) => field.onChange(val.value)}
+                    name={field.name}
+                    label={t('sendType')}
+                    placeholder={t('select') + ' ' + t('sendType')}
+                    displayField="label"
+                    error={errors?.sendType?.message}
+                  />
+                )}
+                control={control}
+                name="sendType"
+              />
+              {parseInt(watchSentType) === 2 && (
+                <Controller
+                  render={({ field: { onChange, value, ...rest } }) => (
+                    <DatePicker
+                      onChange={onChange}
+                      value={value || ''}
+                      label={t('schedule')}
+                      error={errors?.deliveryDateTime?.message}
+                      options={{ disableMobile: true, enableTime: true, minDate: new Date() }}
+                      placeholder="Choose date..."
+                      {...rest}
+                    />
+                  )}
+                  control={control}
+                  name="deliveryDateTime"
+                />
+              )}
+            </div>
+            <div className="grid gap-4 sm:grid-cols-1">
+              <div className="mt-1">
                 <TextEditor
                   key={'description'}
                   value={content}

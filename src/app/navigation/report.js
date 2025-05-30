@@ -1,5 +1,11 @@
 // Import Dependencies
-import { BookOpenIcon, QueueListIcon } from '@heroicons/react/24/outline';
+import {
+  DocumentChartBarIcon,
+  DocumentTextIcon,
+  ArrowDownTrayIcon,
+  ArrowUpTrayIcon,
+  BanknotesIcon
+} from '@heroicons/react/24/outline';
 
 // Local Imports
 // import SettingIcon from 'assets/dualicons/setting.svg?react';
@@ -10,7 +16,7 @@ export const reports = {
   type: NAV_TYPE_COLLAPSE,
   title: 'Report',
   transKey: 'report',
-  Icon: BookOpenIcon,
+  Icon: DocumentChartBarIcon,
   permission: [
     PERMISSIONS.REPORT.BETSLIP_REPORT_VIEW,
     PERMISSIONS.REPORT.DEPOSIT_REPORT_VIEW,
@@ -23,7 +29,7 @@ export const reports = {
       path: '/report/betslip-transctions',
       title: 'betslip',
       transKey: 'betslip_transactions',
-      Icon: QueueListIcon,
+      Icon: DocumentTextIcon,
       permission: PERMISSIONS.REPORT.BETSLIP_REPORT_VIEW
     },
     {
@@ -32,7 +38,7 @@ export const reports = {
       path: '/report/deposit-transctions',
       title: 'depsositTransaction',
       transKey: 'deposit_transactions',
-      Icon: QueueListIcon,
+      Icon: ArrowDownTrayIcon,
       permission: PERMISSIONS.REPORT.DEPOSIT_REPORT_VIEW
     },
     {
@@ -41,7 +47,7 @@ export const reports = {
       path: '/report/withdraw-transctions',
       title: 'withdrawTransaction',
       transKey: 'withdraw_transactions',
-      Icon: QueueListIcon,
+      Icon: ArrowUpTrayIcon,
       permission: PERMISSIONS.REPORT.WITHDRAW_REPORT_VIEW
     },
     {
@@ -50,7 +56,7 @@ export const reports = {
       path: '/report/player-balance/list',
       title: 'playerBalance',
       transKey: 'playerBalance',
-      Icon: QueueListIcon,
+      Icon: BanknotesIcon,
       permission: PERMISSIONS.REPORT.PLAYER_BALANCE_REPORT_VIEW
     }
     // {
