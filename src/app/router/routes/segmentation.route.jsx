@@ -44,6 +44,21 @@ export const segmentationRoutes = [
         )
       };
     }
+  },
+  {
+    path: 'segmentation/:segmentationId/player-list',
+    lazy: async () => {
+      const { default: UserList } = await import(
+        '../../pages/segmentation/segmented-player-list/list'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.SEGMENTATION.PLAYER_LIST}>
+            <UserList />
+          </PrivateRoute>
+        )
+      };
+    }
   }
 ];
 

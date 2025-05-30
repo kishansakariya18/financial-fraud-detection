@@ -1,4 +1,5 @@
 import { parseSegmentationStatusToAPI } from 'app/pages/segmentation/helper';
+import { playerStatusToAPI } from 'app/pages/users/player/helper';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
 import { sendRequest } from 'utils/axios';
@@ -35,6 +36,47 @@ const SegmentationService = {
             'Content-Type': 'application/json'
           },
           body: apiRequestParams
+        });
+
+        return response;
+      }
+
+      return null;
+    } catch (err) {
+      console.log('Error getSegmentationList: ', err);
+    }
+  },
+  getUserList: async (body) => {
+    try {
+      const { pagination, filters, segmentationId } = body;
+
+      const apiQueryParams = {
+        perPage: pagination ? pagination.pageSize : undefined,
+        page: pagination ? pagination.pageIndex + 1 : undefined
+      };
+
+      const apiFilters = {
+        keyword: filters?.keyword || undefined,
+        status: filters?.status ? playerStatusToAPI(filters.status) : undefined,
+        startDate: filters?.startDate
+          ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
+          : undefined,
+        endDate: filters?.endDate
+          ? dayjs(+filters.endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
+          : undefined
+      };
+
+      let apiURL = `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.SEGMENTATION.USER_LIST}`;
+
+      if (apiURL) {
+        const response = await sendRequest({
+          url: apiURL,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: { filters: apiFilters, segmentationId },
+          params: apiQueryParams
         });
 
         return response;

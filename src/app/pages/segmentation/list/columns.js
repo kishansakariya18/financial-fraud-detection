@@ -18,9 +18,15 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.createdByAdmin, {
+    id: 'createdByAdmin',
+    header: 'Created By Admin',
+    cell: BoldCell,
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.count, {
     id: 'count',
-    header: 'Count',
+    header: 'User Count',
     cell: BoldCell, // plain value or wrap in AmountCell etc.
     enableSorting: false
   }),
