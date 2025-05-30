@@ -67,6 +67,14 @@ export function Toolbar({
           textColor="text-sky-100"
           maskShape="is-reuleaux-triangle"
         />
+        <DashboardCard
+          label={dummyCards.Admin.INACTIVE_ADMIN.key}
+          value={dummyCards.Admin.INACTIVE_ADMIN.value}
+          gradientFrom={dummyCards.Admin.INACTIVE_ADMIN.gradientFrom}
+          gradientTo={dummyCards.Admin.INACTIVE_ADMIN.gradientTo}
+          textColor="text-sky-100"
+          maskShape="is-reuleaux-triangle"
+        />
       </div>
       {isXs ? (
         <>

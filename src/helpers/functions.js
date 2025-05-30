@@ -27,25 +27,25 @@ export const dummyCards = {
   User: {
     TOTAL_USERS: {
       key: 'Total Users',
-      value: 1032,
+      value: 23894,
       gradientFrom: 'from-info',
       gradientTo: 'to-pink-500'
     },
     TOTAL_REALCASH: {
       key: 'Total RealCash',
-      value: 284957,
+      value: 28495789,
       gradientFrom: 'from-amber-400',
       gradientTo: 'to-orange-600'
     },
     TOTAL_BONUS: {
       key: 'Total Bonus',
-      value: 17253,
+      value: 182538,
       gradientFrom: 'from-pink-500',
       gradientTo: 'to-rose-500'
     },
     INACTIVE_USERS: {
       key: 'Inactive Users',
-      value: 85,
+      value: 4,
       gradientFrom: 'from-info',
       gradientTo: 'to-info-darker'
     }
@@ -53,27 +53,33 @@ export const dummyCards = {
   Admin: {
     TOTAL_ADMIN: {
       key: 'Total Admin',
-      value: 18,
+      value: 23,
       gradientFrom: 'from-amber-400',
       gradientTo: 'to-orange-600'
     },
     ACTIVE_ADMIN: {
       key: 'Active Admin',
-      value: 16,
+      value: 22,
       gradientFrom: 'from-pink-500',
       gradientTo: 'to-rose-500'
+    },
+    INACTIVE_ADMIN: {
+      key: 'Inactive Admin',
+      value: 1,
+      gradientFrom: 'from-info',
+      gradientTo: 'to-info-darker'
     }
   },
   Affiliate: {
     TOTAL_AFFILIATE: {
       key: 'Total Affiliate',
-      value: 42,
+      value: 157,
       gradientFrom: 'from-info',
       gradientTo: 'to-info-darker'
     },
     TOTAL_SIGNUP_USERS: {
       key: 'Total Signup Users',
-      value: 987,
+      value: 9879,
       gradientFrom: 'from-amber-400',
       gradientTo: 'to-orange-600'
     },
@@ -85,7 +91,7 @@ export const dummyCards = {
     },
     TOTAL_COMMISSION: {
       key: 'Total Commission',
-      value: 11843,
+      value: 65845,
       gradientFrom: 'from-info',
       gradientTo: 'to-pink-500'
     }
@@ -93,19 +99,19 @@ export const dummyCards = {
   Country: {
     TOTAL_COUNTRY: {
       key: 'Total Country',
-      value: 62,
+      value: 244,
       gradientFrom: 'from-amber-400',
       gradientTo: 'to-orange-600'
     },
     ACTIVE_COUNTRY: {
       key: 'Active Country',
-      value: 55,
+      value: 239,
       gradientFrom: 'from-pink-500',
       gradientTo: 'to-rose-500'
     },
     INACTIVE_COUNTRY: {
       key: 'Inactive Country',
-      value: 7,
+      value: 5,
       gradientFrom: 'from-info',
       gradientTo: 'to-info-darker'
     }
@@ -113,19 +119,19 @@ export const dummyCards = {
   Category: {
     TOTAL_CATEGORIES: {
       key: 'Total Categories',
-      value: 12,
+      value: 18,
       gradientFrom: 'from-amber-400',
       gradientTo: 'to-orange-600'
     },
     ACTIVE_CATEGORIES: {
       key: 'Active Categories',
-      value: 10,
+      value: 17,
       gradientFrom: 'from-pink-500',
       gradientTo: 'to-rose-500'
     },
     INACTIVE_CATEGORIES: {
       key: 'Inactive Categories',
-      value: 2,
+      value: 1,
       gradientFrom: 'from-info',
       gradientTo: 'to-pink-500'
     }
@@ -133,19 +139,19 @@ export const dummyCards = {
   Provider: {
     TOTAL_PROVIDER: {
       key: 'Total Provider',
-      value: 9,
+      value: 39,
       gradientFrom: 'from-amber-400',
       gradientTo: 'to-orange-600'
     },
     ACTIVE_PROVIDER: {
       key: 'Active Provider',
-      value: 8,
+      value: 37,
       gradientFrom: 'from-pink-500',
       gradientTo: 'to-rose-500'
     },
     INACTIVE_PROVIDER: {
       key: 'Inactive Provider',
-      value: 1,
+      value: 2,
       gradientFrom: 'from-info',
       gradientTo: 'to-info-darker'
     },
@@ -159,13 +165,13 @@ export const dummyCards = {
   Games: {
     TOTAL_GAMES: {
       key: 'Total Games',
-      value: 238,
+      value: 351,
       gradientFrom: 'from-pink-500',
       gradientTo: 'to-rose-500'
     },
     TOTAL_PROVIDER: {
       key: 'Total Provider',
-      value: 9,
+      value: 39,
       gradientFrom: 'from-info',
       gradientTo: 'to-info-darker'
     }
@@ -173,7 +179,7 @@ export const dummyCards = {
   PromoCode: {
     TOTAL_PROMOCODE: {
       key: 'Total Promocode',
-      value: 33,
+      value: 14,
       gradientFrom: 'from-amber-400',
       gradientTo: 'to-orange-600'
     },
