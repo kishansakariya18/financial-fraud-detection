@@ -100,6 +100,25 @@ const EmailTemplateService = {
     } catch (error) {
       console.log('Error from emailTemplateSubmit', error);
     }
+  },
+  emailTemplateStatus: async (emailTemplateID) => {
+    try {
+      const endPoint = apiConfig.endPoints.EMAIL_TEMPLATE.STATUS;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        params: {
+          emailTemplateID
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from emailTemplateSubmit', error);
+    }
   }
 };
 

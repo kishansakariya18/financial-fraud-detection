@@ -807,7 +807,7 @@ export default function Home() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
             <DashboardCard
               label={`${t('total')}  ${t('deposits')}`}
-              value="3,889,357,000"
+              value="526,412"
               gradientFrom="from-info"
               gradientTo="to-info-darker"
               textColor="text-sky-100"
@@ -815,7 +815,7 @@ export default function Home() {
             />
             <DashboardCard
               label={`${t('total')}  ${t('withdrawals')}`}
-              value="855,129,000"
+              value="258,954"
               gradientFrom="from-amber-400"
               gradientTo="to-orange-600"
               textColor="text-amber-50"
@@ -823,7 +823,7 @@ export default function Home() {
             />
             <DashboardCard
               label={`${t('ggr')}`}
-              value="3,667,357"
+              value="367,357"
               gradientFrom="from-pink-500"
               gradientTo="to-rose-500"
               textColor="text-pink-100"
@@ -831,7 +831,7 @@ export default function Home() {
             />
             <DashboardCard
               label={`${t('net')} ${t('profit')}`}
-              value="748,229"
+              value="118,229"
               gradientFrom="from-amber-400"
               gradientTo="to-orange-600"
               textColor="text-amber-50"
@@ -839,7 +839,7 @@ export default function Home() {
             />
             <DashboardCard
               label={`${t('today')} ${t('registrations')}`}
-              value="6,333"
+              value="646"
               gradientFrom="from-pink-500"
               gradientTo="to-rose-500"
               textColor="text-pink-100"
@@ -847,7 +847,7 @@ export default function Home() {
             />
             <DashboardCard
               label={`${t('total')} ${t('players')}`}
-              value="580,443"
+              value="4,394"
               gradientFrom="from-info"
               gradientTo="to-info-darker"
               textColor="text-sky-100"
@@ -855,7 +855,7 @@ export default function Home() {
             />
             <DashboardCard
               label={`${t('total')} ${t('players')} ${t('balance')}`}
-              value="580,443"
+              value="120,645"
               gradientFrom="from-amber-400"
               gradientTo="to-orange-600"
               textColor="text-amber-50"
@@ -863,7 +863,7 @@ export default function Home() {
             />
             <DashboardCard
               label={`${t('total')} ${t('providers')}`}
-              value="5"
+              value="14"
               gradientFrom="from-info"
               gradientTo="to-info-darker"
               textColor="text-sky-100"

@@ -26,11 +26,11 @@ export function RowActions({ row, table }) {
 
   const confirmMessages = {
     pending: {
-      description: t('affiliate_status_desc'),
+      description: t('email_template_desc'),
       actionText: t('submit')
     },
     success: {
-      title: t('affiliate') + ' ' + t('status') + ' ' + t('changed'),
+      title: t('emailTemplate') + ' ' + t('status') + ' ' + t('changed'),
       description: t('affiliate_status_suceess')
     }
   };
@@ -47,7 +47,7 @@ export function RowActions({ row, table }) {
 
   const handleChangeStatus = useCallback(async () => {
     setConfirmDeleteLoading(true);
-    const result = await EmailTemplateService.AffiliateStatus(row.original.affiliateUID);
+    const result = await EmailTemplateService.emailTemplateStatus(row.original.id);
     if (result.status === 200) {
       table.options.meta?.changeStatus(row);
       setChangeStatusSuccess(true);
