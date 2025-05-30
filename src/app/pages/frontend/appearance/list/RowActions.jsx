@@ -1,6 +1,6 @@
 // Import Dependencies
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
-import { EllipsisHorizontalIcon, EyeIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -9,40 +9,34 @@ import PropTypes from 'prop-types';
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
 import { TbStatusChange } from 'react-icons/tb';
-import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import HomePageService from 'services/home-page.services';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
-import AffiliateService from 'services/affiliate.services';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
-  const { hasPermission } = usePermissions();
   const [chnageStatusModalOpen, setChangeStatusModalOpen] = useState(false);
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
   const [changeStatusSuccess, setChangeStatusSuccess] = useState(false);
   const [changeStatusError, setChangeStatusError] = useState(false);
-  const navigate = useNavigate();
 
-  console.log(t('affiliate_status_desc'));
+  const { hasPermission } = usePermissions();
 
   const confirmMessages = {
     pending: {
-      description: t('affiliate_status_desc'),
+      title: t('change') + ' ' + t('status'),
+      description: t('appearance_status_desc'),
       actionText: t('submit')
     },
     success: {
-      title: t('affiliate') + ' ' + t('status') + ' ' + t('changed'),
-      description: t('affiliate_status_suceess')
+      title: t('appearance') + ' ' + t('status') + ' ' + t('changed'),
+      description: t('appearance_status_suceess')
     }
   };
 
   const closeModal = () => {
     setChangeStatusModalOpen(false);
-  };
-
-  const handleClickView = () => {
-    navigate(`/affiliate/${row.original.affiliateUID}/tab/details`);
   };
 
   const openModal = () => {
@@ -53,7 +47,11 @@ export function RowActions({ row, table }) {
 
   const handleChangeStatus = useCallback(async () => {
     setConfirmDeleteLoading(true);
-    const result = await AffiliateService.AffiliateStatus(row.original.affiliateUID);
+
+    const result = await HomePageService.changeAppearanceStatus({
+      appearanceId: row.original.id,
+      status: row.original.status
+    });
     if (result.status === 200) {
       table.options.meta?.changeStatus(row);
       setChangeStatusSuccess(true);
@@ -85,35 +83,7 @@ export function RowActions({ row, table }) {
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
               className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
-              {hasPermission(PERMISSIONS.AFFILIATES.LIST) && (
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      className={clsx(
-                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
-                        focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
-                      )}
-                      onClick={handleClickView}>
-                      <EyeIcon className="size-4.5 stroke-1" />
-                      <span>{t('view')}</span>
-                    </button>
-                  )}
-                </MenuItem>
-              )}
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
-                      focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
-                    )}
-                    onClick={() => navigate(`/affiliate/${row.original.affiliateUID}/edit`)}>
-                    <PencilIcon className="size-4.5 stroke-1" />
-                    <span>{t('edit')}</span>
-                  </button>
-                )}
-              </MenuItem>
-              {hasPermission(PERMISSIONS.AFFILIATES.CHANGE_STATUS) && (
+              {hasPermission(PERMISSIONS.FRONTEND.CHANGE_APPEARANCE_STATUS) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button

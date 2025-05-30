@@ -18,6 +18,7 @@ import { pages } from './pages';
 import { crm } from './crm';
 import { frontend } from './front-end';
 // import { getAiChatBot } from './ai-chat';`
+import { banner } from './banner';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -35,10 +36,11 @@ export const dashboards = () => ({
       transKey: 'nav.dashboards.dashboard',
       Icon: MonitorIcon
     },
-    users,
     roles,
+    users,
     platform,
     country,
+    banner,
     pages,
     frontend,
     // payment,

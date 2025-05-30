@@ -410,7 +410,10 @@ export const apiConfig = {
       ADD_HOME_GAMES: '/admin/home-page/home-category/home-game/add-games',
       REORDER_CATEGORY: '/admin/home-page/home-category/reorder-category',
       REORDER_GAMES: '/admin/home-page/home-category/home-game/reorder-games',
-      DELETE_HOME_GAME: '/admin/home-page/home-category/home-game/:homePageGameId/delete'
+      DELETE_HOME_GAME: '/admin/home-page/home-category/home-game/:homePageGameId/delete',
+      ADD_APPEARANCE: '/admin/home-page/appearance/add',
+      CHANGE_APPEARANCE_STATUS: '/admin/home-page/appearance/change-status',
+      APPEARANCE_LIST: '/admin/home-page/appearance/list'
     }
   }
 };

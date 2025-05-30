@@ -70,6 +70,34 @@ export const homeCategoryRoute = [
         )
       };
     }
+  },
+  {
+    path: 'appearance/create',
+    lazy: async () => {
+      const { default: CreateAppearance } = await import(
+        '../../pages/frontend/appearance/CreateAppearance'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.FRONTEND.ADD_APPEARANCE}>
+            <CreateAppearance />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'appearance/list',
+    lazy: async () => {
+      const { default: Appearance } = await import('../../pages/frontend/appearance/list/list');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.FRONTEND.APPEARANCE_VIEW}>
+            <Appearance />
+          </PrivateRoute>
+        )
+      };
+    }
   }
 ];
 

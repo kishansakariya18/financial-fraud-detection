@@ -3,6 +3,7 @@ import { ComputerDesktopIcon, TagIcon } from '@heroicons/react/24/outline';
 
 // Local Imports
 import { NAV_TYPE_COLLAPSE, NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
+import { TbPalette } from 'react-icons/tb';
 
 export const frontend = {
   id: 'frontend',
@@ -10,7 +11,7 @@ export const frontend = {
   title: 'Frontend',
   transKey: 'frontend',
   Icon: ComputerDesktopIcon,
-  permission: [PERMISSIONS.FRONTEND.VIEW],
+  permission: [PERMISSIONS.FRONTEND.VIEW, PERMISSIONS.FRONTEND.APPEARANCE_VIEW],
   childs: [
     {
       id: 'homeCategory',
@@ -20,6 +21,15 @@ export const frontend = {
       transKey: 'homeCategory',
       Icon: TagIcon,
       permission: PERMISSIONS.FRONTEND.VIEW
+    },
+    {
+      id: 'appearance',
+      path: '/appearance/list',
+      type: NAV_TYPE_ITEM,
+      title: 'appearance',
+      transKey: 'appearance',
+      Icon: TbPalette,
+      permission: PERMISSIONS.FRONTEND.APPEARANCE_VIEW
     }
   ]
 };

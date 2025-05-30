@@ -266,6 +266,76 @@ const HomePageService = {
     } catch (error) {
       console.log('error: ', error);
     }
+  },
+  addAppearance: async (body) => {
+    try {
+      const { name, primaryColor, secondaryColor, fontColor1, fontColor2, fontColor3, fontColor4 } =
+        body;
+
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.HOME_PAGE.ADD_APPEARANCE}`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          name,
+          primaryColor,
+          secondaryColor,
+          fontColor1,
+          fontColor2,
+          fontColor3,
+          fontColor4
+        }
+      });
+
+      return response;
+    } catch (error) {
+      console.log('error: ', error);
+    }
+  },
+  changeAppearanceStatus: async (body) => {
+    try {
+      const { appearanceId, status } = body;
+
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.HOME_PAGE.CHANGE_APPEARANCE_STATUS}`,
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          appearanceId,
+          status: status === 'active' ? 0 : 1
+        }
+      });
+
+      return response;
+    } catch (error) {
+      console.log('error: ', error);
+    }
+  },
+  appearanceList: async (data) => {
+    try {
+      const { pagination } = data;
+
+      const apiQueryParams = {
+        perPage: pagination.pageSize,
+        page: pagination.pageIndex + 1
+      };
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.HOME_PAGE.APPEARANCE_LIST}`,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        params: apiQueryParams
+      });
+
+      return response;
+    } catch (error) {
+      console.log('error: ', error);
+    }
   }
 };
 

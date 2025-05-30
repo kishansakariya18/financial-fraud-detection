@@ -247,6 +247,7 @@ export const PERMISSIONS = {
     }
   },
   BANNER: {
+    LIST: 'banner-view',
     ADD: 'banner-add',
     EDIT: 'banner-edit',
     VIEW: 'banner-view',
@@ -356,7 +357,10 @@ export const PERMISSIONS = {
     ADD_HOME_GAMES: 'frontend-add-home-games',
     CHANGE_HOME_GAME_STATUS: 'frontend-change-home-game-status',
     REORDER_HOME_GAMES: 'frontend-reorder-home-games',
-    DELETE_HOME_GAME: 'frontend-delete-home-game'
+    DELETE_HOME_GAME: 'frontend-delete-home-game',
+    APPEARANCE_VIEW: 'frontend-view-appearance',
+    ADD_APPEARANCE: 'frontend-add-appearance',
+    CHANGE_APPEARANCE_STATUS: 'frontend-change-appearance-status'
   },
   BUX_AI: {
     VIEW: 'bux-ai-view'
