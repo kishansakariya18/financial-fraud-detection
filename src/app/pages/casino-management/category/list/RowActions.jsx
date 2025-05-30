@@ -15,17 +15,6 @@ import CategoryService from 'services/category.services';
 import { CustomModal } from 'components/custom';
 import { EditCategory } from '../EditCategory';
 
-const confirmMessages = {
-  pending: {
-    description: 'Are you sure you want to change Status of the Category?',
-    actionText: 'Submit'
-  },
-  success: {
-    title: 'Category Status Changed',
-    description: 'Category Status has been changed successfully'
-  }
-};
-
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
 
@@ -34,6 +23,18 @@ export function RowActions({ row, table }) {
   const [statusSuccess, setStatusSuccess] = useState(false);
   const [statusError, setStatusError] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const confirmMessages = {
+    pending: {
+      title: t('change') + ' ' + t('status'),
+      description: t('category_status_desc'),
+      actionText: t('submit')
+    },
+    success: {
+      title: t('category') + ' ' + t('status') + ' ' + t('changed'),
+      description: t('category_status_suceess')
+    }
+  };
 
   const onOpenDialogBox = () => {
     setIsDialogOpen(true);

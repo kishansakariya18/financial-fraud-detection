@@ -15,17 +15,6 @@ import EditNote from './EditNote';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
 
-const confirmMessages = {
-  pending: {
-    description: 'Are you sure you want to Delete This Note?',
-    actionText: 'Submit'
-  },
-  success: {
-    title: 'Delete Note',
-    description: 'Note Deleted Successfully'
-  }
-};
-
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -34,6 +23,17 @@ export function RowActions({ row, table }) {
   const [deleteError, setDeleteError] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { hasPermission } = usePermissions();
+
+  const confirmMessages = {
+    pending: {
+      description: t('player_note_delete_desc'),
+      actionText: t('submit')
+    },
+    success: {
+      title: t('note') + ' ' + t('delete'),
+      description: t('player_note_delete_suceess')
+    }
+  };
 
   const closeModal = () => {
     setDeleteModalOpen(false);

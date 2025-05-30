@@ -371,5 +371,9 @@
   "configuration": "Configuration",
   "isSignupCommissionEnabled": "Is Signup Commission Enabled?",
   "isDepositCommissionEnabled": "Is Deposit Commission Enabled?",
-  "isUserLossCommissionEnabled": "Is User Loss Commission Enabled?"
+  "isUserLossCommissionEnabled": "Is User Loss Commission Enabled?",
+  "player_note_delete_desc": "Are you sure you want to Delete This Note ?",
+  "player_note_delete_suceess": "Note Deleted Successfully",
+  "category_status_suceess": "Category status has been changed successfully",
+  "category_status_desc": "Are you sure you want to change Status of the Category?"
 }
