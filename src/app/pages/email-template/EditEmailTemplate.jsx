@@ -14,7 +14,6 @@ import { TextEditor } from 'components/shared/form/TextEditor';
 import Quill, { Delta } from 'quill';
 import { Listbox } from 'components/shared/form/Listbox';
 import { emailTemplateOptions, emailTemplateStatusToAPP } from './helper';
-import { stringToSlug } from 'utils/stringToSlug';
 
 const EditEmailTemplate = () => {
   const navigate = useNavigate();
@@ -99,7 +98,7 @@ const EditEmailTemplate = () => {
         if (result) {
           const mappedData = {
             title: result?.Title,
-            Slug: result?.Slug,
+            slug: result?.Slug,
             heading: result?.Subject,
             cc: result?.CC || '',
             bcc: result?.BCC || '',
@@ -143,6 +142,7 @@ const EditEmailTemplate = () => {
 
     await editEmailTemplateAPI({ ...data, template: htmlContent, emailTemplateId: templateId });
   };
+  console.log('title: ', title);
   return (
     <Page title={t('edit') + ' ' + t('emailTemplate')}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
@@ -170,7 +170,6 @@ const EditEmailTemplate = () => {
                 {...register('slug')}
                 key={'slug'}
                 label={t('slug')}
-                value={title ? stringToSlug(title) : undefined}
                 error={errors?.slug?.message}
                 placeholder={t('enter') + ' ' + t('slug')}
                 disabled
@@ -251,7 +250,7 @@ const EditEmailTemplate = () => {
               {t('reset')}
             </Button>
             <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
-              {t('edit')}
+              {t('update')}
             </Button>
           </div>
         </form>

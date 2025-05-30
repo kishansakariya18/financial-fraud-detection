@@ -109,7 +109,7 @@ function SearchInput({ table }) {
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
         root: 'shrink-0'
       }}
-      placeholder={t('search_desc')}
+      placeholder={t('search_email_template')}
     />
   );
 }
