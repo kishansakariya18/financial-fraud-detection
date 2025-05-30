@@ -114,7 +114,7 @@ export function ViewDetails() {
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('name')}
                   </p>
-                  <p>{response?.Name}</p>
+                  <p>{response?.NameOnDocument}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
@@ -138,17 +138,17 @@ export function ViewDetails() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {response?.Type === DOCUMENT_TYPE.DOCUMENT
+                    {response?.DocumentType === DOCUMENT_TYPE.DOCUMENT
                       ? t('document') + ' ' + t('number')
                       : t('account') + ' ' + t('number')}
                   </p>
                   <div className="flex space-x-1 rtl:space-x-reverse">
-                    <span> {response?.Number || '-'}</span>
-                    {response?.Number && (
+                    <span> {response?.DocumentIdentifier || '-'}</span>
+                    {response?.DocumentIdentifier && (
                       <Button
                         data-tooltip
                         data-tooltip-content={copied ? 'Copied' : 'Copy'}
-                        onClick={() => copy(response?.Number)}
+                        onClick={() => copy(response?.DocumentIdentifier)}
                         isIcon
                         variant="flat"
                         className="size-5 rounded-full group-hover/td:opacity-100"
@@ -198,9 +198,9 @@ export function ViewDetails() {
                     {t('status')}
                   </p>
                   <p>
-                    {+response.Status >= 0 &&
+                    {+response.DocumentStatus >= 0 &&
                       capitalizeFirstLetter(
-                        parseUserKycStatusToApp(+response?.Status).toUpperCase()
+                        parseUserKycStatusToApp(+response?.DocumentStatus).toUpperCase()
                       )}
                   </p>
                 </div>
@@ -220,7 +220,9 @@ export function ViewDetails() {
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     Document Type:
                   </p>
-                  <p>{+response?.Type === DOCUMENT_TYPE.DOCUMENT ? t('document') : t('bank')}</p>
+                  <p>
+                    {+response?.DocumentType === DOCUMENT_TYPE.DOCUMENT ? t('document') : t('bank')}
+                  </p>
                 </div>
                 <div className="mt-4 flex flex-col gap-4 sm:flex-row">
                   <div>
@@ -244,7 +246,7 @@ export function ViewDetails() {
                 </div>
 
                 <div className="mt-4 space-y-4">
-                  {+response?.Status === DOCUMENT_STATUS.PENDING && (
+                  {+response?.DocumentStatus === DOCUMENT_STATUS.PENDING && (
                     <div className="flex flex-wrap gap-5">
                       <Radio
                         value="approve"
@@ -264,20 +266,21 @@ export function ViewDetails() {
                       />
                     </div>
                   )}
-                  {selected === 'reject' && +response?.Status === DOCUMENT_STATUS.PENDING && (
-                    <div className="max-w-xl">
-                      <Input
-                        onChange={(e) => setRejectReason(e.target.value)}
-                        label={t('rejectReason')}
-                        placeholder={t('enter') + ' ' + t('rejectReason')}
-                      />
-                    </div>
-                  )}
+                  {selected === 'reject' &&
+                    +response?.DocumentStatus === DOCUMENT_STATUS.PENDING && (
+                      <div className="max-w-xl">
+                        <Input
+                          onChange={(e) => setRejectReason(e.target.value)}
+                          label={t('rejectReason')}
+                          placeholder={t('enter') + ' ' + t('rejectReason')}
+                        />
+                      </div>
+                    )}
                 </div>
               </div>
 
               <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-                {+response?.Status === DOCUMENT_STATUS.PENDING && (
+                {+response?.DocumentStatus === DOCUMENT_STATUS.PENDING && (
                   <Button
                     className="min-w-[7rem]"
                     color={'primary'}
