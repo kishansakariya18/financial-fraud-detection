@@ -29,6 +29,9 @@ export function FacedtedFilter({
 
   const selectedValues = column?.getFilterValue() || [];
 
+  console.log('selectedValues: ', selectedValues);
+  console.log('options: ', options);
+
   const selectedItems = options?.filter((o) =>
     isMultiple ? selectedValues.includes(o[valueField]) : o[valueField] === selectedValues
   );

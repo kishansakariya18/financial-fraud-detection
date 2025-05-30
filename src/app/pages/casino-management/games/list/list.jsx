@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
@@ -9,12 +9,13 @@ import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 
-import { responseMapper } from '../helper';
+import { providerResponserMapper, responseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import GamesService from 'services/games.services';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
+import ProviderService from 'services/provider.services';
 
 export default function Games() {
   const { t } = useTranslation();
@@ -23,9 +24,32 @@ export default function Games() {
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
+  const [providerOptions, setProviderOptions] = useState([]);
+
+  const fetchAllProviders = async () => {
+    const result = await ProviderService.getAllProviders();
+
+    if (result.status === 200) {
+      setProviderOptions(providerResponserMapper(result.response.data));
+    }
+
+    return { status: result.status, error: result.error };
+  };
+
+  // const getProviderValue = (providerId) => {
+  //   const provider = providerOptions.find((p) => p.id === providerId);
+
+  //   return provider?.value || null;
+  // };
+
+  useEffect(() => {
+    fetchAllProviders();
+  }, []);
+
   const fetchProvider = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
+
     const result = await GamesService.getGamesList({
       pagination: { pageIndex, pageSize },
       filters: queryParams
@@ -69,6 +93,9 @@ export default function Games() {
     if (queryParams.status) {
       filtersFromQuery.push({ id: 'status', value: queryParams.status });
     }
+    if (queryParams.provider) {
+      filtersFromQuery.push({ id: 'provider', value: +queryParams.provider });
+    }
 
     if (queryParams.startDate && queryParams.endDate) {
       filtersFromQuery.push({
@@ -82,7 +109,7 @@ export default function Games() {
 
   const applyFilterHandler = () => {
     const filterItems = {};
-    // console.log('table.getState().columnFilters:', table.getState().columnFilters);
+    console.log('table.getState().columnFilters:', table.getState().columnFilters);
 
     for (let data of table.getState().columnFilters) {
       if (data.id === 'name') {
@@ -96,6 +123,10 @@ export default function Games() {
       if (data.id === 'createdAt') {
         filterItems.date = data.value;
       }
+
+      if (data.id === 'provider') {
+        filterItems.provider = data.value;
+      }
     }
 
     setSearchParams({
@@ -104,7 +135,8 @@ export default function Games() {
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
       ...(filterItems.status && { status: filterItems.status }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
-      ...(filterItems.date && { endDate: filterItems?.date[1] })
+      ...(filterItems.date && { endDate: filterItems?.date[1] }),
+      ...(filterItems.provider && { provider: filterItems.provider })
     });
   };
 
@@ -127,6 +159,7 @@ export default function Games() {
       <ProviderFilters
         pageTitle={pageTitle}
         table={table}
+        providerOptions={providerOptions}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
         // filters= {}

@@ -362,6 +362,7 @@ export const apiConfig = {
       CHANGE_STATUS: '/admin/casino-management/category/:categoryId/change-status'
     },
     PROVIDER: {
+      ALL_LIST: '/admin/casino-management/provider/all',
       LIST: '/admin/casino-management/provider/list',
       CREATE: '/admin/casino-management/provider/create',
       EDIT: '/admin/casino-management/provider/:providerId/edit',

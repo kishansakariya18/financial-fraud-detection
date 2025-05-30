@@ -5,6 +5,21 @@ import { sendRequest } from 'utils/axios';
 import { replaceText } from 'utils/custom.utilities';
 
 const ProviderService = {
+  getAllProviders: async () => {
+    try {
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.PROVIDER.ALL_LIST}`,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
   getProviderList: async (body) => {
     try {
       const { pagination, filters, isPaginationRequired = true } = body;
