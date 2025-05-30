@@ -3,7 +3,7 @@ import { Page } from 'components/shared/Page';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import { Button, Input, Textarea } from 'components/ui';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import PlayerService from 'services/player.services';
@@ -16,11 +16,13 @@ import { manageFundSchema } from './schema';
 import { useParams } from 'react-router';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { useDisclosure } from 'hooks';
+import { FaMoneyBill1Wave, FaMoneyBillTransfer } from 'react-icons/fa6';
 
 const ManageFund = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
+  const [userDetails, setUserDetails] = useState(null);
   const [show, { toggle }] = useDisclosure();
 
   const { playerId } = useParams();
@@ -47,6 +49,24 @@ const ManageFund = () => {
       : selectedType === 'debit'
         ? fundTypeOption.filter((option) => option.value === 'winning')
         : [];
+
+  const fetchPlayerDetails = async () => {
+    setLoading(true);
+    const result = await PlayerService.userDetail(playerId);
+
+    if (result.status === 200) {
+      const apiData = result.response.data;
+      setUserDetails(apiData);
+    } else {
+      setError(result.error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchPlayerDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playerId]);
 
   const manageFundAPI = async (requestObject) => {
     setLoading(true);
@@ -87,8 +107,25 @@ const ManageFund = () => {
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
             {t('manage') + ' ' + t('fund')}
           </h2>
-          <div className="hidden self-stretch py-1 sm:flex">
-            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+        </div>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="rounded-lg bg-gray-100 p-3 dark:bg-surface-3 2xl:p-4">
+            <div className="flex justify-between space-x-1">
+              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
+                {userDetails?.RealCash}
+              </p>
+              <FaMoneyBill1Wave className="this:success size-5 text-this dark:text-this-light" />
+            </div>
+            <p className="mt-1 text-xs+">{t('realCash')}</p>
+          </div>
+          <div className="rounded-lg bg-gray-100 p-3 dark:bg-surface-3 2xl:p-4">
+            <div className="flex justify-between space-x-1">
+              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
+                {userDetails?.Winning}
+              </p>
+              <FaMoneyBillTransfer className="this:success size-5 text-this dark:text-this-light" />
+            </div>
+            <p className="mt-1 text-xs+"> {t('winning')}</p>
           </div>
         </div>
 
@@ -143,6 +180,7 @@ const ManageFund = () => {
                 type="number"
                 error={errors?.amount?.message}
                 placeholder={t('enter') + ' ' + t('amount')}
+                step="0.01"
               />
               <Textarea
                 {...register('fundMessage')}

@@ -19,17 +19,6 @@ import { PERMISSIONS } from 'constants/app.constant';
 import { CustomModal } from 'components/custom';
 import AddEditSegmentation from './AddEditSegmentation';
 
-const confirmMessages = {
-  pending: {
-    description: 'Are you sure you want to change Status of the Game?',
-    actionText: 'Submit'
-  },
-  success: {
-    title: 'Game Status Changed',
-    description: 'Game Status has been changed successfully'
-  }
-};
-
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
 
@@ -40,6 +29,18 @@ export function RowActions({ row, table }) {
   const { hasPermission } = usePermissions();
   const navigate = useNavigate();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const confirmMessages = {
+    pending: {
+      title: t('change') + ' ' + t('status'),
+      description: t('game_status_desc'),
+      actionText: t('submit')
+    },
+    success: {
+      title: t('game') + ' ' + t('status') + ' ' + t('changed'),
+      description: t('game_status_suceess')
+    }
+  };
 
   const closeModal = () => {
     setStatusModalOpen(false);

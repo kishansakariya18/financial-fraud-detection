@@ -3,31 +3,30 @@ import { Page } from 'components/shared/Page';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import { Button, Input, Textarea } from 'components/ui';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
 import { Listbox } from 'components/shared/form/Listbox';
 import { TbCoinRupeeFilled } from 'react-icons/tb';
 import TextareaAutosize from 'react-textarea-autosize';
-import { LockClosedIcon } from '@heroicons/react/24/outline';
+import { EyeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import { manageFundSchema } from './schema';
 import { useParams } from 'react-router';
 import AffiliateService from 'services/affiliate.services';
 import { transactionTypeOption } from '../users/player/helper';
+import { EyeSlashIcon } from '@heroicons/react/20/solid';
+import { useDisclosure } from 'hooks';
+import { FaMoneyBill1Wave } from 'react-icons/fa6';
 
 const ManageFund = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
+  const [affiliate, setAffiliate] = useState(null);
+  const [show, { toggle }] = useDisclosure();
 
   const { affiliateId } = useParams();
   const { t } = useTranslation();
-
-  const breadcrumbItem = [
-    { title: t('affiliates'), path: '/affiliate' },
-    { title: t('manage') + ' ' + t('fund') }
-  ];
 
   const {
     register,
@@ -57,6 +56,24 @@ const ManageFund = () => {
     setLoading(false);
   };
 
+  const fetchAffiliateDetails = async () => {
+    setLoading(true);
+    const result = await AffiliateService.getAffiliateDetail(affiliateId);
+
+    if (result.status === 200) {
+      const apiData = result.response.data;
+      setAffiliate(apiData);
+    } else {
+      setError(result.error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchAffiliateDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [affiliateId, response]);
+
   if (!loading && error) {
     toast.error(error);
     setError('');
@@ -65,6 +82,7 @@ const ManageFund = () => {
   if (!loading && !error && response) {
     toast.success(response.message);
     setResponse(null);
+    fetchAffiliateDetails();
     reset();
   }
 
@@ -79,16 +97,22 @@ const ManageFund = () => {
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
             {t('manage') + ' ' + t('fund')}
           </h2>
-          <div className="hidden self-stretch py-1 sm:flex">
-            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+        </div>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          <div className="rounded-lg bg-gray-100 p-3 dark:bg-surface-3 2xl:p-4">
+            <div className="flex justify-between space-x-1">
+              <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
+                {affiliate?.CommissionBalance}
+              </p>
+              <FaMoneyBill1Wave className="this:success size-5 text-this dark:text-this-light" />
+            </div>
+            <p className="mt-1 text-xs+">{t('commission') + ' ' + t('balance')}</p>
           </div>
-          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div className="mt-6 space-y-4">
             <div className="grid gap-4 lg:grid-cols-2">
-              {/* Transaction Type */}
               <Controller
                 render={({ field }) => (
                   <Listbox
@@ -130,11 +154,24 @@ const ManageFund = () => {
 
             <div className="grid sm:grid-cols-2">
               <Input
-                {...register('password')}
-                prefix={<LockClosedIcon className="size-5" />}
                 label={t('transaction') + ' ' + t('password')}
-                error={errors?.password?.message}
+                type={show ? 'text' : 'password'}
                 placeholder={t('enter') + ' ' + t('transaction') + ' ' + t('password')}
+                prefix={<LockClosedIcon className="size-4.5" />}
+                suffix={
+                  <Button
+                    variant="flat"
+                    className="pointer-events-auto size-6 shrink-0 rounded-full p-0"
+                    onClick={toggle}>
+                    {show ? (
+                      <EyeSlashIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
+                    ) : (
+                      <EyeIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
+                    )}
+                  </Button>
+                }
+                {...register('password')}
+                error={errors?.password?.message}
               />
             </div>
           </div>

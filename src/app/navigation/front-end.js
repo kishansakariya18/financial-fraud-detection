@@ -1,9 +1,9 @@
 // Import Dependencies
-import { ComputerDesktopIcon, TagIcon } from '@heroicons/react/24/outline';
+import { ComputerDesktopIcon } from '@heroicons/react/24/outline';
 
 // Local Imports
 import { NAV_TYPE_COLLAPSE, NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
-import { TbPalette } from 'react-icons/tb';
+import { TbCategoryPlus, TbPalette } from 'react-icons/tb';
 
 export const frontend = {
   id: 'frontend',
@@ -19,7 +19,7 @@ export const frontend = {
       type: NAV_TYPE_ITEM,
       title: 'homeCategory',
       transKey: 'homeCategory',
-      Icon: TagIcon,
+      Icon: TbCategoryPlus,
       permission: PERMISSIONS.FRONTEND.VIEW
     },
     {

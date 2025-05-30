@@ -45,7 +45,22 @@ export function RestrictedCountryFilters({
           <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
             {pageTitle}
           </h2>
+          <div className="hidden self-stretch py-1 sm:flex">
+            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          </div>
+          {breadcrumbItem && <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />}
         </div>
+        {/* 
+        {breadcrumbItem && (
+          <div
+            className={clsx(
+              'transition-content flex items-center justify-between gap-4',
+              isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x] pt-4'
+            )}>
+            <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
+          </div>
+        )} */}
+
         {!isCountryList && (
           <Button
             className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
@@ -56,11 +71,7 @@ export function RestrictedCountryFilters({
           </Button>
         )}
       </div>
-      {breadcrumbItem && (
-        <div className="ml-7 mt-2">
-          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
-        </div>
-      )}
+
       {isXs ? (
         <>
           <div

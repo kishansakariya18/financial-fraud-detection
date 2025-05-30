@@ -53,7 +53,7 @@ export default function LoginHistoryList() {
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
       tableSettings: {},
-      columnVisibility: { expiredAt: false }
+      columnVisibility: { id: false }
     }
   });
 

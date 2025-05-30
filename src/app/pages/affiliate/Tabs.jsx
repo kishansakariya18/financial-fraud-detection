@@ -25,7 +25,7 @@ export default function Tabs() {
     },
     {
       id: randomId(),
-      title: t('player') + ' ' + t('list'),
+      title: t('referredPlayers'),
       path: `/affiliate/${affiliateId}/tab/player-list`,
       icon: ListBulletIcon,
       index: 1,

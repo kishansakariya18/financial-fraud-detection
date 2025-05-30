@@ -83,6 +83,12 @@ const ViewDetails = () => {
                 <p>{response?.LastName}</p>
               </div>
               <div>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                  {t('createdByAdmin')}:
+                </p>
+                <p>{response?.CreatedByAdmin}</p>
+              </div>
+              <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('email')}</p>
                 <div className="flex space-x-1 rtl:space-x-reverse">
                   <span> {response?.Email || '-'}</span>

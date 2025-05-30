@@ -213,14 +213,16 @@ export default function AffiliateTransactions() {
         </div>
       </div>
 
-      <div className="m-6 rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-        <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('Link')}</p>
-        <NavLink
-          target="_blank"
-          to={`https://web-demo-backoffice-betnexus.sourcecodelab.co/${affiliateDataRef.current?.ReferralCode}`}
-          className="tracking-wide text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500">
-          {`https://web-demo-backoffice-betnexus.sourcecodelab.co/${affiliateDataRef.current?.ReferralCode}`}
-        </NavLink>
+      <div className="mt-4 grid grid-cols-1 gap-3 px-[--margin-x] sm:grid-cols-1 sm:gap-4 lg:grid-cols-1 2xl:gap-6">
+        <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
+          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('Link')}</p>
+          <NavLink
+            target="_blank"
+            to={`https://web-demo-backoffice-betnexus.sourcecodelab.co/${affiliateDataRef.current?.ReferralCode}`}
+            className="tracking-wide text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500">
+            {`https://web-demo-backoffice-betnexus.sourcecodelab.co/${affiliateDataRef.current?.ReferralCode}`}
+          </NavLink>
+        </div>
       </div>
 
       <Toolbar

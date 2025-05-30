@@ -170,6 +170,7 @@
   "admin_status_desc": "Are you sure you want to update this Admin's status ?",
   "admin_status_suceess": "Admin Status has been changed successfully",
   "role_delete_desc": "Are you sure you want to delete this role ?",
+  "role_delete_suceess": "Roke has been deleted successfully",
   "changed": "Changed",
   "welcome_back": "Welcome Back",
   "forgot": "Forgot",
@@ -359,6 +360,16 @@
   "sendType": "Send",
   "immediate": "Immediate",
   "schedule": "Schedule",
-  "deliveryDateTime": "Delivery DateTime"
-
+  "deliveryDateTime": "Delivery DateTime",
+  "createdByAdmin": "Created By Admin",
+  "signupIpAddress": "Signup IP Address",
+  "referredPlayers": "Referred Players",
+  "provider_status_desc": "Are you sure you want to update this Provider's status ?",
+  "provider_status_suceess": "Provider Status has been changed successfully",
+  "game_status_desc": "Are you sure you want to update this Game's status ?",
+  "game_status_suceess": "Game Status has been changed successfully",
+  "configuration": "Configuration",
+  "isSignupCommissionEnabled": "Is Signup Commission Enabled?",
+  "isDepositCommissionEnabled": "Is Deposit Commission Enabled?",
+  "isUserLossCommissionEnabled": "Is User Loss Commission Enabled?"
 }

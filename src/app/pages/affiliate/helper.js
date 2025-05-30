@@ -179,6 +179,10 @@ export const affiliateTransactionTypeToAPP = (type) => {
     return 'system';
   } else if (+type === TRANSACTION.TRANSACTION_TYPE.AFFILIATE_PAYOUT) {
     return 'payout';
+  } else if (+type === TRANSACTION.TRANSACTION_TYPE.DEPOSIT_TAX) {
+    return 'deposit_tax';
+  } else if (+type === TRANSACTION.TRANSACTION_TYPE.WITHDRAW_TAX) {
+    return 'withdraw_tax';
   }
 };
 
@@ -194,6 +198,10 @@ export const affiliateTransactionToAPI = (type) => {
       return TRANSACTION.TRANSACTION_TYPE.SYSTEM;
     case 'payout':
       return TRANSACTION.TRANSACTION_TYPE.AFFILIATE_PAYOUT;
+    case 'deposit_tax':
+      return TRANSACTION.TRANSACTION_TYPE.DEPOSIT_TAX;
+    case 'withdraw_tax':
+      return TRANSACTION.TRANSACTION_TYPE.WITHDRAW_TAX;
     default:
       return null;
   }
@@ -211,6 +219,14 @@ export const affiliateTransactionTypeOption = [
   {
     value: 'userLoss',
     label: 'User Loss'
+  },
+  {
+    value: 'withdraw_tax',
+    label: 'Withdraw Tax'
+  },
+  {
+    value: 'deposit_tax',
+    label: 'Deposit Tax'
   }
 ];
 

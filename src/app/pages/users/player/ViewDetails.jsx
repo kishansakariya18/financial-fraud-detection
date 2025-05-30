@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 // Local Imports
 import { Button, Card, Skeleton } from 'components/ui';
-import { useNavigate, useParams } from 'react-router';
+import { Link, useNavigate, useParams } from 'react-router';
 import { Page } from 'components/shared/Page';
 import { playerStatusToApp, selfExclusionMapper } from './helper';
 import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
@@ -211,6 +211,30 @@ export function ViewDetails() {
                       </Button>
                     </div>
                   </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('signupIpAddress')}
+                    </p>
+
+                    {response?.SignupIPAddress ? (
+                      <div className="flex space-x-1 rtl:space-x-reverse">
+                        <span>{response?.SignupIPAddress}</span>
+
+                        <Button
+                          data-tooltip
+                          data-tooltip-content={copied ? 'Copied' : 'Copy'}
+                          onClick={() => copy(response?.SignupIPAddress)}
+                          isIcon
+                          variant="flat"
+                          className="size-5 rounded-full group-hover/td:opacity-100"
+                          aria-label="Copy Button">
+                          <DocumentDuplicateIcon className="size-3.5" />
+                        </Button>
+                      </div>
+                    ) : (
+                      '-'
+                    )}
+                  </div>
 
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
@@ -253,6 +277,12 @@ export function ViewDetails() {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('country')}
+                    </p>
+                    <p>{response?.country?.CountryName}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {t('pan') + ' ' + t('status')}
                     </p>
                     <p>
@@ -272,6 +302,21 @@ export function ViewDetails() {
                         ? `${response.BankDetail} (Verified)`
                         : `Pending`}
                     </p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('affiliate')}
+                    </p>
+                    {response?.affiliate ? (
+                      <Link
+                        to={`/affiliate/${response?.affiliate?.AffiliatesUID}/tab/details`}
+                        className="tracking-wide text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500">
+                        <p className="text-center">{response?.affiliate?.Username || '-'}</p>
+                      </Link>
+                    ) : (
+                      '-'
+                    )}
                   </div>
                 </div>
 

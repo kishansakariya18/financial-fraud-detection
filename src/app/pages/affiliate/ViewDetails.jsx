@@ -8,13 +8,11 @@ import { NavLink, useNavigate, useParams } from 'react-router';
 import { Page } from 'components/shared/Page';
 import { affiliateStatusToApp } from './helper';
 import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
-import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
 import { useClipboard } from 'hooks';
 import { DocumentDuplicateIcon } from '@heroicons/react/20/solid';
 import { toast } from 'sonner';
 import AffiliateService from 'services/affiliate.services';
-const breadcrumbs = [{ title: 'Affiliates', path: '/affiliate' }, { title: 'Details' }];
 
 export function ViewDetails() {
   const { t } = useTranslation();
@@ -59,7 +57,6 @@ export function ViewDetails() {
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
           </div>
-          <Breadcrumbs items={breadcrumbs} className="max-sm:hidden" />
         </div>
 
         <div className="col-span-12 sm:col-span-8 lg:col-span-9">
@@ -81,6 +78,12 @@ export function ViewDetails() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('affiliate') + 'UID'}
+                  </p>
+                  <p>{response?.AffiliatesUID}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('firstName')}
                   </p>
                   <p>{response?.FirstName}</p>
@@ -93,7 +96,7 @@ export function ViewDetails() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('balance')}
+                    {t('commission') + ' ' + t('balance')}
                   </p>
                   <p>{response?.CommissionBalance}</p>
                 </div>
@@ -186,6 +189,51 @@ export function ViewDetails() {
                     className="tracking-wide text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500">
                     {`https://web-demo-backoffice-betnexus.sourcecodelab.co/${response?.ReferralCode}`}
                   </NavLink>
+                </div>
+              </div>
+
+              <h6 className="mt-8 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
+                {t('affiliate') + ' ' + t('configuration')}
+              </h6>
+
+              <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('isSignupCommissionEnabled')}`}
+                  </p>
+                  <p>{+response?.IsSignupCommissionEnabled === 1 ? t('yes') : t('no')}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('isDepositCommissionEnabled')}`}
+                  </p>
+                  <p>{+response?.IsDepositCommissionEnabled === 1 ? t('yes') : t('no')}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('isUserLossCommissionEnabled')}`}
+                  </p>
+                  <p>{+response?.IsUserLossCommissionEnabled === 1 ? t('yes') : t('no')}</p>
+                </div>
+
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('signup') + ' ' + t('commission') + ' ' + t('amount')}`}
+                  </p>
+                  <p>{response?.SignupCommissionAmount || 0}</p>
+                </div>
+
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('deposit') + ' ' + t('commission') + ' ' + t('amount')}`}
+                  </p>
+                  <p>{response?.DepositCommissionAmount || '0'}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('user') + ' ' + t('loss') + ' ' + t('commission') + ' ' + t('amount')}`}
+                  </p>
+                  <p>{response?.UserLossCommissionAmount || '0'}</p>
                 </div>
               </div>
 

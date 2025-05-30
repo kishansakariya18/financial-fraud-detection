@@ -99,7 +99,7 @@ export const playerTransactionsResponseMapper = (apiData) => {
       winning:
         parseFloat(item.Winning) > 0
           ? item.Winning
-          : item.TransactionData['Merchandise_Product_name']
+          : item?.TransactionData?.Merchandise_Product_name
             ? item.TransactionData['Merchandise_Product_name']
             : 0,
       coin: item.Coin,
@@ -147,25 +147,59 @@ export const transactionTypeAppToApi = (status) => {
   }
 };
 
+// export const transactionTypeInWords = (type) => {
+//   if (+type === TRANSACTION.TRANSACTION_TYPE.SYSTEM) {
+//     return 'ADMIN SYSTEM';
+//   } else if (+type === TRANSACTION.TRANSACTION_TYPE.DEPOSIT) {
+//     return 'DEPOSIT';
+//   } else if (+type === TRANSACTION.TRANSACTION_TYPE.WINNING) {
+//     return 'WINNING';
+//   } else if (+type === TRANSACTION.TRANSACTION_TYPE.WITHDRAW) {
+//     return 'WITHDRAW';
+//   } else if (+type === TRANSACTION.TRANSACTION_TYPE.DEPOSIT_TAX) {
+//     return 'DEPOSIT TAX';
+//   } else if (+type === TRANSACTION.TRANSACTION_TYPE.WITHDRAW_TAX) {
+//     return 'WITHDRAW TAX';
+//   } else if (+type === TRANSACTION.TRANSACTION_TYPE.BETSLIP) {
+//     return 'BET SLIP';
+//   } else if (+type === TRANSACTION.TRANSACTION_TYPE.DEPOSIT_PROMO_CODE_BENEFIT) {
+//     return 'PROMOCODE BENEFIT';
+//   } else if (+type === TRANSACTION.TRANSACTION_TYPE.ROLLBACK) {
+//     return 'ROLLBACK';
+//   }
+// };
 export const transactionTypeInWords = (type) => {
-  if (+type === TRANSACTION.TRANSACTION_TYPE.SYSTEM) {
-    return 'ADMIN SYSTEM';
-  } else if (+type === TRANSACTION.TRANSACTION_TYPE.DEPOSIT) {
-    return 'DEPOSIT';
-  } else if (+type === TRANSACTION.TRANSACTION_TYPE.WINNING) {
-    return 'WINNING';
-  } else if (+type === TRANSACTION.TRANSACTION_TYPE.WITHDRAW) {
-    return 'WITHDRAW';
-  } else if (+type === TRANSACTION.TRANSACTION_TYPE.DEPOSIT_TAX) {
-    return 'DEPOSIT TAX';
-  } else if (+type === TRANSACTION.TRANSACTION_TYPE.WITHDRAW_TAX) {
-    return 'WITHDRAW TAX';
-  } else if (+type === TRANSACTION.TRANSACTION_TYPE.BETSLIP) {
-    return 'BET SLIP';
-  } else if (+type === TRANSACTION.TRANSACTION_TYPE.DEPOSIT_PROMO_CODE_BENEFIT) {
-    return 'PROMOCODE BENEFIT';
-  } else if (+type === TRANSACTION.TRANSACTION_TYPE.ROLLBACK) {
-    return 'ROLLBACK';
+  switch (+type) {
+    case TRANSACTION.TRANSACTION_TYPE.SYSTEM:
+      return 'ADMIN SYSTEM';
+    case TRANSACTION.TRANSACTION_TYPE.DEPOSIT:
+      return 'DEPOSIT';
+    case TRANSACTION.TRANSACTION_TYPE.WITHDRAW:
+      return 'WITHDRAW';
+    case TRANSACTION.TRANSACTION_TYPE.WINNING:
+      return 'WINNING';
+    case TRANSACTION.TRANSACTION_TYPE.BETSLIP:
+      return 'BET SLIP';
+    case TRANSACTION.TRANSACTION_TYPE.WITHDRAW_TAX:
+      return 'WITHDRAW TAX';
+    case TRANSACTION.TRANSACTION_TYPE.DEPOSIT_TAX:
+      return 'DEPOSIT TAX';
+    case TRANSACTION.TRANSACTION_TYPE.DEPOSIT_PROMO_CODE_BENEFIT:
+      return 'PROMOCODE BENEFIT';
+    case TRANSACTION.TRANSACTION_TYPE.WITHOUT_REFERRAL_SIGNUP_BONUS:
+      return 'WITHOUT REFERRAL SIGNUP BONUS';
+    case TRANSACTION.TRANSACTION_TYPE.REFERRAL_PAN_VERIFICATION:
+      return 'REFERRAL PAN VERIFICATION';
+    case TRANSACTION.TRANSACTION_TYPE.REFERRAL_BANK_VERIFICATION:
+      return 'REFERRAL BANK VERIFICATION';
+    case TRANSACTION.TRANSACTION_TYPE.WITHOUT_REFERRAL_PAN_VERIFICATION:
+      return 'NO REFERRAL PAN VERIFICATION';
+    case TRANSACTION.TRANSACTION_TYPE.WITHOUT_REFERRAL_BANK_VERIFICATION:
+      return 'NO REFERRAL BANK VERIFICATION';
+    case TRANSACTION.TRANSACTION_TYPE.ROLLBACK:
+      return 'ROLLBACK';
+    default:
+      return 'UNKNOWN';
   }
 };
 

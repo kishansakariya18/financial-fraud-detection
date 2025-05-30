@@ -16,19 +16,20 @@ import { CustomModal } from 'components/custom';
 import { EditProvider } from '../EditProvider';
 import { useNavigate } from 'react-router';
 
-const confirmMessages = {
-  pending: {
-    description: 'Are you sure you want to change Status of the Provider?',
-    actionText: 'Submit'
-  },
-  success: {
-    title: 'Provider Status Changed',
-    description: 'Provider Status has been changed successfully'
-  }
-};
-
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
+
+  const confirmMessages = {
+    pending: {
+      title: t('change') + ' ' + t('status'),
+      description: t('provider_status_desc'),
+      actionText: t('submit')
+    },
+    success: {
+      title: t('casino_provider') + ' ' + t('status') + ' ' + t('changed'),
+      description: t('provider_status_suceess')
+    }
+  };
 
   const [statusModalOpen, setStatusModalOpen] = useState(false);
   const [confirmStatusLoading, setConfirmStatusLoading] = useState(false);

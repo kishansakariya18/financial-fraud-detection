@@ -1,6 +1,6 @@
 // Import Dependencies
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
-import { EllipsisHorizontalIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { EllipsisHorizontalIcon, PencilIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -20,16 +20,24 @@ export function RowActions({ row, table }) {
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const confirmMessages = {
     pending: {
+      title: t('delete_key') + ' ' + t('role'),
       description: t('role_delete_desc'),
       actionText: t('submit')
     },
     success: {
-      title: t('admin') + ' ' + t('delete_success'),
-      description: t('admin_status_suceess')
+      title: t('role') + ' ' + t('delete_success'),
+      description: t('role_delete_suceess')
+    },
+    error: {
+      Icon: XCircleIcon,
+      title: "Can't Delete Role...",
+      description: errorMessage,
+      iconClassName: 'text-error'
     }
   };
 
@@ -60,6 +68,7 @@ export function RowActions({ row, table }) {
         navigate('/roles');
       }, 0);
     } else {
+      setErrorMessage(result.error);
       setDeleteError(true);
     }
 

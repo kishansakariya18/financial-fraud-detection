@@ -11,7 +11,6 @@ import { CiMobile1 } from 'react-icons/ci';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
-import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
 import AffiliateService from 'services/affiliate.services';
 import {
@@ -28,8 +27,6 @@ const CreateAffiliate = () => {
 
   const [response, setResponse] = useState(null);
   const { t } = useTranslation();
-
-  const breadcrumbItem = [{ title: t('affiliate'), path: '/affiliate' }, { title: t('create') }];
 
   const navigate = useNavigate();
   const {
@@ -103,7 +100,6 @@ const CreateAffiliate = () => {
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
           </div>
-          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">

@@ -18,7 +18,7 @@ import AffiliateService from 'services/affiliate.services';
 export default function AffiliatePlayers() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('player') + ' ' + t('list');
+  const pageTitle = t('referredPlayers');
   const { affiliateId } = useParams();
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);

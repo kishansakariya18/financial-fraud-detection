@@ -36,9 +36,9 @@ export const responseMapper = (apiData) => {
 export const loginHistoryResponseMapper = (apiData) => {
   return apiData.map((data) => {
     return {
-      id: data.ID,
+      id: data.AdminLoginHistoryID,
       adminId: data.AdminID,
-      ip: data.Ip,
+      ip: data.IPAddress,
       userAgent: data.UserAgent,
       expiredAt: data.ExpiredAt,
       loginAt: data.DateCreated
