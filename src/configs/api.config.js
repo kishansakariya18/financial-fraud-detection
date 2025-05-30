@@ -301,7 +301,8 @@ export const apiConfig = {
       LIST: '/admin/email-template/list',
       ADD: '/admin/email-template/add',
       DETAIL: '/admin/email-template/detail',
-      UPDATE: '/admin/email-template/update'
+      UPDATE: '/admin/email-template/update',
+      STATUS: '/admin/email-template/status'
     },
     REFERRAL_OFFER: {
       LIST: '/admin/v1/offers/list',
