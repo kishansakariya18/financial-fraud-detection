@@ -8,7 +8,7 @@ const GamesService = {
     try {
       const { pagination, filters, isPaginationRequired = true } = body;
 
-      const { status, keyword, startDate, endDate } = filters;
+      const { status, keyword, startDate, endDate, provider } = filters;
 
       const apiQueryParams = {
         perPage: pagination.pageSize,
@@ -19,7 +19,8 @@ const GamesService = {
         status: status ? parseProviderStatusToApi(status) : undefined,
         keyword: keyword || undefined,
         startDate: startDate ? getStartDate(startDate) : undefined,
-        endDate: endDate ? getEndDate(endDate) : undefined
+        endDate: endDate ? getEndDate(endDate) : undefined,
+        providerId: provider || undefined
       };
 
       const response = await sendRequest({

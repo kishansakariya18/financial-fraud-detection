@@ -35,6 +35,14 @@ export const responseMapper = (apiData) => {
     updatedAt: getDateInUTCToTimeZone(item.DateModified)
   }));
 };
+
+export const providerResponserMapper = (apiData) => {
+  return apiData.map((item) => ({
+    value: item.ProviderID,
+    label: item.Name
+  }));
+};
+
 export const statusOptions = [
   {
     value: 'active',

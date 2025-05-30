@@ -1,6 +1,11 @@
 // Import Dependencies
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
-import { EllipsisHorizontalIcon, FlagIcon, PencilIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowUpRightIcon,
+  EllipsisHorizontalIcon,
+  FlagIcon,
+  PencilIcon
+} from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -131,6 +136,19 @@ export function RowActions({ row, table }) {
                     }>
                     <FlagIcon className="size-4.5 stroke-1" />
                     <span>{t('restricted_country')}</span>
+                  </button>
+                )}
+              </MenuItem>
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    className={clsx(
+                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                      focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                    )}
+                    onClick={() => navigate(`/casino/games/list?provider=${row.original.id}`)}>
+                    <ArrowUpRightIcon className="size-4.5 stroke-1" />
+                    <span>{t('games')}</span>
                   </button>
                 )}
               </MenuItem>

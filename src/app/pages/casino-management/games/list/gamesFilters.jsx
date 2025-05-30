@@ -1,5 +1,5 @@
 // Import Dependencies
-import { MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, MapPinIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 // import { TbCurrencyDollar } from "react-icons/tb";
 import PropTypes from 'prop-types';
@@ -14,6 +14,7 @@ import { t } from 'i18next';
 import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { statusOptions } from '../helper';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 // import { useSearchParams } from 'react-router';
 // import { CreateCategory } from '../CreateCategory';
 
@@ -23,12 +24,18 @@ export function ProviderFilters({
   table,
   onApplyFilters = () => {},
   onClearFilters = () => {},
-  pageTitle = ''
+  pageTitle = '',
+  providerOptions = []
 }) {
+  console.log('providerOptions: ', providerOptions);
+
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
   // const [searchParams] = useSearchParams();
   // console.log('table.getState().columnFilters: inside', Object.fromEntries([...searchParams]));
+
+  const breadcrumbItem = [{ title: t('providers'), path: '/casino/provider/list' }];
+  const breadcrumbItem2 = [{ title: t('games'), path: '/casino/games/list' }];
 
   return (
     <div className="table-toolbar">
@@ -37,11 +44,29 @@ export function ProviderFilters({
           'transition-content flex items-center justify-between gap-4',
           isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x] pt-4'
         )}>
-        <div className="min-w-0">
+        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
+            {pageTitle}
+          </h2>
+          <div className="hidden self-stretch py-1 sm:flex">
+            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          </div>
+          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
+          <div className="hidden self-stretch py-1 sm:flex">
+            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          </div>
+          <Breadcrumbs items={breadcrumbItem2} className="max-sm:hidden" />
+        </div>
+
+        {/* <div className="min-w-0">
           <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
             {pageTitle}
           </h2>
-        </div>
+          <div className="hidden self-stretch py-1 sm:flex">
+            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          </div>
+          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
+        </div> */}
         {/* <CreateCategory tableFetch={table.options.meta?.fetchNewList(false)} /> */}
       </div>
       {isXs ? (
@@ -63,6 +88,7 @@ export function ProviderFilters({
               table={table}
               onApplyFilters={onApplyFilters}
               onClearFilters={onClearFilters}
+              providerOptions={providerOptions}
             />
           </div>
         </>
@@ -82,6 +108,7 @@ export function ProviderFilters({
                 table={table}
                 onApplyFilters={onApplyFilters}
                 onClearFilters={onClearFilters}
+                providerOptions={providerOptions}
               />
             </div>
 
@@ -108,7 +135,9 @@ function SearchInput({ table }) {
   );
 }
 
-function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }) {
+function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {}, providerOptions }) {
+  console.log('providerOptions: ', providerOptions);
+
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>
@@ -130,6 +159,16 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
             maxDate: new Date().fp_incr(1),
             mode: 'range'
           }}
+        />
+      )}
+      {table.getColumn('provider') && (
+        <FacedtedFilter
+          options={providerOptions}
+          column={table.getColumn('provider')}
+          title="Provider"
+          Icon={UserPlusIcon}
+          isMultiple={false}
+          showCheckbox={false}
         />
       )}
 
