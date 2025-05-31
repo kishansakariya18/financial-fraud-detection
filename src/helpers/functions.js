@@ -27,19 +27,19 @@ export const dummyCards = {
   User: {
     TOTAL_USERS: {
       key: 'Total Users',
-      value: 23894,
+      value: '23,894',
       gradientFrom: 'from-info',
       gradientTo: 'to-pink-500'
     },
     TOTAL_REALCASH: {
       key: 'Total RealCash',
-      value: 28495789,
+      value: '28,495,789',
       gradientFrom: 'from-amber-400',
       gradientTo: 'to-orange-600'
     },
     TOTAL_BONUS: {
       key: 'Total Bonus',
-      value: 182538,
+      value: '182,538',
       gradientFrom: 'from-pink-500',
       gradientTo: 'to-rose-500'
     },
@@ -79,19 +79,19 @@ export const dummyCards = {
     },
     TOTAL_SIGNUP_USERS: {
       key: 'Total Signup Users',
-      value: 9879,
+      value: '9,879',
       gradientFrom: 'from-amber-400',
       gradientTo: 'to-orange-600'
     },
     TOTAL_DEPOSITS: {
       key: 'Total Deposits',
-      value: 294301,
+      value: '294,301',
       gradientFrom: 'from-pink-500',
       gradientTo: 'to-rose-500'
     },
     TOTAL_COMMISSION: {
       key: 'Total Commission',
-      value: 65845,
+      value: '65,845',
       gradientFrom: 'from-info',
       gradientTo: 'to-pink-500'
     }
@@ -185,19 +185,19 @@ export const dummyCards = {
     },
     TOTAL_DEPOSITS: {
       key: 'Total Deposits',
-      value: 11253,
+      value: '11,253',
       gradientFrom: 'from-pink-500',
       gradientTo: 'to-rose-500'
     },
     TOTAL_REWARDS: {
       key: 'Total Rewards',
-      value: 5743,
+      value: '5,743',
       gradientFrom: 'from-info',
       gradientTo: 'to-pink-500'
     },
     TOTAL_WAGERING: {
       key: 'Total Wagering',
-      value: 38521,
+      value: '38,521',
       gradientFrom: 'from-amber-400',
       gradientTo: 'to-orange-600'
     }
