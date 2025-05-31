@@ -37,6 +37,13 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.gameName, {
+    id: 'gameName',
+    label: 'Game Name',
+    header: 'Game Name',
+    cell: BoldCell,
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.username, {
     id: 'username',
     label: 'Username',

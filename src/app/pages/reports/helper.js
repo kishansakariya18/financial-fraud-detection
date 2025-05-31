@@ -51,6 +51,7 @@ export const responseMapper = (apiData) => {
     id: data.ID,
     userId: data.UserID,
     betPlacementId: data.BetPlacementTransactionID,
+    gameName: data.GameName,
     username: data.Username,
     mobile: data.Mobile,
     betAmount: data.BetAmount,
