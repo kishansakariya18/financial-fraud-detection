@@ -377,5 +377,12 @@
   "player_note_delete_desc": "¿Estás seguro de querer eliminar esta nota?",
   "player_note_delete_suceess": "Nota eliminada exitosamente",
   "category_status_suceess": "Estado de categoría cambiado exitosamente",
-  "category_status_desc": "¿Estás seguro de querer cambiar el estado de esta categoría?"
-}
+  "category_status_desc": "¿Estás seguro de querer cambiar el estado de esta categoría?",
+  "segmented": "segmentado",
+  "username": "Nombre de usuario",
+  "tenant": "Inquilino",
+  "tenants": "Inquilinos",
+  "tenant_status_desc": "¿Está seguro de que desea actualizar el estado de este inquilino?",
+  "tenant_status_suceess": "El estado del inquilino se ha cambiado correctamente",
+  "service": "Servicio"
+  }

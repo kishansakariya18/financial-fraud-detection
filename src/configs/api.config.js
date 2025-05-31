@@ -84,6 +84,11 @@ export const apiConfig = {
       UPDATE_PROFILE: '/admin/update-profile',
       ADMIN_COUNTRY_LIST: '/admin/countries'
     },
+    TENANT: {
+      LIST: '/admin/tenant/list',
+      CHANGE_STATUS: '/admin/tenant/:tenantUID/change-status',
+      CREATE: '/admin/tenant/create'
+    },
     DASHBOARD: {
       LIST: '/admin/dashboard',
       CARDS: '/admin/dashboard/cards',

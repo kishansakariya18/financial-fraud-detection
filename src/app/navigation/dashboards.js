@@ -19,6 +19,7 @@ import { crm } from './crm';
 import { frontend } from './front-end';
 // import { getAiChatBot } from './ai-chat';`
 import { banner } from './banner';
+import { tenants } from './tenant';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -45,9 +46,10 @@ export const dashboards = () => ({
     frontend,
     // payment,
     reports,
+    tenants,
     playerKyc,
-    casinoManagement,
     // affliate,
+    casinoManagement,
     segmentation,
     emailTemplate,
     peomocode,

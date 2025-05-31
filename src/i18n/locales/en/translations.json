@@ -379,5 +379,10 @@
   "category_status_suceess": "Category status has been changed successfully",
   "category_status_desc": "Are you sure you want to change Status of the Category?",
   "segmented": "Segmented",
-  "username": "Username"
+  "username": "Username",
+  "tenant": "Tenant",
+  "tenants": "Tenants",
+  "tenant_status_desc": "Are you sure you want to update this Tenants's status ?",
+  "tenant_status_suceess": "Tenant status has been changed successfully",
+  "service": "Service"
 }

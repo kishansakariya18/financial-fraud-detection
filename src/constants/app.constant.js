@@ -365,6 +365,11 @@ export const PERMISSIONS = {
   },
   BUX_AI: {
     VIEW: 'bux-ai-view'
+  },
+  TENANT: {
+    VIEW: 'tenant-view',
+    CREATE: 'tenant-create',
+    CHANGE_STATUS: 'tenant-change-status'
   }
 };
 

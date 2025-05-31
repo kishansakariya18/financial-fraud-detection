@@ -377,5 +377,13 @@
   "player_note_delete_desc": "Êtes-vous sûr de vouloir supprimer cette note ?",
   "player_note_delete_suceess": "Note supprimée avec succès",
   "category_status_suceess": "Le statut de la catégorie a été modifié avec succès",
-  "category_status_desc": "Êtes-vous sûr de vouloir modifier le statut de la catégorie?"
+  "category_status_desc": "Êtes-vous sûr de vouloir modifier le statut de la catégorie?",
+  "segmented": "segmenté",
+  "username": "Nom d'utilisateur",
+  "tenant": "Locataire",
+  "tenants": "Locataires",
+  "tenant_status_desc": "Êtes-vous sûr de vouloir mettre à jour le statut de ce locataire ?",
+  "tenant_status_suceess": "Le statut du locataire a été modifié avec succès",
+ "service": "Service"
+
 }

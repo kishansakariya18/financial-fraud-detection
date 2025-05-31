@@ -19,6 +19,7 @@ import promocodeRoute from './routes/promocode.route';
 import pagesRoute from './routes/pages.route';
 import crmRoute from './routes/crm.route';
 import homeCategoryRoute from './routes/home-category.route';
+import tenantRoute from './routes/tenant.route';
 
 // ----------------------------------------------------------------------
 
@@ -47,7 +48,8 @@ const protectedRoutes = {
         ...promocodeRoute,
         ...pagesRoute,
         ...crmRoute,
-        ...homeCategoryRoute
+        ...homeCategoryRoute,
+        ...tenantRoute
       ]
     }
   ]
