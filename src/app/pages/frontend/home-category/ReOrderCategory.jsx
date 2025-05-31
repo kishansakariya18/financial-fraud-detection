@@ -58,7 +58,7 @@ export default function ReOrderCategory() {
   if (!submitLoading && !submitError && submitResponse) {
     toast.success(submitResponse);
     setSubmitResponse('');
-    navigate('/home-category');
+    navigate('/web/home-category');
   }
   if (!submitLoading && submitError) {
     toast.error(submitError);

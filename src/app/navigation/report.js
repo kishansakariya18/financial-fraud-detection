@@ -15,6 +15,7 @@ export const reports = {
   id: 'report',
   type: NAV_TYPE_COLLAPSE,
   title: 'Report',
+  path: '/report',
   transKey: 'report',
   Icon: DocumentChartBarIcon,
   permission: [

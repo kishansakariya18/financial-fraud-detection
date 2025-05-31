@@ -84,7 +84,7 @@ const CreateAdmin = () => {
   if (!loading && !error && response) {
     toast.success(response.message);
     setTimeout(() => {
-      navigate('/admin');
+      navigate('/users/admin');
     }, 0);
 
     setResponse(null);

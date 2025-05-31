@@ -40,7 +40,7 @@ export function RowActions({ row, table }) {
   };
 
   const handleClickView = () => {
-    navigate(`/affiliate/${row.original.affiliateUID}/tab/details`);
+    navigate(`/users/affiliate/${row.original.affiliateUID}/tab/details`);
   };
 
   const openModal = () => {
@@ -105,7 +105,7 @@ export function RowActions({ row, table }) {
                       'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
                       focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
                     )}
-                    onClick={() => navigate(`/affiliate/${row.original.affiliateUID}/edit`)}>
+                    onClick={() => navigate(`/users/affiliate/${row.original.affiliateUID}/edit`)}>
                     <PencilIcon className="size-4.5 stroke-1" />
                     <span>{t('edit')}</span>
                   </button>

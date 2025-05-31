@@ -8,6 +8,7 @@ import { TbCategoryPlus, TbPalette } from 'react-icons/tb';
 export const frontend = {
   id: 'frontend',
   type: NAV_TYPE_COLLAPSE,
+  path: '/web',
   title: 'Frontend',
   transKey: 'frontend',
   Icon: ComputerDesktopIcon,
@@ -15,7 +16,7 @@ export const frontend = {
   childs: [
     {
       id: 'homeCategory',
-      path: '/home-category',
+      path: '/web/home-category',
       type: NAV_TYPE_ITEM,
       title: 'homeCategory',
       transKey: 'homeCategory',
@@ -24,7 +25,7 @@ export const frontend = {
     },
     {
       id: 'appearance',
-      path: '/appearance/list',
+      path: '/web/appearance',
       type: NAV_TYPE_ITEM,
       title: 'appearance',
       transKey: 'appearance',

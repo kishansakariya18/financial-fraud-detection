@@ -64,7 +64,7 @@ export default function ReOrderGames() {
 
     setTimeout(() => {
       setSubmitResponse('');
-      navigate(`/home-games/${homeCategoryId}/list`);
+      navigate(`/web/home-category/${homeCategoryId}/list`);
     }, 0);
   }
   if (!submitLoading && submitError) {

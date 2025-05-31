@@ -47,7 +47,7 @@ export function Toolbar({
           <Button
             className="ml-2 h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
             color="primary"
-            onClick={() => navigate(`/home-category/reorder-category`)}>
+            onClick={() => navigate(`/web/home-category/reorder-category`)}>
             <ArrowPathRoundedSquareIcon className="size-5" />
             <span>{t('reorder') + ' ' + t('categories')}</span>
           </Button>
