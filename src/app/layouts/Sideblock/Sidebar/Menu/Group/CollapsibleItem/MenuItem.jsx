@@ -12,7 +12,7 @@ import { useSidebarContext } from 'app/contexts/sidebar/context';
 // ----------------------------------------------------------------------
 
 export function MenuItem({ data }) {
-  const { id, transKey, path, Icon } = data;
+  const { id, transKey, path, disabled, Icon } = data;
   const { t } = useTranslation();
   const { lgAndDown } = useBreakpointsContext();
   const { close } = useSidebarContext();
@@ -25,14 +25,16 @@ export function MenuItem({ data }) {
   return (
     <div className="relative flex">
       <NavLink
-        to={path}
+        to={disabled ? '' : path}
         onClick={handleMenuItemClick}
         className={({ isActive }) =>
           clsx(
             'group min-w-0 flex-1 rounded-md px-3 py-2 font-medium outline-none transition-colors ease-in-out',
-            isActive
-              ? 'text-primary-600 dark:text-primary-400'
-              : 'text-gray-800 hover:bg-gray-100 hover:text-gray-950 focus:bg-gray-100 focus:text-gray-950 dark:text-dark-200 dark:hover:bg-dark-300/10 dark:hover:text-dark-50 dark:focus:bg-dark-300/10'
+            disabled
+              ? 'cursor-not-allowed text-gray-400 dark:text-dark-400'
+              : isActive
+                ? 'text-primary-600 dark:text-primary-400'
+                : 'text-gray-800 hover:bg-gray-100 hover:text-gray-950 focus:bg-gray-100 focus:text-gray-950 dark:text-dark-200 dark:hover:bg-dark-300/10 dark:hover:text-dark-50 dark:focus:bg-dark-300/10'
           )
         }>
         {({ isActive }) => (
