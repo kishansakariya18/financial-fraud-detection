@@ -4,7 +4,7 @@ import PrivateRoute from '../private';
 
 export const adminRoute = [
   {
-    path: 'admin',
+    path: 'users/admin',
     lazy: async () => {
       const { default: AdminList } = await import('../../pages/users/admin/list/list');
       return {
@@ -17,7 +17,7 @@ export const adminRoute = [
     }
   },
   {
-    path: 'admin/:adminId/tab',
+    path: 'users/admin/:adminId/tab',
     lazy: async () => ({
       Component: (await import('../../pages/users/admin/Tabs')).default
     }),
@@ -57,7 +57,7 @@ export const adminRoute = [
     ]
   },
   {
-    path: 'admin/create',
+    path: 'users/admin/create',
     lazy: async () => {
       const { default: Create } = await import('../../pages/users/admin/CreateAdmin');
       return {
@@ -71,7 +71,7 @@ export const adminRoute = [
   },
 
   {
-    path: 'admin/:adminId/edit',
+    path: 'users/admin/:adminId/edit',
     lazy: async () => {
       const { default: Edit } = await import('../../pages/users/admin/EditAdmin');
       return {

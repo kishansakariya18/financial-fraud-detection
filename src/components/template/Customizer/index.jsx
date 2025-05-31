@@ -17,7 +17,7 @@ import { useDisclosure } from 'hooks';
 import SettingIcon from 'assets/dualicons/setting.svg?react';
 import { useThemeContext } from 'app/contexts/theme/context';
 import { colors } from 'constants/colors.constant';
-import { range } from 'utils/range';
+// import { range } from 'utils/range';
 import { Button, ScrollShadow } from 'components/ui';
 import { Listbox } from 'components/shared/form/Listbox';
 
@@ -228,7 +228,7 @@ function CustomizerContent({ close }) {
           </div>
         </RadioGroup>
 
-        <RadioGroup value={theme.themeLayout} onChange={theme.setThemeLayout} className="mt-5">
+        {/* <RadioGroup value={theme.themeLayout} onChange={theme.setThemeLayout} className="mt-5">
           <Label className="font-medium text-gray-800 dark:text-dark-100">Theme Layout</Label>
 
           <div className="mt-2.5 grid grid-cols-2 gap-3">
@@ -313,7 +313,7 @@ function CustomizerContent({ close }) {
               )}
             </Radio>
           </div>
-        </RadioGroup>
+        </RadioGroup> */}
 
         <RadioGroup
           value={theme.primaryColorScheme.name}

@@ -13,7 +13,7 @@ import usePermissions from 'app/router/usePermissions';
 // ----------------------------------------------------------------------
 
 export function CollapsibleItem({ data }) {
-  const { id, transKey, Icon, childs } = data;
+  const { path, transKey, Icon, childs } = data;
   const { t } = useTranslation();
   const { isRtl } = useLocaleContext();
   const { hasPermission } = usePermissions();
@@ -21,8 +21,10 @@ export function CollapsibleItem({ data }) {
   const title = t(transKey) || data.title;
   const ChevronIcon = isRtl ? ChevronLeftIcon : ChevronRightIcon;
 
+  console.log('id: ', path);
+
   return (
-    <AccordionItem value={id} className="relative flex flex-1 flex-col px-3">
+    <AccordionItem value={path} className="relative flex flex-1 flex-col px-3">
       {({ open }) => (
         <>
           <AccordionButton

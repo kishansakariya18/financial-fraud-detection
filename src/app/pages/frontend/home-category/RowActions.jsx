@@ -134,7 +134,7 @@ export function RowActions({ row, table }) {
                         'flex h-9 w-full items-center space-x-2 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
                         focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
                       )}
-                      onClick={() => navigate(`/home-games/${row?.original?.id}/list`)}>
+                      onClick={() => navigate(`/web/home-category/${row?.original?.id}/list`)}>
                       <PuzzlePieceIcon className="size-4.5 stroke-1" />
                       <span>{t('view') + ' ' + t('games')}</span>
                     </button>

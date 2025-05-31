@@ -18,7 +18,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('details'),
-      path: `/affiliate/${affiliateId}/tab/details`,
+      path: `/users/affiliate/${affiliateId}/tab/details`,
       icon: HomeIcon,
       index: 0,
       permission: PERMISSIONS.AFFILIATES.LIST
@@ -26,7 +26,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('referredPlayers'),
-      path: `/affiliate/${affiliateId}/tab/player-list`,
+      path: `/users/affiliate/${affiliateId}/tab/player-list`,
       icon: ListBulletIcon,
       index: 1,
       permission: PERMISSIONS.AFFILIATES.USER_SIGNUP_LIST
@@ -34,7 +34,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('transaction') + ' ' + t('list'),
-      path: `/affiliate/${affiliateId}/tab/transaction-list`,
+      path: `/users/affiliate/${affiliateId}/tab/transaction-list`,
       icon: ListBulletIcon,
       index: 2,
       permission: PERMISSIONS.AFFILIATES.TRANSACTIONS
@@ -42,7 +42,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('login') + ' ' + t('history'),
-      path: `/affiliate/${affiliateId}/tab/login-history`,
+      path: `/users/affiliate/${affiliateId}/tab/login-history`,
       icon: FaHistory,
       index: 3,
       permission: PERMISSIONS.AFFILIATES.VIEW_LOGIN_HISTORY
@@ -50,7 +50,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('payout') + ' ' + t('history'),
-      path: `/affiliate/${affiliateId}/tab/payout-history`,
+      path: `/users/affiliate/${affiliateId}/tab/payout-history`,
       icon: ListBulletIcon,
       index: 4,
       permission: PERMISSIONS.AFFILIATES.PAYOUT
@@ -58,7 +58,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('manage') + ' ' + t('fund'),
-      path: `/affiliate/${affiliateId}/tab/manage-fund`,
+      path: `/users/affiliate/${affiliateId}/tab/manage-fund`,
       icon: WalletIcon,
       index: 4,
       permission: PERMISSIONS.AFFILIATES.ADD_MONEY

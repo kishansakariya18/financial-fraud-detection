@@ -48,7 +48,7 @@ export function Toolbar({
             <Button
               className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
               color="primary"
-              onClick={() => navigate(`/home-games/${homeCategoryId}/add-game-list`)}>
+              onClick={() => navigate(`/web/home-category/${homeCategoryId}/add-game-list`)}>
               <PlusIcon className="size-5" />
               <span>{t('add') + ' ' + t('games')}</span>
             </Button>
@@ -57,7 +57,7 @@ export function Toolbar({
             <Button
               className="ml-2 h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
               color="primary"
-              onClick={() => navigate(`/home-games/${homeCategoryId}/reorder-games`)}>
+              onClick={() => navigate(`/web/home-category/${homeCategoryId}/reorder-games`)}>
               <ArrowPathRoundedSquareIcon className="size-5" />
               <span>{t('reorder') + ' ' + t('games')}</span>
             </Button>

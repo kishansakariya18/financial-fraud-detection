@@ -8,6 +8,7 @@ import { NAV_TYPE_COLLAPSE, NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.con
 export const users = {
   id: 'users.users',
   type: NAV_TYPE_COLLAPSE,
+  path: '/users',
   title: 'Users',
   transKey: 'nav.users.users',
   Icon: UsersIcon,
@@ -15,7 +16,7 @@ export const users = {
   childs: [
     {
       id: 'users.admin',
-      path: '/admin',
+      path: '/users/admin',
       type: NAV_TYPE_ITEM,
       title: 'Admin',
       transKey: 'nav.users.admin',
@@ -24,7 +25,7 @@ export const users = {
     },
     {
       id: 'users.players',
-      path: '/player',
+      path: '/users/player',
       type: NAV_TYPE_ITEM,
       title: 'Players',
       transKey: 'nav.users.players',
@@ -34,7 +35,7 @@ export const users = {
     {
       id: 'affiliate',
       type: NAV_TYPE_ITEM,
-      path: '/affiliate',
+      path: '/users/affiliate',
       title: 'Affiliates',
       transKey: 'affiliates',
       Icon: UsersIcon,

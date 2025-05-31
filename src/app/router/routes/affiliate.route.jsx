@@ -6,7 +6,7 @@ import { PERMISSIONS } from 'constants/app.constant';
 
 export const affiliateRoutes = [
   {
-    path: 'affiliate',
+    path: 'users/affiliate',
     lazy: async () => {
       const { default: AffiliateList } = await import('../../pages/affiliate/list/list');
       return {
@@ -19,7 +19,7 @@ export const affiliateRoutes = [
     }
   },
   {
-    path: 'affiliate/:affiliateId/tab',
+    path: 'users/affiliate/:affiliateId/tab',
     lazy: async () => ({
       Component: (await import('../../pages/affiliate/Tabs')).default
     }),
@@ -117,7 +117,7 @@ export const affiliateRoutes = [
     ]
   },
   {
-    path: 'affiliate/create',
+    path: 'users/affiliate/create',
     lazy: async () => {
       const { default: CreateAffiliate } = await import('../../pages/affiliate/CreateAffiliate');
       return {
@@ -130,7 +130,7 @@ export const affiliateRoutes = [
     }
   },
   {
-    path: 'affiliate/:affiliateId/edit',
+    path: 'users/affiliate/:affiliateId/edit',
     lazy: async () => {
       const { default: EditAffiliate } = await import('../../pages/affiliate/EditAffiliate');
       return {

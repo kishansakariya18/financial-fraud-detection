@@ -22,7 +22,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('details'),
-      path: `/player/${playerId}/tab/details`,
+      path: `/users/player/${playerId}/tab/details`,
       icon: HomeIcon,
       index: 0,
       permission: PERMISSIONS.USER.LIST
@@ -30,7 +30,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('limits'),
-      path: `/player/${playerId}/tab/limits`,
+      path: `/users/player/${playerId}/tab/limits`,
       icon: AdjustmentsVerticalIcon,
       index: 1,
       permission: PERMISSIONS.USER.USER_LEVEL_LIMITS
@@ -38,7 +38,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('transactions'),
-      path: `/player/${playerId}/tab/transactions`,
+      path: `/users/player/${playerId}/tab/transactions`,
       icon: ListBulletIcon,
       index: 2,
       permission: PERMISSIONS.USER.TRANSACTION_LIST
@@ -46,7 +46,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('login') + ' ' + t('history'),
-      path: `/player/${playerId}/tab/login-history`,
+      path: `/users/player/${playerId}/tab/login-history`,
       icon: ListBulletIcon,
       index: 3,
       permission: PERMISSIONS.USER.VIEW_LOGIN_HISTORY
@@ -54,7 +54,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('manage') + ' ' + t('fund'),
-      path: `/player/${playerId}/tab/manage-fund`,
+      path: `/users/player/${playerId}/tab/manage-fund`,
       icon: WalletIcon,
       index: 4,
       permission: PERMISSIONS.USER.ADD_MONEY
@@ -62,7 +62,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('notes'),
-      path: `/player/${playerId}/tab/player-notes`,
+      path: `/users/player/${playerId}/tab/player-notes`,
       icon: ListBulletIcon,
       index: 5,
       permission: PERMISSIONS.USER.COMMENT_VIEW

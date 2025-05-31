@@ -45,7 +45,7 @@ export function Toolbar({
         <Button
           className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
           color="primary"
-          onClick={() => navigate('/admin/create')}>
+          onClick={() => navigate('/users/admin/create')}>
           <PlusIcon className="size-5" />
           <span>{t('create') + ' ' + t('admin')}</span>
         </Button>

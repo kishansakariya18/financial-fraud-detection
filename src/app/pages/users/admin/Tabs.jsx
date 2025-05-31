@@ -12,13 +12,13 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('details'),
-      path: `/admin/${adminId}/tab/details`,
+      path: `/users/admin/${adminId}/tab/details`,
       icon: HomeIcon
     },
     {
       id: randomId(),
       title: t('login') + ' ' + t('history'),
-      path: `/admin/${adminId}/tab/login-history`,
+      path: `/users/admin/${adminId}/tab/login-history`,
       icon: ListBulletIcon
     }
   ];

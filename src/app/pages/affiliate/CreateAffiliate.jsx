@@ -67,7 +67,7 @@ const CreateAffiliate = () => {
   if (!loading && !error && response) {
     toast.success(response.message);
     setTimeout(() => {
-      navigate('/affiliate');
+      navigate('/users/affiliate');
     }, 0);
 
     setResponse(null);

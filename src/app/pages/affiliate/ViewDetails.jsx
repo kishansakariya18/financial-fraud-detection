@@ -251,7 +251,7 @@ export function ViewDetails() {
               </div>
 
               <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-                <Button className="min-w-[7rem]" onClick={() => navigate('/affiliate')}>
+                <Button className="min-w-[7rem]" onClick={() => navigate('/users/affiliate')}>
                   {t('back')}
                 </Button>
               </div>

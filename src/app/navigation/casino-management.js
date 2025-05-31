@@ -13,6 +13,7 @@ import { NAV_TYPE_COLLAPSE, NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.con
 export const casinoManagement = {
   id: 'casino_management',
   type: NAV_TYPE_COLLAPSE,
+  path: '/casino',
   title: 'Casino Management',
   transKey: 'casino_management',
   Icon: CircleStackIcon,

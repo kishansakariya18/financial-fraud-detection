@@ -95,7 +95,7 @@ export default function CreateAppearance() {
   if (!isLoading && response) {
     toast.success(response.message);
     setResponse(null);
-    navigate('/appearance/list');
+    navigate('/web/appearance');
   }
   useDidUpdate(() => {
     toast('Position updated', {

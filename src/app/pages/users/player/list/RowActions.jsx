@@ -40,7 +40,7 @@ export function RowActions({ row, table }) {
   };
 
   const handleClickView = () => {
-    navigate(`/player/${row.original.userUID}/tab/details`);
+    navigate(`/users/player/${row.original.userUID}/tab/details`);
   };
 
   const openModal = () => {

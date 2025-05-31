@@ -6,7 +6,7 @@ import { PERMISSIONS } from 'constants/app.constant';
 
 export const playerRoutes = [
   {
-    path: 'player',
+    path: 'users/player',
     lazy: async () => {
       const { default: PlayerList } = await import('../../pages/users/player/list/list');
       return {
@@ -19,7 +19,7 @@ export const playerRoutes = [
     }
   },
   {
-    path: 'player/:playerId/tab',
+    path: 'users/player/:playerId/tab',
     lazy: async () => ({
       Component: (await import('../../pages/users/player/Tabs')).default
     }),

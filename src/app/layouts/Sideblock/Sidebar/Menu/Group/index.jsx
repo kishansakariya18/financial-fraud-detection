@@ -44,7 +44,7 @@ export function Group({ data }) {
             switch (item.type) {
               case NAV_TYPE_COLLAPSE:
                 if (!item.permission || item?.permission.some((p) => hasPermission(p))) {
-                  return <CollapsibleItem key={item.id} data={item} />;
+                  return <CollapsibleItem key={item.path} data={item} />;
                 }
                 return null;
               case NAV_TYPE_ITEM:

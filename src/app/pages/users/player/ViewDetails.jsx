@@ -310,7 +310,7 @@ export function ViewDetails() {
                     </p>
                     {response?.affiliate ? (
                       <Link
-                        to={`/affiliate/${response?.affiliate?.AffiliatesUID}/tab/details`}
+                        to={`/users/affiliate/${response?.affiliate?.AffiliatesUID}/tab/details`}
                         className="tracking-wide text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500">
                         <p className="text-center">{response?.affiliate?.Username || '-'}</p>
                       </Link>
@@ -552,7 +552,7 @@ export function ViewDetails() {
                   </div>
                 </div>
                 <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-                  <Button className="min-w-[7rem]" onClick={() => navigate('/player')}>
+                  <Button className="min-w-[7rem]" onClick={() => navigate('/users/player')}>
                     {t('back')}
                   </Button>
                 </div>
