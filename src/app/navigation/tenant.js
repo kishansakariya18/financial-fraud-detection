@@ -7,6 +7,7 @@ import { UserGroupIcon } from '@heroicons/react/24/outline';
 export const tenants = {
   id: 'tenant',
   type: NAV_TYPE_ITEM,
+  path: '/tenant',
   title: 'Tenant',
   transKey: 'tenants',
   Icon: UserGroupIcon,
