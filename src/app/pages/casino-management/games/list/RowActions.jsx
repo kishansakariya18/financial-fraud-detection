@@ -111,8 +111,8 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              {hasPermission(PERMISSIONS.GAME.EDIT) && (
-                <>
+              <>
+                {hasPermission(PERMISSIONS.GAME.EDIT) && (
                   <MenuItem>
                     {({ focus }) => (
                       <button
@@ -126,6 +126,8 @@ export function RowActions({ row, table }) {
                       </button>
                     )}
                   </MenuItem>
+                )}
+                {hasPermission(PERMISSIONS.GAME.ADD_SEGMENTATION) && (
                   <MenuItem>
                     {({ focus }) => (
                       <button
@@ -139,8 +141,8 @@ export function RowActions({ row, table }) {
                       </button>
                     )}
                   </MenuItem>
-                </>
-              )}
+                )}
+              </>
             </MenuItems>
           </Transition>
         </Menu>

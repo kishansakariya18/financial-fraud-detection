@@ -21,8 +21,6 @@ export function CollapsibleItem({ data }) {
   const title = t(transKey) || data.title;
   const ChevronIcon = isRtl ? ChevronLeftIcon : ChevronRightIcon;
 
-  console.log('id: ', path);
-
   return (
     <AccordionItem value={path} className="relative flex flex-1 flex-col px-3">
       {({ open }) => (

@@ -1,6 +1,6 @@
 // Local Imports
 import { Page } from 'components/shared/Page';
-import { Outlet, NavLink } from 'react-router';
+import { Outlet, NavLink, useLocation } from 'react-router';
 // import TabNavigation from "./ShiftLeftAnimation";
 import clsx from 'clsx';
 import { Button, Tab, TabGroup, TabList, TabPanels } from '@headlessui/react';
@@ -10,6 +10,7 @@ import usePermissions from 'app/router/usePermissions';
 // ----------------------------------------------------------------------
 
 export default function TabsPage({ tabs }) {
+  const location = useLocation();
   const initialTabIndex = tabs.findIndex((tab) => location.pathname.includes(tab.path));
   const { hasPermission } = usePermissions();
 

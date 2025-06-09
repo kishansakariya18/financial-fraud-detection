@@ -114,7 +114,6 @@ export default function RestrictedCountry() {
   const onSubmit = async () => {
     setSubmitLoading(true);
     const result = await ProviderService.removeRestrictedCountry(providerId, checked);
-    console.log('result:', result);
 
     if (result.status === 200) {
       setSubmitResponse(result.response.message);
@@ -124,7 +123,6 @@ export default function RestrictedCountry() {
     setSubmitLoading(false);
   };
   if (!submitLoading && !submitError && submitResponse) {
-    console.log('errrrrr', submitResponse);
     toast.success(submitResponse);
     navigate('/casino/provider/list');
   }

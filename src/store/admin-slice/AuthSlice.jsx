@@ -55,70 +55,12 @@ const AuthSlice = createSlice({
       console.log('action.payload::', action.payload);
 
       state.permissions = action.payload.permissions;
+    },
+    updateUserData(state, action) {
+      state.userData = action.payload;
     }
   }
 });
 
 export const AuthAction = AuthSlice.actions;
 export default AuthSlice;
-//   name: 'Auth',
-//   initialState,
-//   reducers: {
-//     sendLoginOtp(state, action) {
-//       state.isLoggedIn = false;
-//       state.twoStepMode = 'login';
-//       state.authEmail = action.payload.authEmail;
-//       state.authPassword = action.payload.authPassword;
-//       state.authMfaEnabled = action.payload.authMfaEnabled;
-//       state.authVerifyOTP = action.payload.authVerifyOTP;
-//     },
-//     login(state, action) {
-//       state.isLoggedIn = true;
-//       state.authToken = action.payload.authData.token;
-//       state.isMasterAdmin = action.payload.authData.isMasterAdmin;
-//       state.authPassword = null;
-//       state.authVerifyOTP = false;
-//       state.twoStepMode = null;
-//       state.authData = action.payload.authData
-//       state.permissions = action.payload.permissions
-//     },
-//     sendForgotOtp(state, action) {
-//       state.isLoggedIn = false;
-//       state.twoStepMode = 'forgot_password';
-//       state.authEmail = action.payload.authEmail;
-//     },
-//     validateForgotOtp(state) {
-//       state.isLoggedIn = false;
-//       state.twoStepMode = null;
-//     },
-//     logout(state) {
-//       state.isLoggedIn = false;
-//       state.twoStepMode = null;
-//       state.authEmail = null;
-//       state.authPassword = null;
-//       state.authMfaEnabled = null;
-//       state.authVerifyOTP = false;
-//       state.authToken = null;
-//       state.userData = null;
-//       state.permissions = [];
-//     },
-//     changeNameSpace(state, action) {
-//       state.nameSpace = action.payload.nameSpace
-//     }
-//     ,
-//     changeAdminProfile(state, action) {
-
-//       state.authData.profilePic = action.payload.profilePic
-//       state.authData.firstName  = action.payload.firstName
-//       state.authData.lastName  = action.payload.lastName
-//       state.authData.fullName = (action.payload.firstName).trim() + ' ' + (action.payload.lastName).trim()
-//       localStorage.setItem('AuthData', JSON.stringify({
-//         ...JSON.parse(localStorage.getItem('AuthData')),
-//         firstName: action.payload.firstName,
-//         profilePic: action.payload.profilePic,
-//         lastName: action.payload.lastName,
-//         fullName: (action.payload.firstName).trim() + ' ' + (action.payload.lastName).trim()
-//       }))
-//     }
-//   },
-// });

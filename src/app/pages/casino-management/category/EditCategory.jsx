@@ -44,8 +44,6 @@ export function EditCategory({ value = '', categoryId, closeModal = () => {} }) 
     setError('');
   }
   const onSubmit = async (data) => {
-    console.log('submitData', data);
-
     await editCategoryApi(data);
   };
   return (

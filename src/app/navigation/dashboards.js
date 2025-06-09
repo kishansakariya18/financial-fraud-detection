@@ -3,23 +3,19 @@ import MonitorIcon from 'assets/nav-icons/monitor.svg?react';
 import { NAV_TYPE_ITEM, NAV_TYPE_ROOT } from 'constants/app.constant';
 import { users } from './users';
 import { platform } from './platoform';
-import { country } from './country';
 import { reports } from './report';
-// import { payment } from './payment';
 import { playerKyc } from './player-kyc';
 import { casinoManagement } from './casino-management';
-// import { affliate } from './affiliates';
 import { segmentation } from './segmentation';
 import { emailTemplate } from './email-template';
 import { peomocode } from './promocode';
 import { roles } from './roles';
 import { auditlogs } from './auditlogs';
-import { pages } from './pages';
 import { crm } from './crm';
 import { frontend } from './front-end';
-// import { getAiChatBot } from './ai-chat';`
-import { banner } from './banner';
 import { tenants } from './tenant';
+import { contentManagement } from './content-management';
+import { siteConfiguration } from './site-configuration';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -40,9 +36,11 @@ export const dashboards = () => ({
     roles,
     users,
     platform,
-    country,
-    banner,
-    pages,
+    // country,
+    // banner,
+    contentManagement,
+    siteConfiguration,
+    // pages,
     frontend,
     // payment,
     reports,

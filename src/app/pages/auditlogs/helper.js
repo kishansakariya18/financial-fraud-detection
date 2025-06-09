@@ -10,7 +10,6 @@ export const responseMapper = (apiData) => {
     eventName: data.EventName,
     createdAt: getDateInUTCToTimeZone(data.DateCreated)
   }));
-  console.log('data >>>', resultData);
 
   return resultData;
 };

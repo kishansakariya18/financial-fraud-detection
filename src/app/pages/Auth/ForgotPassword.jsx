@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { useThemeContext } from 'app/contexts/theme/context';
+import { CiMobile1 } from 'react-icons/ci';
 
 // ----------------------------------------------------------------------
 
@@ -104,10 +105,7 @@ export default function ForgotPassword() {
                   label={t('mobile')}
                   placeholder={t('enter') + ' ' + t('mobile')}
                   prefix={
-                    <EnvelopeIcon
-                      className="size-5 transition-colors duration-200"
-                      strokeWidth="1"
-                    />
+                    <CiMobile1 className="size-5 transition-colors duration-200" strokeWidth="1" />
                   }
                   {...register('mobile')}
                   error={errors?.mobile?.message}

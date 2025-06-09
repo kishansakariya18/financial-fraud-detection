@@ -20,6 +20,7 @@ import pagesRoute from './routes/pages.route';
 import crmRoute from './routes/crm.route';
 import homeCategoryRoute from './routes/home-category.route';
 import tenantRoute from './routes/tenant.route';
+import profileRoute from './routes/profile.route';
 
 // ----------------------------------------------------------------------
 
@@ -49,7 +50,8 @@ const protectedRoutes = {
         ...pagesRoute,
         ...crmRoute,
         ...homeCategoryRoute,
-        ...tenantRoute
+        ...tenantRoute,
+        ...profileRoute
       ]
     }
   ]

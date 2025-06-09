@@ -92,6 +92,14 @@ export const columns = [
     filterFn: 'inNumberRange',
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.blockedAt, {
+    id: 'blockedAt',
+    label: 'Blocked At',
+    header: 'Blocked At',
+    cell: DateCell,
+    filterFn: 'inNumberRange',
+    enableSorting: false
+  }),
   columnHelper.display({
     id: 'actions',
     label: 'Row Actions',

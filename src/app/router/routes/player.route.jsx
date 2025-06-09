@@ -121,6 +121,32 @@ export const playerRoutes = [
             )
           };
         }
+      },
+      {
+        path: 'change-profile',
+        lazy: async () => {
+          const { default: Profile } = await import('../../pages/profile/Profile');
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.AFFILIATES.LIST}>
+                <Profile />
+              </PrivateRoute>
+            )
+          };
+        }
+      },
+      {
+        path: 'change-password',
+        lazy: async () => {
+          const { default: ChangePassword } = await import('../../pages/profile/ChangePassword');
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.AFFILIATES.LIST}>
+                <ChangePassword />
+              </PrivateRoute>
+            )
+          };
+        }
       }
     ]
   }

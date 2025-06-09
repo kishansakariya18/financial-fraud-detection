@@ -1,6 +1,6 @@
 // Import Dependencies
 import { useLocation, useNavigate } from 'react-router';
-import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
+import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
@@ -20,6 +20,7 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { useThemeContext } from 'app/contexts/theme/context';
 import { useDisclosure } from 'hooks';
+import { CiMobile1 } from 'react-icons/ci';
 
 // ----------------------------------------------------------------------
 
@@ -177,10 +178,7 @@ export default function Login() {
                   label={t('mobile')}
                   placeholder={t('enter') + ' ' + t('mobile')}
                   prefix={
-                    <EnvelopeIcon
-                      className="size-5 transition-colors duration-200"
-                      strokeWidth="1"
-                    />
+                    <CiMobile1 className="size-5 transition-colors duration-200" strokeWidth="1" />
                   }
                   {...register('mobile')}
                   error={errors?.mobile?.message}

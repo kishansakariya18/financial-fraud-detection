@@ -22,8 +22,6 @@ const AddRole = () => {
 
   const [checkedList, setCheckedList] = useState([]);
   const handleCheck = (checked, permissionObj, modulePermissionList) => {
-    console.log('handleCheck', checked, permissionObj, modulePermissionList);
-
     if (permissionObj.permissionName == 'View') {
       const modulePermissionIds = modulePermissionList.map((item) => item.permissionID);
       if (!checked) {
@@ -53,12 +51,6 @@ const AddRole = () => {
     }
   };
 
-  console.log('checkedList: ', checkedList);
-
-  console.log('response: ', response);
-  console.log('isLoading: ', isLoading);
-  console.log('error: ', error);
-
   const [isSubmitLoading, setSubmitLoading] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const [submitResponse, setSubmitResponse] = useState(null);
@@ -74,7 +66,6 @@ const AddRole = () => {
 
   const onSubmit = async (data) => {
     data.permissionsIdList = checkedList;
-    console.log('data::', data);
 
     setSubmitLoading(true);
     const result = await RoleService.roleSubmit(data);
@@ -120,10 +111,7 @@ const AddRole = () => {
     setIsLoading(false);
   };
 
-  console.log('response:', response);
-
   useEffect(() => {
-    console.log('Component mounted or remounted!');
     fetchRolePermissionList();
   }, []);
 

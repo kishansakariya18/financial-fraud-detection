@@ -10,6 +10,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { LOCAL_STORAGE } from 'constants/app.constant';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { TbUser } from 'react-icons/tb';
+import apiConfig from 'configs/api.config';
+
+const links = [
+  {
+    id: '1',
+    title: 'Profile',
+    description: 'Your profile Setting',
+    to: '/profile/change-profile',
+    Icon: TbUser,
+    color: 'warning'
+  }
+];
 
 export function Profile() {
   const dispatch = useDispatch();
@@ -42,7 +55,7 @@ export function Profile() {
         size={9}
         role="button"
         name={userData?.FirstName + ' ' + userData?.LastName}
-        src={null}
+        src={userData?.ImageName ? `${apiConfig.baseURL.S3_URL}/admin/${userData.ImageName}` : null}
         indicator={<AvatarDot color="success" className="-m-0.5 size-3 ltr:right-0 rtl:left-0" />}
       />
       <Transition
@@ -76,10 +89,32 @@ export function Profile() {
                 </div>
               </div>
               <div className="flex flex-col pb-5 pt-2">
+                {links.map((link) => (
+                  <Link
+                    key={link.id}
+                    to={link.to}
+                    onClick={close}
+                    className="group flex items-center gap-3 px-4 py-2 tracking-wide outline-none transition-all hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-dark-600 dark:focus:bg-dark-600">
+                    <Avatar
+                      size={8}
+                      initialColor={link.color}
+                      classNames={{ display: 'rounded-lg' }}>
+                      <link.Icon className="size-4.5" />
+                    </Avatar>
+                    <div>
+                      <h2 className="font-medium text-gray-800 transition-colors group-hover:text-primary-600 group-focus:text-primary-600 dark:text-dark-100 dark:group-hover:text-primary-400 dark:group-focus:text-primary-400">
+                        {link.title}
+                      </h2>
+                      <div className="truncate text-xs text-gray-400 dark:text-dark-300">
+                        {link.description}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
                 <div className="px-4 pt-4">
                   <Button className="w-full gap-2" onClick={logoutHandler}>
                     <ArrowLeftStartOnRectangleIcon className="size-4.5" />
-                    <span>Logout</span>
+                    <span>{t('logout')}</span>
                   </Button>
                 </div>
               </div>

@@ -55,8 +55,6 @@ export function EditProvider({ providerName = '', value = '', providerId, closeM
     setError('');
   }
   const onSubmit = async (data) => {
-    console.log('submitData', data);
-
     await editProviderApi(data);
   };
 

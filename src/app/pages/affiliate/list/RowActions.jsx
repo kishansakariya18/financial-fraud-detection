@@ -24,8 +24,6 @@ export function RowActions({ row, table }) {
   const [changeStatusError, setChangeStatusError] = useState(false);
   const navigate = useNavigate();
 
-  console.log(t('affiliate_status_desc'));
-
   const confirmMessages = {
     pending: {
       description: t('affiliate_status_desc'),

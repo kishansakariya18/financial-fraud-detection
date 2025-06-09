@@ -27,7 +27,8 @@ export const responseMapper = (apiData) => {
       status: playerStatusToApp(item.AccountStatus),
       createdAt: item.DateCreated ? getDateInUTCToTimeZone(item.DateCreated) : '',
       lastLoginAt: item.LastLoginAt ? getDateInUTCToTimeZone(item.LastLoginAt) : '',
-      isBankVerified: item.IsBankVerified
+      isBankVerified: item.IsBankVerified,
+      blockedAt: item?.UserBlockedAt ? getDateInUTCToTimeZone(item.UserBlockedAt) : ''
     };
   });
 

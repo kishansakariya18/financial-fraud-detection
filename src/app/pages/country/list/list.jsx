@@ -23,9 +23,6 @@ export default function Country() {
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const fetchCountry = async () => {
-    // setError(null);
-    console.log('in side fetch');
-
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
     const result = await CountryService.getCountry({

@@ -18,6 +18,8 @@ import { statusOptions } from '../helper';
 import { CreateCategory } from '../CreateCategory';
 import { DashboardCard } from 'components/custom/DashboardCard';
 import { dummyCards } from 'helpers/functions';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +31,7 @@ export function CategoryFilters({
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const { hasPermission } = usePermissions();
   // const [searchParams] = useSearchParams();
   // console.log('table.getState().columnFilters: inside', Object.fromEntries([...searchParams]));
 
@@ -44,7 +47,9 @@ export function CategoryFilters({
             {pageTitle}
           </h2>
         </div>
-        <CreateCategory tableFetch={table.options.meta?.fetchNewList} />
+        {hasPermission(PERMISSIONS.CATEGORY.CREATE) && (
+          <CreateCategory tableFetch={table.options.meta?.fetchNewList} />
+        )}
       </div>
       <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
         <DashboardCard

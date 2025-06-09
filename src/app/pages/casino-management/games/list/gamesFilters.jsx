@@ -29,8 +29,6 @@ export function ProviderFilters({
   pageTitle = '',
   providerOptions = []
 }) {
-  console.log('providerOptions: ', providerOptions);
-
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
   // const [searchParams] = useSearchParams();
@@ -156,8 +154,6 @@ function SearchInput({ table }) {
 }
 
 function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {}, providerOptions }) {
-  console.log('providerOptions: ', providerOptions);
-
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>

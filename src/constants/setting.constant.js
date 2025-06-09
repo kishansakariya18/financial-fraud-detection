@@ -1,0 +1,22 @@
+export const SETTINGS_KEYS = {
+  DEPOSIT_LIMIT: 'DepositLimit',
+  WITHDRAW_LIMIT: 'WithdrawLimit',
+  PHONE_CODE: 'PhoneCode',
+  DEFAULT_OTP: 'DefaultOTP',
+  OTP_SMS: 'OtpSms',
+  SETTING_PASSWORD: 'SettingPassword',
+  MAX_REFERRAL_BENEFITS: 'MaxReferralBenefits',
+  TAX_AMOUNT: 'TaxAmount',
+  SESSION_EXPIRATION: 'SessionExpiration',
+  DEPOSIT_TAX_PERCENTAGE: 'DepositTaxPercentage',
+  WITHDRAW_TAX_PERCENTAGE: 'WithdrawTaxPercentage',
+  MAX_DEPOSIT_PER_DAY: 'MaxDepositPerDay',
+  MAX_WITHDRAW_PER_DAY: 'MaxWithdrawPerDay',
+  BET_LIMIT: 'BetLimit',
+  WIN_LIMIT: 'WinLimit',
+  CHECK_CALENDAR_TIME: 'CheckCalanderTime',
+  IS_MFA_ENABLED: 'IsMFAEnabled',
+  IS_AFFILIATE_MFA_ENABLED: 'IsAffiliateMFAEnabled',
+  IS_GEO_RESTRICTED: 'IsGeoRestricted',
+  FRONT_COLORS: 'FrontColors'
+};

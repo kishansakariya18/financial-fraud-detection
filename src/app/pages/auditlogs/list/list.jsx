@@ -52,7 +52,6 @@ export default function AuditLogs() {
       columnVisibility: { firstname: false }
     }
   });
-  console.log('table log', table.rowCount);
 
   useEffect(() => {
     if (!isLoading && error) {

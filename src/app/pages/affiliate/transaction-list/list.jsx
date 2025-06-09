@@ -16,7 +16,7 @@ import { transactionResponseMapper } from '../helper';
 import AffiliateService from 'services/affiliate.services';
 import { CheckBadgeIcon } from '@heroicons/react/24/solid';
 import { BanknotesIcon, UserPlusIcon } from '@heroicons/react/20/solid';
-import { Checkbox } from 'components/ui';
+import { Badge } from 'components/ui';
 
 export default function AffiliateTransactions() {
   const { t } = useTranslation();
@@ -123,8 +123,6 @@ export default function AffiliateTransactions() {
     });
   };
 
-  console.log('affiliateData ref: ', affiliateDataRef.current);
-
   const clearFilterHandler = () => {
     if (!isEmptyObject(queryParams)) {
       setSearchParams({ pageIndex: DEFAULT_PAGE_INDEX, pageSize: DEFAULT_PER_PAGE_RECORD });
@@ -139,7 +137,7 @@ export default function AffiliateTransactions() {
       pageTitle={pageTitle}
       title={pageTitle}
       enableFullScreen={tableSettings.enableFullScreen}>
-      <div className="mt-4 grid grid-cols-2 gap-3 px-[--margin-x] sm:grid-cols-4 sm:gap-4 lg:grid-cols-6 2xl:gap-6">
+      <div className="mt-4 grid grid-cols-2 gap-3 px-[--margin-x] sm:grid-cols-4 sm:gap-4 lg:grid-cols-3 2xl:gap-3">
         <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
           <div className="flex justify-between space-x-1">
             <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
@@ -169,46 +167,60 @@ export default function AffiliateTransactions() {
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-3 px-[--margin-x] sm:grid-cols-4 sm:gap-4 lg:grid-cols-6 2xl:gap-6">
+      <div className="mt-4 grid grid-cols-2 gap-3 px-[--margin-x] sm:grid-cols-4 sm:gap-4 lg:grid-cols-3 2xl:gap-3">
         <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-          <div className="flex justify-between space-x-1">
-            <Checkbox
-              color="info"
-              disabled
-              checked={affiliateDataRef.current?.IsSignupCommissionEnabled}
-              label={t('per') + ' ' + t('signup')}
-            />
+          <div className="flex justify-between space-x-3">
+            <p className="text-xs+">
+              {t('signup') + ' ' + t('commission')} :{' '}
+              {affiliateDataRef.current?.IsSignupCommissionEnabled ? (
+                <Badge color="success">{t('enabled')}</Badge>
+              ) : (
+                <Badge color="error">{t('disabled')}</Badge>
+              )}
+            </p>
           </div>
           <p className="mt-2 text-xs+">
-            {t('per') + ' ' + t('signup')} : {affiliateDataRef.current?.SignupCommissionAmount}
+            {t('per') + ' ' + t('signup') + ' ' + t('amount')} :{' '}
+            {affiliateDataRef.current?.SignupCommissionAmount}
+            {+affiliateDataRef.current?.SignupCommissionType === 1
+              ? ` (${t('percentage')})`
+              : ` (${t('fixed')})`}
           </p>
         </div>
         <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-          <div className="flex justify-between space-x-1">
-            <Checkbox
-              color="info"
-              disabled
-              checked={affiliateDataRef.current?.IsDepositCommissionEnabled}
-              label={t('per') + ' ' + t('deposit')}
-            />
+          <div className="flex justify-between space-x-3">
+            <p className="text-xs+">
+              {t('deposit') + ' ' + t('commission')} :{' '}
+              {affiliateDataRef.current?.IsDepositCommissionEnabled ? (
+                <Badge color="success">{t('enabled')}</Badge>
+              ) : (
+                <Badge color="error">{t('disabled')}</Badge>
+              )}
+            </p>
           </div>
           <p className="mt-2 text-xs+">
             {t('per') + ' ' + t('deposit')} : {affiliateDataRef.current?.DepositCommissionAmount}{' '}
-            {+affiliateDataRef.current?.DepositCommissionType === 1 ? '%' : ''}
+            {+affiliateDataRef.current?.DepositCommissionType === 1
+              ? ` (${t('percentage')})`
+              : ` (${t('fixed')})`}
           </p>
         </div>
         <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
-          <div className="flex justify-between space-x-1">
-            <Checkbox
-              color="info"
-              disabled
-              checked={affiliateDataRef.current?.IsUserLossCommissionEnabled}
-              label={t('user') + ' ' + t('loss')}
-            />
+          <div className="flex justify-between space-x-3">
+            <p className="text-xs+">
+              {t('user') + ' ' + t('loss') + ' ' + t('commission')} :{' '}
+              {affiliateDataRef.current?.IsUserLossCommissionEnabled ? (
+                <Badge color="success">{t('enabled')}</Badge>
+              ) : (
+                <Badge color="error">{t('disabled')}</Badge>
+              )}
+            </p>
           </div>
           <p className="mt-2 text-xs+">
             {t('user') + ' ' + t('loss')} : {affiliateDataRef.current?.UserLossCommissionAmount}
-            {+affiliateDataRef.current?.UserLossCommissionType === 1 ? '%' : ''}
+            {+affiliateDataRef.current?.UserLossCommissionType === 1
+              ? ` (${t('percentage')})`
+              : ` (${t('fixed')})`}
           </p>
         </div>
       </div>

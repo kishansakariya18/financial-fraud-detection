@@ -47,8 +47,8 @@ export default function Games() {
   }, []);
 
   const fetchProvider = async () => {
-    const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
-    const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
+    const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
+    const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
 
     const result = await GamesService.getGamesList({
       pagination: { pageIndex, pageSize },
@@ -109,7 +109,6 @@ export default function Games() {
 
   const applyFilterHandler = () => {
     const filterItems = {};
-    console.log('table.getState().columnFilters:', table.getState().columnFilters);
 
     for (let data of table.getState().columnFilters) {
       if (data.id === 'name') {
@@ -143,8 +142,8 @@ export default function Games() {
   const clearFilterHandler = () => {
     if (!isEmptyObject(queryParams)) {
       setSearchParams({
-        pageIndex: 0,
-        pageSize: 10
+        pageIndex: DEFAULT_PAGE_INDEX,
+        pageSize: DEFAULT_PER_PAGE_RECORD
       });
     }
     table.resetColumnFilters();

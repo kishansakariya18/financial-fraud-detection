@@ -38,7 +38,6 @@ const ViewDetails = () => {
         setLoading(false);
       }
     } catch (error) {
-      console.log('err: ', error);
       setError(error.message);
     }
   };

@@ -14,6 +14,8 @@ import { useTranslation } from 'react-i18next';
 import CategoryService from 'services/category.services';
 import { CustomModal } from 'components/custom';
 import { EditCategory } from '../EditCategory';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
@@ -23,6 +25,8 @@ export function RowActions({ row, table }) {
   const [statusSuccess, setStatusSuccess] = useState(false);
   const [statusError, setStatusError] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const { hasPermission } = usePermissions();
 
   const confirmMessages = {
     pending: {
@@ -61,8 +65,6 @@ export function RowActions({ row, table }) {
     setConfirmStatusLoading(true);
     const result = await CategoryService.changeCategoryStatus(row.original.id);
     if (result.status === 200) {
-      console.log('table.options: ', table.options);
-
       table.options.meta?.deleteRow(row);
       setStatusSuccess(true);
     } else {
@@ -93,32 +95,36 @@ export function RowActions({ row, table }) {
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
               className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    onClick={openModal}
-                    className={clsx(
-                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
-                      focus && 'bg-this/10 dark:bg-this-light/10'
-                    )}>
-                    <TbStatusChange className="size-4.5 stroke-1" />
-                    <span>{t('change') + ' ' + t('status')}</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    onClick={onOpenDialogBox}
-                    className={clsx(
-                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
-                      focus && 'bg-this/10 dark:bg-this-light/10'
-                    )}>
-                    <TbEdit className="size-4.5 stroke-1" />
-                    <span>{t('Edit') + ' ' + t('casino_category')}</span>
-                  </button>
-                )}
-              </MenuItem>
+              {hasPermission(PERMISSIONS.CATEGORY.CHANGE_STATUS) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={openModal}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                        focus && 'bg-this/10 dark:bg-this-light/10'
+                      )}>
+                      <TbStatusChange className="size-4.5 stroke-1" />
+                      <span>{t('change') + ' ' + t('status')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
+              {hasPermission(PERMISSIONS.CATEGORY.EDIT) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={onOpenDialogBox}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                        focus && 'bg-this/10 dark:bg-this-light/10'
+                      )}>
+                      <TbEdit className="size-4.5 stroke-1" />
+                      <span>{t('Edit') + ' ' + t('casino_category')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
             </MenuItems>
           </Transition>
         </Menu>

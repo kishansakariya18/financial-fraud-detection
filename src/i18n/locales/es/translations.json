@@ -384,5 +384,15 @@
   "tenants": "Inquilinos",
   "tenant_status_desc": "¿Está seguro de que desea actualizar el estado de este inquilino?",
   "tenant_status_suceess": "El estado del inquilino se ha cambiado correctamente",
-  "service": "Servicio"
+  "service": "Servicio",
+  "profile": "Perfil",
+  "logout": "Cerrar sesión",
+  "profile_desc": "Actualiza la configuración de tu cuenta.",
+  "update_password_desc": "Actualiza la configuración de tu cuenta.",
+  "new_key": "Nuevo",
+  "userBlockedAt": "Usuario bloqueado el",
+  "enabled": "Habilitado",
+  "disabled": "Deshabilitado",
+  "content_management": "Gestión de contenido",
+  "site_configuration": "Configuración del sitio"
   }

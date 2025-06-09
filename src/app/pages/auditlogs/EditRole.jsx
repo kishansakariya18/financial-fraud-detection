@@ -29,7 +29,6 @@ const EditRole = () => {
       if (result.status === 200) {
         const apiData = result.response.data;
         const resultData = roleDetailMapper(apiData);
-        console.log('resultData', resultData);
         setDetail(resultData);
         setCheckedList(resultData.permissionIDs);
       } else {
@@ -88,12 +87,6 @@ const EditRole = () => {
     }
   };
 
-  console.log('checkedList: ', checkedList);
-
-  console.log('response: ', response);
-  console.log('isLoading: ', isLoading);
-  console.log('error: ', error);
-
   const [isSubmitLoading, setSubmitLoading] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const [submitResponse, setSubmitResponse] = useState(null);
@@ -110,7 +103,6 @@ const EditRole = () => {
   const onSubmit = async (data) => {
     data.permissionsIdList = checkedList;
     data.rolePermissionID = rolePermissionId;
-    console.log('data::', data);
 
     setSubmitLoading(true);
     const result = await RoleService.roleEdit(data);

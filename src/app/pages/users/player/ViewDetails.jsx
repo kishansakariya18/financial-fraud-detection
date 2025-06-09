@@ -242,6 +242,17 @@ export function ViewDetails() {
                     </p>
                     <p>{getDateInUTCToTimeZone(response?.DateCreated)}</p>
                   </div>
+
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('userBlockedAt')}`}
+                    </p>
+                    <p>
+                      {response?.UserBlockedAt
+                        ? getDateInUTCToTimeZone(response?.UserBlockedAt)
+                        : '-'}
+                    </p>
+                  </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {t('image') + ' ' + t('preview')}

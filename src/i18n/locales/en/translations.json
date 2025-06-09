@@ -384,5 +384,15 @@
   "tenants": "Tenants",
   "tenant_status_desc": "Are you sure you want to update this Tenants's status ?",
   "tenant_status_suceess": "Tenant status has been changed successfully",
-  "service": "Service"
+  "service": "Service",
+  "profile": "Profile",
+  "logout": "Logout",
+  "profile_desc": "Update your account settings.",
+  "update_password_desc": "Update your account settings.",
+  "new_key": "New",
+  "userBlockedAt": "User Blocked At",
+  "enabled": "Enabled",
+  "disabled": "Disabled",
+  "content_management": "Content Management",
+  "site_configuration": "Site Configuration"
 }

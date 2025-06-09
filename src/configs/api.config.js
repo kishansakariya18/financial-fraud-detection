@@ -64,7 +64,8 @@ export const apiConfig = {
       LOGIN_HISTORY: '/admin/users/:userID/login-history',
       GET_COMMENT_DETAIL: '/admin/users/get-comment-detail',
       ADD_COMMENT: '/admin/users/add-comment',
-      DELETE_COMMENT: '/admin/users/delete-comment'
+      DELETE_COMMENT: '/admin/users/delete-comment',
+      CHANE_PLAYER_FUND_PASSWORD: '/admin/user/change-manage-fund-password'
     },
     ADMIN_USER: {
       ADMIN_LIST: '/admin/admin/list',
@@ -103,37 +104,6 @@ export const apiConfig = {
       TOP_PLAYERS: '/admin/dashboard/top-players',
       TOP_GAMES: '/admin/dashboard/top-games'
     },
-    MATCH: {
-      LIST: '/admin/v1/match/list',
-      PIN_MATCH: '/admin/v1/match/:matchId/pin-match',
-      SHOW_HIDE_MEGA_LABEL: '/admin/v1/match/:matchId/show-maga-label',
-      STOP_PRIZE_DISTRIBUTION: '/admin/v1/match/:matchId/stop-prize-distribution',
-      MATCH_ACTION: '/admin/v1/match/:matchId/match-actions',
-      CANCEL_MATCH: '/admin/v1/match/:matchId/cancel-match',
-      SILENT_DELAY: '/admin/v1/match/add-silent-delay',
-      MATCH_DELAY: '/admin/v1/match/add-match-delay',
-      ANNOUNCEMENT: '/admin/v1/match/add-announcement',
-      PUBLISH: '/admin/v1/match/:matchId/publish-match',
-      SUBMIT_PUBLISHED_ROSTERS: '/admin/v1/match/publish-match',
-      CREATE_RETRO_MATCH: '/v1/admin-retro-matches/clone-match',
-      MATCH_STATS: '/admin/v1/match/:matchId/match-stats',
-      ADD_EDIT_IMAGES: '/admin/v1/match/:matchId/add-image-match',
-      GET_IMAGES: '/admin/v1/match/:matchId/images',
-      REMOVE_IMAGES: '/admin/v1/match/:matchId/remove-images'
-    },
-    TEAM: {
-      USER_TEAM_DETAIL: '/admin/v1/contest/:userContestId/user-team-details',
-      LIST: '/admin/v1/team/team-list',
-      EDIT: '/admin/v1/team/edit'
-    },
-    PLAYER: {
-      LIST: '/admin/v1/player/list',
-      EDIT: '/admin/v1/player/edit',
-      PLAYER_POINT_BREAK_UP: '/admin/v1/match/match-stats/player-points-breakdown/:rosterTeamId'
-    },
-    SCORING_RULE: {
-      LIST: '/admin/v1/scoring-rule/list'
-    },
     DEPOSIT_PROMOCODE: {
       PROMOCODE_LIST: '/admin/v1/deposit-promocode/list',
       PROMOCODE_DETAIL: '/admin/v1/deposit-promocode/:promocodeId/details',
@@ -144,35 +114,6 @@ export const apiConfig = {
       PROMOCODE_UPLOAD_SEGMENTATION: '/admin/v1/deposit-promocode/:promocodeId/segmentation',
       PROMOCODE_REMOVE_SEGMENTATION: '/admin/v1/deposit-promocode/:promocodeId/segmentation',
       PROMOCODE_DELETE: '/admin/v1/deposit-promocode/:promocodeId'
-    },
-    CONTEST: {
-      LIST: '/admin/v1/contest/list',
-      TYPE_LIST: '/admin/v1/contest/categories',
-      PIN_CONTEST: '/admin/v1/contest/:contestId/pin-contest',
-      CANCEL_CONTEST: '/admin/v1/contest/:contestId/cancel-contest',
-      DETAIL: '/admin/v1/contest/:contestId/details',
-      DELETE_CONTEST: '/admin/v1/contest/:contestId/delete-contest',
-      GET_JOIN_BENEFIT: '/admin/v1/contest/:contestId/get-join-benefit-contest',
-      SUBMIT_JOIN_BENEFIT: '/admin/v1/contest/save-join-benefit-contest',
-      DELETE_JOIN_BENEFIT: '/admin/v1/contest/:contestId/remove-join-benefit-contest',
-      GET_APPLY_CONTEST_TEMPLATE: '/admin/v1/match/:matchId/match-templates',
-      APPLY_CONTEST_TEMPLATE: '/admin/v1/match/apply-template',
-      DYNAMIC_ENTRY_FEE: '/admin/v1/contest/:contestId/dynamic-entry-fee',
-      SUBMIT_DYNAMIC_ENTRY_FEE: '/admin/v1/contest/dynamic-entry-fee',
-      REPUBLISH_CONTEST: '/admin/v1/contest/republish-contest',
-      CARDS: '/admin/v1/contest/:match_id/cards',
-      ADD_EDIT_IMAGES: '/admin/v1/contest/:contestId/add-images',
-      GET_IMAGES: '/admin/v1/contest/:contestId/images',
-      REMOVE_IMAGES: '/admin/v1/contest/:contestId/remove-images',
-      EXPORT_MATCH_REPORT: '/admin/v1/match/:match_id/export-report'
-    },
-    CONTEST_CATEGORY: {
-      LIST: '/admin/v1/contest-category/list',
-      EDIT: '/admin/v1/contest-category/:contest_category_id',
-      CHANGE_STATUS: '/admin/v1/contest-category/:contest_category_id/change-status',
-      LIST_WITHOUT_PAGINATION: '/admin/v1/contest/categories',
-      REORDERING: '/admin/v1/contest-category/reorder',
-      CREATE: '/admin/v1/contest-category/create'
     },
     APP_SETTING: {
       APP_SETTING_LIST: '/admin/app-setting/list',
@@ -191,43 +132,6 @@ export const apiConfig = {
       SUBMIT_BANNER_SEGMENTATION: `/admin/banner/:bannerId/segmentation`,
       REMOVE_BANNER_SEGMENTATION: `/admin/banner/:bannerId/segmentation`
     },
-    BASKETBALL: {
-      CONTEST: {
-        CATEGORY_LIST: '/admin/v1/contest/categories'
-      },
-      CONTEST_TEMPLATE: {
-        CONTEST_TEMPLATE_LIST: '/admin/v1/contest-template/list',
-        CONTEST_TEMPLATE_CREATE: '/admin/v1/contest-template/create',
-        CONTEST_TEMPLATE_DETAIL: '/admin/v1/contest-template/:contestTemplateId/details',
-        CONTEST_TEMPLATE_CHANGE_STATUS:
-          '/admin/v1/contest-template/:contestTemplateId/change-status',
-        CONTEST_TEMPLATE_SEGMENTATION_LIST:
-          '/admin/v1/contest-template/:contestTemplateId/segmentation',
-        CONTEST_TEMPLATE_UPLOAD_SEGMENTATION:
-          '/admin/v1/contest-template/:contestTemplateId/segmentation',
-        CONTEST_TEMPLATE_REMOVE_SEGMENTATION:
-          '/admin/v1/contest-template/:contestTemplateId/segmentation',
-        CONTEST_TEMPLATE_DIRECT_CONTEST: '/admin/v1/contest-template/create-match-contest'
-      },
-      PROMOCODE: {
-        PROMOCODE_LIST: '/admin/v1/promocode/list',
-        PROMOCODE_DETAIL: '/admin/v1/promocode/:promocodeId/details',
-        PROMOCODE_CREATE: '/admin/v1/promocode/create',
-        PROMOCODE_CHANGE_STATUS: '/admin/v1/promocode/:promocodeId/change-status',
-        PROMOCODE_HISTORY: '/admin/v1/promocode/:promocodeId/history'
-      },
-      DEPOSIT_PROMOCODE: {
-        PROMOCODE_LIST: '/admin/v1/deposit-promocode/list',
-        PROMOCODE_DETAIL: '/admin/v1/deposit-promocode/:promocodeId/details',
-        PROMOCODE_CREATE: '/admin/v1/deposit-promocode/create',
-        PROMOCODE_CHANGE_STATUS: '/admin/v1/deposit-promocode/:promocodeId/change-status',
-        PROMOCODE_HISTORY: '/admin/v1/deposit-promocode/:promocodeId/history',
-        PROMOCODE_SEGMENTATION: '/admin/v1/deposit-promocode/:promocodeId/segmentation',
-        PROMOCODE_UPLOAD_SEGMENTATION: '/admin/v1/deposit-promocode/:promocodeId/segmentation',
-        PROMOCODE_REMOVE_SEGMENTATION: '/admin/v1/deposit-promocode/:promocodeId/segmentation',
-        PROMOCODE_DELETE: '/admin/v1/deposit-promocode/:promocodeId'
-      }
-    },
     AFFILIATE: {
       AFFILIATE_LIST: '/admin/affiliates',
       CHANGE_STATUS: '/admin/affiliates/change-status',
@@ -239,7 +143,8 @@ export const apiConfig = {
       PAYOUT_LIST: '/admin/affiliates/payout-histories',
       UPDATE_PAYOUT: '/admin/affiliates/update-payout',
       FUND: '/admin/affiliates/fund',
-      AFFILIATE_LOGIN_HISTORY: '/admin/affiliates/:affiliateID/login-history'
+      AFFILIATE_LOGIN_HISTORY: '/admin/affiliates/:affiliateID/login-history',
+      CHANGE_AFFILIATE_FUND_PASSWORD: '/admin/affiliate/change-manage-fund-password'
     },
     APP_VERSION: {
       LIST: '/admin/app-version/list',

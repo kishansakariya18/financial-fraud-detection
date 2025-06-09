@@ -29,7 +29,6 @@ export default function Affiliates() {
       pagination: { pageIndex, pageSize },
       filters: queryParams
     });
-    console.log('result: ', result.response);
 
     const apiData = affiliateListResponseMapper(result.response.data);
 

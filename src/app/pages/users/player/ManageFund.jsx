@@ -66,7 +66,7 @@ const ManageFund = () => {
   useEffect(() => {
     fetchPlayerDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playerId]);
+  }, [playerId, response]);
 
   const manageFundAPI = async (requestObject) => {
     setLoading(true);

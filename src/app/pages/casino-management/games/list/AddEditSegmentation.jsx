@@ -47,8 +47,6 @@ const AddEditSegmentation = ({ onClose, gameId }) => {
     setError(null);
     const result = await SegmentationService.getAllSegmentationList();
 
-    console.log('result:', result);
-
     if (result) {
       if (result.status === 200 || result.status === 201) {
         const apiData = result.response.data;

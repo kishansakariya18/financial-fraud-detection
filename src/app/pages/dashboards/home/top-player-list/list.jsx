@@ -40,10 +40,7 @@ export default function TopPlayers() {
     data.timeRangeType = playerTimeRange ? playerTimeRange : 1;
     data.type = playerFilter ? playerFilter : 1;
 
-    console.log('fetchTopPlayers: ', data);
-
     const result = await DashboardService.getTopPlayers(data);
-    console.log('result: ', result.response);
 
     const apiData = result.response.data;
 

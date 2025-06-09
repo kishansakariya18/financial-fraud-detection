@@ -52,8 +52,6 @@ export function CreateCategory({ tableFetch }) {
   }
 
   const onSubmit = async (data) => {
-    console.log('submitData', data);
-
     await createCategoryApi(data);
   };
   return (
