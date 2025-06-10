@@ -3,10 +3,10 @@ import { Page } from 'components/shared/Page';
 import { UserIcon } from '@heroicons/react/20/solid';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
-import { Button, Checkbox, Input } from 'components/ui';
+import { Checkbox, Input } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
 import { Listbox } from 'components/shared/form/Listbox';
@@ -14,7 +14,7 @@ import SegmentationService from 'services/segmentation.services';
 import { genderOptions, kycOptions } from './helper';
 import { createSegmentationSchema } from './schema';
 
-const EditSegmentation = () => {
+const ViewSegmentation = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [countryOptions, setCountryOptions] = useState([]);
@@ -24,12 +24,11 @@ const EditSegmentation = () => {
 
   const breadcrumbItem = [
     { title: t('segmentation'), path: '/segmentation' },
-    { title: t('edit') }
+    { title: t('view') }
   ];
 
   const {
     register,
-    handleSubmit,
     watch,
     setValue,
     control,
@@ -50,7 +49,6 @@ const EditSegmentation = () => {
   const moneyDeposit = watch('moneyDeposit');
   const moneyWon = watch('moneyWon');
   const moneyLoss = watch('moneyLoss');
-  const navigate = useNavigate();
 
   const fetchCountryList = async () => {
     setLoading(true);
@@ -186,20 +184,6 @@ const EditSegmentation = () => {
     fetchCountryList();
   }, []);
 
-  const editSegmentationAPI = async (requestObject) => {
-    setLoading(true);
-    setError(null);
-    const result = await SegmentationService.addEditSegmentationList(requestObject);
-    if (result) {
-      if (result.status === 200 || result.status === 201) {
-        setResponse(result.response);
-      } else {
-        setError(result.error);
-      }
-    }
-    setLoading(false);
-  };
-
   if (!loading && error) {
     toast.error(error);
     setError('');
@@ -207,21 +191,15 @@ const EditSegmentation = () => {
 
   if (!loading && !error && response) {
     toast.success(response.message);
-    setTimeout(() => {
-      navigate('/segmentation');
-    }, 0);
     setResponse(null);
   }
 
-  const onSubmit = async (data) => {
-    await editSegmentationAPI({ segmentationId, ...data });
-  };
   return (
-    <Page title={t('edit') + ' ' + t('segmentation')}>
+    <Page title={t('view') + ' ' + t('segmentation')}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
         <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
-            {t('edit') + ' ' + t('segmentation') + ' ' + t('form')}
+            {t('view') + ' ' + t('segmentation') + ' ' + t('form')}
           </h2>
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
@@ -229,15 +207,16 @@ const EditSegmentation = () => {
           <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+        <form autoComplete="off">
           <div className="mt-6 space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
                 {...register('name')}
                 prefix={<UserIcon className="size-5" />}
                 label={t('name')}
+                disabled={true}
                 error={errors?.name?.message}
-                placeholder={t('enter') + ' ' + t('name')}
+                placeholder={t('name')}
               />
             </div>
           </div>
@@ -247,7 +226,7 @@ const EditSegmentation = () => {
           <div className="mt-6 space-y-4">
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
-                <Checkbox label={t('kyc')} {...register('kyc')} />
+                <Checkbox disabled label={t('kyc')} {...register('kyc')} />
               </div>
 
               {
@@ -262,8 +241,8 @@ const EditSegmentation = () => {
                           }
                           onChange={(val) => field.onChange(val.value)}
                           name={field.name}
-                          disabled={!kyc}
-                          placeholder={t('select') + ' ' + t('kyc') + ' ' + t('option')}
+                          disabled={true}
+                          placeholder={t('kyc') + ' ' + t('option')}
                           displayField="label"
                           error={errors?.playerLossCommissionType?.message}
                         />
@@ -277,7 +256,7 @@ const EditSegmentation = () => {
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
-                <Checkbox label={t('countries')} {...register('countryCheck')} />
+                <Checkbox disabled label={t('countries')} {...register('countryCheck')} />
               </div>
 
               {
@@ -287,7 +266,7 @@ const EditSegmentation = () => {
                       render={({ field }) => (
                         <Listbox
                           data={countryOptions}
-                          disabled={!countryCheck}
+                          disabled={true}
                           value={countryOptions.find((opt) => opt.value === field.value) || null}
                           onChange={(val) => field.onChange(val.value)}
                           name={field.name}
@@ -305,41 +284,41 @@ const EditSegmentation = () => {
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
-                <Checkbox label={t('age') + ' ' + t('group')} {...register('ageGroup')} />
+                <Checkbox disabled label={t('age') + ' ' + t('group')} {...register('ageGroup')} />
               </div>
               {
                 <>
                   <Input
                     {...register('minAge')}
                     error={errors?.minAge?.message}
-                    placeholder={t('enter') + ' ' + t('minimum') + ' ' + t('age')}
+                    placeholder={t('minimum') + ' ' + t('age')}
                     type="number"
-                    disabled={!ageGroup}
+                    disabled={true}
                   />
                   <Input
                     {...register('maxAge')}
                     error={errors?.maxAge?.message}
-                    placeholder={t('enter') + ' ' + t('maximum') + ' ' + t('age')}
+                    placeholder={t('maximum') + ' ' + t('age')}
                     type="number"
-                    disabled={!ageGroup}
+                    disabled={true}
                   />
                 </>
               }
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
-                <Checkbox label={t('gender')} {...register('genderCheck')} />
+                <Checkbox disabled label={t('gender')} {...register('genderCheck')} />
               </div>
               {
                 <Controller
                   render={({ field }) => (
                     <Listbox
                       data={genderOptions}
-                      disabled={!genderCheck}
+                      disabled={true}
                       value={genderOptions.find((opt) => opt.value === field.value) || null}
                       onChange={(val) => field.onChange(val.value)}
                       name={field.name}
-                      placeholder={t('select') + ' ' + t('gender')}
+                      placeholder={t('gender')}
                       displayField="label"
                       error={errors?.gender?.message}
                     />
@@ -351,19 +330,23 @@ const EditSegmentation = () => {
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
-                <Checkbox label={t('login') + ' ' + t('counter')} {...register('loginCounter')} />
+                <Checkbox
+                  disabled
+                  label={t('login') + ' ' + t('counter')}
+                  {...register('loginCounter')}
+                />
               </div>
               {
                 <>
                   <Input
-                    disabled={!loginCounter}
+                    disabled={true}
                     {...register('minLoginCount')}
                     error={errors?.minLoginCount?.message}
                     placeholder={t('minimum') + ' ' + t('login') + ' ' + t('count')}
                     type="number"
                   />
                   <Input
-                    disabled={!loginCounter}
+                    disabled={true}
                     {...register('maxLoginCount')}
                     error={errors?.maxLoginCount?.message}
                     placeholder={t('maximum') + ' ' + t('login') + ' ' + t('count')}
@@ -374,7 +357,7 @@ const EditSegmentation = () => {
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
-                <Checkbox label={t('referral')} {...register('referral')} />
+                <Checkbox disabled label={t('referral')} {...register('referral')} />
               </div>
               {
                 <>
@@ -383,10 +366,10 @@ const EditSegmentation = () => {
                     error={errors?.minReferral?.message}
                     placeholder={t('minimum') + ' ' + t('referral') + ' ' + t('count')}
                     type="number"
-                    disabled={!referral}
+                    disabled={true}
                   />
                   <Input
-                    disabled={!referral}
+                    disabled={true}
                     {...register('maxReferral')}
                     error={errors?.maxReferral?.message}
                     placeholder={t('maximum') + ' ' + t('referral') + ' ' + t('count')}
@@ -397,7 +380,11 @@ const EditSegmentation = () => {
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
-                <Checkbox label={t('money') + ' ' + t('deposit')} {...register('moneyDeposit')} />
+                <Checkbox
+                  disabled
+                  label={t('money') + ' ' + t('deposit')}
+                  {...register('moneyDeposit')}
+                />
               </div>
               {
                 <>
@@ -406,21 +393,21 @@ const EditSegmentation = () => {
                     error={errors?.minDeposit?.message}
                     placeholder={t('minimum') + ' ' + t('deposit')}
                     type="number"
-                    disabled={!moneyDeposit}
+                    disabled={true}
                   />
                   <Input
                     {...register('maxDeposit')}
                     error={errors?.maxDeposit?.message}
                     placeholder={t('maximum') + ' ' + t('deposit')}
                     type="number"
-                    disabled={!moneyDeposit}
+                    disabled={true}
                   />
                 </>
               }
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
-                <Checkbox label={t('money') + ' ' + t('won')} {...register('moneyWon')} />
+                <Checkbox disabled label={t('money') + ' ' + t('won')} {...register('moneyWon')} />
               </div>
               {
                 <>
@@ -429,33 +416,37 @@ const EditSegmentation = () => {
                     error={errors?.minWon?.message}
                     placeholder={t('minimum') + ' ' + t('won')}
                     type="number"
-                    disabled={!moneyWon}
+                    disabled={true}
                   />
                   <Input
                     {...register('maxWon')}
                     error={errors?.maxWon?.message}
                     placeholder={t('maximum') + ' ' + t('won')}
                     type="number"
-                    disabled={!moneyWon}
+                    disabled={true}
                   />
                 </>
               }
             </div>
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
-                <Checkbox label={t('money') + ' ' + t('loss')} {...register('moneyLoss')} />
+                <Checkbox
+                  disabled
+                  label={t('money') + ' ' + t('loss')}
+                  {...register('moneyLoss')}
+                />
               </div>
               {
                 <>
                   <Input
-                    disabled={!moneyLoss}
+                    disabled={true}
                     {...register('minLoss')}
                     error={errors?.minLoss?.message}
                     placeholder={t('minimum') + ' ' + t('loss')}
                     type="number"
                   />
                   <Input
-                    disabled={!moneyLoss}
+                    disabled={true}
                     {...register('maxLoss')}
                     error={errors?.maxLoss?.message}
                     placeholder={t('maximum') + ' ' + t('loss')}
@@ -465,18 +456,10 @@ const EditSegmentation = () => {
               }
             </div>
           </div>
-          <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-            <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
-              {t('reset')}
-            </Button>
-            <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
-              {t('update')}
-            </Button>
-          </div>
         </form>
       </div>
     </Page>
   );
 };
 
-export default EditSegmentation;
+export default ViewSegmentation;
