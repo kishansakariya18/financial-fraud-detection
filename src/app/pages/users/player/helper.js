@@ -382,3 +382,22 @@ export const selfExclusionMapper = (ExclusionType) => {
       return 'None';
   }
 };
+
+export const playerReferralResponseMapper = (apiData) => {
+  const totalRecords = apiData.totalRecords;
+  const userData = { username: apiData?.data?.referrerData?.Username };
+  const list = apiData?.data?.raferralList?.map((item) => {
+    return {
+      id: item.ReferralID,
+      username: item.user.Username,
+      mobile: item.user.Mobile,
+      email: item.user.Email,
+      realCash: item.user.RealCash,
+      bonus: item.user.Bonus,
+      coin: item.user.Coin,
+      createdAt: getDateInUTCToTimeZone(item.DateCreated)
+      // transactionData: item.TransactionData,
+    };
+  });
+  return { totalRecords, list, userData };
+};

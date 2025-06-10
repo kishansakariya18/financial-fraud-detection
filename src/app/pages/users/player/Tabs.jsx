@@ -5,6 +5,7 @@ import {
   AdjustmentsVerticalIcon,
   HomeIcon,
   ListBulletIcon,
+  UserGroupIcon,
   WalletIcon
 } from '@heroicons/react/24/outline';
 import { randomId } from 'utils/randomId';
@@ -66,6 +67,14 @@ export default function Tabs() {
       icon: ListBulletIcon,
       index: 5,
       permission: PERMISSIONS.USER.COMMENT_VIEW
+    },
+    {
+      id: randomId(),
+      title: t('referrals'),
+      path: `/users/player/${playerId}/tab/referrals`,
+      icon: UserGroupIcon,
+      index: 0,
+      permission: PERMISSIONS.USER.LIST
     }
   ];
 
