@@ -259,6 +259,9 @@ export const PERMISSIONS = {
     VIEW: 'tenant-view',
     CREATE: 'tenant-create',
     CHANGE_STATUS: 'tenant-change-status'
+  },
+  REFERRAL_MANAGEMENT: {
+    VIEW: 'referral-management-view'
   }
 };
 

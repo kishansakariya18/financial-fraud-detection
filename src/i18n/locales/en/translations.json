@@ -394,5 +394,9 @@
   "enabled": "Enabled",
   "disabled": "Disabled",
   "content_management": "Content Management",
-  "site_configuration": "Site Configuration"
+  "site_configuration": "Site Configuration",
+  "bonus_management": "Bonus Management",
+  "management": "Management",
+  "with_key": "With",
+  "without": "Without"
 }

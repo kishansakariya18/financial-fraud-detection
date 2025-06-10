@@ -11,7 +11,7 @@ export const countryRoutes = [
   //     ],
   //   },
   {
-    path: 'country',
+    path: 'site-configuration/country',
     lazy: async () => ({
       Component: (await import('../../pages/country/list/list')).default
     })

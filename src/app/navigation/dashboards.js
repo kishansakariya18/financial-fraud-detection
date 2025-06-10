@@ -16,6 +16,7 @@ import { frontend } from './front-end';
 import { tenants } from './tenant';
 import { contentManagement } from './content-management';
 import { siteConfiguration } from './site-configuration';
+import { bonusManagement } from './bonus-management';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -40,6 +41,7 @@ export const dashboards = () => ({
     // banner,
     contentManagement,
     siteConfiguration,
+    bonusManagement,
     // pages,
     frontend,
     // payment,

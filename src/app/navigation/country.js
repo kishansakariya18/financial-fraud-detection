@@ -8,7 +8,7 @@ console.log('country log check');
 export const country = {
   id: 'country',
   type: NAV_TYPE_ITEM,
-  path: '/country',
+  path: '/site-configuration/country',
   title: 'Country',
   transKey: 'country',
   Icon: FlagIcon,

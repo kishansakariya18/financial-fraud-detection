@@ -8,7 +8,7 @@ import { country } from './country';
 export const siteConfiguration = {
   id: 'site_configuration',
   type: NAV_TYPE_COLLAPSE,
-  path: '/site_configuration',
+  path: '/site-configuration',
   title: 'Site Configuration',
   transKey: 'site_configuration',
   Icon: Cog6ToothIcon,

@@ -1,0 +1,24 @@
+// Import Dependencies
+import { CircleStackIcon, ViewColumnsIcon } from '@heroicons/react/24/outline';
+import { NAV_TYPE_COLLAPSE, NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
+
+export const bonusManagement = {
+  id: 'bonus_management',
+  type: NAV_TYPE_COLLAPSE,
+  path: '/bonus',
+  title: 'Bonus Management',
+  transKey: 'bonus_management',
+  Icon: CircleStackIcon,
+  permission: [PERMISSIONS.REFERRAL_MANAGEMENT.VIEW],
+  childs: [
+    {
+      id: 'referral_management',
+      type: NAV_TYPE_ITEM,
+      path: '/bonus/referral-management',
+      title: 'Referral Management',
+      transKey: 'referral_management',
+      Icon: ViewColumnsIcon,
+      permission: PERMISSIONS.REFERRAL_MANAGEMENT.VIEW
+    }
+  ]
+};

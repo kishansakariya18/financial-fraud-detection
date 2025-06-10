@@ -187,6 +187,8 @@ export const transactionTypeInWords = (type) => {
       return 'DEPOSIT TAX';
     case TRANSACTION.TRANSACTION_TYPE.DEPOSIT_PROMO_CODE_BENEFIT:
       return 'PROMOCODE BENEFIT';
+    case TRANSACTION.TRANSACTION_TYPE.REFERRAL_SIGNUP_BONUS:
+      return 'REFERRAL SIGNUP BONUS';
     case TRANSACTION.TRANSACTION_TYPE.WITHOUT_REFERRAL_SIGNUP_BONUS:
       return 'WITHOUT REFERRAL SIGNUP BONUS';
     case TRANSACTION.TRANSACTION_TYPE.REFERRAL_PAN_VERIFICATION:
@@ -265,8 +267,18 @@ export const txnTypeOption = [
     color: 'info'
   },
   {
-    value: 'PROMOCODE_BENEFIT',
+    value: 'PROMOCODE BENEFIT',
     label: 'Promocode Benefit',
+    color: 'success'
+  },
+  {
+    value: 'REFERRAL SIGNUP BONUS',
+    label: 'Referral Signup Bonus',
+    color: 'success'
+  },
+  {
+    value: 'WITHOUT REFERRAL SIGNUP BONUS',
+    label: 'Without Referral Signup Bonus',
     color: 'success'
   },
   {
@@ -288,8 +300,12 @@ export const txnTypeToAPI = (value) => {
       return TRANSACTION.TRANSACTION_TYPE.WINNING;
     case 'BET SLIP':
       return TRANSACTION.TRANSACTION_TYPE.BETSLIP;
-    case 'PROMOCODE_BENEFIT':
+    case 'PROMOCODE BENEFIT':
       return TRANSACTION.TRANSACTION_TYPE.DEPOSIT_PROMO_CODE_BENEFIT;
+    case 'REFERRAL SIGNUP BONUS':
+      return TRANSACTION.TRANSACTION_TYPE.REFERRAL_SIGNUP_BONUS;
+    case 'WITHOUT REFERRAL SIGNUP BONUS':
+      return TRANSACTION.TRANSACTION_TYPE.WITHOUT_REFERRAL_SIGNUP_BONUS;
     case 'ROLLBACK':
       return TRANSACTION.TRANSACTION_TYPE.ROLLBACK;
     default:
