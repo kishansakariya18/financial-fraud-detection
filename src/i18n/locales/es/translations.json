@@ -401,5 +401,9 @@
   "without": "Sin",
   "referral_management": "Gestión de Referidos",
   "oneTimeBetLimitDesc": "Apuesta máxima que un usuario puede hacer en una sola apuesta.",
-  "oneTimeWinLimitDesc": "Ganancia potencial máxima permitida por apuesta. Los usuarios no pueden realizar apuestas donde las cuotas × el importe apostado excedan este límite."
+  "oneTimeWinLimitDesc": "Ganancia potencial máxima permitida por apuesta. Los usuarios no pueden realizar apuestas donde las cuotas × el importe apostado excedan este límite.",
+  "sr_no": "N.º",
+  "referred": "Referido",
+  "by": "Por",
+  "friend": "Amigo"
   }

@@ -401,5 +401,9 @@
   "without": "Without",
   "referral_management": "Referral Management",
   "oneTimeBetLimitDesc": "Maximum stake a user can place on a single bet.",
-  "oneTimeWinLimitDesc": "Maximum potential win allowed per bet. Users cannot place bets where odds × stake exceed this limit."
+  "oneTimeWinLimitDesc": "Maximum potential win allowed per bet. Users cannot place bets where odds × stake exceed this limit.",
+  "sr_no": "Sr No",
+  "referred": "Referred",
+  "by": "By",
+  "friend": "Friend"
 }
