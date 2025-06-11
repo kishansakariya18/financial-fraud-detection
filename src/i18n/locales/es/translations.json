@@ -405,5 +405,9 @@
   "payment_provider": "Proveedor de pagos",
   "payment_provider_search_desc": "Nombre del proveedor de búsqueda",
   "payment_provider_status_conf": "¿Está seguro de que desea cambiar el estado del proveedor?",
-  "payment_provider_suceess": "El estado de administrador se ha cambiado correctamente"
+  "payment_provider_suceess": "El estado de administrador se ha cambiado correctamente",
+  "sr_no": "N.º",
+  "referred": "Referido",
+  "by": "Por",
+  "friend": "Amigo"
   }

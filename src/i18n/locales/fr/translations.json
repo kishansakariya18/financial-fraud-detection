@@ -405,5 +405,9 @@
   "payment_provider": "Fournisseur de paiement",
   "payment_provider_search_desc": "Nom du fournisseur de recherche",
   "payment_provider_status_conf": "Êtes-vous sûr de vouloir changer le statut du fournisseur ?",
-  "payment_provider_suceess": "Le statut d'administrateur a été modifié avec succès"
+  "payment_provider_suceess": "Le statut d'administrateur a été modifié avec succès",
+  "sr_no": "N°",
+  "referred": "Parrainé",
+  "by": "Par",
+  "friend": "Ami"
 }

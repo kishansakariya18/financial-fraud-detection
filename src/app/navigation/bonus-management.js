@@ -1,5 +1,5 @@
 // Import Dependencies
-import { CircleStackIcon, ViewColumnsIcon } from '@heroicons/react/24/outline';
+import { CircleStackIcon, ShareIcon } from '@heroicons/react/24/outline';
 import { NAV_TYPE_COLLAPSE, NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
 
 export const bonusManagement = {
@@ -17,7 +17,7 @@ export const bonusManagement = {
       path: '/bonus/referral-management',
       title: 'Referral Management',
       transKey: 'referral_management',
-      Icon: ViewColumnsIcon,
+      Icon: ShareIcon,
       permission: PERMISSIONS.REFERRAL_MANAGEMENT.VIEW
     }
   ]
