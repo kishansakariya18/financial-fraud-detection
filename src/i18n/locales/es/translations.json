@@ -394,5 +394,12 @@
   "enabled": "Habilitado",
   "disabled": "Deshabilitado",
   "content_management": "Gestión de contenido",
-  "site_configuration": "Configuración del sitio"
+  "site_configuration": "Configuración del sitio",
+  "bonus_management": "Gestión de Bonificaciones",
+  "management": "Gestión",
+  "with_key": "Con",
+  "without": "Sin",
+  "referral_management": "Gestión de Referidos",
+  "oneTimeBetLimitDesc": "Apuesta máxima que un usuario puede hacer en una sola apuesta.",
+  "oneTimeWinLimitDesc": "Ganancia potencial máxima permitida por apuesta. Los usuarios no pueden realizar apuestas donde las cuotas × el importe apostado excedan este límite."
   }

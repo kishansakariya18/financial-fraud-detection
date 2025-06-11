@@ -576,6 +576,13 @@ const PlayerLimit = () => {
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
+                          suffix={
+                            <ContextualHelp
+                              title={t('oneTimeBetLimit')}
+                              anchor={{ to: 'bottom', gap: 8 }}
+                              content={<p>{t('oneTimeBetLimitDesc')}</p>}
+                            />
+                          }
                         />
                       </div>
                     </div>
@@ -601,6 +608,13 @@ const PlayerLimit = () => {
                             root: 'flex-1',
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
+                          suffix={
+                            <ContextualHelp
+                              title={t('oneTimeWinLimit')}
+                              anchor={{ to: 'bottom', gap: 8 }}
+                              content={<p>{t('oneTimeWinLimitDesc')}</p>}
+                            />
+                          }
                         />
                       </div>
                     </div>

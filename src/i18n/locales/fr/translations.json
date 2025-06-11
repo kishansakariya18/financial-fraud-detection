@@ -394,5 +394,12 @@
   "enabled": "Activé",
   "disabled": "Désactivé",
   "content_management": "Gestion de contenu",
-  "site_configuration": "Configuration du site"
+  "site_configuration": "Configuration du site",
+  "bonus_management": "Gestion des Bonus",
+  "management": "Gestion",
+  "with_key": "Avec",
+  "without": "Sans",
+  "referral_management": "Gestion des Parrainages",
+  "oneTimeBetLimitDesc": "Mise maximale qu'un utilisateur peut placer sur un seul pari.",
+  "oneTimeWinLimitDesc": "Gain potentiel maximum autorisé par pari. Les utilisateurs ne peuvent pas placer de paris où la cote × la mise dépasse cette limite."
 }
