@@ -22,6 +22,7 @@ import homeCategoryRoute from './routes/home-category.route';
 import tenantRoute from './routes/tenant.route';
 import profileRoute from './routes/profile.route';
 import bonusManagementRoute from './routes/bonus-management.route';
+import paymentProvider from './routes/payment-provider.route';
 
 // ----------------------------------------------------------------------
 
@@ -53,7 +54,8 @@ const protectedRoutes = {
         ...homeCategoryRoute,
         ...tenantRoute,
         ...profileRoute,
-        ...bonusManagementRoute
+        ...bonusManagementRoute,
+        ...paymentProvider
       ]
     }
   ]

@@ -401,5 +401,9 @@
   "without": "Without",
   "referral_management": "Referral Management",
   "oneTimeBetLimitDesc": "Maximum stake a user can place on a single bet.",
-  "oneTimeWinLimitDesc": "Maximum potential win allowed per bet. Users cannot place bets where odds × stake exceed this limit."
+  "oneTimeWinLimitDesc": "Maximum potential win allowed per bet. Users cannot place bets where odds × stake exceed this limit.",
+  "payment_provider": "Payment Provider",
+  "payment_provider_search_desc": "Search Provider Name",
+  "payment_provider_status_conf": "Are you sure you want to change status of provider ?",
+  "payment_provider_suceess": "Payment Provider Status has been changed successfully"
 }

@@ -262,6 +262,10 @@ export const PERMISSIONS = {
   },
   REFERRAL_MANAGEMENT: {
     VIEW: 'referral-management-view'
+  },
+  PAYMENT_PROVIDER: {
+    VIEW: 'payment-provider-view',
+    STATUS: 'payment-provider-status'
   }
 };
 
