@@ -17,6 +17,7 @@ import { tenants } from './tenant';
 import { contentManagement } from './content-management';
 import { siteConfiguration } from './site-configuration';
 import { bonusManagement } from './bonus-management';
+import { paymentProvider } from './payment-provider';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -54,6 +55,7 @@ export const dashboards = () => ({
     emailTemplate,
     peomocode,
     auditlogs,
-    crm
+    crm,
+    paymentProvider
   ]
 });

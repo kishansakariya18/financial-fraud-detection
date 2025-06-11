@@ -327,6 +327,10 @@ export const apiConfig = {
       ADD_APPEARANCE: '/admin/home-page/appearance/add',
       CHANGE_APPEARANCE_STATUS: '/admin/home-page/appearance/change-status',
       APPEARANCE_LIST: '/admin/home-page/appearance/list'
+    },
+    PAYMENT_PROVIDER: {
+      VIEW: '/admin/payment-provider/list',
+      STATUS: '/admin/payment-provider/change-status'
     }
   }
 };

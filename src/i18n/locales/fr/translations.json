@@ -401,5 +401,9 @@
   "without": "Sans",
   "referral_management": "Gestion des Parrainages",
   "oneTimeBetLimitDesc": "Mise maximale qu'un utilisateur peut placer sur un seul pari.",
-  "oneTimeWinLimitDesc": "Gain potentiel maximum autorisé par pari. Les utilisateurs ne peuvent pas placer de paris où la cote × la mise dépasse cette limite."
+  "oneTimeWinLimitDesc": "Gain potentiel maximum autorisé par pari. Les utilisateurs ne peuvent pas placer de paris où la cote × la mise dépasse cette limite.",
+  "payment_provider": "Fournisseur de paiement",
+  "payment_provider_search_desc": "Nom du fournisseur de recherche",
+  "payment_provider_status_conf": "Êtes-vous sûr de vouloir changer le statut du fournisseur ?",
+  "payment_provider_suceess": "Le statut d'administrateur a été modifié avec succès"
 }

@@ -401,5 +401,9 @@
   "without": "Sin",
   "referral_management": "Gestión de Referidos",
   "oneTimeBetLimitDesc": "Apuesta máxima que un usuario puede hacer en una sola apuesta.",
-  "oneTimeWinLimitDesc": "Ganancia potencial máxima permitida por apuesta. Los usuarios no pueden realizar apuestas donde las cuotas × el importe apostado excedan este límite."
+  "oneTimeWinLimitDesc": "Ganancia potencial máxima permitida por apuesta. Los usuarios no pueden realizar apuestas donde las cuotas × el importe apostado excedan este límite.",
+  "payment_provider": "Proveedor de pagos",
+  "payment_provider_search_desc": "Nombre del proveedor de búsqueda",
+  "payment_provider_status_conf": "¿Está seguro de que desea cambiar el estado del proveedor?",
+  "payment_provider_suceess": "El estado de administrador se ha cambiado correctamente"
   }
