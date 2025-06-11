@@ -18,5 +18,8 @@ export const SETTINGS_KEYS = {
   IS_MFA_ENABLED: 'IsMFAEnabled',
   IS_AFFILIATE_MFA_ENABLED: 'IsAffiliateMFAEnabled',
   IS_GEO_RESTRICTED: 'IsGeoRestricted',
-  FRONT_COLORS: 'FrontColors'
+  FRONT_COLORS: 'FrontColors',
+  PLAYER_FUND_PASSWORD: 'PlayerFundPassword',
+  AFFILIATE_FUND_PASSWORD: 'AffiliateFundPassword',
+  KYC_PROCESSING_MODE: 'KYCProcessingMode'
 };

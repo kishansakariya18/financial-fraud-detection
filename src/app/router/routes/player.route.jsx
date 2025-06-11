@@ -123,6 +123,21 @@ export const playerRoutes = [
         }
       },
       {
+        path: 'referrals',
+        lazy: async () => {
+          const { default: ReferralList } = await import(
+            '../../pages/users/player/referral-list/list'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.USER.COMMENT_VIEW}>
+                <ReferralList />
+              </PrivateRoute>
+            )
+          };
+        }
+      },
+      {
         path: 'change-profile',
         lazy: async () => {
           const { default: Profile } = await import('../../pages/profile/Profile');

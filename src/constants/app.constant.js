@@ -274,3 +274,8 @@ export const PROMOCODE = {
     DEPOSIT_IN_RANGE: 1
   }
 };
+
+export const KYC_PROCESSING_MODE = {
+  AUTO: 'auto',
+  MANUAL: 'manual'
+};

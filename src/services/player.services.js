@@ -47,19 +47,34 @@ const PlayerService = {
   },
   userReferralList: async (data) => {
     try {
-      const reqBody = {
-        page: +data.currentPage,
-        limit: +data.perPage
+      const { pagination, filters } = data;
+      console.log('filters: ', filters);
+
+      const apiRequestParams = {
+        keyword: filters.keyword ? filters.keyword : undefined,
+        startDate: filters.startDate
+          ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
+          : undefined,
+        endDate: filters.endDate
+          ? dayjs(+filters.endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
+          : undefined,
+        limit: pagination?.pageSize || 10,
+        page: pagination.pageIndex + 1
       };
-      const endPoint = replaceText(apiConfig.endPoints.USER.REFERRAL_LIST, ':userID', data.userID);
-      const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
+
+      const endPoint = replaceText(
+        apiConfig.endPoints.USER.REFERRAL_LIST,
+        ':userID',
+        data.playerId
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: reqBody
+        body: apiRequestParams
       });
       return response;
     } catch (error) {
