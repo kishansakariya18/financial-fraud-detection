@@ -398,5 +398,8 @@
   "bonus_management": "Bonus Management",
   "management": "Management",
   "with_key": "With",
-  "without": "Without"
+  "without": "Without",
+  "referral_management": "Referral Management",
+  "oneTimeBetLimitDesc": "Maximum stake a user can place on a single bet.",
+  "oneTimeWinLimitDesc": "Maximum potential win allowed per bet. Users cannot place bets where odds × stake exceed this limit."
 }

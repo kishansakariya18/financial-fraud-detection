@@ -131,13 +131,13 @@ const PlatformLimit = () => {
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
                 {...register('oneTimeBetLimit')}
-                label={t('oneTimeWinLimitPlatform')}
+                label={t('oneTimeBetLimitPlatform')}
                 type="number"
                 error={errors?.oneTimeBetLimit?.message}
                 placeholder="Enter Bet Limit"
                 suffix={
                   <ContextualHelp
-                    title={t('oneTimeWinLimitPlatform')}
+                    title={t('oneTimeBetLimitPlatform')}
                     anchor={{ to: 'bottom', gap: 8 }}
                     content={<p>{t('oneTimeBetLimitPlatformDesc')}</p>}
                   />
