@@ -249,7 +249,8 @@ export const apiConfig = {
       ADD_EDIT: '/admin/segmentation/add-edit',
       COUNTRY_LIST: '/admin/segmentation/countries',
       CHANGE_STATUS: '/admin/segmentation/:segmentationId/change-status',
-      USER_LIST: '/admin/segmentation/player-list'
+      USER_LIST: '/admin/segmentation/player-list',
+      REFRESH_USER_LIST: '/admin/segmentation/:segmentationId/refresh'
     },
     COUNTRY: {
       LIST: '/admin/country/list',

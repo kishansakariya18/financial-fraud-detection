@@ -226,6 +226,34 @@ const SegmentationService = {
     } catch (err) {
       console.log('Error changeSegmentationStatus: ', err);
     }
+  },
+  refreshSegmentationList: async (id) => {
+    try {
+      console.log('reached and id is', id);
+
+      const endPoint = replaceText(
+        apiConfig.endPoints.SEGMENTATION.REFRESH_USER_LIST,
+        ':segmentationId',
+        id
+      );
+      let apiURL = `${apiConfig.baseURL.API_BASE_URL}${endPoint}`;
+
+      if (apiURL) {
+        const response = await sendRequest({
+          url: apiURL,
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        return response;
+      }
+
+      return null;
+    } catch (err) {
+      console.log('Error addEditSegmentationList: ', err);
+    }
   }
 };
 
