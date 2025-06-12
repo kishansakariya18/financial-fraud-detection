@@ -229,22 +229,21 @@ const SegmentationService = {
   },
   refreshSegmentationList: async (id) => {
     try {
-      console.log('reached and id is', id);
+      const apiBodyData = {
+        Id: id,
+        IsRefresh: true
+      };
 
-      const endPoint = replaceText(
-        apiConfig.endPoints.SEGMENTATION.REFRESH_USER_LIST,
-        ':segmentationId',
-        id
-      );
-      let apiURL = `${apiConfig.baseURL.API_BASE_URL}${endPoint}`;
+      let apiURL = `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.SEGMENTATION.ADD_EDIT}`;
 
       if (apiURL) {
         const response = await sendRequest({
           url: apiURL,
-          method: 'GET',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json'
-          }
+          },
+          body: apiBodyData
         });
 
         return response;
