@@ -7,7 +7,7 @@ import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
 export const pages = {
   id: 'pages',
   type: NAV_TYPE_ITEM,
-  path: '/pages',
+  path: '/content-management/pages',
   title: 'Pages',
   transKey: 'pages',
   Icon: DocumentIcon,
