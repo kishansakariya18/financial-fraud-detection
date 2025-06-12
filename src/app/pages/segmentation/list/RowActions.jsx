@@ -45,21 +45,21 @@ export function RowActions({ row, table }) {
     navigate(`/segmentation/${row.original.id}/edit`);
   };
 
-  const handleRefresh = async () => {
+  const handleRefresh1 = useCallback(async () => {
+    setConfirmDeleteLoading(true);
     const result = await SegmentationService.refreshSegmentationList(row.original.id);
-
     if (result.status === 200) {
       toast.success(t('refresh_success'));
-      return {
-        status: 200
-      };
+      table.options.meta?.changeStatus(row);
+      setChangeStatusSuccess(true);
     } else {
       toast.error(t('refresh_failed'));
-      return {
-        status: 500
-      };
+      setChangeStatusError(true);
     }
-  };
+
+    setConfirmDeleteLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [row]);
 
   const handleView = () => {
     navigate(`/segmentation/${row.original.id}/details`);
@@ -143,7 +143,7 @@ export function RowActions({ row, table }) {
                         'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
                         focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
                       )}
-                      onClick={handleRefresh}>
+                      onClick={handleRefresh1}>
                       <IoRefreshCircleOutline className="size-4.5 stroke-1" />
                       <span>{t('refresh')}</span>
                     </button>
