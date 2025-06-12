@@ -9,6 +9,7 @@ import Quill from 'quill'; // Ensure Quill is imported
 
 // import { useParams } from 'react-router';
 import { Delta, TextEditor } from 'components/shared/form/TextEditor';
+import { htmlToDelta } from 'utils/quillUtils';
 
 const EditNote = ({ noteId, onClose, note: noteText }) => {
   const [error, setError] = useState('');
@@ -18,7 +19,7 @@ const EditNote = ({ noteId, onClose, note: noteText }) => {
 
   const { t } = useTranslation();
   const { handleSubmit, reset, register } = useForm({});
-  const [content, setContent] = useState(new Delta([{ insert: htmlContent }]));
+  const [content, setContent] = useState(htmlToDelta(noteText));
   const [textError, setTextError] = useState('');
 
   const handleChange = (val) => {

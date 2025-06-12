@@ -14,6 +14,7 @@ import { TextEditor } from 'components/shared/form/TextEditor';
 import Quill, { Delta } from 'quill';
 import { Listbox } from 'components/shared/form/Listbox';
 import { emailTemplateOptions, emailTemplateStatusToAPP } from './helper';
+import { htmlToDelta } from 'utils/quillUtils';
 
 const EditEmailTemplate = () => {
   const navigate = useNavigate();
@@ -108,7 +109,7 @@ const EditEmailTemplate = () => {
           const quill = new Quill(document.createElement('div'));
           quill.root.innerHTML = result?.BodyHtml || '';
           quill.setContents(result?.BodyHtml);
-          const delta = quill.getContents();
+          const delta = htmlToDelta(result?.BodyHtml);
           setHtmlContent(result?.BodyHtml || '');
 
           setContent(delta);

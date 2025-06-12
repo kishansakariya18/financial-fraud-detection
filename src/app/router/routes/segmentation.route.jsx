@@ -59,6 +59,21 @@ export const segmentationRoutes = [
         )
       };
     }
+  },
+  {
+    path: 'segmentation/:segmentationId/details',
+    lazy: async () => {
+      const { default: ViewSegmentation } = await import(
+        '../../pages/segmentation/ViewSegmentation'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.SEGMENTATION.LIST}>
+            <ViewSegmentation />
+          </PrivateRoute>
+        )
+      };
+    }
   }
 ];
 

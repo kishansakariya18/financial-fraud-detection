@@ -14,6 +14,7 @@ import { TextEditor } from 'components/shared/form/TextEditor';
 import Quill, { Delta } from 'quill';
 import { Listbox } from 'components/shared/form/Listbox';
 import { pagesOptions, pagesStatusToAPP } from './helper';
+import { htmlToDelta } from 'utils/quillUtils';
 
 const EditPages = () => {
   const [error, setError] = useState('');
@@ -98,7 +99,7 @@ const EditPages = () => {
           const quill = new Quill(document.createElement('div'));
           quill.root.innerHTML = result?.Content || '';
           quill.setContents(result?.Content);
-          const delta = quill.getContents();
+          const delta = htmlToDelta(result?.Content);
 
           setHtmlContent(result?.Content || '');
 
