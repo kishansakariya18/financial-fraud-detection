@@ -409,5 +409,8 @@
   "sr_no": "Sr No",
   "referred": "Referred",
   "by": "By",
-  "friend": "Friend"
+  "friend": "Friend",
+  "refresh": "Refresh",
+  "refresh_success": "Refreshed Successfully",
+  "refresh_failed": "Not Refreshed due to some error"
 }

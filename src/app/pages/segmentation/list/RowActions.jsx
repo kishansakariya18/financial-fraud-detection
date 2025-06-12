@@ -4,7 +4,7 @@ import { EllipsisHorizontalIcon, EyeIcon, PencilIcon } from '@heroicons/react/24
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-
+import { toast } from 'sonner';
 // Local Imports
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
 import SegmentationService from 'services/segmentation.services';
+import { IoRefreshCircleOutline } from 'react-icons/io5';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
@@ -42,6 +43,22 @@ export function RowActions({ row, table }) {
 
   const handleEdit = () => {
     navigate(`/segmentation/${row.original.id}/edit`);
+  };
+
+  const handleRefresh = async () => {
+    const result = await SegmentationService.refreshSegmentationList(row.original.id);
+
+    if (result.status === 200) {
+      toast.success(t('refresh_success'));
+      return {
+        status: 200
+      };
+    } else {
+      toast.error(t('refresh_failed'));
+      return {
+        status: 500
+      };
+    }
   };
 
   const handleView = () => {
@@ -114,6 +131,21 @@ export function RowActions({ row, table }) {
                       onClick={handleEdit}>
                       <PencilIcon className="size-4.5 stroke-1" />
                       <span>{t('edit')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
+              {hasPermission(PERMISSIONS.SEGMENTATION.EDIT) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                        focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                      )}
+                      onClick={handleRefresh}>
+                      <IoRefreshCircleOutline className="size-4.5 stroke-1" />
+                      <span>{t('refresh')}</span>
                     </button>
                   )}
                 </MenuItem>

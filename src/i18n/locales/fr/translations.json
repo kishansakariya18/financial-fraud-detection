@@ -409,5 +409,8 @@
   "sr_no": "N°",
   "referred": "Parrainé",
   "by": "Par",
-  "friend": "Ami"
+  "friend": "Ami",
+  "refresh": "Rafraîchir",
+  "refresh_success": "Actualisé avec succès",
+  "refresh_failed": "Non actualisé en raison d'une erreur"
 }
