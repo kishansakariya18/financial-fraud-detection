@@ -409,5 +409,6 @@
   "sr_no": "Sr No",
   "referred": "Referred",
   "by": "By",
-  "friend": "Friend"
+  "friend": "Friend",
+  "userClass": "User Class"
 }

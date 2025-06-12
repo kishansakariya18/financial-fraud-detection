@@ -331,6 +331,9 @@ export const apiConfig = {
     PAYMENT_PROVIDER: {
       VIEW: '/admin/payment-provider/list',
       STATUS: '/admin/payment-provider/change-status'
+    },
+    USER_CLASS: {
+      LIST: '/admin/user-class/list'
     }
   }
 };

@@ -266,6 +266,13 @@ export const PERMISSIONS = {
   PAYMENT_PROVIDER: {
     VIEW: 'payment-provider-view',
     STATUS: 'payment-provider-status'
+  },
+  USER_CLASS: {
+    LIST: 'player-class-list',
+    VIEW: 'player-class-view',
+    CREATE: 'player-class-create',
+    EDIT: 'player-class-edit',
+    CHANGE_STATUS: 'player-class-change-status'
   }
 };
 
