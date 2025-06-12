@@ -4,7 +4,7 @@ import { Navigate } from 'react-router';
 
 export const pagesRoute = [
   {
-    path: 'pages',
+    path: 'content-management/pages',
     lazy: async () => {
       const { default: PageList } = await import('../../pages/pages/list/list');
       return {
@@ -17,7 +17,7 @@ export const pagesRoute = [
     }
   },
   {
-    path: 'pages/:pageID/edit',
+    path: 'content-management/pages/:pageID/edit',
     lazy: async () => {
       const { default: EditPage } = await import('../../pages/pages/EditPages');
       return {
@@ -30,7 +30,7 @@ export const pagesRoute = [
     }
   },
   {
-    path: 'pages/:pageID/view',
+    path: 'content-management/pages/:pageID/view',
     lazy: async () => {
       const { default: ViewPage } = await import('../../pages/pages/ViewDetails');
       return {
@@ -43,7 +43,7 @@ export const pagesRoute = [
     }
   },
   {
-    path: 'pages/:id/tab',
+    path: 'content-management/pages/:id/tab',
     lazy: async () => ({
       Component: (await import('../../pages/player-kyc/Tabs')).default
     }),
