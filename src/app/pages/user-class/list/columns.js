@@ -18,7 +18,7 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row.title, {
     id: 'title',
-    header: 'Title',
+    header: 'Name',
     cell: BoldCell,
     enableSorting: false
   }),
@@ -30,7 +30,7 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row.heading, {
     id: 'heading',
-    header: 'Heading',
+    header: 'Code',
     cell: BoldCell,
     enableSorting: false
   }),

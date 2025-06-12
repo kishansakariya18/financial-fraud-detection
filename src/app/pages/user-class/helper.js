@@ -5,9 +5,9 @@ export const userclassListResponseMapper = (apiData) => {
   const totalRecords = apiData?.total_record;
   const list = apiData?.data?.map((item) => {
     return {
-      userClassId: item?.UserClassID,
-      className: item?.ClassName,
-      classCode: item?.ClassCode,
+      id: item?.UserClassID,
+      title: item?.ClassName,
+      heading: item?.ClassCode,
       priority: item?.Priority,
       avatarUrl: item?.AvatarURL,
       status: userclassStatusToAPP(item?.IsActive),

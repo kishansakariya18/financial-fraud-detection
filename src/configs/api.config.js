@@ -333,7 +333,7 @@ export const apiConfig = {
       STATUS: '/admin/payment-provider/change-status'
     },
     USER_CLASS: {
-      LIST: '/admin/user-class/list'
+      LIST: '/admin/user-classes/list'
     }
   }
 };
