@@ -1,5 +1,4 @@
 import apiConfig from 'configs/api.config';
-import dayjs from 'dayjs';
 import { sendRequest } from 'utils/axios';
 
 const EmailTemplateService = {
@@ -12,9 +11,7 @@ const EmailTemplateService = {
         segmentationID: data.segmentationID || undefined,
         subject: data.subject || undefined,
         sendType: data.sendType || 1,
-        deliveryDateTime: data.deliveryDateTime
-          ? dayjs(+data.deliveryDateTime).format('YYYY-MM-DD HH:mm:ss')
-          : undefined
+        deliveryDateTime: data.deliveryDateTime || undefined
       };
       const endPoint = apiConfig.endPoints.CRM.SEND;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
