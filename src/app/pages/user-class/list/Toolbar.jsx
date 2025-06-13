@@ -9,9 +9,9 @@ import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
-
-// ----------------------------------------------------------------------
-
+import { userclassOptions } from '../helper';
+import { MapPinIcon } from '@heroicons/react/24/outline';
+import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 export function Toolbar({
   table,
   pageTitle = '',
@@ -101,6 +101,16 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>
+      {table.getColumn('status') && (
+        <FacedtedFilter
+          options={userclassOptions}
+          column={table.getColumn('status')}
+          title={t('status')}
+          Icon={MapPinIcon}
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
       {table.getColumn('createdAt') && (
         <DateFilter
           column={table.getColumn('createdAt')}

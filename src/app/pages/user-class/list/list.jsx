@@ -23,8 +23,11 @@ export default function UserClass() {
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const fetchUserClasses = async () => {
+    const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
+    const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
     const result = await UserClassService.userclassList({
-      filters: queryParams
+      filters: queryParams,
+      pagination: { pageIndex, pageSize }
     });
 
     const apiData = userclassListResponseMapper(result.response);
