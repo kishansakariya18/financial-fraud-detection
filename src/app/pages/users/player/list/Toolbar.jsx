@@ -19,6 +19,7 @@ import { dummyCards } from 'helpers/functions';
 export function Toolbar({
   table,
   pageTitle = '',
+  summary = null,
   onApplyFilters = () => {},
   onClearFilters = () => {}
 }) {
@@ -41,7 +42,7 @@ export function Toolbar({
       <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
         <DashboardCard
           label={dummyCards.User.TOTAL_USERS.key}
-          value={dummyCards.User.TOTAL_USERS.value}
+          value={summary ? summary.totalUsers : dummyCards.User.TOTAL_USERS.value}
           gradientFrom={dummyCards.User.TOTAL_USERS.gradientFrom}
           gradientTo={dummyCards.User.TOTAL_USERS.gradientTo}
           textColor="text-sky-100"
@@ -49,7 +50,7 @@ export function Toolbar({
         />
         <DashboardCard
           label={dummyCards.User.INACTIVE_USERS.key}
-          value={dummyCards.User.INACTIVE_USERS.value}
+          value={summary ? summary.inactiveUsers : dummyCards.User.INACTIVE_USERS.value}
           gradientFrom={dummyCards.User.INACTIVE_USERS.gradientFrom}
           gradientTo={dummyCards.User.INACTIVE_USERS.gradientTo}
           textColor="text-sky-100"
@@ -57,7 +58,7 @@ export function Toolbar({
         />
         <DashboardCard
           label={dummyCards.User.TOTAL_REALCASH.key}
-          value={dummyCards.User.TOTAL_REALCASH.value}
+          value={summary ? summary.totalRealCash : dummyCards.User.TOTAL_REALCASH.value}
           gradientFrom={dummyCards.User.TOTAL_REALCASH.gradientFrom}
           gradientTo={dummyCards.User.TOTAL_REALCASH.gradientTo}
           textColor="text-sky-100"
@@ -65,7 +66,7 @@ export function Toolbar({
         />
         <DashboardCard
           label={dummyCards.User.TOTAL_BONUS.key}
-          value={dummyCards.User.TOTAL_BONUS.value}
+          value={summary ? summary.totalBonus : dummyCards.User.TOTAL_BONUS.value}
           gradientFrom={dummyCards.User.TOTAL_BONUS.gradientFrom}
           gradientTo={dummyCards.User.TOTAL_BONUS.gradientTo}
           textColor="text-sky-100"

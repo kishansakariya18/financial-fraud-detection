@@ -112,6 +112,23 @@ const GameService = {
       console.log('Error', err);
     }
   },
+  getGameSummary: async () => {
+    try {
+      const endpoint = apiConfig.endPoints.GAME.SUMMARY;
+
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + endpoint,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
   deleteGame: async (gameId) => {
     try {
       const endpoint = replaceText(apiConfig.endPoints.GAME.DELETE, ':gameId', gameId);

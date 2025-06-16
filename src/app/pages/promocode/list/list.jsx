@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
@@ -19,7 +19,7 @@ export default function PromoCodeList() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t('promocode') + ' ' + t('list');
-
+  const [summary, setSummary] = useState(null);
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const fetchDepositPromocodeList = async () => {
@@ -42,11 +42,30 @@ export default function PromoCodeList() {
     }
     return { status: result.status, error: result.error };
   };
+  const fetchSummary = async () => {
+    // setError(null);
 
+    const result = await PromoCodeService.getPromoCodeSummary();
+
+    if (result.status === 200) {
+      setSummary(result.response.data);
+      return {
+        status: 200,
+        data: result.response.data,
+        totalRecords: parseInt(result.response.total_records, 10) || 0
+      };
+    }
+
+    return { status: result.status, error: result.error };
+  };
+  useEffect(() => {
+    fetchSummary();
+  }, []);
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
     fetchData: fetchDepositPromocodeList,
     queryParams,
+    fetchSummary: fetchSummary,
     setSearchParams,
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
@@ -118,6 +137,7 @@ export default function PromoCodeList() {
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
       <Toolbar
+        summary={summary}
         table={table}
         pageTitle={pageTitle}
         onApplyFilters={applyFilterHandler}

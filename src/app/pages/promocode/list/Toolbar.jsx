@@ -21,7 +21,8 @@ export function Toolbar({
   table,
   pageTitle = '',
   onApplyFilters = () => {},
-  onClearFilters = () => {}
+  onClearFilters = () => {},
+  summary = null
 }) {
   const { isXs } = useBreakpointsContext();
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ export function Toolbar({
       <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
         <DashboardCard
           label={dummyCards.PromoCode.TOTAL_PROMOCODE.key}
-          value={dummyCards.PromoCode.TOTAL_PROMOCODE.value}
+          value={summary ? summary.totalPromoCodes : dummyCards.PromoCode.TOTAL_PROMOCODE.value}
           gradientFrom={dummyCards.PromoCode.TOTAL_PROMOCODE.gradientFrom}
           gradientTo={dummyCards.PromoCode.TOTAL_PROMOCODE.gradientTo}
           textColor="text-sky-100"
@@ -59,7 +60,9 @@ export function Toolbar({
         />
         <DashboardCard
           label={dummyCards.PromoCode.TOTAL_DEPOSITS.key}
-          value={dummyCards.PromoCode.TOTAL_DEPOSITS.value}
+          value={
+            summary ? summary.totalDepositAmountByPromo : dummyCards.PromoCode.TOTAL_DEPOSITS.value
+          }
           gradientFrom={dummyCards.PromoCode.TOTAL_DEPOSITS.gradientFrom}
           gradientTo={dummyCards.PromoCode.TOTAL_DEPOSITS.gradientTo}
           textColor="text-sky-100"
@@ -67,17 +70,9 @@ export function Toolbar({
         />
         <DashboardCard
           label={dummyCards.PromoCode.TOTAL_REWARDS.key}
-          value={dummyCards.PromoCode.TOTAL_REWARDS.value}
+          value={summary ? summary.benefitAmount : dummyCards.PromoCode.TOTAL_REWARDS.value}
           gradientFrom={dummyCards.PromoCode.TOTAL_REWARDS.gradientFrom}
           gradientTo={dummyCards.PromoCode.TOTAL_REWARDS.gradientTo}
-          textColor="text-sky-100"
-          maskShape="is-reuleaux-triangle"
-        />
-        <DashboardCard
-          label={dummyCards.PromoCode.TOTAL_WAGERING.key}
-          value={dummyCards.PromoCode.TOTAL_WAGERING.value}
-          gradientFrom={dummyCards.PromoCode.TOTAL_WAGERING.gradientFrom}
-          gradientTo={dummyCards.PromoCode.TOTAL_WAGERING.gradientTo}
           textColor="text-sky-100"
           maskShape="is-reuleaux-triangle"
         />

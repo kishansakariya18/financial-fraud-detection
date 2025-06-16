@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { rolePermissionListMapper } from './helper';
 import RoleService from 'services/role.services';
 import { useNavigate } from 'react-router';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 const AddRole = () => {
   const { t } = useTranslation();
@@ -128,7 +129,7 @@ const AddRole = () => {
     console.log('Component mounted or remounted!');
     fetchRolePermissionList();
   }, []);
-
+  const breadcrumbItem = [{ title: t('roles'), path: '/roles' }, { title: t('add') }];
   return (
     <Page title={pageTitle}>
       <div className="transition-content px-[--margin-x] pb-6">
@@ -138,6 +139,12 @@ const AddRole = () => {
             <h2 className="line-clamp-1 text-xl font-medium text-gray-700 dark:text-dark-50">
               {pageTitle}
             </h2>
+            <div className="ml-4 flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+              <div className="hidden self-stretch py-1 sm:flex">
+                <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+              </div>
+              <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
+            </div>
           </div>
         </div>
         <form autoComplete="off" onSubmit={handleSubmit(onSubmit)} id="add-role-form">

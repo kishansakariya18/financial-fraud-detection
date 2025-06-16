@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
@@ -21,6 +21,7 @@ export default function Country() {
   const pageTitle = t('country');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const [summary, setSummary] = useState(null);
 
   const fetchCountry = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
@@ -40,10 +41,29 @@ export default function Country() {
 
     return { status: result.status, error: result.error };
   };
+  const fetchSummary = async () => {
+    // setError(null);
 
+    const result = await CountryService.getCountrySummary();
+
+    if (result.status === 200) {
+      setSummary(result.response.data);
+      return {
+        status: 200,
+        data: result.response.data,
+        totalRecords: parseInt(result.response.total_records, 10) || 0
+      };
+    }
+
+    return { status: result.status, error: result.error };
+  };
+  useEffect(() => {
+    fetchSummary();
+  }, []);
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
     fetchData: fetchCountry,
+    fetchSummary: fetchSummary,
     queryParams,
     setSearchParams,
     initialSettings: {
@@ -111,6 +131,7 @@ export default function Country() {
       <CountryFilters
         pageTitle={pageTitle}
         table={table}
+        summary={summary}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
       />

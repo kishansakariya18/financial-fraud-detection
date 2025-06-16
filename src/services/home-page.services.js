@@ -57,6 +57,24 @@ const HomePageService = {
       console.log('Error', err);
     }
   },
+  deleteHomeCategory: async (homeCategoryId) => {
+    try {
+      const endpoint = apiConfig.endPoints.HOME_PAGE.DELETE_THEME;
+
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${endpoint}`,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        params: { appearanceId: homeCategoryId }
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
   changeHomeGameStatus: async (homePageGameId) => {
     try {
       const endpoint = replaceText(

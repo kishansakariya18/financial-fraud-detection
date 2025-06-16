@@ -18,6 +18,7 @@ import { homeGameStatusOptions } from '../helper';
 import { useNavigate } from 'react-router';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 export function Toolbar({
   table,
   pageTitle = '',
@@ -29,7 +30,10 @@ export function Toolbar({
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
   const navigate = useNavigate();
   const { hasPermission } = usePermissions();
-
+  const breadcrumbItem = [
+    { title: t('homeCategory') + ' ' + t('list'), path: '/web/home-category' },
+    { title: t('homeGame') + ' ' + t('list') }
+  ];
   return (
     <div className="table-toolbar">
       <div
@@ -37,10 +41,14 @@ export function Toolbar({
           'transition-content flex items-center justify-between gap-4',
           isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x] pt-4'
         )}>
-        <div className="min-w-0">
+        <div className="ml-4 flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
           <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
             {pageTitle}
           </h2>
+          <div className="hidden self-stretch py-1 sm:flex">
+            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          </div>
+          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
 
         <div>

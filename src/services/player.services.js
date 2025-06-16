@@ -270,7 +270,23 @@ const PlayerService = {
       });
       return response;
     } catch (error) {
-      console.log('Error from user referral list', error);
+      console.log('Error from user detail list', error);
+    }
+  },
+  userSummary: async () => {
+    try {
+      const endPoint = apiConfig.endPoints.USER.SUMMARY;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from user summary list', error);
     }
   },
   playerTransactionDetail: async (data) => {

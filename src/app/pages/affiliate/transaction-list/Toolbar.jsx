@@ -11,6 +11,7 @@ import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { affiliateTransactionTypeOption } from '../helper';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 // ----------------------------------------------------------------------
 
@@ -22,19 +23,24 @@ export function Toolbar({
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
-
+  const breadcrumbItem = [
+    { title: t('affiliate'), path: '/users/affiliate' },
+    { title: t('transaction') + ' ' + t('history') }
+  ];
   return (
     <div className="table-toolbar">
       <div
         className={clsx(
-          'transition-content flex items-center justify-between gap-4',
+          'transition-content flex items-center gap-4',
           isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x] pt-4'
         )}>
-        <div className="min-w-2">
-          <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
-            {pageTitle}
-          </h2>
+        <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
+          {pageTitle}
+        </h2>
+        <div className="hidden self-stretch py-1 sm:flex">
+          <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
         </div>
+        <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
       </div>
 
       {isXs ? (
