@@ -62,7 +62,7 @@ export function RowActions({ row, table }) {
     const result = await CategoryService.changeCategoryStatus(row.original.id);
     if (result.status === 200) {
       console.log('table.options: ', table.options);
-
+      table.options.meta?.fetchSummary();
       table.options.meta?.deleteRow(row);
       setStatusSuccess(true);
     } else {

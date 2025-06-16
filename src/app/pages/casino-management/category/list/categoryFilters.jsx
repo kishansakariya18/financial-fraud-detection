@@ -25,7 +25,8 @@ export function CategoryFilters({
   table,
   onApplyFilters = () => {},
   onClearFilters = () => {},
-  pageTitle = ''
+  pageTitle = '',
+  summary = null
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
@@ -49,7 +50,7 @@ export function CategoryFilters({
       <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
         <DashboardCard
           label={dummyCards.Category.TOTAL_CATEGORIES.key}
-          value={dummyCards.Category.TOTAL_CATEGORIES.value}
+          value={summary ? summary.totalCategories : dummyCards.Category.TOTAL_CATEGORIES.value}
           gradientFrom={dummyCards.Category.TOTAL_CATEGORIES.gradientFrom}
           gradientTo={dummyCards.Category.TOTAL_CATEGORIES.gradientTo}
           textColor="text-sky-100"
@@ -57,7 +58,7 @@ export function CategoryFilters({
         />
         <DashboardCard
           label={dummyCards.Category.ACTIVE_CATEGORIES.key}
-          value={dummyCards.Category.ACTIVE_CATEGORIES.value}
+          value={summary ? summary.activeCategories : dummyCards.Category.ACTIVE_CATEGORIES.value}
           gradientFrom={dummyCards.Category.ACTIVE_CATEGORIES.gradientFrom}
           gradientTo={dummyCards.Category.ACTIVE_CATEGORIES.gradientTo}
           textColor="text-sky-100"
@@ -65,7 +66,9 @@ export function CategoryFilters({
         />
         <DashboardCard
           label={dummyCards.Category.INACTIVE_CATEGORIES.key}
-          value={dummyCards.Category.INACTIVE_CATEGORIES.value}
+          value={
+            summary ? summary.inactiveCategories : dummyCards.Category.INACTIVE_CATEGORIES.value
+          }
           gradientFrom={dummyCards.Category.INACTIVE_CATEGORIES.gradientFrom}
           gradientTo={dummyCards.Category.INACTIVE_CATEGORIES.gradientTo}
           textColor="text-sky-100"

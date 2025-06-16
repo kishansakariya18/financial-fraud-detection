@@ -53,6 +53,7 @@ export function RowActions({ row, table }) {
     setConfirmDeleteLoading(true);
     const result = await AffiliateService.AffiliateStatus(row.original.affiliateUID);
     if (result.status === 200) {
+      table.options.meta?.fetchSummary();
       table.options.meta?.changeStatus(row);
       setChangeStatusSuccess(true);
     } else {

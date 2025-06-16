@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
@@ -19,7 +19,7 @@ export default function Admin() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t('admins');
-
+  const [summary, setSummary] = useState(null);
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const fetchAdmin = async () => {
@@ -41,9 +41,28 @@ export default function Admin() {
 
     return { status: result.status, error: result.error };
   };
+  const fetchSummary = async () => {
+    // setError(null);
 
+    const result = await AdminService.getAdminSummary();
+
+    if (result.status === 200) {
+      setSummary(result.response.data);
+      return {
+        status: 200,
+        data: result.response.data,
+        totalRecords: parseInt(result.response.total_records, 10) || 0
+      };
+    }
+
+    return { status: result.status, error: result.error };
+  };
+  useEffect(() => {
+    fetchSummary();
+  }, []);
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
+    fetchSummary: fetchSummary,
     fetchData: fetchAdmin,
     queryParams,
     setSearchParams,
@@ -122,6 +141,7 @@ export default function Admin() {
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
       <Toolbar
+        summary={summary}
         pageTitle={pageTitle}
         table={table}
         onApplyFilters={applyFilterHandler}

@@ -20,6 +20,21 @@ const ProviderService = {
       console.log('Error', err);
     }
   },
+  getProvidersSummary: async () => {
+    try {
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.PROVIDER.SUMMARY}`,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
   getProviderList: async (body) => {
     try {
       const { pagination, filters, isPaginationRequired = true } = body;

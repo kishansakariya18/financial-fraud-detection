@@ -56,6 +56,7 @@ export function RowActions({ row, table }) {
     const result = await AffiliateService.AffiliateStatus(row.original.affiliateUID);
     if (result.status === 200) {
       table.options.meta?.changeStatus(row);
+      table.options.meta?.fetchSummary();
       setChangeStatusSuccess(true);
     } else {
       setChangeStatusError(true);

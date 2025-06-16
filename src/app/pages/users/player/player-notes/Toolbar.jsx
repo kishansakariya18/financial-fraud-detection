@@ -13,6 +13,7 @@ import { t } from 'i18next';
 import { CustomModal } from 'components/custom';
 import CreateNote from './CreateNote';
 import { useState } from 'react';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 export function Toolbar({ table, pageTitle = '' }) {
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
@@ -29,6 +30,10 @@ export function Toolbar({ table, pageTitle = '' }) {
     await table.options.meta?.editRow(row);
     setIsDialogOpen(false);
   };
+  const breadcrumbItem = [
+    { title: t('players'), path: '/users/player' },
+    { title: t('player') + ' ' + t('notes') }
+  ];
 
   return (
     <div className="table-toolbar">
@@ -37,11 +42,16 @@ export function Toolbar({ table, pageTitle = '' }) {
           'transition-content flex items-center justify-between gap-4',
           isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x] pt-4'
         )}>
-        <div className="min-w-0">
+        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
           <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
             {pageTitle}
           </h2>
+          <div className="hidden self-stretch py-1 sm:flex">
+            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          </div>
+          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
+
         <div className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse">
           <CustomModal
             onClose={onCloseDialogBox}

@@ -56,6 +56,7 @@ export function RowActions({ row, table }) {
     setConfirmStatusLoading(true);
     const result = await GameService.changeGameStatus(row.original.id);
     if (result.status === 200) {
+      table.options.meta?.fetchSummary();
       table.options.meta?.deleteRow(row);
       setStatusSuccess(true);
     } else {

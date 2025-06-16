@@ -21,7 +21,8 @@ export function Toolbar({
   table,
   pageTitle = '',
   onApplyFilters = () => {},
-  onClearFilters = () => {}
+  onClearFilters = () => {},
+  summary = null
 }) {
   const { isXs } = useBreakpointsContext();
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ export function Toolbar({
       <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
         <DashboardCard
           label={dummyCards.Affiliate.TOTAL_AFFILIATE.key}
-          value={dummyCards.Affiliate.TOTAL_AFFILIATE.value}
+          value={summary ? summary.totalAffiliates : dummyCards.Affiliate.TOTAL_AFFILIATE.value}
           gradientFrom={dummyCards.Affiliate.TOTAL_AFFILIATE.gradientFrom}
           gradientTo={dummyCards.Affiliate.TOTAL_AFFILIATE.gradientTo}
           textColor="text-sky-100"
@@ -59,7 +60,7 @@ export function Toolbar({
         />
         <DashboardCard
           label={dummyCards.Affiliate.TOTAL_SIGNUP_USERS.key}
-          value={dummyCards.Affiliate.TOTAL_SIGNUP_USERS.value}
+          value={summary ? summary.totalSignups : dummyCards.Affiliate.TOTAL_SIGNUP_USERS.value}
           gradientFrom={dummyCards.Affiliate.TOTAL_SIGNUP_USERS.gradientFrom}
           gradientTo={dummyCards.Affiliate.TOTAL_SIGNUP_USERS.gradientTo}
           textColor="text-sky-100"
@@ -67,7 +68,7 @@ export function Toolbar({
         />
         <DashboardCard
           label={dummyCards.Affiliate.TOTAL_DEPOSITS.key}
-          value={dummyCards.Affiliate.TOTAL_DEPOSITS.value}
+          value={summary ? summary.totalDeposits : dummyCards.Affiliate.TOTAL_DEPOSITS.value}
           gradientFrom={dummyCards.Affiliate.TOTAL_DEPOSITS.gradientFrom}
           gradientTo={dummyCards.Affiliate.TOTAL_DEPOSITS.gradientTo}
           textColor="text-sky-100"
@@ -75,7 +76,7 @@ export function Toolbar({
         />
         <DashboardCard
           label={dummyCards.Affiliate.TOTAL_COMMISSION.key}
-          value={dummyCards.Affiliate.TOTAL_COMMISSION.value}
+          value={summary ? summary.totalCommissions : dummyCards.Affiliate.TOTAL_COMMISSION.value}
           gradientFrom={dummyCards.Affiliate.TOTAL_COMMISSION.gradientFrom}
           gradientTo={dummyCards.Affiliate.TOTAL_COMMISSION.gradientTo}
           textColor="text-sky-100"

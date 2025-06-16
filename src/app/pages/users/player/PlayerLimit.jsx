@@ -13,6 +13,7 @@ import { Listbox } from 'components/shared/form/Listbox';
 import { DatePicker } from 'components/shared/form/Datepicker';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 import { useTranslation } from 'react-i18next';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 const exclusionTimeOptions = [
   { label: '1 day', value: 1 },
@@ -146,16 +147,23 @@ const PlayerLimit = () => {
     field.onChange(val.value);
     setExclusionType(val.value);
   };
+  const breadcrumbItem = [
+    { title: t('players'), path: '/users/player' },
+    { title: t('player') + ' ' + t('limit') }
+  ];
 
   return (
     <Page title={pageTitle}>
       <div className="transition-content w-full px-[--margin-x] pb-8">
         <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
-          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
+          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
             {pageTitle}
           </h2>
-          <div className="hidden self-stretch py-1 sm:flex">
-            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          <div className="ml-4 flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+            <div className="hidden self-stretch py-1 sm:flex">
+              <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+            </div>
+            <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
           </div>
         </div>
 

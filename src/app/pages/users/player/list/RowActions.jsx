@@ -55,6 +55,7 @@ export function RowActions({ row, table }) {
     if (result.status === 200) {
       table.options.meta?.changeStatus(row);
       setChangeStatusSuccess(true);
+      table.options.meta?.fetchSummary();
     } else {
       setChangeStatusError(true);
     }

@@ -361,7 +361,8 @@ export const PERMISSIONS = {
     DELETE_HOME_GAME: 'frontend-delete-home-game',
     APPEARANCE_VIEW: 'frontend-view-appearance',
     ADD_APPEARANCE: 'frontend-add-appearance',
-    CHANGE_APPEARANCE_STATUS: 'frontend-change-appearance-status'
+    CHANGE_APPEARANCE_STATUS: 'frontend-change-appearance-status',
+    DELETE_APPEARANCE: 'frontend-delete-appearance'
   },
   BUX_AI: {
     VIEW: 'bux-ai-view'

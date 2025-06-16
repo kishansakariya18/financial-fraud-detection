@@ -10,9 +10,10 @@ import { roleDetailMapper, rolePermissionListMapper } from './helper';
 import RoleService from 'services/role.services';
 // import { useParams } from 'react-router';
 import { useNavigate, useParams } from 'react-router';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 const EditRole = () => {
-  const { rolePermissionId } = useParams();
+  const { roleId } = useParams();
   const { t } = useTranslation();
 
   const pageTitle = t('edit') + ' ' + t('role');
@@ -23,20 +24,21 @@ const EditRole = () => {
   const [detailError, setDetailError] = useState(null);
   const [detail, setDetail] = useState({});
   const [response, setResponse] = useState([]);
-  const fetchRoleDetail = async (rolePermissionId) => {
+  const fetchRoleDetail = async (roleId) => {
     setDetailLoading(true);
-    const result = await RoleService.roleDetail(rolePermissionId);
-    if (result) {
-      if (result.status === 200) {
-        const apiData = result.response.data;
-        const resultData = roleDetailMapper(apiData);
-        console.log('resultData', resultData);
-        setDetail(resultData);
-        setCheckedList(resultData.permissionIDs);
-      } else {
-        setDetailError(result.error);
-      }
+    const result = await RoleService.roleDetail(roleId);
+    console.log('result of roles edit', result);
+
+    if (result.status === 200) {
+      const apiData = result.response.data;
+      const resultData = roleDetailMapper(apiData);
+      console.log('resultData::::', resultData);
+      setDetail(resultData);
+      setCheckedList(resultData.permissionIDs);
+    } else {
+      setDetailError(result.error);
     }
+
     setDetailLoading(false);
   };
 
@@ -49,10 +51,10 @@ const EditRole = () => {
     // toast.success(detail.message, config.TOAST_UI);
   }
   useEffect(() => {
-    if (rolePermissionId) {
-      fetchRoleDetail(rolePermissionId);
+    if (roleId) {
+      fetchRoleDetail(roleId);
     }
-  }, [rolePermissionId]);
+  }, [roleId]);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -123,7 +125,7 @@ const EditRole = () => {
 
   const onSubmit = async (data) => {
     data.permissionsIdList = checkedList;
-    data.rolePermissionID = rolePermissionId;
+    data.roleId = roleId;
     console.log('data::', data);
 
     setSubmitLoading(true);
@@ -148,7 +150,7 @@ const EditRole = () => {
     setSubmitError(null);
   }
   if (!isSubmitLoading && !submitError && submitResponse) {
-    toast.success('Role created successfully', {
+    toast.success(submitResponse.message, {
       invert: true
     });
     setTimeout(() => {
@@ -178,6 +180,7 @@ const EditRole = () => {
     console.log('Component mounted or remounted!');
     fetchRolePermissionList();
   }, []);
+  const breadcrumbItem = [{ title: t('roles'), path: '/roles' }, { title: t('edit') }];
 
   return (
     <Page title={pageTitle}>
@@ -188,6 +191,12 @@ const EditRole = () => {
             <h2 className="line-clamp-1 text-xl font-medium text-gray-700 dark:text-dark-50">
               {pageTitle}
             </h2>
+            <div className="ml-4 flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+              <div className="hidden self-stretch py-1 sm:flex">
+                <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+              </div>
+              <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
+            </div>
           </div>
         </div>
         <form autoComplete="off" onSubmit={handleSubmit(onSubmit)} id="add-role-form">

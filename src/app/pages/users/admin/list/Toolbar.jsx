@@ -23,7 +23,8 @@ export function Toolbar({
   table,
   onApplyFilters = () => {},
   onClearFilters = () => {},
-  pageTitle = ''
+  pageTitle = '',
+  summary = null
 }) {
   const { isXs } = useBreakpointsContext();
   const navigate = useNavigate();
@@ -53,7 +54,7 @@ export function Toolbar({
       <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
         <DashboardCard
           label={dummyCards.Admin.TOTAL_ADMIN.key}
-          value={dummyCards.Admin.TOTAL_ADMIN.value}
+          value={summary ? summary.totalAdmins : dummyCards.Admin.TOTAL_ADMIN.value}
           gradientFrom={dummyCards.Admin.TOTAL_ADMIN.gradientFrom}
           gradientTo={dummyCards.Admin.TOTAL_ADMIN.gradientTo}
           textColor="text-sky-100"
@@ -61,7 +62,7 @@ export function Toolbar({
         />
         <DashboardCard
           label={dummyCards.Admin.ACTIVE_ADMIN.key}
-          value={dummyCards.Admin.ACTIVE_ADMIN.value}
+          value={summary ? summary.activeAdmins : dummyCards.Admin.ACTIVE_ADMIN.value}
           gradientFrom={dummyCards.Admin.ACTIVE_ADMIN.gradientFrom}
           gradientTo={dummyCards.Admin.ACTIVE_ADMIN.gradientTo}
           textColor="text-sky-100"
@@ -69,7 +70,7 @@ export function Toolbar({
         />
         <DashboardCard
           label={dummyCards.Admin.INACTIVE_ADMIN.key}
-          value={dummyCards.Admin.INACTIVE_ADMIN.value}
+          value={summary ? summary.inactiveAdmins : dummyCards.Admin.INACTIVE_ADMIN.value}
           gradientFrom={dummyCards.Admin.INACTIVE_ADMIN.gradientFrom}
           gradientTo={dummyCards.Admin.INACTIVE_ADMIN.gradientTo}
           textColor="text-sky-100"

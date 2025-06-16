@@ -26,7 +26,7 @@ export const roleRoutes = [
         })
       },
       {
-        path: 'edit/:rolePermissionId',
+        path: 'edit/:roleId',
         lazy: async () => ({
           Component: (await import('../../pages/roles/EditRole')).default
         })
