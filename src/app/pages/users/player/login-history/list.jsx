@@ -22,7 +22,7 @@ export default function LoginHistoryList() {
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t('login') + ' ' + t('history');
 
-  const breadcrumbs = [{ title: 'Players', path: '/player' }, { title: 'Details' }];
+  const breadcrumbs = [{ title: 'Players', path: '/users/player' }, { title: 'Details' }];
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 

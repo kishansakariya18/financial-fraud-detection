@@ -117,6 +117,22 @@ const AffiliateService = {
       console.log('Error', err);
     }
   },
+  getAffiliateSummary: async () => {
+    try {
+      const endPoint = apiConfig.endPoints.AFFILIATE.SUMMARY;
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + endPoint,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error getAffiliateSummary', err);
+    }
+  },
   editAffiliate: async (data) => {
     try {
       const requestObject = {

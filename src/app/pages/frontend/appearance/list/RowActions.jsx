@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 // Local Imports
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
-import { TbStatusChange } from 'react-icons/tb';
+import { TbStatusChange, TbTrash } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
 import HomePageService from 'services/home-page.services';
 import usePermissions from 'app/router/usePermissions';
@@ -20,6 +20,11 @@ export function RowActions({ row, table }) {
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
   const [changeStatusSuccess, setChangeStatusSuccess] = useState(false);
   const [changeStatusError, setChangeStatusError] = useState(false);
+  // Delete stats
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [confirmLoading, setLoading] = useState(false);
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
+  const [deleteError, setDeleteError] = useState(false);
 
   const { hasPermission } = usePermissions();
 
@@ -34,6 +39,17 @@ export function RowActions({ row, table }) {
       description: t('appearance_status_suceess')
     }
   };
+  const deleteConfirmMessages = {
+    pending: {
+      title: t('delete_theme'),
+      description: t('appearance_delete_desc'),
+      actionText: t('submit')
+    },
+    success: {
+      title: t('deleted_theme'),
+      description: t('appearance_delete_suceess')
+    }
+  };
 
   const closeModal = () => {
     setChangeStatusModalOpen(false);
@@ -44,6 +60,17 @@ export function RowActions({ row, table }) {
     setChangeStatusError(false);
     setChangeStatusSuccess(false);
   };
+  // Delete modal handler
+  const closeDeleteModal = () => {
+    setDeleteModalOpen(false);
+  };
+
+  const openDeleteModal = () => {
+    setDeleteModalOpen(true);
+    setDeleteError(false);
+    setDeleteSuccess(false);
+  };
+  console.log('row.original.status::', row.original.status);
 
   const handleChangeStatus = useCallback(async () => {
     setConfirmDeleteLoading(true);
@@ -53,7 +80,7 @@ export function RowActions({ row, table }) {
       status: row.original.status
     });
     if (result.status === 200) {
-      table.options.meta?.changeStatus(row);
+      table.options.meta?.changeStatus();
       setChangeStatusSuccess(true);
     } else {
       setChangeStatusError(true);
@@ -62,8 +89,23 @@ export function RowActions({ row, table }) {
     setConfirmDeleteLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [row]);
+  const handleDelete = useCallback(async () => {
+    setLoading(true);
+
+    const result = await HomePageService.deleteHomeCategory(row.original.id);
+    if (result.status === 200) {
+      table.options.meta?.deleteRow();
+      setDeleteSuccess(true);
+    } else {
+      setDeleteError(true);
+    }
+
+    setLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [row]);
 
   const state = changeStatusError ? 'error' : changeStatusSuccess ? 'success' : 'pending';
+  const deletestate = deleteError ? 'error' : deleteSuccess ? 'success' : 'pending';
 
   return (
     <>
@@ -98,6 +140,22 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
+              {hasPermission(PERMISSIONS.FRONTEND.DELETE_APPEARANCE) &&
+                row.original.status !== 'active' && (
+                  <MenuItem>
+                    {({ focus }) => (
+                      <button
+                        onClick={openDeleteModal}
+                        className={clsx(
+                          'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                          focus && 'bg-this/10 dark:bg-this-light/10'
+                        )}>
+                        <TbTrash className="size-4.5 stroke-1" />
+                        <span>{t('delete_theme')}</span>
+                      </button>
+                    )}
+                  </MenuItem>
+                )}
             </MenuItems>
           </Transition>
         </Menu>
@@ -110,6 +168,14 @@ export function RowActions({ row, table }) {
         onOk={handleChangeStatus}
         confirmLoading={confirmDeleteLoading}
         state={state}
+      />
+      <ConfirmModal
+        show={deleteModalOpen}
+        onClose={closeDeleteModal}
+        messages={deleteConfirmMessages}
+        onOk={handleDelete}
+        confirmLoading={confirmLoading}
+        state={deletestate}
       />
     </>
   );

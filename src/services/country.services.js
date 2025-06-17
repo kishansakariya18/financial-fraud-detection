@@ -49,6 +49,23 @@ const CountryService = {
     } catch (error) {
       console.log('Error from Country Update Status', error);
     }
+  },
+  getCountrySummary: async () => {
+    try {
+      const endPoint = apiConfig.endPoints.COUNTRY.SUMMARY;
+
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from getCountrySummary', error);
+    }
   }
 };
 

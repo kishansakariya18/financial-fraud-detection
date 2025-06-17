@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
@@ -20,7 +20,7 @@ export default function Player() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t('player') + ' ' + t('list');
-
+  const [summary, setSummary] = useState(null);
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const fetchPlayers = async () => {
@@ -40,11 +40,30 @@ export default function Player() {
     }
     return { status: result.status, error: result.error };
   };
+  const fetchSummary = async () => {
+    // setError(null);
 
+    const result = await PlayerService.userSummary();
+
+    if (result.status === 200) {
+      setSummary(result.response.data);
+      return {
+        status: 200,
+        data: result.response.data,
+        totalRecords: parseInt(result.response.total_records, 10) || 0
+      };
+    }
+
+    return { status: result.status, error: result.error };
+  };
+  useEffect(() => {
+    fetchSummary();
+  }, []);
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
     fetchData: fetchPlayers,
     queryParams,
+    fetchSummary: fetchSummary,
     setSearchParams,
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
@@ -117,6 +136,7 @@ export default function Player() {
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
       <Toolbar
         table={table}
+        summary={summary}
         pageTitle={pageTitle}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
