@@ -3,7 +3,8 @@ import { Page } from 'components/shared/Page';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import { Button, Input } from 'components/ui';
-import { useEffect, useState } from 'react';
+import { EmailInput } from 'components/custom/EmailInput';
+import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { useNavigate, useParams } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
@@ -16,23 +17,23 @@ import { Listbox } from 'components/shared/form/Listbox';
 import { emailTemplateOptions, emailTemplateStatusToAPP } from './helper';
 import { htmlToDelta } from 'utils/quillUtils';
 
+const defaultValue = new Delta();
+
 const EditEmailTemplate = () => {
-  const navigate = useNavigate();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { templateId } = useParams();
-  const [templateTextError, setTemplateError] = useState();
-
   const [response, setResponse] = useState(null);
   const [htmlContent, setHtmlContent] = useState('');
-
+  const [templateTextError, setTemplateError] = useState();
   const { t } = useTranslation();
-  // console.log('htmlContent:', htmlContent);
+  const { templateId } = useParams();
 
   const breadcrumbItem = [
     { title: t('emailTemplate'), path: '/email-template' },
     { title: t('edit') }
   ];
+
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -41,16 +42,18 @@ const EditEmailTemplate = () => {
     watch,
     reset
   } = useForm({
-    resolver: yupResolver(emailTemplateSchema)
+    resolver: yupResolver(emailTemplateSchema),
+    defaultValues: {
+      to: [],
+      cc: [],
+      bcc: []
+    }
   });
 
-  const [content, setContent] = useState(new Delta([{ insert: htmlContent }]));
-
+  const [content, setContent] = useState(defaultValue);
   const title = watch('title');
 
   const handleChange = (val) => {
-    // console.log('handleChange: ', val);
-
     setContent(val);
     const quill = new Quill(document.createElement('div'));
     quill.setContents(val);
@@ -101,11 +104,12 @@ const EditEmailTemplate = () => {
             title: result?.Title,
             slug: result?.Slug,
             heading: result?.Subject,
-            cc: result?.CC || '',
-            bcc: result?.BCC || '',
-            to: result?.ToEmail || '',
+            cc: result?.CC || [],
+            bcc: result?.BCC || [],
+            to: result?.ToEmail || [],
             status: result.IsActive ? emailTemplateStatusToAPP(result.IsActive) : undefined
           };
+
           const quill = new Quill(document.createElement('div'));
           quill.root.innerHTML = result?.BodyHtml || '';
           quill.setContents(result?.BodyHtml);
@@ -141,7 +145,13 @@ const EditEmailTemplate = () => {
       return;
     }
 
-    await editEmailTemplateAPI({ ...data, template: htmlContent, emailTemplateId: templateId });
+    const requestData = {
+      ...data,
+      template: htmlContent,
+      emailTemplateId: templateId
+    };
+
+    await editEmailTemplateAPI(requestData);
   };
   console.log('title: ', title);
   return (
@@ -201,26 +211,44 @@ const EditEmailTemplate = () => {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-1">
-              <Input
-                {...register('to')}
-                key={'to'}
-                label={t('to')}
-                error={errors?.to?.message}
-                placeholder={t('enter') + ' ' + t('to')}
+              <Controller
+                name="to"
+                control={control}
+                render={({ field }) => (
+                  <EmailInput
+                    value={field.value}
+                    onChange={field.onChange}
+                    label={t('to')}
+                    error={errors?.to?.message}
+                    placeholder={t('enter') + ' ' + t('to')}
+                  />
+                )}
               />
-              <Input
-                {...register('cc')}
-                label={'CC'}
-                key={'cc'}
-                error={errors?.cc?.message}
-                placeholder={t('enter') + ' ' + 'CC'}
+              <Controller
+                name="cc"
+                control={control}
+                render={({ field }) => (
+                  <EmailInput
+                    value={field.value}
+                    onChange={field.onChange}
+                    label={'CC'}
+                    error={errors?.cc?.message}
+                    placeholder={t('enter') + ' ' + 'CC'}
+                  />
+                )}
               />
-              <Input
-                {...register('bcc')}
-                label={'BCC'}
-                key={'bcc'}
-                error={errors?.bcc?.message}
-                placeholder={t('enter') + ' ' + 'BCC'}
+              <Controller
+                name="bcc"
+                control={control}
+                render={({ field }) => (
+                  <EmailInput
+                    value={field.value}
+                    onChange={field.onChange}
+                    label={'BCC'}
+                    error={errors?.bcc?.message}
+                    placeholder={t('enter') + ' ' + 'BCC'}
+                  />
+                )}
               />
             </div>
 
