@@ -102,7 +102,10 @@ export const apiConfig = {
       KPI_SUMMARY: '/admin/dashboard/kpi-summary',
       CASINO_STATS: '/admin/dashboard/casino-stats',
       TOP_PLAYERS: '/admin/dashboard/top-players',
-      TOP_GAMES: '/admin/dashboard/top-games'
+      TOP_GAMES: '/admin/dashboard/top-games',
+      LAST_DEPOSITOR: '/admin/dashboard/last-depositor',
+      LAST_WITHDRAWAL: '/admin/dashboard/last-withdrawer',
+      LAST_SIGNUP: '/admin/dashboard/last-signup'
     },
     DEPOSIT_PROMOCODE: {
       PROMOCODE_LIST: '/admin/v1/deposit-promocode/list',

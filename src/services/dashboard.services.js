@@ -279,6 +279,54 @@ const DashboardService = {
     } catch (err) {
       console.log('Error getTopGames: ', err);
     }
+  },
+
+  getLastDepositor: async () => {
+    try {
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.DASHBOARD.LAST_DEPOSITOR}`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error getLastDepositor: ', err);
+    }
+  },
+
+  getLastWithdrawal: async () => {
+    try {
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.DASHBOARD.LAST_WITHDRAWAL}`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error getLastWithdrawal: ', err);
+    }
+  },
+
+  getLastSignup: async () => {
+    try {
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.DASHBOARD.LAST_SIGNUP}`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error getLastSignup: ', err);
+    }
   }
 };
 

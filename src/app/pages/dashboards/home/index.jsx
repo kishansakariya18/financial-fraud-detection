@@ -15,6 +15,9 @@ import { DatePicker } from 'components/shared/form/Datepicker';
 import dayjs from 'dayjs';
 import { getEndDate } from 'helpers/functions';
 import { useLocaleContext } from 'app/contexts/locale/context';
+import LastTenDepositList from './last-ten-deposit-list/list';
+import LastTenWithdrawList from './last-ten-withdraw-list/list';
+import LastTenRegistrationList from './last-ten-registration-list/list';
 
 export default function Home() {
   const [cardResponse, setCardResponse] = useState({});
@@ -1109,6 +1112,21 @@ export default function Home() {
             <div className="mb-4 w-full px-2">
               <Card className="p-4">
                 <TopPlayers />
+              </Card>
+            </div>
+            <div className="mb-4 w-full px-2">
+              <Card className="p-4">
+                <LastTenDepositList />
+              </Card>
+            </div>
+            <div className="mb-4 w-full px-2">
+              <Card className="p-4">
+                <LastTenWithdrawList />
+              </Card>
+            </div>
+            <div className="mb-4 w-full px-2">
+              <Card className="p-4">
+                <LastTenRegistrationList />
               </Card>
             </div>
           </div>

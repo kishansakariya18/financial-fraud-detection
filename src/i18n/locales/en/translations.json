@@ -412,5 +412,8 @@
   "friend": "Friend",
   "refresh": "Refresh",
   "refresh_success": "Refreshed Successfully",
-  "refresh_failed": "Not Refreshed due to some error"
+  "refresh_failed": "Not Refreshed due to some error",
+  "lastTenDeposit": "Last 10 Deposits",
+  "lastTenWithdraw": "Last 10 Withdrawals",
+  "lastTenRegistration": "Last 10 Registrations"
 }
