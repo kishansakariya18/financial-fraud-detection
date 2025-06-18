@@ -7,8 +7,8 @@ export const paymentProvider = {
   id: 'payment-provider',
   type: NAV_TYPE_ITEM,
   path: '/payment-provider',
-  title: 'Audit Logs',
-  transKey: 'payment-provider',
+  title: 'Payment Provider',
+  transKey: 'payment_provider',
   Icon: BanknotesIcon,
   permission: PERMISSIONS.PAYMENT_PROVIDER.VIEW
 };

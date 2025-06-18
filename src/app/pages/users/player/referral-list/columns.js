@@ -80,7 +80,7 @@ export const columns = [
   columnHelper.accessor((row) => row.createdAt, {
     id: 'createdAt',
     label: 'Date',
-    header: 'Created At',
+    header: 'Registration Date',
     cell: DateCell,
     filterFn: 'inNumberRange',
     enableSorting: false
