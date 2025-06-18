@@ -121,6 +121,7 @@ export default function TopGames() {
         table={table}
         loading={isLoading}
         paginationEnabled={false}
+        disableDefaultPadding={true}
       />
     </div>
   );

@@ -118,6 +118,7 @@ export default function TopPlayers() {
         table={table}
         loading={isLoading}
         paginationEnabled={false}
+        disableDefaultPadding={true}
       />
     </div>
   );

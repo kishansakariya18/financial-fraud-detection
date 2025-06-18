@@ -63,6 +63,7 @@ export default function KPISummaryList() {
         table={table}
         loading={isLoading}
         paginationEnabled={false}
+        disableDefaultPadding={true}
       />
     </div>
   );
