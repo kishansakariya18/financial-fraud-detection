@@ -272,7 +272,8 @@ export const PERMISSIONS = {
     VIEW: 'player-class-view',
     CREATE: 'player-class-create',
     EDIT: 'player-class-edit',
-    CHANGE_STATUS: 'player-class-change-status'
+    CHANGE_STATUS: 'player-class-change-status',
+    DELETE: 'player-class-delete'
   }
 };
 

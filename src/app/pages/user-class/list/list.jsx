@@ -65,7 +65,7 @@ export default function UserClass() {
   useEffect(() => {
     const filtersFromQuery = [];
     if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'title', value: queryParams.keyword });
+      filtersFromQuery.push({ id: 'name', value: queryParams.keyword });
     }
     if (queryParams.status) {
       filtersFromQuery.push({ id: 'status', value: queryParams.status });
@@ -84,7 +84,7 @@ export default function UserClass() {
   const applyFilterHandler = () => {
     const filterItems = {};
     for (let data of table.getState().columnFilters) {
-      if (data.id === 'title') {
+      if (data.id === 'name') {
         filterItems.keyword = data.value;
       }
       if (data.id === 'status') {

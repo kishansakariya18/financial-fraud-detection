@@ -333,7 +333,12 @@ export const apiConfig = {
       STATUS: '/admin/payment-provider/change-status'
     },
     USER_CLASS: {
-      LIST: '/admin/user-classes/list'
+      LIST: '/admin/user-classes/list',
+      CREATE: '/admin/user-classes/create',
+      DETAIL: '/admin/user-classes/:userClassUID/detail',
+      UPDATE: '/admin/user-classes/update',
+      CHANGE_STATUS: '/admin/user-classes/:userClassUID/change-status',
+      DELETE: '/admin/user-classes/:userClassUID/delete'
     }
   }
 };

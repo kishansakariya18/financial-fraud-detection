@@ -8,12 +8,13 @@ import PropTypes from 'prop-types';
 // Local Imports
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
-import { TbStatusChange } from 'react-icons/tb';
+import { TbStatusChange, TbTrash } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
-import EmailTemplateService from 'services/email-template.services';
+import UserClassService from 'services/user-class.services';
+import { toast } from 'sonner';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
@@ -22,16 +23,30 @@ export function RowActions({ row, table }) {
   const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
   const [changeStatusSuccess, setChangeStatusSuccess] = useState(false);
   const [changeStatusError, setChangeStatusError] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
+  const [deleteError, setDeleteError] = useState(false);
   const navigate = useNavigate();
 
   const confirmMessages = {
     pending: {
-      description: t('email_template_desc'),
+      description: t('user_class_desc'),
       actionText: t('submit')
     },
     success: {
-      title: t('emailTemplate') + ' ' + t('status') + ' ' + t('changed'),
-      description: t('affiliate_status_suceess')
+      title: t('userClass') + ' ' + t('status') + ' ' + t('changed'),
+      description: t('user_class_status_suceess')
+    }
+  };
+
+  const deleteConfirmMessages = {
+    pending: {
+      description: t('user_class_delete_desc'),
+      actionText: t('Delete')
+    },
+    success: {
+      title: t('userClass') + ' ' + t('deleted'),
+      description: t('user_class_delete_suceess')
     }
   };
 
@@ -45,9 +60,19 @@ export function RowActions({ row, table }) {
     setChangeStatusSuccess(false);
   };
 
+  const openDeleteModal = () => {
+    setDeleteModalOpen(true);
+    setDeleteError(false);
+    setDeleteSuccess(false);
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModalOpen(false);
+  };
+
   const handleChangeStatus = useCallback(async () => {
     setConfirmDeleteLoading(true);
-    const result = await EmailTemplateService.emailTemplateStatus(row.original.id);
+    const result = await UserClassService.userClassChangeStatus(row.original.userClassUID);
     if (result.status === 200) {
       table.options.meta?.changeStatus(row);
       setChangeStatusSuccess(true);
@@ -59,7 +84,29 @@ export function RowActions({ row, table }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [row]);
 
+  const handleDeleteRows = useCallback(async () => {
+    setConfirmDeleteLoading(true);
+    const result = await UserClassService.userClassDelete(row.original.userClassUID);
+    if (result.status === 200) {
+      table.options.meta?.deleteRow(row);
+      setDeleteSuccess(true);
+      toast.success('User Class deleted successfully', {
+        invert: true
+      });
+      setTimeout(() => {
+        navigate('/user-class');
+      }, 0);
+    } else {
+      setDeleteError(true);
+    }
+
+    setConfirmDeleteLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [row]);
+
   const state = changeStatusError ? 'error' : changeStatusSuccess ? 'success' : 'pending';
+
+  const deleteState = deleteError ? 'error' : deleteSuccess ? 'success' : 'pending';
 
   return (
     <>
@@ -86,13 +133,13 @@ export function RowActions({ row, table }) {
                       'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
                       focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
                     )}
-                    onClick={() => navigate(`/email-template/${row.original.id}/edit`)}>
+                    onClick={() => navigate(`/user-class/${row.original.userClassUID}/edit`)}>
                     <PencilIcon className="size-4.5 stroke-1" />
                     <span>{t('edit')}</span>
                   </button>
                 )}
               </MenuItem>
-              {hasPermission(PERMISSIONS.AFFILIATES.CHANGE_STATUS) && (
+              {hasPermission(PERMISSIONS.USER_CLASS.CHANGE_STATUS) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -103,6 +150,21 @@ export function RowActions({ row, table }) {
                       )}>
                       <TbStatusChange className="size-4.5 stroke-1" />
                       <span>{t('change') + ' ' + t('status')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
+              {hasPermission(PERMISSIONS.USER_CLASS.DELETE) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={openDeleteModal}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                        focus && 'bg-this/10 dark:bg-this-light/10'
+                      )}>
+                      <TbTrash className="size-4.5 stroke-1" />
+                      <span>{t('Delete')}</span>
                     </button>
                   )}
                 </MenuItem>
@@ -119,6 +181,14 @@ export function RowActions({ row, table }) {
         onOk={handleChangeStatus}
         confirmLoading={confirmDeleteLoading}
         state={state}
+      />
+      <ConfirmModal
+        show={deleteModalOpen}
+        onClose={closeDeleteModal}
+        messages={deleteConfirmMessages}
+        onOk={handleDeleteRows}
+        confirmLoading={confirmDeleteLoading}
+        state={deleteState}
       />
     </>
   );

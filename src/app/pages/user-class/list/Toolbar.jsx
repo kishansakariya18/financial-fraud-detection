@@ -1,10 +1,9 @@
 // Import Dependencies
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 // Local Imports
-import { DateFilter } from 'components/shared/table/DateFilter';
 import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
@@ -12,6 +11,10 @@ import { t } from 'i18next';
 import { userclassOptions } from '../helper';
 import { MapPinIcon } from '@heroicons/react/24/outline';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
+import { PERMISSIONS } from 'constants/app.constant';
+import { useNavigate } from 'react-router';
+import usePermissions from 'app/router/usePermissions';
+
 export function Toolbar({
   table,
   pageTitle = '',
@@ -20,6 +23,8 @@ export function Toolbar({
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const { hasPermission } = usePermissions();
+  const navigate = useNavigate();
 
   return (
     <div className="table-toolbar">
@@ -33,6 +38,16 @@ export function Toolbar({
             {pageTitle}
           </h2>
         </div>
+
+        {hasPermission(PERMISSIONS.USER_CLASS.CREATE) && (
+          <Button
+            className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
+            color="primary"
+            onClick={() => navigate('/user-class/create')}>
+            <PlusIcon className="size-5" />
+            <span>{t('add') + ' ' + t('userClass')}</span>
+          </Button>
+        )}
       </div>
 
       {isXs ? (
@@ -85,8 +100,8 @@ export function Toolbar({
 function SearchInput({ table }) {
   return (
     <Input
-      value={table?.getColumn('title')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('title').setFilterValue(e.target.value)}
+      value={table?.getColumn('name')?.getFilterValue() || ''}
+      onChange={(e) => table.getColumn('name').setFilterValue(e.target.value)}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
@@ -109,16 +124,6 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}
-        />
-      )}
-      {table.getColumn('createdAt') && (
-        <DateFilter
-          column={table.getColumn('createdAt')}
-          title={t('date') + ' ' + t('range')}
-          config={{
-            maxDate: new Date().fp_incr(1),
-            mode: 'range'
-          }}
         />
       )}
 

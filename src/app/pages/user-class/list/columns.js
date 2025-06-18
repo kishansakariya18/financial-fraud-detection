@@ -4,7 +4,6 @@ import { createColumnHelper } from '@tanstack/react-table';
 // Local Imports
 import { RowActions } from './RowActions';
 import { IdCell, DateCell, BoldCell, BadgeCell } from '../../../../components/custom/table/cell';
-import { CopyableCell } from '../../../../components/shared/table/CopyableCell';
 import { userclassOptions } from '../helper';
 
 const columnHelper = createColumnHelper();
@@ -17,19 +16,19 @@ export const columns = [
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.title, {
-    id: 'title',
+    id: 'name',
     header: 'Name',
     cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.slug, {
-    id: 'slug',
-    header: 'Slug',
-    cell: CopyableCell,
+  columnHelper.accessor((row) => row.priority, {
+    id: 'priority',
+    header: 'Priority',
+    cell: BoldCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.heading, {
-    id: 'heading',
+    id: 'code',
     header: 'Code',
     cell: BoldCell,
     enableSorting: false

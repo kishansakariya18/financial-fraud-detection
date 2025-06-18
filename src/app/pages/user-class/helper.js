@@ -6,6 +6,7 @@ export const userclassListResponseMapper = (apiData) => {
   const list = apiData?.data?.map((item) => {
     return {
       id: item?.UserClassID,
+      userClassUID: item?.UserClassUID,
       title: item?.ClassName,
       heading: item?.ClassCode,
       priority: item?.Priority,
