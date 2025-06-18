@@ -49,7 +49,7 @@ export function RowActions({ row, table }) {
 
   const handleChangeStatus = useCallback(async () => {
     setConfirmDeleteLoading(true);
-    const result = await PaymentProviderService.changePlayerStatus(row.original.id);
+    const result = await PaymentProviderService.changePlayerStatus(row.original.uid);
     if (result.status === 200) {
       table.options.meta?.changeStatus(row);
       setChangeStatusSuccess(true);
@@ -109,7 +109,7 @@ export function RowActions({ row, table }) {
                   </button>
                 )}
               </MenuItem> */}
-              {console.log('row?.options?.status ::> ', row?.original?.id)}
+              {console.log('row?.options?.status ::> ', row?.original?.uid)}
               {hasPermission(PERMISSIONS.PAYMENT_PROVIDER.VIEW) && (
                 <MenuItem>
                   {({ focus }) => (
