@@ -15,7 +15,7 @@ const TableCard = (props) => {
     <div
       className={clsx(
         'transition-content flex flex-col pt-3',
-        tableSettings.enableFullScreen ? 'overflow-hidden' : 'px-[--margin-x]'
+        tableSettings.enableFullScreen ? 'overflow-hidden' : ''
       )}>
       <Card
         className={clsx(

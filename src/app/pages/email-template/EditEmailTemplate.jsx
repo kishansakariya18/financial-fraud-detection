@@ -107,7 +107,7 @@ const EditEmailTemplate = () => {
             cc: result?.CC || [],
             bcc: result?.BCC || [],
             to: result?.ToEmail || [],
-            status: result.IsActive ? emailTemplateStatusToAPP(result.IsActive) : undefined
+            status: emailTemplateStatusToAPP(result.IsActive)
           };
 
           const quill = new Quill(document.createElement('div'));

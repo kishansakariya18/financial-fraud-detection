@@ -30,6 +30,30 @@ export function DateCell({ getValue }) {
   );
 }
 
+export function OneLineDateCell({ getValue }) {
+  // const { locale } = useLocaleContext();
+  let serverDate = getValue();
+
+  const date = dayjs(serverDate).format('DD MMM YYYY');
+  const time = dayjs(serverDate).format('hh:mm A');
+  return (
+    <>
+      {serverDate && (
+        <>
+          <p className="font-medium">
+            {date} <span className="text-center">{time}</span>
+          </p>
+        </>
+      )}
+      {!serverDate && (
+        <>
+          <p className="font-medium">-</p>
+        </>
+      )}
+    </>
+  );
+}
+
 export function IdCell({ getValue }) {
   return <span className="font-medium text-primary-600 dark:text-primary-400">{getValue()}</span>;
 }

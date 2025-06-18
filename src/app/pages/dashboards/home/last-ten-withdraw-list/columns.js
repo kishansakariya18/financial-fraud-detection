@@ -1,29 +1,29 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import { AmountCell, IdCell } from 'components/custom/table/cell';
+import { AmountCell, OneLineDateCell } from 'components/custom/table/cell';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
 
 const columnHelper = createColumnHelper();
 
 export const columns = [
-  columnHelper.accessor((row) => row.TransactionID, {
-    id: 'trasnsactionID',
-    label: 'Transaction ID',
-    header: 'Transaction ID',
-    cell: IdCell,
-    enableSorting: false
-  }),
   columnHelper.accessor((row) => row.user.Username, {
-    id: 'name',
-    label: 'Name',
-    header: 'Name',
+    id: 'username',
+    label: 'Username',
+    header: 'Username',
     cell: CopyableCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.Winning, {
-    id: 'winnings',
-    label: 'Winnings',
-    header: 'Winnings',
+    id: 'amount',
+    label: 'Amount',
+    header: 'Amount',
     cell: AmountCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.DateCreated, {
+    id: 'date',
+    label: 'Date',
+    header: 'Date',
+    cell: OneLineDateCell,
     enableSorting: false
   })
 ];

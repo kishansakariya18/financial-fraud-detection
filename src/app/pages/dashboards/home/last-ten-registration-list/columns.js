@@ -1,22 +1,29 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import { DateCell } from 'components/custom/table/cell';
+import { IdCell, OneLineDateCell } from 'components/custom/table/cell';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
 
 const columnHelper = createColumnHelper();
 
 export const columns = [
   columnHelper.accessor((row) => row.Username, {
-    id: 'name',
-    label: 'Name',
-    header: 'Name',
+    id: 'username',
+    label: 'Username',
+    header: 'Username',
     cell: CopyableCell,
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.UserID, {
+    id: 'userID',
+    label: 'User ID',
+    header: 'User ID',
+    cell: IdCell,
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.DateCreated, {
-    id: 'creationDate',
-    label: 'Creation Date',
-    header: 'Creation Date',
-    cell: DateCell,
+    id: 'date',
+    label: 'Date',
+    header: 'Date',
+    cell: OneLineDateCell,
     enableSorting: false
   })
 ];
