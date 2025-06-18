@@ -419,5 +419,19 @@
   "refresh_failed": "Not Refreshed due to some error",
   "lastTenDeposit": "Last 10 Deposits",
   "lastTenWithdraw": "Last 10 Withdrawals",
-  "lastTenRegistration": "Last 10 Registrations"
+  "lastTenRegistration": "Last 10 Registrations",
+  "profitLossReport": "P&L Report",
+  "transactionCounts": "Transaction Counts",
+  "gameTransactions": "Game Transactions",
+  "bankingTransactions": "Banking Transactions",
+  "platformProfit": "Platform Profit",
+  "totalWagered":"Total Wagered",
+  "totalPayout": "Total Payout",
+  "casinoWageredCount": "Casino Wagered Count",
+  "sportsWageredCount": "Sports Wagered Count",
+  "depositCount": "Deposit Count",
+  "casinoWagered": "Casino Wagered",
+  "sportsWagered": "Sports Wagered",
+  "casinoPayout": "Casino Payout",
+  "sportsPayout": "Sports Payout"
 }

@@ -60,6 +60,7 @@ export default function LastTenDepositList() {
         table={table}
         loading={isLoading}
         paginationEnabled={false}
+        disableDefaultPadding={true}
       />
     </div>
   );

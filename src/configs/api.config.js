@@ -66,7 +66,8 @@ export const apiConfig = {
       ADD_COMMENT: '/admin/users/add-comment',
       DELETE_COMMENT: '/admin/users/delete-comment',
       CHANE_PLAYER_FUND_PASSWORD: '/admin/user/change-manage-fund-password',
-      SUMMARY: '/admin/users/summary'
+      SUMMARY: '/admin/users/summary',
+      USER_SUMMARY: '/admin/user/summary'
     },
     ADMIN_USER: {
       ADMIN_LIST: '/admin/admin/list',

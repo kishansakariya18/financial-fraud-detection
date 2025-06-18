@@ -9,12 +9,19 @@ import { PaginationSection } from 'components/shared/table/PaginationSection';
 
 const TableCard = (props) => {
   const { cardSkin } = useThemeContext();
-  const { tableSettings, table, loading, paginationEnabled = true } = props; // Added loading prop
+  const {
+    tableSettings,
+    table,
+    loading,
+    paginationEnabled = true,
+    disableDefaultPadding = false
+  } = props;
 
   return (
     <div
       className={clsx(
         'transition-content flex flex-col pt-3',
+        !disableDefaultPadding && 'px-[--margin-x]',
         tableSettings.enableFullScreen ? 'overflow-hidden' : ''
       )}>
       <Card

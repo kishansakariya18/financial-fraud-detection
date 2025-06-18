@@ -6,7 +6,7 @@ function ChartCard({ data, title }) {
   if (!data) return null;
 
   return (
-    <Card className="col-span-12 sm:col-span-6 lg:col-span-7 xl:col-span-8">
+    <Card className="">
       <div className="mt-3 flex flex-col justify-between gap-2 px-4 sm:flex-row sm:items-center sm:px-5">
         <div className="flex flex-1 items-center justify-between space-x-2 sm:flex-initial rtl:space-x-reverse">
           <h2 className="text-sm+ font-medium uppercase tracking-wide text-gray-800 dark:text-dark-100">

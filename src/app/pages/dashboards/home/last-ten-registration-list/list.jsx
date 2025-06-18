@@ -62,6 +62,7 @@ export default function LastTenRegistrationList() {
         table={table}
         loading={isLoading}
         paginationEnabled={false}
+        disableDefaultPadding={true}
       />
     </div>
   );
