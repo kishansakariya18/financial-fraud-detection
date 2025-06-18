@@ -17,7 +17,7 @@ export const columns = [
   columnHelper.accessor((row) => row.id, {
     id: 'id',
     label: 'Payment Provider ID',
-    header: 'Payment Provider ID',
+    header: 'Provider ID',
     cell: IdCell,
     enableSorting: false
   }),
