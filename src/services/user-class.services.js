@@ -68,14 +68,22 @@ const UserClassService = {
       console.log('Error', err);
     }
   },
-  userClassUpdate: async (data) => {
+  userClassUpdate: async (data, file) => {
     try {
+      const formData = new FormData();
+      formData.append('className', data.className);
+      formData.append('classCode', data.classCode);
+      formData.append('classId', data.classId);
+      if (file && file.name) {
+        formData.append('avatarURL', file, file.name);
+      }
       const response = await sendRequest({
         url: apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.USER_CLASS.UPDATE,
         method: 'PUT',
-        body: data,
+        body: formData,
+        contentType: 'form-data',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': "multipart/form-data'"
         }
       });
       return response;

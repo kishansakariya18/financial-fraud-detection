@@ -16,6 +16,7 @@ import { XMarkIcon } from '@heroicons/react/20/solid';
 import { PreviewImg } from 'components/shared/PreviewImg';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { userclassStatusToAPP } from './helper';
+import apiConfig from 'configs/api.config';
 
 const EditUserClass = () => {
   const navigate = useNavigate();
@@ -23,8 +24,6 @@ const EditUserClass = () => {
   const [loading, setLoading] = useState(false);
   const { userClassUID } = useParams();
   const [avatar, setAvatar] = useState(null);
-  const [classname, setClassName] = useState('');
-  const [classcode, setClassCode] = useState('');
   const [classID, setClassID] = useState('');
 
   const [response, setResponse] = useState(null);
@@ -36,24 +35,36 @@ const EditUserClass = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
+    watch
   } = useForm({
     resolver: yupResolver(createUserClassSchema)
   });
-  const editUserClassAPI = async (requestObject) => {
-    // console.log('requestObject: ', requestObject);
-
+  const editUserClassAPI = async (data, avatarFile) => {
+    console.log('Update request data:', { data, avatarFile });
     setLoading(true);
     setError(null);
-    const result = await UserClassService.userClassUpdate(requestObject);
-    if (result) {
-      if (result.status === 200 || result.status === 201) {
-        setResponse(result.response);
-      } else {
-        setError(result.error);
+
+    try {
+      const result = await UserClassService.userClassUpdate(data, avatarFile);
+      console.log('Update response:', result);
+
+      if (result) {
+        if (result.status === 200 || result.status === 201) {
+          setResponse(result.response);
+          return true;
+        }
+        setError(result.error || 'Failed to update user class');
+        return false;
       }
+      return false;
+    } catch (error) {
+      console.error('Error updating user class:', error);
+      setError(error.message || 'An error occurred while updating the user class');
+      return false;
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const fetchUserClassDetails = async () => {
@@ -62,12 +73,11 @@ const EditUserClass = () => {
       if (result) {
         if (result.status === 200 || result.status === 201) {
           return result.response.data;
-        } else {
-          setError(result.error);
         }
+        setError(result.error);
       }
     } catch (error) {
-      console.log('err: ', error);
+      console.error('Error fetching user class details:', error);
       setError(error.message);
     }
   };
@@ -79,12 +89,9 @@ const EditUserClass = () => {
           const mappedData = {
             className: result?.ClassName,
             classCode: result?.ClassCode,
-            avatarURL: result?.AvatarURL,
             status: result.IsActive ? userclassStatusToAPP(result.IsActive) : undefined
           };
           setAvatar(result?.AvatarURL);
-          setClassName(result?.ClassName);
-          setClassCode(result?.ClassCode);
           setClassID(result?.UserClassID);
           reset(mappedData);
         }
@@ -105,14 +112,19 @@ const EditUserClass = () => {
     fetchUserClassDetails();
   }
 
-  const onSubmit = async (data) => {
-    console.log(data);
-    editUserClassAPI({
-      classID: classID,
-      avatarURL: avatar,
-      classname: classname,
-      classcode: classcode
-    });
+  const onSubmit = async (formData) => {
+    console.log('Form submitted:', formData);
+
+    const requestData = {
+      classId: classID,
+      className: formData.className,
+      classCode: formData.classCode
+    };
+
+    // Only include the avatar file if it's a new file upload
+    const avatarFile = avatar && typeof avatar === 'object' ? avatar : null;
+
+    editUserClassAPI(requestData, avatarFile);
   };
   return (
     <Page title={t('edit') + ' ' + t('userClass')}>
@@ -131,9 +143,20 @@ const EditUserClass = () => {
             <span className="text-base font-medium text-gray-800 dark:text-dark-100">Avatar</span>
             <Avatar
               size={20}
-              src={avatar}
               imgComponent={PreviewImg}
               imgProps={{ file: avatar }}
+              {...(avatar && {
+                src: (() => {
+                  if (typeof avatar === 'object' && avatar) {
+                    return URL.createObjectURL(avatar);
+                  }
+                  if (avatar) {
+                    return `${apiConfig.baseURL.S3_URL}/user-class/${avatar}`;
+                  }
+                  return '';
+                })()
+              })}
+              name={watch('className')}
               classNames={{
                 root: 'rounded-xl ring-primary-600 ring-offset-[3px] ring-offset-white transition-all hover:ring dark:ring-primary-500 dark:ring-offset-dark-700',
                 display: 'rounded-xl'
