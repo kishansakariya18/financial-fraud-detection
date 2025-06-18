@@ -6,8 +6,8 @@ export const userClass = {
   id: 'user-class',
   type: NAV_TYPE_ITEM,
   path: '/user-class',
-  title: 'User Class',
-  transKey: 'User Class',
+  title: 'Player Class',
+  transKey: 'Player Class',
   Icon: ArchiveBoxArrowDownIcon,
   permission: PERMISSIONS.USER_CLASS.LIST
 };
