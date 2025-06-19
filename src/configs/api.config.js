@@ -339,6 +339,14 @@ export const apiConfig = {
       UPDATE: '/admin/user-classes/update',
       CHANGE_STATUS: '/admin/user-classes/:userClassUID/change-status',
       DELETE: '/admin/user-classes/:userClassUID/delete'
+    },
+    USER_CLASS_LIMIT: {
+      LIST: '/admin/user-class-limits/list',
+      CREATE: '/admin/user-class-limits/create',
+      DETAIL: '/admin/user-class-limits/:userClassLimitUID/detail',
+      UPDATE: '/admin/user-class-limits/update',
+      CHANGE_STATUS: '/admin/user-class-limits/:userClassLimitUID/change-status',
+      DELETE: '/admin/user-class-limits/:userClassLimitUID/delete'
     }
   }
 };

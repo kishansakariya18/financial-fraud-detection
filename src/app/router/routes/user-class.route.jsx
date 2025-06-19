@@ -39,6 +39,49 @@ export const userClasseRoute = [
         )
       };
     }
+  },
+  {
+    path: '/user-class/:userClassUID/limits',
+    lazy: async () => {
+      const { default: Limits } = await import('../../pages/user-class/limits/list/list');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.USER_CLASS.LIMITS}>
+            <Limits />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: '/user-class/:userClassUID/limits/:userClassLimitUID/edit',
+    lazy: async () => {
+      const { default: EditUserClassLimit } = await import(
+        '../../pages/user-class/limits/EditUserClassLimit'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.USER_CLASS.LIMITS}>
+            <EditUserClassLimit />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: '/user-class/:userClassUID/limits/create',
+    lazy: async () => {
+      const { default: CreateUserClassLimit } = await import(
+        '../../pages/user-class/limits/CreateUserClassLimit'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.USER_CLASS_LIMIT.CREATE}>
+            <CreateUserClassLimit />
+          </PrivateRoute>
+        )
+      };
+    }
   }
 ];
 export default userClasseRoute;

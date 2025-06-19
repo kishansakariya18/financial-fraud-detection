@@ -409,5 +409,12 @@
   "sr_no": "N°",
   "referred": "Parrainé",
   "by": "Par",
-  "friend": "Ami"
+  "friend": "Ami",
+  "userClass": "Classe de joueur",
+  "priority": "Priorité",
+  "user_class_desc": "Êtes-vous sûr de vouloir mettre à jour le statut de cette Classe de joueur ?",
+  "user_class_status_suceess": "Le statut de la Classe de joueur a été modifié avec succès",
+  "user_class_delete_desc": "Êtes-vous sûr de vouloir supprimer cette Classe de joueur ?",
+  "user_class_delete_suceess": "Classe de joueur supprimée avec succès"
+  
 }

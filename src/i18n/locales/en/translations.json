@@ -410,10 +410,10 @@
   "referred": "Referred",
   "by": "By",
   "friend": "Friend",
-  "userClass": "User Class",
+  "userClass": "Player Class",
   "priority": "Priority",
-  "user_class_desc": "Are you sure you want to update this User Class's status ?",
-  "user_class_status_suceess": "User Class Status has been changed successfully",
-  "user_class_delete_desc": "Are you sure you want to Delete This User Class ?",
-  "user_class_delete_suceess": "User Class Deleted Successfully"
+  "user_class_desc": "Are you sure you want to update this Player Class's status ?",
+  "user_class_status_suceess": "Player Class Status has been changed successfully",
+  "user_class_delete_desc": "Are you sure you want to Delete This Player Class ?",
+  "user_class_delete_suceess": "Player Class Deleted Successfully"
 }

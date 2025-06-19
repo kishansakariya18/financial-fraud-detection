@@ -274,6 +274,13 @@ export const PERMISSIONS = {
     EDIT: 'player-class-edit',
     CHANGE_STATUS: 'player-class-change-status',
     DELETE: 'player-class-delete'
+  },
+  USER_CLASS_LIMIT: {
+    LIST: 'player-class-limit-list',
+    CREATE: 'player-class-limit-create',
+    EDIT: 'player-class-limit-edit',
+    CHANGE_STATUS: 'player-class-limit-change-status',
+    DELETE: 'player-class-limit-delete'
   }
 };
 
@@ -285,6 +292,18 @@ export const PROMOCODE = {
     EXACT_DEPOSIT: 0,
     DEPOSIT_IN_RANGE: 1
   }
+};
+export const USER_CLASS_LIMIT_TYPE = {
+  DEPOSIT: 'Deposit',
+  WITHDRAW: 'Withdrawal',
+  WAGER: 'Betting',
+  LOSS: 'Loss'
+};
+
+export const USER_CLASS_LIMIT_PERIOD = {
+  DAILY: 'Daily',
+  WEEKLY: 'Weekly',
+  MONTHLY: 'Monthly'
 };
 
 export const KYC_PROCESSING_MODE = {
