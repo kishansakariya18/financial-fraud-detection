@@ -296,7 +296,7 @@ export const PROMOCODE = {
 export const USER_CLASS_LIMIT_TYPE = {
   DEPOSIT: 'Deposit',
   WITHDRAW: 'Withdrawal',
-  WAGER: 'Betting',
+  WAGER: 'Wager',
   LOSS: 'Loss'
 };
 

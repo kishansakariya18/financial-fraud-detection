@@ -54,14 +54,14 @@ export const userClasseRoute = [
     }
   },
   {
-    path: '/user-class/:userClassUID/limits/:userClassLimitUID/edit',
+    path: '/user-class/:userClassID/:userClassLimitUID/limits/edit',
     lazy: async () => {
       const { default: EditUserClassLimit } = await import(
         '../../pages/user-class/limits/EditUserClassLimit'
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.USER_CLASS.LIMITS}>
+          <PrivateRoute permission={PERMISSIONS.USER_CLASS_LIMIT.EDIT}>
             <EditUserClassLimit />
           </PrivateRoute>
         )

@@ -138,7 +138,8 @@ const UserClassService = {
         page: pagination.pageIndex + 1,
         limit: pagination.pageSize,
         filters: {
-          keyword: filters?.keyword || undefined
+          userClassID: filters?.userClassID || undefined,
+          keyword: filters?.limitType || undefined
         }
       };
       const endPoint = apiConfig.endPoints.USER_CLASS_LIMIT.LIST;

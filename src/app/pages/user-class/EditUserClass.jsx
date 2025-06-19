@@ -184,15 +184,15 @@ const EditUserClass = () => {
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
                 {...register('className')}
-                label={t('Class Name')}
+                label={t('class_name')}
                 error={errors?.className?.message}
-                placeholder={t('enter') + ' ' + t('className')}
+                placeholder={t('enter') + ' ' + t('class_name')}
               />
               <Input
                 {...register('classCode')}
-                label={t('Class Code')}
+                label={t('class_code')}
                 error={errors?.classCode?.message}
-                placeholder={t('enter') + ' ' + t('classCode')}
+                placeholder={t('enter') + ' ' + t('class_code')}
               />
             </div>
           </div>

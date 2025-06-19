@@ -4,6 +4,7 @@ import { EllipsisHorizontalIcon, PencilIcon, TrashIcon } from '@heroicons/react/
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router';
 
 // Local Imports
 import { ConfirmModal } from 'components/shared/ConfirmModal';
@@ -21,6 +22,7 @@ export function RowActions({ row, table }) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
+  const navigate = useNavigate();
 
   const deleteConfirmMessages = {
     pending: {
@@ -55,7 +57,7 @@ export function RowActions({ row, table }) {
     setTimeout(() => {
       table.options.meta?.deleteRow(row);
       setDeleteSuccess(true);
-      toast.success('User Class Limit deleted successfully', {
+      toast.success('Player Class Limit deleted successfully', {
         invert: true
       });
       setConfirmDeleteLoading(false);
@@ -91,7 +93,11 @@ export function RowActions({ row, table }) {
                         'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
                         focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
                       )}
-                      onClick={() => {}}>
+                      onClick={() => {
+                        navigate(
+                          `/user-class/${row.original.userClassID}/${row.original.userClassLimitUID}/limits/edit`
+                        );
+                      }}>
                       <PencilIcon className="size-4.5 stroke-1" />
                       <span>{t('edit')}</span>
                     </button>

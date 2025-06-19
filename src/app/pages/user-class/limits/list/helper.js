@@ -6,6 +6,7 @@ export const userclassLimitListResponseMapper = (apiData) => {
   const list = apiData?.data?.map((item) => {
     return {
       id: item?.UserClassLimitID,
+      userClassID: item?.UserClassID,
       userClassLimitUID: item?.UserClassLimitUID,
       limitName: item?.LimitName,
       limitValue: item?.LimitValue,

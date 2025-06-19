@@ -1,6 +1,5 @@
 // Import Dependencies
 import { Page } from 'components/shared/Page';
-import { UserIcon } from '@heroicons/react/20/solid';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { Button, Input, Upload, Avatar } from 'components/ui';
@@ -13,6 +12,7 @@ import { createUserClassSchema } from './schema';
 import { PreviewImg } from 'components/shared/PreviewImg';
 import { HiPencil } from 'react-icons/hi';
 import { XMarkIcon } from '@heroicons/react/20/solid';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 const CreateUserClass = () => {
   const [error, setError] = useState('');
@@ -20,6 +20,8 @@ const CreateUserClass = () => {
   const [avatar, setAvatar] = useState(null);
   const [response, setResponse] = useState(null);
   const { t } = useTranslation();
+
+  const breadcrumbItem = [{ title: t('userClass'), path: '/user-class' }, { title: t('create') }];
 
   const navigate = useNavigate();
   const {
@@ -76,8 +78,8 @@ const CreateUserClass = () => {
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
           </div>
+          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
-
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div className="mt-4 flex flex-col space-y-1.5">
             <span className="text-base font-medium text-gray-800 dark:text-dark-100">Avatar</span>
@@ -113,17 +115,15 @@ const CreateUserClass = () => {
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
                 {...register('className')}
-                prefix={<UserIcon className="size-5" />}
-                label={t('Class Name')}
+                label={t('class_name')}
                 error={errors?.className?.message}
-                placeholder={t('enter') + ' ' + t('className')}
+                placeholder={t('enter') + ' ' + t('class_name')}
               />
               <Input
                 {...register('classCode')}
-                prefix={<UserIcon className="size-5" />}
-                label={t('Class Code')}
+                label={t('class_code')}
                 error={errors?.classCode?.message}
-                placeholder={t('enter') + ' ' + t('classCode')}
+                placeholder={t('enter') + ' ' + t('class_code')}
               />
             </div>
           </div>

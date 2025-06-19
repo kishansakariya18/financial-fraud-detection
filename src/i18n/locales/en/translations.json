@@ -415,5 +415,13 @@
   "user_class_desc": "Are you sure you want to update this Player Class's status ?",
   "user_class_status_suceess": "Player Class Status has been changed successfully",
   "user_class_delete_desc": "Are you sure you want to Delete This Player Class ?",
-  "user_class_delete_suceess": "Player Class Deleted Successfully"
+  "user_class_delete_suceess": "Player Class Deleted Successfully",
+  "limit_type": "Limit Type",
+  "limit_period": "Limit Period",
+  "limit_amount": "Limit Amount",
+  "search_limit_name": "Search Limit",
+  "class_code": "Class Code",
+  "class_name": "Class Name",
+  "class_name_required": "Class Name Required",
+  "class_code_required": "Class Code Required"
 }

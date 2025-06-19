@@ -99,8 +99,8 @@ const CreateUserClassLimit = () => {
                     value={limitTypeOptions.find((opt) => opt.value === field.value) || null}
                     onChange={(val) => field.onChange(val.value)}
                     name={field.name}
-                    label={t('limitType')}
-                    placeholder={t('select') + ' ' + t('limitType')}
+                    label={t('limit_type')}
+                    placeholder={t('select') + ' ' + t('limit_type')}
                     displayField="label"
                     error={errors.limitType?.message}
                     required
@@ -117,8 +117,8 @@ const CreateUserClassLimit = () => {
                     value={limitPeriodOptions.find((opt) => opt.value === field.value) || null}
                     onChange={(val) => field.onChange(val.value)}
                     name={field.name}
-                    label={t('limitPeriod')}
-                    placeholder={t('select') + ' ' + t('limitPeriod')}
+                    label={t('limit_period')}
+                    placeholder={t('select') + ' ' + t('limit_period')}
                     displayField="label"
                     error={errors.limitPeriod?.message}
                     required
@@ -127,12 +127,11 @@ const CreateUserClassLimit = () => {
               />
 
               <Input
-                label={t('limitAmount')}
+                label={t('limit_amount')}
                 type="number"
-                step="0.01"
                 {...register('limitAmount')}
                 error={errors.limitAmount?.message}
-                required
+                placeholder={t('enter') + ' ' + t('limitAmount')}
               />
             </div>
 

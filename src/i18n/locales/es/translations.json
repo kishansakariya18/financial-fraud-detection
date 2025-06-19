@@ -415,5 +415,12 @@
   "user_class_desc": "¿Estás seguro de querer actualizar el estado de esta Clase de jugador?",
   "user_class_status_suceess": "Estado de Clase de jugador cambiado exitosamente",
   "user_class_delete_desc": "¿Estás seguro de querer eliminar esta Clase de jugador?",
-  "user_class_delete_suceess": "Clase de jugador eliminada exitosamente"
+  "user_class_delete_suceess": "Clase de jugador eliminada exitosamente",
+  "limit_type": "Tipo de límite",
+  "limit_period": "Período de límite",
+  "limit_amount": "Cantidad de límite",
+  "class_code": "Código de la clase",
+  "class_name": "Nombre de la clase",
+  "class_name_required": "Nombre de la clase es requerido",
+  "class_code_required": "Código de la clase es requerido"
 }

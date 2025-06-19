@@ -26,9 +26,9 @@ export default function UserClassLimitsList() {
   const fetchUserClassLimits = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
-    // TODO: Replace with actual API call to fetch user class limits
+    console.log('queryParams', queryParams);
     const result = await UserClassService.userClassLimitList({
-      filters: queryParams,
+      filters: { userClassID: userClassUID, ...queryParams },
       pagination: { pageIndex, pageSize }
     });
 

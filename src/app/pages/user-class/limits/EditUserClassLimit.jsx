@@ -1,26 +1,29 @@
 // Import Dependencies
 import { Page } from 'components/shared/Page';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
-import { Button, Input, Select } from 'components/ui';
+import { Controller, useForm } from 'react-hook-form';
+import { Button, Input } from 'components/ui';
+import { Listbox } from 'components/shared/form/Listbox';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { createUserClassLimitSchema } from './schema';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import UserClassService from 'services/user-class.services';
+import { USER_CLASS_LIMIT_TYPE, USER_CLASS_LIMIT_PERIOD } from 'constants/app.constant';
+import { userclassLimitDetailResponseMapper } from './helper';
 
 const EditUserClassLimit = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(true);
-  const { userClassId, userClassLimitId } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { userClassID, userClassLimitUID } = useParams();
 
   const breadcrumbItems = [
     { title: t('userClass'), path: '/user-class' },
-    { title: t('limits'), path: `/user-class/limits` },
+    { title: t('limits'), path: `/user-class/${userClassID}/limits` },
     { title: t('edit') }
   ];
 
@@ -35,72 +38,53 @@ const EditUserClassLimit = () => {
   });
 
   const limitTypeOptions = [
-    { value: 'Deposit', label: 'Deposit' },
-    { value: 'Withdrawal', label: 'Withdrawal' },
-    { value: 'Betting', label: 'Betting' },
-    { value: 'Loss', label: 'Loss' },
-    { value: 'Session', label: 'Session' }
+    { value: 'deposit', label: USER_CLASS_LIMIT_TYPE.DEPOSIT },
+    { value: 'withdraw', label: USER_CLASS_LIMIT_TYPE.WITHDRAW },
+    { value: 'wager', label: USER_CLASS_LIMIT_TYPE.WAGER },
+    { value: 'loss', label: USER_CLASS_LIMIT_TYPE.LOSS }
   ];
 
   const limitPeriodOptions = [
-    { value: 'PerTransaction', label: 'Per Transaction' },
-    { value: 'Daily', label: 'Daily' },
-    { value: 'Weekly', label: 'Weekly' },
-    { value: 'Monthly', label: 'Monthly' }
+    { value: 'daily', label: USER_CLASS_LIMIT_PERIOD.DAILY },
+    { value: 'weekly', label: USER_CLASS_LIMIT_PERIOD.WEEKLY },
+    { value: 'monthly', label: USER_CLASS_LIMIT_PERIOD.MONTHLY }
   ];
-
-  const currencyOptions = [
-    { value: 'USD', label: 'USD' },
-    { value: 'EUR', label: 'EUR' },
-    { value: 'GBP', label: 'GBP' },
-    { value: 'INR', label: 'INR' }
-  ];
-
-  const statusOptions = [
-    { value: 1, label: t('active') },
-    { value: 0, label: t('inactive') }
-  ];
-
   useEffect(() => {
     const fetchUserClassLimit = async () => {
-      try {
-        setInitialLoading(true);
-        // TODO: Replace with actual API call to fetch user class limit details
-        // const result = await UserClassService.getUserClassLimitDetail(userClassLimitId);
-        // if (result.status === 200) {
-        //   const data = result.response.data;
-        //   reset({
-        //     limitType: data.limitType,
-        //     limitPeriod: data.limitPeriod,
-        //     limitAmount: data.limitAmount,
-        //     currencyCode: data.currencyCode,
-        //     status: data.status
-        //   });
-        // } else {
-        //   setError(result.error || t('failed_to_fetch_user_class_limit'));
-        // }
+      console.log('Fetching user class limit for user class ID:', userClassLimitUID);
+      if (!userClassLimitUID) return;
 
-        // Mock data for now - replace with actual API call
-        const mockData = {
-          limitType: 'Deposit',
-          limitPeriod: 'Daily',
-          limitAmount: 1000,
-          currencyCode: 'USD',
-          status: 1
-        };
-        reset(mockData);
+      try {
+        setError('');
+        setLoading(true);
+        const result = await UserClassService.getUserClassLimitDetail(userClassLimitUID);
+        console.log('API Response:', result);
+
+        const mappedData = userclassLimitDetailResponseMapper(result.response);
+        console.log('Mapped data:', mappedData);
+
+        if (mappedData) {
+          reset({
+            limitType: mappedData.limitType,
+            limitPeriod: mappedData.limitPeriod,
+            limitAmount: mappedData.limitAmount,
+            currencyCode: mappedData.currencyCode,
+            status: mappedData.isActive
+          });
+        } else {
+          setError(t('invalid_response_format'));
+        }
       } catch (err) {
         console.error('Error fetching user class limit:', err);
-        setError(t('something_went_wrong'));
+        setError(err.message || t('something_went_wrong'));
+        toast.error(err.message || t('something_went_wrong'));
       } finally {
-        setInitialLoading(false);
+        setLoading(false);
       }
     };
 
-    if (userClassLimitId) {
-      fetchUserClassLimit();
-    }
-  }, [userClassLimitId, reset, t]);
+    fetchUserClassLimit();
+  }, [userClassLimitUID, reset, t]);
 
   const updateUserClassLimit = async (data) => {
     setLoading(true);
@@ -108,24 +92,19 @@ const EditUserClassLimit = () => {
 
     try {
       const requestData = {
-        ...data,
-        userClassLimitId: userClassLimitId,
-        userClassId: userClassId
+        limitType: data.limitType,
+        limitPeriod: data.limitPeriod,
+        limitAmount: data.limitAmount,
+        userClassLimitUID: userClassLimitUID
       };
 
-      // TODO: Replace with actual API call to update user class limit
-      // const result = await UserClassService.updateUserClassLimit(requestData);
-      // if (result.status === 200) {
-      //   toast.success(t('user_class_limit_updated'));
-      //   navigate(`/user-class/${userClassId}/limits`);
-      // } else {
-      //   setError(result.error || t('something_went_wrong'));
-      // }
-
-      // Mock success for now
-      console.log('Updating user class limit with:', requestData);
-      toast.success(t('user_class_limit_updated'));
-      navigate(`/user-class/${userClassId}/limits`);
+      const result = await UserClassService.updateUserClassLimit(requestData);
+      if (result.status === 200 || result.status === 201) {
+        toast.success(t('user_class_limit_updated'));
+        navigate(`/user-class/${userClassID}/limits`);
+      } else {
+        setError(result.error || t('something_went_wrong'));
+      }
     } catch (err) {
       console.error('Error updating user class limit:', err);
       setError(t('something_went_wrong'));
@@ -137,78 +116,84 @@ const EditUserClassLimit = () => {
   if (error) {
     toast.error(error);
   }
-
-  if (initialLoading) {
-    return <div>Loading...</div>; // Add a proper loading component here
-  }
-
   return (
     <Page title={t('edit') + ' ' + t('userClass') + ' ' + t('limit')}>
-      <Breadcrumbs items={breadcrumbItems} />
-      <div className="mt-6">
-        <div className="rounded-lg bg-white p-6 shadow-sm dark:bg-dark-100">
-          <form onSubmit={handleSubmit(updateUserClassLimit)} className="space-y-6">
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              <Select
-                label={t('limitType')}
+      <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
+        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
+            {t('edit') + ' ' + t('userClass') + ' ' + t('limit')}
+          </h2>
+          <div className="hidden self-stretch py-1 sm:flex">
+            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          </div>
+          <Breadcrumbs items={breadcrumbItems} />
+        </div>
+
+        <form onSubmit={handleSubmit(updateUserClassLimit)} className="space-y-6">
+          <div className="mt-6 space-y-4">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <Controller
                 name="limitType"
                 control={control}
-                options={limitTypeOptions}
-                error={errors.limitType?.message}
-                required
+                render={({ field }) => (
+                  <Listbox
+                    data={limitTypeOptions}
+                    value={limitTypeOptions.find((opt) => opt.value === field.value) || null}
+                    onChange={(val) => field.onChange(val.value)}
+                    name={field.name}
+                    label={t('limit_type')}
+                    placeholder={t('select') + ' ' + t('limit_type')}
+                    displayField="label"
+                    error={errors.limitType?.message}
+                  />
+                )}
               />
-
-              <Select
-                label={t('limitPeriod')}
+              <Controller
                 name="limitPeriod"
                 control={control}
-                options={limitPeriodOptions}
-                error={errors.limitPeriod?.message}
-                required
+                render={({ field }) => (
+                  <Listbox
+                    data={limitPeriodOptions}
+                    value={limitPeriodOptions.find((opt) => opt.value === field.value) || null}
+                    onChange={(val) => field.onChange(val.value)}
+                    name={field.name}
+                    label={t('limit_period')}
+                    placeholder={t('select') + ' ' + t('limit_period')}
+                    displayField="label"
+                    error={errors.limitPeriod?.message}
+                  />
+                )}
               />
 
               <Input
-                label={t('limitAmount')}
+                label={t('limit_amount')}
                 type="number"
                 step="0.01"
                 {...register('limitAmount')}
                 error={errors.limitAmount?.message}
-                required
-              />
-
-              <Select
-                label={t('currencyCode')}
-                name="currencyCode"
-                control={control}
-                options={currencyOptions}
-                error={errors.currencyCode?.message}
-                required
-              />
-
-              <Select
-                label={t('status')}
-                name="status"
-                control={control}
-                options={statusOptions}
-                error={errors.status?.message}
-                required
+                placeholder={t('enter') + ' ' + t('limitAmount')}
               />
             </div>
 
-            <div className="flex justify-end space-x-3 pt-4">
+            <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
               <Button
-                type="button"
-                variant="plain"
-                onClick={() => navigate(`/user-class/${userClassId}/limits`)}
-                disabled={loading}>
+                className="min-w-[7rem]"
+                onClick={() => navigate(`/user-class/${userClassID}/limits`)}
+                disabled={loading}
+                variant="outlined">
                 {t('cancel')}
               </Button>
-              <Button type="submit" loading={loading}>
+              <Button
+                type="submit"
+                className="min-w-[7rem]"
+                color="primary"
+                loading={loading}
+                disabled={loading}>
                 {t('update')}
               </Button>
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </Page>
   );

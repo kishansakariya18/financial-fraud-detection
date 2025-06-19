@@ -5,6 +5,7 @@ export const userclassLimitListResponseMapper = (apiData) => {
   const list = apiData?.data?.map((item) => {
     return {
       id: item?.UserClassLimitID,
+      userClassID: item?.UserClassID,
       userClassLimitUID: item?.UserClassLimitUID,
       limitType: item?.LimitType,
       limitPeriod: item?.LimitPeriod,
@@ -16,6 +17,19 @@ export const userclassLimitListResponseMapper = (apiData) => {
     };
   });
   return { list, totalRecords };
+};
+
+export const userclassLimitDetailResponseMapper = (apiResponse) => {
+  if (!apiResponse?.data) return null;
+
+  return {
+    status: apiResponse.status,
+    limitType: apiResponse.data.LimitType,
+    limitPeriod: apiResponse.data.LimitPeriod,
+    limitAmount: apiResponse.data.LimitAmount,
+    currencyCode: apiResponse.data.CurrencyCode || '',
+    isActive: apiResponse.data.IsActive === 1 ? 'active' : 'inactive'
+  };
 };
 
 export const userclassLimitStatusToAPP = (status) => {
