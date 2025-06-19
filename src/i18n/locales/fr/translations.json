@@ -412,5 +412,22 @@
   "friend": "Ami",
   "refresh": "Rafraîchir",
   "refresh_success": "Actualisé avec succès",
-  "refresh_failed": "Non actualisé en raison d'une erreur"
+  "refresh_failed": "Non actualisé en raison d'une erreur",
+  "lastTenDeposit": "10 derniers dépôts",
+  "lastTenWithdraw": "10 derniers retraits",
+  "lastTenRegistration": "10 dernières inscriptions",
+  "profitLossReport": "Rapport P&L",
+  "transactionCounts": "Nombre de transactions",
+  "gameTransactions": "Transactions de jeu",
+  "bankingTransactions": "Opérations bancaires",
+  "platformProfit": "Bénéfice de la plateforme",
+  "totalWagered": "Total misé",
+  "totalPayout": "Paiement total",
+  "casinoWageredCount": "Nombre de mises au casino",
+  "sportsWageredCount": "Nombre de paris sportifs",
+  "depositCount": "Nombre de dépôts",
+  "casinoWagered": "Casino parié",
+  "sportsWagered": "Sports pariés",
+  "casinoPayout": "Paiement du casino",
+  "sportsPayout": "Paiement sportif"
 }
