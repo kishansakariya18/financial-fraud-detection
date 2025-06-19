@@ -5,12 +5,12 @@ import { Controller, useForm } from 'react-hook-form';
 import { Button, Input, Upload } from 'components/ui';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
-import { useParams } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
 import { editGameSchema } from './schema';
 import GameService from 'services/game.services';
-import { Listbox } from 'components/shared/form/Listbox';
+import { CheckboxGroup } from 'components/shared/form/CheckboxGroup';
 import RenderImage from 'components/ui/custom/ImageRender';
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
 import apiConfig from 'configs/api.config';
@@ -27,6 +27,7 @@ const EditGame = () => {
   const [gameImage, setGameImage] = useState('');
   const uploadRef = useRef();
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   console.log('preview: ', preview);
 
@@ -48,6 +49,19 @@ const EditGame = () => {
 
     if (result.status === 200) {
       const apiData = result.response.data;
+      const mappedData = {
+        gameName: apiData.Name,
+        minBetAmount: apiData?.MinBetAmount || 0,
+        maxBetAmount: apiData?.MaxBetAmount || 0,
+        categoryIds: Array.isArray(apiData.Categories)
+          ? apiData.Categories.map(Number)
+          : apiData.Categories
+            ? [Number(apiData.Categories)]
+            : [],
+        image: apiData?.Image
+      };
+      setGameImage(apiData.Image);
+      reset(mappedData);
       return apiData;
     } else {
       setError(result.error);
@@ -85,7 +99,11 @@ const EditGame = () => {
             gameName: result.Name,
             minBetAmount: result?.MinBetAmount || 0,
             maxBetAmount: result?.MaxBetAmount || 0,
-            categoryId: +result.CategoryID,
+            categoryIds: Array.isArray(result.Categories)
+              ? result.Categories.map(Number)
+              : result.Categories
+                ? [Number(result.Categories)]
+                : [],
             image: result?.Image
           };
           setGameImage(result.Image);
@@ -99,7 +117,14 @@ const EditGame = () => {
   const editAffiliateAPI = async (requestObject) => {
     setLoading(true);
     setError(null);
-    const result = await GameService.editGame(gameUID, requestObject, file);
+    const categoryToSend = Array.isArray(requestObject.categoryIds)
+      ? requestObject.categoryIds
+      : [];
+    const result = await GameService.editGame(
+      gameUID,
+      { ...requestObject, categoryId: categoryToSend },
+      file
+    );
     if (result) {
       if (result.status === 200 || result.status === 201) {
         setResponse(result.response);
@@ -117,8 +142,9 @@ const EditGame = () => {
 
   if (!loading && !error && response) {
     toast.success(response.message);
-    fetchGameDetails();
-    fetchCategories();
+    setTimeout(() => {
+      navigate('/casino/games/list');
+    }, 0);
 
     setResponse(null);
   }
@@ -145,29 +171,12 @@ const EditGame = () => {
 
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div className="mt-6 space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-1">
               <Input
                 {...register('gameName')}
                 label={t('game') + ' ' + t('name')}
                 error={errors?.gameName?.message}
                 placeholder={t('enter') + ' ' + t('game') + ' ' + t('name')}
-              />
-              <Controller
-                render={({ field }) => (
-                  <Listbox
-                    key={'category'}
-                    data={categoryOptions}
-                    value={categoryOptions.find((status) => status.value === field.value) || null}
-                    onChange={(val) => field.onChange(val.value)}
-                    name={field.name}
-                    label={t('select') + ' ' + t('category')}
-                    placeholder={t('select') + ' ' + t('type')}
-                    displayField="label"
-                    error={errors?.categoryId?.message}
-                  />
-                )}
-                control={control}
-                name="categoryId"
               />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -188,6 +197,21 @@ const EditGame = () => {
                 step="0.01"
               />
             </div>
+            <Controller
+              render={({ field }) => (
+                <CheckboxGroup
+                  data={categoryOptions}
+                  value={field.value || []}
+                  onChange={field.onChange}
+                  name={field.name}
+                  label={t('select') + ' ' + t('category')}
+                  error={errors?.categoryIds?.message}
+                  displayField="label"
+                />
+              )}
+              control={control}
+              name="categoryIds"
+            />
             <div className="ml-4 mt-5 w-40 space-y-4">
               <div className="grid gap-4 sm:grid-cols-1">
                 {(preview || gameImage) && (

@@ -72,7 +72,12 @@ const GameService = {
       const formData = new FormData();
 
       formData.append('name', data.name);
-      formData.append('categoryId', data.categoryId);
+      // Handle multiple category IDs
+      if (Array.isArray(data.categoryId)) {
+        data.categoryId.forEach((catId, idx) => {
+          formData.append(`categoryIds[${idx}]`, catId);
+        });
+      }
       formData.append('minBetAmount', data.minBetAmount);
       formData.append('maxBetAmount', data.maxBetAmount);
 
