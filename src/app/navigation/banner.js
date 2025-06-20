@@ -10,7 +10,7 @@ export const banner = {
   path: '/banner',
   title: 'Banner',
   transKey: 'nav.banner',
-  disabled: true,
+  // disabled: true,
   Icon: MegaphoneIcon,
   permission: PERMISSIONS.BANNER.LIST
 };

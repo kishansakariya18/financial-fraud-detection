@@ -382,3 +382,16 @@ export const PROMOCODE = {
     DEPOSIT_IN_RANGE: 1
   }
 };
+<<<<<<< Updated upstream
+=======
+
+export const KYC_PROCESSING_MODE = {
+  AUTO: 'auto',
+  MANUAL: 'manual'
+};
+export const BANNER = {
+  TYPE: {
+    LOBBY_BANNER: 1
+  }
+};
+>>>>>>> Stashed changes

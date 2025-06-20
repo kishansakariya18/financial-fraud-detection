@@ -20,6 +20,13 @@ import pagesRoute from './routes/pages.route';
 import crmRoute from './routes/crm.route';
 import homeCategoryRoute from './routes/home-category.route';
 import tenantRoute from './routes/tenant.route';
+<<<<<<< Updated upstream
+=======
+import profileRoute from './routes/profile.route';
+import bonusManagementRoute from './routes/bonus-management.route';
+import paymentProvider from './routes/payment-provider.route';
+import bannerRoute from './routes/banner.route';
+>>>>>>> Stashed changes
 
 // ----------------------------------------------------------------------
 
@@ -33,6 +40,7 @@ const protectedRoutes = {
       children: [
         ...dashboardRoute,
         ...adminRoute,
+        ...bannerRoute,
         ...playerRoutes,
         ...roleRoutes,
         ...auditlogsRoutes,

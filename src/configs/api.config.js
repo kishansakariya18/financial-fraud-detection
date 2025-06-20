@@ -186,10 +186,7 @@ export const apiConfig = {
       BANNER_CREATE: '/admin/banner/create',
       BANNER_DELETE: `/admin/banner/:bannerId/delete`,
       BANNER_DETAIL: `/admin/banner/:bannerId/details`,
-      BANNER_EDIT: `/admin/banner/edit`,
-      GET_BANNER_SGMENTATION: `/admin/banner/:bannerId/segmentation`,
-      SUBMIT_BANNER_SEGMENTATION: `/admin/banner/:bannerId/segmentation`,
-      REMOVE_BANNER_SEGMENTATION: `/admin/banner/:bannerId/segmentation`
+      BANNER_EDIT: `/admin//banner/:bannerId/edit`
     },
     BASKETBALL: {
       CONTEST: {
