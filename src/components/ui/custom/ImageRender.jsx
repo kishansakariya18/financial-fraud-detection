@@ -1,7 +1,14 @@
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import clsx from 'clsx';
-const RenderImage = ({ id, preview, value, label = '' }) => {
+const RenderImage = ({
+  id,
+  preview,
+  value,
+  label = '',
+  maxWidth = '100px',
+  maxHeight = '100px'
+}) => {
   const handleImageLoad = (e) => {
     const skeleton = e.target.nextSibling;
 
@@ -31,7 +38,7 @@ const RenderImage = ({ id, preview, value, label = '' }) => {
           id={id}
           src={preview ? preview : value}
           className={'img-thumbnail mb-2 mr-2 rounded'}
-          style={{ maxWidth: '100px', maxHeight: '100px' }}
+          style={{ maxWidth: maxWidth, maxHeight: maxHeight }}
           alt={'null'}
           onLoad={handleImageLoad}
           onError={handleImageError}
@@ -40,7 +47,7 @@ const RenderImage = ({ id, preview, value, label = '' }) => {
           height={100}
           width={100}
           baseColor="#e6eaeb"
-          style={{ maxWidth: '100px', maxHeight: '100px' }}
+          style={{ maxWidth: maxWidth, maxHeight: maxHeight }}
         />
       </>
     )
