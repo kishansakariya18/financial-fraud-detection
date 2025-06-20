@@ -73,7 +73,7 @@ const UserClassService = {
       const formData = new FormData();
       formData.append('className', data.className);
       formData.append('classCode', data.classCode);
-      formData.append('classId', data.classId);
+      formData.append('classUID', data.classUID);
       if (file && file.name) {
         formData.append('avatarURL', file, file.name);
       }

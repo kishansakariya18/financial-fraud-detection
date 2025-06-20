@@ -24,7 +24,6 @@ const EditUserClass = () => {
   const [loading, setLoading] = useState(false);
   const { userClassUID } = useParams();
   const [avatar, setAvatar] = useState(null);
-  const [classID, setClassID] = useState('');
 
   const [response, setResponse] = useState(null);
   const { t } = useTranslation();
@@ -92,7 +91,6 @@ const EditUserClass = () => {
             status: result.IsActive ? userclassStatusToAPP(result.IsActive) : undefined
           };
           setAvatar(result?.AvatarURL);
-          setClassID(result?.UserClassID);
           reset(mappedData);
         }
       });
@@ -116,7 +114,7 @@ const EditUserClass = () => {
     console.log('Form submitted:', formData);
 
     const requestData = {
-      classId: classID,
+      classUID: userClassUID,
       className: formData.className,
       classCode: formData.classCode
     };
