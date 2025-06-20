@@ -345,6 +345,9 @@ export const apiConfig = {
     PAYMENT_PROVIDER: {
       VIEW: '/admin/payment-provider/list',
       STATUS: '/admin/payment-provider/change-status'
+    },
+    GEORESTRICTION: {
+      COUNTRY_LIST: '/admin/country/restrictions/list'
     }
   }
 };

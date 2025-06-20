@@ -6,7 +6,7 @@ import { replaceText } from 'utils/custom.utilities';
 const CountryService = {
   getCountry: async ({ pagination, filters }) => {
     try {
-      const endPoint = apiConfig.endPoints.COUNTRY.LIST;
+      const endPoint = apiConfig.endPoints.GEORESTRICTION.COUNTRY_LIST;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
@@ -14,14 +14,12 @@ const CountryService = {
         headers: {
           'Content-Type': 'application/json'
         },
-        params: {
-          perPage: pagination.pageSize,
-          page: pagination.pageIndex + 1
-        },
         body: {
+          page: pagination.pageIndex + 1,
+          limit: pagination.pageSize,
           filters: {
-            keyword: filters.keyword ? filters.keyword : undefined,
-            status: filters.status ? parseAdminStatusToApi(filters.status) : undefined
+            keyword: filters.keyword ? filters.keyword : '',
+            status: filters.status ? parseAdminStatusToApi(filters.status) : 1
           }
         }
       });

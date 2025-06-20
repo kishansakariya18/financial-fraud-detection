@@ -19,7 +19,9 @@ export const responseMapper = (apiData) => {
     id: data.CountryID,
     countryName: data.CountryName,
     countryCode: data.CountryCode,
-    status: parseAdminStatusToApp(data.IsActive)
+    status: parseAdminStatusToApp(data.IsActive),
+    globallyBlocked: data.GloballyBlocked ? 'blocked' : 'not_blocked',
+    blockedModules: data.BlockedModules.map((module) => module.ModuleName).join(', ')
   }));
   return resultData;
 };
@@ -36,5 +38,20 @@ export const statusOptions = [
     label: 'Inactive',
     color: 'error',
     icon: XCircleIcon
+  }
+];
+
+export const globallyBlockedStatusOptions = [
+  {
+    value: 'blocked',
+    label: 'Blocked',
+    color: 'error',
+    icon: XCircleIcon
+  },
+  {
+    value: 'not_blocked',
+    label: 'Not Blocked',
+    color: 'success',
+    icon: CheckBadgeIcon
   }
 ];

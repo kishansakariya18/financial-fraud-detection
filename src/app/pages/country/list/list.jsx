@@ -18,7 +18,7 @@ import CountryService from 'services/country.services';
 export default function Country() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('country');
+  const pageTitle = t('countries');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
   const [summary, setSummary] = useState(null);
@@ -35,7 +35,8 @@ export default function Country() {
       return {
         status: 200,
         data: responseMapper(result.response.data),
-        totalRecords: parseInt(result.response.totalRecords, 10) || 0
+        totalRecords: parseInt(result.response.totalRecord, 10) || 0,
+        totalPages: result.response.totalPages
       };
     }
 

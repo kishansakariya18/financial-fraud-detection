@@ -9,12 +9,14 @@ import PropTypes from 'prop-types';
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
 
-import { TbStatusChange } from 'react-icons/tb';
+import { TbStatusChange, TbEdit } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
 import CountryService from 'services/country.services';
+import { useNavigate } from 'react-router';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const confirmMessages = {
     pending: {
@@ -87,6 +89,19 @@ export function RowActions({ row, table }) {
                     )}>
                     <TbStatusChange className="size-4.5 stroke-1" />
                     <span>{t('change') + ' ' + t('status')}</span>
+                  </button>
+                )}
+              </MenuItem>
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    onClick={() => navigate(`/casino/games/${row.original.gameUID}/edit`)}
+                    className={clsx(
+                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                      focus && 'bg-this/10 dark:bg-this-light/10'
+                    )}>
+                    <TbEdit className="size-4.5 stroke-1" />
+                    <span>{t('edit')}</span>
                   </button>
                 )}
               </MenuItem>
