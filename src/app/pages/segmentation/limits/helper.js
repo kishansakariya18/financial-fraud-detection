@@ -1,11 +1,11 @@
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 
-export const userclassLimitListResponseMapper = (apiData) => {
+export const segmentationLimitListResponseMapper = (apiData) => {
   const totalRecords = apiData?.total_record;
   const list = apiData?.data?.map((item) => {
     return {
-      id: item?.UserClassLimitID,
-      userClassID: item?.UserClassID,
+      id: item?.SegmentationLimitID,
+      segmentationLimitUID: item?.SegmentationLimitUID,
       userClassLimitUID: item?.UserClassLimitUID,
       limitType: item?.LimitType,
       limitPeriod: item?.LimitPeriod,
@@ -19,7 +19,7 @@ export const userclassLimitListResponseMapper = (apiData) => {
   return { list, totalRecords };
 };
 
-export const userclassLimitDetailResponseMapper = (apiResponse) => {
+export const segmentationLimitDetailResponseMapper = (apiResponse) => {
   if (!apiResponse?.data) return null;
 
   return {
@@ -58,7 +58,6 @@ export const userclassLimitStatusToAPI = (status) => {
 };
 
 export default {
-  userclassLimitListResponseMapper,
-  userclassLimitStatusToAPP,
-  userclassLimitStatusToAPI
+  segmentationLimitListResponseMapper,
+  segmentationLimitDetailResponseMapper
 };

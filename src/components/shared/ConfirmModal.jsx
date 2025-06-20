@@ -9,6 +9,7 @@ import { useRef } from 'react';
 // Local Imports
 import { Button, GhostSpinner } from 'components/ui';
 import { AnimatedTick } from './AnimatedTick';
+import { t } from 'i18next';
 
 // ----------------------------------------------------------------------
 
@@ -16,7 +17,7 @@ const defaultMessages = {
   pending: {
     Icon: ExclamationTriangleIcon,
     iconClassName: 'text-warning',
-    title: 'Are you sure?',
+    title: t('areYouSure'),
     description:
       'Are you sure you want to delete this record? Once deleted, it cannot be restored.',
     actionText: 'Delete'

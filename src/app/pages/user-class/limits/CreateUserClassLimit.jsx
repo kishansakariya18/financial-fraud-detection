@@ -56,12 +56,11 @@ const CreateUserClassLimit = () => {
       };
 
       const result = await UserClassService.createUserClassLimit(requestData);
-
       if (result.status === 200 || result.status === 201) {
-        toast.success(t('user_class_limit_created'));
+        toast.success(result.response.message);
         navigate(`/user-class/${userClassUID}/limits`);
       } else {
-        setError(result.error || t('something_went_wrong'));
+        setError(result.response.message || t('something_went_wrong'));
       }
     } catch (err) {
       console.error('Error creating user class limit:', err);

@@ -448,5 +448,7 @@
   "casinoWagered": "Casino Wagered",
   "sportsWagered": "Sports Wagered",
   "casinoPayout": "Casino Payout",
-  "sportsPayout": "Sports Payout"
+  "sportsPayout": "Sports Payout",
+  "areYouSure":"Are You Sure?"
+  
 }

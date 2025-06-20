@@ -10,20 +10,20 @@ import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { createUserClassLimitSchema } from './schema';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
-import UserClassService from 'services/user-class.services';
+import SegmentationService from 'services/segmentation.services';
 import { USER_CLASS_LIMIT_TYPE, USER_CLASS_LIMIT_PERIOD } from 'constants/app.constant';
 import { userclassLimitDetailResponseMapper } from './helper';
 
-const EditUserClassLimit = () => {
+const EditSegmentationLimit = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { userClassID, userClassLimitUID } = useParams();
+  const { segmentationId, segmentationLimitUID } = useParams();
 
   const breadcrumbItems = [
-    { title: t('userClass'), path: '/user-class' },
-    { title: t('limits'), path: `/user-class/${userClassID}/limits` },
+    { title: t('segmentation'), path: '/segmentation' },
+    { title: t('limits'), path: `/segmentation/${segmentationId}/limits` },
     { title: t('edit') }
   ];
 
@@ -50,13 +50,14 @@ const EditUserClassLimit = () => {
     { value: 'monthly', label: USER_CLASS_LIMIT_PERIOD.MONTHLY }
   ];
   useEffect(() => {
-    const fetchUserClassLimit = async () => {
-      console.log('Fetching user class limit for user class ID:', userClassLimitUID);
-      if (!userClassLimitUID) return;
+    const fetchSegmentationLimit = async () => {
+      console.log('Fetching segmentation limit for segmentation ID:', segmentationLimitUID);
+      if (!segmentationLimitUID) return;
+
       try {
         setError('');
         setLoading(true);
-        const result = await UserClassService.getUserClassLimitDetail(userClassLimitUID);
+        const result = await SegmentationService.segmentationLimitDetail(segmentationLimitUID);
         console.log('API Response:', result);
 
         const mappedData = userclassLimitDetailResponseMapper(result.response);
@@ -74,7 +75,7 @@ const EditUserClassLimit = () => {
           setError(t('invalid_response_format'));
         }
       } catch (err) {
-        console.error('Error fetching user class limit:', err);
+        console.error('Error fetching segmentation limit:', err);
         setError(err.message || t('something_went_wrong'));
         toast.error(err.message || t('something_went_wrong'));
       } finally {
@@ -82,10 +83,10 @@ const EditUserClassLimit = () => {
       }
     };
 
-    fetchUserClassLimit();
-  }, [userClassLimitUID, reset, t]);
+    fetchSegmentationLimit();
+  }, [segmentationLimitUID, reset, t]);
 
-  const updateUserClassLimit = async (data) => {
+  const updateSegmentationLimit = async (data) => {
     setLoading(true);
     setError('');
 
@@ -94,18 +95,18 @@ const EditUserClassLimit = () => {
         limitType: data.limitType,
         limitPeriod: data.limitPeriod,
         limitAmount: data.limitAmount,
-        userClassLimitUID: userClassLimitUID
+        segmentationLimitUID: segmentationLimitUID
       };
 
-      const result = await UserClassService.updateUserClassLimit(requestData);
+      const result = await SegmentationService.updateSegmentationLimit(requestData);
       if (result.status === 200 || result.status === 201) {
-        toast.success(result.response.message);
-        navigate(`/user-class/${userClassID}/limits`);
+        toast.success(t('segmentation_limit_updated'));
+        navigate(`/segmentation/${segmentationId}/limits`);
       } else {
-        setError(result.response.message || t('something_went_wrong'));
+        setError(result.error || t('something_went_wrong'));
       }
     } catch (err) {
-      console.error('Error updating user class limit:', err);
+      console.error('Error updating segmentation limit:', err);
       setError(t('something_went_wrong'));
     } finally {
       setLoading(false);
@@ -116,11 +117,11 @@ const EditUserClassLimit = () => {
     toast.error(error);
   }
   return (
-    <Page title={t('edit') + ' ' + t('userClass') + ' ' + t('limit')}>
+    <Page title={t('edit') + ' ' + t('segmentation') + ' ' + t('limit')}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
         <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
-            {t('edit') + ' ' + t('userClass') + ' ' + t('limit')}
+            {t('edit') + ' ' + t('segmentation') + ' ' + t('limit')}
           </h2>
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
@@ -128,7 +129,7 @@ const EditUserClassLimit = () => {
           <Breadcrumbs items={breadcrumbItems} />
         </div>
 
-        <form onSubmit={handleSubmit(updateUserClassLimit)} className="space-y-6">
+        <form onSubmit={handleSubmit(updateSegmentationLimit)} className="space-y-6">
           <div className="mt-6 space-y-4">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <Controller
@@ -177,7 +178,7 @@ const EditUserClassLimit = () => {
             <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
               <Button
                 className="min-w-[7rem]"
-                onClick={() => navigate(`/user-class/${userClassID}/limits`)}
+                onClick={() => navigate(`/segmentation/${segmentationId}/limits`)}
                 disabled={loading}
                 variant="outlined">
                 {t('cancel')}
@@ -198,4 +199,4 @@ const EditUserClassLimit = () => {
   );
 };
 
-export default EditUserClassLimit;
+export default EditSegmentationLimit;

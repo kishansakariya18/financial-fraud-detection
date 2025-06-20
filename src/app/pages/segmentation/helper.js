@@ -86,3 +86,19 @@ export const genderOptions = [
   { value: 'Male', label: 'Male' },
   { value: 'Female', label: 'Female' }
 ];
+export const userclassOptions = [
+  {
+    key: 'active',
+    value: 'active',
+    label: 'Active',
+    color: 'success',
+    icon: CheckBadgeIcon
+  },
+  {
+    key: 'inactive',
+    value: 'inactive',
+    label: 'Inactive',
+    color: 'error',
+    icon: XCircleIcon
+  }
+];

@@ -90,12 +90,12 @@ export function RowActions({ row, table }) {
     if (result.status === 200) {
       table.options.meta?.deleteRow(row);
       setDeleteSuccess(true);
-      toast.success('Player Class deleted successfully', {
+      toast.success(result.response.message, {
         invert: true
       });
       setTimeout(() => {
         navigate('/user-class');
-      }, 0);
+      }, 1000);
     } else {
       setDeleteError(true);
     }

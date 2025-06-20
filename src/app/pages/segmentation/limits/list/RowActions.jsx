@@ -5,7 +5,6 @@ import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router';
-
 // Local Imports
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
@@ -13,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
 import { toast } from 'sonner';
-import UserClassService from 'services/user-class.services';
+import SegmentationService from 'services/segmentation.services';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
@@ -26,12 +25,12 @@ export function RowActions({ row, table }) {
 
   const deleteConfirmMessages = {
     pending: {
-      description: t('user_class_limit_delete_desc'),
+      description: t('segmentation_limit_delete_desc'),
       actionText: t('Delete')
     },
     success: {
-      title: t('userClassLimit') + ' ' + t('deleted'),
-      description: t('user_class_limit_delete_success')
+      title: t('segmentationLimit') + ' ' + t('deleted'),
+      description: t('segmentation_limit_delete_success')
     }
   };
 
@@ -47,7 +46,9 @@ export function RowActions({ row, table }) {
 
   const handleDeleteRows = useCallback(async () => {
     setConfirmDeleteLoading(true);
-    const result = await UserClassService.deleteUserClassLimit(row.original.userClassLimitUID);
+    const result = await SegmentationService.deleteSegmentationLimit(
+      row.original.segmentationLimitUID
+    );
     if (result.status === 200) {
       table.options.meta?.deleteRow(row);
       setDeleteSuccess(true);
@@ -57,7 +58,7 @@ export function RowActions({ row, table }) {
     setTimeout(() => {
       table.options.meta?.deleteRow(row);
       setDeleteSuccess(true);
-      toast.success(result.response.messages, {
+      toast.success('Segmentation Limit deleted successfully', {
         invert: true
       });
       setConfirmDeleteLoading(false);
@@ -85,7 +86,7 @@ export function RowActions({ row, table }) {
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
               className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
-              {hasPermission(PERMISSIONS.USER_CLASS_LIMIT.UPDATE) && (
+              {hasPermission(PERMISSIONS.SEGMENTATION.LIMIT_UPDATE) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -95,7 +96,7 @@ export function RowActions({ row, table }) {
                       )}
                       onClick={() => {
                         navigate(
-                          `/user-class/${row.original.userClassID}/${row.original.userClassLimitUID}/limits/edit`
+                          `/segmentation/${row.original.segmentationID}/${row.original.segmentationLimitUID}/limits/edit`
                         );
                       }}>
                       <PencilIcon className="size-4.5 stroke-1" />
@@ -104,7 +105,7 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              {hasPermission(PERMISSIONS.USER_CLASS_LIMIT.DELETE) && (
+              {hasPermission(PERMISSIONS.SEGMENTATION.LIMIT_DELETE) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button

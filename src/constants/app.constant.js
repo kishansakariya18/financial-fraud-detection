@@ -189,7 +189,12 @@ export const PERMISSIONS = {
     ADD: 'segmentation-add',
     EDIT: 'segmentation-add',
     CHANGE_STATUS: 'segmentation-change-status',
-    PLAYER_LIST: 'segmentation-player-list'
+    PLAYER_LIST: 'segmentation-player-list',
+    LIMIT: 'segmentation-limit',
+    LIMIT_CREATE: 'segmentation-limit-create',
+    LIMIT_EDIT: 'segmentation-limit-edit',
+    LIMIT_DELETE: 'segmentation-limit-delete',
+    LIMIT_CHANGE_STATUS: 'segmentation-limit-change-status'
   },
   AFFILIATES: {
     LIST: 'affiliate-view',

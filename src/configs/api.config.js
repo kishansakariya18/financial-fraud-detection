@@ -361,6 +361,14 @@ export const apiConfig = {
       UPDATE: '/admin/user-class-limits/update',
       CHANGE_STATUS: '/admin/user-class-limits/:userClassLimitUID/change-status',
       DELETE: '/admin/user-class-limits/:userClassLimitUID/delete'
+    },
+    SEGMENTATION_LIMIT: {
+      LIST: '/admin/segmentation-limits/list',
+      CREATE: '/admin/segmentation-limits/create',
+      DETAIL: '/admin/segmentation-limits/:segmentationLimitUID/detail',
+      UPDATE: '/admin/segmentation-limits/update',
+      CHANGE_STATUS: '/admin/segmentation-limits/:segmentationLimitUID/change-status',
+      DELETE: '/admin/segmentation-limits/:segmentationLimitUID/delete'
     }
   }
 };
