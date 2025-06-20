@@ -420,7 +420,7 @@
   "limit_type": "Limit Type",
   "limit_period": "Limit Period",
   "limit_amount": "Limit Amount",
-  "search_limit_name": "Search Limit",
+  "search_limit_name": "Search Limits",
   "class_code": "Class Code",
   "class_name": "Class Name",
   "class_name_required": "Class Name Required",

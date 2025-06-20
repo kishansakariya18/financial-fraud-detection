@@ -423,5 +423,6 @@
   "class_name": "Nom de classe",
   "class_name_required": "Nom de la classe est requis",
   "class_code_required": "Code de la classe est requis" ,
-  "user_class_limit_delete_desc":"Êtes-vous sûr de vouloir supprimer cette Classe de joueur ?"
+  "user_class_limit_delete_desc":"Êtes-vous sûr de vouloir supprimer cette Classe de joueur ?",
+  "search_limit_name": "Rechercher limites"
 }
