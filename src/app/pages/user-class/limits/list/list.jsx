@@ -29,7 +29,8 @@ export default function UserClassLimitsList() {
     console.log('queryParams', queryParams);
     const result = await UserClassService.userClassLimitList({
       filters: { userClassID: userClassUID, ...queryParams },
-      pagination: { pageIndex, pageSize }
+      pagination: { pageIndex, pageSize },
+      totalPage: queryParams.totalPage
     });
 
     const apiData = userclassLimitListResponseMapper(result.response);

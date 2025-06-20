@@ -422,5 +422,6 @@
   "class_code": "Código de la clase",
   "class_name": "Nombre de la clase",
   "class_name_required": "Nombre de la clase es requerido",
-  "class_code_required": "Código de la clase es requerido"
+  "class_code_required": "Código de la clase es requerido",
+  "user_class_limit_delete_desc":"¿Estás seguro de querer eliminar esta Clase de jugador?"
 }
