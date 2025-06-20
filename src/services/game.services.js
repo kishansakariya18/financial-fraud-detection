@@ -72,7 +72,12 @@ const GameService = {
       const formData = new FormData();
 
       formData.append('name', data.name);
-      formData.append('categoryId', data.categoryId);
+      // Handle multiple category IDs
+      if (Array.isArray(data.categoryId)) {
+        data.categoryId.forEach((catId, idx) => {
+          formData.append(`categoryIds[${idx}]`, catId);
+        });
+      }
       formData.append('minBetAmount', data.minBetAmount);
       formData.append('maxBetAmount', data.maxBetAmount);
 
@@ -98,6 +103,23 @@ const GameService = {
   changeGameStatus: async (gameId) => {
     try {
       const endpoint = replaceText(apiConfig.endPoints.GAME.CHANGE_STATUS, ':gameId', gameId);
+
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + endpoint,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
+  getGameSummary: async () => {
+    try {
+      const endpoint = apiConfig.endPoints.GAME.SUMMARY;
 
       const response = await sendRequest({
         url: apiConfig.baseURL.API_BASE_URL + endpoint,

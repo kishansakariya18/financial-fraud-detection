@@ -25,18 +25,16 @@ export const rolePermissionListMapper = (apiData) => {
 
 export const roleDetailMapper = (apiData) => {
   return {
-    rolePermissionID: apiData.RolePermissionID,
     roleID: apiData.RoleID,
     roleName: apiData.RoleName,
-    createBy: apiData.CreateBy,
-    permissionIDs: apiData?.PermissionID?.split(',')?.map((item) => +item),
+    permissionIDs: apiData?.PermissionID,
     status: apiData.Status
   };
 };
 
 export const responseMapper = (apiData) => {
   const resultData = apiData.map((data) => ({
-    id: data.RolePermissionID,
+    id: data.RoleID,
     roleName: data.RoleName,
     createBy: data.Username,
     createdAt: getDateInUTCToTimeZone(data.DateCreated)

@@ -59,6 +59,22 @@ const AdminService = {
       console.log('Error', err);
     }
   },
+  getAdminSummary: async () => {
+    try {
+      const endPoint = apiConfig.endPoints.ADMIN_USER.ADMIN_SUMMARY;
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + endPoint,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
   changeAdminStatus: async (adminUID) => {
     try {
       const endPoint = replaceText(

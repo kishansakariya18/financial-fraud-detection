@@ -5,7 +5,6 @@ import { Controller, useForm } from 'react-hook-form';
 import { Button, Input } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
 import CrmService from 'services/crm.services';
 import { crmSchema } from './schema';
@@ -34,8 +33,6 @@ const Send = () => {
 
   const [response, setResponse] = useState(null);
   const [htmlContent, setHtmlContent] = useState('');
-
-  const breadcrumbItem = [{ title: t('crm'), path: '/crm' }, { title: t('send') }];
 
   // const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
@@ -127,10 +124,6 @@ const Send = () => {
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
             {t('crm')}
           </h2>
-          <div className="hidden self-stretch py-1 sm:flex">
-            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
-          </div>
-          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">

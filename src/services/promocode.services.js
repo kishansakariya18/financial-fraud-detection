@@ -243,6 +243,24 @@ const PromoCodeService = {
       console.log('Error from get promocode segmentation', err);
     }
   },
+  getPromoCodeSummary: async () => {
+    try {
+      const endPoint = apiConfig.endPoints.DEPOSIT_PROMOCODE.SUMMARY;
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + endPoint,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log('response: ', response);
+
+      return response;
+    } catch (err) {
+      console.log('Error from get promocode segmentation', err);
+    }
+  },
   submitSegmentationData: async (id, data) => {
     try {
       const endPoint = replaceText(

@@ -91,7 +91,7 @@ export default function TopGames() {
 
   return (
     <div className="mb-4 w-full">
-      <div className="flex flex-wrap items-center justify-between gap-2 px-[--margin-x]">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-sm+ font-medium uppercase tracking-wide text-gray-800 dark:text-dark-100">
           {title}
         </h2>
@@ -121,6 +121,7 @@ export default function TopGames() {
         table={table}
         loading={isLoading}
         paginationEnabled={false}
+        disableDefaultPadding={true}
       />
     </div>
   );

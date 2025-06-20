@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 import { Listbox } from 'components/shared/form/Listbox';
 import { promocodeTypeOptions } from './helper';
 import PromoCodeService from 'services/promocode.services';
@@ -50,6 +51,8 @@ const CreatePromocode = () => {
   const { t } = useTranslation();
 
   const breadcrumbItem = [{ title: t('promocode'), path: '/promocode' }, { title: t('create') }];
+
+  const navigate = useNavigate();
 
   const fetchInfluencerList = async () => {
     console.log('fetchInfluencerList callled');
@@ -140,6 +143,15 @@ const CreatePromocode = () => {
   if (!loading && error) {
     toast.error(error);
     setError('');
+  }
+
+  if (!loading && !error && response) {
+    toast.success(response.message);
+    setTimeout(() => {
+      navigate('/promocode');
+    }, 0);
+
+    setResponse(null);
   }
 
   const influencerOptions = affiliateList.map((affiliate) => {

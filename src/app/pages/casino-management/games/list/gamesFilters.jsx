@@ -27,7 +27,8 @@ export function ProviderFilters({
   onApplyFilters = () => {},
   onClearFilters = () => {},
   pageTitle = '',
-  providerOptions = []
+  providerOptions = [],
+  summary = null
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
@@ -72,7 +73,7 @@ export function ProviderFilters({
       <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
         <DashboardCard
           label={dummyCards.Games.TOTAL_GAMES.key}
-          value={dummyCards.Games.TOTAL_GAMES.value}
+          value={summary ? summary.totalProviders : dummyCards.Games.TOTAL_GAMES.value}
           gradientFrom={dummyCards.Games.TOTAL_GAMES.gradientFrom}
           gradientTo={dummyCards.Games.TOTAL_GAMES.gradientTo}
           textColor="text-sky-100"
@@ -80,7 +81,7 @@ export function ProviderFilters({
         />
         <DashboardCard
           label={dummyCards.Games.TOTAL_PROVIDER.key}
-          value={dummyCards.Games.TOTAL_PROVIDER.value}
+          value={summary ? summary.totalGames : dummyCards.Games.TOTAL_PROVIDER.value}
           gradientFrom={dummyCards.Games.TOTAL_PROVIDER.gradientFrom}
           gradientTo={dummyCards.Games.TOTAL_PROVIDER.gradientTo}
           textColor="text-sky-100"

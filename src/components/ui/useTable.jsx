@@ -5,6 +5,7 @@ import useDeepCompareEffect from 'use-deep-compare-effect';
 const useTable = ({
   columns,
   fetchData,
+  fetchSummary,
   queryParams = {},
   setSearchParams = null,
   initialSettings = {},
@@ -116,6 +117,7 @@ const useTable = ({
         }),
     manualFiltering: true,
     meta: {
+      fetchSummary: async () => await fetchSummary(),
       deleteRow: async () => await fetchTableData(false),
       changeStatus: async () => await fetchTableData(false),
       editRow: async () => await fetchTableData(false),

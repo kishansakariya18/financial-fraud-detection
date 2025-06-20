@@ -424,5 +424,25 @@
   "class_name_required": "Nombre de la clase es requerido",
   "class_code_required": "Código de la clase es requerido",
   "user_class_limit_delete_desc":"¿Estás seguro de querer eliminar esta Clase de jugador?",
-  "search_limit_name": "Buscar límites"
-}
+  "search_limit_name": "Buscar límites",
+  "refresh": "Refrescar",
+  "refresh_success": "Actualizado exitosamente",
+  "refresh_failed": "No actualizado debido a algún error",
+  "lastTenDeposit": "Últimos 10 depósitos",
+  "lastTenWithdraw": "Últimos 10 retiros",
+  "lastTenRegistration": "Últimas 10 inscripciones",
+  "profitLossReport": "Informe de pérdidas y ganancias",
+  "transactionCounts": "Recuentos de transacciones",
+  "gameTransactions": "Transacciones de juego",
+  "bankingTransactions": "Transacciones bancarias",
+  "platformProfit": "Beneficio de la plataforma",
+  "totalWagered": "Total apostado",
+  "totalPayout":"Pago total",
+  "casinoWageredCount": "Recuento de apuestas del casino",
+  "sportsWageredCount": "Recuento de apuestas deportivas",
+  "depositCount": "Recuento de depósitos",
+  "casinoWagered": "Casino apostado",
+  "sportsWagered": "Deportes apostados",
+  "casinoPayout": "Pago de casino",
+  "sportsPayout" : "Pago deportivo"
+  }

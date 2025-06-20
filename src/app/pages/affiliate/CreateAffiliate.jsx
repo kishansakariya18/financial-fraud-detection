@@ -20,6 +20,7 @@ import {
 } from './helper';
 import { BiMoney } from 'react-icons/bi';
 import { LuScanText } from 'react-icons/lu';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 const CreateAffiliate = () => {
   const [error, setError] = useState('');
@@ -89,6 +90,10 @@ const CreateAffiliate = () => {
       setValue('playerLossCommission', null);
     }
   }, [perSignup, perDeposit, perPlayerLoss, setValue]);
+  const breadcrumbItem = [
+    { title: t('affiliate'), path: '/users/affiliate' },
+    { title: t('create') + ' ' + t('affiliate') }
+  ];
 
   return (
     <Page title={t('create') + ' ' + t('affiliate')}>
@@ -97,8 +102,11 @@ const CreateAffiliate = () => {
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
             {t('create') + ' ' + t('affiliate') + ' ' + t('form')}
           </h2>
-          <div className="hidden self-stretch py-1 sm:flex">
-            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          <div className="ml-4 flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+            <div className="hidden self-stretch py-1 sm:flex">
+              <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+            </div>
+            <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
           </div>
         </div>
 

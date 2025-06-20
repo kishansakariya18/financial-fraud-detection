@@ -5,6 +5,7 @@ export const translator = (t, text, ns) => t(`${text}`, { ns });
 export const responseMapper = (apiData) => {
   const resultData = apiData.map((data) => ({
     id: data.GatewayID,
+    uid: data.GatewayUID,
     gatewayName: data.Name,
     status: pagesStatusToAPP(data.IsActive)
   }));

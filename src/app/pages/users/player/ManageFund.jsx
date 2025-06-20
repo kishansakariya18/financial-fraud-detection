@@ -17,6 +17,7 @@ import { useParams } from 'react-router';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { useDisclosure } from 'hooks';
 import { FaMoneyBill1Wave, FaMoneyBillTransfer } from 'react-icons/fa6';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 const ManageFund = () => {
   const [error, setError] = useState('');
@@ -99,14 +100,24 @@ const ManageFund = () => {
   const onSubmit = async (data) => {
     await manageFundAPI(data);
   };
+  const breadcrumbItem = [
+    { title: t('players'), path: '/users/player' },
+    { title: t('manage') + ' ' + t('fund') }
+  ];
 
   return (
     <Page title={t('manage') + ' ' + t('fund')}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
         <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
-          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
+          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
             {t('manage') + ' ' + t('fund')}
           </h2>
+          <div className="ml-4 flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+            <div className="hidden self-stretch py-1 sm:flex">
+              <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+            </div>
+            <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
+          </div>
         </div>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <div className="rounded-lg bg-gray-100 p-3 dark:bg-surface-3 2xl:p-4">

@@ -14,6 +14,7 @@ import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions
 import { useTranslation } from 'react-i18next';
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline';
 import { useClipboard } from 'hooks';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 const ViewDetails = () => {
   //   const kycFormCtx = useKYCFormContext();
@@ -43,14 +44,19 @@ const ViewDetails = () => {
     fetchAdminDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [adminId]);
-
+  const breadcrumbItem = [{ title: t('admin'), path: '/admin' }, { title: t('details') }];
   return (
     <Page title={pageTitle}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
-        <h2 className="py-5 text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:py-6 lg:text-2xl">
-          {pageTitle}
-        </h2>
-
+        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+          <h2 className="py-5 text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:py-6 lg:text-2xl">
+            {pageTitle}
+          </h2>
+          <div className="hidden self-stretch py-1 sm:flex">
+            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          </div>
+          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
+        </div>
         <div className="col-span-12 sm:col-span-8 lg:col-span-9">
           <Card className="h-full p-4 sm:p-5">
             <h6 className="mt-4 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">

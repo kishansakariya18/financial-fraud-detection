@@ -21,6 +21,7 @@ import {
 import { BiMoney } from 'react-icons/bi';
 import { LuScanText } from 'react-icons/lu';
 import { editAffiliateSchema } from './schema';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 const EditAffiliate = () => {
   const [error, setError] = useState('');
@@ -129,6 +130,11 @@ const EditAffiliate = () => {
   const onSubmit = async (data) => {
     await editAffiliateAPI({ affiliateUID: affiliateId, ...data });
   };
+  const breadcrumbItem = [
+    { title: t('affiliate'), path: '/users/affiliate' },
+    { title: t('edit') + ' ' + t('affiliate') }
+  ];
+
   return (
     <Page title={t('edit') + ' ' + t('affiliate')}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
@@ -136,8 +142,11 @@ const EditAffiliate = () => {
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
             {t('edit') + ' ' + t('affiliate') + ' ' + t('form')}
           </h2>
-          <div className="hidden self-stretch py-1 sm:flex">
-            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          <div className="ml-4 flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+            <div className="hidden self-stretch py-1 sm:flex">
+              <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+            </div>
+            <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
           </div>
         </div>
 

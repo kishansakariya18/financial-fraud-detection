@@ -70,17 +70,10 @@ export const columns = [
     cell: AmountCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.coin, {
-    id: 'coin',
-    header: 'Coin',
-    label: 'Coin',
-    cell: AmountCell,
-    enableSorting: false
-  }),
   columnHelper.accessor((row) => row.createdAt, {
     id: 'createdAt',
     label: 'Date',
-    header: 'Created At',
+    header: 'Registration Date',
     cell: DateCell,
     filterFn: 'inNumberRange',
     enableSorting: false

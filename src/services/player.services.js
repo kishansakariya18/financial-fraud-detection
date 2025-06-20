@@ -270,7 +270,42 @@ const PlayerService = {
       });
       return response;
     } catch (error) {
-      console.log('Error from user referral list', error);
+      console.log('Error from user detail list', error);
+    }
+  },
+  userSummary: async () => {
+    try {
+      const endPoint = apiConfig.endPoints.USER.SUMMARY;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from user summary list', error);
+    }
+  },
+  getUserSummary: async (userID) => {
+    try {
+      const endPoint = apiConfig.endPoints.USER.USER_SUMMARY;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        params: {
+          userID: userID
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from user specific summary', error);
     }
   },
   playerTransactionDetail: async (data) => {

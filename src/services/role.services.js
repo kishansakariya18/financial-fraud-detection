@@ -94,7 +94,7 @@ const RoleService = {
       const reqData = {
         roleName: data.roleName,
         permissionID: data.permissionsIdList,
-        rolePermissionID: data.rolePermissionID
+        roleId: data.roleId
       };
       const endPoint = apiConfig.endPoints.ROLES.EDIT;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;

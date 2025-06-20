@@ -65,7 +65,9 @@ export const apiConfig = {
       GET_COMMENT_DETAIL: '/admin/users/get-comment-detail',
       ADD_COMMENT: '/admin/users/add-comment',
       DELETE_COMMENT: '/admin/users/delete-comment',
-      CHANE_PLAYER_FUND_PASSWORD: '/admin/user/change-manage-fund-password'
+      CHANE_PLAYER_FUND_PASSWORD: '/admin/user/change-manage-fund-password',
+      SUMMARY: '/admin/users/summary',
+      USER_SUMMARY: '/admin/user/summary'
     },
     ADMIN_USER: {
       ADMIN_LIST: '/admin/admin/list',
@@ -83,7 +85,8 @@ export const apiConfig = {
       ADMIN_PERMISSION: '/admin/permissions',
       ADMIN_EDIT: '/admin/admin/edit',
       UPDATE_PROFILE: '/admin/update-profile',
-      ADMIN_COUNTRY_LIST: '/admin/countries'
+      ADMIN_COUNTRY_LIST: '/admin/countries',
+      ADMIN_SUMMARY: '/admin/admin/summary'
     },
     TENANT: {
       LIST: '/admin/tenant/list',
@@ -102,7 +105,10 @@ export const apiConfig = {
       KPI_SUMMARY: '/admin/dashboard/kpi-summary',
       CASINO_STATS: '/admin/dashboard/casino-stats',
       TOP_PLAYERS: '/admin/dashboard/top-players',
-      TOP_GAMES: '/admin/dashboard/top-games'
+      TOP_GAMES: '/admin/dashboard/top-games',
+      LAST_DEPOSITOR: '/admin/dashboard/last-depositor',
+      LAST_WITHDRAWAL: '/admin/dashboard/last-withdrawer',
+      LAST_SIGNUP: '/admin/dashboard/last-signup'
     },
     DEPOSIT_PROMOCODE: {
       PROMOCODE_LIST: '/admin/v1/deposit-promocode/list',
@@ -113,7 +119,8 @@ export const apiConfig = {
       PROMOCODE_SEGMENTATION: '/admin/v1/deposit-promocode/:promocodeId/segmentation',
       PROMOCODE_UPLOAD_SEGMENTATION: '/admin/v1/deposit-promocode/:promocodeId/segmentation',
       PROMOCODE_REMOVE_SEGMENTATION: '/admin/v1/deposit-promocode/:promocodeId/segmentation',
-      PROMOCODE_DELETE: '/admin/v1/deposit-promocode/:promocodeId'
+      PROMOCODE_DELETE: '/admin/v1/deposit-promocode/:promocodeId',
+      SUMMARY: '/admin/v1/deposit-promocode/summary'
     },
     APP_SETTING: {
       APP_SETTING_LIST: '/admin/app-setting/list',
@@ -144,7 +151,8 @@ export const apiConfig = {
       UPDATE_PAYOUT: '/admin/affiliates/update-payout',
       FUND: '/admin/affiliates/fund',
       AFFILIATE_LOGIN_HISTORY: '/admin/affiliates/:affiliateID/login-history',
-      CHANGE_AFFILIATE_FUND_PASSWORD: '/admin/affiliate/change-manage-fund-password'
+      CHANGE_AFFILIATE_FUND_PASSWORD: '/admin/affiliate/change-manage-fund-password',
+      SUMMARY: '/admin/affiliates/summary'
     },
     APP_VERSION: {
       LIST: '/admin/app-version/list',
@@ -249,10 +257,12 @@ export const apiConfig = {
       ADD_EDIT: '/admin/segmentation/add-edit',
       COUNTRY_LIST: '/admin/segmentation/countries',
       CHANGE_STATUS: '/admin/segmentation/:segmentationId/change-status',
-      USER_LIST: '/admin/segmentation/player-list'
+      USER_LIST: '/admin/segmentation/player-list',
+      REFRESH_USER_LIST: '/admin/segmentation/:segmentationId/refresh'
     },
     COUNTRY: {
       LIST: '/admin/country/list',
+      SUMMARY: '/admin/country/summary',
       CHANGE_STATUS: '/admin/country/:countryId/change-status'
     },
     PAYMENT: {
@@ -267,6 +277,7 @@ export const apiConfig = {
     },
     CATEGORY: {
       LIST: '/admin/casino-management/category/list',
+      SUMMARY: '/admin/casino-management/category/summary',
       CREATE: '/admin/casino-management/category/create',
       EDIT: '/admin/casino-management/category/:categoryId/edit',
       DELETE: '/admin/casino-management/category/:categoryId/delete',
@@ -275,6 +286,7 @@ export const apiConfig = {
     PROVIDER: {
       ALL_LIST: '/admin/casino-management/provider/all',
       LIST: '/admin/casino-management/provider/list',
+      SUMMARY: '/admin/casino-management/provider/summary',
       CREATE: '/admin/casino-management/provider/create',
       EDIT: '/admin/casino-management/provider/:providerId/edit',
       DELETE: '/admin/casino-management/provider/:providerId/delete',
@@ -289,6 +301,7 @@ export const apiConfig = {
     },
     GAME: {
       LIST: '/admin/casino-management/games/list',
+      SUMMARY: '/admin/casino-management/games/summary',
       DETAILS: '/admin/casino-management/games/:gameUID/details',
       CREATE: '/admin/casino-management/games/create',
       EDIT: '/admin/casino-management/games/:gameId/edit',
@@ -322,6 +335,7 @@ export const apiConfig = {
       ADD_HOME_GAME_LIST: '/admin/home-page/home-category/home-game/add-game-list',
       ADD_HOME_GAMES: '/admin/home-page/home-category/home-game/add-games',
       REORDER_CATEGORY: '/admin/home-page/home-category/reorder-category',
+      DELETE_THEME: '/admin/home-page/appearance/delete',
       REORDER_GAMES: '/admin/home-page/home-category/home-game/reorder-games',
       DELETE_HOME_GAME: '/admin/home-page/home-category/home-game/:homePageGameId/delete',
       ADD_APPEARANCE: '/admin/home-page/appearance/add',

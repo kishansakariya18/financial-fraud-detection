@@ -21,7 +21,8 @@ export function CountryFilters({
   table,
   onApplyFilters = () => {},
   onClearFilters = () => {},
-  pageTitle = ''
+  pageTitle = '',
+  summary = null
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
@@ -42,7 +43,7 @@ export function CountryFilters({
       <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
         <DashboardCard
           label={dummyCards.Country.TOTAL_COUNTRY.key}
-          value={dummyCards.Country.TOTAL_COUNTRY.value}
+          value={summary ? summary.totalCountries : dummyCards.Country.TOTAL_COUNTRY.value}
           gradientFrom={dummyCards.Country.TOTAL_COUNTRY.gradientFrom}
           gradientTo={dummyCards.Country.TOTAL_COUNTRY.gradientTo}
           textColor="text-sky-100"
@@ -50,7 +51,7 @@ export function CountryFilters({
         />
         <DashboardCard
           label={dummyCards.Country.ACTIVE_COUNTRY.key}
-          value={dummyCards.Country.ACTIVE_COUNTRY.value}
+          value={summary ? summary.activeCountries : dummyCards.Country.ACTIVE_COUNTRY.value}
           gradientFrom={dummyCards.Country.ACTIVE_COUNTRY.gradientFrom}
           gradientTo={dummyCards.Country.ACTIVE_COUNTRY.gradientTo}
           textColor="text-sky-100"
@@ -58,7 +59,7 @@ export function CountryFilters({
         />
         <DashboardCard
           label={dummyCards.Country.INACTIVE_COUNTRY.key}
-          value={dummyCards.Country.INACTIVE_COUNTRY.value}
+          value={summary ? summary.inactiveCountries : dummyCards.Country.INACTIVE_COUNTRY.value}
           gradientFrom={dummyCards.Country.INACTIVE_COUNTRY.gradientFrom}
           gradientTo={dummyCards.Country.INACTIVE_COUNTRY.gradientTo}
           textColor="text-sky-100"

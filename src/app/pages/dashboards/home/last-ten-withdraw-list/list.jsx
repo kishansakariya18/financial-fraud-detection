@@ -8,11 +8,11 @@ import useTable from 'components/ui/useTable';
 import DashboardService from 'services/dashboard.services';
 import { t } from 'i18next';
 
-export default function KPISummaryList() {
-  const title = `${t('kpi')} ${t('summary')}`;
+export default function LastTenWithdrawList() {
+  const title = `${t('lastTenWithdraw')}`;
 
-  const fetchKPISummaryList = async () => {
-    const result = await DashboardService.getKPISummary({
+  const fetchLastTenDepositList = async () => {
+    const result = await DashboardService.getLastWithdrawal({
       filters: {}
     });
     console.log('result: ', result.response);
@@ -22,8 +22,7 @@ export default function KPISummaryList() {
     if (result.status === 200) {
       return {
         status: 200,
-        data: apiData,
-        totalRecords: parseInt(result?.response?.totalRecords)
+        data: apiData
       };
     }
     return { status: result.status, error: result.error };
@@ -31,7 +30,7 @@ export default function KPISummaryList() {
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
-    fetchData: fetchKPISummaryList,
+    fetchData: fetchLastTenDepositList,
     initialSettings: {
       tableSettings: { enableFullScreen: false }
     },

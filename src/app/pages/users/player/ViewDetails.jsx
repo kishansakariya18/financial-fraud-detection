@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 // Local Imports
 import { Button, Card, Skeleton } from 'components/ui';
+import { Chart } from 'components/custom/Chart';
 import { Link, useNavigate, useParams } from 'react-router';
 import { Page } from 'components/shared/Page';
 import { playerStatusToApp, selfExclusionMapper } from './helper';
@@ -16,11 +17,13 @@ import { DocumentDuplicateIcon } from '@heroicons/react/20/solid';
 import { toast } from 'sonner';
 import RenderImage from 'components/ui/custom/ImageRender';
 import apiConfig from 'configs/api.config';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 export function ViewDetails() {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState('');
+  const [userSummary, setUserSummary] = useState(null);
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { playerId } = useParams();
@@ -40,8 +43,21 @@ export function ViewDetails() {
     setLoading(false);
   };
 
+  const fetchUserSummary = async () => {
+    try {
+      const summaryResult = await PlayerService.getUserSummary(playerId);
+      console.log('User Summary API Response:', summaryResult);
+      if (summaryResult.status === 200) {
+        setUserSummary(summaryResult.response.data);
+      }
+    } catch (error) {
+      console.log('Error fetching user summary:', error);
+    }
+  };
+
   useEffect(() => {
     fetchPlayerDetails();
+    fetchUserSummary();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerId]);
 
@@ -49,16 +65,317 @@ export function ViewDetails() {
     toast.error(error);
     setError('');
   }
+  const breadcrumbItem = [{ title: t('players'), path: '/users/player' }, { title: t('details') }];
+
+  // Chart for Profit/Loss breakdown
+  const getProfitLossChartData = () => {
+    if (!userSummary?.ProfitLoss) return null;
+
+    const { PlatformProfit, TotalWagered, TotalPayout } = userSummary.ProfitLoss;
+    const total = PlatformProfit + TotalWagered + TotalPayout;
+
+    if (total === 0) return null;
+
+    return {
+      type: 'pie',
+      height: 300,
+      series: [PlatformProfit, TotalWagered, TotalPayout],
+      options: {
+        chart: {
+          type: 'pie',
+          toolbar: {
+            show: false
+          }
+        },
+        labels: [t('platformProfit'), t('totalWagered'), t('totalPayout')],
+        legend: {
+          position: 'bottom',
+          fontSize: '14px',
+          fontFamily: 'inherit',
+          labels: {
+            colors: '#374151'
+          }
+        },
+        dataLabels: {
+          enabled: true,
+          formatter: function (val, opts) {
+            const value = opts.w.globals.series[opts.seriesIndex];
+            const percentage = val.toFixed(1);
+            return `${percentage}%\n(${value})`;
+          },
+          style: {
+            fontSize: '12px',
+            fontFamily: 'inherit',
+            fontWeight: '600',
+            colors: ['#ffffff', '#ffffff', '#ffffff']
+          }
+        },
+        tooltip: {
+          y: {
+            formatter: function (value) {
+              return `${value}`;
+            }
+          }
+        },
+        plotOptions: {
+          pie: {
+            donut: {
+              size: '60%'
+            },
+            offsetY: 0
+          }
+        },
+        stroke: {
+          colors: ['#fff'],
+          width: 2
+        },
+        states: {
+          hover: {
+            filter: {
+              type: 'darken',
+              value: 0.1
+            }
+          }
+        }
+      }
+    };
+  };
+
+  // Chart for Transaction Counts
+  const getTransactionCountsChartData = () => {
+    if (!userSummary?.TransactionCounts) return null;
+
+    const { CasinoWageredCount, SportsWageredCount, DepositCount } = userSummary.TransactionCounts;
+    const total = CasinoWageredCount + SportsWageredCount + DepositCount;
+
+    if (total === 0) return null;
+
+    return {
+      type: 'pie',
+      height: 300,
+      series: [CasinoWageredCount, SportsWageredCount, DepositCount],
+      options: {
+        chart: {
+          type: 'pie',
+          toolbar: {
+            show: false
+          }
+        },
+        labels: [t('casinoWageredCount'), t('sportsWageredCount'), t('depositCount')],
+        legend: {
+          position: 'bottom',
+          fontSize: '14px',
+          fontFamily: 'inherit',
+          labels: {
+            colors: '#374151'
+          }
+        },
+        dataLabels: {
+          enabled: true,
+          formatter: function (val, opts) {
+            const value = opts.w.globals.series[opts.seriesIndex];
+            const percentage = val.toFixed(1);
+            return `${percentage}%\n(${value})`;
+          },
+          style: {
+            fontSize: '12px',
+            fontFamily: 'inherit',
+            fontWeight: '600',
+            colors: ['#ffffff', '#ffffff', '#ffffff']
+          }
+        },
+        tooltip: {
+          y: {
+            formatter: function (value) {
+              return `${value} ${t('transactions')}`;
+            }
+          }
+        },
+        plotOptions: {
+          pie: {
+            donut: {
+              size: '60%'
+            },
+            offsetY: 0
+          }
+        },
+        stroke: {
+          colors: ['#fff'],
+          width: 2
+        },
+        states: {
+          hover: {
+            filter: {
+              type: 'darken',
+              value: 0.1
+            }
+          }
+        }
+      }
+    };
+  };
+
+  // Chart for Game Transactions
+  const getGameTransactionsChartData = () => {
+    if (!userSummary?.GameTransactions) return null;
+
+    const { CasinoWagered, SportsWagered, CasinoPayout, SportsPayout } =
+      userSummary.GameTransactions;
+    const total = CasinoWagered + SportsWagered + CasinoPayout + SportsPayout;
+
+    if (total === 0) return null;
+
+    return {
+      type: 'pie',
+      height: 300,
+      series: [CasinoWagered, SportsWagered, CasinoPayout, SportsPayout],
+      options: {
+        chart: {
+          type: 'pie',
+          toolbar: {
+            show: false
+          }
+        },
+        labels: [t('casinoWagered'), t('sportsWagered'), t('casinoPayout'), t('sportsPayout')],
+        legend: {
+          position: 'bottom',
+          fontSize: '14px',
+          fontFamily: 'inherit',
+          labels: {
+            colors: '#374151'
+          }
+        },
+        dataLabels: {
+          enabled: true,
+          formatter: function (val, opts) {
+            const value = opts.w.globals.series[opts.seriesIndex];
+            const percentage = val.toFixed(1);
+            return `${percentage}%\n(${value})`;
+          },
+          style: {
+            fontSize: '12px',
+            fontFamily: 'inherit',
+            fontWeight: '600',
+            colors: ['#ffffff', '#ffffff', '#ffffff', '#ffffff']
+          }
+        },
+        tooltip: {
+          y: {
+            formatter: function (value) {
+              return `${value}`;
+            }
+          }
+        },
+        plotOptions: {
+          pie: {
+            donut: {
+              size: '60%'
+            },
+            offsetY: 0
+          }
+        },
+        stroke: {
+          colors: ['#fff'],
+          width: 2
+        },
+        states: {
+          hover: {
+            filter: {
+              type: 'darken',
+              value: 0.1
+            }
+          }
+        }
+      }
+    };
+  };
+
+  // Chart for Banking Transactions
+  const getBankingTransactionsChartData = () => {
+    if (!userSummary?.BankingTransactions) return null;
+
+    const { Deposit, Withdraw } = userSummary.BankingTransactions;
+    const total = Deposit + Withdraw;
+
+    if (total === 0) return null;
+
+    return {
+      type: 'pie',
+      height: 300,
+      series: [Deposit, Withdraw],
+      options: {
+        chart: {
+          type: 'pie',
+          toolbar: {
+            show: false
+          }
+        },
+        labels: [t('deposit'), t('withdraw')],
+        legend: {
+          position: 'bottom',
+          fontSize: '14px',
+          fontFamily: 'inherit',
+          labels: {
+            colors: '#374151'
+          }
+        },
+        dataLabels: {
+          enabled: true,
+          formatter: function (val, opts) {
+            const value = opts.w.globals.series[opts.seriesIndex];
+            const percentage = val.toFixed(1);
+            return `${percentage}%\n(${value})`;
+          },
+          style: {
+            fontSize: '12px',
+            fontFamily: 'inherit',
+            fontWeight: '600',
+            colors: ['#ffffff', '#ffffff']
+          }
+        },
+        tooltip: {
+          y: {
+            formatter: function (value) {
+              return `${value}`;
+            }
+          }
+        },
+        plotOptions: {
+          pie: {
+            donut: {
+              size: '60%'
+            },
+            offsetY: 0
+          }
+        },
+        stroke: {
+          colors: ['#fff'],
+          width: 2
+        },
+        states: {
+          hover: {
+            filter: {
+              type: 'darken',
+              value: 0.1
+            }
+          }
+        }
+      }
+    };
+  };
 
   return (
     <Page title={pageTitle}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
         <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
-          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
+          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
             {pageTitle}
           </h2>
-          <div className="hidden self-stretch py-1 sm:flex">
-            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          <div className="ml-4 flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+            <div className="hidden self-stretch py-1 sm:flex">
+              <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+            </div>
+            <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
           </div>
         </div>
 
@@ -70,6 +387,31 @@ export function ViewDetails() {
           ) : (
             <>
               <Card className="h-350 p-4 sm:p-5">
+                {(getProfitLossChartData() ||
+                  getTransactionCountsChartData() ||
+                  getGameTransactionsChartData() ||
+                  getBankingTransactionsChartData()) && (
+                  <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
+                    {getProfitLossChartData() && (
+                      <Chart data={getProfitLossChartData()} title={t('profitLossReport')} />
+                    )}
+                    {getTransactionCountsChartData() && (
+                      <Chart
+                        data={getTransactionCountsChartData()}
+                        title={t('transactionCounts')}
+                      />
+                    )}
+                    {getGameTransactionsChartData() && (
+                      <Chart data={getGameTransactionsChartData()} title={t('gameTransactions')} />
+                    )}
+                    {getBankingTransactionsChartData() && (
+                      <Chart
+                        data={getBankingTransactionsChartData()}
+                        title={t('bankingTransactions')}
+                      />
+                    )}
+                  </div>
+                )}
                 <h6 className="mt-8 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
                   {t('player') + ' ' + t('information')}
                 </h6>
@@ -562,6 +904,7 @@ export function ViewDetails() {
                     <p>{!response.ExclusionStartAt || !response.ExclusionEndAt ? '-' : ''}</p>
                   </div>
                 </div>
+
                 <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
                   <Button className="min-w-[7rem]" onClick={() => navigate('/users/player')}>
                     {t('back')}
