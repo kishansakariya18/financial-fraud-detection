@@ -17,6 +17,7 @@ import { placementTypeOptions } from './helper';
 import SegmentationService from 'services/segmentation.services';
 import { DatePicker } from 'components/shared/form/Datepicker';
 import apiConfig from 'configs/api.config';
+import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 const EditBanner = () => {
   const [error, setError] = useState('');
@@ -91,8 +92,8 @@ const EditBanner = () => {
             placementType: result?.PlacementType || 0,
             segmentationType: result?.HasUserSegmentation || 0,
             segmentIds: result?.SegmentationIds,
-            startDate: result?.StartDate,
-            endDate: result?.EndDate,
+            startDate: getDateInUTCToTimeZone(result?.StartDate, undefined, 'YYYY-MM-DD HH:mm'),
+            endDate: getDateInUTCToTimeZone(result?.EndDate, undefined, 'YYYY-MM-DD HH:mm'),
             bannerHeadline: result?.bannerContent[0]?.HeadLine,
             bannerSubHeadline: result?.bannerContent[0]?.SubHeadLine,
             targetUrl: result?.bannerContent[0]?.TargetURL,

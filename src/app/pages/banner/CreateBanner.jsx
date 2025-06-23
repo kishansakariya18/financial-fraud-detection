@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router';
 const CreateBanner = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [segmentationType, setSegmentationType] = useState('0');
+  const [segmentationType, setSegmentationType] = useState(0);
   const [segmentationList, setSegmentationList] = useState([]);
   const [segmentationIds, setSegmentationIds] = useState([]);
   const [file, setFile] = useState();
@@ -105,17 +105,23 @@ const CreateBanner = () => {
   }
 
   const onSubmit = async (data) => {
-    if (file) {
-      const apiData = {
-        segmentationType,
-        segmentationIds
-      };
-      console.log('{ ...data, ...apiData }: ', { ...data, ...apiData });
-
-      await createBannerAPI({ ...data, ...apiData });
-    } else {
-      toast.error(t('image_required'));
+    if (segmentationType && segmentationIds.length === 0) {
+      toast.error(t('segmentation_required'));
+      return false;
     }
+
+    if (!file) {
+      toast.error(t('image_required'));
+      return false;
+    }
+
+    const apiData = {
+      segmentationType,
+      segmentationIds
+    };
+    console.log('{ ...data, ...apiData }: ', { ...data, ...apiData });
+
+    await createBannerAPI({ ...data, ...apiData });
   };
   return (
     <Page title={t('create') + ' ' + t('banner')}>
@@ -181,15 +187,6 @@ const CreateBanner = () => {
               </div>
 
               {segmentationType === 1 && (
-                // <CustomSelect
-                //   id="segmemtation"
-                //   showLabel={t('select') + ' ' + t('segmentation')}
-                //   options={segmentationOptions}
-                //   isMulti={true}
-                //   error={segmentationOptionsError}
-                //   value={segmentationIds}
-                //   onChange={handleSegmentationChange}
-                // />
                 <Controller
                   render={({ field }) => (
                     <Listbox

@@ -1,6 +1,6 @@
 import { parseBannerStatusToApi } from 'app/pages/banner/helper';
 import apiConfig from 'configs/api.config';
-import { getEndDate, getStartDate } from 'helpers/functions';
+import { getEndDate, getEndOfDate, getStartDate, getStartofDate } from 'helpers/functions';
 import { sendRequest } from 'utils/axios';
 import { replaceText } from 'utils/custom.utilities';
 
@@ -47,8 +47,8 @@ const BannerService = {
       const formData = new FormData();
       data.bannerName && formData.append('bannerName', data.bannerName);
       data.placementType && formData.append('placementType', data.placementType);
-      data.startDate && formData.append('startDate', getStartDate(+data.startDate));
-      data.endDate && formData.append('endDate', getEndDate(+data.endDate));
+      data.startDate && formData.append('startDate', getStartofDate(+data.startDate));
+      data.endDate && formData.append('endDate', getEndOfDate(+data.endDate));
       data.bannerHeadline && formData.append('headLine', data.bannerHeadline);
       data.bannerSubHeadline && formData.append('subHeadLine', data.bannerSubHeadline);
       data.targetUrl && formData.append('targetUrl', data.targetUrl);
@@ -88,8 +88,8 @@ const BannerService = {
       const formData = new FormData();
       data.bannerName && formData.append('bannerName', data.bannerName);
       data.placementType && formData.append('placementType', data.placementType);
-      data.startDate && formData.append('startDate', getStartDate(+data.startDate));
-      data.endDate && formData.append('endDate', getEndDate(+data.endDate));
+      data.startDate && formData.append('startDate', getStartofDate(+data.startDate));
+      data.endDate && formData.append('endDate', getEndOfDate(+data.endDate));
       data.bannerHeadline && formData.append('headLine', data.bannerHeadline);
       data.bannerSubHeadline && formData.append('subHeadLine', data.bannerSubHeadline);
       data.targetUrl && formData.append('targetUrl', data.targetUrl);

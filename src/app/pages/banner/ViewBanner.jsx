@@ -91,19 +91,19 @@ export default function ViewBannerDetails() {
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('banner') + ' ' + t('headline')}
                   </p>
-                  <p>{response?.bannerContent[0]?.HeadLine}</p>
+                  <p>{response?.bannerContent[0]?.HeadLine || '-'}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('banner') + ' ' + t('subHeadline')}
                   </p>
-                  <p>{response?.bannerContent[0]?.SubHeadLine}</p>
+                  <p>{response?.bannerContent[0]?.SubHeadLine || '-'}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('targetUrl')}
                   </p>
-                  <p>{response?.bannerContent[0]?.TargetURL}</p>
+                  <p>{response?.bannerContent[0]?.TargetURL || '-'}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
