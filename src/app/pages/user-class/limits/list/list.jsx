@@ -39,7 +39,9 @@ export default function UserClassLimitsList() {
       return {
         status: 200,
         data: apiData.list,
-        totalRecords: parseInt(result?.response?.totalRecords) || DEFAULT_PER_PAGE_RECORD
+        totalRecords:
+          parseInt(result.response?.total_records, 10) || result.response?.data?.length || 0,
+        totalPages: result.response?.total_pages || 1
       };
     }
     return { status: result.status, error: result.error };

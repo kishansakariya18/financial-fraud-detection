@@ -10,7 +10,7 @@ const UserClassService = {
 
       const reqBody = {
         page: pagination.pageIndex + 1,
-        limit: pagination.pageSize,
+        per_page: pagination.pageSize,
         filters: {
           keyword: filters?.keyword || undefined,
           status: userclassStatusToAPI(filters?.status)
@@ -136,7 +136,7 @@ const UserClassService = {
 
       const reqBody = {
         page: pagination.pageIndex + 1,
-        limit: pagination.pageSize,
+        per_page: pagination.pageSize,
         filters: {
           userClassID: filters?.userClassID || undefined,
           keyword: filters?.limitType || undefined

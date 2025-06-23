@@ -28,8 +28,9 @@ export default function SegmentationLimitsList() {
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
     console.log('queryParams', queryParams);
     const result = await SegmentationService.segmentationLimitList({
-      filters: { segmentationID: segmentationId, ...queryParams },
-      pagination: { pageIndex, pageSize },
+      filters: { segmentationID: segmentationId },
+      page: pageIndex,
+      per_page: pageSize,
       totalPage: queryParams.totalPage
     });
 
@@ -39,7 +40,8 @@ export default function SegmentationLimitsList() {
       return {
         status: 200,
         data: apiData.list,
-        totalRecords: parseInt(result?.response?.totalRecords) || DEFAULT_PER_PAGE_RECORD
+        totalRecords: parseInt(result?.response?.total_records) || DEFAULT_PER_PAGE_RECORD,
+        totalPage: result?.response?.total_pages || 1
       };
     }
     return { status: result.status, error: result.error };
