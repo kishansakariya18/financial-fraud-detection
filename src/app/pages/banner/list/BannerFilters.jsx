@@ -1,5 +1,10 @@
 // Import Dependencies
-import { MagnifyingGlassIcon, MapPinIcon, PlusIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowPathRoundedSquareIcon,
+  MagnifyingGlassIcon,
+  MapPinIcon,
+  PlusIcon
+} from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 // import { TbCurrencyDollar } from "react-icons/tb";
 import PropTypes from 'prop-types';
@@ -15,6 +20,8 @@ import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { statusOptions } from '../helper';
 import { useNavigate } from 'react-router';
+import { PERMISSIONS } from 'constants/app.constant';
+import usePermissions from 'app/router/usePermissions';
 
 export function BannerFilters({
   table,
@@ -24,6 +31,7 @@ export function BannerFilters({
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const { hasPermission } = usePermissions();
 
   const navigate = useNavigate();
 
@@ -39,13 +47,26 @@ export function BannerFilters({
             {pageTitle}
           </h2>
         </div>
-        <Button
-          className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
-          color="primary"
-          onClick={() => navigate('/content-management/banner/create')}>
-          <PlusIcon className="size-5" />
-          <span>{t('create') + ' ' + t('banner')}</span>
-        </Button>
+        <div className="flex items-center justify-end space-x-2 rtl:space-x-reverse">
+          {hasPermission(PERMISSIONS.BANNER.EDIT) && (
+            <Button
+              className="ml-2 h-8 space-x-1.5 rounded-md px-3 text-xs"
+              color="primary"
+              onClick={() => navigate(`/content-management/banner/reorder`)}>
+              <ArrowPathRoundedSquareIcon className="size-5" />
+              <span>{t('reorder') + ' ' + t('banner')}</span>
+            </Button>
+          )}
+          {hasPermission(PERMISSIONS.BANNER.ADD) && (
+            <Button
+              className="h-8 space-x-1.5 rounded-md px-3 text-xs"
+              color="primary"
+              onClick={() => navigate('/content-management/banner/create')}>
+              <PlusIcon className="size-5" />
+              <span>{t('create') + ' ' + t('banner')}</span>
+            </Button>
+          )}
+        </div>
       </div>
       {isXs ? (
         <>
@@ -125,9 +146,9 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           showCheckbox={false}
         />
       )}
-      {table.getColumn('createdAt') && (
+      {table.getColumn('startDate') && (
         <DateFilter
-          column={table.getColumn('createdAt')}
+          column={table.getColumn('startDate')}
           title={t('date') + ' ' + t('range')}
           config={{
             maxDate: new Date().fp_incr(1),

@@ -1,6 +1,6 @@
-import { parseCategoryStatusToApi } from 'app/pages/casino-management/category/helper';
+import { parseBannerStatusToApi } from 'app/pages/banner/helper';
 import apiConfig from 'configs/api.config';
-import dayjs from 'dayjs';
+import { getEndDate, getStartDate } from 'helpers/functions';
 import { sendRequest } from 'utils/axios';
 import { replaceText } from 'utils/custom.utilities';
 
@@ -9,16 +9,18 @@ const BannerService = {
     try {
       const { pagination, filters, isPaginationRequired = true } = body;
 
-      const { status, keyword } = filters;
+      const { status, keyword, startDate, endDate } = filters;
 
       const apiQueryParams = {
-        perPage: pagination.pageSize,
-        page: pagination.pageIndex + 1
+        perPage: pagination?.pageSize,
+        page: (pagination?.pageIndex || 0) + 1
       };
 
       const apiRequestParams = {
-        status: status ? parseCategoryStatusToApi(status) : undefined,
-        keyword: keyword || undefined
+        status: status ? parseBannerStatusToApi(status) : undefined,
+        keyword: keyword || undefined,
+        startDate: startDate ? getStartDate(+startDate) : undefined,
+        endDate: endDate ? getEndDate(+endDate) : undefined
       };
 
       const response = await sendRequest({
@@ -30,6 +32,8 @@ const BannerService = {
         body: { filters: apiRequestParams, isPaginationRequired },
         params: apiQueryParams
       });
+
+      console.log('response: ', response);
 
       return response;
     } catch (err) {
@@ -43,13 +47,18 @@ const BannerService = {
       const formData = new FormData();
       data.bannerName && formData.append('bannerName', data.bannerName);
       data.placementType && formData.append('placementType', data.placementType);
-      data.startDate &&
-        formData.append('startDate', dayjs(+data.startDate).format('YYYY-MM-DD HH:mm:ss'));
-      data.endDate &&
-        formData.append('endDate', dayjs(+data.endDate).format('YYYY-MM-DD HH:mm:ss'));
+      data.startDate && formData.append('startDate', getStartDate(+data.startDate));
+      data.endDate && formData.append('endDate', getEndDate(+data.endDate));
       data.bannerHeadline && formData.append('headLine', data.bannerHeadline);
       data.bannerSubHeadline && formData.append('subHeadLine', data.bannerSubHeadline);
       data.targetUrl && formData.append('targetUrl', data.targetUrl);
+      data.segmentationType >= 0 && formData.append('segmentationType', data.segmentationType);
+
+      if (data.segmentationType === 1 && data.segmentationIds) {
+        for (let i = 0; i < data.segmentationIds.length; i++) {
+          formData.append(`segmentationIds[${i}]`, data.segmentationIds[i]);
+        }
+      }
 
       if (file && file.name) {
         formData.append('media', file, file.name);
@@ -79,13 +88,18 @@ const BannerService = {
       const formData = new FormData();
       data.bannerName && formData.append('bannerName', data.bannerName);
       data.placementType && formData.append('placementType', data.placementType);
-      data.startDate &&
-        formData.append('startDate', dayjs(+data.startDate).format('YYYY-MM-DD HH:mm:ss'));
-      data.endDate &&
-        formData.append('endDate', dayjs(+data.endDate).format('YYYY-MM-DD HH:mm:ss'));
+      data.startDate && formData.append('startDate', getStartDate(+data.startDate));
+      data.endDate && formData.append('endDate', getEndDate(+data.endDate));
       data.bannerHeadline && formData.append('headLine', data.bannerHeadline);
       data.bannerSubHeadline && formData.append('subHeadLine', data.bannerSubHeadline);
       data.targetUrl && formData.append('targetUrl', data.targetUrl);
+      data.segmentationType >= 0 && formData.append('segmentationType', data.segmentationType);
+
+      if (data.segmentationType === 1 && data.segmentationIds) {
+        for (let i = 0; i < data.segmentationIds.length; i++) {
+          formData.append(`segmentationIds[${i}]`, data.segmentationIds[i]);
+        }
+      }
 
       if (file && file.name) {
         formData.append('media', file, file.name);
@@ -152,6 +166,26 @@ const BannerService = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
+        }
+      });
+
+      return response;
+    } catch (error) {
+      console.log('error: ', error);
+    }
+  },
+  reorderBanner: async (data) => {
+    try {
+      console.log('bannerOrderList: ', data);
+
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.BANNER.BANNER_REORDER}`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          bannerOrderList: data
         }
       });
 

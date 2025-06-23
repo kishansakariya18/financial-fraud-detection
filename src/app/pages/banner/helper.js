@@ -7,8 +7,6 @@ export const parseBannerStatus = (status) => {
       return 'inactive';
     case 1:
       return 'active';
-    case 2:
-      return 'deleted';
     default:
       return 'not found';
   }
@@ -45,8 +43,6 @@ export const parseBannerStatusToApi = (status) => {
     apiStatus = 0;
   } else if (status === 'active') {
     apiStatus = 1;
-  } else if (status === 'deleted') {
-    apiStatus = 2;
   }
   return apiStatus;
 };

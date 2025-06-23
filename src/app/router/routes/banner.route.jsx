@@ -34,8 +34,34 @@ export const bannerRoute = [
       const { default: EditBanner } = await import('../../pages/banner/EditBanner');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.BANNER.ADD}>
+          <PrivateRoute permission={PERMISSIONS.BANNER.EDIT}>
             <EditBanner />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'content-management/banner/reorder',
+    lazy: async () => {
+      const { default: ReOrderCategory } = await import('../../pages/banner/ReorderBanner');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.BANNER.EDIT}>
+            <ReOrderCategory />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'content-management/banner/:bannerId/details',
+    lazy: async () => {
+      const { default: ViewBannerDetails } = await import('../../pages/banner/ViewBanner');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.BANNER.LIST}>
+            <ViewBannerDetails />
           </PrivateRoute>
         )
       };

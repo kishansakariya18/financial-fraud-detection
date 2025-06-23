@@ -134,7 +134,8 @@ export const apiConfig = {
       BANNER_CREATE: '/admin/banner/create',
       BANNER_DELETE: `/admin/banner/:bannerId/delete`,
       BANNER_DETAIL: `/admin/banner/:bannerId/details`,
-      BANNER_EDIT: `/admin//banner/:bannerId/edit`
+      BANNER_EDIT: `/admin//banner/:bannerId/edit`,
+      BANNER_REORDER: '/admin/banner/reorder'
     },
     AFFILIATE: {
       AFFILIATE_LIST: '/admin/affiliates',
@@ -250,10 +251,10 @@ export const apiConfig = {
     SEGMENTATION: {
       LIST: '/admin/segmentation/list',
       ALL_LIST: '/admin/segmentation/allList',
-      DETAIL: '/admin/segmentation/:segmentationId/details',
+      DETAIL: '/admin/segmentation/:segmentationUID/details',
       ADD_EDIT: '/admin/segmentation/add-edit',
       COUNTRY_LIST: '/admin/segmentation/countries',
-      CHANGE_STATUS: '/admin/segmentation/:segmentationId/change-status',
+      CHANGE_STATUS: '/admin/segmentation/:segmentationUID/change-status',
       USER_LIST: '/admin/segmentation/player-list',
       REFRESH_USER_LIST: '/admin/segmentation/:segmentationId/refresh'
     },

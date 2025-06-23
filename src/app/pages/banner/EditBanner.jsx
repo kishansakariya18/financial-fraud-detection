@@ -90,7 +90,7 @@ const EditBanner = () => {
             bannerName: result.BannerName,
             placementType: result?.PlacementType || 0,
             segmentationType: result?.HasUserSegmentation || 0,
-            segmentIds: result?.SegmentationIDs,
+            segmentIds: result?.SegmentationIds,
             startDate: result?.StartDate,
             endDate: result?.EndDate,
             bannerHeadline: result?.bannerContent[0]?.HeadLine,
@@ -98,7 +98,9 @@ const EditBanner = () => {
             targetUrl: result?.bannerContent[0]?.TargetURL,
             image: result?.bannerContent[0]?.MediaFileName
           };
-          setSegmentationIds(result?.SegmentationIDs);
+          setSegmentationType(result?.HasUserSegmentation);
+          const segmentIds = result?.SegmentationIds?.map((s) => parseInt(s));
+          setSegmentationIds(segmentIds);
           setBannerImage(result?.bannerContent[0]?.MediaFileName);
           reset(mappedData);
         }
@@ -106,6 +108,8 @@ const EditBanner = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bannerId]);
+
+  console.log('segmentationIds: ', segmentationIds);
 
   const segmentationOptions = segmentationList.map((segmentation) => {
     const mapping = {
@@ -147,7 +151,11 @@ const EditBanner = () => {
   useEffect(() => {}, [bannerId]);
 
   const onSubmit = async (data) => {
-    await editBannerAPI({ gameUID: bannerId, name: data.gameName, ...data });
+    const apiData = {
+      segmentationType,
+      segmentationIds
+    };
+    await editBannerAPI({ name: data.gameName, ...data, ...apiData });
   };
   return (
     <Page title={t('edit') + ' ' + t('banner')}>
@@ -200,19 +208,19 @@ const EditBanner = () => {
                   <Radio
                     label={t('all')}
                     value="0"
-                    checked={segmentationType === '0'}
-                    onChange={(e) => setSegmentationType(e.target.value)}
+                    checked={segmentationType === 0}
+                    onChange={(e) => setSegmentationType(parseInt(e.target.value))}
                   />
                   <Radio
                     label={t('specific')}
                     value="1"
-                    checked={segmentationType === '1'}
-                    onChange={(e) => setSegmentationType(e.target.value)}
+                    checked={segmentationType === 1}
+                    onChange={(e) => setSegmentationType(parseInt(e.target.value))}
                   />
                 </div>
               </div>
 
-              {segmentationType === '1' && (
+              {segmentationType === 1 && (
                 <Controller
                   render={({ field }) => (
                     <Listbox
@@ -220,8 +228,8 @@ const EditBanner = () => {
                       data={segmentationOptions}
                       multiple={true}
                       value={
-                        segmentationOptions.filter((status) =>
-                          segmentationIds.includes(status.value)
+                        segmentationOptions?.filter((status) =>
+                          segmentationIds?.includes(status.value)
                         ) || null
                       }
                       onChange={(val) => {

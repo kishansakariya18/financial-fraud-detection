@@ -1,6 +1,11 @@
 // Import Dependencies
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
-import { EllipsisHorizontalIcon, TrashIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import {
+  EllipsisHorizontalIcon,
+  EyeIcon,
+  TrashIcon,
+  XCircleIcon
+} from '@heroicons/react/24/outline';
 
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
@@ -14,6 +19,8 @@ import { TbEdit, TbStatusChange } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
 import BannerService from 'services/banner.services';
 import { useNavigate } from 'react-router';
+import { PERMISSIONS } from 'constants/app.constant';
+import usePermissions from 'app/router/usePermissions';
 // import { EditCategory } from '../EditCategory';
 
 export function RowActions({ row, table }) {
@@ -28,6 +35,8 @@ export function RowActions({ row, table }) {
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const { hasPermission } = usePermissions();
 
   const navigate = useNavigate();
 
@@ -59,6 +68,10 @@ export function RowActions({ row, table }) {
       description: errorMessage,
       iconClassName: 'text-error'
     }
+  };
+
+  const handleClickView = () => {
+    navigate(`/content-management/banner/${row.original.id}/details`);
   };
 
   const closeModal = () => {
@@ -135,6 +148,21 @@ export function RowActions({ row, table }) {
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
               className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
+              {hasPermission(PERMISSIONS.BANNER.LIST) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                        focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                      )}
+                      onClick={handleClickView}>
+                      <EyeIcon className="size-4.5 stroke-1" />
+                      <span>{t('view')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
               <MenuItem>
                 {({ focus }) => (
                   <button

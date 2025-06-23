@@ -105,13 +105,17 @@ const CreateBanner = () => {
   }
 
   const onSubmit = async (data) => {
-    const apiData = {
-      segmentationType,
-      segmentationIds
-    };
-    console.log('{ ...data, ...apiData }: ', { ...data, ...apiData });
+    if (file) {
+      const apiData = {
+        segmentationType,
+        segmentationIds
+      };
+      console.log('{ ...data, ...apiData }: ', { ...data, ...apiData });
 
-    await createBannerAPI({ ...data, ...apiData });
+      await createBannerAPI({ ...data, ...apiData });
+    } else {
+      toast.error(t('image_required'));
+    }
   };
   return (
     <Page title={t('create') + ' ' + t('banner')}>
@@ -164,19 +168,19 @@ const CreateBanner = () => {
                   <Radio
                     label={t('all')}
                     value="0"
-                    checked={segmentationType === '0'}
-                    onChange={(e) => setSegmentationType(e.target.value)}
+                    checked={segmentationType === 0}
+                    onChange={(e) => setSegmentationType(parseInt(e.target.value))}
                   />
                   <Radio
                     label={t('specific')}
                     value="1"
-                    checked={segmentationType === '1'}
-                    onChange={(e) => setSegmentationType(e.target.value)}
+                    checked={segmentationType === 1}
+                    onChange={(e) => setSegmentationType(parseInt(e.target.value))}
                   />
                 </div>
               </div>
 
-              {segmentationType === '1' && (
+              {segmentationType === 1 && (
                 // <CustomSelect
                 //   id="segmemtation"
                 //   showLabel={t('select') + ' ' + t('segmentation')}
@@ -193,8 +197,8 @@ const CreateBanner = () => {
                       data={segmentationOptions}
                       multiple={true}
                       value={
-                        segmentationOptions.filter((status) =>
-                          segmentationOptions.includes(status.value)
+                        segmentationOptions?.filter((status) =>
+                          segmentationIds?.includes(status.value)
                         ) || null
                       }
                       onChange={(val) => {
@@ -296,7 +300,7 @@ const CreateBanner = () => {
                     onChange={setFile}
                     ref={uploadRef}
                     setPreview={setPreview}
-                    accept={'.png'}>
+                    accept={'.png, .jpg, .jpeg'}>
                     {({ ...props }) => (
                       <Button color="primary" {...props} className="space-x-2">
                         <CloudArrowUpIcon className="size-5" />

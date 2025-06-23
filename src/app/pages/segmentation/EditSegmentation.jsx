@@ -39,7 +39,7 @@ const EditSegmentation = () => {
     resolver: yupResolver(createSegmentationSchema)
   });
 
-  const { segmentationId } = useParams();
+  const { segmentationUID } = useParams();
 
   const kyc = watch('kyc');
   const countryCheck = watch('countryCheck');
@@ -72,7 +72,7 @@ const EditSegmentation = () => {
   };
 
   const fetchSegmentationDetails = async () => {
-    const result = await SegmentationService.getSegmentationDetails(segmentationId);
+    const result = await SegmentationService.getSegmentationDetails(segmentationUID);
 
     if (result.status === 200) {
       return result.response.data;
@@ -121,7 +121,7 @@ const EditSegmentation = () => {
 
   useEffect(() => {
     console.log('called');
-    if (segmentationId) {
+    if (segmentationUID) {
       fetchSegmentationDetails().then((result) => {
         if (result) {
           const mappedData = {
@@ -164,7 +164,7 @@ const EditSegmentation = () => {
 
             // Money Won
             moneyWon: result?.Filters?.MoneyWonCheck === 'on',
-            minWon: result?.Filters?.MaxMonWon ? Number(result?.Filters?.MaxMonWon) : null,
+            minWon: result?.Filters?.MinMonWon ? Number(result?.Filters?.MinMonWon) : null,
             maxWon: result?.Filters?.MaxMonWon ? Number(result?.Filters?.MaxMonWon) : null,
 
             // Money Loss
@@ -178,9 +178,9 @@ const EditSegmentation = () => {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [segmentationId]);
+  }, [segmentationUID]);
 
-  console.log('seg id: ', segmentationId);
+  console.log('seg id: ', segmentationUID);
 
   useEffect(() => {
     fetchCountryList();
@@ -214,7 +214,7 @@ const EditSegmentation = () => {
   }
 
   const onSubmit = async (data) => {
-    await editSegmentationAPI({ segmentationId, ...data });
+    await editSegmentationAPI({ segmentationUID, ...data });
   };
   return (
     <Page title={t('edit') + ' ' + t('segmentation')}>

@@ -31,7 +31,7 @@ export const segmentationRoutes = [
     }
   },
   {
-    path: 'segmentation/:segmentationId/edit',
+    path: 'segmentation/:segmentationUID/edit',
     lazy: async () => {
       const { default: EditSegmeantation } = await import(
         '../../pages/segmentation/EditSegmentation'
@@ -46,7 +46,7 @@ export const segmentationRoutes = [
     }
   },
   {
-    path: 'segmentation/:segmentationId/player-list',
+    path: 'segmentation/:segmentationUID/player-list',
     lazy: async () => {
       const { default: UserList } = await import(
         '../../pages/segmentation/segmented-player-list/list'
@@ -61,7 +61,7 @@ export const segmentationRoutes = [
     }
   },
   {
-    path: 'segmentation/:segmentationId/details',
+    path: 'segmentation/:segmentationUID/details',
     lazy: async () => {
       const { default: ViewSegmentation } = await import(
         '../../pages/segmentation/ViewSegmentation'

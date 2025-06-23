@@ -19,7 +19,7 @@ export default function UserList() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t('segmented') + ' ' + t('player') + ' ' + t('list');
-  const { segmentationId } = useParams();
+  const { segmentationUID } = useParams();
   const breadcrumbItem = [
     { title: t('segmentation'), path: '/segmentation' },
     { title: t('player') + ' ' + t('list') }
@@ -33,7 +33,7 @@ export default function UserList() {
     const result = await SegmentationService.getUserList({
       pagination: { pageIndex, pageSize },
       filters: queryParams,
-      segmentationId
+      segmentationUID
     });
 
     if (result.status === 200) {

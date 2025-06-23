@@ -27,6 +27,8 @@ export default function Reports() {
   const fetchBanners = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
+    console.log('queryParams: ', queryParams);
+
     const result = await BannerService.getBannerList({
       pagination: { pageIndex, pageSize },
       filters: queryParams
@@ -73,7 +75,7 @@ export default function Reports() {
 
     if (queryParams.startDate && queryParams.endDate) {
       filtersFromQuery.push({
-        id: 'createdAt',
+        id: 'startDate',
         value: [+queryParams.startDate, +queryParams.endDate]
       });
     }
@@ -83,7 +85,7 @@ export default function Reports() {
 
   const applyFilterHandler = () => {
     const filterItems = {};
-    // console.log('table.getState().columnFilters:', table.getState().columnFilters);
+    console.log('table.getState().columnFilters:', table.getState().columnFilters);
 
     for (let data of table.getState().columnFilters) {
       if (data.id === 'name') {
@@ -94,7 +96,7 @@ export default function Reports() {
         filterItems.status = data.value;
       }
 
-      if (data.id === 'createdAt') {
+      if (data.id === 'startDate') {
         filterItems.date = data.value;
       }
     }
