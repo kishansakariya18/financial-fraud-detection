@@ -10,31 +10,31 @@ const columnHelper = createColumnHelper();
 
 export const columns = [
   columnHelper.accessor((row) => row.id, {
-    id: 'id',
+    id: 'ID',
     header: 'ID',
     cell: IdCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.title, {
-    id: 'name',
+    id: 'Name',
     header: 'Name',
     cell: BoldCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.priority, {
-    id: 'priority',
+    id: 'Priority',
     header: 'Priority',
     cell: BoldCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.heading, {
-    id: 'code',
+    id: 'Code',
     header: 'Code',
     cell: BoldCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.status, {
-    id: 'status',
+    id: 'Status',
     header: 'Status',
     cell: BadgeCell,
     meta: { optionData: userclassOptions },
@@ -42,21 +42,21 @@ export const columns = [
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.createdAt, {
-    id: 'createdAt',
+    id: 'Created At',
     header: 'Created At',
     cell: DateCell,
     filterFn: 'inNumberRange',
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.dateModified, {
-    id: 'dateModified',
+    id: 'Last Modified',
     header: 'Last Modified',
     cell: DateCell,
     filterFn: 'inNumberRange',
     enableSorting: false
   }),
   columnHelper.display({
-    id: 'actions',
+    id: 'Actions',
     header: 'Actions',
     cell: RowActions,
     enableSorting: false

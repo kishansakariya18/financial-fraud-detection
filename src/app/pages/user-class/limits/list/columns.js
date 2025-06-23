@@ -9,45 +9,45 @@ const columnHelper = createColumnHelper();
 
 export const columns = [
   columnHelper.accessor((row) => row.id, {
-    id: 'id',
+    id: 'ID',
     header: 'ID',
     cell: IdCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.limitType, {
-    id: 'limitType',
+    id: 'Limit Type',
     header: 'Limit Type',
     cell: BoldCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.limitPeriod, {
-    id: 'limitPeriod',
+    id: 'Limit Period',
     header: 'Limit Period',
     cell: BoldCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.limitAmount, {
-    id: 'limitAmount',
+    id: 'Limit Amount',
     header: 'Limit Amount',
     cell: BoldCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.createdAt, {
-    id: 'createdAt',
+    id: 'Created At',
     header: 'Created At',
     cell: DateCell,
     filterFn: 'inNumberRange',
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.updatedAt, {
-    id: 'updatedAt',
+    id: 'Last Updated',
     header: 'Last Updated',
     cell: DateCell,
     filterFn: 'inNumberRange',
     enableSorting: false
   }),
   columnHelper.display({
-    id: 'actions',
+    id: 'Actions',
     header: 'Actions',
     cell: RowActions,
     enableSorting: false

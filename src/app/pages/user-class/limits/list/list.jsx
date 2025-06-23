@@ -68,10 +68,10 @@ export default function UserClassLimitsList() {
   useEffect(() => {
     const filtersFromQuery = [];
     if (queryParams.limitType) {
-      filtersFromQuery.push({ id: 'limitType', value: queryParams.limitType });
+      filtersFromQuery.push({ id: 'Limit Type', value: queryParams.limitType });
     }
     if (queryParams.limitPeriod) {
-      filtersFromQuery.push({ id: 'limitPeriod', value: queryParams.limitPeriod });
+      filtersFromQuery.push({ id: 'Limit Period', value: queryParams.limitPeriod });
     }
     if (queryParams.startDate && queryParams.endDate) {
       filtersFromQuery.push({
@@ -87,10 +87,10 @@ export default function UserClassLimitsList() {
   const applyFilterHandler = () => {
     const filterItems = {};
     for (let data of table.getState().columnFilters) {
-      if (data.id === 'limitType') {
+      if (data.id === 'Limit Type') {
         filterItems.limitType = data.value;
       }
-      if (data.id === 'limitPeriod') {
+      if (data.id === 'Limit Period') {
         filterItems.limitPeriod = data.value;
       }
       if (data.id === 'createdAt') {

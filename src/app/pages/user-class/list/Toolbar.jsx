@@ -100,8 +100,8 @@ export function Toolbar({
 function SearchInput({ table }) {
   return (
     <Input
-      value={table?.getColumn('name')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('name').setFilterValue(e.target.value)}
+      value={table?.getColumn('Name')?.getFilterValue() || ''}
+      onChange={(e) => table.getColumn('Name').setFilterValue(e.target.value)}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
@@ -116,10 +116,10 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>
-      {table.getColumn('status') && (
+      {table.getColumn('Status') && (
         <FacedtedFilter
           options={userclassOptions}
-          column={table.getColumn('status')}
+          column={table.getColumn('Status')}
           title={t('status')}
           Icon={MapPinIcon}
           isMultiple={false}

@@ -65,10 +65,10 @@ export default function UserClass() {
   useEffect(() => {
     const filtersFromQuery = [];
     if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'name', value: queryParams.keyword });
+      filtersFromQuery.push({ id: 'Name', value: queryParams.keyword });
     }
     if (queryParams.status) {
-      filtersFromQuery.push({ id: 'status', value: queryParams.status });
+      filtersFromQuery.push({ id: 'Status', value: queryParams.status });
     }
     if (queryParams.startDate && queryParams.endDate) {
       filtersFromQuery.push({
@@ -84,10 +84,10 @@ export default function UserClass() {
   const applyFilterHandler = () => {
     const filterItems = {};
     for (let data of table.getState().columnFilters) {
-      if (data.id === 'name') {
+      if (data.id === 'Name') {
         filterItems.keyword = data.value;
       }
-      if (data.id === 'status') {
+      if (data.id === 'Status') {
         filterItems.status = data.value;
       }
       if (data.id === 'createdAt') {

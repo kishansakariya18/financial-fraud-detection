@@ -103,8 +103,8 @@ function SearchInput({ table }) {
   const { t } = useTranslation();
   return (
     <Input
-      value={table?.getColumn('limitType')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('limitType').setFilterValue(e.target.value)}
+      value={table?.getColumn('Limit Type')?.getFilterValue() || ''}
+      onChange={(e) => table.getColumn('Limit Type').setFilterValue(e.target.value)}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
