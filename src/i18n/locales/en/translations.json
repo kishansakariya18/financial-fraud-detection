@@ -450,5 +450,17 @@
   "casinoPayout": "Casino Payout",
   "sportsPayout": "Sports Payout",
   "areYouSure":"Are You Sure?"
-  
+  ,
+  "banner": "Banner",
+  "placement": "Placement",
+  "headline": "Headline",
+  "subHeadline": "Sub Headline",
+  "targetUrl": "Target URL",
+  "banner_status_desc": "Are you sure you want to change Status of the Banner?",
+  "banner_status_suceess": "Banner status has been changed successfully",
+  "banner_delete_desc": "Are you sure you want to delete this banner ?",
+  "banner_delete_suceess": "Banner has been deleted successfully",
+  "image_required": "Please upload image",
+  "startDate": "Start Date",
+  "endDate": "End Date"
 }

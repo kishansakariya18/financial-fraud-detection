@@ -48,7 +48,7 @@ const SegmentationService = {
   },
   getUserList: async (body) => {
     try {
-      const { pagination, filters, segmentationId } = body;
+      const { pagination, filters, segmentationUID } = body;
 
       const apiQueryParams = {
         perPage: pagination ? pagination.pageSize : undefined,
@@ -75,7 +75,7 @@ const SegmentationService = {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: { filters: apiFilters, segmentationId },
+          body: { filters: apiFilters, segmentationUID },
           params: apiQueryParams
         });
 
@@ -106,9 +106,13 @@ const SegmentationService = {
       console.log('Error getSegmentationList: ', err);
     }
   },
-  getSegmentationDetails: async (id) => {
+  getSegmentationDetails: async (uid) => {
     try {
-      const endPoint = replaceText(apiConfig.endPoints.SEGMENTATION.DETAIL, ':segmentationId', id);
+      const endPoint = replaceText(
+        apiConfig.endPoints.SEGMENTATION.DETAIL,
+        ':segmentationUID',
+        uid
+      );
       let apiURL = `${apiConfig.baseURL.API_BASE_URL}${endPoint}`;
 
       if (apiURL) {
@@ -131,7 +135,7 @@ const SegmentationService = {
   addEditSegmentationList: async (data) => {
     try {
       const apiBodyData = {
-        Id: data?.segmentationId,
+        UID: data?.segmentationUID,
         Name: data.name,
         KYCCheck: data.kyc,
         KYC: data.kycType,
@@ -200,12 +204,12 @@ const SegmentationService = {
       console.log('Error getCountries: ', err);
     }
   },
-  changeSegmentationStatus: async (id) => {
+  changeSegmentationStatus: async (uid) => {
     try {
       const endPoint = replaceText(
         apiConfig.endPoints.SEGMENTATION.CHANGE_STATUS,
-        ':segmentationId',
-        id
+        ':segmentationUID',
+        uid
       );
 
       let apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
@@ -227,10 +231,10 @@ const SegmentationService = {
       console.log('Error changeSegmentationStatus: ', err);
     }
   },
-  refreshSegmentationList: async (id) => {
+  refreshSegmentationList: async (uid) => {
     try {
       const apiBodyData = {
-        Id: id,
+        UID: uid,
         IsRefresh: true
       };
 

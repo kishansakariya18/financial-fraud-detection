@@ -164,8 +164,8 @@ export default function ResetPassword() {
                   error={errors?.otp?.message}
                 />
                 <Input
-                  label={t('new') + ' ' + t('password')}
-                  placeholder={t('enter') + ' ' + t('new') + ' ' + t('password')}
+                  label={t('new_key') + ' ' + t('password')}
+                  placeholder={t('enter') + ' ' + t('new_key') + ' ' + t('password')}
                   type="password"
                   prefix={
                     <LockClosedIcon

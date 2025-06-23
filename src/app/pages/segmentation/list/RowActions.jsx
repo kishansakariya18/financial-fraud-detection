@@ -42,12 +42,12 @@ export function RowActions({ row, table }) {
   };
 
   const handleEdit = () => {
-    navigate(`/segmentation/${row.original.id}/edit`);
+    navigate(`/segmentation/${row.original.uid}/edit`);
   };
 
   const handleRefresh1 = useCallback(async () => {
     setConfirmDeleteLoading(true);
-    const result = await SegmentationService.refreshSegmentationList(row.original.id);
+    const result = await SegmentationService.refreshSegmentationList(row.original.uid);
     if (result.status === 200) {
       toast.success(t('refresh_success'));
       table.options.meta?.changeStatus(row);
@@ -62,7 +62,7 @@ export function RowActions({ row, table }) {
   }, [row]);
 
   const handleView = () => {
-    navigate(`/segmentation/${row.original.id}/details`);
+    navigate(`/segmentation/${row.original.uid}/details`);
   };
 
   const openModal = () => {
@@ -73,7 +73,7 @@ export function RowActions({ row, table }) {
 
   const handleChangeStatus = useCallback(async () => {
     setConfirmDeleteLoading(true);
-    const result = await SegmentationService.changeSegmentationStatus(row.original.id);
+    const result = await SegmentationService.changeSegmentationStatus(row.original.uid);
     if (result.status === 200) {
       table.options.meta?.changeStatus(row);
       setChangeStatusSuccess(true);
@@ -169,7 +169,7 @@ export function RowActions({ row, table }) {
                 <MenuItem>
                   {({ focus }) => (
                     <button
-                      onClick={() => navigate(`/segmentation/${row?.original?.id}/player-list`)}
+                      onClick={() => navigate(`/segmentation/${row?.original?.uid}/player-list`)}
                       className={clsx(
                         'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
                         focus && 'bg-this/10 dark:bg-this-light/10'

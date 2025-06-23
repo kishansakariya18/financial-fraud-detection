@@ -23,6 +23,7 @@ import tenantRoute from './routes/tenant.route';
 import profileRoute from './routes/profile.route';
 import bonusManagementRoute from './routes/bonus-management.route';
 import paymentProvider from './routes/payment-provider.route';
+import bannerRoute from './routes/banner.route';
 import userClass from './routes/user-class.route';
 
 // ----------------------------------------------------------------------
@@ -37,6 +38,7 @@ const protectedRoutes = {
       children: [
         ...dashboardRoute,
         ...adminRoute,
+        ...bannerRoute,
         ...playerRoutes,
         ...roleRoutes,
         ...auditlogsRoutes,

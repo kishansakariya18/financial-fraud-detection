@@ -1,59 +1,58 @@
 import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
-import { useSearchParams, useParams } from 'react-router';
+import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
 
-// Local Imports - UI, Services, Helpers, Utils
-import { Toolbar } from './Toolbar';
+// Local Imports - UI,Services,Helper,Utils
+// import { CategoryFilters } from './categoryFilters';
 import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
+
+import { responseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
-import { segmentationLimitListResponseMapper } from '../helper';
-import SegmentationService from 'services/segmentation.services';
+import BannerService from 'services/banner.services';
+import { BannerFilters } from './BannerFilters';
 
-export default function SegmentationLimitsList() {
+export default function Reports() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { segmentationId } = useParams();
-  const pageTitle = t('segmentation') + ' ' + t('limits') + ' ' + t('list');
+  const pageTitle = t('banner');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
-  const fetchSegmantationLimits = async () => {
-    const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
-    const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
-    console.log('queryParams', queryParams);
-    const result = await SegmentationService.segmentationLimitList({
-      filters: { segmentationID: segmentationId, ...queryParams },
-      pagination: { pageIndex, pageSize },
-      totalPage: queryParams.totalPage
-    });
+  const fetchBanners = async () => {
+    const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
+    const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
+    console.log('queryParams: ', queryParams);
 
-    const apiData = segmentationLimitListResponseMapper(result.response);
+    const result = await BannerService.getBannerList({
+      pagination: { pageIndex, pageSize },
+      filters: queryParams
+    });
 
     if (result.status === 200) {
       return {
         status: 200,
-        data: apiData.list,
-        totalRecords: parseInt(result?.response?.totalRecords) || DEFAULT_PER_PAGE_RECORD
+        data: responseMapper(result.response.data),
+        totalRecords: parseInt(result.response.totalRecords, 10) || 0
       };
     }
+
     return { status: result.status, error: result.error };
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
-    fetchData: fetchSegmantationLimits,
+    fetchData: fetchBanners,
     queryParams,
     setSearchParams,
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
-      tableSettings: { enableFullScreen: false },
-      columnVisibility: { slug: false }
+      tableSettings: {}
     }
   });
 
@@ -68,62 +67,79 @@ export default function SegmentationLimitsList() {
   useEffect(() => {
     const filtersFromQuery = [];
     if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'limitType', value: queryParams.keyword });
+      filtersFromQuery.push({ id: 'name', value: queryParams.keyword });
     }
+    if (queryParams.status) {
+      filtersFromQuery.push({ id: 'status', value: queryParams.status });
+    }
+
     if (queryParams.startDate && queryParams.endDate) {
       filtersFromQuery.push({
-        id: 'createdAt',
+        id: 'startDate',
         value: [+queryParams.startDate, +queryParams.endDate]
       });
     }
-
-    // Only update filters if they're different to prevent infinite loop
-    const currentFilters = table.getState().columnFilters;
-    if (JSON.stringify(currentFilters) !== JSON.stringify(filtersFromQuery)) {
-      setColumnFilters(filtersFromQuery);
-    }
+    setColumnFilters(filtersFromQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryParams]);
 
   const applyFilterHandler = () => {
     const filterItems = {};
-    const currentFilters = table.getState().columnFilters;
-    for (let data of currentFilters) {
-      if (data.id === 'limitType' || data.id === 'limitPeriod') {
+    console.log('table.getState().columnFilters:', table.getState().columnFilters);
+
+    for (let data of table.getState().columnFilters) {
+      if (data.id === 'name') {
         filterItems.keyword = data.value;
-      } else if (data.id === 'createdAt') {
+      }
+
+      if (data.id === 'status') {
+        filterItems.status = data.value;
+      }
+
+      if (data.id === 'startDate') {
         filterItems.date = data.value;
       }
     }
 
-    // Update URL with search params
     setSearchParams({
       pageIndex: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
+      ...(filterItems.status && { status: filterItems.status }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
-      ...(filterItems.date && { endDate: filterItems.date[1] })
+      ...(filterItems.date && { endDate: filterItems?.date[1] })
     });
   };
 
   const clearFilterHandler = () => {
     if (!isEmptyObject(queryParams)) {
-      setSearchParams({ pageIndex: DEFAULT_PAGE_INDEX, pageSize: DEFAULT_PER_PAGE_RECORD });
+      setSearchParams({
+        pageIndex: 0,
+        pageSize: 10
+      });
     }
     table.resetColumnFilters();
   };
 
   useLockScrollbar(tableSettings.enableFullScreen);
+  // console.log('tableSettings: from reports', table);
 
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
-      <Toolbar
-        table={table}
+      {/* <Toolbar breadcrumbs={breadcrumbs} table={table} pageTitle={pageTitle} /> */}
+      <BannerFilters
         pageTitle={pageTitle}
+        table={table}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
-        segmentationId={segmentationId}
       />
+      {/* <CategoryFilters
+        pageTitle={pageTitle}
+        table={table}
+        onApplyFilters={applyFilterHandler}
+        onClearFilters={clearFilterHandler}
+        // filters= {}
+      /> */}
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>
   );

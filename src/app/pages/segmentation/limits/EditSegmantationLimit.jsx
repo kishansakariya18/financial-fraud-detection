@@ -12,7 +12,7 @@ import { createUserClassLimitSchema } from './schema';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import SegmentationService from 'services/segmentation.services';
 import { USER_CLASS_LIMIT_TYPE, USER_CLASS_LIMIT_PERIOD } from 'constants/app.constant';
-import { userclassLimitDetailResponseMapper } from './helper';
+import { segmentationLimitDetailResponseMapper } from './helper';
 
 const EditSegmentationLimit = () => {
   const [error, setError] = useState('');
@@ -60,7 +60,7 @@ const EditSegmentationLimit = () => {
         const result = await SegmentationService.segmentationLimitDetail(segmentationLimitUID);
         console.log('API Response:', result);
 
-        const mappedData = userclassLimitDetailResponseMapper(result.response);
+        const mappedData = segmentationLimitDetailResponseMapper(result.response);
         console.log('Mapped data:', mappedData);
 
         if (mappedData) {
@@ -100,14 +100,14 @@ const EditSegmentationLimit = () => {
 
       const result = await SegmentationService.updateSegmentationLimit(requestData);
       if (result.status === 200 || result.status === 201) {
-        toast.success(t('segmentation_limit_updated'));
+        toast.success(result.response.message);
         navigate(`/segmentation/${segmentationId}/limits`);
       } else {
-        setError(result.error || t('something_went_wrong'));
+        setError(result.response.message || t('something_went_wrong'));
       }
     } catch (err) {
       console.error('Error updating segmentation limit:', err);
-      setError(t('something_went_wrong'));
+      setError(err.response.message || t('something_went_wrong'));
     } finally {
       setLoading(false);
     }

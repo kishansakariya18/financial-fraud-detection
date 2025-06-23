@@ -316,3 +316,9 @@ export const KYC_PROCESSING_MODE = {
   AUTO: 'auto',
   MANUAL: 'manual'
 };
+
+export const BANNER = {
+  TYPE: {
+    LOBBY_BANNER: 1
+  }
+};

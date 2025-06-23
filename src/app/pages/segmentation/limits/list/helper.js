@@ -1,4 +1,3 @@
-import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 export const segmentationLimitListResponseMapper = (apiData) => {
@@ -33,20 +32,3 @@ export const segmentationLimitStatusToAPI = (status) => {
     return 1;
   }
 };
-
-export const segmentationLimitOptions = [
-  {
-    key: 'active',
-    value: 'active',
-    label: 'Active',
-    color: 'success',
-    icon: CheckBadgeIcon
-  },
-  {
-    key: 'inactive',
-    value: 'inactive',
-    label: 'Inactive',
-    color: 'error',
-    icon: XCircleIcon
-  }
-];

@@ -5,6 +5,7 @@ export const segmentationLimitListResponseMapper = (apiData) => {
   const list = apiData?.data?.map((item) => {
     return {
       id: item?.SegmentationLimitID,
+      segmentationID: item?.SegmentationID,
       segmentationLimitUID: item?.SegmentationLimitUID,
       userClassLimitUID: item?.UserClassLimitUID,
       limitType: item?.LimitType,

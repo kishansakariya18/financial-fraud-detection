@@ -5,6 +5,7 @@ import { playerStatusToApp } from '../users/player/helper';
 export const segmentationResponseMapper = (apiData) => {
   const resultData = apiData.map((data) => ({
     id: data.UserSegmentID,
+    uid: data.UserSegmentUID,
     name: data.Name,
     createdByAdmin: data?.admin?.Username,
     count: data?.Count || '0',
