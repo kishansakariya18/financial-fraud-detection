@@ -462,5 +462,6 @@
   "banner_delete_suceess": "Banner has been deleted successfully",
   "image_required": "Please upload image",
   "startDate": "Start Date",
-  "endDate": "End Date"
+  "endDate": "End Date",
+  "segmentation_limit_delete_desc": "Are you sure you want to delete this Segmentation Limit ?"
 }

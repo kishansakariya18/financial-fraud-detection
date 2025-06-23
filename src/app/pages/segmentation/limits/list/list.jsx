@@ -28,7 +28,7 @@ export default function SegmentationLimitsList() {
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
     console.log('queryParams', queryParams);
     const result = await SegmentationService.segmentationLimitList({
-      filters: { segmentationID: segmentationId },
+      filters: { segmentationID: segmentationId, keyword: queryParams.keyword },
       page: pageIndex,
       per_page: pageSize,
       totalPage: queryParams.totalPage

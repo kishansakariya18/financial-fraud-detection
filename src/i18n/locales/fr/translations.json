@@ -445,5 +445,6 @@
   "class_code_required": "Code de la classe est requis" ,
   "user_class_limit_delete_desc":"Êtes-vous sûr de vouloir supprimer cette Classe de joueur ?",
   "search_limit_name": "Rechercher limites",
-  "areYouSure":"Êtes-vous sûr ?"
+  "areYouSure":"Êtes-vous sûr ?",
+  "segmentation_limit_delete_desc": "Êtes-vous sûr de vouloir supprimer cette Segmentation Limit ?"
 }

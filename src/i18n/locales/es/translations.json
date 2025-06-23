@@ -445,5 +445,6 @@
   "sportsWagered": "Deportes apostados",
   "casinoPayout": "Pago de casino",
   "sportsPayout" : "Pago deportivo",
-  "areYouSure":"¿Estás seguro?"
+  "areYouSure":"¿Estás seguro?",
+  "segmentation_limit_delete_desc": "¿Estás seguro de querer eliminar esta Segmentation Limit ?"
   }
