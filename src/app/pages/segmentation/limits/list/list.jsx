@@ -28,7 +28,11 @@ export default function SegmentationLimitsList() {
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
     console.log('queryParams', queryParams);
     const result = await SegmentationService.segmentationLimitList({
-      filters: { segmentationID: segmentationId, keyword: queryParams.keyword },
+      filters: {
+        segmentationID: segmentationId,
+        limitType: queryParams.limitType,
+        limitPeriod: queryParams.limitPeriod
+      },
       page: pageIndex,
       per_page: pageSize,
       totalPage: queryParams.totalPage
@@ -69,8 +73,11 @@ export default function SegmentationLimitsList() {
 
   useEffect(() => {
     const filtersFromQuery = [];
-    if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'limitType', value: queryParams.keyword });
+    if (queryParams.limitType) {
+      filtersFromQuery.push({ id: 'limitType', value: queryParams.limitType });
+    }
+    if (queryParams.limitPeriod) {
+      filtersFromQuery.push({ id: 'limitPeriod', value: queryParams.limitPeriod });
     }
     if (queryParams.startDate && queryParams.endDate) {
       filtersFromQuery.push({
@@ -79,30 +86,29 @@ export default function SegmentationLimitsList() {
       });
     }
 
-    // Only update filters if they're different to prevent infinite loop
-    const currentFilters = table.getState().columnFilters;
-    if (JSON.stringify(currentFilters) !== JSON.stringify(filtersFromQuery)) {
-      setColumnFilters(filtersFromQuery);
-    }
+    setColumnFilters(filtersFromQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryParams]);
 
   const applyFilterHandler = () => {
     const filterItems = {};
-    const currentFilters = table.getState().columnFilters;
-    for (let data of currentFilters) {
-      if (data.id === 'limitType' || data.id === 'limitPeriod') {
-        filterItems.keyword = data.value;
-      } else if (data.id === 'createdAt') {
+    for (let data of table.getState().columnFilters) {
+      if (data.id === 'limitType') {
+        filterItems.limitType = data.value;
+      }
+      if (data.id === 'limitPeriod') {
+        filterItems.limitPeriod = data.value;
+      }
+      if (data.id === 'createdAt') {
         filterItems.date = data.value;
       }
     }
 
-    // Update URL with search params
     setSearchParams({
       pageIndex: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PER_PAGE_RECORD,
-      ...(filterItems.keyword && { keyword: filterItems.keyword }),
+      ...(filterItems.limitType && { limitType: filterItems.limitType }),
+      ...(filterItems.limitPeriod && { limitPeriod: filterItems.limitPeriod }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
       ...(filterItems.date && { endDate: filterItems.date[1] })
     });

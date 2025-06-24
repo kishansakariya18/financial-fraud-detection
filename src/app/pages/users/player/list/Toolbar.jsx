@@ -2,6 +2,7 @@
 import { MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 
 // Local Imports
 import { DateFilter } from 'components/shared/table/DateFilter';
@@ -14,6 +15,7 @@ import { bankVerifiedOptions } from '../helper';
 import { t } from 'i18next';
 import { DashboardCard } from 'components/custom/DashboardCard';
 import { dummyCards } from 'helpers/functions';
+import { CustomisedFilter } from 'components/custom/CustomisedFilter';
 
 // ----------------------------------------------------------------------
 
@@ -23,11 +25,13 @@ export function Toolbar({
   summary = null,
   onApplyFilters = () => {},
   onClearFilters = () => {},
-  countries
+  countries,
+  segmentations
 }) {
   console.log(countries);
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const [selectedSegmentations, setSelectedSegmentations] = useState([]);
 
   return (
     <div className="table-toolbar">
@@ -115,6 +119,9 @@ export function Toolbar({
               onApplyFilters={onApplyFilters}
               onClearFilters={onClearFilters}
               countries={countries}
+              segmentations={segmentations}
+              selectedSegmentations={selectedSegmentations}
+              setSelectedSegmentations={setSelectedSegmentations}
             />
           </div>
 
@@ -140,8 +147,16 @@ function SearchInput({ table }) {
   );
 }
 
-function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {}, countries }) {
-  const isFiltered = table.getState().columnFilters.length > 0;
+function Filters({
+  table,
+  onApplyFilters = () => {},
+  onClearFilters = () => {},
+  countries,
+  segmentations,
+  selectedSegmentations,
+  setSelectedSegmentations
+}) {
+  const isFiltered = table.getState().columnFilters.length > 0 || selectedSegmentations.length > 0;
   return (
     <>
       {table.getColumn('status') && (
@@ -184,20 +199,29 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {}, 
           }}
         />
       )}
-      <FacedtedFilter
-        options={
-          countries
-            ? countries.map((country) => ({ label: country.CountryName, value: country.CountryID }))
-            : []
-        }
-        column={table.getColumn('CountryID')}
-        title={t('country')}
-        Icon={MapPinIcon}
-        isMultiple={true}
-        showCheckbox={true}
+      <CustomisedFilter
+        title={'Countries'}
+        options={countries}
+        labelField={'CountryName'}
+        valueField={'CountryID'}
+        selectedValues={selectedSegmentations}
+        setSelectedValues={setSelectedSegmentations}
       />
+      {segmentations && (
+        <FacedtedFilter
+          options={segmentations.map((seg) => ({ label: seg.Name, value: seg.UserSegmentID }))}
+          value={selectedSegmentations}
+          onChange={setSelectedSegmentations}
+          title={t('segmentation')}
+          Icon={MapPinIcon}
+          isMultiple={true}
+          showCheckbox={true}
+        />
+      )}
       <div>
-        <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
+        <Button
+          onClick={() => onApplyFilters(selectedSegmentations)}
+          className="h-8 whitespace-nowrap px-2.5 text-xs">
           {t('search')}
         </Button>
         <Button
@@ -217,7 +241,8 @@ Toolbar.propTypes = {
   summary: PropTypes.object,
   onApplyFilters: PropTypes.func,
   onClearFilters: PropTypes.func,
-  countries: PropTypes.array
+  countries: PropTypes.array,
+  segmentations: PropTypes.array
 };
 
 SearchInput.propTypes = {
@@ -228,5 +253,8 @@ Filters.propTypes = {
   table: PropTypes.object,
   onApplyFilters: PropTypes.func,
   onClearFilters: PropTypes.func,
-  countries: PropTypes.array
+  countries: PropTypes.array,
+  segmentations: PropTypes.array,
+  selectedSegmentations: PropTypes.array,
+  setSelectedSegmentations: PropTypes.func
 };

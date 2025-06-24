@@ -22,6 +22,7 @@ export default function Player() {
   const pageTitle = t('player') + ' ' + t('list');
   const [summary, setSummary] = useState(null);
   const [countries, setCountries] = useState(null);
+  const [segmentations, setSegmentations] = useState(null);
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
   const filtersInitializedRef = useRef(false);
 
@@ -52,11 +53,7 @@ export default function Player() {
   const fetchSegmentationList = async () => {
     const result = await PlayerService.segmentationList();
     if (result.status === 200) {
-      return {
-        status: 200,
-        data: result.response.data,
-        totalRecords: parseInt(result.response.total_records, 10) || 0
-      };
+      setSegmentations(result.response.data);
     }
     return { status: result.status, error: result.error };
   };
@@ -127,6 +124,16 @@ export default function Player() {
         }
         filtersFromQuery.push({ id: 'CountryID', value: countryIds });
       }
+      if (queryParams.SegmentationID) {
+        let segmentationIds = queryParams.SegmentationID;
+        if (typeof segmentationIds === 'string') {
+          segmentationIds = segmentationIds.split(',').filter(Boolean);
+        }
+        if (!Array.isArray(segmentationIds)) {
+          segmentationIds = [segmentationIds];
+        }
+        filtersFromQuery.push({ id: 'SegmentationID', value: segmentationIds });
+      }
       if (queryParams.startDate && queryParams.endDate) {
         filtersFromQuery.push({
           id: 'createdAt',
@@ -157,6 +164,9 @@ export default function Player() {
       if (data.id === 'CountryID') {
         filterItems.CountryID = data.value;
       }
+      if (data.id === 'SegmentationID') {
+        filterItems.SegmentationID = data.value;
+      }
       if (data.id === 'createdAt') {
         filterItems.date = data.value;
       }
@@ -167,6 +177,11 @@ export default function Player() {
         ? filterItems.CountryID
         : [filterItems.CountryID]
       : [];
+    const segmentationIds = filterItems.SegmentationID
+      ? Array.isArray(filterItems.SegmentationID)
+        ? filterItems.SegmentationID
+        : [filterItems.SegmentationID]
+      : [];
 
     setSearchParams({
       pageIndex: DEFAULT_PAGE_INDEX,
@@ -176,6 +191,7 @@ export default function Player() {
       ...(filterItems.isBankVerified && { isBankVerified: filterItems.isBankVerified }),
       ...(filterItems.isKYCVerified && { isKYCVerified: filterItems.isKYCVerified }),
       ...(countryIds.length && { CountryID: countryIds.join(',') }),
+      ...(segmentationIds.length && { SegmentationID: segmentationIds.join(',') }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
       ...(filterItems.date && { endDate: filterItems?.date[1] })
     });
@@ -198,6 +214,7 @@ export default function Player() {
         table={table}
         summary={summary}
         countries={countries}
+        segmentations={segmentations}
         pageTitle={pageTitle}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}

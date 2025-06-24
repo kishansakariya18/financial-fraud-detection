@@ -12,7 +12,11 @@ import { t } from 'i18next';
 import { userclassOptions } from '../../helper';
 import { MapPinIcon } from '@heroicons/react/24/outline';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
-import { PERMISSIONS } from 'constants/app.constant';
+import {
+  PERMISSIONS,
+  USER_CLASS_LIMIT_TYPE,
+  USER_CLASS_LIMIT_PERIOD
+} from 'constants/app.constant';
 import { useNavigate } from 'react-router';
 import usePermissions from 'app/router/usePermissions';
 
@@ -84,7 +88,6 @@ export function Toolbar({
             '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)'
           }}>
           <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
-            <SearchInput table={table} />
             <Filters
               table={table}
               onApplyFilters={onApplyFilters}
@@ -116,9 +119,42 @@ function SearchInput({ table }) {
 }
 
 function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }) {
+  const { t } = useTranslation();
   const isFiltered = table.getState().columnFilters.length > 0;
+
+  // Build options for limit type and period
+  const limitTypeOptions = [
+    { value: 'deposit', label: USER_CLASS_LIMIT_TYPE.DEPOSIT },
+    { value: 'withdraw', label: USER_CLASS_LIMIT_TYPE.WITHDRAW },
+    { value: 'wager', label: USER_CLASS_LIMIT_TYPE.WAGER },
+    { value: 'loss', label: USER_CLASS_LIMIT_TYPE.LOSS }
+  ];
+  const limitPeriodOptions = [
+    { value: 'daily', label: USER_CLASS_LIMIT_PERIOD.DAILY },
+    { value: 'weekly', label: USER_CLASS_LIMIT_PERIOD.WEEKLY },
+    { value: 'monthly', label: USER_CLASS_LIMIT_PERIOD.MONTHLY }
+  ];
+
   return (
     <>
+      {table.getColumn('limitType') && (
+        <FacedtedFilter
+          options={limitTypeOptions}
+          column={table.getColumn('limitType')}
+          title={t('limit_type')}
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
+      {table.getColumn('limitPeriod') && (
+        <FacedtedFilter
+          options={limitPeriodOptions}
+          column={table.getColumn('limitPeriod')}
+          title={t('limit_period')}
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
       {table.getColumn('status') && (
         <FacedtedFilter
           options={userclassOptions}
@@ -129,7 +165,6 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           showCheckbox={false}
         />
       )}
-
       <div>
         <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
           {t('search')}
