@@ -463,5 +463,7 @@
   "image_required": "Please upload image",
   "startDate": "Start Date",
   "endDate": "End Date",
-  "segmentation_limit_delete_desc": "Are you sure you want to delete this Segmentation Limit ?"
+  "segmentation_limit_delete_desc": "Are you sure you want to delete this Segmentation Limit ?",
+  "bank_verified": "Bank Verified",
+  "pan_verified": "KYC Verified"
 }

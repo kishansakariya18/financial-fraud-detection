@@ -27,7 +27,10 @@ export const responseMapper = (apiData) => {
       status: playerStatusToApp(item.AccountStatus),
       createdAt: item.DateCreated ? getDateInUTCToTimeZone(item.DateCreated) : '',
       lastLoginAt: item.LastLoginAt ? getDateInUTCToTimeZone(item.LastLoginAt) : '',
-      isBankVerified: item.IsBankVerified,
+      isBankVerified: playerBankVerifyToApp(item.isBankVerified),
+      isKYCVerified: playerKycToApp(item.isKYCVerified),
+      gender: item.Gender,
+      country: item.CountryID,
       blockedAt: item?.UserBlockedAt ? getDateInUTCToTimeZone(item.UserBlockedAt) : ''
     };
   });
@@ -47,6 +50,36 @@ export const playerStatusToApp = (status) => {
       break;
   }
 };
+export const playerKycToApp = (kyc) => {
+  switch (+kyc) {
+    case 1:
+      return 'verified';
+    case 0:
+      return 'not-verified';
+    default:
+      break;
+  }
+};
+export const playerBankVerifyToApp = (bankStatus) => {
+  switch (bankStatus) {
+    case true:
+      return 'verified';
+    case false:
+      return 'not-verified';
+    default:
+      break;
+  }
+};
+export const playerKycToAPI = (kyc) => {
+  switch (kyc) {
+    case 'verified':
+      return 1;
+    case 'not-verified':
+      return 0;
+    default:
+      return null;
+  }
+};
 
 export const playerStatusToAPI = (status) => {
   switch (status) {
@@ -60,7 +93,6 @@ export const playerStatusToAPI = (status) => {
       return null;
   }
 };
-
 export const playerStatusOptions = [
   {
     value: 'active',
@@ -81,7 +113,67 @@ export const playerStatusOptions = [
     icon: ArchiveBoxIcon
   }
 ];
-
+export const genderOptions = [
+  {
+    value: 'male',
+    label: 'Male',
+    color: 'success',
+    icon: CheckBadgeIcon
+  },
+  {
+    value: 'female',
+    label: 'Female',
+    color: 'error',
+    icon: XCircleIcon
+  }
+];
+export const bankVerifiedOptions = [
+  {
+    value: 'verified',
+    label: 'Verified',
+    color: 'success',
+    icon: CheckBadgeIcon
+  },
+  {
+    value: 'not-verified',
+    label: 'Not Verified',
+    color: 'error'
+  }
+];
+export const bankVerifyOptionToAPI = (status) => {
+  switch (status) {
+    case 'verified':
+      return 1;
+    case 'not-verified':
+      return 0;
+    default:
+      return null;
+  }
+};
+export const panVerifyOptionToAPI = (status) => {
+  switch (status) {
+    case 'verified':
+      return 1;
+    case 'not-verified':
+      return 0;
+    default:
+      return null;
+  }
+};
+export const panVerifiedOptions = [
+  {
+    value: 'verified',
+    label: 'Verified',
+    color: 'success',
+    icon: CheckBadgeIcon
+  },
+  {
+    value: 'not-verified',
+    label: 'Not Verified',
+    color: 'error',
+    icon: XCircleIcon
+  }
+];
 export const playerTransactionsResponseMapper = (apiData) => {
   const totalRecords = apiData.totalRecords;
   const userData = { username: apiData?.data?.userData?.Username };

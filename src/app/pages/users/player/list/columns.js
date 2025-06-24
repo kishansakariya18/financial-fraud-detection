@@ -11,7 +11,9 @@ import {
   AmountCell
 } from '../../../../../components/custom/table/cell';
 import { CopyableCell } from '../../../../../components/shared/table/CopyableCell';
-import { playerStatusOptions } from '../helper';
+import { playerStatusOptions, genderOptions } from '../helper';
+import { panVerifiedOptions } from '../helper';
+import { bankVerifiedOptions } from '../helper';
 
 // ----------------------------------------------------------------------
 
@@ -105,6 +107,40 @@ export const columns = [
     label: 'Row Actions',
     header: 'Actions',
     cell: RowActions,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.isBankVerified, {
+    id: 'isBankVerified',
+    label: 'Bank Verified',
+    header: 'Bank Verified',
+    cell: BoldCell,
+    meta: { optionData: bankVerifiedOptions },
+    filterFn: 'arrIncludesSome',
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.gender, {
+    id: 'gender',
+    label: 'Gender',
+    header: 'Gender',
+    cell: BoldCell,
+    meta: { optionData: genderOptions },
+    filterFn: 'arrIncludesSome',
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.isKYCVerified, {
+    id: 'isKYCVerified',
+    label: 'KYC Verified',
+    header: 'KYC Verified',
+    cell: BoldCell,
+    meta: { optionData: panVerifiedOptions },
+    filterFn: 'arrIncludesSome',
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.CountryID, {
+    id: 'CountryID',
+    label: 'Country',
+    header: 'Country',
+    cell: BoldCell,
     enableSorting: false
   })
 ];

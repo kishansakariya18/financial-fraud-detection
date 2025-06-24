@@ -5,7 +5,8 @@ import {
   playerStatusToAPI,
   transactionStatusToAPI,
   transactionTypeAppToApi,
-  txnTypeToAPI
+  txnTypeToAPI,
+  playerKycToAPI
 } from 'app/pages/users/player/helper';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
@@ -17,10 +18,12 @@ const PlayerService = {
     try {
       const { pagination, filters } = data;
       console.log('filters: ', filters);
-
       const apiRequestParams = {
         keyword: filters.keyword ? filters.keyword : undefined,
         status: filters.status ? playerStatusToAPI(filters.status) : undefined,
+        isKYCVerified: filters.isKYCVerified ? playerKycToAPI(filters.isKYCVerified) : undefined,
+        isBankVerified: filters.isBankVerified ? playerKycToAPI(filters.isBankVerified) : undefined,
+        countries: filters.CountryID ? filters.CountryID.split(',') : [],
         startDate: filters.startDate
           ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
           : undefined,
@@ -43,6 +46,42 @@ const PlayerService = {
       return response;
     } catch (error) {
       console.log('Error from user list', error);
+    }
+  },
+  countryList: async () => {
+    try {
+      const endPoint = apiConfig.endPoints.USER.COUNTRY_LIST;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from user country list', error);
+    }
+  },
+  segmentationList: async () => {
+    try {
+      const endPoint = apiConfig.endPoints.USER.SEGMENTATION_LIST;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        body: {
+          pagination: false,
+          filters: {}
+        },
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from user segmentation list', error);
     }
   },
   userReferralList: async (data) => {

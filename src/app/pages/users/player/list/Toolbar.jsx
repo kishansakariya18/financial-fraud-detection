@@ -9,7 +9,8 @@ import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
-import { playerStatusOptions } from '../helper';
+import { playerStatusOptions, panVerifiedOptions } from '../helper';
+import { bankVerifiedOptions } from '../helper';
 import { t } from 'i18next';
 import { DashboardCard } from 'components/custom/DashboardCard';
 import { dummyCards } from 'helpers/functions';
@@ -21,8 +22,10 @@ export function Toolbar({
   pageTitle = '',
   summary = null,
   onApplyFilters = () => {},
-  onClearFilters = () => {}
+  onClearFilters = () => {},
+  countries
 }) {
+  console.log(countries);
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
@@ -92,6 +95,7 @@ export function Toolbar({
               table={table}
               onApplyFilters={onApplyFilters}
               onClearFilters={onClearFilters}
+              countries={countries}
             />
           </div>
         </>
@@ -110,6 +114,7 @@ export function Toolbar({
               table={table}
               onApplyFilters={onApplyFilters}
               onClearFilters={onClearFilters}
+              countries={countries}
             />
           </div>
 
@@ -135,7 +140,7 @@ function SearchInput({ table }) {
   );
 }
 
-function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }) {
+function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {}, countries }) {
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>
@@ -149,7 +154,26 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           showCheckbox={false}
         />
       )}
-
+      {table.getColumn('isBankVerified') && (
+        <FacedtedFilter
+          options={bankVerifiedOptions}
+          column={table.getColumn('isBankVerified')}
+          title={t('bank_verified')}
+          Icon={MapPinIcon}
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
+      {table.getColumn('isKYCVerified') && (
+        <FacedtedFilter
+          options={panVerifiedOptions}
+          column={table.getColumn('isKYCVerified')}
+          title={t('pan_verified')}
+          Icon={MapPinIcon}
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
       {table.getColumn('createdAt') && (
         <DateFilter
           column={table.getColumn('createdAt')}
@@ -160,7 +184,18 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           }}
         />
       )}
-
+      <FacedtedFilter
+        options={
+          countries
+            ? countries.map((country) => ({ label: country.CountryName, value: country.CountryID }))
+            : []
+        }
+        column={table.getColumn('CountryID')}
+        title={t('country')}
+        Icon={MapPinIcon}
+        isMultiple={true}
+        showCheckbox={true}
+      />
       <div>
         <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
           {t('search')}
@@ -177,7 +212,12 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
 }
 
 Toolbar.propTypes = {
-  table: PropTypes.object
+  table: PropTypes.object,
+  pageTitle: PropTypes.string,
+  summary: PropTypes.object,
+  onApplyFilters: PropTypes.func,
+  onClearFilters: PropTypes.func,
+  countries: PropTypes.array
 };
 
 SearchInput.propTypes = {
@@ -185,5 +225,8 @@ SearchInput.propTypes = {
 };
 
 Filters.propTypes = {
-  table: PropTypes.object
+  table: PropTypes.object,
+  onApplyFilters: PropTypes.func,
+  onClearFilters: PropTypes.func,
+  countries: PropTypes.array
 };
