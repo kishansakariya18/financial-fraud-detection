@@ -448,5 +448,6 @@
   "areYouSure":"Êtes-vous sûr ?",
   "segmentation_limit_delete_desc": "Êtes-vous sûr de vouloir supprimer cette Segmentation Limit ?",
   "bank_verified": "Verifié par le banque",
-  "pan_verified": "Verifié par le KYC"
+  "pan_verified": "Verifié par le KYC",
+  "limitAmount": "Limit Amount"
 }

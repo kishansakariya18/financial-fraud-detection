@@ -87,7 +87,13 @@ export default function Player() {
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
       tableSettings: {},
-      columnVisibility: { userUID: false }
+      columnVisibility: {
+        userUID: false,
+        CountryID: false,
+        isKYCVerified: false,
+        isBankVerified: false,
+        segmentationID: false
+      }
     }
   });
 
@@ -134,6 +140,9 @@ export default function Player() {
         }
         filtersFromQuery.push({ id: 'SegmentationID', value: segmentationIds });
       }
+      if (queryParams.gender) {
+        filtersFromQuery.push({ id: 'gender', value: queryParams.gender });
+      }
       if (queryParams.startDate && queryParams.endDate) {
         filtersFromQuery.push({
           id: 'createdAt',
@@ -170,6 +179,9 @@ export default function Player() {
       if (data.id === 'createdAt') {
         filterItems.date = data.value;
       }
+      if (data.id === 'gender') {
+        filterItems.gender = data.value;
+      }
     }
 
     const countryIds = filterItems.CountryID
@@ -193,7 +205,8 @@ export default function Player() {
       ...(countryIds.length && { CountryID: countryIds.join(',') }),
       ...(segmentationIds.length && { SegmentationID: segmentationIds.join(',') }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
-      ...(filterItems.date && { endDate: filterItems?.date[1] })
+      ...(filterItems.date && { endDate: filterItems?.date[1] }),
+      ...(filterItems.gender && { gender: filterItems.gender })
     });
     // Do NOT reset filtersInitializedRef here, so UI state is preserved
   };

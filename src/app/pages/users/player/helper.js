@@ -31,6 +31,7 @@ export const responseMapper = (apiData) => {
       isKYCVerified: playerKycToApp(item.isKYCVerified),
       gender: item.Gender,
       country: item.CountryID,
+      SegmentationID: '0',
       blockedAt: item?.UserBlockedAt ? getDateInUTCToTimeZone(item.UserBlockedAt) : ''
     };
   });

@@ -81,6 +81,22 @@ const CreateUserClass = () => {
           <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+          <div className="mt-6 space-y-4">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Input
+                {...register('className')}
+                label={t('class_name')}
+                error={errors?.className?.message}
+                placeholder={t('enter') + ' ' + t('class_name')}
+              />
+              <Input
+                {...register('classCode')}
+                label={t('class_code')}
+                error={errors?.classCode?.message}
+                placeholder={t('enter') + ' ' + t('class_code')}
+              />
+            </div>
+          </div>
           <div className="mt-4 flex flex-col space-y-1.5">
             <span className="text-base font-medium text-gray-800 dark:text-dark-100">Avatar</span>
             <Avatar
@@ -110,22 +126,6 @@ const CreateUserClass = () => {
                 </div>
               }
             />
-          </div>
-          <div className="mt-6 space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Input
-                {...register('className')}
-                label={t('class_name')}
-                error={errors?.className?.message}
-                placeholder={t('enter') + ' ' + t('class_name')}
-              />
-              <Input
-                {...register('classCode')}
-                label={t('class_code')}
-                error={errors?.classCode?.message}
-                placeholder={t('enter') + ' ' + t('class_code')}
-              />
-            </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
             <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
