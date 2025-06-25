@@ -93,22 +93,11 @@ export function ViewDetails() {
           fontSize: '14px',
           fontFamily: 'inherit',
           labels: {
-            colors: '#374151'
+            colors: '#000000'
           }
         },
         dataLabels: {
-          enabled: true,
-          formatter: function (val, opts) {
-            const value = opts.w.globals.series[opts.seriesIndex];
-            const percentage = val.toFixed(1);
-            return `${percentage}%\n(${value})`;
-          },
-          style: {
-            fontSize: '12px',
-            fontFamily: 'inherit',
-            fontWeight: '600',
-            colors: ['#ffffff', '#ffffff', '#ffffff']
-          }
+          enabled: false
         },
         tooltip: {
           y: {
@@ -119,15 +108,12 @@ export function ViewDetails() {
         },
         plotOptions: {
           pie: {
-            donut: {
-              size: '60%'
-            },
-            offsetY: 0
+            customScale: 1
           }
         },
         stroke: {
           colors: ['#fff'],
-          width: 2
+          width: 0
         },
         states: {
           hover: {
@@ -171,18 +157,7 @@ export function ViewDetails() {
           }
         },
         dataLabels: {
-          enabled: true,
-          formatter: function (val, opts) {
-            const value = opts.w.globals.series[opts.seriesIndex];
-            const percentage = val.toFixed(1);
-            return `${percentage}%\n(${value})`;
-          },
-          style: {
-            fontSize: '12px',
-            fontFamily: 'inherit',
-            fontWeight: '600',
-            colors: ['#ffffff', '#ffffff', '#ffffff']
-          }
+          enabled: false
         },
         tooltip: {
           y: {
@@ -193,15 +168,12 @@ export function ViewDetails() {
         },
         plotOptions: {
           pie: {
-            donut: {
-              size: '60%'
-            },
-            offsetY: 0
+            customScale: 1
           }
         },
         stroke: {
           colors: ['#fff'],
-          width: 2
+          width: 0
         },
         states: {
           hover: {
@@ -246,18 +218,7 @@ export function ViewDetails() {
           }
         },
         dataLabels: {
-          enabled: true,
-          formatter: function (val, opts) {
-            const value = opts.w.globals.series[opts.seriesIndex];
-            const percentage = val.toFixed(1);
-            return `${percentage}%\n(${value})`;
-          },
-          style: {
-            fontSize: '12px',
-            fontFamily: 'inherit',
-            fontWeight: '600',
-            colors: ['#ffffff', '#ffffff', '#ffffff', '#ffffff']
-          }
+          enabled: false
         },
         tooltip: {
           y: {
@@ -268,15 +229,12 @@ export function ViewDetails() {
         },
         plotOptions: {
           pie: {
-            donut: {
-              size: '60%'
-            },
-            offsetY: 0
+            customScale: 1
           }
         },
         stroke: {
           colors: ['#fff'],
-          width: 2
+          width: 0
         },
         states: {
           hover: {
@@ -320,7 +278,7 @@ export function ViewDetails() {
           }
         },
         dataLabels: {
-          enabled: true,
+          enabled: false,
           formatter: function (val, opts) {
             const value = opts.w.globals.series[opts.seriesIndex];
             const percentage = val.toFixed(1);
@@ -329,8 +287,16 @@ export function ViewDetails() {
           style: {
             fontSize: '12px',
             fontFamily: 'inherit',
-            fontWeight: '600',
-            colors: ['#ffffff', '#ffffff']
+            fontWeight: '400',
+            colors: ['#000000', '#000000']
+          },
+          dropShadow: {
+            enabled: true,
+            top: 1,
+            left: 1,
+            blur: 2,
+            color: '#ffffff',
+            opacity: 0.1
           }
         },
         tooltip: {
@@ -342,15 +308,12 @@ export function ViewDetails() {
         },
         plotOptions: {
           pie: {
-            donut: {
-              size: '60%'
-            },
-            offsetY: 0
+            customScale: 1
           }
         },
         stroke: {
           colors: ['#fff'],
-          width: 2
+          width: 0
         },
         states: {
           hover: {
@@ -367,11 +330,11 @@ export function ViewDetails() {
   return (
     <Page title={pageTitle}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
-        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
-          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
+        <div className="flex w-full items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+          <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
             {pageTitle}
           </h2>
-          <div className="ml-4 flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+          <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
             <div className="hidden self-stretch py-1 sm:flex">
               <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
             </div>

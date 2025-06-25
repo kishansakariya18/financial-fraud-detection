@@ -1,17 +1,17 @@
 // Import Dependencies
-import { MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 // import { TbCurrencyDollar } from "react-icons/tb";
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 // Local Imports
-import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
+// import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 // import { RangeFilter } from "components/shared/table/RangeFilter";
 import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
-import { t } from 'i18next';
-import { statusOptions } from '../helper';
+// import { globallyBlockedStatusOptions, statusOptions } from '../helper';
 import { DashboardCard } from 'components/custom/DashboardCard';
 import { dummyCards } from 'helpers/functions';
 
@@ -26,6 +26,7 @@ export function CountryFilters({
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const { t } = useTranslation();
 
   return (
     <div className="table-toolbar">
@@ -85,6 +86,7 @@ export function CountryFilters({
               table={table}
               onApplyFilters={onApplyFilters}
               onClearFilters={onClearFilters}
+              t={t}
             />
           </div>
         </>
@@ -103,6 +105,7 @@ export function CountryFilters({
               table={table}
               onApplyFilters={onApplyFilters}
               onClearFilters={onClearFilters}
+              t={t}
             />
           </div>
 
@@ -128,11 +131,11 @@ function SearchInput({ table }) {
   );
 }
 
-function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }) {
+function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {}, t }) {
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>
-      {table.getColumn('status') && (
+      {/* {table.getColumn('status') && (
         <FacedtedFilter
           options={statusOptions}
           column={table.getColumn('status')}
@@ -142,6 +145,16 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           showCheckbox={false}
         />
       )}
+
+      {table.getColumn('globallyBlocked') && (
+        <FacedtedFilter
+          options={globallyBlockedStatusOptions}
+          column={table.getColumn('globallyBlocked')}
+          title="Global Status"
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )} */}
 
       <div>
         <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">

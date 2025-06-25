@@ -446,5 +446,12 @@
   "image_required": "Please upload image",
   "startDate": "Start Date",
   "endDate": "End Date",
-  "segmentation_required": "Please select Segmentation"
+  "segmentation_required": "Please select Segmentation",
+  "blockedModules": "Blocked Modules",
+  "blockedProviders": "Blocked Providers",
+  "searchProviderName": "Search Provider Name",
+  "restrictions": "Restrictions",
+  "countryRestrictions": "Country Restrictions",
+  "block": "Block",
+  "unblock": "Unblock"
 }

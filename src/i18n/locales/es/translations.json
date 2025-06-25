@@ -429,5 +429,10 @@
   "casinoWagered": "Casino apostado",
   "sportsWagered": "Deportes apostados",
   "casinoPayout": "Pago de casino",
-  "sportsPayout" : "Pago deportivo"
+  "sportsPayout" : "Pago deportivo",
+  "blockedModules": "Módulos bloqueados",
+  "blockedProviders": "Proveedores bloqueados",
+  "searchProviderName": "Nombre del proveedor de búsqueda",
+  "restrictions": "Restricciones",
+  "countryRestrictions": "Restricciones del país"
   }

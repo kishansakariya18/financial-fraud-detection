@@ -155,6 +155,27 @@ export function ThemeSwatchCell({ getValue }) {
     </div>
   );
 }
+
+export function MultiLineCell({ getValue }) {
+  const value = getValue();
+
+  if (!value || value.length === 0) {
+    return <span className="font-medium">-</span>;
+  }
+
+  const items = value.split(', ');
+
+  return (
+    <div>
+      {items.map((item, index) => (
+        <div key={index} className="font-medium text-gray-800 dark:text-dark-100">
+          {item}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 DateCell.propTypes = {
   getValue: PropTypes.func
 };
@@ -182,5 +203,9 @@ CreateMarkupCell.propTypes = {
 };
 
 ThemeSwatchCell.propTypes = {
+  getValue: PropTypes.func
+};
+
+MultiLineCell.propTypes = {
   getValue: PropTypes.func
 };

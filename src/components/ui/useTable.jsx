@@ -9,7 +9,8 @@ const useTable = ({
   queryParams = {},
   setSearchParams = null,
   initialSettings = {},
-  paginationEnabled = true // ✅ optional prop
+  paginationEnabled = true, // ✅ optional prop
+  meta = {}
 }) => {
   const [response, setResponse] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -117,6 +118,7 @@ const useTable = ({
         }),
     manualFiltering: true,
     meta: {
+      ...meta, // Merge custom meta
       fetchSummary: async () => await fetchSummary(),
       deleteRow: async () => await fetchTableData(false),
       changeStatus: async () => await fetchTableData(false),

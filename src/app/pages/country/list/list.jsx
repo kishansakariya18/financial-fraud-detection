@@ -18,7 +18,7 @@ import CountryService from 'services/country.services';
 export default function Country() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('country');
+  const pageTitle = t('countries');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
   const [summary, setSummary] = useState(null);
@@ -35,7 +35,8 @@ export default function Country() {
       return {
         status: 200,
         data: responseMapper(result.response.data),
-        totalRecords: parseInt(result.response.totalRecords, 10) || 0
+        totalRecords: parseInt(result.response.totalRecord, 10) || 0,
+        totalPages: result.response.totalPages
       };
     }
 
@@ -69,7 +70,8 @@ export default function Country() {
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
       tableSettings: {}
-    }
+    },
+    meta: { fetchCountry }
   });
 
   useEffect(() => {
@@ -88,6 +90,9 @@ export default function Country() {
     if (queryParams.status) {
       filtersFromQuery.push({ id: 'status', value: queryParams.status });
     }
+    if (queryParams.globallyBlocked) {
+      filtersFromQuery.push({ id: 'globallyBlocked', value: queryParams.globallyBlocked });
+    }
 
     setColumnFilters(filtersFromQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -103,6 +108,9 @@ export default function Country() {
       if (data.id === 'status') {
         filterItems.status = data.value;
       }
+      if (data.id === 'globallyBlocked') {
+        filterItems.globallyBlocked = data.value;
+      }
     }
 
     setSearchParams({
@@ -110,7 +118,8 @@ export default function Country() {
       pageIndex: 0,
       pageSize: 10,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
-      ...(filterItems.status && { status: filterItems.status })
+      ...(filterItems.status && { status: filterItems.status }),
+      ...(filterItems.globallyBlocked && { globallyBlocked: filterItems.globallyBlocked })
     });
   };
 

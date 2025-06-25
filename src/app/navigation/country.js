@@ -9,8 +9,8 @@ export const country = {
   id: 'country',
   type: NAV_TYPE_ITEM,
   path: '/site-configuration/country',
-  title: 'Country',
-  transKey: 'country',
+  title: 'Country Restrictions',
+  transKey: 'countryRestrictions',
   Icon: FlagIcon,
   permission: PERMISSIONS.COUNTRIES.LIST
 };
