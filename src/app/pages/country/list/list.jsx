@@ -70,7 +70,8 @@ export default function Country() {
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
       tableSettings: {}
-    }
+    },
+    meta: { fetchCountry }
   });
 
   useEffect(() => {
@@ -89,6 +90,9 @@ export default function Country() {
     if (queryParams.status) {
       filtersFromQuery.push({ id: 'status', value: queryParams.status });
     }
+    if (queryParams.globallyBlocked) {
+      filtersFromQuery.push({ id: 'globallyBlocked', value: queryParams.globallyBlocked });
+    }
 
     setColumnFilters(filtersFromQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -104,6 +108,9 @@ export default function Country() {
       if (data.id === 'status') {
         filterItems.status = data.value;
       }
+      if (data.id === 'globallyBlocked') {
+        filterItems.globallyBlocked = data.value;
+      }
     }
 
     setSearchParams({
@@ -111,7 +118,8 @@ export default function Country() {
       pageIndex: 0,
       pageSize: 10,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
-      ...(filterItems.status && { status: filterItems.status })
+      ...(filterItems.status && { status: filterItems.status }),
+      ...(filterItems.globallyBlocked && { globallyBlocked: filterItems.globallyBlocked })
     });
   };
 

@@ -347,7 +347,13 @@ export const apiConfig = {
       STATUS: '/admin/payment-provider/change-status'
     },
     GEORESTRICTION: {
-      COUNTRY_LIST: '/admin/country/restrictions/list'
+      COUNTRY_LIST: '/admin/country/restrictions/list',
+      BLOCKED_MODULES: '/admin/country/:countryId/restrictions/modules/list',
+      BLOCKED_PROVIDERS: '/admin/country/:countryId/restrictions/providers/list',
+      BLOCK_MODULE: '/admin/country/:countryId/restrict-country-module',
+      BLOCK_PROVIDER: '/admin/country/:countryId/restrict-country-provider',
+      BLOCK_COUNTRY: '/admin/country/restrictions',
+      UNBLOCK_COUNTRY: '/admin/country/restrictions/:countryId/unrestrict'
     }
   }
 };

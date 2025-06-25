@@ -433,5 +433,12 @@
   "casinoWagered": "Casino Wagered",
   "sportsWagered": "Sports Wagered",
   "casinoPayout": "Casino Payout",
-  "sportsPayout": "Sports Payout"
+  "sportsPayout": "Sports Payout",
+  "blockedModules": "Blocked Modules",
+  "blockedProviders": "Blocked Providers",
+  "searchProviderName": "Search Provider Name",
+  "restrictions": "Restrictions",
+  "countryRestrictions": "Country Restrictions",
+  "block": "Block",
+  "unblock": "Unblock"
 }

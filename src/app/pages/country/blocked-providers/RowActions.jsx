@@ -2,25 +2,23 @@
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
-import { Fragment, useState } from 'react';
+import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 
 // Local Imports
 import { BlockUnblockModal } from 'components/shared/BlockUnblockModal';
 import { Button } from 'components/ui';
 
-import { TbStatusChange, TbEdit } from 'react-icons/tb';
+import { TbStatusChange } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
 import CountryService from 'services/country.services';
-import { useNavigate } from 'react-router';
-import { useCallback } from 'react';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
-  const isBlocked = row.original.globallyBlocked;
-  const countryId = row.original.id;
+  const isBlocked = row.original.isBlocked;
+  const countryId = table.options.meta?.countryId;
+
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -51,12 +49,24 @@ export function RowActions({ row, table }) {
       let result;
       try {
         if (isBlocked) {
-          result = await CountryService.unblockCountry(countryId);
+          // Unblock
+          result = await CountryService.blockProvider(
+            row.original.providerUID,
+            0,
+            countryId,
+            reason
+          );
         } else {
-          result = await CountryService.blockCountry(countryId, reason);
+          // Block
+          result = await CountryService.blockProvider(
+            row.original.providerUID,
+            1,
+            countryId,
+            reason
+          );
         }
-        if (result.status === 200 || result.status === 201) {
-          //refreshTable()
+        if (result.status === 200) {
+          // refreshTable();
         } else {
           setError(true);
           setErrorMessage(result?.data?.message || 'Something went wrong.');
@@ -74,6 +84,9 @@ export function RowActions({ row, table }) {
     setError(false);
     setErrorMessage('');
   };
+
+  const modalError = error;
+  const modalLoading = loading;
 
   return (
     <>
@@ -103,21 +116,8 @@ export function RowActions({ row, table }) {
                     )}>
                     <TbStatusChange className="size-4.5 stroke-1" />
                     <span>
-                      {isBlocked ? t('unblock') : t('block')} {t('country')}
+                      {isBlocked ? t('unblock') : t('block')} {t('casino_provider')}
                     </span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    onClick={() => navigate(`/site-configuration/country/${row.original.id}/edit`)}
-                    className={clsx(
-                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
-                      focus && 'bg-this/10 dark:bg-this-light/10'
-                    )}>
-                    <TbEdit className="size-4.5 stroke-1" />
-                    <span>{t('edit')}</span>
                   </button>
                 )}
               </MenuItem>
@@ -131,11 +131,11 @@ export function RowActions({ row, table }) {
         onClose={closeModal}
         onSubmit={handleBlockUnblock}
         blocked={isBlocked}
-        confirmLoading={loading}
-        error={error}
+        confirmLoading={modalLoading}
+        error={modalError}
         errorMessage={errorMessage}
         onRetry={handleRetry}
-        itemType={t('country')}
+        itemType={t('casino_provider')}
       />
     </>
   );
@@ -143,5 +143,6 @@ export function RowActions({ row, table }) {
 
 RowActions.propTypes = {
   row: PropTypes.object,
-  table: PropTypes.object
+  table: PropTypes.object,
+  fetchBlockedModules: PropTypes.func
 };

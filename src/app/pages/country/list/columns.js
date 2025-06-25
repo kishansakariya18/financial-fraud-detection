@@ -37,10 +37,10 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.globallyBlocked, {
+  columnHelper.accessor((row) => (row.globallyBlocked ? 'blocked' : 'not_blocked'), {
     id: 'globallyBlocked',
-    label: 'Globally Blocked',
-    header: 'Globally Blocked',
+    label: 'Globally Blocked?',
+    header: 'Globally Blocked?',
     cell: BadgeCell,
     meta: { optionData: globallyBlockedStatusOptions },
     filterFn: 'arrIncludesSome',
