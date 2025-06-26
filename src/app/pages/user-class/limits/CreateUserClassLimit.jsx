@@ -157,7 +157,7 @@ const CreateUserClassLimit = () => {
 
         <form onSubmit={handleSubmit(createUserClassLimit)} className="space-y-6">
           <div className="mt-6 space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <Controller
                 name="limitType"
                 control={control}

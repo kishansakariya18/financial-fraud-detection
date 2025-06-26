@@ -126,7 +126,7 @@ const EditUserClass = () => {
   };
   return (
     <Page title={t('edit') + ' ' + t('userClass')}>
-      <div className="transition-content grid max-w-2xl grid-rows-[auto_1fr] px-[--margin-x] pb-8 2xl:max-w-5xl">
+      <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
         <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
             {t('edit') + ' ' + t('userClass') + ' ' + t('form')}
@@ -137,6 +137,22 @@ const EditUserClass = () => {
           <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+          <div className="mt-6 space-y-4">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Input
+                {...register('className')}
+                label={t('class_name')}
+                error={errors?.className?.message}
+                placeholder={t('enter') + ' ' + t('class_name')}
+              />
+              <Input
+                {...register('classCode')}
+                label={t('class_code')}
+                error={errors?.classCode?.message}
+                placeholder={t('enter') + ' ' + t('class_code')}
+              />
+            </div>
+          </div>
           <div className="mt-4 flex flex-col space-y-1.5">
             <span className="text-base font-medium text-gray-800 dark:text-dark-100">Avatar</span>
             <Avatar
@@ -177,22 +193,6 @@ const EditUserClass = () => {
                 </div>
               }
             />
-          </div>
-          <div className="mt-6 space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Input
-                {...register('className')}
-                label={t('class_name')}
-                error={errors?.className?.message}
-                placeholder={t('enter') + ' ' + t('class_name')}
-              />
-              <Input
-                {...register('classCode')}
-                label={t('class_code')}
-                error={errors?.classCode?.message}
-                placeholder={t('enter') + ' ' + t('class_code')}
-              />
-            </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
             <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
