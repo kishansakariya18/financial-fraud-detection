@@ -466,5 +466,6 @@
   "segmentation_limit_delete_desc": "Are you sure you want to delete this Segmentation Limit ?",
   "bank_verified": "Bank Verified",
   "pan_verified": "KYC Verified",
-  "limitAmount": "Limit Amount"
+  "limitAmount": "Limit Amount",
+  "search_player_class": "Search Name, Code..."
 }

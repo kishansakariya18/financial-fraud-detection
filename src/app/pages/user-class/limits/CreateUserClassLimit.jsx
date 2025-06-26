@@ -4,16 +4,18 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import { Button, Input } from 'components/ui';
 import { Listbox } from 'components/shared/form/Listbox';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import UserClassService from 'services/user-class.services';
 import { createUserClassLimitSchema } from './schema';
 import { USER_CLASS_LIMIT_TYPE, USER_CLASS_LIMIT_PERIOD } from 'constants/app.constant';
+
 const CreateUserClassLimit = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [existingLimits, setExistingLimits] = useState([]);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { userClassUID } = useParams();
@@ -22,12 +24,41 @@ const CreateUserClassLimit = () => {
     register,
     handleSubmit,
     formState: { errors },
-    control
+    control,
+    watch,
+    setValue
   } = useForm({
     resolver: yupResolver(createUserClassLimitSchema),
     defaultValues: {
       status: 1 // Default to active
     }
+  });
+
+  // Fetch existing limits on mount
+  useEffect(() => {
+    const fetchLimits = async () => {
+      try {
+        const result = await UserClassService.userClassLimitList({
+          filters: { userClassID: userClassUID },
+          pagination: { pageIndex: 0, pageSize: 100 }
+        });
+        if (result.status === 200) {
+          setExistingLimits(result.response.data || []);
+        }
+      } catch {
+        // Optionally handle error
+      }
+    };
+    if (userClassUID) fetchLimits();
+  }, [userClassUID]);
+
+  // Build a lookup for used combinations
+  const usedCombinations = {};
+  existingLimits.forEach((limit) => {
+    if (!usedCombinations[limit.LimitType]) {
+      usedCombinations[limit.LimitType] = new Set();
+    }
+    usedCombinations[limit.LimitType].add(limit.LimitPeriod);
   });
 
   const limitTypeOptions = [
@@ -42,6 +73,44 @@ const CreateUserClassLimit = () => {
     { value: 'weekly', label: USER_CLASS_LIMIT_PERIOD.WEEKLY },
     { value: 'monthly', label: USER_CLASS_LIMIT_PERIOD.MONTHLY }
   ];
+
+  // Map form value to API value for lookup
+  const typeValueToApi = {
+    deposit: 'deposit',
+    withdraw: 'withdraw',
+    wager: 'wager',
+    loss: 'loss'
+  };
+  const periodValueToApi = {
+    daily: 'daily',
+    weekly: 'weekly',
+    monthly: 'monthly'
+  };
+
+  // Watch selected limitType
+  const selectedLimitType = watch('limitType');
+
+  // Compute period options with disabled property
+  const limitPeriodOptionsWithDisabled = limitPeriodOptions.map((opt) => ({
+    ...opt,
+    disabled:
+      selectedLimitType &&
+      usedCombinations[typeValueToApi[selectedLimitType]]?.has(periodValueToApi[opt.value])
+  }));
+
+  // If user changes limitType, reset limitPeriod if the current value is now disabled
+  useEffect(() => {
+    const currentPeriod = watch('limitPeriod');
+    if (selectedLimitType && currentPeriod) {
+      const isDisabled = limitPeriodOptionsWithDisabled.find(
+        (opt) => opt.value === currentPeriod
+      )?.disabled;
+      if (isDisabled) {
+        setValue('limitPeriod', '');
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedLimitType]);
 
   const createUserClassLimit = async (data) => {
     setLoading(true);
@@ -112,8 +181,11 @@ const CreateUserClassLimit = () => {
                 control={control}
                 render={({ field }) => (
                   <Listbox
-                    data={limitPeriodOptions}
-                    value={limitPeriodOptions.find((opt) => opt.value === field.value) || null}
+                    data={limitPeriodOptionsWithDisabled}
+                    value={
+                      limitPeriodOptionsWithDisabled.find((opt) => opt.value === field.value) ||
+                      null
+                    }
                     onChange={(val) => field.onChange(val.value)}
                     name={field.name}
                     label={t('limit_period')}
