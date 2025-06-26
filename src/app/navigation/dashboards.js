@@ -18,6 +18,7 @@ import { contentManagement } from './content-management';
 import { siteConfiguration } from './site-configuration';
 import { bonusManagement } from './bonus-management';
 import { paymentProvider } from './payment-provider';
+import { userClass } from './user-class';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -56,6 +57,7 @@ export const dashboards = () => ({
     peomocode,
     auditlogs,
     crm,
-    paymentProvider
+    paymentProvider,
+    userClass
   ]
 });

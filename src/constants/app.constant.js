@@ -189,7 +189,12 @@ export const PERMISSIONS = {
     ADD: 'segmentation-add',
     EDIT: 'segmentation-add',
     CHANGE_STATUS: 'segmentation-change-status',
-    PLAYER_LIST: 'segmentation-player-list'
+    PLAYER_LIST: 'segmentation-player-list',
+    LIMIT: 'segmentation-limit',
+    LIMIT_CREATE: 'segmentation-limit-create',
+    LIMIT_EDIT: 'segmentation-limit-edit',
+    LIMIT_DELETE: 'segmentation-limit-delete',
+    LIMIT_CHANGE_STATUS: 'segmentation-limit-change-status'
   },
   AFFILIATES: {
     LIST: 'affiliate-view',
@@ -267,6 +272,21 @@ export const PERMISSIONS = {
   PAYMENT_PROVIDER: {
     VIEW: 'payment-provider-view',
     STATUS: 'payment-provider-status'
+  },
+  USER_CLASS: {
+    LIST: 'player-class-list',
+    VIEW: 'player-class-view',
+    CREATE: 'player-class-create',
+    EDIT: 'player-class-edit',
+    CHANGE_STATUS: 'player-class-change-status',
+    DELETE: 'player-class-delete'
+  },
+  USER_CLASS_LIMIT: {
+    LIST: 'player-class-limit-list',
+    CREATE: 'player-class-limit-create',
+    EDIT: 'player-class-limit-edit',
+    CHANGE_STATUS: 'player-class-limit-change-status',
+    DELETE: 'player-class-limit-delete'
   }
 };
 
@@ -278,6 +298,18 @@ export const PROMOCODE = {
     EXACT_DEPOSIT: 0,
     DEPOSIT_IN_RANGE: 1
   }
+};
+export const USER_CLASS_LIMIT_TYPE = {
+  DEPOSIT: 'Deposit',
+  WITHDRAW: 'Withdrawal',
+  WAGER: 'Wager',
+  LOSS: 'Loss'
+};
+
+export const USER_CLASS_LIMIT_PERIOD = {
+  DAILY: 'Daily',
+  WEEKLY: 'Weekly',
+  MONTHLY: 'Monthly'
 };
 
 export const KYC_PROCESSING_MODE = {

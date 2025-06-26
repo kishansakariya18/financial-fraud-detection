@@ -9,11 +9,12 @@ import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
-import { playerStatusOptions } from '../helper';
+import { playerStatusOptions, panVerifiedOptions } from '../helper';
+import { bankVerifiedOptions } from '../helper';
 import { t } from 'i18next';
 import { DashboardCard } from 'components/custom/DashboardCard';
 import { dummyCards } from 'helpers/functions';
-
+import { genderOptions } from '../helper';
 // ----------------------------------------------------------------------
 
 export function Toolbar({
@@ -21,8 +22,11 @@ export function Toolbar({
   pageTitle = '',
   summary = null,
   onApplyFilters = () => {},
-  onClearFilters = () => {}
+  onClearFilters = () => {},
+  countries = null,
+  segmentations = null
 }) {
+  console.log(countries);
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
@@ -92,6 +96,8 @@ export function Toolbar({
               table={table}
               onApplyFilters={onApplyFilters}
               onClearFilters={onClearFilters}
+              country={countries}
+              segmentation={segmentations}
             />
           </div>
         </>
@@ -110,6 +116,8 @@ export function Toolbar({
               table={table}
               onApplyFilters={onApplyFilters}
               onClearFilters={onClearFilters}
+              country={countries}
+              segmentation={segmentations}
             />
           </div>
 
@@ -135,7 +143,13 @@ function SearchInput({ table }) {
   );
 }
 
-function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }) {
+function Filters({
+  table,
+  onApplyFilters = () => {},
+  onClearFilters = () => {},
+  country,
+  segmentation
+}) {
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>
@@ -149,7 +163,36 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           showCheckbox={false}
         />
       )}
-
+      {table.getColumn('isBankVerified') && (
+        <FacedtedFilter
+          options={bankVerifiedOptions}
+          column={table.getColumn('isBankVerified')}
+          title={t('bank_verified')}
+          Icon={MapPinIcon}
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
+      {table.getColumn('gender') && (
+        <FacedtedFilter
+          options={genderOptions}
+          column={table.getColumn('gender')}
+          title={t('gender')}
+          Icon={MapPinIcon}
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
+      {table.getColumn('isKYCVerified') && (
+        <FacedtedFilter
+          options={panVerifiedOptions}
+          column={table.getColumn('isKYCVerified')}
+          title={t('pan_verified')}
+          Icon={MapPinIcon}
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
       {table.getColumn('createdAt') && (
         <DateFilter
           column={table.getColumn('createdAt')}
@@ -160,7 +203,64 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           }}
         />
       )}
-
+      {/* <FacedtedFilter
+        title={'Countries'}
+        options={countries}
+        labelField={'CountryName'}
+        valueField={'CountryID'}
+        selectedValues={selectedSegmentations}
+        setSelectedValues={setSelectedSegmentations}
+      /> */}
+      <FacedtedFilter
+        options={
+          country
+            ? country.map((countr) => ({
+                label: countr.CountryName,
+                value: countr.CountryID
+              }))
+            : []
+        }
+        title={t('country')}
+        column={table.getColumn('CountryID')}
+        Icon={MapPinIcon}
+        isMultiple={true}
+        showCheckbox={true}
+      />
+      {table.getColumn('SegmentationID') && (
+        <FacedtedFilter
+          options={
+            segmentation
+              ? segmentation.map((segment) => ({
+                  label: segment.Name,
+                  value: segment.UserSegmentID
+                }))
+              : []
+          }
+          title={t('segmentation')}
+          column={table.getColumn('SegmentationID')}
+          Icon={MapPinIcon}
+          isMultiple={true}
+          showCheckbox={true}
+        />
+      )}
+      {/* {segmentations && (
+        <FacedtedFilter
+          options={
+            segmentations
+              ? segmentations.map((segment) => ({
+                  label: segment.segmentationName,
+                  value: segment.segmentationID
+                }))
+              : []
+          }
+          value={selectedSegmentations}
+          onChange={setSelectedSegmentations}
+          title={t('segmentation')}
+          Icon={MapPinIcon}
+          isMultiple={true}
+          showCheckbox={true}
+        />
+      )} */}
       <div>
         <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
           {t('search')}
@@ -177,7 +277,13 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
 }
 
 Toolbar.propTypes = {
-  table: PropTypes.object
+  table: PropTypes.object,
+  pageTitle: PropTypes.string,
+  summary: PropTypes.object,
+  onApplyFilters: PropTypes.func,
+  onClearFilters: PropTypes.func,
+  countries: PropTypes.array,
+  segmentations: PropTypes.array
 };
 
 SearchInput.propTypes = {
@@ -185,5 +291,9 @@ SearchInput.propTypes = {
 };
 
 Filters.propTypes = {
-  table: PropTypes.object
+  table: PropTypes.object,
+  onApplyFilters: PropTypes.func,
+  onClearFilters: PropTypes.func,
+  countries: PropTypes.array,
+  segmentations: PropTypes.array
 };

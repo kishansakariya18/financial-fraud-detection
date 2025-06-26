@@ -74,6 +74,49 @@ export const segmentationRoutes = [
         )
       };
     }
+  },
+  {
+    path: '/segmentation/:segmentationId/limits',
+    lazy: async () => {
+      const { default: Limits } = await import('../../pages/segmentation/limits/list/list');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.SEGMENTATION.LIMIT}>
+            <Limits />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: '/segmentation/:segmentationId/:segmentationLimitUID/limits/edit',
+    lazy: async () => {
+      const { default: EditSegmantationLimit } = await import(
+        '../../pages/segmentation/limits/EditSegmantationLimit'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.SEGMENTATION.LIMIT_EDIT}>
+            <EditSegmantationLimit />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: '/segmentation/:segmentationId/limits/create',
+    lazy: async () => {
+      const { default: CreateSegmantationLimit } = await import(
+        '../../pages/segmentation/limits/CreateSegmantationLimit'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.SEGMENTATION.LIMIT_CREATE}>
+            <CreateSegmantationLimit />
+          </PrivateRoute>
+        )
+      };
+    }
   }
 ];
 

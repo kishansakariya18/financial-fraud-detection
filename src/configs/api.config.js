@@ -67,7 +67,9 @@ export const apiConfig = {
       DELETE_COMMENT: '/admin/users/delete-comment',
       CHANE_PLAYER_FUND_PASSWORD: '/admin/user/change-manage-fund-password',
       SUMMARY: '/admin/users/summary',
-      USER_SUMMARY: '/admin/user/summary'
+      USER_SUMMARY: '/admin/user/summary',
+      COUNTRY_LIST: '/admin/countries',
+      SEGMENTATION_LIST: '/admin/segmentation/list'
     },
     ADMIN_USER: {
       ADMIN_LIST: '/admin/admin/list',
@@ -352,6 +354,30 @@ export const apiConfig = {
       BLOCK_PROVIDER: '/admin/country/:countryId/restrict-country-provider',
       BLOCK_COUNTRY: '/admin/country/restrictions',
       UNBLOCK_COUNTRY: '/admin/country/restrictions/:countryId/unrestrict'
+    },
+    USER_CLASS: {
+      LIST: '/admin/user-classes/list',
+      CREATE: '/admin/user-classes/create',
+      DETAIL: '/admin/user-classes/:userClassUID/detail',
+      UPDATE: '/admin/user-classes/update',
+      CHANGE_STATUS: '/admin/user-classes/:userClassUID/change-status',
+      DELETE: '/admin/user-classes/:userClassUID/delete'
+    },
+    USER_CLASS_LIMIT: {
+      LIST: '/admin/user-class-limits/list',
+      CREATE: '/admin/user-class-limits/create',
+      DETAIL: '/admin/user-class-limits/:userClassLimitUID/detail',
+      UPDATE: '/admin/user-class-limits/update',
+      CHANGE_STATUS: '/admin/user-class-limits/:userClassLimitUID/change-status',
+      DELETE: '/admin/user-class-limits/:userClassLimitUID/delete'
+    },
+    SEGMENTATION_LIMIT: {
+      LIST: '/admin/segmentation-limits/list',
+      CREATE: '/admin/segmentation-limits/create',
+      DETAIL: '/admin/segmentation-limits/:segmentationLimitUID/detail',
+      UPDATE: '/admin/segmentation-limits/update',
+      CHANGE_STATUS: '/admin/segmentation-limits/:segmentationLimitUID/change-status',
+      DELETE: '/admin/segmentation-limits/:segmentationLimitUID/delete'
     }
   }
 };
