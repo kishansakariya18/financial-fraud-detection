@@ -90,7 +90,7 @@ export function ViewDetails() {
         labels: [t('platformProfit'), t('totalWagered'), t('totalPayout')],
         legend: {
           position: 'bottom',
-          fontSize: '14px',
+          fontSize: '12px',
           fontFamily: 'inherit',
           labels: {
             colors: '#000000'
@@ -150,7 +150,7 @@ export function ViewDetails() {
         labels: [t('casinoWageredCount'), t('sportsWageredCount'), t('depositCount')],
         legend: {
           position: 'bottom',
-          fontSize: '14px',
+          fontSize: '12px',
           fontFamily: 'inherit',
           labels: {
             colors: '#374151'
@@ -211,7 +211,7 @@ export function ViewDetails() {
         labels: [t('casinoWagered'), t('sportsWagered'), t('casinoPayout'), t('sportsPayout')],
         legend: {
           position: 'bottom',
-          fontSize: '14px',
+          fontSize: '12px',
           fontFamily: 'inherit',
           labels: {
             colors: '#374151'
@@ -271,7 +271,7 @@ export function ViewDetails() {
         labels: [t('deposit'), t('withdraw')],
         legend: {
           position: 'bottom',
-          fontSize: '14px',
+          fontSize: '12px',
           fontFamily: 'inherit',
           labels: {
             colors: '#374151'

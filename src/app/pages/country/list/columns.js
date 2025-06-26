@@ -5,9 +5,9 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { RowActions } from './RowActions';
 import {
   IdCell,
-  BadgeCell,
   BoldCell,
-  MultiLineCell
+  MultiLineCell,
+  StatusIconCell
 } from '../../../../components/custom/table/cell';
 import { globallyBlockedStatusOptions } from '../helper';
 
@@ -41,7 +41,7 @@ export const columns = [
     id: 'globallyBlocked',
     label: 'Globally Blocked?',
     header: 'Globally Blocked?',
-    cell: BadgeCell,
+    cell: StatusIconCell,
     meta: { optionData: globallyBlockedStatusOptions },
     filterFn: 'arrIncludesSome',
     enableSorting: false

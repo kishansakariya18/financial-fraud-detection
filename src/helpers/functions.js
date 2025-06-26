@@ -112,6 +112,12 @@ export const dummyCards = {
       gradientFrom: 'from-amber-400',
       gradientTo: 'to-orange-600'
     },
+    BLOCKED_COUNTRY: {
+      key: 'Blocked Country',
+      value: 0,
+      gradientFrom: 'from-pink-500',
+      gradientTo: 'to-rose-500'
+    },
     ACTIVE_COUNTRY: {
       key: 'Active Country',
       value: 239,

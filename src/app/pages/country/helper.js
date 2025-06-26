@@ -1,4 +1,6 @@
 import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
+// import { FaCheck } from 'react-icons/fa';
+import { FaCheck, FaXmark } from 'react-icons/fa6';
 
 export const parseAdminStatusToApp = (status) => (status ? 'active' : 'inactive');
 
@@ -46,13 +48,13 @@ export const globallyBlockedStatusOptions = [
     value: 'blocked',
     label: 'Blocked',
     color: 'error',
-    icon: XCircleIcon
+    icon: FaXmark
   },
   {
     value: 'not_blocked',
     label: 'Active',
     color: 'success',
-    icon: CheckBadgeIcon
+    icon: FaCheck
   }
 ];
 
@@ -61,13 +63,13 @@ export const blockedProviderStatusOptions = [
     value: 'blocked',
     label: 'Blocked',
     color: 'error',
-    icon: XCircleIcon
+    icon: FaXmark
   },
   {
     value: 'active',
     label: 'Active',
     color: 'success',
-    icon: CheckBadgeIcon
+    icon: FaCheck
   }
 ];
 
@@ -76,12 +78,12 @@ export const blockedModuleStatusOptions = [
     value: 'blocked',
     label: 'Blocked',
     color: 'error',
-    icon: XCircleIcon
+    icon: FaXmark
   },
   {
     value: 'active',
     label: 'Active',
     color: 'success',
-    icon: CheckBadgeIcon
+    icon: FaCheck
   }
 ];

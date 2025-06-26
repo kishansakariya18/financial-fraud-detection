@@ -22,7 +22,7 @@ export function CountryFilters({
   onApplyFilters = () => {},
   onClearFilters = () => {},
   pageTitle = '',
-  summary = null
+  summary = {}
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
@@ -51,18 +51,14 @@ export function CountryFilters({
           maskShape="is-reuleaux-triangle"
         />
         <DashboardCard
-          label={dummyCards.Country.ACTIVE_COUNTRY.key}
-          value={summary ? summary.activeCountries : dummyCards.Country.ACTIVE_COUNTRY.value}
-          gradientFrom={dummyCards.Country.ACTIVE_COUNTRY.gradientFrom}
-          gradientTo={dummyCards.Country.ACTIVE_COUNTRY.gradientTo}
-          textColor="text-sky-100"
-          maskShape="is-reuleaux-triangle"
-        />
-        <DashboardCard
-          label={dummyCards.Country.INACTIVE_COUNTRY.key}
-          value={summary ? summary.inactiveCountries : dummyCards.Country.INACTIVE_COUNTRY.value}
-          gradientFrom={dummyCards.Country.INACTIVE_COUNTRY.gradientFrom}
-          gradientTo={dummyCards.Country.INACTIVE_COUNTRY.gradientTo}
+          label={dummyCards.Country.BLOCKED_COUNTRY.key}
+          value={
+            summary.blockedCountries
+              ? summary.blockedCountries
+              : dummyCards.Country.BLOCKED_COUNTRY.value
+          }
+          gradientFrom={dummyCards.Country.BLOCKED_COUNTRY.gradientFrom}
+          gradientTo={dummyCards.Country.BLOCKED_COUNTRY.gradientTo}
           textColor="text-sky-100"
           maskShape="is-reuleaux-triangle"
         />

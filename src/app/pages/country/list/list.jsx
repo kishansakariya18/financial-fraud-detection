@@ -21,7 +21,7 @@ export default function Country() {
   const pageTitle = t('countries');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
-  const [summary, setSummary] = useState(null);
+  const [summary, setSummary] = useState({});
 
   const fetchCountry = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;

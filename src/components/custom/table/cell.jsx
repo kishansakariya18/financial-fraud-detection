@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import { Highlight } from 'components/shared/Highlight';
 import { ensureString } from 'utils/ensureString';
 import { Badge, Checkbox } from 'components/ui';
+import { setThisClass } from 'utils/setThisClass';
+import clsx from 'clsx';
 
 export function DateCell({ getValue }) {
   // const { locale } = useLocaleContext();
@@ -176,6 +178,24 @@ export function MultiLineCell({ getValue }) {
   );
 }
 
+export function StatusIconCell({ getValue, column }) {
+  const value = getValue();
+  const options = column.columnDef.meta?.optionData || [];
+  const option = options.find((opt) => opt.value === value);
+  if (!option) return null;
+  const Icon = option.icon;
+  const color = option.color;
+
+  return (
+    <Icon
+      className={clsx(
+        'h-5 w-5',
+        color && color !== 'neutral' && [setThisClass(color), 'text-this dark:text-this-light']
+      )}
+    />
+  );
+}
+
 DateCell.propTypes = {
   getValue: PropTypes.func
 };
@@ -208,4 +228,9 @@ ThemeSwatchCell.propTypes = {
 
 MultiLineCell.propTypes = {
   getValue: PropTypes.func
+};
+
+StatusIconCell.propTypes = {
+  getValue: PropTypes.func,
+  column: PropTypes.object
 };

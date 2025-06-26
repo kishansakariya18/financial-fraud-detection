@@ -1,5 +1,5 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import { BadgeCell, BoldCell, IdCell, MultiLineCell } from 'components/custom/table/cell';
+import { BoldCell, IdCell, MultiLineCell, StatusIconCell } from 'components/custom/table/cell';
 import { blockedModuleStatusOptions } from '../helper';
 import { RowActions } from './RowActions';
 
@@ -24,7 +24,7 @@ export const columns = [
     id: 'isBlocked',
     label: 'Blocked?',
     header: 'Blocked?',
-    cell: BadgeCell,
+    cell: StatusIconCell,
     meta: { optionData: blockedModuleStatusOptions },
     enableSorting: false
   }),
