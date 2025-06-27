@@ -455,6 +455,16 @@
   "bank_verified": "Verificado por banco",
   "pan_verified": "Verificado por KYC",
   "limitAmount": "Cantidad de límite",
-  "search_player_class": "Nombre de búsqueda, código..."
+  "search_player_class": "Nombre de búsqueda, código...",
+  "appSettings": "Configuración de la aplicación",
+  "allowBetting": "Permitir apuestas",
+  "allowBettingDescription": "Si las apuestas están habilitadas en el sistema.",
+  "maintenance": "Mantenimiento",
+  "maintananceDescription": "Si el sitio web no está disponible temporalmente debido a mantenimiento.",
+  "casinoDescription": "Si el casino está habilitado en el sistema.",
+  "sportsBook": "Apuestas deportivas",
+  "sportsBookDescription":"Si la casa de apuestas está habilitada en el sistema.",
+  "manualKYC": "KYC manual",
+  "manualKYCDescription": "Si se requiere KYC manual para los usuarios."
 
   }

@@ -475,5 +475,15 @@
   "bank_verified": "Bank Verified",
   "pan_verified": "KYC Verified",
   "limitAmount": "Limit Amount",
-  "search_player_class": "Search Name, Code..."
+  "search_player_class": "Search Name, Code...",
+  "appSettings": "Application Settings",
+  "allowBetting": "Allow Betting",
+  "allowBettingDescription": "If betting is enabled in the system.",
+  "maintenance": "Maintenance",
+  "maintananceDescription": "If website is temporarily unavailable due to maintenance.",
+  "casinoDescription": "If the casino is enabled in the system.",
+  "sportsBook": "Sports Book",
+  "sportsBookDescription":"If the sportsbook is enabled in the system.",
+  "manualKYC": "Manual KYC",
+  "manualKYCDescription": "If manual KYC is required for users."
 }

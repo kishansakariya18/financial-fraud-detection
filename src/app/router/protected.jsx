@@ -25,6 +25,7 @@ import bonusManagementRoute from './routes/bonus-management.route';
 import paymentProvider from './routes/payment-provider.route';
 import bannerRoute from './routes/banner.route';
 import userClass from './routes/user-class.route';
+import siteConfigurationRoutes from './routes/site-configuration.route';
 
 // ----------------------------------------------------------------------
 
@@ -59,7 +60,8 @@ const protectedRoutes = {
         ...profileRoute,
         ...bonusManagementRoute,
         ...paymentProvider,
-        ...userClass
+        ...userClass,
+        ...siteConfigurationRoutes
       ]
     }
   ]
