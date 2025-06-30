@@ -30,6 +30,9 @@ export function RowActions({ row, table }) {
     if (table.options?.meta?.fetchNewList) {
       table.options.meta.fetchNewList();
     }
+    if (table.options?.meta?.fetchSummary) {
+      table.options.meta.fetchSummary();
+    }
   };
 
   const closeModal = () => {
