@@ -71,7 +71,7 @@ export default function Country() {
       columnPinning: { left: ['id'], right: ['actions'] },
       tableSettings: {}
     },
-    meta: { fetchCountry }
+    meta: { fetchCountry, fetchSummary }
   });
 
   useEffect(() => {

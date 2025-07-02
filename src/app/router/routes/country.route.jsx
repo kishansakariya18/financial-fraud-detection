@@ -41,6 +41,12 @@ export const countryRoutes = [
         })
       }
     ]
+  },
+  {
+    path: 'site-configuration/app-settings',
+    lazy: async () => ({
+      Component: (await import('../../pages/site-configuration/app-settings')).default
+    })
   }
 ];
 

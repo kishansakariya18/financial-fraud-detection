@@ -51,7 +51,6 @@ export function RowActions({ row }) {
     }
 
     setConfirmStatusLoading(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [row]);
 
   const state = statusError ? 'error' : statusSuccess ? 'success' : 'pending';

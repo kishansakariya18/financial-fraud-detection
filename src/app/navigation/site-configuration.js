@@ -5,6 +5,7 @@ import { Cog6ToothIcon } from '@heroicons/react/24/outline';
 import { NAV_TYPE_COLLAPSE, PERMISSIONS } from 'constants/app.constant';
 import { country } from './country';
 import { RateLimitRules } from './rateLimitRules';
+import { appSettings } from './app-settings';
 
 export const siteConfiguration = {
   id: 'site_configuration',
@@ -14,5 +15,5 @@ export const siteConfiguration = {
   transKey: 'site_configuration',
   Icon: Cog6ToothIcon,
   permission: [PERMISSIONS.COUNTRIES.LIST, PERMISSIONS.RATE_LIMIT_RULES.LIST],
-  childs: [country, RateLimitRules]
+  childs: [country, appSettings, RateLimitRules]
 };

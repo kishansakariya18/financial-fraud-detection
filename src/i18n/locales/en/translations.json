@@ -479,5 +479,15 @@
   "rate_limit_rules": "Rate Limit Rules",
   "rule_status_desc": "Are you sure you want to update this Rule's status ?",
   "rule_status_suceess": "Rule Status has been changed successfully",
-  "rule": "Rule"
+  "rule": "Rule",
+  "appSettings": "Application Settings",
+  "allowBetting": "Allow Betting",
+  "allowBettingDescription": "If betting is enabled in the system.",
+  "maintenance": "Maintenance",
+  "maintananceDescription": "If website is temporarily unavailable due to maintenance.",
+  "casinoDescription": "If the casino is enabled in the system.",
+  "sportsBook": "Sports Book",
+  "sportsBookDescription":"If the sportsbook is enabled in the system.",
+  "manualKYC": "Manual KYC",
+  "manualKYCDescription": "If manual KYC is required for users."
 }
