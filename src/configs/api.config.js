@@ -378,6 +378,10 @@ export const apiConfig = {
       UPDATE: '/admin/segmentation-limits/update',
       CHANGE_STATUS: '/admin/segmentation-limits/:segmentationLimitUID/change-status',
       DELETE: '/admin/segmentation-limits/:segmentationLimitUID/delete'
+    },
+    RATE_LIMIT_RULES: {
+      LIST: '/admin/rate-limit-rules/list',
+      CHANGE_STATUS: '/admin/rate-limit-rules/:rateLimitUID/change-status'
     }
   }
 };

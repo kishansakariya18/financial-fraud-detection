@@ -475,5 +475,9 @@
   "bank_verified": "Bank Verified",
   "pan_verified": "KYC Verified",
   "limitAmount": "Limit Amount",
-  "search_player_class": "Search Name, Code..."
+  "search_player_class": "Search Name, Code...",
+  "rate_limit_rules": "Rate Limit Rules",
+  "rule_status_desc": "Are you sure you want to update this Rule's status ?",
+  "rule_status_suceess": "Rule Status has been changed successfully",
+  "rule": "Rule"
 }

@@ -43,6 +43,11 @@ export const PAYOUT_STATUS = {
   REJECTED: 2
 };
 
+export const GENERAL_STATUS = {
+  ACTIVE: 1,
+  INACTIVE: 0
+};
+
 export const TRANSACTION = {
   TRANSACTION_TYPE: {
     SYSTEM: 0,
@@ -287,6 +292,9 @@ export const PERMISSIONS = {
     EDIT: 'player-class-limit-edit',
     CHANGE_STATUS: 'player-class-limit-change-status',
     DELETE: 'player-class-limit-delete'
+  },
+  RATE_LIMIT_RULES: {
+    LIST: 'rate-limit-rules-view'
   }
 };
 
