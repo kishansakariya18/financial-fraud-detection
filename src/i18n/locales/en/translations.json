@@ -489,5 +489,8 @@
   "sportsBook": "Sports Book",
   "sportsBookDescription":"If the sportsbook is enabled in the system.",
   "manualKYC": "Manual KYC",
-  "manualKYCDescription": "If manual KYC is required for users."
+  "manualKYCDescription": "If manual KYC is required for users.",
+  "phone_number": "Phone Number",
+  "blacklist": "Blacklist",
+  "blacklisted": "Blacklisted"
 }

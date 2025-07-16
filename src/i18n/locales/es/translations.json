@@ -465,6 +465,8 @@
   "sportsBook": "Apuestas deportivas",
   "sportsBookDescription":"Si la casa de apuestas está habilitada en el sistema.",
   "manualKYC": "KYC manual",
-  "manualKYCDescription": "Si se requiere KYC manual para los usuarios."
-
+  "manualKYCDescription": "Si se requiere KYC manual para los usuarios.",
+  "phone_number": "Número de teléfono",
+  "blacklist":"Lista negra",
+  "blacklisted": "En la lista negra"
   }

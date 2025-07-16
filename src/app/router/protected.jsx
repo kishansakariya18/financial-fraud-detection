@@ -27,6 +27,7 @@ import bannerRoute from './routes/banner.route';
 import userClass from './routes/user-class.route';
 import rateLimitRulesRoute from './routes/rate-limit-rules.route';
 import siteConfigurationRoutes from './routes/site-configuration.route';
+import blacklistRoutes from './routes/blacklist.route';
 
 // ----------------------------------------------------------------------
 
@@ -63,7 +64,8 @@ const protectedRoutes = {
         ...paymentProvider,
         ...userClass,
         ...rateLimitRulesRoute,
-        ...siteConfigurationRoutes
+        ...siteConfigurationRoutes,
+        ...blacklistRoutes
       ]
     }
   ]

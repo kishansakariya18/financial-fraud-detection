@@ -465,5 +465,8 @@
   "sportsBook": "Livre de sport",
   "sportsBookDescription":"Si le bookmaker est activé dans le système.",
   "manualKYC": "KYC manuel",
-  "manualKYCDescription": "Si un KYC manuel est requis pour les utilisateurs."
+  "manualKYCDescription": "Si un KYC manuel est requis pour les utilisateurs.",
+  "phone_number": "Numéro de téléphone",
+  "blacklist": "Liste noire",
+  "blacklisted": "Sur liste noire"
 }
