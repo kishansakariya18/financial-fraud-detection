@@ -10,12 +10,18 @@ export default function Toolbar({
   table,
   searchValue,
   setSearchValue,
-  onApplyFilters = () => {}
+  onApplyFilters = () => {},
+  onClearFilters = () => {}
 }) {
   const handleInputChange = (e) => setSearchValue(e.target.value);
   const { t } = useTranslation();
   const pageTitle = t('blacklisted') + ' IP ' + t('address');
   const buttonTitle = t('blacklist') + ' IP ' + t('address');
+
+  const handleReset = () => {
+    setSearchValue('');
+    onClearFilters();
+  };
 
   return (
     <div className="table-toolbar">
@@ -50,6 +56,12 @@ export default function Toolbar({
           <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
             {t('search')}
           </Button>
+          <Button
+            onClick={handleReset}
+            className="h-8 whitespace-nowrap px-2.5 text-xs"
+            disabled={!searchValue}>
+            {t('reset') + ' ' + t('filter')}
+          </Button>
         </div>
         <div className="ml-auto">
           <TableConfig table={table} />
@@ -64,5 +76,6 @@ Toolbar.propTypes = {
   table: PropTypes.object,
   searchValue: PropTypes.string,
   setSearchValue: PropTypes.func,
-  onApplyFilters: PropTypes.func
+  onApplyFilters: PropTypes.func,
+  onClearFilters: PropTypes.func
 };

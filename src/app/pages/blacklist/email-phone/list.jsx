@@ -62,6 +62,13 @@ export default function BlacklistEmailPhone() {
     });
   };
 
+  const handleClearFilters = () => {
+    setSearchValue('');
+    setSearchParams({
+      pageIndex: 0
+    });
+  };
+
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
       <Toolbar
@@ -70,6 +77,7 @@ export default function BlacklistEmailPhone() {
         searchValue={searchValue}
         setSearchValue={setSearchValue}
         onApplyFilters={handleApplyFilters}
+        onClearFilters={handleClearFilters}
       />
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading || loading} />
     </ContentWrapper>

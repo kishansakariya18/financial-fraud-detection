@@ -61,6 +61,13 @@ export default function BlacklistIP() {
     });
   };
 
+  const handleClearFilters = () => {
+    setSearchValue('');
+    setSearchParams({
+      pageIndex: 0
+    });
+  };
+
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
       <Toolbar
@@ -69,6 +76,7 @@ export default function BlacklistIP() {
         searchValue={searchValue}
         setSearchValue={setSearchValue}
         onApplyFilters={handleApplyFilters}
+        onClearFilters={handleClearFilters}
       />
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading || loading} />
     </ContentWrapper>
