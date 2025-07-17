@@ -451,6 +451,8 @@
   "restrictions": "Restricciones",
   "countryRestrictions": "Restricciones del país",
   "areYouSure":"¿Estás seguro?",
+  "delete_confirm_desc": "¿Desea eliminar este {{type}} ({{value}}) de la lista negra?",
+  "delete_success_desc": "¡{{type}} ({{value}}) eliminado de la lista negra con éxito!",
   "segmentation_limit_delete_desc": "¿Estás seguro de querer eliminar esta Segmentation Limit ?",
   "bank_verified": "Verificado por banco",
   "pan_verified": "Verificado por KYC",

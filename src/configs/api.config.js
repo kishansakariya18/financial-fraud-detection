@@ -385,7 +385,8 @@ export const apiConfig = {
     },
     BLACKLIST: {
       LIST: '/admin/blacklist/list',
-      BLOCK: '/admin/blacklist/block'
+      BLOCK: '/admin/blacklist/block',
+      DELETE: '/admin/blacklist/:blacklistUID/delete'
     }
   }
 };

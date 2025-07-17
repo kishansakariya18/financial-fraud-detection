@@ -449,8 +449,9 @@
   "sportsWagered": "Sports Wagered",
   "casinoPayout": "Casino Payout",
   "sportsPayout": "Sports Payout",
-  "areYouSure":"Are You Sure?"
-  ,
+  "areYouSure": "Are you sure?",
+  "delete_confirm_desc": "You want to remove this {{type}} ({{value}}) from Blacklist?",
+  "delete_success_desc": "{{type}} ({{value}}) removed from Blacklist Successfully!",
   "banner": "Banner",
   "placement": "Placement",
   "headline": "Headline",

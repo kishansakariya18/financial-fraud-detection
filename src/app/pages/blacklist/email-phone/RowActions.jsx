@@ -4,15 +4,16 @@ import clsx from 'clsx';
 import { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'components/ui';
-import { BlockUnblockModal } from 'components/shared/BlockUnblockModal';
 import { TbTrash } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
+import { ConfirmModal } from 'components/shared/ConfirmModal';
+import BlacklistService from 'services/blacklist.services';
 
-export function RowActions({ table }) {
+export function RowActions({ row, table }) {
   const { t } = useTranslation();
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalState, setModalState] = useState('pending'); // 'pending' | 'success' | 'error'
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const refreshTable = () => {
@@ -26,34 +27,55 @@ export function RowActions({ table }) {
 
   const closeModal = () => {
     setModalOpen(false);
-    setError(false);
+    setModalState('pending');
     setErrorMessage('');
     refreshTable();
   };
 
   const openModal = () => {
     setModalOpen(true);
-    setError(false);
+    setModalState('pending');
     setErrorMessage('');
   };
 
   const handleDelete = async () => {
     setLoading(true);
     try {
-      // TODO: Replace with actual delete API call
-      // await BlacklistService.deleteEmailOrPhone(row.original.id);
+      const result = await BlacklistService.deleteBlacklistItem(row.original.uid);
       setLoading(false);
-      closeModal();
+      if (result && (result.status === 200 || result.status === 201)) {
+        setModalState('success');
+      } else {
+        setModalState('error');
+        setErrorMessage(result?.error || t('something_went_wrong'));
+      }
     } catch (e) {
-      setError(true);
-      setErrorMessage(e?.message || 'Something went wrong.');
       setLoading(false);
+      setModalState('error');
+      setErrorMessage(e?.message || t('something_went_wrong'));
     }
   };
 
-  const handleRetry = () => {
-    setError(false);
-    setErrorMessage('');
+  const isEmail = row.original.blockType === 'Email';
+  const typeLabel = isEmail ? t('email') : t('phone_number');
+  const value = row.original.value;
+
+  const messages = {
+    pending: {
+      title: t('areYouSure'),
+      description: t('delete_confirm_desc', { type: typeLabel, value }),
+      actionText: t('delete')
+    },
+    success: {
+      title: t('delete_success'),
+      description: t('delete_success_desc', { type: typeLabel, value }),
+      actionText: t('done')
+    },
+    error: {
+      title: t('something_went_wrong'),
+      description: errorMessage,
+      actionText: t('retry')
+    }
   };
 
   return (
@@ -92,18 +114,13 @@ export function RowActions({ table }) {
         </Menu>
       </div>
 
-      <BlockUnblockModal
+      <ConfirmModal
         show={modalOpen}
         onClose={closeModal}
-        onSubmit={handleDelete}
-        blocked={false}
+        onOk={modalState === 'pending' ? handleDelete : closeModal}
         confirmLoading={loading}
-        error={error}
-        errorMessage={errorMessage}
-        onRetry={handleRetry}
-        itemType={t('Email/Phone')}
-        actionLabel={t('delete')}
-        showReasonInput={false}
+        state={modalState}
+        messages={messages}
       />
     </>
   );

@@ -1,6 +1,7 @@
 import { parseAdminStatusToApi } from 'app/pages/country/helper';
 import apiConfig from 'configs/api.config';
 import { sendRequest } from 'utils/axios';
+import { replaceText } from 'utils/custom.utilities';
 // import { replaceText } from 'utils/custom.utilities';
 
 const BlacklistService = {
@@ -76,6 +77,22 @@ const BlacklistService = {
       return response;
     } catch (error) {
       console.log('Error from Blacklist Block', error);
+    }
+  },
+  deleteBlacklistItem: async (uid) => {
+    try {
+      const endPoint = replaceText(apiConfig.endPoints.BLACKLIST.DELETE, ':blacklistUID', uid);
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + endPoint,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error deleting blacklist item', err);
     }
   }
 };
