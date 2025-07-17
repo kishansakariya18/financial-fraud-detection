@@ -11,6 +11,12 @@ import { Input, Button, Textarea } from 'components/ui';
 import { blacklistEmailPhoneSchema } from './schema';
 import BlacklistService from 'services/blacklist.services';
 import { toast } from 'sonner';
+import { countries } from 'constants/countries.constant';
+
+const countriesWithDisplayName = countries.map((c) => ({
+  ...c,
+  displayName: `${c.name} (${c.dialCode})`
+}));
 
 const BlacklistEmailPhone = () => {
   const { t } = useTranslation();
@@ -35,17 +41,30 @@ const BlacklistEmailPhone = () => {
     handleSubmit,
     control,
     reset,
-    formState: { errors }
+    formState: { errors },
+    watch
   } = useForm({
     resolver: yupResolver(blacklistEmailPhoneSchema),
     defaultValues: { type: '', value: '', reason: '' }
   });
 
+  const type = watch('type');
+
   const onSubmit = async (data) => {
     setLoading(true);
+    let postValue = data.value;
+    if (data.type === 'mobile') {
+      if (!data.country) {
+        toast.error(t('select') + ' ' + t('country'));
+        setLoading(false);
+        return;
+      }
+      const countryObj = countriesWithDisplayName.find((c) => c.displayName === data.country);
+      postValue = `${countryObj.dialCode} ${data.value}`;
+    }
     const result = await BlacklistService.blacklist({
       type: data.type,
-      value: data.value,
+      value: postValue,
       reason: data.reason
     });
     setLoading(false);
@@ -73,7 +92,7 @@ const BlacklistEmailPhone = () => {
         </div>
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div className="mt-6 space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-3">
               <Controller
                 name="type"
                 control={control}
@@ -90,14 +109,32 @@ const BlacklistEmailPhone = () => {
                   />
                 )}
               />
+              {type === 'mobile' && (
+                <Controller
+                  name="country"
+                  control={control}
+                  render={({ field }) => (
+                    <Listbox
+                      data={countriesWithDisplayName}
+                      value={
+                        countriesWithDisplayName.find((c) => c.displayName === field.value) || null
+                      }
+                      onChange={(val) => field.onChange(val.displayName)}
+                      name="country"
+                      label={t('select') + ' ' + t('country')}
+                      placeholder={t('select') + ' ' + t('country')}
+                      displayField="displayName"
+                      error={errors?.country?.message}
+                    />
+                  )}
+                />
+              )}
               <Input
                 {...register('value')}
                 label={t('value')}
                 error={errors?.value?.message}
                 placeholder={t('enter') + ' ' + t('value')}
               />
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
               <Textarea
                 {...register('reason')}
                 label={t('reason')}
@@ -112,7 +149,9 @@ const BlacklistEmailPhone = () => {
             <Button
               className="min-w-[7rem]"
               type="button"
-              onClick={() => reset()}
+              onClick={() => {
+                reset();
+              }}
               disabled={loading}>
               {t('clear')}
             </Button>

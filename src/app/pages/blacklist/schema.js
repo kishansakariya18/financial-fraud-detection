@@ -2,12 +2,17 @@ import * as Yup from 'yup';
 
 export const blacklistEmailPhoneSchema = Yup.object().shape({
   type: Yup.string().oneOf(['email', 'mobile'], 'Select a valid type').required('Type is required'),
+  country: Yup.string().when('type', {
+    is: 'mobile',
+    then: (schema) => schema.required('Country is required'),
+    otherwise: (schema) => schema.notRequired()
+  }),
   value: Yup.string().when('type', {
     is: 'email',
     then: (schema) => schema.email('Invalid email').required('Email is required'),
     otherwise: (schema) =>
       schema
-        .matches(/^\d{10}$/, 'Enter a valid 10-digit phone number')
+        .matches(/^[0-9]{10}$/, 'Enter a valid 10-digit phone number')
         .required('Phone number is required')
   }),
   reason: Yup.string().trim().required('Reason is required')

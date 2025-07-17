@@ -86,7 +86,7 @@ const BlacklistIP = () => {
         </div>
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div className="mt-6 space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-3">
               <Controller
                 name="type"
                 control={control}
@@ -109,8 +109,6 @@ const BlacklistIP = () => {
                 error={errors?.ipFrom?.message}
                 placeholder={t('enter') + ' ' + t('ip_from')}
               />
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
               <Input
                 {...register('ipTo')}
                 label={t('ip_to')}
