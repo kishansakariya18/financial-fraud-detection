@@ -468,5 +468,11 @@
   "manualKYCDescription": "Si se requiere KYC manual para los usuarios.",
   "phone_number": "Número de teléfono",
   "blacklist":"Lista negra",
-  "blacklisted": "En la lista negra"
+  "blacklisted": "En la lista negra",
+  "ip_from": "IP Desde",
+  "ip_to": "IP Hasta",
+  "blacklist_success": "Añadido a la lista negra correctamente",
+  "something_went_wrong": "Algo salió mal",
+  "reason": "Motivo",
+  "clear": "Limpiar"
   }

@@ -53,6 +53,30 @@ const BlacklistService = {
     } catch (error) {
       console.log('Error from Entity IP List', error);
     }
+  },
+  blacklist: async ({ type, ipType, ipFrom, ipTo, value, reason }) => {
+    try {
+      const endPoint = apiConfig.endPoints.BLACKLIST.BLOCK;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          type,
+          ipType,
+          ipFrom,
+          ipTo,
+          value,
+          reason
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from Blacklist Block', error);
+    }
   }
 };
 

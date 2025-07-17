@@ -1,12 +1,13 @@
-import { PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
+import { HiOutlineBan } from 'react-icons/hi';
 
 export default function Toolbar({
-  onAdd,
   table,
   searchValue,
   setSearchValue,
@@ -15,6 +16,7 @@ export default function Toolbar({
 }) {
   const handleInputChange = (e) => setSearchValue(e.target.value);
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const pageTitle = t('blacklisted') + ' IP ' + t('address');
   const buttonTitle = t('blacklist') + ' IP ' + t('address');
 
@@ -38,8 +40,8 @@ export default function Toolbar({
         <Button
           className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
           color="primary"
-          onClick={onAdd}>
-          <PlusIcon className="size-5" />
+          onClick={() => navigate('/blacklist/ip')}>
+          <HiOutlineBan className="size-5" />
           <span>{buttonTitle}</span>
         </Button>
       </div>
@@ -72,7 +74,6 @@ export default function Toolbar({
 }
 
 Toolbar.propTypes = {
-  onAdd: PropTypes.func,
   table: PropTypes.object,
   searchValue: PropTypes.string,
   setSearchValue: PropTypes.func,

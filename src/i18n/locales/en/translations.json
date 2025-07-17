@@ -492,5 +492,11 @@
   "manualKYCDescription": "If manual KYC is required for users.",
   "phone_number": "Phone Number",
   "blacklist": "Blacklist",
-  "blacklisted": "Blacklisted"
+  "blacklisted": "Blacklisted",
+  "ip_from": "IP From",
+  "ip_to": "IP To",
+  "blacklist_success": "Blacklisted successfully",
+  "something_went_wrong": "Something went wrong",
+  "reason": "Reason",
+  "clear": "Clear"
 }

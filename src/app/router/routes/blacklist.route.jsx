@@ -45,6 +45,26 @@ export const blacklistRoutes = [
         }
       }
     ]
+  },
+  {
+    path: 'blacklist/ip',
+    lazy: async () => {
+      const { default: BlacklistIP } = await import('../../pages/blacklist/BlacklistIP');
+      return {
+        Component: () => <BlacklistIP />
+      };
+    }
+  },
+  {
+    path: 'blacklist/email-phone',
+    lazy: async () => {
+      const { default: BlacklistEmailPhone } = await import(
+        '../../pages/blacklist/BlacklistEmailPhone'
+      );
+      return {
+        Component: () => <BlacklistEmailPhone />
+      };
+    }
   }
 ];
 
