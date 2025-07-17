@@ -476,5 +476,6 @@
   "blacklist_success": "Ajouté à la liste noire avec succès",
   "something_went_wrong": "Une erreur s'est produite",
   "reason": "Raison",
-  "clear": "Effacer"
+  "clear": "Effacer",
+  "single": "Unique"
 }

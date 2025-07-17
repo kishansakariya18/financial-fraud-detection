@@ -45,7 +45,10 @@ const BlacklistIP = () => {
 
   useEffect(() => {
     if (type === 'single' && ipFrom) {
-      setValue('ipTo', ipFrom, { shouldValidate: true });
+      setValue('ipTo', ipFrom, { shouldValidate: false });
+    }
+    if (type === 'single' && !ipFrom) {
+      setValue('ipTo', '', { shouldValidate: false });
     }
   }, [type, ipFrom, setValue]);
 

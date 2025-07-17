@@ -476,5 +476,6 @@
   "blacklist_success": "Añadido a la lista negra correctamente",
   "something_went_wrong": "Algo salió mal",
   "reason": "Motivo",
-  "clear": "Limpiar"
+  "clear": "Limpiar",
+  "single": "Único"
   }

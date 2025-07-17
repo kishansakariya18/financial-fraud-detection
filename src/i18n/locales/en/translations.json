@@ -499,5 +499,6 @@
   "blacklist_success": "Blacklisted successfully",
   "something_went_wrong": "Something went wrong",
   "reason": "Reason",
-  "clear": "Clear"
+  "clear": "Clear",
+  "single": "Single"
 }
