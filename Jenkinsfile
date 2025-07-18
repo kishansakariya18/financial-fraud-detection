@@ -59,6 +59,7 @@ pipeline {
                     docker.image("${DOCKERHUB_REPO}:${IMAGE_TAG}").push()
           }
          // Now remove the image from the local system
+         sh "docker image prune -f"
          sh "docker rmi ${DOCKERHUB_REPO}:${IMAGE_TAG} || true"
         }
       }  
