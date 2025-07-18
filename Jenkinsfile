@@ -62,7 +62,26 @@ pipeline {
       }  
      }
 
-        
+     stage('Run Docker Container') {
+       steps {
+         script {
+            def containerName = "admin-panel"
+            def imageName = "${DOCKERHUB_REPO}:${IMAGE_TAG}"
+          // stop and remove the old container if it's alreday running
+           sh """
+            docker ps -q --filter name=${containerName} | grep -q . && docker stop ${containerName} || true
+            docker ps -a -q --filter name=${containerName} | grep -q . && docker rm ${containerName} || true
+              """
+            // Pull latest image
+            
+            sh "docker pull ${imageName}"
+            // Run new container on port 9443 (you will reverse-proxy this via Apache)
+            sh """
+            docker run -d --name ${containerName} -p 9443:443 ${imageName}
+               """
+     }  
+    }
+   }        
 
 
 
