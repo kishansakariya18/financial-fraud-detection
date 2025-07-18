@@ -27,11 +27,11 @@ export function RowActions({ row, table }) {
   const deleteConfirmMessages = {
     pending: {
       description: t('user_class_limit_delete_desc'),
-      actionText: t('Delete')
+      actionText: t('delete')
     },
     success: {
-      title: t('userClassLimit') + ' ' + t('deleted'),
-      description: t('user_class_limit_delete_success')
+      title: t('user_class_limit_delete_desc'),
+      description: t('delete_success')
     }
   };
 

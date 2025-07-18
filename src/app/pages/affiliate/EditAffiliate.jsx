@@ -9,7 +9,7 @@ import { Button, Checkbox, Input } from 'components/ui';
 import { CiMobile1 } from 'react-icons/ci';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import AffiliateService from 'services/affiliate.services';
 import {
@@ -46,6 +46,7 @@ const EditAffiliate = () => {
   const perSignup = watch('perSignup');
   const perDeposit = watch('perDeposit');
   const perPlayerLoss = watch('perPlayerLoss');
+  const navigate = useNavigate();
 
   const fetchAffiliateDetails = async () => {
     const result = await AffiliateService.getAffiliateDetail(affiliateId);
@@ -110,6 +111,9 @@ const EditAffiliate = () => {
 
   if (!loading && !error && response) {
     toast.success(response.message);
+    setTimeout(() => {
+      navigate('/users/affiliate');
+    }, 0);
     fetchAffiliateDetails();
 
     setResponse(null);

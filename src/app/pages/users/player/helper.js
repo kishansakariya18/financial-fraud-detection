@@ -138,7 +138,8 @@ export const bankVerifiedOptions = [
   {
     value: 'not-verified',
     label: 'Not Verified',
-    color: 'error'
+    color: 'error',
+    icon: XCircleIcon
   }
 ];
 export const bankVerifyOptionToAPI = (status) => {

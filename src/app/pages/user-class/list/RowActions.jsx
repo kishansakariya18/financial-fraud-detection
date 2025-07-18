@@ -34,7 +34,7 @@ export function RowActions({ row, table }) {
       actionText: t('submit')
     },
     success: {
-      title: t('userClass') + ' ' + t('status') + ' ' + t('changed'),
+      title: t('success'),
       description: t('user_class_status_suceess')
     }
   };
@@ -45,7 +45,7 @@ export function RowActions({ row, table }) {
       actionText: t('delete')
     },
     success: {
-      title: t('userClass') + ' ' + t('deleted'),
+      title: t('success'),
       description: t('user_class_delete_suceess')
     }
   };

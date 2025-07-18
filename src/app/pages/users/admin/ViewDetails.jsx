@@ -44,7 +44,7 @@ const ViewDetails = () => {
     fetchAdminDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [adminId]);
-  const breadcrumbItem = [{ title: t('admin'), path: '/admin' }, { title: t('details') }];
+  const breadcrumbItem = [{ title: t('admin'), path: '/users/admin' }, { title: t('details') }];
   return (
     <Page title={pageTitle}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">

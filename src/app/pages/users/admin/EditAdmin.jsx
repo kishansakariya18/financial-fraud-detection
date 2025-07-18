@@ -26,7 +26,7 @@ const EditAdmin = () => {
 
   const pageTitle = t('edit') + ' ' + t('admin');
 
-  const breadcrumbItem = [{ title: t('admin'), path: '/admin' }, { title: t('edit') }];
+  const breadcrumbItem = [{ title: t('admin'), path: '/users/admin' }, { title: t('edit') }];
 
   const navigate = useNavigate();
   const {
