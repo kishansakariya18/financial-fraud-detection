@@ -17,6 +17,9 @@ RUN npm run build
 # Use Nginx for serving static files
 FROM nginx:alpine
 COPY --from=nodework /app/dist /usr/share/nginx/html
-COPY frontend.conf /etc/nginx/conf.d/default.conf
+COPY frontend.conf /etc/nginx/conf.d/admin-ig-panel.sourcecodelab.co.conf
+COPY ssl/scl.crt /etc/nginx/ssl/scl.crt
+COPY ssl/scl.key /etc/nginx/ssl/scl.key
+COPY ssl/scl-ca.crt /etc/nginx/ssl/scl-ca.crt
 EXPOSE 443
 CMD ["nginx", "-g", "daemon off;"]
