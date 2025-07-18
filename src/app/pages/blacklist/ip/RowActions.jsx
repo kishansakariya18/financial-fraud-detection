@@ -59,12 +59,12 @@ export function RowActions({ row, table }) {
   const messages = {
     pending: {
       title: t('areYouSure'),
-      description: t('delete_confirm_desc', { type: 'IP', value: row.original.ip }),
+      description: t('delete_confirm_desc', { type: 'IP ' + t('address'), value: row.original.ip }),
       actionText: t('delete')
     },
     success: {
       title: t('delete_success'),
-      description: t('delete_success_desc', { type: 'IP', value: row.original.ip }),
+      description: t('delete_success_desc', { type: 'IP ' + t('address'), value: row.original.ip }),
       actionText: t('done')
     },
     error: {
