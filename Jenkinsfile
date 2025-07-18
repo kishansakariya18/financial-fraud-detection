@@ -6,7 +6,7 @@ pipeline {
   stages {
     stage('Checkout') {
          steps {
-           cehckout scm 
+           checkout scm 
                }
 
                       }
