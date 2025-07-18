@@ -58,6 +58,8 @@ pipeline {
            docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
                     docker.image("${DOCKERHUB_REPO}:${IMAGE_TAG}").push()
           }
+         // Now remove the image from the local system
+         sh "docker rmi ${DOCKERHUB_REPO}:${IMAGE_TAG} || true"
         }
       }  
      }
