@@ -51,6 +51,17 @@ pipeline {
              } 
           }
 
+
+   stage('Scan with Trivy') {
+      steps {
+          sh """
+          trivy image --exit-code 1 --severity HIGH,CRITICAL ${DOCKERHUB_REPO}:${IMAGE_TAG} || true
+            """
+            }
+        }
+
+
+
      stage('Push Docker Image') {
        steps {
          script {
