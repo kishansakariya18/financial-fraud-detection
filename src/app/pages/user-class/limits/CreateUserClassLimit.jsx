@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import UserClassService from 'services/user-class.services';
 import { createUserClassLimitSchema } from './schema';
 import { USER_CLASS_LIMIT_TYPE, USER_CLASS_LIMIT_PERIOD } from 'constants/app.constant';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 const CreateUserClassLimit = () => {
   const [error, setError] = useState('');
@@ -19,6 +20,11 @@ const CreateUserClassLimit = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { userClassUID } = useParams();
+  const breadcrumbItems = [
+    { title: t('userClass'), path: '/user-class' },
+    { title: t('limits'), path: `/user-class/${userClassUID}/limits` },
+    { title: t('create') }
+  ];
 
   const {
     register,
@@ -153,6 +159,7 @@ const CreateUserClassLimit = () => {
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
           </div>
+          <Breadcrumbs items={breadcrumbItems} />
         </div>
 
         <form onSubmit={handleSubmit(createUserClassLimit)} className="space-y-6">

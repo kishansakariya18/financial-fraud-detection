@@ -138,39 +138,39 @@ export default function PromocodeHistory() {
       <div className="mt-4 grid grid-cols-2 gap-3 px-[--margin-x] sm:grid-cols-4 sm:gap-4 lg:grid-cols-6 2xl:gap-6">
         <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
           <div className="flex justify-between space-x-1">
-            <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
+            <p className="truncate text-xl font-semibold text-gray-800 dark:text-dark-100">
               {cardData?.recordsCount}
             </p>
             <PresentationChartBarIcon className="size-8" />
           </div>
-          <p className="mt-1 text-xs+">{t('record') + ' ' + t('count')}</p>
+          <p className="mt-1 truncate text-xs+">{t('record') + ' ' + t('count')}</p>
         </div>
         <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
           <div className="flex justify-between space-x-1">
-            <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
+            <p className="truncate text-xl font-semibold text-gray-800 dark:text-dark-100">
               {cardData?.uniqueUsers}
             </p>
             <UsersIcon className="size-8" />
           </div>
-          <p className="mt-1 text-xs+">{t('unique') + ' ' + t('user')}</p>
+          <p className="mt-1 truncate text-xs+">{t('unique') + ' ' + t('user')}</p>
         </div>
         <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
           <div className="flex justify-between space-x-1">
-            <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
+            <p className="truncate text-xl font-semibold text-gray-800 dark:text-dark-100">
               {cardData?.depositAmount}
             </p>
             <BanknotesIcon className="size-8" />
           </div>
-          <p className="mt-1 text-xs+">{t('deposit') + ' ' + t('amount')}</p>
+          <p className="mt-1 truncate text-xs+">{t('deposit') + ' ' + t('amount')}</p>
         </div>
         <div className="rounded-lg bg-gray-150 p-3 dark:bg-dark-700 2xl:p-4">
           <div className="flex justify-between space-x-1">
-            <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
+            <p className="truncate text-xl font-semibold text-gray-800 dark:text-dark-100">
               {cardData?.benefitAmount}
             </p>
             <RiCashFill className="size-8" />
           </div>
-          <p className="mt-1 text-xs+">{t('benefit') + ' ' + t('amount')}</p>
+          <p className="mt-1 truncate text-xs+">{t('benefit') + ' ' + t('amount')}</p>
         </div>
       </div>
 

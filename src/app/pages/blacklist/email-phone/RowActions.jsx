@@ -64,7 +64,7 @@ export function RowActions({ row, table }) {
     pending: {
       title: t('areYouSure'),
       description: t('delete_confirm_desc', { type: typeLabel, value }),
-      actionText: t('delete')
+      actionText: t('delete_text')
     },
     success: {
       title: t('delete_success'),
@@ -105,7 +105,7 @@ export function RowActions({ row, table }) {
                       focus && 'bg-this/10 dark:bg-this-light/10'
                     )}>
                     <TbTrash className="size-4.5 stroke-1" />
-                    <span>{t('delete')}</span>
+                    <span>{t('delete_text')}</span>
                   </button>
                 )}
               </MenuItem>

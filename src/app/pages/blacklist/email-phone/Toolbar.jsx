@@ -50,6 +50,11 @@ export default function Toolbar({
           <Input
             value={searchValue}
             onChange={handleInputChange}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                onApplyFilters();
+              }
+            }}
             prefix={<MagnifyingGlassIcon className="size-4" />}
             className="max-w-xs"
             classNames={{ input: 'h-8 text-xs ring-primary-500/50 focus:ring', root: 'shrink-0' }}

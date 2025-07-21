@@ -264,7 +264,7 @@ const PromoCodeService = {
   submitSegmentationData: async (id, data) => {
     try {
       const endPoint = replaceText(
-        apiConfig.endPoints.BASKETBALL.DEPOSIT_PROMOCODE.PROMOCODE_UPLOAD_SEGMENTATION,
+        apiConfig.endPoints.DEPOSIT_PROMOCODE.PROMOCODE_UPLOAD_SEGMENTATION,
         ':promocodeId',
         id
       );

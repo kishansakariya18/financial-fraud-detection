@@ -45,13 +45,16 @@ export const createPromocodeSchema = Yup.object().shape({
   benefitCap: Yup.number()
     .transform((val) => (isNaN(val) ? undefined : val))
     .nullable()
+    .typeError('Benefit cap must be a number')
     .when('type', {
       is: (val) => +val === PROMOCODE.TYPE.DEPOSIT_IN_RANGE,
       then: (schema) => schema.required('Benefit cap is required').positive('Must be positive')
     }),
 
   startDate: Yup.date().required('Start date is required'),
-  endDate: Yup.date().required('End date is required'),
+  endDate: Yup.date()
+    .required('End date is required')
+    .min(Yup.ref('startDate'), 'End date must be after start date'),
 
   isOnlyFirstDeposit: Yup.boolean(),
   isOnlySecondDeposit: Yup.boolean(),

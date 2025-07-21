@@ -73,7 +73,11 @@ export function Profile() {
               <div className="flex items-center gap-4 rounded-t-lg bg-gray-100 px-4 py-5 dark:bg-dark-800">
                 <Avatar
                   size={14}
-                  src={null}
+                  src={
+                    userData?.ImageName
+                      ? `${apiConfig.baseURL.S3_URL}/admin/${userData.ImageName}`
+                      : null
+                  }
                   name={userData?.FirstName + ' ' + userData?.LastName}
                 />
                 <div>

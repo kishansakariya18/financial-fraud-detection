@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { DocumentPlusIcon } from '@heroicons/react/24/outline';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +11,7 @@ import { rolePermissionListMapper } from './helper';
 import RoleService from 'services/role.services';
 import { useNavigate } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { addRoleSchema } from './schema';
 
 const AddRole = () => {
   const { t } = useTranslation();
@@ -23,35 +25,37 @@ const AddRole = () => {
 
   const [checkedList, setCheckedList] = useState([]);
   const handleCheck = (checked, permissionObj, modulePermissionList) => {
-    console.log('handleCheck', checked, permissionObj, modulePermissionList);
-
+    let newCheckedList = [...checkedList];
     if (permissionObj.permissionName == 'View') {
       const modulePermissionIds = modulePermissionList.map((item) => item.permissionID);
       if (!checked) {
         modulePermissionIds.forEach((id) => {
-          const foundIndex = checkedList.findIndex((item) => item == id);
+          const foundIndex = newCheckedList.findIndex((item) => item == id);
           if (foundIndex != -1) {
-            // console.log('found index::', id);
-            checkedList.splice(foundIndex, 1);
-            // console.log('new checklist:', checkedList);
+            newCheckedList.splice(foundIndex, 1);
           }
         });
-        setCheckedList([...checkedList]);
       } else {
-        // console.log('modulePermissionIds:', modulePermissionIds);
-        setCheckedList([...checkedList, ...modulePermissionIds]);
+        newCheckedList = [...newCheckedList, ...modulePermissionIds];
       }
     } else {
       const viewId = modulePermissionList.find((item) => item.permissionName == 'View');
-      if (viewId && !checkedList.includes(viewId.permissionID)) {
-        setCheckedList([...checkedList, viewId.permissionID, permissionObj.permissionID]);
+      if (viewId && !newCheckedList.includes(viewId.permissionID)) {
+        newCheckedList = [...newCheckedList, viewId.permissionID, permissionObj.permissionID];
       } else {
-        setCheckedList([...checkedList, permissionObj.permissionID]);
+        newCheckedList = [...newCheckedList, permissionObj.permissionID];
       }
       if (!checked) {
-        setCheckedList(checkedList.filter((checkedId) => checkedId !== permissionObj.permissionID));
+        newCheckedList = newCheckedList.filter(
+          (checkedId) => checkedId !== permissionObj.permissionID
+        );
       }
     }
+    // Remove duplicates
+    newCheckedList = Array.from(new Set(newCheckedList));
+    setCheckedList(newCheckedList);
+    setValue('permissionsIdList', newCheckedList, { shouldValidate: true });
+    trigger('permissionsIdList');
   };
 
   console.log('checkedList: ', checkedList);
@@ -68,8 +72,12 @@ const AddRole = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors }
-  } = useForm();
+    formState: { errors },
+    setValue,
+    trigger
+  } = useForm({
+    resolver: yupResolver(addRoleSchema)
+  });
 
   const navigate = useNavigate();
 
@@ -206,11 +214,14 @@ const AddRole = () => {
                     </div>
                   </div>
                 </div>
+                {errors?.permissionsIdList && (
+                  <p className="mt-2 text-sm text-error">{errors.permissionsIdList.message}</p>
+                )}
               </Card>
             </div>
           </div>
         </form>
-        <div className="flex !flex-row-reverse flex-col items-center space-y-4 py-5 sm:flex-row sm:space-y-0 lg:py-6">
+        <div className="flex !flex-row-reverse items-center space-y-4 py-5 sm:flex-row sm:space-y-0 lg:py-6">
           <div className="flex gap-2">
             <Button className="min-w-[7rem]" color="primary" type="submit" form="add-role-form">
               {save}

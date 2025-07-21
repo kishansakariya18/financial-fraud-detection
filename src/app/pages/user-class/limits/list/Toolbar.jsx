@@ -19,6 +19,7 @@ import {
 } from 'constants/app.constant';
 import { useNavigate } from 'react-router';
 import usePermissions from 'app/router/usePermissions';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 export function Toolbar({
   table,
@@ -31,6 +32,7 @@ export function Toolbar({
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
   const { hasPermission } = usePermissions();
   const navigate = useNavigate();
+  const breadcrumbItems = [{ title: t('userClass'), path: '/user-class' }, { title: t('limits') }];
 
   return (
     <div className="table-toolbar">
@@ -39,10 +41,14 @@ export function Toolbar({
           'transition-content flex items-center justify-between gap-4',
           isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x] pt-4'
         )}>
-        <div className="min-w-0">
-          <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
+        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
             {pageTitle}
           </h2>
+          <div className="hidden self-stretch py-1 sm:flex">
+            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          </div>
+          <Breadcrumbs items={breadcrumbItems} />
         </div>
 
         {hasPermission(PERMISSIONS.USER_CLASS_LIMIT.CREATE) && (
@@ -63,7 +69,7 @@ export function Toolbar({
               'flex space-x-2 pt-4 rtl:space-x-reverse [&_.input-root]:flex-1',
               isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x]'
             )}>
-            <SearchInput table={table} />
+            <SearchInput table={table} onApplyFilters={onApplyFilters} />
             <TableConfig table={table} />
           </div>
           <div
@@ -88,6 +94,7 @@ export function Toolbar({
             '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)'
           }}>
           <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
+            <SearchInput table={table} onApplyFilters={onApplyFilters} />
             <Filters
               table={table}
               onApplyFilters={onApplyFilters}
@@ -102,12 +109,17 @@ export function Toolbar({
   );
 }
 
-function SearchInput({ table }) {
+function SearchInput({ table, onApplyFilters }) {
   const { t } = useTranslation();
   return (
     <Input
       value={table?.getColumn('Limit Type')?.getFilterValue() || ''}
       onChange={(e) => table.getColumn('Limit Type').setFilterValue(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          onApplyFilters();
+        }
+      }}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
@@ -189,7 +201,8 @@ Toolbar.propTypes = {
 };
 
 SearchInput.propTypes = {
-  table: PropTypes.object
+  table: PropTypes.object,
+  onApplyFilters: PropTypes.func
 };
 
 Filters.propTypes = {

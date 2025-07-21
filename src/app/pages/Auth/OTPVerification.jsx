@@ -131,6 +131,7 @@ export default function OTPVerification() {
   // resend otp button handler
   const handleResendOtp = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const result = await AuthService.resedOtp({
       token: queryParams.token,
       mobile: queryParams.mobile
@@ -138,6 +139,7 @@ export default function OTPVerification() {
 
     if (result) {
       if (result.status === 200) {
+        setSeconds(30);
         setSearchParams({ ...queryParams, token: result.response.data.token });
         setResendOtp(result.response);
       } else {
@@ -148,19 +150,10 @@ export default function OTPVerification() {
   };
   //resend otp timer
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (seconds > 0) {
-        setSeconds((second) => second - 1);
-      }
-
-      if (seconds === 0) {
-        clearInterval(interval);
-      }
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
+    if (seconds > 0) {
+      const timer = setTimeout(() => setSeconds(seconds - 1), 1000);
+      return () => clearTimeout(timer);
+    }
   }, [seconds]);
 
   // save neccessary data  in local storage and redux
@@ -221,7 +214,9 @@ export default function OTPVerification() {
                   <a
                     href="##"
                     onClick={handleResendOtp}
-                    className="text-xs text-gray-400 transition-colors hover:text-gray-800 focus:text-gray-800 dark:text-dark-300 dark:hover:text-dark-100 dark:focus:text-dark-100">
+                    className={`text-xs text-gray-400 transition-colors hover:text-gray-800 focus:text-gray-800 dark:text-dark-300 dark:hover:text-dark-100 dark:focus:text-dark-100 ${
+                      isLoading ? 'pointer-events-none opacity-50' : ''
+                    }`}>
                     {t('resend') + ' OTP?'}
                   </a>
                 </div>

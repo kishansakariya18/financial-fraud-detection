@@ -7,6 +7,7 @@ import { getDateInUTCToTimeZone } from 'helpers/functions';
 import { useTranslation } from 'react-i18next';
 import { DocumentDuplicateIcon } from '@heroicons/react/24/outline';
 import { useClipboard } from 'hooks';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 // import { viewResponseMapper } from './helper';
 // import { TextEditor } from 'components/shared/form/TextEditor';
 // import Quill, { Delta } from 'quill';
@@ -21,6 +22,7 @@ const ViewDetails = () => {
   // const [content, setContent] = useState(new Delta([{ insert: htmlContent }]));
   const { copied, copy } = useClipboard({ timeout: 2000 });
   const { auditLogID } = useParams();
+  const breadcrumbItem = [{ title: t('audit_logs'), path: '/auditlogs' }, { title: t('details') }];
 
   const fetchLogDetails = async () => {
     try {
@@ -50,9 +52,15 @@ const ViewDetails = () => {
   return (
     <Page title={pageTitle}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
-        <h2 className="py-5 text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:py-6 lg:text-2xl">
-          {pageTitle}
-        </h2>
+        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
+            {pageTitle}
+          </h2>
+          <div className="hidden self-stretch py-1 sm:flex">
+            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          </div>
+          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
+        </div>
 
         <div className="col-span-12 sm:col-span-8 lg:col-span-9">
           <Card className="h-full p-4 sm:p-5">

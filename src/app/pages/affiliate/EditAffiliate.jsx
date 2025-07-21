@@ -77,10 +77,10 @@ const EditAffiliate = () => {
             signupCommissionType: result.SignupCommissionType,
             perDeposit: result.IsDepositCommissionEnabled,
             depositCommission: result.DepositCommissionAmount,
-            depositCommissionType: result.DepositCommissionType,
+            depositCommissionType: Number(result.DepositCommissionType),
             perPlayerLoss: result.IsUserLossCommissionEnabled,
             playerLossCommission: result.UserLossCommissionAmount,
-            playerLossCommissionType: result.UserLossCommissionType
+            playerLossCommissionType: Number(result.UserLossCommissionType)
           };
 
           reset(mappedData);
@@ -355,7 +355,7 @@ const EditAffiliate = () => {
               {t('reset')}
             </Button>
             <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
-              {t('edit')}
+              {t('update')}
             </Button>
           </div>
         </form>

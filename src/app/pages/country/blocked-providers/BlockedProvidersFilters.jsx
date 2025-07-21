@@ -26,7 +26,7 @@ export function BlockedProvidersFilters({
               'flex space-x-2 pt-4 rtl:space-x-reverse [&_.input-root]:flex-1',
               'px-[--margin-x]'
             )}>
-            <SearchInput table={table} t={t} />
+            <SearchInput table={table} t={t} onApplyFilters={onApplyFilters} />
             <TableConfig table={table} />
           </div>
           <div
@@ -53,7 +53,7 @@ export function BlockedProvidersFilters({
             '--margin-scroll': 'var(--margin-x)'
           }}>
           <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
-            <SearchInput table={table} t={t} />
+            <SearchInput table={table} t={t} onApplyFilters={onApplyFilters} />
             <Filters
               table={table}
               onApplyFilters={onApplyFilters}
@@ -69,11 +69,16 @@ export function BlockedProvidersFilters({
   );
 }
 
-function SearchInput({ table, t }) {
+function SearchInput({ table, t, onApplyFilters }) {
   return (
     <Input
       value={table?.getColumn('providerName')?.getFilterValue() || ''}
       onChange={(e) => table.getColumn('providerName').setFilterValue(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          onApplyFilters();
+        }
+      }}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
@@ -119,7 +124,8 @@ BlockedProvidersFilters.propTypes = {
 
 SearchInput.propTypes = {
   table: PropTypes.object,
-  t: PropTypes.func
+  t: PropTypes.func,
+  onApplyFilters: PropTypes.func
 };
 
 Filters.propTypes = {

@@ -146,7 +146,7 @@ const CreatePromocode = () => {
   }
 
   if (!loading && !error && response) {
-    toast.success(response.message);
+    // toast.success(response.message);
     setTimeout(() => {
       navigate('/promocode');
     }, 0);
@@ -556,6 +556,7 @@ const CreatePromocode = () => {
                   label={t('benefitCap')}
                   error={errors?.benefitCap?.message}
                   placeholder={t('enter') + ' ' + t('benefitCap')}
+                  type="number"
                 />
               )}
             </div>
@@ -570,7 +571,8 @@ const CreatePromocode = () => {
                     error={errors?.startDate?.message}
                     options={{
                       disableMobile: true,
-                      time_24hr: true
+                      time_24hr: true,
+                      minDate: new Date(new Date().setHours(0, 0, 0, 0))
                     }}
                     placeholder="Choose date..."
                     {...rest}
@@ -588,7 +590,8 @@ const CreatePromocode = () => {
                     error={errors?.endDate?.message}
                     options={{
                       disableMobile: true,
-                      time_24hr: true
+                      time_24hr: true,
+                      minDate: new Date(new Date().setHours(0, 0, 0, 0))
                     }}
                     placeholder="Choose date..."
                     {...rest}
@@ -640,13 +643,13 @@ const CreatePromocode = () => {
                 <p className="mb-1">{t('displayMode')}</p>
                 <div className="flex flex-wrap gap-2">
                   <Radio
-                    label={t('public')}
+                    label={t('public_text')}
                     value="public"
                     checked={displayMode === 'public'}
                     onChange={(e) => setDisplayMode(e.target.value)}
                   />
                   <Radio
-                    label={t('private')}
+                    label={t('private_text')}
                     value="private"
                     checked={displayMode === 'private'}
                     onChange={(e) => setDisplayMode(e.target.value)}
