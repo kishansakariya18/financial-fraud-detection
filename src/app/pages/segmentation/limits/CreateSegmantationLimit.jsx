@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import SegmentationService from 'services/segmentation.services';
 import { createUserClassLimitSchema } from './schema';
 import { USER_CLASS_LIMIT_TYPE, USER_CLASS_LIMIT_PERIOD } from 'constants/app.constant';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 const CreateSegmentationLimit = () => {
   const [error, setError] = useState('');
@@ -19,6 +20,12 @@ const CreateSegmentationLimit = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { segmentationId } = useParams();
+
+  const breadcrumbItems = [
+    { title: t('segmentation'), path: '/segmentation' },
+    { title: t('limits'), path: `/segmentation/${segmentationId}/limits` },
+    { title: t('create') }
+  ];
 
   const {
     register,
@@ -152,6 +159,7 @@ const CreateSegmentationLimit = () => {
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
           </div>
+          <Breadcrumbs items={breadcrumbItems} />
         </div>
 
         <form onSubmit={handleSubmit(createSegmentationLimit)} className="space-y-6">

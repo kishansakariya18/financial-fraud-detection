@@ -43,6 +43,17 @@ const EditPages = () => {
   const navigate = useNavigate();
 
   const [content, setContent] = useState(new Delta([{ insert: htmlContent }]));
+  const [initialValues, setInitialValues] = useState(null);
+  const [initialContent, setInitialContent] = useState(new Delta([{ insert: '' }]));
+
+  const handleReset = () => {
+    if (initialValues) {
+      reset(initialValues);
+      setContent(initialContent);
+      setHtmlContent(initialValues.content || '');
+    }
+    setError('');
+  };
 
   // const name = watch('name');
 
@@ -105,9 +116,9 @@ const EditPages = () => {
           const delta = htmlToDelta(result?.Content);
 
           setHtmlContent(result?.Content || '');
-
           setContent(delta);
-
+          setInitialValues(mappedData);
+          setInitialContent(delta);
           reset(mappedData);
         }
       });
@@ -207,7 +218,7 @@ const EditPages = () => {
             </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-            <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
+            <Button type="button" className="min-w-[7rem]" onClick={handleReset} disabled={loading}>
               {t('reset')}
             </Button>
             <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>

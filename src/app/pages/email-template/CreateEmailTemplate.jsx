@@ -92,6 +92,20 @@ const CreateEmailTemplate = () => {
     setResponse(null);
   }
 
+  const handleReset = () => {
+    reset({
+      to: [],
+      cc: [],
+      bcc: [],
+      title: '',
+      heading: '',
+      status: ''
+    });
+    setContent(defaultValue);
+    setHtmlContent('');
+    setTemplateError('');
+  };
+
   const onSubmit = async (data) => {
     const contentHTML = htmlContent?.replace(/<(.|\n)*?>/g, '').trim(); // Strip HTML tags
 
@@ -232,7 +246,7 @@ const CreateEmailTemplate = () => {
             </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-            <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
+            <Button className="min-w-[7rem]" onClick={() => handleReset()} disabled={loading}>
               {t('reset')}
             </Button>
             <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>

@@ -17,6 +17,14 @@ const EditHomeCategory = ({ onClose, homeCategoryId }) => {
   const [response, setResponse] = useState(null);
 
   const [categoryOptions, setCategoryOptions] = useState([]);
+  const [initialValues] = useState({
+    category: ''
+  });
+
+  const handleReset = () => {
+    reset(initialValues);
+    setError('');
+  };
 
   const { t } = useTranslation();
   const {
@@ -80,8 +88,8 @@ const EditHomeCategory = ({ onClose, homeCategoryId }) => {
   if (!loading && !error && response) {
     toast.success(response.message);
     setResponse(null);
+    handleReset();
     onClose();
-    reset();
   }
 
   const onSubmit = async (data) => {

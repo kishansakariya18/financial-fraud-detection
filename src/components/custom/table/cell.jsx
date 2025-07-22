@@ -124,11 +124,13 @@ export function SelectHeader({ table }) {
   );
 }
 
-export function SelectCell({ checked, row, onChange }) {
+export function SelectCell({ checked, row, onChange, align = 'center' }) {
   // console.log('select cell recived', { checked, row, onChange });
 
+  const alignmentClass = align === 'start' ? 'justify-start' : 'justify-center';
+
   return (
-    <div className="flex items-center justify-center">
+    <div className={`flex items-center ${alignmentClass}`}>
       <Checkbox
         className="size-4.5"
         checked={checked?.includes(row.original.id)}
@@ -220,6 +222,13 @@ AddressCell.propTypes = {
 
 CreateMarkupCell.propTypes = {
   getValue: PropTypes.func
+};
+
+SelectCell.propTypes = {
+  checked: PropTypes.array,
+  row: PropTypes.object,
+  onChange: PropTypes.func,
+  align: PropTypes.oneOf(['center', 'start'])
 };
 
 ThemeSwatchCell.propTypes = {

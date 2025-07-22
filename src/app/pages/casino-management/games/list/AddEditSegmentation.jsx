@@ -17,21 +17,27 @@ const AddEditSegmentation = ({ onClose, gameId }) => {
 
   const [segmentationOptions, setSegmentationOptions] = useState([]);
   const [gameSegmentation, setGameSegmentation] = useState([]);
+  const [initialSegmentation, setInitialSegmentation] = useState([]);
 
   const { t } = useTranslation();
   const {
     handleSubmit,
     reset,
     control,
-    formState: { errors }
-  } = useForm({});
+    formState: { errors },
+    setValue
+  } = useForm({
+    defaultValues: {
+      segmentation: []
+    }
+  });
 
-  const addSegmentation = async () => {
+  const addSegmentation = async (data) => {
     setLoading(true);
     setError(null);
-    console.log('gameSegmentation: ', gameSegmentation);
+    console.log('Submitting segmentation: ', data.segmentation);
 
-    const result = await GameService.addGameSegmnetation(gameId, gameSegmentation);
+    const result = await GameService.addGameSegmnetation(gameId, data.segmentation);
     if (result) {
       if (result.status === 200 || result.status === 201) {
         setResponse(result.response);
@@ -76,8 +82,10 @@ const AddEditSegmentation = ({ onClose, gameId }) => {
     if (result) {
       if (result.status === 200 || result.status === 201) {
         const apiData = result.response.data;
-
-        setGameSegmentation(apiData.segments);
+        const segments = apiData.segments || [];
+        setGameSegmentation(segments);
+        setInitialSegmentation([...segments]); // Store initial state
+        setValue('segmentation', segments);
       } else {
         setError(result.error);
       }
@@ -103,7 +111,13 @@ const AddEditSegmentation = ({ onClose, gameId }) => {
   }
 
   const onSubmit = async (data) => {
-    await addSegmentation({ ...data });
+    await addSegmentation(data);
+  };
+
+  const handleReset = () => {
+    // Reset to initial state
+    setGameSegmentation([...initialSegmentation]);
+    reset({ segmentation: [...initialSegmentation] });
   };
 
   return (
@@ -137,7 +151,7 @@ const AddEditSegmentation = ({ onClose, gameId }) => {
       </div>
 
       <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-        <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
+        <Button className="min-w-[7rem]" onClick={handleReset} disabled={loading}>
           {t('reset')}
         </Button>
         <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
