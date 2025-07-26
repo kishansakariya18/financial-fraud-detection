@@ -287,7 +287,9 @@ export const PERMISSIONS = {
   },
   BANK: {
     VIEW: 'bank-view',
-    STATUS: 'bank-status'
+    STATUS: 'bank-status',
+    CREATE: 'bank-create',
+    EDIT: 'bank-edit'
   }
 };
 

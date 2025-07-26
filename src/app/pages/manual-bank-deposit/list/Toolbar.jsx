@@ -42,7 +42,7 @@ export function Toolbar({
         <Button
           className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
           color="primary"
-          onClick={() => navigate('/manual-bank-deposit/add')}>
+          onClick={() => navigate('add')}>
           <PlusIcon className="size-5" />
           <span>{t('add') + ' ' + t('bank_deposit')}</span>
         </Button>

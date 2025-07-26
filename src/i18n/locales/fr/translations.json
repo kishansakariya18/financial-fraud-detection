@@ -478,5 +478,11 @@
   "something_went_wrong": "Une erreur s'est produite",
   "reason": "Raison",
   "clear": "Effacer",
-  "single": "Unique"
+  "single": "Unique",
+  "bankName": "Nom du banque",
+  "accountHolderName": "Nom du titulaire de la compte",
+  "accountNumber": "Numéro de compte",
+  "bankCode": "Code du banque",
+  "upiID": "ID UPI",
+  "additionalInfo": "Informations supplémentaires"
 }

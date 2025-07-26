@@ -393,7 +393,7 @@ export const apiConfig = {
       CHANGE_STATUS: '/admin/deposit-bank/:bankId/change-status',
       CREATE: '/admin/deposit-bank/create',
       DETAIL: '/admin/deposit-bank/:bankId/details',
-      EDIT: '/admin/deposit-bank/edit',
+      EDIT: '/admin/deposit-bank/:bankId/edit',
       DELETE: '/admin/deposit-bank/:bankId/delete'
     }
   }

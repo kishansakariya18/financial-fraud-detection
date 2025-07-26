@@ -15,6 +15,36 @@ export const bankRoute = [
         )
       };
     }
+  },
+  {
+    path: 'bank/add',
+    lazy: async () => {
+      const { default: AddBankDeposit } = await import(
+        '../../pages/manual-bank-deposit/AddBankDeposit'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.BANK.CREATE}>
+            <AddBankDeposit />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'bank/:id/edit',
+    lazy: async () => {
+      const { default: EditBankDeposit } = await import(
+        '../../pages/manual-bank-deposit/EditBankDeposit'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.BANK.UPDATE}>
+            <EditBankDeposit />
+          </PrivateRoute>
+        )
+      };
+    }
   }
 ];
 

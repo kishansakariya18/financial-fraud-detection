@@ -478,5 +478,11 @@
   "something_went_wrong": "Algo salió mal",
   "reason": "Motivo",
   "clear": "Limpiar",
-  "single": "Único"
+  "single": "Único",
+  "bankName": "Nombre del banco",
+  "accountHolderName": "Nombre del titular de la cuenta",
+  "accountNumber": "Número de cuenta",
+  "bankCode": "Código del banco",
+  "upiID": "ID UPI",
+  "additionalInfo": "Información adicional"
   }

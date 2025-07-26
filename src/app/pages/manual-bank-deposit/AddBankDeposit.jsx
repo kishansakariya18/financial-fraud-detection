@@ -1,218 +1,208 @@
-import { useForm } from 'react-hook-form';
-import { DocumentPlusIcon } from '@heroicons/react/24/outline';
-import { toast } from 'sonner';
-import { useTranslation } from 'react-i18next';
-
+// Import Dependencies
 import { Page } from 'components/shared/Page';
-import { Button, Card, Input } from 'components/ui';
-import { useEffect, useState } from 'react';
-import { rolePermissionListMapper } from './helper';
-import RoleService from 'services/role.services';
+import { UserIcon } from '@heroicons/react/20/solid';
+import { EnvelopeIcon, EyeIcon, EyeSlashIcon, LockClosedIcon } from '@heroicons/react/24/outline';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { Button, Input } from 'components/ui';
+import { CiMobile1 } from 'react-icons/ci';
+import { useState } from 'react';
+import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { useTranslation } from 'react-i18next';
+import TenantService from 'services/tenant.services';
+import { createBankDepositSchema } from './schema';
+import { useDisclosure } from 'hooks';
 
-const AddRole = () => {
-  const { t } = useTranslation();
-
-  const pageTitle = t('add') + ' ' + t('role');
-  const roleName = t('role') + ' ' + t('name');
-  const save = t('save');
-  const [response, setResponse] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+const CreateBankDeposit = () => {
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [response, setResponse] = useState(null);
+  const { t } = useTranslation();
+  const [show, { toggle }] = useDisclosure();
 
-  const [checkedList, setCheckedList] = useState([]);
-  const handleCheck = (checked, permissionObj, modulePermissionList) => {
-    console.log('handleCheck', checked, permissionObj, modulePermissionList);
+  const breadcrumbItem = [
+    { title: t('manual bank deposit'), path: '/bank' },
+    { title: t('create') }
+  ];
 
-    if (permissionObj.permissionName == 'View') {
-      const modulePermissionIds = modulePermissionList.map((item) => item.permissionID);
-      if (!checked) {
-        modulePermissionIds.forEach((id) => {
-          const foundIndex = checkedList.findIndex((item) => item == id);
-          if (foundIndex != -1) {
-            // console.log('found index::', id);
-            checkedList.splice(foundIndex, 1);
-            // console.log('new checklist:', checkedList);
-          }
-        });
-        setCheckedList([...checkedList]);
-      } else {
-        // console.log('modulePermissionIds:', modulePermissionIds);
-        setCheckedList([...checkedList, ...modulePermissionIds]);
-      }
-    } else {
-      const viewId = modulePermissionList.find((item) => item.permissionName == 'View');
-      if (viewId && !checkedList.includes(viewId.permissionID)) {
-        setCheckedList([...checkedList, viewId.permissionID, permissionObj.permissionID]);
-      } else {
-        setCheckedList([...checkedList, permissionObj.permissionID]);
-      }
-      if (!checked) {
-        setCheckedList(checkedList.filter((checkedId) => checkedId !== permissionObj.permissionID));
-      }
-    }
-  };
-
-  console.log('checkedList: ', checkedList);
-
-  console.log('response: ', response);
-  console.log('isLoading: ', isLoading);
-  console.log('error: ', error);
-
-  const [isSubmitLoading, setSubmitLoading] = useState(false);
-  const [submitError, setSubmitError] = useState(null);
-  const [submitResponse, setSubmitResponse] = useState(null);
-
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    reset,
-    formState: { errors }
-  } = useForm();
+    formState: { errors },
+    reset
+  } = useForm({
+    resolver: yupResolver(createBankDepositSchema)
+  });
 
-  const navigate = useNavigate();
-
-  const onSubmit = async (data) => {
-    data.permissionsIdList = checkedList;
-    console.log('data::', data);
-
-    setSubmitLoading(true);
-    const result = await RoleService.roleSubmit(data);
-
+  const createTenantAPI = async (requestObject) => {
+    setLoading(true);
+    setError(null);
+    const result = await TenantService.createTenant(requestObject);
     if (result) {
       if (result.status === 200 || result.status === 201) {
-        setSubmitResponse(result.response);
+        setResponse(result.response);
       } else {
-        setSubmitError(result.error);
+        setError(result.error);
       }
-    } else {
-      setSubmitError(result.error);
     }
-    setSubmitLoading(false);
+    setLoading(false);
   };
 
-  if (!isSubmitLoading && submitError) {
-    toast(submitError, {
-      invert: true
-    });
-    setSubmitError(null);
+  if (!loading && error) {
+    toast.error(error);
+    setError('');
   }
-  if (!isSubmitLoading && !submitError && submitResponse) {
-    toast.success('Role created successfully', {
-      invert: true
-    });
+
+  if (!loading && !error && response) {
+    toast.success(response.message);
     setTimeout(() => {
-      navigate('/roles');
+      navigate('/tenant');
     }, 0);
-    setSubmitResponse(null);
-    reset();
+
+    setResponse(null);
   }
 
-  const fetchRolePermissionList = async () => {
-    setIsLoading(true);
-    const result = await RoleService.rolePermissionList();
-
-    if (result.status === 200) {
-      const apiData = result.response.data;
-      const resultData = rolePermissionListMapper(apiData);
-      setResponse(resultData);
-    } else {
-      setError(result.error);
-    }
-    setIsLoading(false);
+  const onSubmit = async (data) => {
+    await createTenantAPI(data);
   };
-
-  console.log('response:', response);
-
-  useEffect(() => {
-    console.log('Component mounted or remounted!');
-    fetchRolePermissionList();
-  }, []);
-
   return (
-    <Page title={pageTitle}>
-      <div className="transition-content px-[--margin-x] pb-6">
-        <div className="flex flex-col items-center justify-between space-y-4 py-5 sm:flex-row sm:space-y-0 lg:py-6">
-          <div className="flex items-center gap-1">
-            <DocumentPlusIcon className="size-6" />
-            <h2 className="line-clamp-1 text-xl font-medium text-gray-700 dark:text-dark-50">
-              {pageTitle}
-            </h2>
+    <Page title={t('create') + ' ' + t('bank_deposit')}>
+      <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
+        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
+            {t('create') + ' ' + t('bank_deposit') + ' ' + t('form')}
+          </h2>
+          <div className="hidden self-stretch py-1 sm:flex">
+            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
           </div>
+          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
-        <form autoComplete="off" onSubmit={handleSubmit(onSubmit)} id="add-role-form">
-          <div className="grid grid-cols-12 place-content-start gap-4 sm:gap-5 lg:gap-6">
-            <div className="col-span-12">
-              <Card className="p-4 sm:px-5">
-                <div className="mt-5 space-y-5">
-                  <Input
-                    id="roleName"
-                    className={`form-control ${errors.roleName ? 'is-invalid' : ''}`}
-                    type="text"
-                    name="roleName"
-                    label={roleName}
-                    placeholder="Enter Role Name"
-                    {...register('roleName', {
-                      required: 'Role name is required'
-                    })}
-                    error={errors?.roleName?.message}
-                  />
-                  <div className="flex flex-col">
-                    <div>
-                      {response?.length > 0 &&
-                        response?.map((item) => (
-                          <>
-                            <div key={item.moduleName} className="mb-4 grid"></div>
-                            <div className="flex items-center gap-3">
-                              <div className="w-1/4">
-                                <h4>{item.moduleName}</h4>
-                                <p className="text-sm text-gray-400">
-                                  Access control for {item.moduleName}
-                                </p>
-                              </div>
-                              <div className="flex w-3/4 flex-wrap">
-                                {item?.permissionList.map((permissionObj) => (
-                                  <Button
-                                    type="button"
-                                    key={permissionObj.permissionID}
-                                    className={`my-2 mr-2`}
-                                    color={
-                                      checkedList.includes(permissionObj.permissionID)
-                                        ? 'primary'
-                                        : ''
-                                    }
-                                    variant="outlined"
-                                    onClick={() =>
-                                      handleCheck(
-                                        !checkedList.includes(permissionObj.permissionID),
-                                        permissionObj,
-                                        item?.permissionList
-                                      )
-                                    }>
-                                    {permissionObj.permissionName}
-                                  </Button>
-                                ))}
-                              </div>
-                            </div>
-                          </>
-                        ))}
-                    </div>
-                  </div>
-                </div>
-              </Card>
+
+        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+          <div className="mt-6 space-y-4">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Input
+                {...register('bankName')}
+                prefix={<UserIcon className="size-5" />}
+                label={t('bankName')}
+                error={errors?.bankName?.message}
+                placeholder={t('enter') + ' ' + t('bankName')}
+              />
+              <Input
+                {...register('accountHolderName')}
+                prefix={<UserIcon className="size-5" />}
+                label={t('accountHolderName')}
+                error={errors?.accountHolderName?.message}
+                placeholder={t('enter') + ' ' + t('accountHolderName')}
+              />
             </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Input
+                {...register('accountNumber')}
+                prefix={<UserIcon className="size-5" />}
+                label={t('accountNumber')}
+                error={errors?.accountNumber?.message}
+                placeholder={t('enter') + ' ' + t('accountNumber')}
+              />
+              <Input
+                {...register('bankCode')}
+                prefix={<EnvelopeIcon className="size-5" />}
+                label={t('bankCode')}
+                error={errors?.bankCode?.message}
+                placeholder={t('enter') + ' ' + t('bankCode')}
+              />
+            </div>
+
+            <div className="grid gap-4 lg:grid-cols-2">
+              {/* <Controller
+                render={({ field }) => (
+                  <Listbox
+                    data={tenantStatusOptions}
+                    value={
+                      tenantStatusOptions.find((status) => status.value === field.value) || null
+                    }
+                    onChange={(val) => field.onChange(val.value)}
+                    name={field.name}
+                    label={t('status')}
+                    placeholder={t('select') + ' ' + t('status')}
+                    displayField="label"
+                    error={errors?.status?.message}
+                  />
+                )}
+                control={control}
+                name="status"
+              /> */}
+
+              <Input
+                {...register('upiID')}
+                prefix={<CiMobile1 className="size-5" />}
+                label={t('enter') + ' ' + t('upiID')}
+                error={errors?.upiID?.message}
+                placeholder={t('enter') + ' ' + t('upiID')}
+              />
+            </div>
+            <div className="grid gap-4 lg:grid-cols-2">
+              <Input
+                label={t('additionalInfo')}
+                type={show ? 'text' : 'password'}
+                placeholder={t('enter') + ' ' + t('additionalInfo')}
+                prefix={<LockClosedIcon className="size-4.5" />}
+                suffix={
+                  <Button
+                    variant="flat"
+                    className="pointer-events-auto size-6 shrink-0 rounded-full p-0"
+                    onClick={toggle}>
+                    {show ? (
+                      <EyeSlashIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
+                    ) : (
+                      <EyeIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
+                    )}
+                  </Button>
+                }
+                {...register('additionalInfo')}
+                error={errors?.additionalInfo?.message}
+              />
+            </div>
+            {/* <div className="grid gap-4 lg:grid-cols-2">
+              <Controller
+                render={({ field }) => (
+                  <Listbox
+                    data={servicesOptions}
+                    value={servicesOptions.find((status) => status.value === field.value) || null}
+                    onChange={(val) => field.onChange(val.value)}
+                    name={field.name}
+                    label={t('add') + ' ' + t('service')}
+                    placeholder={t('select') + ' ' + t('service')}
+                    displayField="label"
+                    error={errors?.service?.message}
+                  />
+                )}
+                control={control}
+                name="service"
+              />
+            </div> */}
           </div>
-        </form>
-        <div className="flex !flex-row-reverse flex-col items-center space-y-4 py-5 sm:flex-row sm:space-y-0 lg:py-6">
-          <div className="flex gap-2">
-            <Button className="min-w-[7rem]" color="primary" type="submit" form="add-role-form">
-              {save}
+          <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
+            <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
+              {t('reset')}
+            </Button>
+            <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
+              {t('create')}
             </Button>
           </div>
-        </div>
+        </form>
       </div>
     </Page>
   );
 };
 
-export default AddRole;
+export default CreateBankDeposit;
+//"bankName":"State Bank Of India",
+// "accountHolderName":"Akhilesh Rathore 8",
+// "accountNumber":"10967899748",
+// "bankCode":"SBIN0003493",
+// "upiID":"rathoreakhilesh@ybl8",
+// "additionalInfo":"{}"
