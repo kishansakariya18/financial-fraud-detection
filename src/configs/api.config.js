@@ -6,20 +6,20 @@ export const apiConfig = {
   },
   endPoints: {
     AUTH: {
-      VALIDATE: '/admin/auth/validate',
-      VERIFYOTP: '/admin/auth/login',
-      RESENDOTP: '/admin/auth/resend-otp',
-      CHANGE_PASSWORD: '/admin/auth/change-password',
-      VALIDATE_RESET_PASSWORD: '/admin/auth/validate-reset-password',
-      RESET_PASSWORD: '/admin/auth/reset-password'
+      VALIDATE: '/admin/admin/auth/validate',
+      VERIFYOTP: '/admin/admin/auth/login',
+      RESENDOTP: '/admin/admin/auth/resend-otp',
+      CHANGE_PASSWORD: '/admin/admin/auth/change-password',
+      VALIDATE_RESET_PASSWORD: '/admin/admin/auth/validate-reset-password',
+      RESET_PASSWORD: '/admin/admin/auth/reset-password'
     },
     ROLES: {
-      LIST: '/admin/roles/list',
-      PERMISSION_LIST: '/admin/roles/permission-list',
-      SUBMIT: '/admin/roles/add-role',
-      DETAIL: '/admin/roles/detail/:rolePermissionId',
-      EDIT: '/admin/roles/update',
-      DELETE: '/admin/roles/delete'
+      LIST: '/admin/admin/roles/list',
+      PERMISSION_LIST: '/admin/admin/roles/permission-list',
+      SUBMIT: '/admin/admin/roles/add-role',
+      DETAIL: '/admin/admin/roles/detail/:rolePermissionId',
+      EDIT: '/admin/admin/roles/update',
+      DELETE: '/admin/admin/roles/delete'
     },
     AUDIT_LOGS: {
       VIEW: '/admin/audit-logs/list',
@@ -43,19 +43,9 @@ export const apiConfig = {
       REFERRAL_LIST: '/admin/users/referral/:userID',
       FUND: '/admin/users/fund',
       TRANSACTION_LIST: '/admin/users/transaction-list',
-      REAL_GAME_TRANSACTION_LIST: '/admin/users/real-game-transaction-list',
-      WINNING_TRANSACTION_LIST: '/admin/users/winning-transaction-list',
-      WITHDRAW_TRANSACTION_LIST: '/admin/users/withdraw-transaction-list',
-      TDS_TRANSACTION_LIST: '/admin/users/tds-transaction-list',
       TDS_SUMMARY_TRANSACTION_LIST: '/admin/users/tds-summary-transaction-list',
-      COIN_TRANSACTION_LIST: '/admin/users/coin-transaction-list',
       TRANSACTION_DETAIL: '/admin/users/transaction-detail',
-      BASKETBALL_TRANSACTION_LIST: '/admin/users/basketball-transaction-list',
-      RETRO_TRANSACTION_LIST: '/admin/users/retro-transaction-list',
-      F1_TRANSACTION_LIST: '/admin/users/f1-transaction-list',
-      COIN_MERCHANDISE_TRANSACTION_LIST: '/admin/users/coin-merchandise-transaction-list',
       CHANGE_STATUS: '/admin/users/change-status',
-      JOINED_CONTEST: '/admin/users/joined-contest',
       REST_BANK_COUNT: '/admin/users/reset-bank-request-count',
       UPDATE_RISK_MANAGEMENT: '/admin/users/update-user-risk-management/:userID',
       ALL_TRANSACTION_LIST: '/admin/users/all-transaction-list',
@@ -72,28 +62,28 @@ export const apiConfig = {
       SEGMENTATION_LIST: '/admin/segmentation/list'
     },
     ADMIN_USER: {
-      ADMIN_LIST: '/admin/admin/list',
-      ADMIN_CHANGE_STATUS: '/admin/admin/:adminId/change-status',
-      ADMIN_ROLE_LIST: '/admin/admin/role/list',
-      ADMIN_CREATE: '/admin/admin/create',
-      ADMIN_DELETE: `/admin/admin/:adminId/delete`,
-      ADMIN_DETAIL: '/admin/admin/:adminId/details',
-      ADMIN_LOGIN: '/admin/login',
-      ADMIN_LOGIN_HISTORY: '/admin/admin/:adminID/login-history',
+      ADMIN_LIST: '/admin/admin/admin/list',
+      ADMIN_CHANGE_STATUS: '/admin/admin/admin/:adminId/change-status',
+      ADMIN_ROLE_LIST: '/admin/admin/admin/role/list',
+      ADMIN_CREATE: '/admin/admin/admin/create',
+      ADMIN_DELETE: `/admin/admin/admin/:adminId/delete`,
+      ADMIN_DETAIL: '/admin/admin/admin/:adminId/details',
+      ADMIN_LOGIN: '/admin/admin/login',
+      ADMIN_LOGIN_HISTORY: '/admin/admin/admin/:adminID/login-history',
       ADMIN_DASHBOARD: '/dashboard',
-      ADMIN_CHANGE_PASSWORD: '/auth/update-password',
-      ADMIN_APPSETTINGS: '/admin/config/app-setting',
-      ADMIN_CHECK_PASSWORD: '/admin/check-password',
-      ADMIN_PERMISSION: '/admin/admin/permissions',
-      ADMIN_EDIT: '/admin/admin/edit',
-      UPDATE_PROFILE: '/admin/update-profile',
-      ADMIN_COUNTRY_LIST: '/admin/countries',
-      ADMIN_SUMMARY: '/admin/admin/summary'
+      ADMIN_CHANGE_PASSWORD: '/admin/auth/update-password',
+      ADMIN_APPSETTINGS: '/config/admin/config/app-setting',
+      ADMIN_CHECK_PASSWORD: '/admin/admin/check-password',
+      ADMIN_PERMISSION: '/admin/admin/admin/permissions',
+      ADMIN_EDIT: '/admin/admin/admin/edit',
+      UPDATE_PROFILE: '/admin/admin/update-profile',
+      ADMIN_COUNTRY_LIST: '/admin/admin/countries',
+      ADMIN_SUMMARY: '/admin/admin/admin/summary'
     },
     TENANT: {
-      LIST: '/admin/tenant/list',
-      CHANGE_STATUS: '/admin/tenant/:tenantUID/change-status',
-      CREATE: '/admin/tenant/create'
+      LIST: '/config/admin/tenant/list',
+      CHANGE_STATUS: '/config/admin/tenant/:tenantUID/change-status',
+      CREATE: '/config/admin/tenant/create'
     },
     DASHBOARD: {
       LIST: '/admin/dashboard',
@@ -261,9 +251,9 @@ export const apiConfig = {
       REFRESH_USER_LIST: '/admin/segmentation/:segmentationId/refresh'
     },
     COUNTRY: {
-      LIST: '/admin/country/list',
-      SUMMARY: '/admin/country/summary',
-      CHANGE_STATUS: '/admin/country/:countryId/change-status'
+      LIST: '/config/admin/country/list',
+      SUMMARY: '/config/admin/country/summary',
+      CHANGE_STATUS: '/config/admin/country/:countryId/change-status'
     },
     PAYMENT: {
       DEPOSIT: '/payment/deposit',
@@ -325,22 +315,22 @@ export const apiConfig = {
       SEND: '/admin/crm/sendNotification'
     },
     HOME_PAGE: {
-      HOME_CATEGORY_LIST: '/admin/home-page/home-category/list',
-      CHANGE_HOME_CATEGORY_STATUS: '/admin/home-page/home-category/:homeCategoryId/change-status',
+      HOME_CATEGORY_LIST: '/config/admin/home-page/home-category/list',
+      CHANGE_HOME_CATEGORY_STATUS: '/config/admin/home-page/home-category/:homeCategoryId/change-status',
       CHANGE_HOME_GAME_STATUS:
-        '/admin/home-page/home-category/home-game/:homePageGameId/change-status',
-      GET_CATEGORY: '/admin/home-page/home-category/get-category',
-      EDIT_HOME_CATEGORY: '/admin/home-page/home-category/edit-category',
-      HOME_GAME_LIST: '/admin/home-page/home-category/home-game/list',
-      ADD_HOME_GAME_LIST: '/admin/home-page/home-category/home-game/add-game-list',
-      ADD_HOME_GAMES: '/admin/home-page/home-category/home-game/add-games',
-      REORDER_CATEGORY: '/admin/home-page/home-category/reorder-category',
-      DELETE_THEME: '/admin/home-page/appearance/delete',
-      REORDER_GAMES: '/admin/home-page/home-category/home-game/reorder-games',
-      DELETE_HOME_GAME: '/admin/home-page/home-category/home-game/:homePageGameId/delete',
-      ADD_APPEARANCE: '/admin/home-page/appearance/add',
-      CHANGE_APPEARANCE_STATUS: '/admin/home-page/appearance/change-status',
-      APPEARANCE_LIST: '/admin/home-page/appearance/list'
+        '/config/admin/home-page/home-category/home-game/:homePageGameId/change-status',
+      GET_CATEGORY: '/config/admin/home-page/home-category/get-category',
+      EDIT_HOME_CATEGORY: '/config/admin/home-page/home-category/edit-category',
+      HOME_GAME_LIST: '/config/admin/home-page/home-category/home-game/list',
+      ADD_HOME_GAME_LIST: '/config/admin/home-page/home-category/home-game/add-game-list',
+      ADD_HOME_GAMES: '/config/admin/home-page/home-category/home-game/add-games',
+      REORDER_CATEGORY: '/config/admin/home-page/home-category/reorder-category',
+      DELETE_THEME: '/config/admin/home-page/appearance/delete',
+      REORDER_GAMES: '/config/admin/home-page/home-category/home-game/reorder-games',
+      DELETE_HOME_GAME: '/config/admin/home-page/home-category/home-game/:homePageGameId/delete',
+      ADD_APPEARANCE: '/config/admin/home-page/appearance/add',
+      CHANGE_APPEARANCE_STATUS: '/config/admin/home-page/appearance/change-status',
+      APPEARANCE_LIST: '/config/admin/home-page/appearance/list'
     },
     PAYMENT_PROVIDER: {
       VIEW: '/admin/payment-provider/list',
@@ -380,8 +370,8 @@ export const apiConfig = {
       DELETE: '/admin/segmentation-limits/:segmentationLimitUID/delete'
     },
     RATE_LIMIT_RULES: {
-      LIST: '/admin/rate-limit-rules/list',
-      CHANGE_STATUS: '/admin/rate-limit-rules/:rateLimitUID/change-status'
+      LIST: '/config/admin/rate-limit-rules/list',
+      CHANGE_STATUS: '/config/admin/rate-limit-rules/:rateLimitUID/change-status'
     },
     BLACKLIST: {
       LIST: '/admin/blacklist/list',
