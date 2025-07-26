@@ -1,0 +1,109 @@
+pipeline {
+  agent any
+  tools {nodejs "node"}
+   environment {
+        DOCKERHUB_CREDENTIALS = 'docker-hub-credentials-id'  // Docker Hub credentials ID
+        DOCKERHUB_REPO = "sourcecodelab/sourcecodelab"
+	// SONARQUBE_ENV = 'sonarqube'        
+    }
+
+
+  stages {
+    stage('Checkout') {
+         steps {
+           checkout scm 
+               }
+                      }
+    stage('Set Docker Image Tag') {
+         steps {
+           script {
+              // Dynamically assign Docker tag based on branch name
+                  def branchName = env.GIT_BRANCH?.replaceFirst(/^origin\//, '') ?: env.BRANCH_NAME
+                  echo "Branch: ${branchName}"
+                  if (branchName == 'dev') {
+                     env.IMAGE_TAG = "dev-admin-latest"
+                                           }
+                  else if (branchName == 'brij-devops') {
+                     env.IMAGE_TAG = "brij-devops-latest"
+                                                        }                              
+                  else {
+                        env.IMAGE_TAG = "${branchName}-latest"  // Default for feature branche
+                        }
+                  echo "Docker image tag: ${IMAGE_TAG}"     
+                    }
+
+                }
+           } 
+
+    stage('Build Docker Image') {
+       steps {
+         script {
+            withCredentials([
+               string(credentialsId: 'VITE_S3_URL', variable: 'VITE_S3_URL'),
+               string(credentialsId: 'VITE_API_URL', variable: 'VITE_API_URL')
+                            ]) {
+               sh 'docker --version'
+               sh 'docker build -t $DOCKERHUB_REPO:$IMAGE_TAG --build-arg VITE_S3_URL=$VITE_S3_URL --build-arg VITE_API_URL=$VITE_API_URL .'                      
+                                 }
+                     // Build the Docker image with the dynamic tag
+		    // docker.build("${DOCKERHUB_REPO}:${IMAGE_TAG}")
+                }
+             } 
+          }
+
+
+   stage('Scan with Trivy') {
+      steps {
+          sh """
+          trivy image --exit-code 1 --severity HIGH,CRITICAL ${DOCKERHUB_REPO}:${IMAGE_TAG} || true
+            """
+            }
+        }
+
+
+
+     stage('Push Docker Image') {
+       steps {
+         script {
+           // Push to Docker Hub using the credentials and registry URL
+           docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
+                    docker.image("${DOCKERHUB_REPO}:${IMAGE_TAG}").push()
+          }
+         // Now remove the image from the local system
+         sh "docker image prune -f"
+         sh "docker rmi ${DOCKERHUB_REPO}:${IMAGE_TAG} || true"
+        }
+      }  
+     }
+
+     stage('Run Docker Container') {
+       steps {
+         script {
+            def containerName = "admin-panel"
+            def imageName = "${DOCKERHUB_REPO}:${IMAGE_TAG}"
+          // stop and remove the old container if it's alreday running
+           sh """
+            docker ps -q --filter name=${containerName} | grep -q . && docker stop ${containerName} || true
+            docker ps -a -q --filter name=${containerName} | grep -q . && docker rm ${containerName} || true
+              """
+            // Pull latest image
+            
+            sh "docker pull ${imageName}"
+            // Run new container on port 9443 (you will reverse-proxy this via Apache)
+            sh """
+            docker run -d --name ${containerName} -p 9443:443 ${imageName}
+               """
+     }  
+    }
+   }        
+
+
+
+
+
+
+
+
+
+ }
+}
