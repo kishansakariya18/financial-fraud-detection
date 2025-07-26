@@ -331,6 +331,14 @@ export const apiConfig = {
     PAYMENT_PROVIDER: {
       VIEW: '/admin/payment-provider/list',
       STATUS: '/admin/payment-provider/change-status'
+    },
+    BANK: {
+      LIST: '/admin/deposit-bank/list',
+      CHANGE_STATUS: '/admin/deposit-bank/:bankId/change-status',
+      CREATE: '/admin/deposit-bank/create',
+      DETAIL: '/admin/deposit-bank/:bankId/details',
+      EDIT: '/admin/deposit-bank/edit',
+      DELETE: '/admin/deposit-bank/:bankId/delete'
     }
   }
 };

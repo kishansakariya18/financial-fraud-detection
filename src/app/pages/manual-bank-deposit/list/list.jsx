@@ -4,26 +4,25 @@ import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
 
 // Local Imports - UI,Services,Helper,Utils
-import { CategoryFilters } from './categoryFilters';
 import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
+import { Toolbar } from './Toolbar';
 
 import { responseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import BankService from 'services/bank.services';
-import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 
-export default function Banks() {
+export default function Bank() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('casino_category');
+  const pageTitle = t('bank_deposit');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
-  const fetchBanks = async () => {
+  const fetchBank = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
     const result = await BankService.getBankList({
@@ -44,7 +43,7 @@ export default function Banks() {
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
-    fetchData: fetchBanks,
+    fetchData: fetchBank,
     queryParams,
     setSearchParams,
     initialSettings: {
@@ -64,47 +63,34 @@ export default function Banks() {
   useEffect(() => {
     const filtersFromQuery = [];
     if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'name', value: queryParams.keyword });
+      filtersFromQuery.push({ id: 'countryName', value: queryParams.keyword });
     }
     if (queryParams.status) {
       filtersFromQuery.push({ id: 'status', value: queryParams.status });
     }
 
-    if (queryParams.startDate && queryParams.endDate) {
-      filtersFromQuery.push({
-        id: 'createdAt',
-        value: [+queryParams.startDate, +queryParams.endDate]
-      });
-    }
     setColumnFilters(filtersFromQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryParams]);
 
   const applyFilterHandler = () => {
     const filterItems = {};
-    // console.log('table.getState().columnFilters:', table.getState().columnFilters);
-
     for (let data of table.getState().columnFilters) {
-      if (data.id === 'name') {
+      if (data.id === 'countryName') {
         filterItems.keyword = data.value;
       }
 
       if (data.id === 'status') {
         filterItems.status = data.value;
       }
-
-      if (data.id === 'createdAt') {
-        filterItems.date = data.value;
-      }
     }
 
     setSearchParams({
-      pageIndex: DEFAULT_PAGE_INDEX,
-      pageSize: DEFAULT_PER_PAGE_RECORD,
+      ...queryParams,
+      pageIndex: 0,
+      pageSize: 10,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
-      ...(filterItems.status && { status: filterItems.status }),
-      ...(filterItems.date && { startDate: filterItems.date[0] }),
-      ...(filterItems.date && { endDate: filterItems?.date[1] })
+      ...(filterItems.status && { status: filterItems.status })
     });
   };
 
@@ -119,17 +105,14 @@ export default function Banks() {
   };
 
   useLockScrollbar(tableSettings.enableFullScreen);
-  // console.log('tableSettings: from reports', table);
 
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
-      {/* <Toolbar breadcrumbs={breadcrumbs} table={table} pageTitle={pageTitle} /> */}
-      <CategoryFilters
+      <Toolbar
         pageTitle={pageTitle}
         table={table}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
-        // filters= {}
       />
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>

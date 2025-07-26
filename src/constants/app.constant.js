@@ -266,6 +266,10 @@ export const PERMISSIONS = {
   PAYMENT_PROVIDER: {
     VIEW: 'payment-provider-view',
     STATUS: 'payment-provider-status'
+  },
+  BANK: {
+    VIEW: 'bank-view',
+    STATUS: 'bank-status'
   }
 };
 

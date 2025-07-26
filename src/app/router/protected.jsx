@@ -23,6 +23,7 @@ import tenantRoute from './routes/tenant.route';
 import profileRoute from './routes/profile.route';
 import bonusManagementRoute from './routes/bonus-management.route';
 import paymentProvider from './routes/payment-provider.route';
+import { bankRoute } from './routes/bank.route';
 
 // ----------------------------------------------------------------------
 
@@ -55,7 +56,8 @@ const protectedRoutes = {
         ...tenantRoute,
         ...profileRoute,
         ...bonusManagementRoute,
-        ...paymentProvider
+        ...paymentProvider,
+        ...bankRoute
       ]
     }
   ]
