@@ -3,8 +3,13 @@ import { createColumnHelper } from '@tanstack/react-table';
 
 // Local Imports
 import { RowActions } from './RowActions';
-import { IdCell, BadgeCell, BoldCell } from '../../../../components/custom/table/cell';
-import { statusOptions } from '../helper';
+import {
+  IdCell,
+  BoldCell,
+  MultiLineCell,
+  StatusIconCell
+} from '../../../../components/custom/table/cell';
+import { globallyBlockedStatusOptions } from '../helper';
 
 // ----------------------------------------------------------------------
 
@@ -23,7 +28,6 @@ export const columns = [
     label: 'Country Name',
     header: 'Country Name',
     cell: BoldCell,
-
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.countryCode, {
@@ -33,16 +37,24 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
-
-  columnHelper.accessor((row) => row.status, {
-    id: 'status',
-    label: 'Status',
-    header: 'Status',
-    cell: BadgeCell,
-    meta: { optionData: statusOptions },
+  columnHelper.accessor((row) => (row.globallyBlocked ? 'blocked' : 'not_blocked'), {
+    id: 'globallyBlocked',
+    label: 'Globally Blocked?',
+    header: 'Globally Blocked?',
+    cell: StatusIconCell,
+    meta: { optionData: globallyBlockedStatusOptions },
     filterFn: 'arrIncludesSome',
     enableSorting: false
   }),
+
+  columnHelper.accessor((row) => row.blockedModules, {
+    id: 'blockedModules',
+    label: 'Blocked Modules',
+    header: 'Blocked Modules',
+    cell: MultiLineCell,
+    enableSorting: false
+  }),
+
   columnHelper.display({
     id: 'actions',
     label: 'Row Actions',

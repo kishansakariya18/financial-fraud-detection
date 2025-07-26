@@ -30,7 +30,7 @@ export function RowActions({ row, table }) {
       actionText: t('submit')
     },
     success: {
-      title: t('note') + ' ' + t('delete'),
+      title: t('note') + ' ' + t('delete_text'),
       description: t('player_note_delete_suceess')
     }
   };
@@ -116,7 +116,7 @@ export function RowActions({ row, table }) {
                         focus && 'bg-this/10 dark:bg-this-light/10'
                       )}>
                       <TrashIcon className="size-4.5 stroke-1" />
-                      <span>{t('delete')}</span>
+                      <span>{t('delete_text')}</span>
                     </button>
                   )}
                 </MenuItem>

@@ -4,16 +4,17 @@ import { EllipsisHorizontalIcon, EyeIcon, PencilIcon } from '@heroicons/react/24
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-
+import { toast } from 'sonner';
 // Local Imports
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
-import { TbList, TbStatusChange } from 'react-icons/tb';
+import { TbList, TbStatusChange, TbTicketOff } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
 import SegmentationService from 'services/segmentation.services';
+import { IoRefreshCircleOutline } from 'react-icons/io5';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
@@ -41,11 +42,27 @@ export function RowActions({ row, table }) {
   };
 
   const handleEdit = () => {
-    navigate(`/segmentation/${row.original.id}/edit`);
+    navigate(`/segmentation/${row.original.uid}/edit`);
   };
 
+  const handleRefresh1 = useCallback(async () => {
+    setConfirmDeleteLoading(true);
+    const result = await SegmentationService.refreshSegmentationList(row.original.uid);
+    if (result.status === 200) {
+      toast.success(t('refresh_success'));
+      table.options.meta?.changeStatus(row);
+      setChangeStatusSuccess(true);
+    } else {
+      toast.error(t('refresh_failed'));
+      setChangeStatusError(true);
+    }
+
+    setConfirmDeleteLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [row]);
+
   const handleView = () => {
-    navigate(`/segmentation/${row.original.id}/details`);
+    navigate(`/segmentation/${row.original.uid}/details`);
   };
 
   const openModal = () => {
@@ -56,7 +73,7 @@ export function RowActions({ row, table }) {
 
   const handleChangeStatus = useCallback(async () => {
     setConfirmDeleteLoading(true);
-    const result = await SegmentationService.changeSegmentationStatus(row.original.id);
+    const result = await SegmentationService.changeSegmentationStatus(row.original.uid);
     if (result.status === 200) {
       table.options.meta?.changeStatus(row);
       setChangeStatusSuccess(true);
@@ -118,6 +135,21 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
+              {hasPermission(PERMISSIONS.SEGMENTATION.EDIT) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                        focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                      )}
+                      onClick={handleRefresh1}>
+                      <IoRefreshCircleOutline className="size-4.5 stroke-1" />
+                      <span>{t('refresh')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
               {hasPermission(PERMISSIONS.SEGMENTATION.CHANGE_STATUS) && (
                 <MenuItem>
                   {({ focus }) => (
@@ -137,13 +169,28 @@ export function RowActions({ row, table }) {
                 <MenuItem>
                   {({ focus }) => (
                     <button
-                      onClick={() => navigate(`/segmentation/${row?.original?.id}/player-list`)}
+                      onClick={() => navigate(`/segmentation/${row?.original?.uid}/player-list`)}
                       className={clsx(
                         'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
                         focus && 'bg-this/10 dark:bg-this-light/10'
                       )}>
                       <TbList className="size-4.5 stroke-1" />
                       <span>{t('player') + ' ' + t('list')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
+              {hasPermission(PERMISSIONS.SEGMENTATION.LIMIT) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={() => navigate(`/segmentation/${row?.original?.id}/limits`)}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                        focus && 'bg-this/10 dark:bg-this-light/10'
+                      )}>
+                      <TbTicketOff className="size-4.5 stroke-1" />
+                      <span>{t('limit')}</span>
                     </button>
                   )}
                 </MenuItem>

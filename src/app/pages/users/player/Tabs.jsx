@@ -70,7 +70,7 @@ export default function Tabs() {
     },
     {
       id: randomId(),
-      title: t('referrals'),
+      title: t('referral'),
       path: `/users/player/${playerId}/tab/referrals`,
       icon: UserGroupIcon,
       index: 0,

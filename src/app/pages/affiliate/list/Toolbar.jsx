@@ -21,7 +21,8 @@ export function Toolbar({
   table,
   pageTitle = '',
   onApplyFilters = () => {},
-  onClearFilters = () => {}
+  onClearFilters = () => {},
+  summary = null
 }) {
   const { isXs } = useBreakpointsContext();
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ export function Toolbar({
       <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
         <DashboardCard
           label={dummyCards.Affiliate.TOTAL_AFFILIATE.key}
-          value={dummyCards.Affiliate.TOTAL_AFFILIATE.value}
+          value={summary ? summary.totalAffiliates : dummyCards.Affiliate.TOTAL_AFFILIATE.value}
           gradientFrom={dummyCards.Affiliate.TOTAL_AFFILIATE.gradientFrom}
           gradientTo={dummyCards.Affiliate.TOTAL_AFFILIATE.gradientTo}
           textColor="text-sky-100"
@@ -59,7 +60,7 @@ export function Toolbar({
         />
         <DashboardCard
           label={dummyCards.Affiliate.TOTAL_SIGNUP_USERS.key}
-          value={dummyCards.Affiliate.TOTAL_SIGNUP_USERS.value}
+          value={summary ? summary.totalSignups : dummyCards.Affiliate.TOTAL_SIGNUP_USERS.value}
           gradientFrom={dummyCards.Affiliate.TOTAL_SIGNUP_USERS.gradientFrom}
           gradientTo={dummyCards.Affiliate.TOTAL_SIGNUP_USERS.gradientTo}
           textColor="text-sky-100"
@@ -67,7 +68,7 @@ export function Toolbar({
         />
         <DashboardCard
           label={dummyCards.Affiliate.TOTAL_DEPOSITS.key}
-          value={dummyCards.Affiliate.TOTAL_DEPOSITS.value}
+          value={summary ? summary.totalDeposits : dummyCards.Affiliate.TOTAL_DEPOSITS.value}
           gradientFrom={dummyCards.Affiliate.TOTAL_DEPOSITS.gradientFrom}
           gradientTo={dummyCards.Affiliate.TOTAL_DEPOSITS.gradientTo}
           textColor="text-sky-100"
@@ -75,7 +76,7 @@ export function Toolbar({
         />
         <DashboardCard
           label={dummyCards.Affiliate.TOTAL_COMMISSION.key}
-          value={dummyCards.Affiliate.TOTAL_COMMISSION.value}
+          value={summary ? summary.totalCommissions : dummyCards.Affiliate.TOTAL_COMMISSION.value}
           gradientFrom={dummyCards.Affiliate.TOTAL_COMMISSION.gradientFrom}
           gradientTo={dummyCards.Affiliate.TOTAL_COMMISSION.gradientTo}
           textColor="text-sky-100"
@@ -89,7 +90,7 @@ export function Toolbar({
               'flex space-x-2 pt-4 rtl:space-x-reverse [&_.input-root]:flex-1',
               isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x]'
             )}>
-            <SearchInput table={table} />
+            <SearchInput table={table} onApplyFilters={onApplyFilters} />
             <TableConfig table={table} />
           </div>
           <div
@@ -114,7 +115,7 @@ export function Toolbar({
             '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)'
           }}>
           <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
-            <SearchInput table={table} />
+            <SearchInput table={table} onApplyFilters={onApplyFilters} />
             <Filters
               table={table}
               onApplyFilters={onApplyFilters}
@@ -129,11 +130,16 @@ export function Toolbar({
   );
 }
 
-function SearchInput({ table }) {
+function SearchInput({ table, onApplyFilters }) {
   return (
     <Input
       value={table?.getColumn('username')?.getFilterValue() || ''}
       onChange={(e) => table.getColumn('username').setFilterValue(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          onApplyFilters();
+        }
+      }}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
@@ -190,7 +196,8 @@ Toolbar.propTypes = {
 };
 
 SearchInput.propTypes = {
-  table: PropTypes.object
+  table: PropTypes.object,
+  onApplyFilters: PropTypes.func
 };
 
 Filters.propTypes = {

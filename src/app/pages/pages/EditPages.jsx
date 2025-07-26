@@ -25,7 +25,10 @@ const EditPages = () => {
   const [htmlContent, setHtmlContent] = useState('');
   const { t } = useTranslation();
 
-  const breadcrumbItem = [{ title: t('pages'), path: '/pages' }, { title: t('edit') }];
+  const breadcrumbItem = [
+    { title: t('pages'), path: '/content-management/pages' },
+    { title: t('edit') }
+  ];
   const {
     register,
     handleSubmit,
@@ -58,7 +61,7 @@ const EditPages = () => {
       if (result.status === 200 || result.status === 201) {
         setResponse(result.response);
         setTimeout(() => {
-          navigate('/pages');
+          navigate('/content-management/pages');
         }, 0);
       } else {
         setError(result.error);
@@ -120,7 +123,7 @@ const EditPages = () => {
   if (!loading && !error && response) {
     toast.success(response.message);
     setTimeout(() => {
-      navigate('/pages');
+      navigate('/content-management/pages');
     }, 0);
     setResponse(null);
     fetchPagesDetails();

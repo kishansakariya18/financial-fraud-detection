@@ -65,7 +65,11 @@ export const apiConfig = {
       GET_COMMENT_DETAIL: '/admin/users/get-comment-detail',
       ADD_COMMENT: '/admin/users/add-comment',
       DELETE_COMMENT: '/admin/users/delete-comment',
-      CHANE_PLAYER_FUND_PASSWORD: '/admin/user/change-manage-fund-password'
+      CHANE_PLAYER_FUND_PASSWORD: '/admin/user/change-manage-fund-password',
+      SUMMARY: '/admin/users/summary',
+      USER_SUMMARY: '/admin/user/summary',
+      COUNTRY_LIST: '/admin/countries',
+      SEGMENTATION_LIST: '/admin/segmentation/list'
     },
     ADMIN_USER: {
       ADMIN_LIST: '/admin/admin/list',
@@ -83,7 +87,8 @@ export const apiConfig = {
       ADMIN_PERMISSION: '/admin/permissions',
       ADMIN_EDIT: '/admin/admin/edit',
       UPDATE_PROFILE: '/admin/update-profile',
-      ADMIN_COUNTRY_LIST: '/admin/countries'
+      ADMIN_COUNTRY_LIST: '/admin/countries',
+      ADMIN_SUMMARY: '/admin/admin/summary'
     },
     TENANT: {
       LIST: '/admin/tenant/list',
@@ -102,7 +107,10 @@ export const apiConfig = {
       KPI_SUMMARY: '/admin/dashboard/kpi-summary',
       CASINO_STATS: '/admin/dashboard/casino-stats',
       TOP_PLAYERS: '/admin/dashboard/top-players',
-      TOP_GAMES: '/admin/dashboard/top-games'
+      TOP_GAMES: '/admin/dashboard/top-games',
+      LAST_DEPOSITOR: '/admin/dashboard/last-depositor',
+      LAST_WITHDRAWAL: '/admin/dashboard/last-withdrawer',
+      LAST_SIGNUP: '/admin/dashboard/last-signup'
     },
     DEPOSIT_PROMOCODE: {
       PROMOCODE_LIST: '/admin/v1/deposit-promocode/list',
@@ -113,7 +121,8 @@ export const apiConfig = {
       PROMOCODE_SEGMENTATION: '/admin/v1/deposit-promocode/:promocodeId/segmentation',
       PROMOCODE_UPLOAD_SEGMENTATION: '/admin/v1/deposit-promocode/:promocodeId/segmentation',
       PROMOCODE_REMOVE_SEGMENTATION: '/admin/v1/deposit-promocode/:promocodeId/segmentation',
-      PROMOCODE_DELETE: '/admin/v1/deposit-promocode/:promocodeId'
+      PROMOCODE_DELETE: '/admin/v1/deposit-promocode/:promocodeId',
+      SUMMARY: '/admin/v1/deposit-promocode/summary'
     },
     APP_SETTING: {
       APP_SETTING_LIST: '/admin/app-setting/list',
@@ -127,10 +136,8 @@ export const apiConfig = {
       BANNER_CREATE: '/admin/banner/create',
       BANNER_DELETE: `/admin/banner/:bannerId/delete`,
       BANNER_DETAIL: `/admin/banner/:bannerId/details`,
-      BANNER_EDIT: `/admin/banner/edit`,
-      GET_BANNER_SGMENTATION: `/admin/banner/:bannerId/segmentation`,
-      SUBMIT_BANNER_SEGMENTATION: `/admin/banner/:bannerId/segmentation`,
-      REMOVE_BANNER_SEGMENTATION: `/admin/banner/:bannerId/segmentation`
+      BANNER_EDIT: `/admin//banner/:bannerId/edit`,
+      BANNER_REORDER: '/admin/banner/reorder'
     },
     AFFILIATE: {
       AFFILIATE_LIST: '/admin/affiliates',
@@ -144,7 +151,8 @@ export const apiConfig = {
       UPDATE_PAYOUT: '/admin/affiliates/update-payout',
       FUND: '/admin/affiliates/fund',
       AFFILIATE_LOGIN_HISTORY: '/admin/affiliates/:affiliateID/login-history',
-      CHANGE_AFFILIATE_FUND_PASSWORD: '/admin/affiliate/change-manage-fund-password'
+      CHANGE_AFFILIATE_FUND_PASSWORD: '/admin/affiliate/change-manage-fund-password',
+      SUMMARY: '/admin/affiliates/summary'
     },
     APP_VERSION: {
       LIST: '/admin/app-version/list',
@@ -245,14 +253,16 @@ export const apiConfig = {
     SEGMENTATION: {
       LIST: '/admin/segmentation/list',
       ALL_LIST: '/admin/segmentation/allList',
-      DETAIL: '/admin/segmentation/:segmentationId/details',
+      DETAIL: '/admin/segmentation/:segmentationUID/details',
       ADD_EDIT: '/admin/segmentation/add-edit',
       COUNTRY_LIST: '/admin/segmentation/countries',
-      CHANGE_STATUS: '/admin/segmentation/:segmentationId/change-status',
-      USER_LIST: '/admin/segmentation/player-list'
+      CHANGE_STATUS: '/admin/segmentation/:segmentationUID/change-status',
+      USER_LIST: '/admin/segmentation/player-list',
+      REFRESH_USER_LIST: '/admin/segmentation/:segmentationId/refresh'
     },
     COUNTRY: {
       LIST: '/admin/country/list',
+      SUMMARY: '/admin/country/summary',
       CHANGE_STATUS: '/admin/country/:countryId/change-status'
     },
     PAYMENT: {
@@ -267,6 +277,7 @@ export const apiConfig = {
     },
     CATEGORY: {
       LIST: '/admin/casino-management/category/list',
+      SUMMARY: '/admin/casino-management/category/summary',
       CREATE: '/admin/casino-management/category/create',
       EDIT: '/admin/casino-management/category/:categoryId/edit',
       DELETE: '/admin/casino-management/category/:categoryId/delete',
@@ -275,6 +286,7 @@ export const apiConfig = {
     PROVIDER: {
       ALL_LIST: '/admin/casino-management/provider/all',
       LIST: '/admin/casino-management/provider/list',
+      SUMMARY: '/admin/casino-management/provider/summary',
       CREATE: '/admin/casino-management/provider/create',
       EDIT: '/admin/casino-management/provider/:providerId/edit',
       DELETE: '/admin/casino-management/provider/:providerId/delete',
@@ -289,6 +301,7 @@ export const apiConfig = {
     },
     GAME: {
       LIST: '/admin/casino-management/games/list',
+      SUMMARY: '/admin/casino-management/games/summary',
       DETAILS: '/admin/casino-management/games/:gameUID/details',
       CREATE: '/admin/casino-management/games/create',
       EDIT: '/admin/casino-management/games/:gameId/edit',
@@ -322,6 +335,7 @@ export const apiConfig = {
       ADD_HOME_GAME_LIST: '/admin/home-page/home-category/home-game/add-game-list',
       ADD_HOME_GAMES: '/admin/home-page/home-category/home-game/add-games',
       REORDER_CATEGORY: '/admin/home-page/home-category/reorder-category',
+      DELETE_THEME: '/admin/home-page/appearance/delete',
       REORDER_GAMES: '/admin/home-page/home-category/home-game/reorder-games',
       DELETE_HOME_GAME: '/admin/home-page/home-category/home-game/:homePageGameId/delete',
       ADD_APPEARANCE: '/admin/home-page/appearance/add',
@@ -331,6 +345,48 @@ export const apiConfig = {
     PAYMENT_PROVIDER: {
       VIEW: '/admin/payment-provider/list',
       STATUS: '/admin/payment-provider/change-status'
+    },
+    GEORESTRICTION: {
+      COUNTRY_LIST: '/admin/country/restrictions/list',
+      BLOCKED_MODULES: '/admin/country/:countryId/restrictions/modules/list',
+      BLOCKED_PROVIDERS: '/admin/country/:countryId/restrictions/providers/list',
+      BLOCK_MODULE: '/admin/country/:countryId/restrict-country-module',
+      BLOCK_PROVIDER: '/admin/country/:countryId/restrict-country-provider',
+      BLOCK_COUNTRY: '/admin/country/restrictions',
+      UNBLOCK_COUNTRY: '/admin/country/restrictions/:countryId/unrestrict'
+    },
+    USER_CLASS: {
+      LIST: '/admin/user-classes/list',
+      CREATE: '/admin/user-classes/create',
+      DETAIL: '/admin/user-classes/:userClassUID/detail',
+      UPDATE: '/admin/user-classes/update',
+      CHANGE_STATUS: '/admin/user-classes/:userClassUID/change-status',
+      DELETE: '/admin/user-classes/:userClassUID/delete'
+    },
+    USER_CLASS_LIMIT: {
+      LIST: '/admin/user-class-limits/list',
+      CREATE: '/admin/user-class-limits/create',
+      DETAIL: '/admin/user-class-limits/:userClassLimitUID/detail',
+      UPDATE: '/admin/user-class-limits/update',
+      CHANGE_STATUS: '/admin/user-class-limits/:userClassLimitUID/change-status',
+      DELETE: '/admin/user-class-limits/:userClassLimitUID/delete'
+    },
+    SEGMENTATION_LIMIT: {
+      LIST: '/admin/segmentation-limits/list',
+      CREATE: '/admin/segmentation-limits/create',
+      DETAIL: '/admin/segmentation-limits/:segmentationLimitUID/detail',
+      UPDATE: '/admin/segmentation-limits/update',
+      CHANGE_STATUS: '/admin/segmentation-limits/:segmentationLimitUID/change-status',
+      DELETE: '/admin/segmentation-limits/:segmentationLimitUID/delete'
+    },
+    RATE_LIMIT_RULES: {
+      LIST: '/admin/rate-limit-rules/list',
+      CHANGE_STATUS: '/admin/rate-limit-rules/:rateLimitUID/change-status'
+    },
+    BLACKLIST: {
+      LIST: '/admin/blacklist/list',
+      BLOCK: '/admin/blacklist/block',
+      DELETE: '/admin/blacklist/:blacklistUID/delete'
     },
     BANK: {
       LIST: '/admin/deposit-bank/list',

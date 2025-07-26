@@ -27,7 +27,8 @@ export function CategoryFilters({
   table,
   onApplyFilters = () => {},
   onClearFilters = () => {},
-  pageTitle = ''
+  pageTitle = '',
+  summary = null
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
@@ -54,7 +55,7 @@ export function CategoryFilters({
       <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
         <DashboardCard
           label={dummyCards.Category.TOTAL_CATEGORIES.key}
-          value={dummyCards.Category.TOTAL_CATEGORIES.value}
+          value={summary ? summary.totalCategories : dummyCards.Category.TOTAL_CATEGORIES.value}
           gradientFrom={dummyCards.Category.TOTAL_CATEGORIES.gradientFrom}
           gradientTo={dummyCards.Category.TOTAL_CATEGORIES.gradientTo}
           textColor="text-sky-100"
@@ -62,7 +63,7 @@ export function CategoryFilters({
         />
         <DashboardCard
           label={dummyCards.Category.ACTIVE_CATEGORIES.key}
-          value={dummyCards.Category.ACTIVE_CATEGORIES.value}
+          value={summary ? summary.activeCategories : dummyCards.Category.ACTIVE_CATEGORIES.value}
           gradientFrom={dummyCards.Category.ACTIVE_CATEGORIES.gradientFrom}
           gradientTo={dummyCards.Category.ACTIVE_CATEGORIES.gradientTo}
           textColor="text-sky-100"
@@ -70,7 +71,9 @@ export function CategoryFilters({
         />
         <DashboardCard
           label={dummyCards.Category.INACTIVE_CATEGORIES.key}
-          value={dummyCards.Category.INACTIVE_CATEGORIES.value}
+          value={
+            summary ? summary.inactiveCategories : dummyCards.Category.INACTIVE_CATEGORIES.value
+          }
           gradientFrom={dummyCards.Category.INACTIVE_CATEGORIES.gradientFrom}
           gradientTo={dummyCards.Category.INACTIVE_CATEGORIES.gradientTo}
           textColor="text-sky-100"
@@ -84,7 +87,7 @@ export function CategoryFilters({
               'flex space-x-2 pt-4 rtl:space-x-reverse [&_.input-root]:flex-1',
               isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x]'
             )}>
-            <SearchInput table={table} />
+            <SearchInput table={table} onApplyFilters={onApplyFilters} />
             <TableConfig table={table} />
           </div>
           <div
@@ -110,7 +113,7 @@ export function CategoryFilters({
               '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)'
             }}>
             <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
-              <SearchInput table={table} />
+              <SearchInput table={table} onApplyFilters={onApplyFilters} />
               <Filters
                 table={table}
                 onApplyFilters={onApplyFilters}
@@ -126,11 +129,16 @@ export function CategoryFilters({
   );
 }
 
-function SearchInput({ table }) {
+function SearchInput({ table, onApplyFilters }) {
   return (
     <Input
       value={table?.getColumn('name')?.getFilterValue() || ''}
       onChange={(e) => table.getColumn('name').setFilterValue(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          onApplyFilters();
+        }
+      }}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
@@ -186,7 +194,8 @@ CategoryFilters.propTypes = {
 };
 
 SearchInput.propTypes = {
-  table: PropTypes.object
+  table: PropTypes.object,
+  onApplyFilters: PropTypes.func
 };
 
 Filters.propTypes = {

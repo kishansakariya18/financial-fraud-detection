@@ -85,16 +85,20 @@ const CustomListbox = forwardRef(
                     {data.map((item, i) => (
                       <ListboxOption
                         key={i}
-                        className={({ selected, focus }) =>
+                        className={({ selected, focus, disabled }) =>
                           clsx(
-                            'relative cursor-pointer select-none py-2 pl-4 pr-10 outline-none transition-colors rtl:pl-10 rtl:pr-4',
-                            focus && !selected && 'bg-gray-100 dark:bg-dark-600',
+                            'relative select-none py-2 pl-4 pr-10 outline-none transition-colors rtl:pl-10 rtl:pr-4',
+                            disabled
+                              ? 'cursor-not-allowed opacity-50 dark:bg-dark-600'
+                              : 'cursor-pointer',
+                            focus && !selected && !disabled && 'bg-gray-100 dark:bg-dark-600',
                             selected
                               ? 'bg-primary-600 text-white dark:bg-primary-500'
                               : 'text-gray-800 dark:text-dark-100'
                           )
                         }
-                        value={item}>
+                        value={item}
+                        disabled={item.disabled}>
                         {({ selected }) => (
                           <>
                             <span className="block truncate">{item[displayField]}</span>

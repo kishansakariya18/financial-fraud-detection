@@ -115,8 +115,8 @@ function ComboboxFilter({
       }
       onChange={(list) => {
         isMultiple
-          ? column.setFilterValue(list.map((item) => item[valueField]))
-          : column.setFilterValue(list[valueField]);
+          ? column?.setFilterValue(list.map((item) => item[valueField]))
+          : column?.setFilterValue(list[valueField]);
       }}
       multiple={isMultiple}
       className="h-[366px] sm:h-auto sm:max-h-80 sm:w-56">

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
@@ -20,8 +20,11 @@ export default function Player() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t('player') + ' ' + t('list');
-
+  const [summary, setSummary] = useState(null);
+  const [countries, setCountries] = useState(null);
+  const [segmentations, setSegmentations] = useState(null);
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const filtersInitializedRef = useRef(false);
 
   const fetchPlayers = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
@@ -40,16 +43,57 @@ export default function Player() {
     }
     return { status: result.status, error: result.error };
   };
+  const fetchCountryList = async () => {
+    const result = await PlayerService.countryList();
+    if (result.status === 200) {
+      setCountries(result.response.data);
+    }
+    return { status: result.status, error: result.error };
+  };
+  const fetchSegmentationList = async () => {
+    const result = await PlayerService.segmentationList();
+    if (result.status === 200) {
+      setSegmentations(result.response.data);
+    }
+    return { status: result.status, error: result.error };
+  };
+  const fetchSummary = async () => {
+    // setError(null);
 
+    const result = await PlayerService.userSummary();
+
+    if (result.status === 200) {
+      setSummary(result.response.data);
+      return {
+        status: 200,
+        data: result.response.data,
+        totalRecords: parseInt(result.response.total_records, 10) || 0
+      };
+    }
+
+    return { status: result.status, error: result.error };
+  };
+  useEffect(() => {
+    fetchSummary();
+    fetchCountryList();
+    fetchSegmentationList();
+  }, []);
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
     fetchData: fetchPlayers,
     queryParams,
+    fetchSummary: fetchSummary,
     setSearchParams,
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
       tableSettings: {},
-      columnVisibility: { userUID: false }
+      columnVisibility: {
+        userUID: false,
+        CountryID: false,
+        isKYCVerified: false,
+        isBankVerified: false,
+        segmentationID: false
+      }
     }
   });
 
@@ -62,21 +106,52 @@ export default function Player() {
   }, [error]);
 
   useEffect(() => {
-    const filtersFromQuery = [];
-    if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'username', value: queryParams.keyword });
+    if (!filtersInitializedRef.current) {
+      const filtersFromQuery = [];
+      if (queryParams.keyword) {
+        filtersFromQuery.push({ id: 'username', value: queryParams.keyword });
+      }
+      if (queryParams.status) {
+        filtersFromQuery.push({ id: 'status', value: queryParams.status });
+      }
+      if (queryParams.isKYCVerified) {
+        filtersFromQuery.push({ id: 'isKYCVerified', value: queryParams.isKYCVerified });
+      }
+      if (queryParams.isBankVerified) {
+        filtersFromQuery.push({ id: 'isBankVerified', value: queryParams.isBankVerified });
+      }
+      if (queryParams.CountryID) {
+        let countryIds = queryParams.CountryID;
+        if (typeof countryIds === 'string') {
+          countryIds = countryIds.split(',').filter(Boolean);
+        }
+        if (!Array.isArray(countryIds)) {
+          countryIds = [countryIds];
+        }
+        filtersFromQuery.push({ id: 'CountryID', value: countryIds });
+      }
+      if (queryParams.SegmentationID) {
+        let segmentationIds = queryParams.SegmentationID;
+        if (typeof segmentationIds === 'string') {
+          segmentationIds = segmentationIds.split(',').filter(Boolean);
+        }
+        if (!Array.isArray(segmentationIds)) {
+          segmentationIds = [segmentationIds];
+        }
+        filtersFromQuery.push({ id: 'SegmentationID', value: segmentationIds });
+      }
+      if (queryParams.gender) {
+        filtersFromQuery.push({ id: 'gender', value: queryParams.gender });
+      }
+      if (queryParams.startDate && queryParams.endDate) {
+        filtersFromQuery.push({
+          id: 'createdAt',
+          value: [+queryParams.startDate, +queryParams.endDate]
+        });
+      }
+      setColumnFilters(filtersFromQuery);
+      filtersInitializedRef.current = true;
     }
-    if (queryParams.status) {
-      filtersFromQuery.push({ id: 'status', value: queryParams.status });
-    }
-    if (queryParams.startDate && queryParams.endDate) {
-      filtersFromQuery.push({
-        id: 'createdAt',
-        value: [+queryParams.startDate, +queryParams.endDate]
-      });
-    }
-
-    setColumnFilters(filtersFromQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryParams]);
 
@@ -89,19 +164,51 @@ export default function Player() {
       if (data.id === 'status') {
         filterItems.status = data.value;
       }
+      if (data.id === 'isKYCVerified') {
+        filterItems.isKYCVerified = data.value;
+      }
+      if (data.id === 'isBankVerified') {
+        filterItems.isBankVerified = data.value;
+      }
+      if (data.id === 'CountryID') {
+        filterItems.CountryID = data.value;
+      }
+      if (data.id === 'SegmentationID') {
+        filterItems.SegmentationID = data.value;
+      }
       if (data.id === 'createdAt') {
         filterItems.date = data.value;
       }
+      if (data.id === 'gender') {
+        filterItems.gender = data.value;
+      }
     }
+
+    const countryIds = filterItems.CountryID
+      ? Array.isArray(filterItems.CountryID)
+        ? filterItems.CountryID
+        : [filterItems.CountryID]
+      : [];
+    const segmentationIds = filterItems.SegmentationID
+      ? Array.isArray(filterItems.SegmentationID)
+        ? filterItems.SegmentationID
+        : [filterItems.SegmentationID]
+      : [];
 
     setSearchParams({
       pageIndex: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
       ...(filterItems.status && { status: filterItems.status }),
+      ...(filterItems.isBankVerified && { isBankVerified: filterItems.isBankVerified }),
+      ...(filterItems.isKYCVerified && { isKYCVerified: filterItems.isKYCVerified }),
+      ...(countryIds.length && { CountryID: countryIds.join(',') }),
+      ...(segmentationIds.length && { SegmentationID: segmentationIds.join(',') }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
-      ...(filterItems.date && { endDate: filterItems?.date[1] })
+      ...(filterItems.date && { endDate: filterItems?.date[1] }),
+      ...(filterItems.gender && { gender: filterItems.gender })
     });
+    // Do NOT reset filtersInitializedRef here, so UI state is preserved
   };
 
   const clearFilterHandler = () => {
@@ -109,6 +216,7 @@ export default function Player() {
       setSearchParams({ pageIndex: DEFAULT_PAGE_INDEX, pageSize: DEFAULT_PER_PAGE_RECORD });
     }
     table.resetColumnFilters();
+    filtersInitializedRef.current = false; // Allow re-initialization from URL
   };
 
   useLockScrollbar(tableSettings.enableFullScreen);
@@ -117,6 +225,9 @@ export default function Player() {
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
       <Toolbar
         table={table}
+        summary={summary}
+        countries={countries}
+        segmentations={segmentations}
         pageTitle={pageTitle}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}

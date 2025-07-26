@@ -7,10 +7,10 @@ import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
 export const banner = {
   id: 'banner',
   type: NAV_TYPE_ITEM,
-  path: '/banner',
+  path: '/content-management/banner',
   title: 'Banner',
   transKey: 'nav.banner',
-  disabled: true,
+  // disabled: true,
   Icon: MegaphoneIcon,
   permission: PERMISSIONS.BANNER.LIST
 };

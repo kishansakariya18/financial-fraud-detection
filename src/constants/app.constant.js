@@ -267,6 +267,24 @@ export const PERMISSIONS = {
     VIEW: 'payment-provider-view',
     STATUS: 'payment-provider-status'
   },
+  USER_CLASS: {
+    LIST: 'player-class-list',
+    VIEW: 'player-class-view',
+    CREATE: 'player-class-create',
+    EDIT: 'player-class-edit',
+    CHANGE_STATUS: 'player-class-change-status',
+    DELETE: 'player-class-delete'
+  },
+  USER_CLASS_LIMIT: {
+    LIST: 'player-class-limit-list',
+    CREATE: 'player-class-limit-create',
+    EDIT: 'player-class-limit-edit',
+    CHANGE_STATUS: 'player-class-limit-change-status',
+    DELETE: 'player-class-limit-delete'
+  },
+  RATE_LIMIT_RULES: {
+    LIST: 'rate-limit-rules-view'
+  },
   BANK: {
     VIEW: 'bank-view',
     STATUS: 'bank-status'

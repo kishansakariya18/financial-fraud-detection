@@ -13,8 +13,8 @@ const columnHelper = createColumnHelper();
 export const columns = [
   columnHelper.accessor((row) => row.id, {
     id: 'id',
-    label: 'Role Permission ID',
-    header: 'Role Permission ID',
+    label: 'Role ID',
+    header: 'Role ID',
     cell: IdCell,
     enableSorting: false
   }),

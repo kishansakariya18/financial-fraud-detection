@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
@@ -18,9 +18,10 @@ import CountryService from 'services/country.services';
 export default function Country() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('country');
+  const pageTitle = t('countries');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const [summary, setSummary] = useState({});
 
   const fetchCountry = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
@@ -34,22 +35,43 @@ export default function Country() {
       return {
         status: 200,
         data: responseMapper(result.response.data),
-        totalRecords: parseInt(result.response.totalRecords, 10) || 0
+        totalRecords: parseInt(result.response.totalRecord, 10) || 0,
+        totalPages: result.response.totalPages
       };
     }
 
     return { status: result.status, error: result.error };
   };
+  const fetchSummary = async () => {
+    // setError(null);
 
+    const result = await CountryService.getCountrySummary();
+
+    if (result.status === 200) {
+      setSummary(result.response.data);
+      return {
+        status: 200,
+        data: result.response.data,
+        totalRecords: parseInt(result.response.total_records, 10) || 0
+      };
+    }
+
+    return { status: result.status, error: result.error };
+  };
+  useEffect(() => {
+    fetchSummary();
+  }, []);
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
     fetchData: fetchCountry,
+    fetchSummary: fetchSummary,
     queryParams,
     setSearchParams,
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
       tableSettings: {}
-    }
+    },
+    meta: { fetchCountry, fetchSummary }
   });
 
   useEffect(() => {
@@ -68,6 +90,9 @@ export default function Country() {
     if (queryParams.status) {
       filtersFromQuery.push({ id: 'status', value: queryParams.status });
     }
+    if (queryParams.globallyBlocked) {
+      filtersFromQuery.push({ id: 'globallyBlocked', value: queryParams.globallyBlocked });
+    }
 
     setColumnFilters(filtersFromQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,6 +108,9 @@ export default function Country() {
       if (data.id === 'status') {
         filterItems.status = data.value;
       }
+      if (data.id === 'globallyBlocked') {
+        filterItems.globallyBlocked = data.value;
+      }
     }
 
     setSearchParams({
@@ -90,7 +118,8 @@ export default function Country() {
       pageIndex: 0,
       pageSize: 10,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
-      ...(filterItems.status && { status: filterItems.status })
+      ...(filterItems.status && { status: filterItems.status }),
+      ...(filterItems.globallyBlocked && { globallyBlocked: filterItems.globallyBlocked })
     });
   };
 
@@ -111,6 +140,7 @@ export default function Country() {
       <CountryFilters
         pageTitle={pageTitle}
         table={table}
+        summary={summary}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
       />

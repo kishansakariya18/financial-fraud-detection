@@ -48,7 +48,7 @@ const SegmentationService = {
   },
   getUserList: async (body) => {
     try {
-      const { pagination, filters, segmentationId } = body;
+      const { pagination, filters, segmentationUID } = body;
 
       const apiQueryParams = {
         perPage: pagination ? pagination.pageSize : undefined,
@@ -75,7 +75,7 @@ const SegmentationService = {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: { filters: apiFilters, segmentationId },
+          body: { filters: apiFilters, segmentationUID },
           params: apiQueryParams
         });
 
@@ -106,9 +106,13 @@ const SegmentationService = {
       console.log('Error getSegmentationList: ', err);
     }
   },
-  getSegmentationDetails: async (id) => {
+  getSegmentationDetails: async (uid) => {
     try {
-      const endPoint = replaceText(apiConfig.endPoints.SEGMENTATION.DETAIL, ':segmentationId', id);
+      const endPoint = replaceText(
+        apiConfig.endPoints.SEGMENTATION.DETAIL,
+        ':segmentationUID',
+        uid
+      );
       let apiURL = `${apiConfig.baseURL.API_BASE_URL}${endPoint}`;
 
       if (apiURL) {
@@ -131,7 +135,7 @@ const SegmentationService = {
   addEditSegmentationList: async (data) => {
     try {
       const apiBodyData = {
-        Id: data?.segmentationId,
+        UID: data?.segmentationUID,
         Name: data.name,
         KYCCheck: data.kyc,
         KYC: data.kycType,
@@ -200,12 +204,12 @@ const SegmentationService = {
       console.log('Error getCountries: ', err);
     }
   },
-  changeSegmentationStatus: async (id) => {
+  changeSegmentationStatus: async (uid) => {
     try {
       const endPoint = replaceText(
         apiConfig.endPoints.SEGMENTATION.CHANGE_STATUS,
-        ':segmentationId',
-        id
+        ':segmentationUID',
+        uid
       );
 
       let apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
@@ -225,6 +229,153 @@ const SegmentationService = {
       return null;
     } catch (err) {
       console.log('Error changeSegmentationStatus: ', err);
+    }
+  },
+  refreshSegmentationList: async (uid) => {
+    try {
+      const apiBodyData = {
+        UID: uid,
+        IsRefresh: true
+      };
+
+      let apiURL = `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.SEGMENTATION.ADD_EDIT}`;
+
+      if (apiURL) {
+        const response = await sendRequest({
+          url: apiURL,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: apiBodyData
+        });
+
+        return response;
+      }
+
+      return null;
+    } catch (err) {
+      console.log('Error addEditSegmentationList: ', err);
+    }
+  },
+  segmentationLimitList: async (data) => {
+    try {
+      let apiURL = `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.SEGMENTATION_LIMIT.LIST}`;
+
+      if (apiURL) {
+        const response = await sendRequest({
+          url: apiURL,
+          method: 'POST',
+          body: data,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        return response;
+      }
+
+      return null;
+    } catch (err) {
+      console.log('Error segmentationLimitList: ', err);
+    }
+  },
+  segmentationLimitDetail: async (id) => {
+    try {
+      const endPoint = replaceText(
+        apiConfig.endPoints.SEGMENTATION_LIMIT.DETAIL,
+        ':segmentationLimitUID',
+        id
+      );
+
+      let apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+
+      if (apiURL) {
+        const response = await sendRequest({
+          url: apiURL,
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        return response;
+      }
+
+      return null;
+    } catch (err) {
+      console.log('Error segmentationLimitDetail: ', err);
+    }
+  },
+  addSegmentationLimit: async (data) => {
+    try {
+      let apiURL = `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.SEGMENTATION_LIMIT.CREATE}`;
+
+      if (apiURL) {
+        const response = await sendRequest({
+          url: apiURL,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: data
+        });
+
+        return response;
+      }
+
+      return null;
+    } catch (err) {
+      console.log('Error addEditSegmentationLimit: ', err);
+    }
+  },
+  updateSegmentationLimit: async (data) => {
+    try {
+      let apiURL = `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.SEGMENTATION_LIMIT.UPDATE}`;
+
+      if (apiURL) {
+        const response = await sendRequest({
+          url: apiURL,
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: data
+        });
+
+        return response;
+      }
+
+      return null;
+    } catch (err) {
+      console.log('Error updateSegmentationLimit: ', err);
+    }
+  },
+  deleteSegmentationLimit: async (id) => {
+    try {
+      const endPoint = replaceText(
+        apiConfig.endPoints.SEGMENTATION_LIMIT.DELETE,
+        ':segmentationLimitUID',
+        id
+      );
+
+      let apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+
+      if (apiURL) {
+        const response = await sendRequest({
+          url: apiURL,
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        return response;
+      }
+
+      return null;
+    } catch (err) {
+      console.log('Error deleteSegmentationLimit: ', err);
     }
   }
 };

@@ -40,7 +40,7 @@ export function RowActions({ row, table }) {
   };
 
   const handleClickView = () => {
-    navigate(`/pages/${row.original.id}/view`);
+    navigate(`/content-management/pages/${row.original.id}/view`);
   };
 
   const openModal = () => {
@@ -105,7 +105,7 @@ export function RowActions({ row, table }) {
                       'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
                       focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
                     )}
-                    onClick={() => navigate(`/pages/${row.original.id}/edit`)}>
+                    onClick={() => navigate(`/content-management/pages/${row.original.id}/edit`)}>
                     <PencilIcon className="size-4.5 stroke-1" />
                     <span>{t('edit')}</span>
                   </button>

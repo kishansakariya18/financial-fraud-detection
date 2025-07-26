@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import { Highlight } from 'components/shared/Highlight';
 import { ensureString } from 'utils/ensureString';
 import { Badge, Checkbox } from 'components/ui';
+import { setThisClass } from 'utils/setThisClass';
+import clsx from 'clsx';
 
 export function DateCell({ getValue }) {
   // const { locale } = useLocaleContext();
@@ -19,6 +21,30 @@ export function DateCell({ getValue }) {
         <>
           <p className="font-medium">{date}</p>
           <p className="mt-0.5 text-xs text-gray-400 dark:text-dark-300">{time}</p>
+        </>
+      )}
+      {!serverDate && (
+        <>
+          <p className="font-medium">-</p>
+        </>
+      )}
+    </>
+  );
+}
+
+export function OneLineDateCell({ getValue }) {
+  // const { locale } = useLocaleContext();
+  let serverDate = getValue();
+
+  const date = dayjs(serverDate).format('DD MMM YYYY');
+  const time = dayjs(serverDate).format('hh:mm A');
+  return (
+    <>
+      {serverDate && (
+        <>
+          <p className="font-medium">
+            {date} <span className="text-center">{time}</span>
+          </p>
         </>
       )}
       {!serverDate && (
@@ -131,6 +157,45 @@ export function ThemeSwatchCell({ getValue }) {
     </div>
   );
 }
+
+export function MultiLineCell({ getValue }) {
+  const value = getValue();
+
+  if (!value || value.length === 0) {
+    return <span className="font-medium">-</span>;
+  }
+
+  const items = value.split(', ');
+
+  return (
+    <div>
+      {items.map((item, index) => (
+        <div key={index} className="font-medium text-gray-800 dark:text-dark-100">
+          {item}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function StatusIconCell({ getValue, column }) {
+  const value = getValue();
+  const options = column.columnDef.meta?.optionData || [];
+  const option = options.find((opt) => opt.value === value);
+  if (!option) return null;
+  const Icon = option.icon;
+  const color = option.color;
+
+  return (
+    <Icon
+      className={clsx(
+        'h-5 w-5',
+        color && color !== 'neutral' && [setThisClass(color), 'text-this dark:text-this-light']
+      )}
+    />
+  );
+}
+
 DateCell.propTypes = {
   getValue: PropTypes.func
 };
@@ -159,4 +224,13 @@ CreateMarkupCell.propTypes = {
 
 ThemeSwatchCell.propTypes = {
   getValue: PropTypes.func
+};
+
+MultiLineCell.propTypes = {
+  getValue: PropTypes.func
+};
+
+StatusIconCell.propTypes = {
+  getValue: PropTypes.func,
+  column: PropTypes.object
 };

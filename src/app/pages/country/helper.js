@@ -1,4 +1,6 @@
 import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
+// import { FaCheck } from 'react-icons/fa';
+import { FaCheck, FaXmark } from 'react-icons/fa6';
 
 export const parseAdminStatusToApp = (status) => (status ? 'active' : 'inactive');
 
@@ -19,7 +21,9 @@ export const responseMapper = (apiData) => {
     id: data.CountryID,
     countryName: data.CountryName,
     countryCode: data.CountryCode,
-    status: parseAdminStatusToApp(data.IsActive)
+    status: parseAdminStatusToApp(data.IsActive),
+    globallyBlocked: data.GloballyBlocked,
+    blockedModules: data.BlockedModules.map((module) => module.ModuleName).join(', ')
   }));
   return resultData;
 };
@@ -36,5 +40,50 @@ export const statusOptions = [
     label: 'Inactive',
     color: 'error',
     icon: XCircleIcon
+  }
+];
+
+export const globallyBlockedStatusOptions = [
+  {
+    value: 'blocked',
+    label: 'Blocked',
+    color: 'error',
+    icon: FaXmark
+  },
+  {
+    value: 'not_blocked',
+    label: 'Active',
+    color: 'success',
+    icon: FaCheck
+  }
+];
+
+export const blockedProviderStatusOptions = [
+  {
+    value: 'blocked',
+    label: 'Blocked',
+    color: 'error',
+    icon: FaXmark
+  },
+  {
+    value: 'active',
+    label: 'Active',
+    color: 'success',
+    icon: FaCheck
+  }
+];
+
+export const blockedModuleStatusOptions = [
+  {
+    value: 'blocked',
+    label: 'Blocked',
+    color: 'error',
+    icon: FaXmark
+  },
+  {
+    value: 'active',
+    label: 'Active',
+    color: 'success',
+    icon: FaCheck
   }
 ];

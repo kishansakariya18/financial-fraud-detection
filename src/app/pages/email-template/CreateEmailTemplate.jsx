@@ -3,6 +3,7 @@ import { Page } from 'components/shared/Page';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import { Button, Input } from 'components/ui';
+import { EmailInput } from 'components/custom/EmailInput';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
@@ -40,7 +41,12 @@ const CreateEmailTemplate = () => {
     watch,
     reset
   } = useForm({
-    resolver: yupResolver(emailTemplateSchema)
+    resolver: yupResolver(emailTemplateSchema),
+    defaultValues: {
+      to: [],
+      cc: [],
+      bcc: []
+    }
   });
 
   const [content, setContent] = useState(defaultValue);
@@ -93,7 +99,15 @@ const CreateEmailTemplate = () => {
       setTemplateError('Template content is required');
       return;
     }
-    await createEmailTemplateAPI({ ...data, slug: stringToSlug(title), template: htmlContent });
+
+    // Send arrays directly to backend
+    const requestData = {
+      ...data,
+      slug: stringToSlug(title),
+      template: htmlContent
+    };
+
+    await createEmailTemplateAPI(requestData);
   };
   return (
     <Page title={t('create') + ' ' + t('emailTemplate')}>
@@ -154,26 +168,44 @@ const CreateEmailTemplate = () => {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-1">
-              <Input
-                {...register('to')}
-                key={'to'}
-                label={t('to')}
-                error={errors?.to?.message}
-                placeholder={t('enter') + ' ' + t('to')}
+              <Controller
+                name="to"
+                control={control}
+                render={({ field }) => (
+                  <EmailInput
+                    value={field.value}
+                    onChange={field.onChange}
+                    label={t('to')}
+                    error={errors?.to?.message}
+                    placeholder={t('enter') + ' ' + t('to')}
+                  />
+                )}
               />
-              <Input
-                {...register('cc')}
-                label={'CC'}
-                key={'cc'}
-                error={errors?.cc?.message}
-                placeholder={t('enter') + ' ' + 'CC'}
+              <Controller
+                name="cc"
+                control={control}
+                render={({ field }) => (
+                  <EmailInput
+                    value={field.value}
+                    onChange={field.onChange}
+                    label={'CC'}
+                    error={errors?.cc?.message}
+                    placeholder={t('enter') + ' ' + 'CC'}
+                  />
+                )}
               />
-              <Input
-                {...register('bcc')}
-                label={'BCC'}
-                key={'bcc'}
-                error={errors?.bcc?.message}
-                placeholder={t('enter') + ' ' + 'BCC'}
+              <Controller
+                name="bcc"
+                control={control}
+                render={({ field }) => (
+                  <EmailInput
+                    value={field.value}
+                    onChange={field.onChange}
+                    label={'BCC'}
+                    error={errors?.bcc?.message}
+                    placeholder={t('enter') + ' ' + 'BCC'}
+                  />
+                )}
               />
             </div>
 

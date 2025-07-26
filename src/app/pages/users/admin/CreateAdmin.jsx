@@ -24,7 +24,7 @@ const CreateAdmin = () => {
   const [response, setResponse] = useState(null);
   const { t } = useTranslation();
 
-  const breadcrumbItem = [{ title: t('admin'), path: '/admin' }, { title: t('create') }];
+  const breadcrumbItem = [{ title: t('admin'), path: '/users/admin' }, { title: t('create') }];
 
   const navigate = useNavigate();
   const {

@@ -55,7 +55,7 @@ export default function KPISummaryList() {
 
   return (
     <div className="mb-4 w-full">
-      <h2 className="px-[--margin-x] text-sm+ font-medium uppercase tracking-wide text-gray-800 dark:text-dark-100">
+      <h2 className="text-sm+ font-medium uppercase tracking-wide text-gray-800 dark:text-dark-100">
         {title}
       </h2>
       <TableCard
@@ -63,6 +63,7 @@ export default function KPISummaryList() {
         table={table}
         loading={isLoading}
         paginationEnabled={false}
+        disableDefaultPadding={true}
       />
     </div>
   );

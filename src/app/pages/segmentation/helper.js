@@ -5,6 +5,7 @@ import { playerStatusToApp } from '../users/player/helper';
 export const segmentationResponseMapper = (apiData) => {
   const resultData = apiData.map((data) => ({
     id: data.UserSegmentID,
+    uid: data.UserSegmentUID,
     name: data.Name,
     createdByAdmin: data?.admin?.Username,
     count: data?.Count || '0',
@@ -85,4 +86,20 @@ export const kycOptions = [
 export const genderOptions = [
   { value: 'Male', label: 'Male' },
   { value: 'Female', label: 'Female' }
+];
+export const userclassOptions = [
+  {
+    key: 'active',
+    value: 'active',
+    label: 'Active',
+    color: 'success',
+    icon: CheckBadgeIcon
+  },
+  {
+    key: 'inactive',
+    value: 'inactive',
+    label: 'Inactive',
+    color: 'error',
+    icon: XCircleIcon
+  }
 ];

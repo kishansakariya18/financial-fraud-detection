@@ -51,6 +51,7 @@ export function RowActions({ row, table }) {
     const result = await AdminService.changeAdminStatus(row.original.adminUID);
     if (result.status === 200) {
       table.options.meta?.deleteRow(row);
+      table.options.meta?.fetchSummary();
       setDeleteSuccess(true);
     } else {
       setDeleteError(true);

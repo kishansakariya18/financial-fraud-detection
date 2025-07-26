@@ -9,7 +9,7 @@ import { Button, Checkbox, Input } from 'components/ui';
 import { CiMobile1 } from 'react-icons/ci';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import AffiliateService from 'services/affiliate.services';
 import {
@@ -21,6 +21,7 @@ import {
 import { BiMoney } from 'react-icons/bi';
 import { LuScanText } from 'react-icons/lu';
 import { editAffiliateSchema } from './schema';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 const EditAffiliate = () => {
   const [error, setError] = useState('');
@@ -45,6 +46,7 @@ const EditAffiliate = () => {
   const perSignup = watch('perSignup');
   const perDeposit = watch('perDeposit');
   const perPlayerLoss = watch('perPlayerLoss');
+  const navigate = useNavigate();
 
   const fetchAffiliateDetails = async () => {
     const result = await AffiliateService.getAffiliateDetail(affiliateId);
@@ -75,10 +77,10 @@ const EditAffiliate = () => {
             signupCommissionType: result.SignupCommissionType,
             perDeposit: result.IsDepositCommissionEnabled,
             depositCommission: result.DepositCommissionAmount,
-            depositCommissionType: result.DepositCommissionType,
+            depositCommissionType: Number(result.DepositCommissionType),
             perPlayerLoss: result.IsUserLossCommissionEnabled,
             playerLossCommission: result.UserLossCommissionAmount,
-            playerLossCommissionType: result.UserLossCommissionType
+            playerLossCommissionType: Number(result.UserLossCommissionType)
           };
 
           reset(mappedData);
@@ -109,6 +111,9 @@ const EditAffiliate = () => {
 
   if (!loading && !error && response) {
     toast.success(response.message);
+    setTimeout(() => {
+      navigate('/users/affiliate');
+    }, 0);
     fetchAffiliateDetails();
 
     setResponse(null);
@@ -129,6 +134,11 @@ const EditAffiliate = () => {
   const onSubmit = async (data) => {
     await editAffiliateAPI({ affiliateUID: affiliateId, ...data });
   };
+  const breadcrumbItem = [
+    { title: t('affiliate'), path: '/users/affiliate' },
+    { title: t('edit') + ' ' + t('affiliate') }
+  ];
+
   return (
     <Page title={t('edit') + ' ' + t('affiliate')}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
@@ -136,8 +146,11 @@ const EditAffiliate = () => {
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
             {t('edit') + ' ' + t('affiliate') + ' ' + t('form')}
           </h2>
-          <div className="hidden self-stretch py-1 sm:flex">
-            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          <div className="ml-4 flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+            <div className="hidden self-stretch py-1 sm:flex">
+              <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+            </div>
+            <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
           </div>
         </div>
 
@@ -342,7 +355,7 @@ const EditAffiliate = () => {
               {t('reset')}
             </Button>
             <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
-              {t('edit')}
+              {t('update')}
             </Button>
           </div>
         </form>

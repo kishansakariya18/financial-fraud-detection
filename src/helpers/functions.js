@@ -20,6 +20,15 @@ export function getEndDate(date) {
   return moment(+date).utc().add(1, 'day').subtract(1, 'second').format('YYYY-MM-DD HH:mm');
 }
 
+export function getStartofDate(date) {
+  console.log('sttime', date);
+  return moment(+date).startOf('day').utc().format('YYYY-MM-DD HH:mm');
+}
+export function getEndOfDate(date) {
+  console.log('endtime', date);
+  return moment(+date).endOf('day').utc().format('YYYY-MM-DD HH:mm');
+}
+
 export function capitalizeFirstLetter(val) {
   return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }
@@ -102,6 +111,12 @@ export const dummyCards = {
       value: 244,
       gradientFrom: 'from-amber-400',
       gradientTo: 'to-orange-600'
+    },
+    BLOCKED_COUNTRY: {
+      key: 'Blocked Country',
+      value: 0,
+      gradientFrom: 'from-pink-500',
+      gradientTo: 'to-rose-500'
     },
     ACTIVE_COUNTRY: {
       key: 'Active Country',

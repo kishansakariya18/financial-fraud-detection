@@ -1,17 +1,17 @@
 // Import Dependencies
-import { MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 // import { TbCurrencyDollar } from "react-icons/tb";
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 
 // Local Imports
-import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
+// import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 // import { RangeFilter } from "components/shared/table/RangeFilter";
 import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
-import { t } from 'i18next';
-import { statusOptions } from '../helper';
+// import { globallyBlockedStatusOptions, statusOptions } from '../helper';
 import { DashboardCard } from 'components/custom/DashboardCard';
 import { dummyCards } from 'helpers/functions';
 
@@ -21,10 +21,12 @@ export function CountryFilters({
   table,
   onApplyFilters = () => {},
   onClearFilters = () => {},
-  pageTitle = ''
+  pageTitle = '',
+  summary = {}
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const { t } = useTranslation();
 
   return (
     <div className="table-toolbar">
@@ -42,25 +44,21 @@ export function CountryFilters({
       <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
         <DashboardCard
           label={dummyCards.Country.TOTAL_COUNTRY.key}
-          value={dummyCards.Country.TOTAL_COUNTRY.value}
+          value={summary ? summary.totalCountries : dummyCards.Country.TOTAL_COUNTRY.value}
           gradientFrom={dummyCards.Country.TOTAL_COUNTRY.gradientFrom}
           gradientTo={dummyCards.Country.TOTAL_COUNTRY.gradientTo}
           textColor="text-sky-100"
           maskShape="is-reuleaux-triangle"
         />
         <DashboardCard
-          label={dummyCards.Country.ACTIVE_COUNTRY.key}
-          value={dummyCards.Country.ACTIVE_COUNTRY.value}
-          gradientFrom={dummyCards.Country.ACTIVE_COUNTRY.gradientFrom}
-          gradientTo={dummyCards.Country.ACTIVE_COUNTRY.gradientTo}
-          textColor="text-sky-100"
-          maskShape="is-reuleaux-triangle"
-        />
-        <DashboardCard
-          label={dummyCards.Country.INACTIVE_COUNTRY.key}
-          value={dummyCards.Country.INACTIVE_COUNTRY.value}
-          gradientFrom={dummyCards.Country.INACTIVE_COUNTRY.gradientFrom}
-          gradientTo={dummyCards.Country.INACTIVE_COUNTRY.gradientTo}
+          label={dummyCards.Country.BLOCKED_COUNTRY.key}
+          value={
+            summary.blockedCountries
+              ? summary.blockedCountries
+              : dummyCards.Country.BLOCKED_COUNTRY.value
+          }
+          gradientFrom={dummyCards.Country.BLOCKED_COUNTRY.gradientFrom}
+          gradientTo={dummyCards.Country.BLOCKED_COUNTRY.gradientTo}
           textColor="text-sky-100"
           maskShape="is-reuleaux-triangle"
         />
@@ -72,7 +70,7 @@ export function CountryFilters({
               'flex space-x-2 pt-4 rtl:space-x-reverse [&_.input-root]:flex-1',
               isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x]'
             )}>
-            <SearchInput table={table} />
+            <SearchInput table={table} onApplyFilters={onApplyFilters} />
             <TableConfig table={table} />
           </div>
           <div
@@ -84,6 +82,7 @@ export function CountryFilters({
               table={table}
               onApplyFilters={onApplyFilters}
               onClearFilters={onClearFilters}
+              t={t}
             />
           </div>
         </>
@@ -97,11 +96,12 @@ export function CountryFilters({
             '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)'
           }}>
           <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
-            <SearchInput table={table} />
+            <SearchInput table={table} onApplyFilters={onApplyFilters} />
             <Filters
               table={table}
               onApplyFilters={onApplyFilters}
               onClearFilters={onClearFilters}
+              t={t}
             />
           </div>
 
@@ -112,11 +112,16 @@ export function CountryFilters({
   );
 }
 
-function SearchInput({ table }) {
+function SearchInput({ table, onApplyFilters }) {
   return (
     <Input
       value={table?.getColumn('countryName')?.getFilterValue() || ''}
       onChange={(e) => table.getColumn('countryName').setFilterValue(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          onApplyFilters();
+        }
+      }}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
@@ -127,11 +132,11 @@ function SearchInput({ table }) {
   );
 }
 
-function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }) {
+function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {}, t }) {
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>
-      {table.getColumn('status') && (
+      {/* {table.getColumn('status') && (
         <FacedtedFilter
           options={statusOptions}
           column={table.getColumn('status')}
@@ -141,6 +146,16 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           showCheckbox={false}
         />
       )}
+
+      {table.getColumn('globallyBlocked') && (
+        <FacedtedFilter
+          options={globallyBlockedStatusOptions}
+          column={table.getColumn('globallyBlocked')}
+          title="Global Status"
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )} */}
 
       <div>
         <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
@@ -162,7 +177,8 @@ CountryFilters.propTypes = {
 };
 
 SearchInput.propTypes = {
-  table: PropTypes.object
+  table: PropTypes.object,
+  onApplyFilters: PropTypes.func
 };
 
 Filters.propTypes = {

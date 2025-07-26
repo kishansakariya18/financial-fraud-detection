@@ -11,6 +11,7 @@ import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { affiliateTransactionTypeOption } from '../helper';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 // ----------------------------------------------------------------------
 
@@ -22,19 +23,24 @@ export function Toolbar({
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
-
+  const breadcrumbItem = [
+    { title: t('affiliate'), path: '/users/affiliate' },
+    { title: t('transaction') + ' ' + t('history') }
+  ];
   return (
     <div className="table-toolbar">
       <div
         className={clsx(
-          'transition-content flex items-center justify-between gap-4',
+          'transition-content flex items-center gap-4',
           isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x] pt-4'
         )}>
-        <div className="min-w-2">
-          <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
-            {pageTitle}
-          </h2>
+        <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
+          {pageTitle}
+        </h2>
+        <div className="hidden self-stretch py-1 sm:flex">
+          <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
         </div>
+        <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
       </div>
 
       {isXs ? (
@@ -44,7 +50,7 @@ export function Toolbar({
               'flex space-x-2 pt-4 rtl:space-x-reverse [&_.input-root]:flex-1',
               isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x]'
             )}>
-            <SearchInput table={table} />
+            <SearchInput table={table} onApplyFilters={onApplyFilters} />
             <TableConfig table={table} />
           </div>
           <div
@@ -69,7 +75,7 @@ export function Toolbar({
             '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)'
           }}>
           <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
-            <SearchInput table={table} />
+            <SearchInput table={table} onApplyFilters={onApplyFilters} />
             <Filters
               table={table}
               onApplyFilters={onApplyFilters}
@@ -84,11 +90,16 @@ export function Toolbar({
   );
 }
 
-function SearchInput({ table }) {
+function SearchInput({ table, onApplyFilters }) {
   return (
     <Input
       value={table?.getColumn('username')?.getFilterValue() || ''}
       onChange={(e) => table.getColumn('username').setFilterValue(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          onApplyFilters();
+        }
+      }}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
@@ -145,7 +156,8 @@ Toolbar.propTypes = {
 };
 
 SearchInput.propTypes = {
-  table: PropTypes.object
+  table: PropTypes.object,
+  onApplyFilters: PropTypes.func
 };
 
 Filters.propTypes = {

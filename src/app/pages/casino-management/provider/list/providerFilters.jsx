@@ -25,7 +25,8 @@ export function ProviderFilters({
   table,
   onApplyFilters = () => {},
   onClearFilters = () => {},
-  pageTitle = ''
+  pageTitle = '',
+  summary = null
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
@@ -50,7 +51,7 @@ export function ProviderFilters({
       <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
         <DashboardCard
           label={dummyCards.Provider.TOTAL_PROVIDER.key}
-          value={dummyCards.Provider.TOTAL_PROVIDER.value}
+          value={summary ? summary?.providers.total : dummyCards.Provider.TOTAL_PROVIDER.value}
           gradientFrom={dummyCards.Provider.TOTAL_PROVIDER.gradientFrom}
           gradientTo={dummyCards.Provider.TOTAL_PROVIDER.gradientTo}
           textColor="text-sky-100"
@@ -58,7 +59,7 @@ export function ProviderFilters({
         />
         <DashboardCard
           label={dummyCards.Provider.ACTIVE_PROVIDER.key}
-          value={dummyCards.Provider.ACTIVE_PROVIDER.value}
+          value={summary ? summary?.providers?.active : dummyCards.Provider.ACTIVE_PROVIDER.value}
           gradientFrom={dummyCards.Provider.ACTIVE_PROVIDER.gradientFrom}
           gradientTo={dummyCards.Provider.ACTIVE_PROVIDER.gradientTo}
           textColor="text-sky-100"
@@ -66,7 +67,9 @@ export function ProviderFilters({
         />
         <DashboardCard
           label={dummyCards.Provider.INACTIVE_PROVIDER.key}
-          value={dummyCards.Provider.INACTIVE_PROVIDER.value}
+          value={
+            summary ? summary?.providers?.inactive : dummyCards.Provider.INACTIVE_PROVIDER.value
+          }
           gradientFrom={dummyCards.Provider.INACTIVE_PROVIDER.gradientFrom}
           gradientTo={dummyCards.Provider.INACTIVE_PROVIDER.gradientTo}
           textColor="text-sky-100"
@@ -74,7 +77,7 @@ export function ProviderFilters({
         />
         <DashboardCard
           label={dummyCards.Provider.TOTAL_GAMES.key}
-          value={dummyCards.Provider.TOTAL_GAMES.value}
+          value={summary ? summary?.games?.total : dummyCards.Provider.TOTAL_GAMES.value}
           gradientFrom={dummyCards.Provider.TOTAL_GAMES.gradientFrom}
           gradientTo={dummyCards.Provider.TOTAL_GAMES.gradientTo}
           textColor="text-sky-100"
@@ -88,7 +91,7 @@ export function ProviderFilters({
               'flex space-x-2 pt-4 rtl:space-x-reverse [&_.input-root]:flex-1',
               isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x]'
             )}>
-            <SearchInput table={table} />
+            <SearchInput table={table} onApplyFilters={onApplyFilters} />
             <TableConfig table={table} />
           </div>
           <div
@@ -114,7 +117,7 @@ export function ProviderFilters({
               '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)'
             }}>
             <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
-              <SearchInput table={table} />
+              <SearchInput table={table} onApplyFilters={onApplyFilters} />
               <Filters
                 table={table}
                 onApplyFilters={onApplyFilters}
@@ -130,11 +133,16 @@ export function ProviderFilters({
   );
 }
 
-function SearchInput({ table }) {
+function SearchInput({ table, onApplyFilters }) {
   return (
     <Input
       value={table?.getColumn('name')?.getFilterValue() || ''}
       onChange={(e) => table.getColumn('name').setFilterValue(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          onApplyFilters();
+        }
+      }}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
@@ -190,7 +198,8 @@ ProviderFilters.propTypes = {
 };
 
 SearchInput.propTypes = {
-  table: PropTypes.object
+  table: PropTypes.object,
+  onApplyFilters: PropTypes.func
 };
 
 Filters.propTypes = {

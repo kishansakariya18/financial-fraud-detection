@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
@@ -20,7 +20,7 @@ export default function Banks() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t('casino_category');
-
+  const [summary, setSummary] = useState(null);
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const fetchBanks = async () => {
@@ -41,10 +41,29 @@ export default function Banks() {
 
     return { status: result.status, error: result.error };
   };
+  const fetchSummary = async () => {
+    // setError(null);
 
+    const result = await CategoryService.getCategorySummary();
+
+    if (result.status === 200) {
+      setSummary(result.response.data);
+      return {
+        status: 200,
+        data: result.response.data,
+        totalRecords: parseInt(result.response.total_records, 10) || 0
+      };
+    }
+
+    return { status: result.status, error: result.error };
+  };
+  useEffect(() => {
+    fetchSummary();
+  }, []);
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
-    fetchData: fetchBanks,
+    fetchSummary: fetchSummary,
+    fetchData: fetchCategory,
     queryParams,
     setSearchParams,
     initialSettings: {
@@ -127,6 +146,7 @@ export default function Banks() {
       <CategoryFilters
         pageTitle={pageTitle}
         table={table}
+        summary={summary}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
         // filters= {}

@@ -58,6 +58,21 @@ const CategoryService = {
       console.log('Error', err);
     }
   },
+  getCategorySummary: async () => {
+    try {
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.CATEGORY.SUMMARY,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
   editCategory: async (id, data) => {
     try {
       const endPoint = replaceText(apiConfig.endPoints.CATEGORY.EDIT, ':categoryId', id);

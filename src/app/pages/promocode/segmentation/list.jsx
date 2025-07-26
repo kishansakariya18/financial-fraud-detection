@@ -128,10 +128,8 @@ export default function SegmentationList() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uploadFileResponse]);
 
-  const onSubmit = async (data) => {
-    console.log('submitData', data);
-
-    await uploadSegmentation(data);
+  const onSubmit = async () => {
+    await uploadSegmentation();
   };
 
   useLockScrollbar(tableSettings.enableFullScreen);
