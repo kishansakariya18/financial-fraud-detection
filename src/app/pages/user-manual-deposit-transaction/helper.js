@@ -1,4 +1,5 @@
 import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { PAYOUT_STATUS } from 'constants/app.constant';
 
 export const parseAdminStatusToApp = (status) => (status ? 'active' : 'inactive');
 
@@ -22,7 +23,7 @@ export const responseMapper = (apiData) => {
     depositBankAccountID: data.DepositBankAccountID,
     amount: data.Amount,
     depositTime: data.DepositTime,
-    depositStatus: data.DepositStatus,
+    depositStatus: parsePayoutStatusToApp(data.DepositStatus),
     bankTransactionID: data.BankTransactionID,
     dateCreated: data.DateCreated,
     dateModified: data.DateModified,
@@ -56,5 +57,48 @@ export const userManualDepositTransactionStatusToAPP = (status) => {
     return 'inactive';
   } else if (status == 1) {
     return 'active';
+  }
+};
+export const payoutStatusOptions = [
+  {
+    value: 'pending',
+    label: 'Pending',
+    color: 'warning'
+  },
+  {
+    value: 'rejected',
+    label: 'Rejected',
+    color: 'error'
+  },
+  {
+    value: 'approved',
+    label: 'Approved',
+    color: 'success'
+  }
+];
+
+export const parsePayoutStatusToAPI = (status) => {
+  switch (status) {
+    case 'pending':
+      return PAYOUT_STATUS.PENDING;
+    case 'rejected':
+      return PAYOUT_STATUS.REJECTED;
+    case 'approved':
+      return PAYOUT_STATUS.APPROVED;
+    default:
+      break;
+  }
+};
+
+export const parsePayoutStatusToApp = (status) => {
+  switch (+status) {
+    case PAYOUT_STATUS.APPROVED:
+      return 'approved';
+    case PAYOUT_STATUS.REJECTED:
+      return 'rejected';
+    case PAYOUT_STATUS.PENDING:
+      return 'pending';
+    default:
+      break;
   }
 };

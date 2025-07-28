@@ -4,7 +4,8 @@ import { createColumnHelper } from '@tanstack/react-table';
 // Local Imports
 import { RowActions } from './RowActions';
 import { IdCell } from '../../../../components/custom/table/cell';
-import { BoldCell } from '../../../../components/custom/table/cell';
+import { BoldCell, BadgeCell } from '../../../../components/custom/table/cell';
+import { payoutStatusOptions } from '../helper';
 // ----------------------------------------------------------------------
 
 const columnHelper = createColumnHelper();
@@ -30,13 +31,13 @@ export const columns = [
     cell: IdCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.userID, {
-    id: 'userID',
-    label: 'User ID',
-    header: 'User ID',
-    cell: BoldCell,
-    enableSorting: false
-  }),
+  // columnHelper.accessor((row) => row.userID, {
+  //   id: 'userID',
+  //   label: 'User ID',
+  //   header: 'User ID',
+  //   cell: BoldCell,
+  //   enableSorting: false
+  // }),
   // columnHelper.accessor((row) => row.depositBankAccountID, {
   //   id: 'depositBankAccountID',
   //   label: 'Deposit Bank Account ID',
@@ -59,20 +60,20 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
-  // columnHelper.accessor((row) => row.depositStatus, {
-  //   id: 'depositStatus',
-  //   label: 'Deposit Status',
-  //   header: 'Deposit Status',
-  //   cell: BadgeCell,
-  //   meta: { optionData: statusOptions },
-  //   filterFn: 'arrIncludesSome',
-  //   enableSorting: false
-  // }),
   columnHelper.accessor((row) => row.bankTransactionID, {
     id: 'bankTransactionID',
     label: 'Bank Transaction ID',
     header: 'Bank Transaction ID',
     cell: BoldCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.depositStatus, {
+    id: 'depositStatus',
+    label: 'Deposit Status',
+    header: 'Deposit Status',
+    cell: BadgeCell,
+    meta: { optionData: payoutStatusOptions },
+    filterFn: 'arrIncludesSome',
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.dateCreated, {

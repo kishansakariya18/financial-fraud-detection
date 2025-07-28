@@ -85,6 +85,30 @@ const UserManualDepositTransactionService = {
     } catch (error) {
       console.log('Error from User Manual Deposit Transaction Detail', error);
     }
+  },
+  manualVerify: async (data) => {
+    try {
+      const endPoint = replaceText(
+        apiConfig.endPoints.USER_MANUAL_DEPOSIT_TRANSACTION.MANUAL_VERIFY,
+        ':depositId',
+        data.id
+      );
+      //const endPoint = apiConfig.endPoints.USER_MANUAL_DEPOSIT_TRANSACTION.MANUAL_VERIFY;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          depositStatus: data.depositStatus
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from User Manual Deposit Transaction Verify', error);
+    }
   }
 };
 

@@ -1,6 +1,6 @@
 // Import Dependencies
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
-import { EllipsisHorizontalIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { EllipsisHorizontalIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -9,55 +9,55 @@ import PropTypes from 'prop-types';
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
 
-import { TbStatusChange } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
-import BankService from 'services/bank.services';
+import UserManualDepositTransactionService from 'services/user-manual-deposit-transaction.services';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+
+  const [modalState, setModalState] = useState({ open: false, action: null });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+
+  const openModal = (action) => {
+    setModalState({ open: true, action });
+    setError(false);
+    setSuccess(false);
+  };
+
+  const closeModal = () => {
+    setModalState({ open: false, action: null });
+  };
+
+  const handleAction = useCallback(async () => {
+    setLoading(true);
+    const depositStatus = modalState.action === 'accept' ? 1 : 2;
+    const result = await UserManualDepositTransactionService.manualVerify({
+      id: row.original.id,
+      depositStatus
+    });
+    if (result.status === 200) {
+      table.options.meta?.refetchData();
+      setSuccess(true);
+    } else {
+      setError(true);
+    }
+    setLoading(false);
+  }, [modalState.action, row.original.id, table.options.meta]);
 
   const confirmMessages = {
     pending: {
-      description: t('bank_status_desc'),
+      description: `Are you sure you want to ${modalState.action} this transaction?`,
       actionText: t('submit')
     },
     success: {
-      title: t('bank') + ' ' + t('status') + ' ' + t('changed'),
-      description: t('bank_status_suceess')
+      title: t('status') + ' ' + t('changed'),
+      description: `Transaction has been successfully ${modalState.action}ed.`
     }
   };
-  const [statusModalOpen, setStatusModalOpen] = useState(false);
-  const [confirmStatusLoading, setConfirmStatusLoading] = useState(false);
-  const [statusSuccess, setStatusSuccess] = useState(false);
-  const [statusError, setStatusError] = useState(false);
 
-  const closeModal = () => {
-    setStatusModalOpen(false);
-  };
-
-  const openModal = () => {
-    setStatusModalOpen(true);
-    setStatusError(false);
-    setStatusSuccess(false);
-  };
-
-  const handleChangeStatusRows = useCallback(async () => {
-    setConfirmStatusLoading(true);
-    const result = await BankService.changeStatus(row.original.id);
-    if (result.status === 200) {
-      table.options.meta?.refetchData();
-      setStatusSuccess(true);
-    } else {
-      setStatusError(true);
-    }
-
-    setConfirmStatusLoading(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [row]);
-
-  const state = statusError ? 'error' : statusSuccess ? 'success' : 'pending';
+  const state = error ? 'error' : success ? 'success' : 'pending';
 
   return (
     <>
@@ -80,26 +80,26 @@ export function RowActions({ row, table }) {
               <MenuItem>
                 {({ focus }) => (
                   <button
-                    onClick={() => navigate(`/bank/${row.original.id}/edit`)}
+                    onClick={() => openModal('accept')}
                     className={clsx(
                       'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
                       focus && 'bg-this/10 dark:bg-this-light/10'
                     )}>
-                    <PencilIcon className="size-4.5 stroke-1" />
-                    <span>{t('edit')}</span>
+                    <CheckCircleIcon className="size-4.5 stroke-1" />
+                    <span>{t('accept')}</span>
                   </button>
                 )}
               </MenuItem>
               <MenuItem>
                 {({ focus }) => (
                   <button
-                    onClick={openModal}
+                    onClick={() => openModal('reject')}
                     className={clsx(
                       'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
                       focus && 'bg-this/10 dark:bg-this-light/10'
                     )}>
-                    <TbStatusChange className="size-4.5 stroke-1" />
-                    <span>{t('change') + ' ' + t('status')}</span>
+                    <XCircleIcon className="size-4.5 stroke-1" />
+                    <span>{t('reject')}</span>
                   </button>
                 )}
               </MenuItem>
@@ -109,11 +109,11 @@ export function RowActions({ row, table }) {
       </div>
 
       <ConfirmModal
-        show={statusModalOpen}
+        show={modalState.open}
         onClose={closeModal}
         messages={confirmMessages}
-        onOk={handleChangeStatusRows}
-        confirmLoading={confirmStatusLoading}
+        onOk={handleAction}
+        confirmLoading={loading}
         state={state}
       />
     </>

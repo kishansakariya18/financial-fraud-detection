@@ -396,6 +396,7 @@ export const apiConfig = {
     },
     USER_MANUAL_DEPOSIT_TRANSACTION: {
       LIST: '/payments/admin/user-bank-deposit/list',
+      MANUAL_VERIFY: '/payments/admin/user-bank-deposit/:depositId/manual-deposit/verify',
       DETAIL: '/admin/user-bank-deposit/:depositId/details',
       EDIT: '/admin/user-bank-deposit/:depositId/edit',
       DELETE: '/admin/user-bank-deposit/:depositId/delete'
