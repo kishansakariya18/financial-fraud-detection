@@ -12,7 +12,9 @@ import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { useNavigate } from 'react-router';
 import { t } from 'i18next';
-// import { statusOptions } from '../helper';
+import { statusOptions } from '../helper';
+import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
+import { MapPinIcon } from '@heroicons/react/24/outline';
 
 // ----------------------------------------------------------------------
 
@@ -98,8 +100,8 @@ export function Toolbar({
 function SearchInput({ table }) {
   return (
     <Input
-      value={table?.getColumn('roleName')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('roleName').setFilterValue(e.target.value)}
+      value={table?.getColumn('bankName')?.getFilterValue() || ''}
+      onChange={(e) => table.getColumn('bankName').setFilterValue(e.target.value)}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
@@ -114,16 +116,16 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>
-      {/* {table.getColumn('status') && (
+      {table.getColumn('status') && (
         <FacedtedFilter
           options={statusOptions}
           column={table.getColumn('status')}
-          title="Status"
+          title={t('status')}
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}
         />
-      )} */}
+      )}
 
       {/* {table.getColumn('createdAt') && (
         <DateFilter

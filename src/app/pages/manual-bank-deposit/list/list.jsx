@@ -25,9 +25,11 @@ export default function Bank() {
   const fetchBank = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
+    console.log(queryParams);
     const result = await BankService.getBankList({
       pagination: { pageIndex, pageSize },
-      filters: queryParams
+      keyword: queryParams.bankName,
+      status: queryParams.status
     });
 
     if (result.status === 200) {
@@ -62,8 +64,8 @@ export default function Bank() {
 
   useEffect(() => {
     const filtersFromQuery = [];
-    if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'countryName', value: queryParams.keyword });
+    if (queryParams.bankName) {
+      filtersFromQuery.push({ id: 'bankName', value: queryParams.bankName });
     }
     if (queryParams.status) {
       filtersFromQuery.push({ id: 'status', value: queryParams.status });
@@ -76,8 +78,8 @@ export default function Bank() {
   const applyFilterHandler = () => {
     const filterItems = {};
     for (let data of table.getState().columnFilters) {
-      if (data.id === 'countryName') {
-        filterItems.keyword = data.value;
+      if (data.id === 'bankName') {
+        filterItems.bankName = data.value;
       }
 
       if (data.id === 'status') {
@@ -89,7 +91,7 @@ export default function Bank() {
       ...queryParams,
       pageIndex: 0,
       pageSize: 10,
-      ...(filterItems.keyword && { keyword: filterItems.keyword }),
+      ...(filterItems.bankName && { bankName: filterItems.bankName }),
       ...(filterItems.status && { status: filterItems.status })
     });
   };

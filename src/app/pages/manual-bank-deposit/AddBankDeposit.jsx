@@ -13,6 +13,7 @@ import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
 
 import { createBankDepositSchema } from './schema';
+import BankService from 'services/bank.services';
 // import { useDisclosure } from 'hooks';
 
 const CreateBankDeposit = () => {
@@ -34,24 +35,17 @@ const CreateBankDeposit = () => {
     resolver: yupResolver(createBankDepositSchema)
   });
 
-  const createBankAPI = async () => {
+  const createBankAPI = async (data) => {
     setLoading(true);
     setError(null);
 
-    // Simulate API call with a delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
-    // Dummy success response
-    const result = {
-      status: 201,
-      response: { message: 'Bank deposit created successfully (dummy response)!' }
-    };
+    const result = await BankService.createBank(data);
 
     if (result) {
       if (result.status === 200 || result.status === 201) {
         setResponse(result.response);
       } else {
-        setError(result.error); // This part will not be hit with dummy data
+        setError(result.error);
       }
     }
     setLoading(false);

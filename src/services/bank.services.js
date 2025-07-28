@@ -3,7 +3,7 @@ import { sendRequest } from '../utils/axios';
 import { replaceText } from 'utils/custom.utilities';
 
 const BankService = {
-  getBankList: async ({ pagination }) => {
+  getBankList: async ({ pagination, keyword, status }) => {
     try {
       const endPoint = apiConfig.BANK.LIST;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
@@ -16,8 +16,8 @@ const BankService = {
         body: {
           limit: pagination.pageSize,
           page: pagination.pageIndex + 1,
-          keyword: '',
-          status: 1
+          keyword: keyword,
+          status: status
         }
       });
       return response;
@@ -44,7 +44,7 @@ const BankService = {
   },
   updateBank: async (data) => {
     try {
-      const endPoint = apiConfig.BANK.UPDATE;
+      const endPoint = replaceText(apiConfig.BANK.EDIT, ':bankId', data.id);
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,

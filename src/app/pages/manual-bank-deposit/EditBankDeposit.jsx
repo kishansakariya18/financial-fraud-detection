@@ -1,6 +1,6 @@
 import { Page } from 'components/shared/Page';
 import { UserIcon } from '@heroicons/react/20/solid';
-import { EnvelopeIcon, EyeIcon, EyeSlashIcon, LockClosedIcon } from '@heroicons/react/24/outline';
+import { EnvelopeIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { Button, Input } from 'components/ui';
@@ -13,7 +13,6 @@ import { useTranslation } from 'react-i18next';
 
 import { createBankDepositSchema } from './schema';
 import BankService from 'services/bank.services';
-import { useDisclosure } from 'hooks';
 
 const EditBankDeposit = () => {
   const { id } = useParams();
@@ -21,7 +20,6 @@ const EditBankDeposit = () => {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const { t } = useTranslation();
-  const [show, { toggle }] = useDisclosure();
   const [bankDetail, setBankDetail] = useState(null);
 
   const breadcrumbItem = [{ title: t('bank_deposit'), path: '/bank' }, { title: t('edit') }];
@@ -163,7 +161,7 @@ const EditBankDeposit = () => {
                   placeholder={t('enter') + ' ' + t('upiID')}
                 />
               </div>
-              <div className="grid gap-4 lg:grid-cols-2">
+              {/* <div className="grid gap-4 lg:grid-cols-2">
                 <Input
                   label={t('additionalInfo')}
                   type={show ? 'text' : 'password'}
@@ -184,7 +182,7 @@ const EditBankDeposit = () => {
                   {...register('additionalInfo')}
                   error={errors?.additionalInfo?.message}
                 />
-              </div>
+              </div> */}
             </div>
             <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
               <Button

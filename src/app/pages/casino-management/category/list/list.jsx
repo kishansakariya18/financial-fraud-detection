@@ -23,7 +23,7 @@ export default function Banks() {
   const [summary, setSummary] = useState(null);
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
-  const fetchBanks = async () => {
+  const fetchCategory = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
     const result = await BankService.getBankList({
