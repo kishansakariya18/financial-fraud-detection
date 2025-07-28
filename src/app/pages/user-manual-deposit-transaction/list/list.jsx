@@ -14,7 +14,7 @@ import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import UserManualDepositTransactionService from 'services/user-manual-deposit-transaction.services';
-import { bankStatusToAPI } from '../helper';
+import { parsePayoutStatusToAPI } from '../helper';
 
 export default function UserManualDepositTransaction() {
   const { t } = useTranslation();
@@ -31,7 +31,7 @@ export default function UserManualDepositTransaction() {
     const result = await UserManualDepositTransactionService.getUserManualDepositTransactionList({
       pagination: { pageIndex, pageSize },
       keyword: queryParams.keyword,
-      status: bankStatusToAPI(queryParams.status)
+      status: parsePayoutStatusToAPI(queryParams.status)
     });
 
     if (result.status === 200) {
@@ -96,8 +96,8 @@ export default function UserManualDepositTransaction() {
         filterItems.keyword = data.value;
       }
 
-      if (data.id === 'status') {
-        filterItems.status = data.value;
+      if (data.id === 'depositStatus') {
+        filterItems.depositStatus = data.value;
       }
     }
 
@@ -106,7 +106,7 @@ export default function UserManualDepositTransaction() {
       pageIndex: 0,
       pageSize: 10,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
-      ...(filterItems.status && { status: filterItems.status })
+      ...(filterItems.depositStatus && { status: filterItems.depositStatus })
     });
   };
 

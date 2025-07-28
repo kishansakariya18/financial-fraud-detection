@@ -11,7 +11,7 @@ import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
-import { statusOptions } from '../helper';
+import { payoutStatusOptions } from '../helper';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { MapPinIcon } from '@heroicons/react/24/outline';
 
@@ -114,10 +114,10 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>
-      {table.getColumn('status') && (
+      {table.getColumn('depositStatus') && (
         <FacedtedFilter
-          options={statusOptions}
-          column={table.getColumn('status')}
+          options={payoutStatusOptions}
+          column={table.getColumn('depositStatus')}
           title={t('status')}
           Icon={MapPinIcon}
           isMultiple={false}
