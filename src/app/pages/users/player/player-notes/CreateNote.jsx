@@ -23,6 +23,17 @@ const CreateNote = ({ onClose = () => {} }) => {
   const { handleSubmit, reset, register } = useForm({});
   const [content, setContent] = useState(defaultValue);
   const [textError, setTextError] = useState('');
+  const [initialValues] = useState({
+    isPinned: false
+  });
+
+  const handleReset = () => {
+    reset(initialValues);
+    setContent(defaultValue);
+    setHtmlContent('');
+    setTextError('');
+    setError('');
+  };
 
   const handleChange = (val) => {
     setContent(val);
@@ -59,12 +70,10 @@ const CreateNote = ({ onClose = () => {} }) => {
   }
 
   if (!loading && !error && response) {
-    console.log('use effect called');
     toast.success(response.message);
     setResponse(null);
-    setContent(defaultValue);
+    handleReset();
     onClose();
-    reset();
   }
 
   const onSubmit = async (data) => {
@@ -96,7 +105,7 @@ const CreateNote = ({ onClose = () => {} }) => {
       </div>
 
       <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-        <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
+        <Button type="button" className="min-w-[7rem]" onClick={handleReset} disabled={loading}>
           {t('reset')}
         </Button>
         <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>

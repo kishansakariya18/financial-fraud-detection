@@ -19,6 +19,17 @@ export default function PlayerFundPassword() {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState('');
   const [passwordType, setPasswordType] = useState('playerFund');
+  const [initialValues] = useState({
+    currentPassword: '',
+    newPassword: '',
+    verifyPassword: ''
+  });
+
+  const handleReset = () => {
+    reset(initialValues);
+    setPasswordType('playerFund');
+    setError('');
+  };
 
   const {
     register,
@@ -82,8 +93,9 @@ export default function PlayerFundPassword() {
   }
   if (!loading && !error && response) {
     toast.success(response.message);
+    reset(initialValues);
+    setPasswordType('playerFund');
     setResponse('');
-    reset();
   }
 
   useEffect(() => {
@@ -143,7 +155,7 @@ export default function PlayerFundPassword() {
             </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-            <Button className="min-w-[7rem]" disabled={() => reset()}>
+            <Button type="button" className="min-w-[7rem]" onClick={handleReset} disabled={loading}>
               {t('reset')}
             </Button>
             <Button className="min-w-[7rem]" color="primary" type="submit" disabled={loading}>

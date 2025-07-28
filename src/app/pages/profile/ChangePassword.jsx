@@ -18,6 +18,16 @@ export default function ChangePassword() {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const [error, setError] = useState('');
+  const [initialValues] = useState({
+    currentPassword: '',
+    newPassword: '',
+    verifyPassword: ''
+  });
+
+  const handleReset = () => {
+    reset(initialValues);
+    setError('');
+  };
 
   const {
     register,
@@ -59,7 +69,7 @@ export default function ChangePassword() {
   if (!loading && !error && response) {
     toast.success(response.message);
     setResponse('');
-    reset();
+    handleReset();
   }
 
   useEffect(() => {
@@ -105,7 +115,7 @@ export default function ChangePassword() {
             </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-            <Button className="min-w-[7rem]" disabled={() => reset()}>
+            <Button type="button" className="min-w-[7rem]" onClick={handleReset} disabled={loading}>
               {t('reset')}
             </Button>
             <Button className="min-w-[7rem]" color="primary" type="submit" disabled={loading}>

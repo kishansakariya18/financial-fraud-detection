@@ -5,7 +5,7 @@ import { replaceText } from 'utils/custom.utilities';
 const BankService = {
   getBankList: async ({ pagination }) => {
     try {
-      const endPoint = apiConfig.endPoints.BANK.LIST;
+      const endPoint = apiConfig.BANK.LIST;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
@@ -27,7 +27,7 @@ const BankService = {
   },
   createBank: async (data) => {
     try {
-      const endPoint = apiConfig.endPoints.BANK.CREATE;
+      const endPoint = apiConfig.BANK.CREATE;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
@@ -44,7 +44,7 @@ const BankService = {
   },
   updateBank: async (data) => {
     try {
-      const endPoint = apiConfig.endPoints.BANK.UPDATE;
+      const endPoint = apiConfig.BANK.UPDATE;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
@@ -61,7 +61,7 @@ const BankService = {
   },
   changeStatus: async (id) => {
     try {
-      const endPoint = replaceText(apiConfig.endPoints.BANK.CHANGE_STATUS, ':bankId', id);
+      const endPoint = replaceText(apiConfig.BANK.CHANGE_STATUS, ':bankId', id);
       //const endPoint = apiConfig.endPoints.BANK.CHANGE_STATUS;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
@@ -79,15 +79,15 @@ const BankService = {
   },
   bankDetail: async (data) => {
     try {
-      const endPoint = apiConfig.endPoints.BANK.DETAIL;
+      console.log(data);
+      const endPoint = replaceText(apiConfig.BANK.DETAIL, ':bankId', data);
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
-        },
-        body: data
+        }
       });
       return response;
     } catch (error) {

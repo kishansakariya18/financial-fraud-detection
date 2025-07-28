@@ -10,8 +10,9 @@ import { toast } from 'sonner';
 import { useNavigate, useParams } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
-import BankService from 'services/bank.services';
+
 import { createBankDepositSchema } from './schema';
+import BankService from 'services/bank.services';
 import { useDisclosure } from 'hooks';
 
 const EditBankDeposit = () => {
@@ -23,7 +24,7 @@ const EditBankDeposit = () => {
   const [show, { toggle }] = useDisclosure();
   const [bankDetail, setBankDetail] = useState(null);
 
-  const breadcrumbItem = [{ title: t('bank_deposit'), path: '/bank/add' }, { title: t('edit') }];
+  const breadcrumbItem = [{ title: t('bank_deposit'), path: '/bank' }, { title: t('edit') }];
 
   const navigate = useNavigate();
   const {
@@ -37,11 +38,22 @@ const EditBankDeposit = () => {
 
   useEffect(() => {
     if (id) {
+      console.log(id);
       setLoading(true);
       BankService.bankDetail(id)
         .then((res) => {
-          setBankDetail(res.response.data);
-          reset(res.response.data);
+          const bankData = res.response.data;
+          const mappedData = {
+            id: bankData.id,
+            bankName: bankData.BankName,
+            accountHolderName: bankData.AccountHolderName,
+            accountNumber: bankData.AccountNumber,
+            bankCode: bankData.BankCode,
+            upiID: bankData.UPIID,
+            additionalInfo: bankData.AdditionalInfo
+          };
+          setBankDetail(mappedData);
+          reset(mappedData);
         })
         .catch((err) => {
           setError(err.message);
@@ -81,7 +93,16 @@ const EditBankDeposit = () => {
   }
 
   const onSubmit = async (data) => {
-    await updateBankAPI({ ...data, id });
+    const requestObject = {
+      id: id,
+      BankName: data.bankName,
+      AccountHolderName: data.accountHolderName,
+      AccountNumber: data.accountNumber,
+      BankCode: data.bankCode,
+      UPIID: data.upiID,
+      AdditionalInfo: data.additionalInfo
+    };
+    await updateBankAPI(requestObject);
   };
 
   return (

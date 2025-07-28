@@ -414,7 +414,7 @@
   "referred": "Referred",
   "by": "By",
   "friend": "Friend",
-  "bank_deposit": "Bank Deposit",
+  "bank_deposit": "Bank",
   "userClass": "Player Class",
   "priority": "Priority",
   "user_class_desc": "Are you sure you want to update this Player Class's status ?",
@@ -507,5 +507,7 @@
   "accountNumber": "Account Number",
   "bankCode": "Bank Code",
   "upiID": "UPI ID",
-  "additionalInfo": "Additional Info"
+  "additionalInfo": "Additional Info",
+  "bank_status_desc": "Are you sure you want to update this Bank's status ?",
+  "bank_status_suceess": "Bank Status has been changed successfully"
 }

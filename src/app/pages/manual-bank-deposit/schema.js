@@ -2,7 +2,9 @@ import * as Yup from 'yup';
 
 export const createBankDepositSchema = Yup.object().shape({
   // Personal Information
-  name: Yup.string().trim().required('Name Required'),
-  content: Yup.string().trim().required('Content Required'),
-  status: Yup.string().trim().required('Select Status')
+  bankName: Yup.string().trim().required('Bank Name Required'),
+  accountHolderName: Yup.string().trim().required('Account Holder Name Required'),
+  accountNumber: Yup.string().trim().required('Account Number Required'),
+  bankCode: Yup.string().trim().required('Bank Code Required'),
+  upiID: Yup.string().trim().required('UPI ID Required')
 });

@@ -7,7 +7,7 @@ export const bank = {
   id: 'bank',
   type: NAV_TYPE_ITEM,
   path: '/bank',
-  title: 'Bank Deposit',
+  title: 'Bank',
   transKey: 'bank',
   Icon: BanknotesIcon,
   permission: PERMISSIONS.BANK.VIEW

@@ -132,7 +132,7 @@ const BlacklistIP = () => {
               type="button"
               onClick={() => reset()}
               disabled={loading}>
-              {t('clear')}
+              {t('reset')}
             </Button>
             <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
               {t('blacklist')}

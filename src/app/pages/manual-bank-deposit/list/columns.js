@@ -4,6 +4,8 @@ import { createColumnHelper } from '@tanstack/react-table';
 // Local Imports
 import { RowActions } from './RowActions';
 import { IdCell, BoldCell } from '../../../../components/custom/table/cell';
+import { BadgeCell } from '../../../../components/custom/table/cell';
+import { statusOptions } from '../../../../app/pages/manual-bank-deposit/helper';
 
 // ----------------------------------------------------------------------
 
@@ -53,6 +55,15 @@ export const columns = [
     label: 'UPI ID',
     header: 'UPI ID',
     cell: BoldCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.status, {
+    id: 'status',
+    label: 'Status',
+    header: 'Status',
+    cell: BadgeCell,
+    meta: { optionData: statusOptions },
+    filterFn: 'arrIncludesSome',
     enableSorting: false
   }),
   columnHelper.display({

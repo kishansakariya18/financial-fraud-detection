@@ -154,7 +154,15 @@ const EditGame = () => {
   }, [gameUID]);
 
   const onSubmit = async (data) => {
-    await editAffiliateAPI({ gameUID, name: data.gameName, ...data });
+    // Convert string values to numbers before submission
+    const formData = {
+      ...data,
+      minBetAmount: Number(data.minBetAmount),
+      maxBetAmount: Number(data.maxBetAmount),
+      name: data.gameName,
+      gameUID
+    };
+    await editAffiliateAPI(formData);
   };
   return (
     <Page title={t('edit') + ' ' + t('game')}>
@@ -183,18 +191,20 @@ const EditGame = () => {
               <Input
                 {...register('minBetAmount')}
                 label={t('minBetAmount')}
-                error={errors?.lastName?.message}
+                error={errors?.minBetAmount?.message}
                 placeholder={t('enter') + ' ' + t('minBetAmount')}
                 type="number"
                 step="0.01"
+                min="0"
               />
               <Input
                 {...register('maxBetAmount')}
                 label={t('maxBetAmount')}
-                error={errors?.email?.message}
+                error={errors?.maxBetAmount?.message}
                 placeholder={t('enter') + ' ' + t('maxBetAmount')}
                 type="number"
                 step="0.01"
+                min="0"
               />
             </div>
             <Controller

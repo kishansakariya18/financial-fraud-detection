@@ -14,7 +14,8 @@ export const countryColumns = ({ selectedIds, handleCheck, actionLabel }) => {
       id: 'select',
       label: actionLabel,
       header: actionLabel,
-      cell: (cell) => SelectCell({ checked: selectedIds, row: cell.row, onChange: handleCheck }),
+      cell: (cell) =>
+        SelectCell({ checked: selectedIds, row: cell.row, onChange: handleCheck, align: 'start' }),
       enableSorting: false
     }),
     columnHelper.accessor((row) => row.id, {

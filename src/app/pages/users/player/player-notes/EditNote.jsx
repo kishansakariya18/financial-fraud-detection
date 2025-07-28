@@ -8,7 +8,7 @@ import PlayerService from 'services/player.services';
 import Quill from 'quill'; // Ensure Quill is imported
 
 // import { useParams } from 'react-router';
-import { Delta, TextEditor } from 'components/shared/form/TextEditor';
+import { TextEditor } from 'components/shared/form/TextEditor';
 import { htmlToDelta } from 'utils/quillUtils';
 
 const EditNote = ({ noteId, onClose, note: noteText }) => {
@@ -21,10 +21,21 @@ const EditNote = ({ noteId, onClose, note: noteText }) => {
   const { handleSubmit, reset, register } = useForm({});
   const [content, setContent] = useState(htmlToDelta(noteText));
   const [textError, setTextError] = useState('');
+  const [initialValues] = useState({
+    isPinned: false
+  });
+
+  const handleReset = () => {
+    reset(initialValues);
+    setContent(htmlToDelta(noteText));
+    setHtmlContent(noteText);
+    setTextError('');
+    setError('');
+  };
 
   const handleChange = (val) => {
     setContent(val);
-    const quill = new Quill(document.createElement('div'));
+    const quill = new Quill(document.createElement('div')); // Temporary Quill instance
     quill.setContents(val);
     const html = quill.root.innerHTML;
     setHtmlContent(html);
@@ -59,9 +70,8 @@ const EditNote = ({ noteId, onClose, note: noteText }) => {
   if (!loading && !error && response) {
     toast.success(response.message);
     setResponse(null);
-    setContent(new Delta([{ insert: htmlContent }]));
+    handleReset();
     onClose();
-    reset();
   }
 
   const onSubmit = async (data) => {
@@ -87,7 +97,7 @@ const EditNote = ({ noteId, onClose, note: noteText }) => {
       </div>
 
       <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-        <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
+        <Button type="button" className="min-w-[7rem]" onClick={handleReset} disabled={loading}>
           {t('reset')}
         </Button>
         <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>

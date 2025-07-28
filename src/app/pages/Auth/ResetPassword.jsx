@@ -1,6 +1,7 @@
 // Import Dependencies
 import { useLocation, useNavigate, useSearchParams } from 'react-router';
 import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 
@@ -45,6 +46,8 @@ export default function ResetPassword() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [seconds, setSeconds] = useState(30);
   const [resendOtp, setResendOtp] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -93,6 +96,8 @@ export default function ResetPassword() {
       if (result.status === 200) {
         setSearchParams({ ...queryParams, token: result.response.data.token });
         setResendOtp(result.response);
+        setSeconds(30);
+        setIsLoading(true);
       } else {
         setError(result.error);
       }
@@ -166,12 +171,27 @@ export default function ResetPassword() {
                 <Input
                   label={t('new_key') + ' ' + t('password')}
                   placeholder={t('enter') + ' ' + t('new_key') + ' ' + t('password')}
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   prefix={
                     <LockClosedIcon
                       className="size-5 transition-colors duration-200"
                       strokeWidth="1"
                     />
+                  }
+                  suffix={
+                    <Button
+                      variant="flat"
+                      className="pointer-events-auto size-6 shrink-0 rounded-full p-0"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setShowPassword(!showPassword);
+                      }}>
+                      {showPassword ? (
+                        <EyeSlashIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
+                      ) : (
+                        <EyeIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
+                      )}
+                    </Button>
                   }
                   {...register('password')}
                   error={errors?.password?.message}
@@ -179,12 +199,27 @@ export default function ResetPassword() {
                 <Input
                   label={t('confirm') + ' ' + t('password')}
                   placeholder={t('enter') + ' ' + t('confirm') + ' ' + t('password')}
-                  type="password"
+                  type={showConfirmPassword ? 'text' : 'password'}
                   prefix={
                     <LockClosedIcon
                       className="size-5 transition-colors duration-200"
                       strokeWidth="1"
                     />
+                  }
+                  suffix={
+                    <Button
+                      variant="flat"
+                      className="pointer-events-auto size-6 shrink-0 rounded-full p-0"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setShowConfirmPassword(!showConfirmPassword);
+                      }}>
+                      {showConfirmPassword ? (
+                        <EyeSlashIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
+                      ) : (
+                        <EyeIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
+                      )}
+                    </Button>
                   }
                   {...register('confirmPassword')}
                   error={errors?.confirmPassword?.message}

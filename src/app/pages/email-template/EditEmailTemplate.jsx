@@ -137,9 +137,50 @@ const EditEmailTemplate = () => {
     fetchEmailTemplateDetails();
   }
 
-  const onSubmit = async (data) => {
-    // const contentHTML = htmlContent?.replace(/<(.|\n)*?>/g, '').trim(); // Strip HTML tags
+  const handleReset = () => {
+    // Reset the form with initial values
+    reset({
+      to: [],
+      cc: [],
+      bcc: [],
+      title: '',
+      heading: '',
+      status: ''
+    });
 
+    // Reset the editor content
+    setContent(defaultValue);
+    setHtmlContent('');
+    setTemplateError('');
+
+    // Re-fetch the original template data
+    if (templateId) {
+      fetchEmailTemplateDetails().then((result) => {
+        if (result) {
+          const mappedData = {
+            title: result?.Title,
+            slug: result?.Slug,
+            heading: result?.Subject,
+            cc: result?.CC || [],
+            bcc: result?.BCC || [],
+            to: result?.ToEmail || [],
+            status: emailTemplateStatusToAPP(result.IsActive)
+          };
+
+          const quill = new Quill(document.createElement('div'));
+          quill.root.innerHTML = result?.BodyHtml || '';
+          quill.setContents(result?.BodyHtml);
+          const delta = htmlToDelta(result?.BodyHtml);
+          setHtmlContent(result?.BodyHtml || '');
+          setContent(delta);
+
+          reset(mappedData);
+        }
+      });
+    }
+  };
+
+  const onSubmit = async (data) => {
     if (+content.ops.length === 0) {
       setTemplateError('Template content is required');
       return;
@@ -275,7 +316,7 @@ const EditEmailTemplate = () => {
             </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-            <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
+            <Button type="button" className="min-w-[7rem]" onClick={handleReset} disabled={loading}>
               {t('reset')}
             </Button>
             <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>

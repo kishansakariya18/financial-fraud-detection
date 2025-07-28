@@ -1,6 +1,6 @@
 // Import Dependencies
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
-import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
+import { EllipsisHorizontalIcon, PencilIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -11,19 +11,21 @@ import { Button } from 'components/ui';
 
 import { TbStatusChange } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 import BankService from 'services/bank.services';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const confirmMessages = {
     pending: {
-      description: t('country_status_desc'),
+      description: t('bank_status_desc'),
       actionText: t('submit')
     },
     success: {
       title: t('bank') + ' ' + t('status') + ' ' + t('changed'),
-      description: t('country_status_suceess')
+      description: t('bank_status_suceess')
     }
   };
   const [statusModalOpen, setStatusModalOpen] = useState(false);
@@ -75,6 +77,19 @@ export function RowActions({ row, table }) {
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
               className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    onClick={() => navigate(`/bank/${row.original.id}/edit`)}
+                    className={clsx(
+                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                      focus && 'bg-this/10 dark:bg-this-light/10'
+                    )}>
+                    <PencilIcon className="size-4.5 stroke-1" />
+                    <span>{t('edit')}</span>
+                  </button>
+                )}
+              </MenuItem>
               <MenuItem>
                 {({ focus }) => (
                   <button

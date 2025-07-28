@@ -484,5 +484,7 @@
   "accountNumber": "Número de cuenta",
   "bankCode": "Código del banco",
   "upiID": "ID UPI",
-  "additionalInfo": "Información adicional"
+  "additionalInfo": "Información adicional",
+  "bank_status_desc": "¿Estás seguro de querer actualizar el estado de este banco?",
+  "bank_status_suceess": "Estado del banco cambiado exitosamente"
   }

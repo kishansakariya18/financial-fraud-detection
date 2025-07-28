@@ -1,7 +1,7 @@
 // Import Dependencies
 import { Page } from 'components/shared/Page';
 import { UserIcon } from '@heroicons/react/20/solid';
-import { EnvelopeIcon, EyeIcon, EyeSlashIcon, LockClosedIcon } from '@heroicons/react/24/outline';
+import { EnvelopeIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { Button, Input } from 'components/ui';
@@ -11,21 +11,18 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
-import BankService from 'services/bank.services';
+
 import { createBankDepositSchema } from './schema';
-import { useDisclosure } from 'hooks';
+// import { useDisclosure } from 'hooks';
 
 const CreateBankDeposit = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const { t } = useTranslation();
-  const [show, { toggle }] = useDisclosure();
+  // const [show, { toggle }] = useDisclosure();
 
-  const breadcrumbItem = [
-    { title: t('manual bank deposit'), path: '/bank' },
-    { title: t('create') }
-  ];
+  const breadcrumbItem = [{ title: t('bank'), path: '/bank' }, { title: t('create') }];
 
   const navigate = useNavigate();
   const {
@@ -37,15 +34,24 @@ const CreateBankDeposit = () => {
     resolver: yupResolver(createBankDepositSchema)
   });
 
-  const createBankAPI = async (requestObject) => {
+  const createBankAPI = async () => {
     setLoading(true);
     setError(null);
-    const result = await BankService.createBank(requestObject);
+
+    // Simulate API call with a delay
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    // Dummy success response
+    const result = {
+      status: 201,
+      response: { message: 'Bank deposit created successfully (dummy response)!' }
+    };
+
     if (result) {
       if (result.status === 200 || result.status === 201) {
         setResponse(result.response);
       } else {
-        setError(result.error);
+        setError(result.error); // This part will not be hit with dummy data
       }
     }
     setLoading(false);
@@ -144,7 +150,7 @@ const CreateBankDeposit = () => {
                 placeholder={t('enter') + ' ' + t('upiID')}
               />
             </div>
-            <div className="grid gap-4 lg:grid-cols-2">
+            {/* <div className="grid gap-4 lg:grid-cols-2">
               <Input
                 label={t('additionalInfo')}
                 type={show ? 'text' : 'password'}
@@ -165,7 +171,7 @@ const CreateBankDeposit = () => {
                 {...register('additionalInfo')}
                 error={errors?.additionalInfo?.message}
               />
-            </div>
+            </div> */}
             {/* <div className="grid gap-4 lg:grid-cols-2">
               <Controller
                 render={({ field }) => (
