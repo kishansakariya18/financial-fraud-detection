@@ -23,7 +23,7 @@ export const responseMapper = (apiData) => {
     accountNumber: data.AccountNumber,
     bankCode: data.BankCode,
     upiId: data.UPIID,
-    status: data.IsActive
+    status: bankStatusToAPP(data.IsActive)
   }));
   return resultData;
 };
@@ -46,5 +46,12 @@ export const bankStatusToAPI = (status) => {
     return 0;
   } else if (status == 'active') {
     return 1;
+  }
+};
+export const bankStatusToAPP = (status) => {
+  if (status == 0) {
+    return 'inactive';
+  } else if (status == 1) {
+    return 'active';
   }
 };

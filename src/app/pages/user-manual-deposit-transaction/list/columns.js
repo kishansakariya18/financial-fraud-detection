@@ -93,6 +93,15 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.isActive, {
+    id: 'isActive',
+    label: 'Is Active',
+    header: 'Is Active',
+    cell: BadgeCell,
+    meta: { optionData: statusOptions },
+    filterFn: 'arrIncludesSome',
+    enableSorting: false
+  }),
   columnHelper.display({
     id: 'actions',
     label: 'Row Actions',

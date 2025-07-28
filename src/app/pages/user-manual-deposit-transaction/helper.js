@@ -51,3 +51,10 @@ export const bankStatusToAPI = (status) => {
     return 1;
   }
 };
+export const userManualDepositTransactionStatusToAPP = (status) => {
+  if (status == 0) {
+    return 'inactive';
+  } else if (status == 1) {
+    return 'active';
+  }
+};
