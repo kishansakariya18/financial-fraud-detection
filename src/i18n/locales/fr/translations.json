@@ -486,5 +486,6 @@
   "upiID": "ID UPI",
   "additionalInfo": "Informations supplémentaires",
   "bank_status_desc": "Êtes-vous sûr de vouloir mettre à jour le statut de ce compte bancaire ?",
-  "bank_status_suceess": "Le statut du compte bancaire a été modifié avec succès"
+  "bank_status_suceess": "Le statut du compte bancaire a été modifié avec succès",
+  "user_manual_deposit_transaction_view": "Voir la transaction de dépôt manuelle de l'utilisateur"
 }

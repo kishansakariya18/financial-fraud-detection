@@ -2,10 +2,10 @@ import apiConfig from '../configs/api.config';
 import { sendRequest } from '../utils/axios';
 import { replaceText } from 'utils/custom.utilities';
 
-const BankService = {
-  getBankList: async ({ pagination, keyword, status }) => {
+const UserManualDepositTransactionService = {
+  getUserManualDepositTransactionList: async ({ pagination, keyword, status }) => {
     try {
-      const endPoint = apiConfig.endPoints.BANK.LIST;
+      const endPoint = apiConfig.endPoints.USER_MANUAL_DEPOSIT_TRANSACTION.LIST;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
@@ -22,29 +22,16 @@ const BankService = {
       });
       return response;
     } catch (error) {
-      console.log('Error from Bank List', error);
+      console.log('Error from User Manual Deposit Transaction List', error);
     }
   },
-  createBank: async (data) => {
+  updateUserManualDepositTransaction: async (data) => {
     try {
-      const endPoint = apiConfig.endPoints.BANK.CREATE;
-      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
-      const response = await sendRequest({
-        url: apiURL,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: data
-      });
-      return response;
-    } catch (error) {
-      console.log('Error from Bank Create', error);
-    }
-  },
-  updateBank: async (data) => {
-    try {
-      const endPoint = replaceText(apiConfig.endPoints.BANK.EDIT, ':bankId', data.id);
+      const endPoint = replaceText(
+        apiConfig.endPoints.USER_MANUAL_DEPOSIT_TRANSACTION.EDIT,
+        ':depositId',
+        data.id
+      );
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
@@ -56,31 +43,36 @@ const BankService = {
       });
       return response;
     } catch (error) {
-      console.log('Error from Bank Update', error);
+      console.log('Error from User Manual Deposit Transaction Update', error);
     }
   },
-  changeStatus: async (id) => {
+  deleteUserManualDepositTransaction: async (id) => {
     try {
-      const endPoint = replaceText(apiConfig.endPoints.BANK.CHANGE_STATUS, ':bankId', id);
-      //const endPoint = apiConfig.endPoints.BANK.CHANGE_STATUS;
+      const endPoint = replaceText(
+        apiConfig.endPoints.USER_MANUAL_DEPOSIT_TRANSACTION.DELETE,
+        ':depositId',
+        id
+      );
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'PATCH',
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
-        },
-        body: {}
+        }
       });
       return response;
     } catch (error) {
-      console.log('Error from Bank Change Status', error);
+      console.log('Error from User Manual Deposit Transaction Delete', error);
     }
   },
-  bankDetail: async (data) => {
+  getUserManualDepositTransactionDetail: async (id) => {
     try {
-      console.log(data);
-      const endPoint = replaceText(apiConfig.endPoints.BANK.DETAIL, ':bankId', data);
+      const endPoint = replaceText(
+        apiConfig.endPoints.USER_MANUAL_DEPOSIT_TRANSACTION.DETAIL,
+        ':depositId',
+        id
+      );
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
@@ -91,9 +83,9 @@ const BankService = {
       });
       return response;
     } catch (error) {
-      console.log('Error from Bank Detail', error);
+      console.log('Error from User Manual Deposit Transaction Detail', error);
     }
   }
 };
 
-export default BankService;
+export default UserManualDepositTransactionService;

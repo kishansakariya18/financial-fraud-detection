@@ -13,24 +13,24 @@ import { responseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
-import BankService from 'services/bank.services';
+import UserManualDepositTransactionService from 'services/user-manual-deposit-transaction.services';
 import { bankStatusToAPI } from '../helper';
 
-export default function Bank() {
+export default function UserManualDepositTransaction() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('bank_deposit');
+  const pageTitle = t('user_manual_deposit_transaction');
   const [refetch, setRefetch] = useState(false);
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
-  const fetchBank = async () => {
+  const fetchUserManualDepositTransaction = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
     console.log(queryParams);
-    const result = await BankService.getBankList({
+    const result = await UserManualDepositTransactionService.getUserManualDepositTransactionList({
       pagination: { pageIndex, pageSize },
-      keyword: queryParams.bankName,
+      keyword: queryParams.keyword,
       status: bankStatusToAPI(queryParams.status)
     });
 
@@ -47,7 +47,7 @@ export default function Bank() {
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
-    fetchData: fetchBank,
+    fetchData: fetchUserManualDepositTransaction,
     queryParams,
     setSearchParams,
     initialSettings: {
@@ -71,8 +71,8 @@ export default function Bank() {
 
   useEffect(() => {
     const filtersFromQuery = [];
-    if (queryParams.bankName) {
-      filtersFromQuery.push({ id: 'bankName', value: queryParams.bankName });
+    if (queryParams.keyword) {
+      filtersFromQuery.push({ id: 'keyword', value: queryParams.keyword });
     }
     if (queryParams.status) {
       filtersFromQuery.push({ id: 'status', value: queryParams.status });
@@ -92,8 +92,8 @@ export default function Bank() {
   const applyFilterHandler = () => {
     const filterItems = {};
     for (let data of table.getState().columnFilters) {
-      if (data.id === 'bankName') {
-        filterItems.bankName = data.value;
+      if (data.id === 'keyword') {
+        filterItems.keyword = data.value;
       }
 
       if (data.id === 'status') {
@@ -105,7 +105,7 @@ export default function Bank() {
       ...queryParams,
       pageIndex: 0,
       pageSize: 10,
-      ...(filterItems.bankName && { bankName: filterItems.bankName }),
+      ...(filterItems.keyword && { keyword: filterItems.keyword }),
       ...(filterItems.status && { status: filterItems.status })
     });
   };

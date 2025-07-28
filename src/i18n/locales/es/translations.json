@@ -486,5 +486,6 @@
   "upiID": "ID UPI",
   "additionalInfo": "Información adicional",
   "bank_status_desc": "¿Estás seguro de querer actualizar el estado de este banco?",
-  "bank_status_suceess": "Estado del banco cambiado exitosamente"
+  "bank_status_suceess": "Estado del banco cambiado exitosamente",
+  "user_manual_deposit_transaction_view": "Ver transacción de depósito manual del usuario"
   }

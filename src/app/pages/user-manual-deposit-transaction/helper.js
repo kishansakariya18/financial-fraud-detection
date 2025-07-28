@@ -17,12 +17,15 @@ export const translator = (t, text, ns) => t(`${text}`, { ns });
 export const responseMapper = (apiData) => {
   if (!apiData) return [];
   const resultData = apiData.map((data) => ({
-    id: data.DepositBankAccountUID,
-    bankName: data.BankName,
-    accountHolderName: data.AccountHolderName,
-    accountNumber: data.AccountNumber,
-    bankCode: data.BankCode,
-    upiId: data.UPIID,
+    id: data.UserBankDepositUID,
+    userID: data.UserID,
+    depositBankAccountID: data.DepositBankAccountID,
+    amount: data.Amount,
+    depositTime: data.DepositTime,
+    depositStatus: data.DepositStatus,
+    bankTransactionID: data.BankTransactionID,
+    dateCreated: data.DateCreated,
+    dateModified: data.DateModified,
     status: data.IsActive
   }));
   return resultData;
