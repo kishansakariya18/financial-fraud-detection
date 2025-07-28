@@ -47,7 +47,7 @@ export function RowActions({ row, table }) {
     setConfirmStatusLoading(true);
     const result = await BankService.changeStatus(row.original.id);
     if (result.status === 200) {
-      table.options.meta?.deleteRow(row);
+      table.options.meta?.refetchData();
       setStatusSuccess(true);
     } else {
       setStatusError(true);

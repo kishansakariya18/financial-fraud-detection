@@ -1,6 +1,10 @@
 import { Page } from 'components/shared/Page';
-import { UserIcon } from '@heroicons/react/20/solid';
-import { EnvelopeIcon } from '@heroicons/react/24/outline';
+import {
+  UserIcon,
+  BuildingLibraryIcon,
+  CreditCardIcon,
+  HashtagIcon
+} from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { Button, Input } from 'components/ui';
@@ -93,12 +97,12 @@ const EditBankDeposit = () => {
   const onSubmit = async (data) => {
     const requestObject = {
       id: id,
-      BankName: data.bankName,
-      AccountHolderName: data.accountHolderName,
-      AccountNumber: data.accountNumber,
-      BankCode: data.bankCode,
-      UPIID: data.upiID,
-      AdditionalInfo: data.additionalInfo
+      bankName: data.bankName,
+      accountHolderName: data.accountHolderName,
+      accountNumber: data.accountNumber,
+      bankCode: data.bankCode,
+      upiID: data.upiID,
+      additionalInfo: {}
     };
     await updateBankAPI(requestObject);
   };
@@ -122,7 +126,7 @@ const EditBankDeposit = () => {
               <div className="grid gap-4 sm:grid-cols-2">
                 <Input
                   {...register('bankName')}
-                  prefix={<UserIcon className="size-5" />}
+                  prefix={<BuildingLibraryIcon className="size-5" />}
                   label={t('bankName')}
                   error={errors?.bankName?.message}
                   placeholder={t('enter') + ' ' + t('bankName')}
@@ -138,14 +142,14 @@ const EditBankDeposit = () => {
               <div className="grid gap-4 sm:grid-cols-2">
                 <Input
                   {...register('accountNumber')}
-                  prefix={<UserIcon className="size-5" />}
+                  prefix={<CreditCardIcon className="size-5" />}
                   label={t('accountNumber')}
                   error={errors?.accountNumber?.message}
                   placeholder={t('enter') + ' ' + t('accountNumber')}
                 />
                 <Input
                   {...register('bankCode')}
-                  prefix={<EnvelopeIcon className="size-5" />}
+                  prefix={<HashtagIcon className="size-5" />}
                   label={t('bankCode')}
                   error={errors?.bankCode?.message}
                   placeholder={t('enter') + ' ' + t('bankCode')}

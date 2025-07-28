@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
@@ -19,6 +19,7 @@ export default function Bank() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t('bank_deposit');
+  const [refetch, setRefetch] = useState(false);
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
@@ -51,6 +52,11 @@ export default function Bank() {
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
       tableSettings: {}
+    },
+    meta: {
+      refetchData: () => {
+        setRefetch((prev) => !prev);
+      }
     }
   });
 
@@ -74,6 +80,13 @@ export default function Bank() {
     setColumnFilters(filtersFromQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryParams]);
+
+  useEffect(() => {
+    if (refetch) {
+      table.options.meta?.refetchData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refetch]);
 
   const applyFilterHandler = () => {
     const filterItems = {};
