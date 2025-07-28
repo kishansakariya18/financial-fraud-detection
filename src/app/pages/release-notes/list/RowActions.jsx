@@ -8,11 +8,11 @@ import PropTypes from 'prop-types';
 // Local Imports
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
-import RoleService from 'services/role.services';
 import { TbStatusChange } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
+import ReleaseNotesService from 'services/release-notes.services';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
@@ -25,17 +25,17 @@ export function RowActions({ row, table }) {
 
   const confirmMessages = {
     pending: {
-      title: t('delete_key') + ' ' + t('role'),
-      description: t('role_delete_desc'),
+      title: t('delete_key') + ' ' + t('release_note'),
+      description: t('release_note_delete_desc'),
       actionText: t('submit')
     },
     success: {
-      title: t('role') + ' ' + t('delete_success'),
-      description: t('role_delete_suceess')
+      title: t('success'),
+      description: t('release_note') + ' ' + t('delete_success')
     },
     error: {
       Icon: XCircleIcon,
-      title: "Can't Delete Role...",
+      title: "Can't Delete Release Note...",
       description: errorMessage,
       iconClassName: 'text-error'
     }
@@ -57,11 +57,11 @@ export function RowActions({ row, table }) {
 
   const handleDeleteRows = useCallback(async () => {
     setConfirmDeleteLoading(true);
-    const result = await RoleService.deleteRole(row.original.id);
-    if (result.status === 200) {
+    const result = await ReleaseNotesService.deleteReleaseNote(row.original.releaseNoteUID);
+    if (result.status === 200 || result.status === 201) {
       table.options.meta?.deleteRow(row);
       setDeleteSuccess(true);
-      toast.success('Role deleted successfully', {
+      toast.success('Release note deleted successfully', {
         invert: true
       });
       setTimeout(() => {
@@ -131,7 +131,7 @@ export function RowActions({ row, table }) {
                       focus && 'bg-this/10 dark:bg-this-light/10'
                     )}>
                     <TbStatusChange className="size-4.5 stroke-1" />
-                    <span>{`${t('delete')}`}</span>
+                    <span>{`${t('delete_text')}`}</span>
                   </button>
                 )}
               </MenuItem>

@@ -378,6 +378,11 @@ export const apiConfig = {
       LIST: '/admin/blacklist/list',
       BLOCK: '/admin/blacklist/block',
       DELETE: '/admin/blacklist/:blacklistUID/delete'
+    },
+    RELEASE_NOTES: {
+      LIST: '/content/admin/release-note/list',
+      CREATE: '/content/admin/release-note/create',
+      DELETE: '/content/admin/release-note/:releaseNoteUID/delete'
     }
   }
 };

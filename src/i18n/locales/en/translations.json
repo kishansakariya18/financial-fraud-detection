@@ -502,5 +502,7 @@
   "clear": "Clear",
   "single": "Single",
   "release_notes": "Release Notes",
-  "release_note": "Release Note"
+  "release_note": "Release Note",
+  "release_date": "Release Date",
+  "release_note_delete_desc": "Are you sure you want to delete this Release Note?"
 }

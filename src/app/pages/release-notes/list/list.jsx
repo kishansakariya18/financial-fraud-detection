@@ -7,13 +7,12 @@ import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 
-import RoleService from '../../../../services/role.services';
-
 import { responseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
+import ReleaseNotesService from 'services/release-notes.services';
 
 export default function ReleaseNotes() {
   const { t } = useTranslation();
@@ -25,7 +24,7 @@ export default function ReleaseNotes() {
     // setError(null);
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
-    const result = await RoleService.roleList({
+    const result = await ReleaseNotesService.releaseNotesList({
       pagination: { pageIndex, pageSize },
       filters: queryParams
     });
@@ -34,7 +33,8 @@ export default function ReleaseNotes() {
       return {
         status: 200,
         data: responseMapper(result.response.data),
-        totalRecords: parseInt(result.response.total_records, 10) || 0
+        totalPages: parseInt(result.response.total_pages, 10) || 0,
+        totalRecords: parseInt(result.response.total_record, 10) || 0
       };
     }
 
