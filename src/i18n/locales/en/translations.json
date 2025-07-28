@@ -500,5 +500,7 @@
   "something_went_wrong": "Something went wrong",
   "reason": "Reason",
   "clear": "Clear",
-  "single": "Single"
+  "single": "Single",
+  "release_notes": "Release Notes",
+  "release_note": "Release Note"
 }

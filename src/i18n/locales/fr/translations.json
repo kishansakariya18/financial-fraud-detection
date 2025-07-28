@@ -477,5 +477,7 @@
   "something_went_wrong": "Une erreur s'est produite",
   "reason": "Raison",
   "clear": "Effacer",
-  "single": "Unique"
+  "single": "Unique",
+  "release_notes": "Notes de version",
+  "release_note": "Note de version"
 }

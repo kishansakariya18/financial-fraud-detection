@@ -295,6 +295,9 @@ export const PERMISSIONS = {
   },
   RATE_LIMIT_RULES: {
     LIST: 'rate-limit-rules-view'
+  },
+  RELEASE_NOTES: {
+    VIEW: 'release-notes-view'
   }
 };
 

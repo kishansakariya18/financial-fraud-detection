@@ -477,5 +477,7 @@
   "something_went_wrong": "Algo salió mal",
   "reason": "Motivo",
   "clear": "Limpiar",
-  "single": "Único"
+  "single": "Único",
+  "release_notes": "Notas de lanzamiento",
+  "release_note": "Nota de lanzamiento"
   }
