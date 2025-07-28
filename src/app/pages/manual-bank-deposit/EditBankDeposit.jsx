@@ -23,10 +23,7 @@ const EditBankDeposit = () => {
   const [show, { toggle }] = useDisclosure();
   const [bankDetail, setBankDetail] = useState(null);
 
-  const breadcrumbItem = [
-    { title: t('manual bank deposit'), path: '/manual-bank-deposit' },
-    { title: t('edit') }
-  ];
+  const breadcrumbItem = [{ title: t('bank_deposit'), path: '/bank/add' }, { title: t('edit') }];
 
   const navigate = useNavigate();
   const {

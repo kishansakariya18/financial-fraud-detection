@@ -1,5 +1,6 @@
 import apiConfig from '../configs/api.config';
 import { sendRequest } from '../utils/axios';
+import { replaceText } from 'utils/custom.utilities';
 
 const BankService = {
   getBankList: async ({ pagination }) => {
@@ -58,9 +59,10 @@ const BankService = {
       console.log('Error from Bank Update', error);
     }
   },
-  changeStatus: async (data) => {
+  changeStatus: async (id) => {
     try {
-      const endPoint = apiConfig.endPoints.BANK.CHANGE_STATUS;
+      const endPoint = replaceText(apiConfig.endPoints.BANK.CHANGE_STATUS, ':bankId', id);
+      //const endPoint = apiConfig.endPoints.BANK.CHANGE_STATUS;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
@@ -68,7 +70,7 @@ const BankService = {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: data
+        body: {}
       });
       return response;
     } catch (error) {

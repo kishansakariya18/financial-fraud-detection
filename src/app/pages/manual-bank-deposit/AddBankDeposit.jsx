@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
-import TenantService from 'services/tenant.services';
+import BankService from 'services/bank.services';
 import { createBankDepositSchema } from './schema';
 import { useDisclosure } from 'hooks';
 
@@ -37,10 +37,10 @@ const CreateBankDeposit = () => {
     resolver: yupResolver(createBankDepositSchema)
   });
 
-  const createTenantAPI = async (requestObject) => {
+  const createBankAPI = async (requestObject) => {
     setLoading(true);
     setError(null);
-    const result = await TenantService.createTenant(requestObject);
+    const result = await BankService.createBank(requestObject);
     if (result) {
       if (result.status === 200 || result.status === 201) {
         setResponse(result.response);
@@ -59,14 +59,14 @@ const CreateBankDeposit = () => {
   if (!loading && !error && response) {
     toast.success(response.message);
     setTimeout(() => {
-      navigate('/tenant');
+      navigate('/bank');
     }, 0);
 
     setResponse(null);
   }
 
   const onSubmit = async (data) => {
-    await createTenantAPI(data);
+    await createBankAPI(data);
   };
   return (
     <Page title={t('create') + ' ' + t('bank_deposit')}>

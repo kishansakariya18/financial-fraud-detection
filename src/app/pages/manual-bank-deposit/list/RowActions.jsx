@@ -11,7 +11,7 @@ import { Button } from 'components/ui';
 
 import { TbStatusChange } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
-import CountryService from 'services/country.services';
+import BankService from 'services/bank.services';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
@@ -22,7 +22,7 @@ export function RowActions({ row, table }) {
       actionText: t('submit')
     },
     success: {
-      title: t('country') + ' ' + t('status') + ' ' + t('changed'),
+      title: t('bank') + ' ' + t('status') + ' ' + t('changed'),
       description: t('country_status_suceess')
     }
   };
@@ -43,7 +43,7 @@ export function RowActions({ row, table }) {
 
   const handleChangeStatusRows = useCallback(async () => {
     setConfirmStatusLoading(true);
-    const result = await CountryService.updateCountryStatus(row.original.id);
+    const result = await BankService.changeStatus(row.original.id);
     if (result.status === 200) {
       table.options.meta?.deleteRow(row);
       setStatusSuccess(true);

@@ -5,13 +5,21 @@ export const apiConfig = {
     AI_CHAT_URL: import.meta.env.VITE_AI_CHAT_URL
   },
   endPoints: {
+    // AUTH: {
+    //   VALIDATE: 'admin/auth/validate',
+    //   VERIFYOTP: 'admin/auth/login',
+    //   RESENDOTP: 'admin/auth/resend-otp',
+    //   CHANGE_PASSWORD: 'admin/auth/change-password',
+    //   VALIDATE_RESET_PASSWORD: 'admin/auth/validate-reset-password',
+    //   RESET_PASSWORD: 'admin/auth/reset-password'
+    // },
     AUTH: {
-      VALIDATE: '/admin/auth/validate',
-      VERIFYOTP: '/admin/auth/login',
-      RESENDOTP: '/admin/auth/resend-otp',
-      CHANGE_PASSWORD: '/admin/auth/change-password',
-      VALIDATE_RESET_PASSWORD: '/admin/auth/validate-reset-password',
-      RESET_PASSWORD: '/admin/auth/reset-password'
+      VALIDATE: '/admin/admin/auth/validate',
+      VERIFYOTP: '/admin/admin/auth/login',
+      RESENDOTP: '/admin/admin/auth/resend-otp',
+      CHANGE_PASSWORD: '/admin/admin/auth/change-password',
+      VALIDATE_RESET_PASSWORD: '/admin/admin/auth/validate-reset-password',
+      RESET_PASSWORD: '/admin/admin/auth/reset-password'
     },
     ROLES: {
       LIST: '/admin/roles/list',
@@ -82,9 +90,9 @@ export const apiConfig = {
       ADMIN_LOGIN_HISTORY: '/admin/admin/:adminID/login-history',
       ADMIN_DASHBOARD: '/dashboard',
       ADMIN_CHANGE_PASSWORD: '/auth/update-password',
-      ADMIN_APPSETTINGS: '/admin/appSetting',
+      ADMIN_APPSETTINGS: '/config/admin/config/app-setting',
       ADMIN_CHECK_PASSWORD: '/admin/check-password',
-      ADMIN_PERMISSION: '/admin/permissions',
+      ADMIN_PERMISSION: '/admin/admin/admin/permissions',
       ADMIN_EDIT: '/admin/admin/edit',
       UPDATE_PROFILE: '/admin/update-profile',
       ADMIN_COUNTRY_LIST: '/admin/countries',
@@ -260,10 +268,15 @@ export const apiConfig = {
       USER_LIST: '/admin/segmentation/player-list',
       REFRESH_USER_LIST: '/admin/segmentation/:segmentationId/refresh'
     },
+    // COUNTRY: {
+    //   LIST: '/admin/country/list',
+    //   SUMMARY: '/admin/country/summary',
+    //   CHANGE_STATUS: '/admin/country/:countryId/change-status'
+    // },
     COUNTRY: {
-      LIST: '/admin/country/list',
-      SUMMARY: '/admin/country/summary',
-      CHANGE_STATUS: '/admin/country/:countryId/change-status'
+      LIST: '/config/admin/country/list',
+      SUMMARY: '/config/admin/country/summary',
+      CHANGE_STATUS: '/config/admin/country/:countryId/change-status'
     },
     PAYMENT: {
       DEPOSIT: '/payment/deposit',
@@ -389,7 +402,7 @@ export const apiConfig = {
       DELETE: '/admin/blacklist/:blacklistUID/delete'
     },
     BANK: {
-      LIST: '/admin/deposit-bank/list',
+      LIST: 'payments/admin/deposit-bank/list',
       CHANGE_STATUS: '/admin/deposit-bank/:bankId/change-status',
       CREATE: '/admin/deposit-bank/create',
       DETAIL: '/admin/deposit-bank/:bankId/details',
