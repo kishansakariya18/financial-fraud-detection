@@ -92,7 +92,7 @@ const ReleaseNotesService = {
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
