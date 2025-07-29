@@ -1,5 +1,5 @@
 // Import Dependencies
-import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, MapPinIcon, PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 // import { TbCurrencyDollar } from "react-icons/tb";
 import PropTypes from 'prop-types';
@@ -12,6 +12,8 @@ import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { useNavigate } from 'react-router';
 import { t } from 'i18next';
+import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
+import { releaseNoteStatusOption } from '../helper';
 // import { statusOptions } from '../helper';
 
 // ----------------------------------------------------------------------
@@ -96,10 +98,27 @@ export function Toolbar({
 }
 
 function SearchInput({ table, onApplyFilters }) {
+  const keywordFilter = table
+    .getState()
+    .columnFilters.find(
+      (filter) => ['version', 'uid', 'title'].includes(filter.id) && filter.value
+    );
+
+  const handleChange = (e) => {
+    ['version', 'uid', 'title'].forEach((columnId) => {
+      table.getColumn(columnId)?.setFilterValue(undefined);
+    });
+
+    const value = e.target.value;
+    ['version', 'uid', 'title'].forEach((columnId) => {
+      table.getColumn(columnId)?.setFilterValue(value);
+    });
+  };
+
   return (
     <Input
-      value={table?.getColumn('roleName')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('roleName').setFilterValue(e.target.value)}
+      value={keywordFilter?.value || ''}
+      onChange={handleChange}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
           onApplyFilters();
@@ -110,25 +129,36 @@ function SearchInput({ table, onApplyFilters }) {
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
         root: 'shrink-0'
       }}
-      placeholder={t('search') + ' ' + t('role') + '...'}
+      placeholder={t('search') + ' ' + t('version') + ', ' + t('uid') + '...'}
     />
   );
 }
 
 function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }) {
   const isFiltered = table.getState().columnFilters.length > 0;
+
+  // Handle clear filter for status column
+  const handleClearFilter = () => {
+    const statusColumn = table.getColumn('status');
+    if (statusColumn) {
+      statusColumn.setFilterValue(undefined);
+      onClearFilters();
+    }
+  };
+
   return (
     <>
-      {/* {table.getColumn('status') && (
+      {table.getColumn('status') && (
         <FacedtedFilter
-          options={statusOptions}
+          options={releaseNoteStatusOption}
           column={table.getColumn('status')}
           title="Status"
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}
+          onClear={handleClearFilter}
         />
-      )} */}
+      )}
 
       {/* {table.getColumn('createdAt') && (
         <DateFilter

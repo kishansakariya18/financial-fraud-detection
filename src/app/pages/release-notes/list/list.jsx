@@ -63,8 +63,22 @@ export default function ReleaseNotes() {
 
   useEffect(() => {
     const filtersFromQuery = [];
+
+    // Handle keyword filter (for version, uid, and title)
     if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'roleName', value: queryParams.keyword });
+      filtersFromQuery.push(
+        { id: 'version', value: queryParams.keyword },
+        { id: 'uid', value: queryParams.keyword },
+        { id: 'title', value: queryParams.keyword }
+      );
+    }
+
+    // Handle status filter
+    if (queryParams.status) {
+      filtersFromQuery.push({
+        id: 'status',
+        value: queryParams.status === '1' ? 'active' : 'inactive'
+      });
     }
 
     setColumnFilters(filtersFromQuery);
@@ -73,16 +87,24 @@ export default function ReleaseNotes() {
 
   const applyFilterHandler = () => {
     const filterItems = {};
-    for (let data of table.getState().columnFilters) {
-      if (data.id === 'roleName') {
-        filterItems.keyword = data.value;
+    const columnFilters = table.getState().columnFilters;
+
+    // Process each filter
+    columnFilters.forEach((filter) => {
+      if (['version', 'uid', 'title'].includes(filter.id) && filter.value) {
+        // For keyword search (version, uid, title)
+        filterItems.keyword = filter.value;
+      } else if (filter.id === 'status' && filter.value) {
+        // For status filter
+        filterItems.status = filter.value === 'active' ? '1' : '0';
       }
-    }
+    });
 
     setSearchParams({
       pageIndex: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PER_PAGE_RECORD,
-      ...(filterItems.keyword && { keyword: filterItems.keyword })
+      ...(filterItems.keyword && { keyword: filterItems.keyword }),
+      ...(filterItems.status && { status: filterItems.status })
     });
   };
 
