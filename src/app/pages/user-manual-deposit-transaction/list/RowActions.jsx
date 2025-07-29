@@ -11,51 +11,54 @@ import { Button } from 'components/ui';
 
 import { useTranslation } from 'react-i18next';
 import UserManualDepositTransactionService from 'services/user-manual-deposit-transaction.services';
+import { toast } from 'sonner';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
 
-  const [modalState, setModalState] = useState({ open: false, action: null });
+  const [modal, setModal] = useState({ type: null, open: false });
+  const [rejectionReason, setRejectionReason] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
 
-  const openModal = (action) => {
-    setModalState({ open: true, action });
-    setError(false);
-    setSuccess(false);
+  const openModal = (type) => {
+    setModal({ type, open: true });
   };
 
   const closeModal = () => {
-    setModalState({ open: false, action: null });
+    setModal({ type: null, open: false });
+    setRejectionReason('');
+    setSuccess(false);
+    setError(false);
+    setLoading(false);
   };
 
-  const handleAction = useCallback(async () => {
+  const handleConfirm = useCallback(async () => {
     setLoading(true);
-    const depositStatus = modalState.action === 'accept' ? 1 : 2;
-    const result = await UserManualDepositTransactionService.manualVerify({
+    const payload = {
       id: row.original.id,
-      depositStatus
-    });
+      depositStatus: modal.type === 'accept' ? 1 : 2
+    };
+
+    if (modal.type === 'reject') {
+      payload.rejectionReason = rejectionReason;
+    }
+
+    const result = await UserManualDepositTransactionService.manualVerify(payload);
+
     if (result.status === 200) {
+      toast.success(result.response.message);
       table.options.meta?.fetchNewList();
       setSuccess(true);
+      setTimeout(() => {
+        closeModal();
+      }, 1500);
     } else {
       setError(true);
+      setLoading(false);
     }
-    setLoading(false);
-  }, [modalState.action, row.original.id, table.options.meta]);
-
-  const confirmMessages = {
-    pending: {
-      description: `Are you sure you want to ${modalState.action} this transaction?`,
-      actionText: t('submit')
-    },
-    success: {
-      title: t('status') + ' ' + t('changed'),
-      description: `Transaction has been successfully ${modalState.action}ed.`
-    }
-  };
+  }, [modal.type, rejectionReason, row.original.id, table.options.meta]);
 
   const state = error ? 'error' : success ? 'success' : 'pending';
 
@@ -109,13 +112,58 @@ export function RowActions({ row, table }) {
       </div>
 
       <ConfirmModal
-        show={modalState.open}
+        show={modal.open && modal.type === 'accept'}
         onClose={closeModal}
-        messages={confirmMessages}
-        onOk={handleAction}
+        onOk={handleConfirm}
         confirmLoading={loading}
         state={state}
+        messages={{
+          pending: {
+            description: 'Are you sure you want to accept this transaction?',
+            actionText: t('submit')
+          },
+          success: {
+            title: t('status') + ' ' + t('changed'),
+            description: 'Transaction has been successfully accepted.'
+          }
+        }}
       />
+
+      <ConfirmModal
+        show={modal.open && modal.type === 'reject'}
+        confirmDisabled={!rejectionReason.trim()}
+        onClose={closeModal}
+        title="Reject Transaction"
+        onOk={handleConfirm}
+        confirmLoading={loading}
+        state={state}
+        messages={{
+          pending: {
+            description: 'Please enter a reason for rejection.',
+            actionText: t('submit')
+          },
+          success: {
+            title: t('status') + ' ' + t('changed'),
+            description: 'Transaction has been successfully rejected.'
+          }
+        }}>
+        <div className="mt-4">
+          <label
+            htmlFor="rejectionReason"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Rejection Reason
+          </label>
+          <textarea
+            id="rejectionReason"
+            name="rejectionReason"
+            rows={3}
+            className="border-black-300 mt-1 block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-dark-500 dark:bg-dark-700 dark:text-white sm:text-sm"
+            value={rejectionReason}
+            onChange={(e) => setRejectionReason(e.target.value)}
+            disabled={loading || success}
+          />
+        </div>
+      </ConfirmModal>
     </>
   );
 }

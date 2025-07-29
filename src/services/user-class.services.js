@@ -231,6 +231,27 @@ const UserClassService = {
       console.log('Error deleting user class limit:', error);
       throw error;
     }
+  },
+  assignBanks: async (userClassId, bankIds) => {
+    try {
+      const endPoint = replaceText(
+        apiConfig.endPoints.USER_CLASS.ASSIGN_BANK,
+        ':userClassUID',
+        userClassId
+      );
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + endPoint,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: bankIds
+      });
+      return response;
+    } catch (error) {
+      console.log('Error assigning banks:', error);
+      throw error;
+    }
   }
 };
 export default UserClassService;

@@ -82,6 +82,34 @@ export const userClasseRoute = [
         )
       };
     }
+  },
+  {
+    path: '/user-class/:id/assign-bank',
+    lazy: async () => {
+      const { default: AssignedBanks } = await import(
+        '../../pages/user-class/assigned-banks/AssignedBanks'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.USER_CLASS.ASSIGN_BANK}>
+            <AssignedBanks />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: '/user-class/:id/assign-bank/add',
+    lazy: async () => {
+      const { default: BankList } = await import('../../pages/user-class/assigned-banks/BankList');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.USER_CLASS.ASSIGN_BANK}>
+            <BankList />
+          </PrivateRoute>
+        )
+      };
+    }
   }
 ];
 export default userClasseRoute;

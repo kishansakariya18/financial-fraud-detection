@@ -39,7 +39,17 @@ const defaultMessages = {
 };
 
 export function ConfirmModal(props) {
-  const { show, onClose, onOk, confirmLoading, className, state, messages } = props;
+  const {
+    show,
+    onClose,
+    onOk,
+    confirmLoading,
+    confirmDisabled,
+    className,
+    state,
+    messages,
+    children
+  } = props;
 
   const focusRef = useRef();
 
@@ -89,8 +99,10 @@ export function ConfirmModal(props) {
             state,
             messages,
             confirmLoading,
+            confirmDisabled,
             onClose,
-            focusRef
+            focusRef,
+            children
           }}
         />
       </TransitionChild>
@@ -98,7 +110,16 @@ export function ConfirmModal(props) {
   );
 }
 
-function Confirm({ onOk, state, messages, confirmLoading, onClose, focusRef }) {
+function Confirm({
+  onOk,
+  state,
+  messages,
+  confirmLoading,
+  confirmDisabled,
+  onClose,
+  focusRef,
+  children
+}) {
   const mergedMessages = merge(defaultMessages, messages);
   const Icon = mergedMessages[state].Icon;
   const spinner = <GhostSpinner variant="soft" className="size-4 border-2" />;
@@ -109,6 +130,8 @@ function Confirm({ onOk, state, messages, confirmLoading, onClose, focusRef }) {
       <div className="mt-4">
         <h3 className="text-xl text-gray-800 dark:text-dark-100">{mergedMessages[state].title}</h3>
         <p className="mx-auto mt-2 max-w-xs">{mergedMessages[state].description}</p>
+
+        {children}
 
         {state === 'success' ? (
           <Button onClick={onClose} color="success" className="mt-12 h-9 min-w-[7rem]">
@@ -125,6 +148,7 @@ function Confirm({ onOk, state, messages, confirmLoading, onClose, focusRef }) {
                 ref={focusRef}
                 onClick={onOk}
                 color="primary"
+                disabled={confirmDisabled}
                 className="h-9 min-w-[7rem] space-x-2 rtl:space-x-reverse">
                 {confirmLoading && spinner}
                 <span> {mergedMessages[state].actionText}</span>
@@ -154,7 +178,9 @@ ConfirmModal.propTypes = {
   confirmLoading: PropTypes.bool,
   className: PropTypes.string,
   state: PropTypes.oneOf(['pending', 'success', 'error']),
-  messages: PropTypes.object
+  messages: PropTypes.object,
+  children: PropTypes.node,
+  confirmDisabled: PropTypes.bool
 };
 
 Confirm.propTypes = {
@@ -162,6 +188,8 @@ Confirm.propTypes = {
   state: PropTypes.oneOf(['pending', 'success', 'error']),
   messages: PropTypes.object,
   confirmLoading: PropTypes.bool,
+  confirmDisabled: PropTypes.bool,
   onClose: PropTypes.func,
-  focusRef: PropTypes.object
+  focusRef: PropTypes.object,
+  children: PropTypes.node
 };

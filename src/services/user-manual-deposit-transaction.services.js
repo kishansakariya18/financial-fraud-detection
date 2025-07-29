@@ -102,7 +102,8 @@ const UserManualDepositTransactionService = {
           'Content-Type': 'application/json'
         },
         body: {
-          depositStatus: data.depositStatus
+          depositStatus: data.depositStatus,
+          rejectionReason: data.rejectionReason
         }
       });
       return response;
