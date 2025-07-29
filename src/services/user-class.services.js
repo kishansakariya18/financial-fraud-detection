@@ -245,7 +245,12 @@ const UserClassService = {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: data
+        body: {
+          page: data.pagination.pageIndex,
+          limit: data.pagination.pageSize,
+          keyword: data.filters.keyword,
+          status: data.status
+        }
       });
       return response;
     } catch (err) {

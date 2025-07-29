@@ -489,5 +489,6 @@
   "bank_status_suceess": "Le statut du compte bancaire a été modifié avec succès",
   "user_manual_deposit_transaction_view": "Voir la transaction de dépôt manuelle de l'utilisateur",
   "user_manual_deposit_transaction":"Transaction de dépôt manuelle de l'utilisateur",
-  "search_transaction":"Rechercher transaction"
+  "search_transaction":"Rechercher transaction",
+  "search_by_bank_name":"Rechercher par nom du banque"
 }

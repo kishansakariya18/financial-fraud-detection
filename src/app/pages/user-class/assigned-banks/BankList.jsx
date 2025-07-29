@@ -118,7 +118,7 @@ export default function BankList() {
       toast.success(result.response.message);
       navigate(`/user-class/${userClassId}/assign-bank`);
     } else {
-      toast.error(result.error || 'Failed to assign banks');
+      toast.error(result.response.message || 'Failed to assign banks');
     }
     setSubmitLoading(false);
   };

@@ -490,5 +490,6 @@
   "user_manual_deposit_transaction_view": "Ver transacción de depósito manual del usuario",
   "user_manual_deposit_transaction":"Transacción de depósito manual del usuario",
   "assign_bank": "Asignar banco",
-  "search_transaction":"Buscar transacción"
+  "search_transaction":"Buscar transacción",
+  "search_by_bank_name":"Buscar por nombre del banco"
   }
