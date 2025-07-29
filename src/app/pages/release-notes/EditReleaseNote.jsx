@@ -1,184 +1,99 @@
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { DocumentPlusIcon } from '@heroicons/react/24/outline';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 
 import { Page } from 'components/shared/Page';
-import { Button, Card, Input } from 'components/ui';
+import { Button, Input, Textarea } from 'components/ui';
 import { useEffect, useState } from 'react';
-import { roleDetailMapper, rolePermissionListMapper } from './helper';
-import RoleService from 'services/role.services';
+import { releaseNoteDetailMapper } from './helper';
+import { addReleaseNoteSchema } from './schema';
+import { DatePicker } from 'components/shared/form/Datepicker';
+import ReleaseNotesService from 'services/release-notes.services';
 // import { useParams } from 'react-router';
 import { useNavigate, useParams } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 const EditReleaseNote = () => {
-  const { roleId } = useParams();
+  const { releaseNoteId: releaseNoteUID } = useParams();
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const pageTitle = `${t('edit')} ${t('release_note')}`;
 
-  const pageTitle = t('edit') + ' ' + t('release_note');
-  const update = t('update');
-  //* === Get api state for Edit ===
-  const [isDetailLoading, setDetailLoading] = useState(false);
-  const [detailError, setDetailError] = useState(null);
-  const [detail, setDetail] = useState({});
-  const [response, setResponse] = useState([]);
-  const fetchRoleDetail = async (roleId) => {
-    setDetailLoading(true);
-    const result = await RoleService.roleDetail(roleId);
-    console.log('result of roles edit', result);
-
-    if (result.status === 200) {
-      const apiData = result.response.data;
-      const resultData = roleDetailMapper(apiData);
-      console.log('resultData::::', resultData);
-      setDetail(resultData);
-      setCheckedList(resultData.permissionIDs);
-    } else {
-      setDetailError(result.error);
-    }
-
-    setDetailLoading(false);
-  };
-
-  // TODO: remove below code and implement loader
-  if (!isDetailLoading && detailError) {
-    // toast.error(detailError, config.TOAST_UI);
-    setDetailError(null);
-  }
-  if (!isDetailLoading && !detailError && detail) {
-    // toast.success(detail.message, config.TOAST_UI);
-  }
-  useEffect(() => {
-    if (roleId) {
-      fetchRoleDetail(roleId);
-    }
-  }, [roleId]);
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const [checkedList, setCheckedList] = useState([]);
-  const handleCheck = (checked, permissionObj, modulePermissionList) => {
-    console.log('handleCheck', checked, permissionObj, modulePermissionList);
-
-    if (permissionObj.permissionName == 'View') {
-      const modulePermissionIds = modulePermissionList.map((item) => item.permissionID);
-      if (!checked) {
-        modulePermissionIds.forEach((id) => {
-          const foundIndex = checkedList.findIndex((item) => item == id);
-          if (foundIndex != -1) {
-            // console.log('found index::', id);
-            checkedList.splice(foundIndex, 1);
-            // console.log('new checklist:', checkedList);
-          }
-        });
-        setCheckedList([...checkedList]);
-      } else {
-        // console.log('modulePermissionIds:', modulePermissionIds);
-        setCheckedList([...checkedList, ...modulePermissionIds]);
-      }
-    } else {
-      const viewId = modulePermissionList.find((item) => item.permissionName == 'View');
-      if (viewId && !checkedList.includes(viewId.permissionID)) {
-        setCheckedList([...checkedList, viewId.permissionID, permissionObj.permissionID]);
-      } else {
-        setCheckedList([...checkedList, permissionObj.permissionID]);
-      }
-      if (!checked) {
-        setCheckedList(checkedList.filter((checkedId) => checkedId !== permissionObj.permissionID));
-      }
-    }
-  };
-
-  console.log('checkedList: ', checkedList);
-
-  console.log('response: ', response);
-  console.log('isLoading: ', isLoading);
-  console.log('error: ', error);
-
-  const [isSubmitLoading, setSubmitLoading] = useState(false);
+  // Removed unused isDetailLoading and detailError
+  const [detail, setDetail] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
-  const [submitResponse, setSubmitResponse] = useState(null);
+
+  const form = useForm({
+    resolver: yupResolver(addReleaseNoteSchema),
+    defaultValues: {
+      version: '',
+      title: '',
+      description: '',
+      releaseDate: ''
+    }
+  });
 
   const {
     register,
     handleSubmit,
+    control,
     reset,
     formState: { errors }
-  } = useForm({
-    defaultValues: {
-      roleName: detail.roleName
-    }
-  });
+  } = form;
 
   useEffect(() => {
-    if (detail?.roleName) {
-      reset({
-        roleName: detail.roleName
-      });
+    const fetchDetail = async () => {
+      setIsSubmitting(true);
+      const result = await ReleaseNotesService.releaseNoteDetails(releaseNoteUID);
+      if (result && result.status === 200) {
+        const mapped = releaseNoteDetailMapper(result.response.data);
+        setDetail(mapped);
+        reset(mapped);
+      } else {
+        setSubmitError(result?.error || 'Failed to fetch details');
+      }
+      setIsSubmitting(false);
+    };
+    if (releaseNoteUID) {
+      fetchDetail();
     }
-  }, [detail]);
+  }, [releaseNoteUID, reset]);
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    if (submitError) {
+      toast.error(submitError, { invert: true });
+      setSubmitError(null);
+    }
+  }, [submitError]);
 
   const onSubmit = async (data) => {
-    data.permissionsIdList = checkedList;
-    data.roleId = roleId;
-    console.log('data::', data);
-
-    setSubmitLoading(true);
-    const result = await RoleService.roleEdit(data);
-
-    if (result) {
-      if (result.status === 200 || result.status === 201) {
-        setSubmitResponse(result.response);
+    try {
+      setIsSubmitting(true);
+      const result = await ReleaseNotesService.releaseNoteEdit(data, releaseNoteUID);
+      if (result && (result.status === 200 || result.status === 201)) {
+        toast.success(result.response.message);
+        setTimeout(() => {
+          navigate('/release-notes');
+        }, 1000);
       } else {
-        setSubmitError(result.error);
+        setSubmitError(result?.error || 'Failed to update release note');
       }
-    } else {
-      setSubmitError(result.error);
+    } catch (error) {
+      setSubmitError(error.message || 'Failed to update release note');
+    } finally {
+      setIsSubmitting(false);
     }
-    setSubmitLoading(false);
   };
 
-  if (!isSubmitLoading && submitError) {
-    toast(submitError, {
-      invert: true
-    });
-    setSubmitError(null);
-  }
-  if (!isSubmitLoading && !submitError && submitResponse) {
-    toast.success(submitResponse.message, {
-      invert: true
-    });
-    setTimeout(() => {
-      navigate('/release-notes');
-    }, 0);
-    setSubmitResponse(null);
-    reset();
-  }
-
-  const fetchRolePermissionList = async () => {
-    setIsLoading(true);
-    const result = await RoleService.rolePermissionList();
-
-    if (result.status === 200) {
-      const apiData = result.response.data;
-      const resultData = rolePermissionListMapper(apiData);
-      setResponse(resultData);
-    } else {
-      setError(result.error);
+  const handleReset = () => {
+    if (detail) {
+      reset(detail);
     }
-    setIsLoading(false);
   };
 
-  console.log('response:', response);
-
-  useEffect(() => {
-    console.log('Component mounted or remounted!');
-    fetchRolePermissionList();
-  }, []);
   const breadcrumbItem = [
     { title: t('release_notes'), path: '/release-notes' },
     { title: t('edit') }
@@ -201,79 +116,70 @@ const EditReleaseNote = () => {
             </div>
           </div>
         </div>
-        <form autoComplete="off" onSubmit={handleSubmit(onSubmit)} id="add-role-form">
-          <div className="grid grid-cols-12 place-content-start gap-4 sm:gap-5 lg:gap-6">
-            <div className="col-span-12">
-              <Card className="p-4 sm:px-5">
-                <div className="mt-5 space-y-5">
-                  {
-                    <Input
-                      id="roleName"
-                      className={`form-control ${errors.roleName ? 'is-invalid' : ''}`}
-                      defaultValue={detail.roleName}
-                      type="text"
-                      name="roleName"
-                      label={'roleName'}
-                      placeholder="Enter Role Name"
-                      {...register('roleName', {
-                        required: 'Role name is required'
-                      })}
-                      error={errors?.roleName?.message}
-                    />
-                  }
-                  <div className="flex flex-col">
-                    <div>
-                      {response?.length > 0 &&
-                        response?.map((item) => (
-                          <>
-                            <div key={item.moduleName} className="mb-4 grid"></div>
-                            <div className="flex items-center gap-3">
-                              <div className="w-1/4">
-                                <h4>{item.moduleName}</h4>
-                                <p className="text-sm text-gray-400">
-                                  Access control for {item.moduleName}
-                                </p>
-                              </div>
-                              <div className="flex w-3/4 flex-wrap">
-                                {item?.permissionList.map((permissionObj) => (
-                                  <Button
-                                    type="button"
-                                    key={permissionObj.permissionID}
-                                    className={`my-2 mr-2`}
-                                    color={
-                                      checkedList?.includes(permissionObj.permissionID)
-                                        ? 'primary'
-                                        : ''
-                                    }
-                                    variant="outlined"
-                                    onClick={() =>
-                                      handleCheck(
-                                        !checkedList?.includes(permissionObj.permissionID),
-                                        permissionObj,
-                                        item?.permissionList
-                                      )
-                                    }>
-                                    {permissionObj.permissionName}
-                                  </Button>
-                                ))}
-                              </div>
-                            </div>
-                          </>
-                        ))}
-                    </div>
-                  </div>
-                </div>
-              </Card>
+        <form
+          autoComplete="off"
+          onSubmit={handleSubmit(onSubmit)}
+          id="edit-release-note-form"
+          className="space-y-6">
+          <div className="grid gap-6 sm:grid-cols-1 lg:grid-cols-3">
+            <Input
+              defaultValue={detail?.version}
+              {...register('version')}
+              label={t('version')}
+              placeholder="1.0.0"
+              error={errors?.version?.message}
+            />
+            <Input
+              {...register('title')}
+              label={t('title')}
+              placeholder={t('enter') + ' ' + t('title')}
+              error={errors?.title?.message}
+            />
+            <Controller
+              name="releaseDate"
+              control={control}
+              render={({ field: { onChange, value, ...rest } }) => {
+                console.log('DatePicker value:', value); // Debug log
+                return (
+                  <DatePicker
+                    onChange={onChange}
+                    value={value || ''}
+                    label={t('release_date')}
+                    error={errors?.releaseDate?.message}
+                    options={{
+                      disableMobile: true,
+                      time_24hr: true
+                    }}
+                    placeholder="Choose date..."
+                    {...rest}
+                  />
+                );
+              }}
+            />
+            <div className="space-y-2">
+              <Textarea
+                {...register('description')}
+                placeholder={t('enter') + ' ' + t('description')}
+                label={t('description')}
+                error={errors?.description?.message}
+                rows={4}
+              />
             </div>
           </div>
-        </form>
-        <div className="flex !flex-row-reverse flex-col items-center space-y-4 py-5 sm:flex-row sm:space-y-0 lg:py-6">
-          <div className="flex gap-2">
-            <Button className="min-w-[7rem]" color="primary" type="submit" form="add-role-form">
-              {update}
+          <div className="flex justify-end space-x-3">
+            <Button type="button" className="min-w-[7rem]" onClick={handleReset}>
+              {t('reset')}
+            </Button>
+            <Button
+              className="min-w-[7rem]"
+              type="submit"
+              color="primary"
+              disabled={isSubmitting}
+              isLoading={isSubmitting}>
+              {t('update')}
             </Button>
           </div>
-        </div>
+        </form>
       </div>
     </Page>
   );

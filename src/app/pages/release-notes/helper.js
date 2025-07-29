@@ -57,6 +57,16 @@ export const responseMapper = (apiData) => {
   }));
   return resultData;
 };
+
+export const releaseNoteDetailMapper = (apiData) => {
+  return {
+    version: apiData.Version || '',
+    title: apiData.Title || '',
+    description: apiData.Description || '',
+    releaseDate: apiData.ReleaseDate ? getDateInUTCToTimeZone(apiData.ReleaseDate) : ''
+  };
+};
+
 export const releaseNoteStatusOption = [
   {
     value: 'active',

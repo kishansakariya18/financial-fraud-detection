@@ -76,14 +76,19 @@ const ReleaseNotesService = {
       console.log('Error from release note details', error);
     }
   },
-  releaseNoteEdit: async (data) => {
+  releaseNoteEdit: async (data, releaseNoteId) => {
     try {
       const reqData = {
-        roleName: data.roleName,
-        permissionID: data.permissionsIdList,
-        roleId: data.roleId
+        version: data.version,
+        title: data.title,
+        description: data.description,
+        releaseDate: data.releaseDate
       };
-      const endPoint = apiConfig.endPoints.ROLES.EDIT;
+      const endPoint = replaceText(
+        apiConfig.endPoints.RELEASE_NOTES.EDIT,
+        ':releaseNoteUID',
+        releaseNoteId
+      );
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,

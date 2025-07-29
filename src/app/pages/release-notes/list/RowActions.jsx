@@ -115,7 +115,7 @@ export function RowActions({ row, table }) {
     const result = await ReleaseNotesService.deleteReleaseNote(row.original.releaseNoteUID);
     if (result.status === 200 || result.status === 201) {
       setDeleteSuccess(true);
-      toast.success('Release note deleted successfully', {
+      toast.success(result.response.message, {
         invert: true
       });
       setTimeout(() => {
@@ -141,7 +141,7 @@ export function RowActions({ row, table }) {
 
       if (result.status === 200 || result.status === 201) {
         setStatusChangeSuccess(true);
-        toast.success('Status changed successfully', { invert: true });
+        toast.success(result.response.message, { invert: true });
         // Refresh the table data
         // table.options.meta?.fetchNewList();
       } else {
@@ -195,7 +195,7 @@ export function RowActions({ row, table }) {
                       'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
                       focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
                     )}
-                    onClick={() => navigate(`/release-notes/edit/${row.original.id}`)}>
+                    onClick={() => navigate(`/release-notes/edit/${row.original.releaseNoteUID}`)}>
                     <PencilIcon className="size-4.5 stroke-1" />
                     <span>{t('edit')}</span>
                   </button>
