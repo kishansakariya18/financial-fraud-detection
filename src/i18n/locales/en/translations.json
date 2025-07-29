@@ -510,5 +510,8 @@
   "additionalInfo": "Additional Info",
   "bank_status_desc": "Are you sure you want to update this Bank's status ?",
   "bank_status_suceess": "Bank Status has been changed successfully",
-  "user_manual_deposit_transaction_view": "User Manual Deposit Transaction View"
+  "user_manual_deposit_transaction_view": "User Manual Deposit Transaction View",
+  "user_manual_deposit_transaction":"User Manual Deposit Transaction",
+  "assign_bank": "Assign Bank",
+  "search_transaction":"Search Transaction"
 }

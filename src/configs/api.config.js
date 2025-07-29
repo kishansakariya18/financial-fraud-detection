@@ -24,44 +24,40 @@ export const apiConfig = {
     RESET_PASSWORD: '/admin/admin/auth/reset-password',
 
     AUDIT_LOGS: {
-      VIEW: '/admin/audit-logs/list',
-      DETAIL: '/admin/audit-logs/view/:Id'
-    },
-    USER_ENQUIRY: {
-      LIST: '/admin/enquiry/list'
+      VIEW: '/notify/admin/audit-logs/list',
+      DETAIL: '/notify/admin/audit-logs/view/:Id'
     },
     PAGE: {
-      LIST: '/admin/pages/list',
-      ADD: '/admin/pages/add',
-      TOGGLE_STATUS: '/admin/pages/:pageID/change-status',
-      DELETE: '/admin/pages/:pageID/delete',
-      DETAIL: '/admin/pages/detail',
-      UPDATE: '/admin/pages/update'
+      LIST: '/content/admin/pages/list',
+      ADD: '/content/admin/pages/add',
+      TOGGLE_STATUS: '/content/admin/pages/:pageID/change-status',
+      DELETE: '/content/admin/pages/:pageID/delete',
+      DETAIL: '/content/admin/pages/detail',
+      UPDATE: '/content/admin/pages/update'
     },
     USER: {
-      SET_EXCLUSION: '/admin/user/:userID/set-exclusion',
-      DETAIL: '/admin//users/detail/:userUID',
+      DETAIL: '/users/admin/detail/:userUID',
       LIST: '/users/admin/list',
-      REFERRAL_LIST: '/admin/users/referral/:userID',
-      FUND: '/admin/users/fund',
-      TRANSACTION_LIST: '/admin/users/transaction-list',
-      TDS_SUMMARY_TRANSACTION_LIST: '/admin/users/tds-summary-transaction-list',
-      TRANSACTION_DETAIL: '/admin/users/transaction-detail',
-      CHANGE_STATUS: '/admin/users/change-status',
-      REST_BANK_COUNT: '/admin/users/reset-bank-request-count',
-      UPDATE_RISK_MANAGEMENT: '/admin/users/update-user-risk-management/:userID',
-      ALL_TRANSACTION_LIST: '/admin/users/all-transaction-list',
-      GET_COMMENT: '/admin/users/get-comment',
-      UPDATE_COMMENT: '/admin/users/update-comment',
-      LOGIN_HISTORY: '/admin/users/:userID/login-history',
-      GET_COMMENT_DETAIL: '/admin/users/get-comment-detail',
-      ADD_COMMENT: '/admin/users/add-comment',
-      DELETE_COMMENT: '/admin/users/delete-comment',
+      REFERRAL_LIST: '/users/admin/referral/:userID',
+      FUND: '/users/admin/fund',
+      TRANSACTION_LIST: '/users/admin/transaction-list',
+      TDS_SUMMARY_TRANSACTION_LIST: '/users/admin/tds-summary-transaction-list',
+      TRANSACTION_DETAIL: '/users/admin/transaction-detail',
+      CHANGE_STATUS: '/users/admin/change-status',
+      REST_BANK_COUNT: '/users/admin/reset-bank-request-count',
+      UPDATE_RISK_MANAGEMENT: '/users/admin/update-user-risk-management/:userID',
+      ALL_TRANSACTION_LIST: '/users/admin/all-transaction-list',
+      GET_COMMENT: '/users/admin/get-comment',
+      UPDATE_COMMENT: '/users/admin/update-comment',
+      LOGIN_HISTORY: '/users/admin/:userID/login-history',
+      GET_COMMENT_DETAIL: '/users/admin/get-comment-detail',
+      ADD_COMMENT: '/users/admin/add-comment',
+      DELETE_COMMENT: '/users/admin/delete-comment',
       CHANE_PLAYER_FUND_PASSWORD: '/admin/user/change-manage-fund-password',
-      SUMMARY: '/admin/users/summary',
-      USER_SUMMARY: '/admin/user/summary',
-      COUNTRY_LIST: '/admin/countries',
-      SEGMENTATION_LIST: '/admin/segmentation/list'
+      SUMMARY: '/users/admin/summary',
+      USER_SUMMARY: '/users/admin/user/summary',
+      COUNTRY_LIST: '/config/admin/config/countries',
+      SEGMENTATION_LIST: '/bonus/admin/segmentation/list'
     },
     ADMIN_USER: {
       ADMIN_LIST: '/admin/admin/admin/list',
@@ -105,152 +101,68 @@ export const apiConfig = {
       LAST_SIGNUP: '/admin/dashboard/last-signup'
     },
     DEPOSIT_PROMOCODE: {
-      PROMOCODE_LIST: '/admin/v1/deposit-promocode/list',
-      PROMOCODE_DETAIL: '/admin/v1/deposit-promocode/:promocodeId/details',
-      PROMOCODE_CREATE: '/admin/v1/deposit-promocode/create',
-      PROMOCODE_CHANGE_STATUS: '/admin/v1/deposit-promocode/:promocodeId/change-status',
-      PROMOCODE_HISTORY: '/admin/v1/deposit-promocode/:promocodeId/history',
-      PROMOCODE_SEGMENTATION: '/admin/v1/deposit-promocode/:promocodeId/segmentation',
-      PROMOCODE_UPLOAD_SEGMENTATION: '/admin/v1/deposit-promocode/:promocodeId/segmentation',
-      PROMOCODE_REMOVE_SEGMENTATION: '/admin/v1/deposit-promocode/:promocodeId/segmentation',
-      PROMOCODE_DELETE: '/admin/v1/deposit-promocode/:promocodeId',
-      SUMMARY: '/admin/v1/deposit-promocode/summary'
-    },
-    APP_SETTING: {
-      APP_SETTING_LIST: '/admin/app-setting/list',
-      APP_SETTING_DETAIL: `/admin/app-setting/:settingId/details`,
-      APP_SETTING_EDIT: `/admin/app-setting/edit`,
-      CLEAR_CACHE: `/admin/clear-cache`
+      PROMOCODE_LIST: '/bonus/admin/v1/deposit-promocode/list',
+      PROMOCODE_DETAIL: '/bonus/admin/v1/deposit-promocode/:promocodeId/details',
+      PROMOCODE_CREATE: '/bonus/admin/v1/deposit-promocode/create',
+      PROMOCODE_CHANGE_STATUS: '/bonus/admin/v1/deposit-promocode/:promocodeId/change-status',
+      PROMOCODE_HISTORY: '/bonus/admin/v1/deposit-promocode/:promocodeId/history',
+      PROMOCODE_SEGMENTATION: '/bonus/admin/v1/deposit-promocode/:promocodeId/segmentation',
+      PROMOCODE_UPLOAD_SEGMENTATION: '/bonus/admin/v1/deposit-promocode/:promocodeId/segmentation',
+      PROMOCODE_REMOVE_SEGMENTATION: '/bonus/admin/v1/deposit-promocode/:promocodeId/segmentation',
+      PROMOCODE_DELETE: '/bonus/admin/v1/deposit-promocode/:promocodeId',
+      SUMMARY: '/bonus/admin/v1/deposit-promocode/summary'
     },
     BANNER: {
-      BANNER_LIST: '/admin/banner/list',
-      BANNER_CHANGE_STATUS: `/admin/banner/:bannerId/change-status`,
-      BANNER_CREATE: '/admin/banner/create',
-      BANNER_DELETE: `/admin/banner/:bannerId/delete`,
-      BANNER_DETAIL: `/admin/banner/:bannerId/details`,
-      BANNER_EDIT: `/admin//banner/:bannerId/edit`,
-      BANNER_REORDER: '/admin/banner/reorder'
+      BANNER_LIST: '/content/admin/banner/list',
+      BANNER_CHANGE_STATUS: `/content/admin/banner/:bannerId/change-status`,
+      BANNER_CREATE: '/content/admin/banner/create',
+      BANNER_DELETE: `/content/admin/banner/:bannerId/delete`,
+      BANNER_DETAIL: `/content/admin/banner/:bannerId/details`,
+      BANNER_EDIT: `/content/admin//banner/:bannerId/edit`,
+      BANNER_REORDER: '/content/admin/banner/reorder'
     },
     AFFILIATE: {
-      AFFILIATE_LIST: '/admin/affiliates',
-      CHANGE_STATUS: '/admin/affiliates/change-status',
-      CREATE: '/admin/affiliates/create',
-      AFFILIATE_DETAIL: '/admin/affiliates/:affiliateId/details',
-      AFFILIATE_EDIT: '/admin/affiliates/edit',
-      USER_JOINED_LIST: '/admin/affiliates/user-joined',
-      TRANSACTION_LIST: '/admin/affiliates/transactions',
-      PAYOUT_LIST: '/admin/affiliates/payout-histories',
-      UPDATE_PAYOUT: '/admin/affiliates/update-payout',
-      FUND: '/admin/affiliates/fund',
-      AFFILIATE_LOGIN_HISTORY: '/admin/affiliates/:affiliateID/login-history',
-      CHANGE_AFFILIATE_FUND_PASSWORD: '/admin/affiliate/change-manage-fund-password',
-      SUMMARY: '/admin/affiliates/summary'
-    },
-    APP_VERSION: {
-      LIST: '/admin/app-version/list',
-      ADD: '/admin/app-version/create',
-      UPDATE: '/admin/app-version/update',
-      VIEW: '/admin/app-version/view/:appVersionId',
-      EDIT: '/admin/app-version/edit/:appVersionId',
-      ACTIVATE: '/admin/app-version/apply'
-    },
-    MERCHANDISE: {
-      MERCHANDISE_LIST: '/admin/merchandises'
-    },
-    FANTASY_POINT: {
-      FANTASY_FORMATS: '/admin/v1/fantasy-point/formats',
-      SCORING_VERSION: '/admin/v1/fantasy-point/:format/version-list',
-      FANTASY_POINT_DETAILS: '/admin/v1/fantasy-point/:version_id/details',
-      GET_EDIT_FANTASY_POINT: '/admin/v1/fantasy-point/get-edit',
-      EDIT_FANATSY_POINT: '/admin/v1/fantasy-point/edit'
-    },
-    TOURNAMENT: {
-      LIST: '/admin/v1/tournament/tournament-list',
-      GET_EDIT: '/admin/v1/tournament/:tournament_id/edit',
-      EDIT: '/admin/v1/tournament/edit',
-      CHANGE_STATUS: '/admin/v1/tournament/:tournament_id/change-status',
-      GET_DEFAULT_CONTESTS: '/admin/v1/tournament/default-contests',
-      SAVE_DEFAULT_CONTESTS: '/admin/v1/tournament/save-default-contests'
+      AFFILIATE_LIST: '/affiliates/admin/affiliates',
+      CHANGE_STATUS: '/affiliates/admin/affiliates/change-status',
+      CREATE: '/affiliates/admin/affiliates/create',
+      AFFILIATE_DETAIL: '/affiliates/admin/affiliates/:affiliateId/details',
+      AFFILIATE_EDIT: '/affiliates/admin/affiliates/edit',
+      USER_JOINED_LIST: '/affiliates/admin/affiliates/user-joined',
+      TRANSACTION_LIST: '/affiliates/admin/affiliates/transactions',
+      PAYOUT_LIST: '/affiliates/admin/affiliates/payout-histories',
+      UPDATE_PAYOUT: '/affiliates/admin/affiliates/update-payout',
+      FUND: '/affiliates/admin/affiliates/fund',
+      AFFILIATE_LOGIN_HISTORY: '/affiliates/admin/affiliates/:affiliateID/login-history',
+      CHANGE_AFFILIATE_FUND_PASSWORD: '/affiliates/admin/affiliate/change-manage-fund-password',
+      SUMMARY: '/affiliates/admin/affiliates/summary'
     },
     SETTINGS: {
-      BANNED_STATE: {
-        LIST: '/admin/bs/bs-list',
-        ADD: '/admin/bs/add',
-        DELETE: '/admin/bs/remove'
-      },
-      STATE_LIST: '/admin/bs/s-list',
-      DEPOSIT_OFFER: {
-        DEPOSIT_OFFER_LIST: '/admin/v1/deposit-offer/list',
-        DEPOSIT_OFFER_DETAIL: '/admin/v1/deposit-offer/:depositOfferId/details',
-        DEPOSIT_OFFER_CREATE: '/admin/v1/deposit-offer/create',
-        DEPOSIT_OFFER_CHANGE_STATUS: '/admin/v1/deposit-offer/:depositOfferId/change-status',
-        DEPOSIT_OFFER_HISTORY: '/admin/v1/deposit-offer/:depositOfferId/history',
-        DEPOSIT_OFFER_SEGMENTATION: '/admin/v1/deposit-offer/:depositOfferId/segmentation',
-        DEPOSIT_OFFER_UPLOAD_SEGMENTATION: '/admin/v1/deposit-offer/:depositOfferId/segmentation',
-        DEPOSIT_OFFER_REMOVE_SEGMENTATION: '/admin/v1/deposit-offer/:depositOfferId/segmentation',
-        DEPOSIT_OFFER_DELETE: '/admin/v1/deposit-offer/:depositOfferId'
-      },
-      MERCHANDISE: {
-        MERCHANDISE_LIST: '/admin/v1/merchandise/list',
-        MERCHANDISE_DETAIL: '/admin/v1/merchandise/:merchandiseId/details',
-        MERCHANDISE_CREATE: '/admin/v1/merchandise/create',
-        MERCHANDISE_EDIT: '/admin/v1/merchandise/:merchandiseId',
-        MERCHANDISE_CHANGE_STATUS: '/admin/v1/merchandise/:merchandiseId/change-status',
-        MERCHANDISE_WINNER_LIST: '/admin/v1/merchandise/winners',
-        MERCHANDISE_WINNER_DETAIL: '/admin/v1/merchandise/winners/:merchandiseWinnerId',
-        MERCHANDISE_WINNER_EDIT: '/admin/v1/merchandise/winners/:merchandiseWinnerId'
-      },
-
       USER_KYC: {
-        LIST: '/admin/kyc/doc/list',
-        DETAILS: '/admin/kyc/doc/:documentId/details',
-        UPDATE: '/admin/kyc/update'
+        LIST: '/users/admin/kyc/doc/list',
+        DETAILS: '/users/admin/kyc/doc/:documentId/details',
+        UPDATE: '/users/admin/kyc/update'
       }
     },
     EMAIL_TEMPLATE: {
-      LIST: '/admin/email-template/list',
-      ADD: '/admin/email-template/add',
-      DETAIL: '/admin/email-template/detail',
-      UPDATE: '/admin/email-template/update',
-      STATUS: '/admin/email-template/status'
+      LIST: '/notifications/admin/email-template/list',
+      ADD: '/notifications/admin/email-template/add',
+      DETAIL: '/notifications/admin/email-template/detail',
+      UPDATE: '/notifications/admin/email-template/update',
+      STATUS: '/notifications/admin/email-template/status'
     },
     REFERRAL_OFFER: {
-      LIST: '/admin/v1/offers/list',
-      UPDATE: '/admin/v1/offers/update'
+      LIST: '/bonus/admin/v1/offers/list',
+      UPDATE: '/bonus/admin/v1/offers/update'
     },
-    COIN: {
-      MERCHANDISE: {
-        VIEW: '/admin/coin/merchandise-list',
-        ADD: '/admin/coin/create-merchandise',
-        EDIT: '',
-        DETAIL: '/admin/coin/detail',
-        DELETE: '/admin/coin/delete',
-        SATAUS: '/admin/coin/status'
-      },
-      SWITCH_CONFIG: '/admin/coin/switch-configuration',
-      CONFIGURATION: '/admin/coin/congfiguration',
-      UPDATE_CONFIG: '/admin/coin/update-configuration'
-    },
-    GENERAL: {
-      USERS_LIST: '/admin/users-data',
-      PACKAGE: {
-        LIST: '/admin/coin-package/list',
-        CREATE: '/admin/coin-package/create-package',
-        CHANGE_STATUS: '/admin/coin-package/change-status',
-        PACKAGE_TRANSACTION: '/admin/coin-package/package-transaction',
-        ARCHIVE_PACKAGE: '/admin/coin-package/:coinStoreId/package-archive'
-      }
-    },
-    API_LOGS: '/admin/api-logs',
     SEGMENTATION: {
-      LIST: '/admin/segmentation/list',
-      ALL_LIST: '/admin/segmentation/allList',
-      DETAIL: '/admin/segmentation/:segmentationUID/details',
-      ADD_EDIT: '/admin/segmentation/add-edit',
-      COUNTRY_LIST: '/admin/segmentation/countries',
-      CHANGE_STATUS: '/admin/segmentation/:segmentationUID/change-status',
-      USER_LIST: '/admin/segmentation/player-list',
-      REFRESH_USER_LIST: '/admin/segmentation/:segmentationId/refresh'
+      LIST: '/bonus/admin/segmentation/list',
+      ALL_LIST: '/bonus/admin/segmentation/allList',
+      DETAIL: '/bonus/admin/segmentation/:segmentationUID/details',
+      ADD_EDIT: '/bonus/admin/segmentation/add-edit',
+      COUNTRY_LIST: '/bonus/admin/segmentation/countries',
+      CHANGE_STATUS: '/bonus/admin/segmentation/:segmentationUID/change-status',
+      USER_LIST: '/bonus/admin/segmentation/player-list',
+      REFRESH_USER_LIST: '/bonus/admin/segmentation/:segmentationId/refresh'
     },
     // COUNTRY: {
     //   LIST: '/admin/country/list',
@@ -262,51 +174,45 @@ export const apiConfig = {
       SUMMARY: '/config/admin/country/summary',
       CHANGE_STATUS: '/config/admin/country/:countryId/change-status'
     },
-    PAYMENT: {
-      DEPOSIT: '/payment/deposit',
-      WINNING: '/payment/winning',
-      WITHDRAW: '/payment/withdraw',
-      BETSLIP: '/payment/betslip'
-    },
     RISK_MANAGEMENT: {
-      LIST: '/admin/risk-management/list',
-      UPDATE: '/admin/update-risk-management'
+      LIST: '/config/admin/risk-management/list',
+      UPDATE: '/config/admin/update-risk-management'
     },
     CATEGORY: {
-      LIST: '/admin/casino-management/category/list',
-      SUMMARY: '/admin/casino-management/category/summary',
-      CREATE: '/admin/casino-management/category/create',
-      EDIT: '/admin/casino-management/category/:categoryId/edit',
-      DELETE: '/admin/casino-management/category/:categoryId/delete',
-      CHANGE_STATUS: '/admin/casino-management/category/:categoryId/change-status'
+      LIST: '/games/admin/casino-management/category/list',
+      SUMMARY: '/games/admin/casino-management/category/summary',
+      CREATE: '/games/admin/casino-management/category/create',
+      EDIT: '/games/admin/casino-management/category/:categoryId/edit',
+      DELETE: '/games/admin/casino-management/category/:categoryId/delete',
+      CHANGE_STATUS: '/games/admin/casino-management/category/:categoryId/change-status'
     },
     PROVIDER: {
-      ALL_LIST: '/admin/casino-management/provider/all',
-      LIST: '/admin/casino-management/provider/list',
-      SUMMARY: '/admin/casino-management/provider/summary',
-      CREATE: '/admin/casino-management/provider/create',
-      EDIT: '/admin/casino-management/provider/:providerId/edit',
-      DELETE: '/admin/casino-management/provider/:providerId/delete',
-      CHANGE_STATUS: '/admin/casino-management/provider/:providerId/change-status',
+      ALL_LIST: '/games/admin/casino-management/provider/all',
+      LIST: '/games/admin/casino-management/provider/list',
+      SUMMARY: '/games/admin/casino-management/provider/summary',
+      CREATE: '/games/admin/casino-management/provider/create',
+      EDIT: '/games/admin/casino-management/provider/:providerId/edit',
+      DELETE: '/games/admin/casino-management/provider/:providerId/delete',
+      CHANGE_STATUS: '/games/admin/casino-management/provider/:providerId/change-status',
       RESTRICTED_COUNTRY_LIST:
-        '/admin/casino-management/provider/:providerId/restricted-country/list',
-      COUNTRY_LIST: '/admin/casino-management/provider/:providerId/country/list',
+        '/games/admin/casino-management/provider/:providerId/restricted-country/list',
+      COUNTRY_LIST: '/games/admin/casino-management/provider/:providerId/country/list',
       ADD_RESTRICTED_COUNTRY:
-        '/admin/casino-management/provider/:providerId/restricted-country/add',
+        '/games/admin/casino-management/provider/:providerId/restricted-country/add',
       REMOVE_RESTRICTED_COUNTRY:
-        '/admin/casino-management/provider/:providerId/restricted-country/delete'
+        '/games/admin/casino-management/provider/:providerId/restricted-country/delete'
     },
     GAME: {
-      LIST: '/admin/casino-management/games/list',
-      SUMMARY: '/admin/casino-management/games/summary',
-      DETAILS: '/admin/casino-management/games/:gameUID/details',
-      CREATE: '/admin/casino-management/games/create',
-      EDIT: '/admin/casino-management/games/:gameId/edit',
-      DELETE: '/admin/casino-management/games/:gameId/delete',
-      PROVIDER_LIST: '/admin/casino-management/games/providers',
-      CATEGORY_LIST: '/admin/casino-management/category/list',
-      GET_GAME_SEGMENTATION: '/admin/casino-management/games/:gameId/segmentation',
-      ADD_GAME_SEGMENTATION: '/admin/casino-management/games/:gameId/segmentation'
+      LIST: '/games/admin/casino-management/games/list',
+      SUMMARY: '/games/admin/casino-management/games/summary',
+      DETAILS: '/games/admin/casino-management/games/:gameUID/details',
+      CREATE: '/games/admin/casino-management/games/create',
+      EDIT: '/games/admin/casino-management/games/:gameId/edit',
+      DELETE: '/games/admin/casino-management/games/:gameId/delete',
+      PROVIDER_LIST: '/games/admin/casino-management/games/providers',
+      CATEGORY_LIST: '/games/admin/casino-management/category/list',
+      GET_GAME_SEGMENTATION: '/games/admin/casino-management/games/:gameId/segmentation',
+      ADD_GAME_SEGMENTATION: '/games/admin/casino-management/games/:gameId/segmentation'
     },
     REPORTS: {
       BETSLIP: '/admin/reports/betslip-transactions',
@@ -341,41 +247,41 @@ export const apiConfig = {
       APPEARANCE_LIST: '/config/admin/home-page/appearance/list'
     },
     PAYMENT_PROVIDER: {
-      VIEW: '/admin/payment-provider/list',
-      STATUS: '/admin/payment-provider/change-status'
+      VIEW: '/payments/admin/payment-provider/list',
+      STATUS: '/payments/admin/payment-provider/change-status'
     },
     GEORESTRICTION: {
-      COUNTRY_LIST: '/admin/country/restrictions/list',
-      BLOCKED_MODULES: '/admin/country/:countryId/restrictions/modules/list',
-      BLOCKED_PROVIDERS: '/admin/country/:countryId/restrictions/providers/list',
-      BLOCK_MODULE: '/admin/country/:countryId/restrict-country-module',
-      BLOCK_PROVIDER: '/admin/country/:countryId/restrict-country-provider',
-      BLOCK_COUNTRY: '/admin/country/restrictions',
-      UNBLOCK_COUNTRY: '/admin/country/restrictions/:countryId/unrestrict'
+      COUNTRY_LIST: '/config/admin/country/restrictions/list',
+      BLOCKED_MODULES: '/config/admin/country/:countryId/restrictions/modules/list',
+      BLOCKED_PROVIDERS: '/config/admin/country/:countryId/restrictions/providers/list',
+      BLOCK_MODULE: '/config/admin/country/:countryId/restrict-country-module',
+      BLOCK_PROVIDER: '/config/admin/country/:countryId/restrict-country-provider',
+      BLOCK_COUNTRY: '/config/admin/country/restrictions',
+      UNBLOCK_COUNTRY: '/config/admin/country/restrictions/:countryId/unrestrict'
     },
     USER_CLASS: {
-      LIST: '/admin/admin/user-classes/list',
-      CREATE: '/admin/user-classes/create',
-      DETAIL: '/admin/user-classes/:userClassUID/detail',
-      UPDATE: '/admin/user-classes/update',
-      CHANGE_STATUS: '/admin/user-classes/:userClassUID/change-status',
-      DELETE: '/admin/user-classes/:userClassUID/delete'
+      LIST: '/users/admin/user-classes/list',
+      CREATE: '/users/admin/user-classes/create',
+      DETAIL: '/users/admin/user-classes/:userClassUID/detail',
+      UPDATE: '/users/admin/user-classes/update',
+      CHANGE_STATUS: '/users/admin/user-classes/:userClassUID/change-status',
+      DELETE: '/users/admin/user-classes/:userClassUID/delete'
     },
     USER_CLASS_LIMIT: {
-      LIST: '/admin/user-class-limits/list',
-      CREATE: '/admin/user-class-limits/create',
-      DETAIL: '/admin/user-class-limits/:userClassLimitUID/detail',
-      UPDATE: '/admin/user-class-limits/update',
-      CHANGE_STATUS: '/admin/user-class-limits/:userClassLimitUID/change-status',
-      DELETE: '/admin/user-class-limits/:userClassLimitUID/delete'
+      LIST: '/users/admin/user-class-limits/list',
+      CREATE: '/users/admin/user-class-limits/create',
+      DETAIL: '/users/admin/user-class-limits/:userClassLimitUID/detail',
+      UPDATE: '/users/admin/user-class-limits/update',
+      CHANGE_STATUS: '/users/admin/user-class-limits/:userClassLimitUID/change-status',
+      DELETE: '/users/admin/user-class-limits/:userClassLimitUID/delete'
     },
     SEGMENTATION_LIMIT: {
-      LIST: '/admin/segmentation-limits/list',
-      CREATE: '/admin/segmentation-limits/create',
-      DETAIL: '/admin/segmentation-limits/:segmentationLimitUID/detail',
-      UPDATE: '/admin/segmentation-limits/update',
-      CHANGE_STATUS: '/admin/segmentation-limits/:segmentationLimitUID/change-status',
-      DELETE: '/admin/segmentation-limits/:segmentationLimitUID/delete'
+      LIST: '/bonus/admin/segmentation-limits/list',
+      CREATE: '/bonus/admin/segmentation-limits/create',
+      DETAIL: '/bonus/admin/segmentation-limits/:segmentationLimitUID/detail',
+      UPDATE: '/bonus/admin/segmentation-limits/update',
+      CHANGE_STATUS: '/bonus/admin/segmentation-limits/:segmentationLimitUID/change-status',
+      DELETE: '/bonus/admin/segmentation-limits/:segmentationLimitUID/delete'
     },
     RATE_LIMIT_RULES: {
       LIST: '/config/admin/rate-limit-rules/list',

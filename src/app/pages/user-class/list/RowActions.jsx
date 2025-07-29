@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 // Local Imports
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
-import { TbStatusChange, TbTicketOff, TbTrash } from 'react-icons/tb';
+import { TbStatusChange, TbTicketOff, TbTrash, TbBuildingBank } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import usePermissions from 'app/router/usePermissions';
@@ -180,6 +180,21 @@ export function RowActions({ row, table }) {
                       )}>
                       <TbTicketOff className="size-4.5 stroke-1" />
                       <span>{t('limits')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
+              {hasPermission(PERMISSIONS.USER_CLASS.ASSIGN_BANK) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={() => navigate(`/user-class/${row.original.id}/assign-bank`)}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                        focus && 'bg-this/10 dark:bg-this-light/10'
+                      )}>
+                      <TbBuildingBank className="size-4.5 stroke-1" />
+                      <span>{t('assign_bank')}</span>
                     </button>
                   )}
                 </MenuItem>

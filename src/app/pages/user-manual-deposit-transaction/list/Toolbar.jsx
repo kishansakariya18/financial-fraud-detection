@@ -98,14 +98,14 @@ export function Toolbar({
 function SearchInput({ table }) {
   return (
     <Input
-      value={table?.getColumn('bankName')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('bankName').setFilterValue(e.target.value)}
+      value={table?.getColumn('amount')?.getFilterValue() || ''}
+      onChange={(e) => table.getColumn('amount').setFilterValue(e.target.value)}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
         root: 'shrink-0'
       }}
-      placeholder={t('search') + ' ' + t('bank_deposit') + '...'}
+      placeholder={t('search') + ' ' + t('transaction') + '...'}
     />
   );
 }

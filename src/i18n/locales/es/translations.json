@@ -487,5 +487,8 @@
   "additionalInfo": "Información adicional",
   "bank_status_desc": "¿Estás seguro de querer actualizar el estado de este banco?",
   "bank_status_suceess": "Estado del banco cambiado exitosamente",
-  "user_manual_deposit_transaction_view": "Ver transacción de depósito manual del usuario"
+  "user_manual_deposit_transaction_view": "Ver transacción de depósito manual del usuario",
+  "user_manual_deposit_transaction":"Transacción de depósito manual del usuario",
+  "assign_bank": "Asignar banco",
+  "search_transaction":"Buscar transacción"
   }

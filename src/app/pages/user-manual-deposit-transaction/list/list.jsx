@@ -93,7 +93,7 @@ export default function UserManualDepositTransaction() {
     const filterItems = {};
     for (let data of table.getState().columnFilters) {
       if (data.id === 'keyword') {
-        filterItems.keyword = data.value;
+        filterItems.keyword = data.amount;
       }
 
       if (data.id === 'depositStatus') {
