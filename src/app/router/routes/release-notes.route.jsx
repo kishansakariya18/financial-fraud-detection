@@ -26,10 +26,23 @@ export const releaseNotesRoutes = [
         })
       },
       {
-        path: 'edit/:roleId',
+        path: 'edit/:releaseNoteId',
         lazy: async () => ({
           Component: (await import('../../pages/release-notes/EditReleaseNote')).default
         })
+      },
+      {
+        path: 'view/:releaseNoteId',
+        lazy: async () => {
+          const { ViewDetails } = await import('../../pages/release-notes/ViewDetails');
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.RELEASE_NOTES.VIEW}>
+                <ViewDetails />
+              </PrivateRoute>
+            )
+          };
+        }
       }
     ]
   }

@@ -504,5 +504,9 @@
   "release_notes": "Release Notes",
   "release_note": "Release Note",
   "release_date": "Release Date",
-  "release_note_delete_desc": "Are you sure you want to delete this Release Note?"
+  "release_note_delete_desc": "Are you sure you want to delete this Release Note?",
+  "id": "ID",
+  "uid": "UID",
+  "version": "Version",
+  "modifiedAt": "Modified At"
 }

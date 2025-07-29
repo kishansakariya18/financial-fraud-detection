@@ -480,5 +480,10 @@
   "single": "Unique",
   "release_notes": "Notes de version",
   "release_note": "Note de version",
-  "release_date": "Date de version"
+  "release_date": "Date de version",
+  "release_note_delete_desc": "Êtes-vous sûr de vouloir supprimer cette Note de version ?",
+  "id": "ID",
+  "uid": "UID",
+  "version": "Version",
+  "modifiedAt": "Modified At"
 }

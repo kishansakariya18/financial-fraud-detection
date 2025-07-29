@@ -9,9 +9,8 @@ const ReleaseNotesService = {
 
       console.log('data: ', data);
       const apiRequestParams = {
-        filters: {
-          keyword: filters.keyword ? filters.keyword : undefined
-        },
+        keyword: filters.keyword ? filters.keyword : undefined,
+        status: filters.status ? filters.status : undefined,
         limit: pagination?.pageSize || DEFAULT_PER_PAGE_RECORD,
         page: pagination.pageIndex + 1
       };
@@ -55,13 +54,15 @@ const ReleaseNotesService = {
       console.log('Error from createReleaseNotes', error);
     }
   },
-  roleDetail: async (rolePermissionId) => {
+  releaseNoteDetails: async (releaseNoteId) => {
     try {
+      console.log('Original endpoint:', apiConfig.endPoints.RELEASE_NOTES.DETAIL);
       const endPoint = replaceText(
-        apiConfig.endPoints.ROLES.DETAIL,
-        ':rolePermissionId',
-        rolePermissionId
+        apiConfig.endPoints.RELEASE_NOTES.DETAIL,
+        ':releaseNoteUID',
+        releaseNoteId
       );
+      console.log('Processed endpoint:', endPoint);
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
@@ -72,10 +73,10 @@ const ReleaseNotesService = {
       });
       return response;
     } catch (error) {
-      console.log('Error from role detail permission', error);
+      console.log('Error from release note details', error);
     }
   },
-  roleEdit: async (data) => {
+  releaseNoteEdit: async (data) => {
     try {
       const reqData = {
         roleName: data.roleName,

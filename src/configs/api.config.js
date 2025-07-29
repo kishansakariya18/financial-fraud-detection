@@ -382,7 +382,8 @@ export const apiConfig = {
     RELEASE_NOTES: {
       LIST: '/content/admin/release-note/list',
       CREATE: '/content/admin/release-note/create',
-      DELETE: '/content/admin/release-note/:releaseNoteUID/delete'
+      DELETE: '/content/admin/release-note/:releaseNoteUID/delete',
+      DETAIL: '/content/admin/release-note/:releaseNoteUID/details'
     }
   }
 };
