@@ -477,5 +477,16 @@
   "something_went_wrong": "Une erreur s'est produite",
   "reason": "Raison",
   "clear": "Effacer",
-  "single": "Unique"
+  "single": "Unique",
+  "release_notes": "Notes de version",
+  "release_note": "Note de version",
+  "release_date": "Date de version",
+  "release_note_delete_desc": "Êtes-vous sûr de vouloir supprimer cette Note de version ?",
+  "id": "ID",
+  "uid": "UID",
+  "version": "Version",
+  "modifiedAt": "Modified At",
+  "release_note_status_suceess": "Note de version El estado se ha cambiado correctamente",
+  "release_note_status_conf": "¿Estás seguro de querer cambiar el estado de la nota de lanzamiento?",
+  "done": "Terminado"
 }

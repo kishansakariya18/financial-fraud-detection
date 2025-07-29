@@ -20,6 +20,7 @@ import { bonusManagement } from './bonus-management';
 import { paymentProvider } from './payment-provider';
 import { userClass } from './user-class';
 import { blacklist } from './blacklist';
+import { releaseNotes } from './release-notes';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -60,6 +61,7 @@ export const dashboards = () => ({
     crm,
     paymentProvider,
     userClass,
-    blacklist
+    blacklist,
+    releaseNotes
   ]
 });

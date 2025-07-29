@@ -281,9 +281,17 @@ export const apiConfig = {
       CHANGE_STATUS: '/config/admin/rate-limit-rules/:rateLimitUID/change-status'
     },
     BLACKLIST: {
-      LIST: '/users/admin/blacklist/list',
-      BLOCK: '/users/admin/blacklist/block',
-      DELETE: '/users/admin/blacklist/:blacklistUID/delete'
+      LIST: '/admin/blacklist/list',
+      BLOCK: '/admin/blacklist/block',
+      DELETE: '/admin/blacklist/:blacklistUID/delete'
+    },
+    RELEASE_NOTES: {
+      LIST: '/content/admin/release-note/list',
+      CREATE: '/content/admin/release-note/create',
+      DELETE: '/content/admin/release-note/:releaseNoteUID/delete',
+      DETAIL: '/content/admin/release-note/:releaseNoteUID/details',
+      CHANGE_STATUS: '/content/admin/release-note/:releaseNoteUID/change-status',
+      EDIT: '/content/admin/release-note/:releaseNoteUID/edit'
     }
   }
 };

@@ -477,5 +477,16 @@
   "something_went_wrong": "Algo salió mal",
   "reason": "Motivo",
   "clear": "Limpiar",
-  "single": "Único"
+  "single": "Único",
+  "release_notes": "Notas de lanzamiento",
+  "release_note": "Nota de lanzamiento",
+  "release_date": "Fecha de lanzamiento",
+  "release_note_delete_desc": "¿Estás seguro de querer eliminar esta Nota de lanzamiento?",
+  "id": "ID",
+  "uid": "UID",
+  "version": "Version",
+  "modifiedAt": "Modified At",
+  "release_note_status_suceess": "Nota de lanzamiento El estado se ha cambiado correctamente",
+  "release_note_status_conf": "¿Estás seguro de querer cambiar el estado de la nota de lanzamiento?",
+  "done": "Hecho"
   }
