@@ -46,8 +46,8 @@ export function RowActions({ row, table }) {
   const handleChangeStatusRows = useCallback(async () => {
     setConfirmStatusLoading(true);
     const result = await BankService.changeStatus(row.original.id);
-    if (result.status === 200) {
-      table.options.meta?.refetchData();
+    if (result.response.status === 200) {
+      table.options.meta?.fetchNewList();
       setStatusSuccess(true);
     } else {
       setStatusError(true);

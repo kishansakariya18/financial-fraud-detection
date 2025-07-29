@@ -38,7 +38,7 @@ export function RowActions({ row, table }) {
       depositStatus
     });
     if (result.status === 200) {
-      table.options.meta?.refetchData();
+      table.options.meta?.fetchNewList();
       setSuccess(true);
     } else {
       setError(true);

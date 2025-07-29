@@ -354,7 +354,7 @@ export const apiConfig = {
       UNBLOCK_COUNTRY: '/admin/country/restrictions/:countryId/unrestrict'
     },
     USER_CLASS: {
-      LIST: '/admin/user-classes/list',
+      LIST: '/admin/admin/user-classes/list',
       CREATE: '/admin/user-classes/create',
       DETAIL: '/admin/user-classes/:userClassUID/detail',
       UPDATE: '/admin/user-classes/update',
