@@ -4,7 +4,9 @@ import {
   EllipsisHorizontalIcon,
   PencilIcon,
   XCircleIcon,
-  EyeIcon
+  EyeIcon,
+  TrashIcon,
+  ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
@@ -18,6 +20,7 @@ import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import ReleaseNotesService from 'services/release-notes.services';
+import { AnimatedTick } from 'components/shared/AnimatedTick';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
@@ -26,45 +29,91 @@ export function RowActions({ row, table }) {
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [statusModalOpen, setStatusModalOpen] = useState(false);
+  const [statusChangeLoading, setStatusChangeLoading] = useState(false);
+  const [statusChangeSuccess, setStatusChangeSuccess] = useState(false);
+  const [statusChangeError, setStatusChangeError] = useState(false);
   const navigate = useNavigate();
 
-  const confirmMessages = {
+  const statusMessages = {
     pending: {
-      title: t('delete_key') + ' ' + t('release_note'),
-      description: t('release_note_delete_desc'),
-      actionText: t('submit')
+      title: t('change') + ' ' + t('status'),
+      description: t('release_note_status_conf'),
+      actionText: t('yes'),
+      Icon: ExclamationTriangleIcon,
+      iconClassName: 'text-warning'
     },
     success: {
       title: t('success'),
-      description: t('release_note') + ' ' + t('delete_success')
+      description: t('release_note_status_suceess'),
+      Icon: AnimatedTick,
+      iconClassName: 'text-success',
+      actionText: t('done')
     },
     error: {
       Icon: XCircleIcon,
-      title: "Can't Delete Release Note...",
-      description: errorMessage,
-      iconClassName: 'text-error'
+      title: t('error'),
+      description: errorMessage || t('failed_to_change_status'),
+      iconClassName: 'text-error',
+      actionText: t('retry')
     }
   };
 
-  const closeModal = () => {
-    setDeleteModalOpen(false);
+  const deleteMessages = {
+    pending: {
+      title: t('delete_key') + ' ' + t('release_note'),
+      description: t('release_note_delete_desc'),
+      actionText: t('submit'),
+      Icon: ExclamationTriangleIcon,
+      iconClassName: 'text-warning'
+    },
+    success: {
+      title: t('success'),
+      description: t('release_note') + ' ' + t('delete_success'),
+      Icon: AnimatedTick,
+      iconClassName: 'text-success',
+      actionText: t('done')
+    },
+    error: {
+      Icon: XCircleIcon,
+      title: t('error'),
+      description: errorMessage || t('delete_failed'),
+      iconClassName: 'text-error',
+      actionText: t('retry')
+    }
+  };
+
+  const closeModal = (type = 'delete') => {
+    if (type === 'delete') {
+      setDeleteModalOpen(false);
+    } else {
+      setStatusModalOpen(false);
+      setStatusChangeError(false);
+      setStatusChangeSuccess(false);
+    }
+    table.options.meta?.fetchNewList();
   };
 
   const handleClickView = () => {
     navigate(`/release-notes/view/${row.original.releaseNoteUID}`);
   };
 
-  const openModal = () => {
-    setDeleteModalOpen(true);
-    setDeleteError(false);
-    setDeleteSuccess(false);
+  const openModal = (type = 'delete') => {
+    if (type === 'delete') {
+      setDeleteModalOpen(true);
+      setDeleteError(false);
+      setDeleteSuccess(false);
+    } else {
+      setStatusModalOpen(true);
+      setStatusChangeError(false);
+      setStatusChangeSuccess(false);
+    }
   };
 
   const handleDeleteRows = useCallback(async () => {
     setConfirmDeleteLoading(true);
     const result = await ReleaseNotesService.deleteReleaseNote(row.original.releaseNoteUID);
     if (result.status === 200 || result.status === 201) {
-      table.options.meta?.deleteRow(row);
       setDeleteSuccess(true);
       toast.success('Release note deleted successfully', {
         invert: true
@@ -72,6 +121,7 @@ export function RowActions({ row, table }) {
       setTimeout(() => {
         navigate('/release-notes');
       }, 0);
+      table.options.meta?.deleteRow(row);
     } else {
       setErrorMessage(result.error);
       setDeleteError(true);
@@ -81,7 +131,31 @@ export function RowActions({ row, table }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [row]);
 
-  const state = deleteError ? 'error' : deleteSuccess ? 'success' : 'pending';
+  const deleteState = deleteError ? 'error' : deleteSuccess ? 'success' : 'pending';
+  const statusState = statusChangeError ? 'error' : statusChangeSuccess ? 'success' : 'pending';
+
+  const handleStatusChange = async () => {
+    try {
+      setStatusChangeLoading(true);
+      const result = await ReleaseNotesService.changeStatus(row.original.releaseNoteUID);
+
+      if (result.status === 200 || result.status === 201) {
+        setStatusChangeSuccess(true);
+        toast.success('Status changed successfully', { invert: true });
+        // Refresh the table data
+        // table.options.meta?.fetchNewList();
+      } else {
+        setStatusChangeError(true);
+        setErrorMessage(result.error || 'Failed to change status');
+      }
+    } catch (error) {
+      console.error('Error changing status:', error);
+      setStatusChangeError(true);
+      setErrorMessage('An error occurred while changing status');
+    } finally {
+      setStatusChangeLoading(false);
+    }
+  };
 
   return (
     <>
@@ -130,12 +204,25 @@ export function RowActions({ row, table }) {
               <MenuItem>
                 {({ focus }) => (
                   <button
-                    onClick={openModal}
+                    onClick={() => openModal('status')}
                     className={clsx(
                       'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
                       focus && 'bg-this/10 dark:bg-this-light/10'
                     )}>
                     <TbStatusChange className="size-4.5 stroke-1" />
+                    <span>{`${t('change') + ' ' + t('status')}`}</span>
+                  </button>
+                )}
+              </MenuItem>
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    onClick={() => openModal('delete')}
+                    className={clsx(
+                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                      focus && 'bg-this/10 dark:bg-this-light/10'
+                    )}>
+                    <TrashIcon className="size-4.5 stroke-1" />
                     <span>{`${t('delete_text')}`}</span>
                   </button>
                 )}
@@ -147,11 +234,19 @@ export function RowActions({ row, table }) {
 
       <ConfirmModal
         show={deleteModalOpen}
-        onClose={closeModal}
-        messages={confirmMessages}
+        onClose={() => closeModal('delete')}
         onOk={handleDeleteRows}
         confirmLoading={confirmDeleteLoading}
-        state={state}
+        messages={deleteMessages}
+        state={deleteState}
+      />
+      <ConfirmModal
+        show={statusModalOpen}
+        onClose={() => closeModal('status')}
+        onOk={handleStatusChange}
+        confirmLoading={statusChangeLoading}
+        messages={statusMessages}
+        state={statusState}
       />
     </>
   );

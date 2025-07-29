@@ -485,5 +485,8 @@
   "id": "ID",
   "uid": "UID",
   "version": "Version",
-  "modifiedAt": "Modified At"
+  "modifiedAt": "Modified At",
+  "release_note_status_suceess": "Nota de lanzamiento El estado se ha cambiado correctamente",
+  "release_note_status_conf": "¿Estás seguro de querer cambiar el estado de la nota de lanzamiento?",
+  "done": "Hecho"
   }

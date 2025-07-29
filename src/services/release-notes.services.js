@@ -7,7 +7,7 @@ const ReleaseNotesService = {
     try {
       const { pagination, filters } = data;
 
-      console.log('data: ', data);
+      // console.log('data: ', data);
       const apiRequestParams = {
         keyword: filters.keyword ? filters.keyword : undefined,
         status: filters.status ? filters.status : undefined,
@@ -15,7 +15,7 @@ const ReleaseNotesService = {
         page: pagination.pageIndex + 1
       };
 
-      console.log('apiRequestParams: ', apiRequestParams);
+      // console.log('apiRequestParams: ', apiRequestParams);
       const endPoint = apiConfig.endPoints.RELEASE_NOTES.LIST;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
@@ -56,13 +56,13 @@ const ReleaseNotesService = {
   },
   releaseNoteDetails: async (releaseNoteId) => {
     try {
-      console.log('Original endpoint:', apiConfig.endPoints.RELEASE_NOTES.DETAIL);
+      // console.log('Original endpoint:', apiConfig.endPoints.RELEASE_NOTES.DETAIL);
       const endPoint = replaceText(
         apiConfig.endPoints.RELEASE_NOTES.DETAIL,
         ':releaseNoteUID',
         releaseNoteId
       );
-      console.log('Processed endpoint:', endPoint);
+      // console.log('Processed endpoint:', endPoint);
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
@@ -116,6 +116,26 @@ const ReleaseNotesService = {
       return response;
     } catch (error) {
       console.log('Error from delete release note', error);
+    }
+  },
+  changeStatus: async (releaseNoteId) => {
+    try {
+      const endPoint = replaceText(
+        apiConfig.endPoints.RELEASE_NOTES.CHANGE_STATUS,
+        ':releaseNoteUID',
+        releaseNoteId
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from changeStatus release notes', error);
     }
   }
 };
