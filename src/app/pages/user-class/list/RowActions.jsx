@@ -188,7 +188,9 @@ export function RowActions({ row, table }) {
                 <MenuItem>
                   {({ focus }) => (
                     <button
-                      onClick={() => navigate(`/user-class/${row.original.id}/assign-bank`)}
+                      onClick={() =>
+                        navigate(`/user-class/${row.original.userClassUID}/assign-bank`)
+                      }
                       className={clsx(
                         'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
                         focus && 'bg-this/10 dark:bg-this-light/10'

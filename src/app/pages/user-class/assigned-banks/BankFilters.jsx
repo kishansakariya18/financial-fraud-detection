@@ -92,8 +92,8 @@ export function BankFilters({
 function SearchInput({ table, onApplyFilters }) {
   return (
     <Input
-      value={table?.getColumn('bankName')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('bankName').setFilterValue(e.target.value)}
+      value={table?.getColumn('BankName')?.getFilterValue() || ''}
+      onChange={(e) => table.getColumn('BankName').setFilterValue(e.target.value)}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
           onApplyFilters();

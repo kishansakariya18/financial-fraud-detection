@@ -21,19 +21,13 @@ export default function AssignedBanks() {
   const pageTitle = t('assign_bank');
   const [checked, setChecked] = useState([]);
 
-  const handleCheck = (ids, select) => {
-    if (typeof select === 'boolean') {
-      if (select) {
-        setChecked((prev) => [...new Set([...prev, ...ids])]);
-      } else {
-        setChecked((prev) => prev.filter((item) => !ids.includes(item)));
-      }
-    } else {
-      const id = ids[0];
-      setChecked((prev) =>
-        prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-      );
-    }
+  const handleCheck = (id) => {
+    console.log('Checkbox clicked with ID:', id);
+    setChecked((prev) => {
+      const newChecked = prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id];
+      console.log('Updated checked list:', newChecked);
+      return newChecked;
+    });
   };
 
   const columns = bankColumns({ selectedIds: checked, handleCheck, actionLabel: 'unassign' });
@@ -42,7 +36,7 @@ export default function AssignedBanks() {
   const fetchAssignedBanks = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
-    const result = await UserClassService.getAssignedBanks(userClassId, {
+    const result = await UserClassService.getMappedBanks(userClassId, {
       pagination: { pageIndex, pageSize },
       filters: queryParams
     });
@@ -51,7 +45,7 @@ export default function AssignedBanks() {
       return {
         status: 200,
         data: result.response.data, // Assuming API returns correct format
-        totalRecords: parseInt(result.response.totalRecords, 10) || 0
+        totalRecords: parseInt(result.response.total_record, 10) || 0
       };
     }
 
@@ -75,7 +69,7 @@ export default function AssignedBanks() {
   useEffect(() => {
     const filtersFromQuery = [];
     if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'name', value: queryParams.keyword });
+      filtersFromQuery.push({ id: 'BankName', value: queryParams.keyword });
     }
     setColumnFilters(filtersFromQuery);
   }, [queryParams, setColumnFilters]);
@@ -83,7 +77,7 @@ export default function AssignedBanks() {
   const applyFilterHandler = () => {
     const filterItems = {};
     for (let data of table.getState().columnFilters) {
-      if (data.id === 'name') {
+      if (data.id === 'BankName') {
         filterItems.keyword = data.value;
       }
     }
@@ -109,13 +103,13 @@ export default function AssignedBanks() {
 
   const handleUnassign = async () => {
     setSubmitLoading(true);
-    const result = await UserClassService.unassignBanks(userClassId, checked);
-    if (result.status === 200) {
-      toast.success('Banks unassigned successfully');
-      table.refreshData();
+    const result = await UserClassService.unmapBank(userClassId, checked);
+    if (result.status === 200 || result.status === 201) {
+      toast.success(result.response.message);
+      table.options.meta?.fetchNewList();
       setChecked([]);
     } else {
-      toast.error(result.error || 'Failed to unassign banks');
+      toast.error(result.response.message || 'Failed to unassign banks');
     }
     setSubmitLoading(false);
   };

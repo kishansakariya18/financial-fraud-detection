@@ -1,39 +1,37 @@
 import { Checkbox } from 'components/ui';
 
-export const bankColumns = ({ handleCheck, selectedIds }) => [
+export const bankColumns = ({ selectedIds = [], handleCheck }) => [
   {
     id: 'select',
-    header: ({ table }) => (
+    header: () => (
       <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        indeterminate={table.getIsSomePageRowsSelected()}
-        onChange={(e) => {
-          const isChecked = e.target.checked;
-          const page = table.getState().pagination.pageIndex;
-          const pageSize = table.getState().pagination.pageSize;
-          const originalData = table.options.meta.data;
-          const ids = originalData.slice(page * pageSize, (page + 1) * pageSize).map((d) => d.id);
-          handleCheck(ids, isChecked);
-        }}
+        checked={selectedIds.length > 0}
+        indeterminate={selectedIds.length > 0}
+        onChange={() => {}}
       />
     ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={selectedIds.includes(row.original.id)}
-        onChange={() => handleCheck([row.original.id])}
-      />
-    )
+    cell: ({ row }) => {
+      console.log('Row data:', row.original);
+      const id =
+        row.original.DepositBankAccountID ||
+        row.original.DepositBankAccountID ||
+        row.original.DepositBankAccountID;
+      if (!id) {
+        console.error('No ID found in row data:', row.original);
+      }
+      return <Checkbox checked={selectedIds.includes(id)} onChange={() => handleCheck(id)} />;
+    }
   },
   {
     header: 'Bank Name',
-    accessorKey: 'bankName'
+    accessorKey: 'BankName'
   },
   {
     header: 'Account Number',
-    accessorKey: 'accountNumber'
+    accessorKey: 'AccountNumber'
   },
   {
     header: 'Account Holder',
-    accessorKey: 'accountHolderName'
+    accessorKey: 'AccountHolderName'
   }
 ];

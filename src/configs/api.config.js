@@ -265,7 +265,11 @@ export const apiConfig = {
       DETAIL: '/users/admin/user-classes/:userClassUID/detail',
       UPDATE: '/users/admin/user-classes/update',
       CHANGE_STATUS: '/users/admin/user-classes/:userClassUID/change-status',
-      DELETE: '/users/admin/user-classes/:userClassUID/delete'
+      DELETE: '/users/admin/user-classes/:userClassUID/delete',
+      MAPPED_BANK: '/payments/admin/deposit-bank/:userClassUID/mapped-bank-account/list',
+      UNMAPPED_BANK: '/payments/admin/deposit-bank/:userClassUID/unmapped-bank-account/list',
+      MAP_BANK: '/payments/admin/deposit-bank/:userClassUID/map-bank',
+      UNMAP_BANK: '/payments/admin/deposit-bank/:userClassUID/unmap-bank'
     },
     USER_CLASS_LIMIT: {
       LIST: '/users/admin/user-class-limits/list',

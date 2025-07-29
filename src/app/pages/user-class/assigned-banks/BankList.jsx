@@ -19,50 +19,52 @@ export default function BankList() {
   const { id: userClassId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t('bank') + ' ' + t('list');
-  const [checked, setChecked] = useState([]);
-
-  const handleCheck = (ids, select) => {
-    if (typeof select === 'boolean') {
-      if (select) {
-        setChecked((prev) => [...new Set([...prev, ...ids])]);
-      } else {
-        setChecked((prev) => prev.filter((item) => !ids.includes(item)));
-      }
-    } else {
-      const id = ids[0];
-      setChecked((prev) =>
-        prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-      );
-    }
-  };
-
-  const columns = bankColumns({ selectedIds: checked, handleCheck, actionLabel: 'assign' });
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const fetchAllBanks = async () => {
+    console.log(queryParams);
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
-    const result = await UserClassService.getAllBanks(userClassId, {
+    const result = await UserClassService.getUnmappedBanks(userClassId, {
       pagination: { pageIndex, pageSize },
-      filters: queryParams
+      filters: queryParams,
+      keyword: queryParams.keyword
     });
 
     if (result.status === 200) {
       return {
         status: 200,
         data: result.response.data, // Assuming API returns correct format
-        totalRecords: parseInt(result.response.totalRecords, 10) || 0
+        totalRecords: parseInt(result.response.total_record, 10) || 0
       };
     }
 
     return { status: result.status, error: result.error };
   };
 
+  const [checked, setChecked] = useState([]);
+
+  const handleCheck = (id) => {
+    console.log('Checkbox clicked with ID:', id);
+    setChecked((prev) => {
+      const newChecked = prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id];
+      console.log('Updated checked list:', newChecked);
+      return newChecked;
+    });
+  };
+
+  // Debug: Log the current checked state when it changes
+  useEffect(() => {
+    console.log('Current checked state:', checked);
+  }, [checked]);
+
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns: columns,
+    columns: bankColumns({ selectedIds: checked, handleCheck }),
     fetchData: fetchAllBanks,
     queryParams,
-    setSearchParams
+    setSearchParams,
+    enableRowSelection: true,
+    getRowId: (row) => row.id
   });
 
   useEffect(() => {
@@ -75,7 +77,7 @@ export default function BankList() {
   useEffect(() => {
     const filtersFromQuery = [];
     if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'name', value: queryParams.keyword });
+      filtersFromQuery.push({ id: 'BankName', value: queryParams.keyword });
     }
     setColumnFilters(filtersFromQuery);
   }, [queryParams, setColumnFilters]);
@@ -83,7 +85,7 @@ export default function BankList() {
   const applyFilterHandler = () => {
     const filterItems = {};
     for (let data of table.getState().columnFilters) {
-      if (data.id === 'name') {
+      if (data.id === 'BankName') {
         filterItems.keyword = data.value;
       }
     }
@@ -109,9 +111,11 @@ export default function BankList() {
 
   const handleAssign = async () => {
     setSubmitLoading(true);
-    const result = await UserClassService.assignBanks(userClassId, checked);
-    if (result.status === 200) {
-      toast.success('Banks assigned successfully');
+    const result = await UserClassService.mapBank(userClassId, {
+      depositBankAccountID: checked
+    });
+    if (result.status === 200 || result.status == 201) {
+      toast.success(result.response.message);
       navigate(`/user-class/${userClassId}/assign-bank`);
     } else {
       toast.error(result.error || 'Failed to assign banks');
@@ -141,7 +145,7 @@ export default function BankList() {
         <Button
           type="button"
           color="primary"
-          disabled={checked.length === 0 || submitLoading}
+          disabled={!checked.length || submitLoading}
           onClick={handleAssign}>
           {submitLoading ? <Circlebar size={6} /> : t('assign')}
         </Button>

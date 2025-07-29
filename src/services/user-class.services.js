@@ -232,25 +232,91 @@ const UserClassService = {
       throw error;
     }
   },
-  assignBanks: async (userClassId, bankIds) => {
+  getMappedBanks: async (userClassUID, data) => {
+    const endPoint = replaceText(
+      apiConfig.endPoints.USER_CLASS.MAPPED_BANK,
+      ':userClassUID',
+      userClassUID
+    );
     try {
-      const endPoint = replaceText(
-        apiConfig.endPoints.USER_CLASS.ASSIGN_BANK,
-        ':userClassUID',
-        userClassId
-      );
       const response = await sendRequest({
         url: apiConfig.baseURL.API_BASE_URL + endPoint,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: bankIds
+        body: data
       });
       return response;
-    } catch (error) {
-      console.log('Error assigning banks:', error);
-      throw error;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
+  getUnmappedBanks: async (userClassUID, data) => {
+    const endPoint = replaceText(
+      apiConfig.endPoints.USER_CLASS.UNMAPPED_BANK,
+      ':userClassUID',
+      userClassUID
+    );
+    try {
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + endPoint,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          page: data.pagination.pageIndex,
+          limit: data.pagination.pageSize,
+          keyword: data.filters.keyword,
+          status: data.status
+        }
+      });
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
+  mapBank: async (userClassUID, data) => {
+    const endPoint = replaceText(
+      apiConfig.endPoints.USER_CLASS.MAP_BANK,
+      ':userClassUID',
+      userClassUID
+    );
+    try {
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + endPoint,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: data
+      });
+      return response;
+    } catch (err) {
+      console.log('Error mapping bank:', err);
+      throw err;
+    }
+  },
+  unmapBank: async (userClassUID, data) => {
+    const endPoint = replaceText(
+      apiConfig.endPoints.USER_CLASS.UNMAP_BANK,
+      ':userClassUID',
+      userClassUID
+    );
+    try {
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + endPoint,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: { depositBankAccountID: data }
+      });
+      return response;
+    } catch (err) {
+      console.log('Error unmapping bank:', err);
+      throw err;
     }
   }
 };

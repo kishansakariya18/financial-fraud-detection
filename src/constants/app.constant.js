@@ -273,7 +273,8 @@ export const PERMISSIONS = {
     CREATE: 'player-class-create',
     EDIT: 'player-class-edit',
     CHANGE_STATUS: 'player-class-change-status',
-    DELETE: 'player-class-delete'
+    DELETE: 'player-class-delete',
+    ASSIGN_BANK: 'player-class-assign-bank'
   },
   USER_CLASS_LIMIT: {
     LIST: 'player-class-limit-list',
