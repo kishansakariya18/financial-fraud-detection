@@ -296,6 +296,13 @@ export const PERMISSIONS = {
     VIEW: 'user-manual-deposit-transaction-view',
     ADD: 'user-manual-deposit-transaction-add',
     EDIT: 'user-manual-deposit-transaction-edit'
+  },
+  CURRENCIES: {
+    LIST: 'currencies-list',
+    CREATE: 'currencies-create',
+    EDIT: 'currencies-edit',
+    CHANGE_STATUS: 'currencies-change-status',
+    DELETE: 'currencies-delete'
   }
 };
 

@@ -1,48 +1,185 @@
-import { Menu, MenuHandler, MenuList, MenuItem } from '@material-tailwind/react';
-import {
-  ArrowPathIcon,
-  EllipsisVerticalIcon,
-  PencilSquareIcon,
-  TrashIcon
-} from '@heroicons/react/24/outline';
-import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { deleteCurrency, updateCurrency } from '../../../../../store/currencies/action';
+// Import Dependencies
+import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
+import { EllipsisHorizontalIcon, TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
+import clsx from 'clsx';
+import { Fragment, useCallback, useState } from 'react';
+import PropTypes from 'prop-types';
 
-const RowActions = ({ id, item }) => {
-  const dispatch = useDispatch();
+// Local Imports
+import { ConfirmModal } from 'components/shared/ConfirmModal';
+import { Button } from 'components/ui';
 
-  const handleDelete = () => {
-    dispatch(deleteCurrency(id));
+import { TbEdit, TbStatusChange } from 'react-icons/tb';
+import { useTranslation } from 'react-i18next';
+import ProviderService from 'services/provider.services';
+import { CustomModal } from 'components/custom';
+import { useNavigate } from 'react-router';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
+
+export function RowActions({ row, table }) {
+  const { t } = useTranslation();
+
+  const confirmMessages = {
+    pending: {
+      title: t('change') + ' ' + t('status'),
+      description: t('provider_status_desc'),
+      actionText: t('submit')
+    },
+    success: {
+      title: t('casino_provider') + ' ' + t('status') + ' ' + t('changed'),
+      description: t('provider_status_suceess')
+    }
   };
 
-  const handleStatusChange = () => {
-    dispatch(updateCurrency(id, { is_active: !item.is_active }));
+  const [statusModalOpen, setStatusModalOpen] = useState(false);
+  const [confirmStatusLoading, setConfirmStatusLoading] = useState(false);
+  const [statusSuccess, setStatusSuccess] = useState(false);
+  const [statusError, setStatusError] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const { hasPermission } = usePermissions();
+  const navigate = useNavigate();
+  const onOpenDialogBox = () => {
+    setIsDialogOpen(true);
   };
+  const onCloseDialogBox = () => {
+    setIsDialogOpen(false);
+  };
+
+  const onOkDialogBox = async () => {
+    await table.options.meta?.editRow(row);
+    setIsDialogOpen(false);
+  };
+  const closeModal = () => {
+    setStatusModalOpen(false);
+  };
+  const openModal = () => {
+    setStatusModalOpen(true);
+    setStatusError(false);
+    setStatusSuccess(false);
+  };
+  const handleChangeStatusRows = useCallback(async () => {
+    setConfirmStatusLoading(true);
+    const result = await ProviderService.changeProviderStatus(row.original.id);
+    if (result.status === 200) {
+      console.log('table.options: ', table.options);
+      table.options.meta?.fetchSummary();
+      table.options.meta?.deleteRow(row);
+      setStatusSuccess(true);
+    } else {
+      setStatusError(true);
+    }
+
+    setConfirmStatusLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [row]);
+
+  const state = statusError ? 'error' : statusSuccess ? 'success' : 'pending';
 
   return (
-    <Menu>
-      <MenuHandler>
-        <EllipsisVerticalIcon className="h-5 w-5 cursor-pointer" />
-      </MenuHandler>
-      <MenuList>
-        <MenuItem>
-          <Link to={`/casino-management/currencies/edit/${id}`} className="flex items-center">
-            <PencilSquareIcon className="mr-2 h-4 w-4" />
-            Edit
-          </Link>
-        </MenuItem>
-        <MenuItem className="flex items-center" onClick={handleStatusChange}>
-          <ArrowPathIcon className="mr-2 h-4 w-4" />
-          {item.is_active ? 'Deactivate' : 'Activate'}
-        </MenuItem>
-        <MenuItem className="flex items-center" onClick={handleDelete}>
-          <TrashIcon className="mr-2 h-4 w-4" />
-          Delete
-        </MenuItem>
-      </MenuList>
-    </Menu>
+    <>
+      <div className="flex justify-center space-x-1.5 rtl:space-x-reverse">
+        <Menu as="div" className="relative inline-block text-left">
+          <MenuButton as={Button} isIcon className="size-8 rounded-full">
+            <EllipsisHorizontalIcon className="size-4.5" />
+          </MenuButton>
+          <Transition
+            as={Fragment}
+            enter="transition ease-out"
+            enterFrom="opacity-0 translate-y-2"
+            enterTo="opacity-100 translate-y-0"
+            leave="transition ease-in"
+            leaveFrom="opacity-100 translate-y-0"
+            leaveTo="opacity-0 translate-y-2">
+            <MenuItems
+              anchor={{ to: 'bottom end', gap: 12 }}
+              className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
+              {hasPermission(PERMISSIONS.CURRENCIES.CHANGE_STATUS) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={openModal}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                        focus && 'bg-this/10 dark:bg-this-light/10'
+                      )}>
+                      <TbStatusChange className="size-4.5 stroke-1" />
+                      <span>{t('change') + ' ' + t('status')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
+              {hasPermission(PERMISSIONS.CURRENCIES.EDIT) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={onOpenDialogBox}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                        focus && 'bg-this/10 dark:bg-this-light/10'
+                      )}>
+                      <TbEdit className="size-4.5 stroke-1" />
+                      <span>{t('edit')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
+              {hasPermission(PERMISSIONS.CURRENCIES.DELETE) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                        focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                      )}
+                      onClick={() =>
+                        navigate(
+                          `/casino/provider/restricted-countries/${row.original.providerUID}/list`
+                        )
+                      }>
+                      <TrashIcon className="size-4.5 stroke-1" />
+                      <span>{t('delete')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
+            </MenuItems>
+          </Transition>
+        </Menu>
+      </div>
+      <CustomModal
+        show={isDialogOpen}
+        title={t('casino_provider') + ' ' + t('details')}
+        btnTitle={t('casino_provider') + ' ' + t('details')}
+        icon={<PencilIcon className="size-4.5 stroke-1" />}
+        btnClassName={clsx(
+          'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+          focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+        )}
+        onClose={onCloseDialogBox}
+        onOpen={onOpenDialogBox}
+        onOk={onOkDialogBox}>
+        {/* <EditProvider
+          providerName={row.original.name}
+          providerId={row.original.id}
+          value={row.original.image}
+          closeModal={onOkDialogBox}
+        /> */}
+      </CustomModal>
+      <ConfirmModal
+        show={statusModalOpen}
+        onClose={closeModal}
+        messages={confirmMessages}
+        onOk={handleChangeStatusRows}
+        confirmLoading={confirmStatusLoading}
+        state={state}
+      />
+    </>
   );
-};
+}
 
-export default RowActions;
+RowActions.propTypes = {
+  row: PropTypes.object,
+  table: PropTypes.object
+};

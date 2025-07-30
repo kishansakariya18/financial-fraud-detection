@@ -1,29 +1,63 @@
-//import RowActions from './RowActions';
+import { createColumnHelper } from '@tanstack/react-table';
+
+// Local Imports
+import { RowActions } from './RowActions';
+import { IdCell, BoldCell } from '../../../../../components/custom/table/cell';
+
+// ----------------------------------------------------------------------
+
+const columnHelper = createColumnHelper();
 
 export const columns = [
-  {
+  columnHelper.accessor((row) => row.id, {
+    id: 'id',
+    label: 'ID',
     header: 'ID',
-    accessorKey: 'id'
-  },
-  {
+    cell: IdCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.name, {
+    id: 'name',
+    label: 'Name',
     header: 'Name',
-    accessorKey: 'name'
-  },
-  {
+    cell: BoldCell,
+    enableSorting: false
+  }),
+  // columnHelper.accessor((row) => row.status, {
+  //   id: 'status',
+  //   label: 'Status',
+  //   header: 'Status',
+  //   cell: BadgeCell,
+  //   meta: { optionData: statusOptions },
+  //   filterFn: 'arrIncludesSome',
+  //   enableSorting: false
+  // }),
+  columnHelper.accessor((row) => row.code, {
+    id: 'code',
+    label: 'Code',
     header: 'Code',
-    accessorKey: 'code'
-  },
-  {
+    cell: BoldCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.symbol, {
+    id: 'symbol',
+    label: 'Symbol',
     header: 'Symbol',
-    accessorKey: 'symbol'
-  },
-  {
-    header: 'Games',
-    accessorKey: 'games_count'
-  }
-  // {
-  //   header: 'Action',
-  //   accessorKey: 'action',
-  //   cell: ({ row }) => <RowActions id={row.original._id} item={row.original} />
-  // }
+    cell: BoldCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.exchange_rate, {
+    id: 'exchange_rate',
+    label: 'Exchange Rate',
+    header: 'Exchange Rate',
+    cell: BoldCell,
+    enableSorting: false
+  }),
+  columnHelper.display({
+    id: 'actions',
+    label: 'Row Actions',
+    header: 'Actions',
+    cell: RowActions,
+    enableSorting: false
+  })
 ];

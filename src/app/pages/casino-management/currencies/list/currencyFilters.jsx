@@ -1,5 +1,6 @@
 // Import Dependencies
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+// Import Dependencies
+import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 // import { TbCurrencyDollar } from "react-icons/tb";
 import PropTypes from 'prop-types';
@@ -12,6 +13,9 @@ import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { DateFilter } from 'components/shared/table/DateFilter';
+import { useNavigate } from 'react-router';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 // import { useSearchParams } from 'react-router';
 // import { CreateCategory } from '../CreateCategory';
 
@@ -24,6 +28,8 @@ export function CurrencyFilters({
   pageTitle = ''
 }) {
   const { isXs } = useBreakpointsContext();
+  const { hasPermission } = usePermissions();
+  const navigate = useNavigate();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
   // const [searchParams] = useSearchParams();
   // console.log('table.getState().columnFilters: inside', Object.fromEntries([...searchParams]));
@@ -40,7 +46,15 @@ export function CurrencyFilters({
             {pageTitle}
           </h2>
         </div>
-        {/* <CreateCategory tableFetch={table.options.meta?.fetchNewList(false)} /> */}
+        {hasPermission(PERMISSIONS.CURRENCIES.CREATE) && (
+          <Button
+            className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
+            color="primary"
+            onClick={() => navigate('/casino-management/currencies/create')}>
+            <PlusIcon className="size-5" />
+            <span>{t('add') + ' ' + t('currency')}</span>
+          </Button>
+        )}
       </div>
 
       {/* <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">

@@ -41,6 +41,17 @@ const CurrencyService = {
         'Content-Type': 'application/json'
       }
     });
+  },
+
+  createCurrency: async (data) => {
+    return await sendRequest({
+      url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.CURRENCY.CREATE}`,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: data
+    });
   }
 };
 
