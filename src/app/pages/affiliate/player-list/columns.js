@@ -1,7 +1,7 @@
 // Import Dependencies
 import { createColumnHelper } from '@tanstack/react-table';
 import {
-  AmountCell,
+  // AmountCell,
   BadgeCell,
   BoldCell,
   DateCell,
@@ -59,20 +59,20 @@ export const columns = [
     enableSorting: false
   }),
 
-  columnHelper.accessor((row) => row.realCashAmount, {
-    id: 'realCashAmount',
-    label: 'Real Cash',
-    header: 'Real Cash',
-    cell: AmountCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => row.bonus, {
-    id: 'bonus',
-    label: 'Bonus',
-    header: 'Bonus',
-    cell: AmountCell,
-    enableSorting: false
-  }),
+  // columnHelper.accessor((row) => row.realCashAmount, {
+  //   id: 'realCashAmount',
+  //   label: 'Real Cash',
+  //   header: 'Real Cash',
+  //   cell: AmountCell,
+  //   enableSorting: false
+  // }),
+  // columnHelper.accessor((row) => row.bonus, {
+  //   id: 'bonus',
+  //   label: 'Bonus',
+  //   header: 'Bonus',
+  //   cell: AmountCell,
+  //   enableSorting: false
+  // }),
   columnHelper.accessor((row) => row.status, {
     id: 'status',
     label: 'Status',

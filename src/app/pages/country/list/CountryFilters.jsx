@@ -1,5 +1,5 @@
 // Import Dependencies
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 // import { TbCurrencyDollar } from "react-icons/tb";
 import PropTypes from 'prop-types';
@@ -14,6 +14,8 @@ import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 // import { globallyBlockedStatusOptions, statusOptions } from '../helper';
 import { DashboardCard } from 'components/custom/DashboardCard';
 import { dummyCards } from 'helpers/functions';
+import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
+import { globallyBlockedStatusOptions } from '../helper';
 
 // ----------------------------------------------------------------------
 
@@ -145,17 +147,18 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {}, 
           isMultiple={false}
           showCheckbox={false}
         />
-      )}
+      )} */}
 
       {table.getColumn('globallyBlocked') && (
         <FacedtedFilter
           options={globallyBlockedStatusOptions}
           column={table.getColumn('globallyBlocked')}
           title="Global Status"
+          Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}
         />
-      )} */}
+      )}
 
       <div>
         <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
