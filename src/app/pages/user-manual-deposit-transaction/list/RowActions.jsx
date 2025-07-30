@@ -1,8 +1,14 @@
 // Import Dependencies
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
-import { EllipsisHorizontalIcon, CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import {
+  EllipsisHorizontalIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  EyeIcon
+} from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
+import { useNavigate } from 'react-router';
 import PropTypes from 'prop-types';
 
 // Local Imports
@@ -15,6 +21,7 @@ import { toast } from 'sonner';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const [modal, setModal] = useState({ type: null, open: false });
   const [rejectionReason, setRejectionReason] = useState('');
@@ -90,6 +97,21 @@ export function RowActions({ row, table }) {
                     )}>
                     <CheckCircleIcon className="size-4.5 stroke-1" />
                     <span>{t('accept')}</span>
+                  </button>
+                )}
+              </MenuItem>
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    onClick={() => {
+                      navigate(`/user-manual-deposit-transaction/view/${row.original.id}`);
+                    }}
+                    className={clsx(
+                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                      focus && 'bg-this/10 dark:bg-this-light/10'
+                    )}>
+                    <EyeIcon className="size-4.5 stroke-1" />
+                    <span>{t('view')}</span>
                   </button>
                 )}
               </MenuItem>

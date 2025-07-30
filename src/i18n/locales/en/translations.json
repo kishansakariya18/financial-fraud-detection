@@ -514,5 +514,15 @@
   "user_manual_deposit_transaction":"User Manual Deposit Transaction",
   "assign_bank": "Assign Bank",
   "search_transaction":"Search Transaction",
-  "search_by_bank_name":"Search by bank name"
+  "search_by_bank_name":"Search by bank name",
+  "user_manual_deposit_transaction_detail":"User Manual Deposit Transaction Detail",
+  "transaction_information":"Transaction Information",
+  "screenshot":"Screenshot",
+  "user_id": "User ID",
+  "bank_transaction_id": "Bank Transaction ID",
+  "deposit_time": "Deposit Time",
+  "rejection_reason": "Rejection Reason",
+  "remarks": "Remarks",
+  "date_created": "Date Created",
+  "last_modified": "Last Modified"
 }

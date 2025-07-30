@@ -47,6 +47,21 @@ export const userManualDepositTransactionRoute = [
         )
       };
     }
+  },
+  {
+    path: 'user-manual-deposit-transaction/view/:id',
+    lazy: async () => {
+      const { default: ViewBankDeposit } = await import(
+        '../../pages/user-manual-deposit-transaction/View'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.USER_MANUAL_DEPOSIT_TRANSACTION.VIEW}>
+            <ViewBankDeposit />
+          </PrivateRoute>
+        )
+      };
+    }
   }
 ];
 

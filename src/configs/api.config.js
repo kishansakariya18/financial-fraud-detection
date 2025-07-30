@@ -202,6 +202,14 @@ export const apiConfig = {
       REMOVE_RESTRICTED_COUNTRY:
         '/games/admin/casino-management/provider/:providerId/restricted-country/delete'
     },
+    CURRENCY: {
+      LIST: '/games/admin/casino-management/currency/list',
+      SUMMARY: '/games/admin/casino-management/currency/summary',
+      CREATE: '/games/admin/casino-management/currency/create',
+      EDIT: '/games/admin/casino-management/currency/:currencyId/edit',
+      DELETE: '/games/admin/casino-management/currency/:currencyId/delete',
+      CHANGE_STATUS: '/games/admin/casino-management/currency/:currencyId/change-status'
+    },
     GAME: {
       LIST: '/games/admin/casino-management/games/list',
       SUMMARY: '/games/admin/casino-management/games/summary',
@@ -307,9 +315,9 @@ export const apiConfig = {
     USER_MANUAL_DEPOSIT_TRANSACTION: {
       LIST: '/payments/admin/user-bank-deposit/list',
       MANUAL_VERIFY: '/payments/admin/user-bank-deposit/:depositId/manual-deposit/verify',
-      DETAIL: '/admin/user-bank-deposit/:depositId/details',
-      EDIT: '/admin/user-bank-deposit/:depositId/edit',
-      DELETE: '/admin/user-bank-deposit/:depositId/delete'
+      DETAIL: '/payments/admin/deposit-bank/:depositId/manual-deposit/details',
+      EDIT: '/payments/admin/user-bank-deposit/:depositId/edit',
+      DELETE: '/payments/admin/user-bank-deposit/:depositId/delete'
     }
   }
 };

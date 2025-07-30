@@ -293,7 +293,9 @@ export const PERMISSIONS = {
     EDIT: 'bank-edit'
   },
   USER_MANUAL_DEPOSIT_TRANSACTION: {
-    VIEW: 'user-manual-deposit-transaction-view'
+    VIEW: 'user-manual-deposit-transaction-view',
+    ADD: 'user-manual-deposit-transaction-add',
+    EDIT: 'user-manual-deposit-transaction-edit'
   }
 };
 

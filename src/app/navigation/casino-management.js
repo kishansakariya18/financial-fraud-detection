@@ -38,6 +38,15 @@ export const casinoManagement = {
       permission: PERMISSIONS.PROVIDER.VIEW
     },
     {
+      id: 'casino_currencies',
+      type: NAV_TYPE_ITEM,
+      path: '/casino-management/currencies',
+      title: 'Currencies',
+      transKey: 'casino_currencies',
+      Icon: null, // Please replace with the correct icon
+      permission: null // Please replace with the correct permission
+    },
+    {
       id: 'casino_games',
       type: NAV_TYPE_ITEM,
       path: '/casino/games/list',

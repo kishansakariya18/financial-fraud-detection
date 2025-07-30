@@ -490,5 +490,17 @@
   "user_manual_deposit_transaction_view": "Voir la transaction de dépôt manuelle de l'utilisateur",
   "user_manual_deposit_transaction":"Transaction de dépôt manuelle de l'utilisateur",
   "search_transaction":"Rechercher transaction",
-  "search_by_bank_name":"Rechercher par nom du banque"
+  "search_by_bank_name":"Rechercher par nom du banque",
+  "user_manual_deposit_transaction_detail":"Détail de la transaction de dépôt manuelle de l'utilisateur",
+  "transaction_information":"Informations de la transaction",
+  "screenshot":"Capture d'écran",
+  "user_id": "ID de l'utilisateur",
+  "amount": "Montant",
+  "bank_transaction_id": "ID de la transaction bancaire",
+  "deposit_time": "Heure du dépôt",
+  "status": "Statut",
+  "rejection_reason": "Motif de rejet",
+  "remarks": "Remarques",
+  "date_created": "Date de création",
+  "last_modified": "Dernière modification"
 }

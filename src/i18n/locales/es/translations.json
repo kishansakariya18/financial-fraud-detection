@@ -491,5 +491,15 @@
   "user_manual_deposit_transaction":"Transacción de depósito manual del usuario",
   "assign_bank": "Asignar banco",
   "search_transaction":"Buscar transacción",
-  "search_by_bank_name":"Buscar por nombre del banco"
+  "search_by_bank_name":"Buscar por nombre del banco",
+  "user_manual_deposit_transaction_detail":"Detalle de transacción de depósito manual del usuario",
+  "transaction_information":"Información de la transacción",
+  "screenshot":"Captura de pantalla",
+  "user_id": "ID de usuario",
+  "bank_transaction_id": "ID de transacción bancaria",
+  "deposit_time": "Tiempo de depósito",
+  "rejection_reason": "Motivo de rechazo",
+  "remarks": "Observaciones",
+  "date_created": "Fecha de creación",
+  "last_modified": "Última modificación"
   }

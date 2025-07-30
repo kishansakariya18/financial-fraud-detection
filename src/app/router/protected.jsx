@@ -12,6 +12,7 @@ import reportsRoutes from './routes/reports.route';
 import paymentRoute from './routes/payment.route';
 import userKycRoute from './routes/player-kyc.routes';
 import casinoRoutes from './routes/casino.route';
+import currenciesRoutes from './routes/currencies.route';
 import affiliateRoutes from './routes/affiliate.route';
 import segmentationRoutes from './routes/segmentation.route';
 import emailTemplateRoute from './routes/email-template.route';
@@ -53,6 +54,7 @@ const protectedRoutes = {
         ...paymentRoute,
         ...userKycRoute,
         ...casinoRoutes,
+        ...currenciesRoutes,
         ...affiliateRoutes,
         ...segmentationRoutes,
         ...emailTemplateRoute,
