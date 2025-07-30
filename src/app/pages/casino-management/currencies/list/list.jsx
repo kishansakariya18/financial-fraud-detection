@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import useTable from 'components/ui/useTable';
