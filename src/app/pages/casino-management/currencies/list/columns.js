@@ -1,38 +1,29 @@
-import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
-import RowActions from './RowActions';
+//import RowActions from './RowActions';
 
 export const columns = [
   {
-    Header: 'Name',
-    accessor: 'name'
+    header: 'ID',
+    accessorKey: 'id'
   },
   {
-    Header: 'Code',
-    accessor: 'code'
+    header: 'Name',
+    accessorKey: 'name'
   },
   {
-    Header: 'Symbol',
-    accessor: 'symbol'
+    header: 'Code',
+    accessorKey: 'code'
   },
   {
-    Header: 'Status',
-    accessor: 'is_active',
-    Cell: ({ value }) => (
-      <div className="flex items-center">
-        {value ? (
-          <CheckBadgeIcon className="h-5 w-5 text-green-500" />
-        ) : (
-          <XCircleIcon className="h-5 w-5 text-red-500" />
-        )}
-        <span className="ml-2 text-sm font-medium text-gray-500">
-          {value ? 'Active' : 'Inactive'}
-        </span>
-      </div>
-    )
+    header: 'Symbol',
+    accessorKey: 'symbol'
   },
   {
-    Header: 'Action',
-    accessor: 'action',
-    Cell: ({ row }) => <RowActions id={row.original._id} item={row.original} />
+    header: 'Games',
+    accessorKey: 'games_count'
   }
+  // {
+  //   header: 'Action',
+  //   accessorKey: 'action',
+  //   cell: ({ row }) => <RowActions id={row.original._id} item={row.original} />
+  // }
 ];

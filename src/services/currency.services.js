@@ -44,4 +44,4 @@ const CurrencyService = {
   }
 };
 
-export default new CurrencyService();
+export default CurrencyService;
