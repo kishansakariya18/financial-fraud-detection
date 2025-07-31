@@ -535,5 +535,7 @@
   "field_name":"Field Name",
   "hide":"Hide",
   "show_as_optional":"Show as Optional",
-  "show_as_required":"Show as Required"
+  "show_as_required":"Show as Required",
+  "admin_exchange_rate": "Admin Exchange Rate",
+  "enter_admin_exchange_rate": "Enter Admin Exchange Rate"
 }

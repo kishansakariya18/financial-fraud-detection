@@ -46,6 +46,7 @@ export default function Currency() {
         code: 'USD',
         symbol: '$',
         exchange_rate: 150,
+        admin_exchange_rate: 300,
         type: 'Fiat',
         status: 'active'
       },
@@ -55,6 +56,7 @@ export default function Currency() {
         code: 'EUR',
         symbol: '€',
         exchange_rate: 200,
+        admin_exchange_rate: 400,
         type: 'Fiat',
         status: 'inactive'
       },
@@ -64,6 +66,7 @@ export default function Currency() {
         code: 'BTC',
         symbol: '₿',
         exchange_rate: 50,
+        admin_exchange_rate: 500,
         type: 'Crypto',
         status: 'inactive'
       },
@@ -73,6 +76,7 @@ export default function Currency() {
         code: 'INR',
         symbol: '₹',
         exchange_rate: 120,
+        admin_exchange_rate: 600,
         type: 'Fiat',
         status: 'inactive'
       }

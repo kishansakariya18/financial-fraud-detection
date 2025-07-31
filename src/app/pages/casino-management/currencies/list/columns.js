@@ -54,6 +54,13 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.admin_exchange_rate, {
+    id: 'admin_exchange_rate',
+    label: 'Admin Exchange Rate',
+    header: 'Admin Exchange Rate',
+    cell: BoldCell,
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.status, {
     id: 'status',
     label: 'Status',

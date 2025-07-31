@@ -303,7 +303,8 @@ export const PERMISSIONS = {
     EDIT: 'currencies-edit',
     CHANGE_STATUS: 'currencies-change-status',
     DELETE: 'currencies-delete',
-    EXCHANGE_HISTORY: 'currencies-exchange-history'
+    EXCHANGE_HISTORY: 'currencies-exchange-history',
+    ADMIN_EXCHANGE_RATE: 'currencies-admin-exchange-history'
   },
   REGISTRATION_FIELDS: {
     VIEW: 'registration-fields-view'

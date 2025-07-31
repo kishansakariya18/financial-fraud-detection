@@ -318,6 +318,10 @@ export const apiConfig = {
       DETAIL: '/payments/admin/deposit-bank/:depositId/manual-deposit/details',
       EDIT: '/payments/admin/user-bank-deposit/:depositId/edit',
       DELETE: '/payments/admin/user-bank-deposit/:depositId/delete'
+    },
+    REGISTRATION_FIELDS: {
+      LIST: '/payments/admin/user-bank-deposit/list',
+      SUBMIT: '/payments/admin/user-bank-deposit/:depositId/manual-deposit/verify'
     }
   }
 };

@@ -512,5 +512,7 @@
   "field_name":"Nombre del campo",
   "hide":"Ocultar",
   "show_as_optional":"Mostrar como opcional",
-  "show_as_required":"Mostrar como obligatorio"
+  "show_as_required":"Mostrar como obligatorio",
+  "admin_exchange_rate":"Admin Rate",
+  "enter_admin_exchange_rate":"Ingrese Admin Rate"
   }

@@ -15,6 +15,14 @@ export const createCurrencySchema = yup.object().shape({
     .positive(t('Exchange rate must be positive'))
 });
 
+export const adminExchangeRateSchema = yup.object().shape({
+  exchange_rate: yup
+    .number()
+    .typeError(t('Exchange rate must be a number'))
+    .required(t('Exchange rate is required'))
+    .positive(t('Exchange rate must be positive'))
+});
+
 export const currencySchema = yup.object().shape({
   name: yup.string().required('Name is required'),
   is_active: yup.boolean()

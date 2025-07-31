@@ -52,6 +52,22 @@ const CurrencyService = {
       },
       body: data
     });
+  },
+
+  addAdminExchangeRate: async (currencyId, data) => {
+    const endpoint = replaceText(
+      apiConfig.endPoints.CURRENCY.ADMIN_EXCHANGE_RATE,
+      ':currencyId',
+      currencyId
+    );
+    return await sendRequest({
+      url: apiConfig.baseURL.API_BASE_URL + endpoint,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: data
+    });
   }
 };
 

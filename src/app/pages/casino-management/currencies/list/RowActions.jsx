@@ -21,6 +21,7 @@ import { CustomModal } from 'components/custom';
 import { useNavigate } from 'react-router';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
+import { AdminExchangeRateModal } from './AdminExchangeRateModal';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
@@ -42,6 +43,7 @@ export function RowActions({ row, table }) {
   const [statusSuccess, setStatusSuccess] = useState(false);
   const [statusError, setStatusError] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isAdminRateModalOpen, setAdminRateModalOpen] = useState(false);
 
   const { hasPermission } = usePermissions();
   const navigate = useNavigate();
@@ -151,6 +153,21 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
+              {hasPermission(PERMISSIONS.CURRENCIES.ADMIN_EXCHANGE_RATE) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={() => setAdminRateModalOpen(true)}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                        focus && 'bg-this/10 dark:bg-this-light/10'
+                      )}>
+                      <ClockIcon className="size-4.5 stroke-1" />
+                      <span>{t('admin_exchange_rate')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
               {hasPermission(PERMISSIONS.CURRENCIES.DELETE) && (
                 <MenuItem>
                   {({ focus }) => (
@@ -200,6 +217,12 @@ export function RowActions({ row, table }) {
         onOk={handleChangeStatusRows}
         confirmLoading={confirmStatusLoading}
         state={state}
+      />
+      <AdminExchangeRateModal
+        show={isAdminRateModalOpen}
+        onClose={() => setAdminRateModalOpen(false)}
+        row={row}
+        table={table}
       />
     </>
   );
