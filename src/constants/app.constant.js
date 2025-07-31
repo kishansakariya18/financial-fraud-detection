@@ -294,6 +294,9 @@ export const PERMISSIONS = {
   },
   USER_MANUAL_DEPOSIT_TRANSACTION: {
     VIEW: 'user-manual-deposit-transaction-view'
+  },
+  RELEASE_NOTES: {
+    VIEW: 'release-notes-view'
   }
 };
 

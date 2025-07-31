@@ -30,6 +30,7 @@ import siteConfigurationRoutes from './routes/site-configuration.route';
 import blacklistRoutes from './routes/blacklist.route';
 import { bankRoute } from './routes/bank.route';
 import { userManualDepositTransactionRoute } from './routes/user-manual-deposit-transaction.route';
+import { releaseNotesRoutes } from './routes/release-notes.route';
 
 // ----------------------------------------------------------------------
 
@@ -69,7 +70,8 @@ const protectedRoutes = {
         ...userClass,
         ...rateLimitRulesRoute,
         ...siteConfigurationRoutes,
-        ...blacklistRoutes
+        ...blacklistRoutes,
+        ...releaseNotesRoutes
       ]
     }
   ]

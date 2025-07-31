@@ -491,5 +491,16 @@
   "user_manual_deposit_transaction":"Transacción de depósito manual del usuario",
   "assign_bank": "Asignar banco",
   "search_transaction":"Buscar transacción",
-  "search_by_bank_name":"Buscar por nombre del banco"
+  "search_by_bank_name":"Buscar por nombre del banco",
+  "release_notes": "Notas de lanzamiento",
+  "release_note": "Nota de lanzamiento",
+  "release_date": "Fecha de lanzamiento",
+  "release_note_delete_desc": "¿Estás seguro de querer eliminar esta Nota de lanzamiento?",
+  "id": "ID",
+  "uid": "UID",
+  "version": "Version",
+  "modifiedAt": "Modified At",
+  "release_note_status_suceess": "Nota de lanzamiento El estado se ha cambiado correctamente",
+  "release_note_status_conf": "¿Estás seguro de querer cambiar el estado de la nota de lanzamiento?",
+  "done": "Hecho"
   }

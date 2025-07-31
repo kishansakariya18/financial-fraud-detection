@@ -198,7 +198,7 @@ export function RowActions({ row, table }) {
                       focus && 'bg-this/10 dark:bg-this-light/10'
                     )}>
                     <TrashIcon className="size-4.5 stroke-1" />
-                    <span>{`${t('Delete')}  ${t('banner')}`}</span>
+                    <span>{`${t('delete_text')}  ${t('banner')}`}</span>
                   </button>
                 )}
               </MenuItem>

@@ -490,5 +490,16 @@
   "user_manual_deposit_transaction_view": "Voir la transaction de dépôt manuelle de l'utilisateur",
   "user_manual_deposit_transaction":"Transaction de dépôt manuelle de l'utilisateur",
   "search_transaction":"Rechercher transaction",
-  "search_by_bank_name":"Rechercher par nom du banque"
+  "search_by_bank_name":"Rechercher par nom du banque",
+  "release_notes": "Notes de version",
+  "release_note": "Note de version",
+  "release_date": "Date de version",
+  "release_note_delete_desc": "Êtes-vous sûr de vouloir supprimer cette Note de version ?",
+  "id": "ID",
+  "uid": "UID",
+  "version": "Version",
+  "modifiedAt": "Modified At",
+  "release_note_status_suceess": "Note de version El estado se ha cambiado correctamente",
+  "release_note_status_conf": "¿Estás seguro de querer cambiar el estado de la nota de lanzamiento?",
+  "done": "Terminado"
 }

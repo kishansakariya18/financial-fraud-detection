@@ -514,5 +514,16 @@
   "user_manual_deposit_transaction":"User Manual Deposit Transaction",
   "assign_bank": "Assign Bank",
   "search_transaction":"Search Transaction",
-  "search_by_bank_name":"Search by bank name"
+  "search_by_bank_name":"Search by bank name",
+  "release_notes": "Release Notes",
+  "release_note": "Release Note",
+  "release_date": "Release Date",
+  "release_note_delete_desc": "Are you sure you want to delete this Release Note?",
+  "id": "ID",
+  "uid": "UID",
+  "version": "Version",
+  "modifiedAt": "Modified At",
+  "release_note_status_suceess": "Release Note Status has been changed successfully",
+  "release_note_status_conf": "Are you sure you want to change status of release note ?",
+  "done": "Done"
 }

@@ -26,9 +26,15 @@ export default function Country() {
   const fetchCountry = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
+    let filters = { ...queryParams };
+
+    // Convert globallyBlocked to boolean if present as string
+    if (filters.globallyBlocked === 'true') filters.globallyBlocked = true;
+    else if (filters.globallyBlocked === 'false') filters.globallyBlocked = false;
+
     const result = await CountryService.getCountry({
       pagination: { pageIndex, pageSize },
-      filters: queryParams
+      filters
     });
 
     if (result.status === 200) {
@@ -109,7 +115,9 @@ export default function Country() {
         filterItems.status = data.value;
       }
       if (data.id === 'globallyBlocked') {
-        filterItems.globallyBlocked = data.value;
+        if (data.value === 'blocked') filterItems.globallyBlocked = true;
+        else if (data.value === 'not_blocked') filterItems.globallyBlocked = false;
+        else filterItems.globallyBlocked = '';
       }
     }
 
@@ -119,7 +127,9 @@ export default function Country() {
       pageSize: 10,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
       ...(filterItems.status && { status: filterItems.status }),
-      ...(filterItems.globallyBlocked && { globallyBlocked: filterItems.globallyBlocked })
+      ...(typeof filterItems.globallyBlocked === 'boolean'
+        ? { globallyBlocked: filterItems.globallyBlocked }
+        : {})
     });
   };
 

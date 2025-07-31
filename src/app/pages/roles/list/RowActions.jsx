@@ -131,7 +131,7 @@ export function RowActions({ row, table }) {
                       focus && 'bg-this/10 dark:bg-this-light/10'
                     )}>
                     <TbStatusChange className="size-4.5 stroke-1" />
-                    <span>{`${t('Delete')}  ${t('role')}`}</span>
+                    <span>{`${t('delete_text')}  ${t('role')}`}</span>
                   </button>
                 )}
               </MenuItem>

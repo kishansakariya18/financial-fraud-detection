@@ -6,8 +6,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import {
   // IdCell,
   DateCell,
-  BoldCell,
-  AmountCell
+  BoldCell
 } from '../../../../../components/custom/table/cell';
 // import { transactionStatusOption, transactionTypeOption } from '../helper';
 // import { transactionStatusOption } from "../helper";
@@ -56,20 +55,20 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.realCash, {
-    id: 'realCash',
-    header: 'RealCash',
-    label: 'RealCash',
-    cell: AmountCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => row.bonus, {
-    id: 'bonus',
-    header: 'Bonus',
-    label: 'Bonus',
-    cell: AmountCell,
-    enableSorting: false
-  }),
+  // columnHelper.accessor((row) => row.realCash, {
+  //   id: 'realCash',
+  //   header: 'RealCash',
+  //   label: 'RealCash',
+  //   cell: AmountCell,
+  //   enableSorting: false
+  // }),
+  // columnHelper.accessor((row) => row.bonus, {
+  //   id: 'bonus',
+  //   header: 'Bonus',
+  //   label: 'Bonus',
+  //   cell: AmountCell,
+  //   enableSorting: false
+  // }),
   columnHelper.accessor((row) => row.createdAt, {
     id: 'createdAt',
     label: 'Date',
