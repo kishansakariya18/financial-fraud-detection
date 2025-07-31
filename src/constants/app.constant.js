@@ -304,6 +304,9 @@ export const PERMISSIONS = {
     CHANGE_STATUS: 'currencies-change-status',
     DELETE: 'currencies-delete',
     EXCHANGE_HISTORY: 'currencies-exchange-history'
+  },
+  REGISTRATION_FIELDS: {
+    VIEW: 'registration-fields-view'
   }
 };
 

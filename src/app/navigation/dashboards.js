@@ -22,6 +22,7 @@ import { userClass } from './user-class';
 import { blacklist } from './blacklist';
 import { bank } from './bank';
 import { userManualDepositTransaction } from './user-manual-deposit-transaction';
+import { registrationFields } from './registration-fields';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -64,6 +65,7 @@ export const dashboards = () => ({
     userClass,
     blacklist,
     bank,
+    registrationFields,
     userManualDepositTransaction
   ]
 });

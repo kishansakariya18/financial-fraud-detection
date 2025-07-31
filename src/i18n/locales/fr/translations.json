@@ -506,5 +506,10 @@
   "fiat": "Fiat",
   "crypto": "Crypto",
   "points": "Points",
-  "casino_currencies": "Devise du casino"
+  "casino_currencies": "Devise du casino",
+  "registration_fields":"Champs de registration",
+  "field_name":"Nom du champ",
+  "hide":"Masquer",
+  "show_as_optional":"Montrer comme optionnel",
+  "show_as_required":"Montrer comme obligatoire"
 }

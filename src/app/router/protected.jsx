@@ -27,6 +27,7 @@ import paymentProvider from './routes/payment-provider.route';
 import bannerRoute from './routes/banner.route';
 import userClass from './routes/user-class.route';
 import rateLimitRulesRoute from './routes/rate-limit-rules.route';
+import registrationFieldsRoute from './routes/registration-fields.route.jsx';
 import siteConfigurationRoutes from './routes/site-configuration.route';
 import blacklistRoutes from './routes/blacklist.route';
 import { bankRoute } from './routes/bank.route';
@@ -70,6 +71,7 @@ const protectedRoutes = {
         ...userManualDepositTransactionRoute,
         ...userClass,
         ...rateLimitRulesRoute,
+        ...registrationFieldsRoute,
         ...siteConfigurationRoutes,
         ...blacklistRoutes
       ]

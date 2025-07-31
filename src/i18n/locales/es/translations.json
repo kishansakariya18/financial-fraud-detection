@@ -507,5 +507,10 @@
   "fiat": "Fiat",
   "crypto": "Cripto",
   "points": "Puntos",
-  "casino_currencies":"Monedas"
+  "casino_currencies":"Monedas",
+  "registration_fields":"Campos de registro",
+  "field_name":"Nombre del campo",
+  "hide":"Ocultar",
+  "show_as_optional":"Mostrar como opcional",
+  "show_as_required":"Mostrar como obligatorio"
   }
