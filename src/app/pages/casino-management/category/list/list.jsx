@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import BankService from 'services/bank.services';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
+import CategoryService from 'services/category.services';
 
 export default function Banks() {
   const { t } = useTranslation();

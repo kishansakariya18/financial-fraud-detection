@@ -15,6 +15,18 @@ export const NAV_TYPE_DIVIDER = 'divider';
 
 export const COLORS = ['neutral', 'primary', 'secondary', 'info', 'success', 'warning', 'error'];
 
+export const USER_CLASS_LIMIT_TYPE = {
+  DEPOSIT: 'Deposit',
+  WITHDRAW: 'Withdrawal',
+  WAGER: 'Wager',
+  LOSS: 'Loss'
+};
+export const USER_CLASS_LIMIT_PERIOD = {
+  DAILY: 'Daily',
+  WEEKLY: 'Weekly',
+  MONTHLY: 'Monthly'
+};
+
 export const LOCAL_STORAGE = {
   USER_DATA: 'UserData',
   AUTH_TOKEN: 'AuthToken',
@@ -313,4 +325,15 @@ export const PROMOCODE = {
 export const KYC_PROCESSING_MODE = {
   AUTO: 'auto',
   MANUAL: 'manual'
+};
+
+export const BANNER = {
+  TYPE: {
+    LOBBY_BANNER: 1
+  }
+};
+
+export const GENERAL_STATUS = {
+  ACTIVE: 1,
+  INACTIVE: 0
 };
