@@ -401,6 +401,7 @@
   "site_configuration": "Site Configuration",
   "bonus_management": "Bonus Management",
   "management": "Management",
+  "exchange_history": "Exchange History",
   "with_key": "With",
   "without": "Without",
   "referral_management": "Referral Management",
@@ -524,5 +525,10 @@
   "rejection_reason": "Rejection Reason",
   "remarks": "Remarks",
   "date_created": "Date Created",
-  "last_modified": "Last Modified"
+  "last_modified": "Last Modified",
+  "exchange_rate": "Exchange Rate",
+  "fiat": "Fiat",
+  "crypto": "Crypto",
+  "points": "Points",
+  "casino_currencies":"Currencies"
 }

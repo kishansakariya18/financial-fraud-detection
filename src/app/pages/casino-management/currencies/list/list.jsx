@@ -40,10 +40,42 @@ export default function Currency() {
   // }, []);
   const fetchProvider = async () => {
     const dummyData = [
-      { id: 1, name: 'US Dollar', code: 'USD', symbol: '$', exchange_rate: 150 },
-      { id: 2, name: 'Euro', code: 'EUR', symbol: '€', exchange_rate: 200 },
-      { id: 3, name: 'Bitcoin', code: 'BTC', symbol: '₿', exchange_rate: 50 },
-      { id: 4, name: 'Indian Rupee', code: 'INR', symbol: '₹', exchange_rate: 120 }
+      {
+        id: 1,
+        name: 'US Dollar',
+        code: 'USD',
+        symbol: '$',
+        exchange_rate: 150,
+        type: 'Fiat',
+        status: 'active'
+      },
+      {
+        id: 2,
+        name: 'Euro',
+        code: 'EUR',
+        symbol: '€',
+        exchange_rate: 200,
+        type: 'Fiat',
+        status: 'inactive'
+      },
+      {
+        id: 3,
+        name: 'Bitcoin',
+        code: 'BTC',
+        symbol: '₿',
+        exchange_rate: 50,
+        type: 'Crypto',
+        status: 'inactive'
+      },
+      {
+        id: 4,
+        name: 'Indian Rupee',
+        code: 'INR',
+        symbol: '₹',
+        exchange_rate: 120,
+        type: 'Fiat',
+        status: 'inactive'
+      }
     ];
 
     // Simulate API delay

@@ -1,11 +1,13 @@
-export const status = [
+export const statusOptions = [
   {
-    value: true,
-    label: 'Active'
+    value: 'active',
+    label: 'Active',
+    color: 'success'
   },
   {
-    value: false,
-    label: 'Inactive'
+    value: 'inactive',
+    label: 'Inactive',
+    color: 'error'
   }
 ];
 

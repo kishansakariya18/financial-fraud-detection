@@ -302,7 +302,8 @@ export const PERMISSIONS = {
     CREATE: 'currencies-create',
     EDIT: 'currencies-edit',
     CHANGE_STATUS: 'currencies-change-status',
-    DELETE: 'currencies-delete'
+    DELETE: 'currencies-delete',
+    EXCHANGE_HISTORY: 'currencies-exchange-history'
   }
 };
 

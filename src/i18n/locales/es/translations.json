@@ -397,6 +397,7 @@
   "site_configuration": "Configuración del sitio",
   "bonus_management": "Gestión de Bonificaciones",
   "management": "Gestión",
+  "exchange_history": "Historial de intercambio",
   "with_key": "Con",
   "without": "Sin",
   "referral_management": "Gestión de Referidos",
@@ -501,5 +502,10 @@
   "rejection_reason": "Motivo de rechazo",
   "remarks": "Observaciones",
   "date_created": "Fecha de creación",
-  "last_modified": "Última modificación"
+  "last_modified": "Última modificación",
+  "exchange_rate": "Tasa de cambio",
+  "fiat": "Fiat",
+  "crypto": "Cripto",
+  "points": "Puntos",
+  "casino_currencies":"Monedas"
   }

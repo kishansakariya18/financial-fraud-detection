@@ -1,6 +1,11 @@
 // Import Dependencies
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
-import { EllipsisHorizontalIcon, TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
+import {
+  EllipsisHorizontalIcon,
+  TrashIcon,
+  PencilIcon,
+  ClockIcon
+} from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -114,13 +119,34 @@ export function RowActions({ row, table }) {
                 <MenuItem>
                   {({ focus }) => (
                     <button
-                      onClick={onOpenDialogBox}
+                      onClick={() =>
+                        navigate(`/casino-management/currencies/edit/${row.original.id}`)
+                      }
                       className={clsx(
                         'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
                         focus && 'bg-this/10 dark:bg-this-light/10'
                       )}>
                       <TbEdit className="size-4.5 stroke-1" />
                       <span>{t('edit')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
+              {hasPermission(PERMISSIONS.CURRENCIES.EXCHANGE_HISTORY) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={() => {
+                        navigate(
+                          `/casino-management/currencies/exchange-history/${row.original.id}/list`
+                        );
+                      }}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                        focus && 'bg-this/10 dark:bg-this-light/10'
+                      )}>
+                      <ClockIcon className="size-4.5 stroke-1" />
+                      <span>{t('exchange_history')}</span>
                     </button>
                   )}
                 </MenuItem>

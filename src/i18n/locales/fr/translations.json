@@ -397,6 +397,7 @@
   "site_configuration": "Configuration du site",
   "bonus_management": "Gestion des Bonus",
   "management": "Gestion",
+  "exchange_history": "Historique des échanges",
   "with_key": "Avec",
   "without": "Sans",
   "referral_management": "Gestion des Parrainages",
@@ -500,5 +501,10 @@
   "rejection_reason": "Motif de rejet",
   "remarks": "Remarques",
   "date_created": "Date de création",
-  "last_modified": "Dernière modification"
+  "last_modified": "Dernière modification",
+  "exchange_rate": "Taux de change",
+  "fiat": "Fiat",
+  "crypto": "Crypto",
+  "points": "Points",
+  "casino_currencies": "Devise du casino"
 }
