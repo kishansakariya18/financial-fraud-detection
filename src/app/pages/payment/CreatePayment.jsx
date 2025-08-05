@@ -191,6 +191,7 @@ const CreatePayment = () => {
               error={errors?.amount?.message}
               placeholder={t('enter') + ' ' + t('amount')}
               type="number"
+              step="any"
               name="amount"
             />
           </div>
@@ -249,6 +250,7 @@ const CreatePayment = () => {
                   error={errors?.odd?.message}
                   placeholder={t('enter') + ' ' + t('odd')}
                   type="number"
+                  step="any"
                 />
                 <Controller
                   render={({ field }) => (

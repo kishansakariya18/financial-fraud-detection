@@ -10,10 +10,23 @@ import { TimezoneProvider } from 'app/contexts/timezone/Provider';
 import router from 'app/router/router';
 import { Provider } from 'react-redux';
 import store from './store/index';
+import { useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 
 function App() {
+  useEffect(() => {
+    const disableScroll = () => {
+      if (document.activeElement.type === 'number') {
+        document.activeElement.blur();
+      }
+    };
+
+    window.addEventListener('wheel', disableScroll, { passive: false });
+    return () => {
+      window.removeEventListener('wheel', disableScroll);
+    };
+  }, []);
   return (
     <Provider store={store}>
       <ThemeProvider>

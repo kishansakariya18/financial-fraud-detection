@@ -103,6 +103,7 @@ const PlatformLimit = () => {
                 {...register('dailyDepositLimit')}
                 label={t('dailyDepositLimitPlatform')}
                 type="number"
+                step="any"
                 error={errors?.dailyDepositLimit?.message}
                 placeholder="Enter Daily Deposit Limit"
                 suffix={
@@ -117,6 +118,7 @@ const PlatformLimit = () => {
                 {...register('dailyWithdrawLimit')}
                 label={t('dailyWithdrawLimitPlatform')}
                 type="number"
+                step="any"
                 error={errors?.dailyWithdrawLimit?.message}
                 placeholder="Enter Daily Withdraw Limit"
                 suffix={
@@ -133,6 +135,7 @@ const PlatformLimit = () => {
                 {...register('oneTimeBetLimit')}
                 label={t('oneTimeBetLimitPlatform')}
                 type="number"
+                step="any"
                 error={errors?.oneTimeBetLimit?.message}
                 placeholder="Enter Bet Limit"
                 suffix={
@@ -147,6 +150,7 @@ const PlatformLimit = () => {
                 {...register('oneTimeWinLimit')}
                 label={t('oneTimeWinLimitPlatform')}
                 type="number"
+                step="any"
                 error={errors?.oneTimeWinLimit?.message}
                 placeholder="Enter Win Limit"
                 suffix={

@@ -207,6 +207,7 @@ const CreateUserClassLimit = () => {
               <Input
                 label={t('limit_amount')}
                 type="number"
+                step="any"
                 {...register('limitAmount')}
                 error={errors.limitAmount?.message}
                 placeholder={t('enter') + ' ' + t('limitAmount')}

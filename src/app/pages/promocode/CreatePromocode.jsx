@@ -390,7 +390,7 @@ const CreatePromocode = () => {
                 label={`${t('wagering')} (Ex : 10x,20x)`}
                 error={errors?.wagering?.message}
                 placeholder={t('enter') + ' ' + t('amount')}
-                step={'1'}
+                step="any"
                 type="number"
               />
               <Input
@@ -400,7 +400,7 @@ const CreatePromocode = () => {
                 label={`${t('wagerFreeBounus')} (%)`}
                 error={errors?.wagerFreeBounus?.message}
                 placeholder={t('enter') + ' ' + t('amount')}
-                step={'1'}
+                step="any"
                 type="number"
               />
             </div>
@@ -500,7 +500,7 @@ const CreatePromocode = () => {
                     error={errors?.exactAmount?.message}
                     placeholder={t('enter') + ' ' + t('amount')}
                     type="number"
-                    step="0.01"
+                    step="any"
                   />
                 )}
                 {+type === PROMOCODE.TYPE.DEPOSIT_IN_RANGE && (
@@ -515,7 +515,7 @@ const CreatePromocode = () => {
                         label={t('min') + ' ' + t('amount')}
                         error={errors?.minAmount?.message}
                         placeholder={t('min') + ' ' + t('amount')}
-                        step={'0.01'}
+                        step="any"
                         type="number"
                       />
                       <Input
@@ -524,7 +524,7 @@ const CreatePromocode = () => {
                         label={t('max') + ' ' + t('amount')}
                         error={errors?.maxAmount?.message}
                         placeholder={t('max') + ' ' + t('amount')}
-                        step={'0.01'}
+                        step="any"
                         type="number"
                       />
                     </div>
@@ -546,7 +546,7 @@ const CreatePromocode = () => {
                 label={t('discount')}
                 error={errors?.discount?.message}
                 placeholder={t('enter') + ' ' + t('amount')}
-                step={'0.01'}
+                step="any"
                 type="number"
               />
               {type === PROMOCODE.TYPE.DEPOSIT_IN_RANGE && (
@@ -556,6 +556,7 @@ const CreatePromocode = () => {
                   label={t('benefitCap')}
                   error={errors?.benefitCap?.message}
                   placeholder={t('enter') + ' ' + t('benefitCap')}
+                  step="any"
                   type="number"
                 />
               )}
@@ -615,6 +616,7 @@ const CreatePromocode = () => {
                 error={errors?.promocodeQty?.message}
                 type="number"
                 placeholder={t('enter') + ' ' + t('promocode') + ' ' + t('quantity')}
+                step="any"
               />
               {!(isOnlyFirstDeposit || isOnlySecondDeposit) && (
                 <Input
@@ -623,6 +625,7 @@ const CreatePromocode = () => {
                   label={t('allowedPerUser')}
                   error={errors?.allowedPerUser?.message}
                   type="number"
+                  step="any"
                   placeholder={t('enter') + ' ' + t('user') + ' ' + t('limit')}
                 />
               )}

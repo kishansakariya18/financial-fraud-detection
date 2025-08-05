@@ -132,7 +132,11 @@ export const manageFundSchema = Yup.object().shape({
   amount: Yup.number('Amount Must Be number')
     .transform((val) => (isNaN(val) ? null : val))
     .required('Amount Required')
-    .positive('Amount Must Be Positive'),
+    .positive('Amount Must Be Positive')
+    .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
+      if (value === undefined || value === null) return true;
+      return /^\d+(\.\d{1,2})?$/.test(value.toString());
+    }),
   fundMessage: Yup.string().trim().required('Fund Message Required'),
   type: Yup.string().trim().required('Type Required')
 });

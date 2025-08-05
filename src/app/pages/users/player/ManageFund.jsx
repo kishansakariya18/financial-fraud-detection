@@ -191,7 +191,7 @@ const ManageFund = () => {
                 type="number"
                 error={errors?.amount?.message}
                 placeholder={t('enter') + ' ' + t('amount')}
-                step="0.01"
+                step="any"
               />
               <Textarea
                 {...register('fundMessage')}

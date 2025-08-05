@@ -200,6 +200,7 @@ const ReferralManagement = () => {
                     <td className="border-l border-gray-200 px-2 py-2 dark:border-gray-700">
                       <TableInput
                         type="number"
+                        step="any"
                         value={offer.userReal}
                         onChange={(e) =>
                           handleInputChange(offer.id, 'userReal', parseFloat(e.target.value) || 0)
@@ -210,6 +211,7 @@ const ReferralManagement = () => {
                     <td className="px-2 py-2">
                       <TableInput
                         type="number"
+                        step="any"
                         value={offer.userBonus}
                         onChange={(e) =>
                           handleInputChange(offer.id, 'userBonus', parseFloat(e.target.value) || 0)
@@ -222,6 +224,7 @@ const ReferralManagement = () => {
                         <td className="border-l border-gray-200 px-2 py-2 dark:border-gray-700">
                           <TableInput
                             type="number"
+                            step="any"
                             value={offer.friendReal}
                             onChange={(e) =>
                               handleInputChange(
@@ -236,6 +239,7 @@ const ReferralManagement = () => {
                         <td className="px-2 py-2">
                           <TableInput
                             type="number"
+                            step="any"
                             value={offer.friendBonus}
                             onChange={(e) =>
                               handleInputChange(

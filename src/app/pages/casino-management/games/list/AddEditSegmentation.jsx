@@ -32,20 +32,35 @@ const AddEditSegmentation = ({ onClose, gameId }) => {
     }
   });
 
+  const handleSegmentationChange = (val) => {
+    const selectedValues = val.map((option) => option.value);
+    setGameSegmentation(selectedValues);
+    setValue('segmentation', selectedValues, { shouldValidate: true });
+  };
+
   const addSegmentation = async (data) => {
     setLoading(true);
     setError(null);
     console.log('Submitting segmentation: ', data.segmentation);
 
-    const result = await GameService.addGameSegmnetation(gameId, data.segmentation);
-    if (result) {
-      if (result.status === 200 || result.status === 201) {
-        setResponse(result.response);
-      } else {
-        setError(result.error);
+    try {
+      const result = await GameService.addGameSegmnetation(gameId, data.segmentation || []);
+      if (result) {
+        if (result.status === 200 || result.status === 201) {
+          setResponse(result.response);
+          return true;
+        } else {
+          setError(result.error);
+          return false;
+        }
       }
+    } catch (error) {
+      console.error('Error submitting segmentation:', error);
+      setError('Failed to update segmentation');
+      return false;
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const fetchSegmentations = async () => {
@@ -134,7 +149,7 @@ const AddEditSegmentation = ({ onClose, gameId }) => {
                 }
                 onChange={(val) => {
                   console.log(val);
-                  setGameSegmentation(val.map((option) => option.value));
+                  handleSegmentationChange(val);
                 }}
                 name={field.name}
                 multiple={true}

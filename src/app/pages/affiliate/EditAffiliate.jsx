@@ -244,6 +244,7 @@ const EditAffiliate = () => {
                     error={errors?.signupCommission?.message}
                     placeholder={t('enter') + ' ' + t('signup') + ' ' + t('commission')}
                     type="number"
+                    step="any"
                     disabled={!perSignup}
                   />
                 </div>
@@ -293,6 +294,7 @@ const EditAffiliate = () => {
                       error={errors?.depositCommission?.message}
                       placeholder={t('enter') + ' ' + t('deposit') + ' ' + t('commission')}
                       type="number"
+                      step="any"
                     />
                   </div>
                 </>
@@ -344,6 +346,7 @@ const EditAffiliate = () => {
                       error={errors?.playerLossCommission?.message}
                       placeholder={t('enter') + ' ' + t('playerLoss') + ' ' + t('comission')}
                       type="number"
+                      step="any"
                     />
                   </div>
                 </>

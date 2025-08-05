@@ -7,4 +7,8 @@ export const createUserClassLimitSchema = Yup.object().shape({
     .typeError('Limit Amount must be a number')
     .required('Limit Amount is required')
     .positive('Limit Amount must be positive')
+    .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
+      if (value === undefined || value === null) return true;
+      return /^\d+(\.\d{1,2})?$/.test(value.toString());
+    })
 });
