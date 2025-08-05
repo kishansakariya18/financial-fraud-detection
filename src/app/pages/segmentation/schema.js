@@ -39,6 +39,11 @@ export const createSegmentationSchema = Yup.object().shape({
       is: true,
       then: (schema) => schema.required('Maximum Age is required'),
       otherwise: (schema) => schema.notRequired()
+    })
+    .test('is-greater-than-min', 'Maximum age must be greater than minimum age', function (value) {
+      if (value === undefined || value === null || !this.parent.ageGroup) return true;
+      const minAge = this.parent.minAge;
+      return minAge === undefined || value > minAge;
     }),
 
   // Gender
@@ -76,7 +81,16 @@ export const createSegmentationSchema = Yup.object().shape({
     .test('max-1-decimals', 'Login Count Must be a whole number', (value) => {
       if (value === undefined || value === null) return true;
       return /^\d+(\.\d{1,1})?$/.test(value.toString());
-    }),
+    })
+    .test(
+      'is-greater-than-min',
+      'Maximum login count must be greater than minimum login count',
+      function (value) {
+        if (value === undefined || value === null || !this.parent.loginCounter) return true;
+        const minLoginCount = this.parent.minLoginCount;
+        return minLoginCount === undefined || value > minLoginCount;
+      }
+    ),
 
   // Referral
   referral: Yup.boolean(),
@@ -105,7 +119,16 @@ export const createSegmentationSchema = Yup.object().shape({
     .test('max-1-decimals', 'Referral count Must be a whole number', (value) => {
       if (value === undefined || value === null) return true;
       return /^\d+(\.\d{1,1})?$/.test(value.toString());
-    }),
+    })
+    .test(
+      'is-greater-than-min',
+      'Maximum referral count must be greater than minimum referral count',
+      function (value) {
+        if (value === undefined || value === null || !this.parent.referral) return true;
+        const minReferral = this.parent.minReferral;
+        return minReferral === undefined || value > minReferral;
+      }
+    ),
 
   // Money Deposit
   moneyDeposit: Yup.boolean(),
@@ -132,7 +155,16 @@ export const createSegmentationSchema = Yup.object().shape({
     .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
       if (value === undefined || value === null) return true;
       return /^\d+(\.\d{1,2})?$/.test(value.toString());
-    }),
+    })
+    .test(
+      'is-greater-than-min',
+      'Maximum deposit must be greater than minimum deposit',
+      function (value) {
+        if (value === undefined || value === null || !this.parent.moneyDeposit) return true;
+        const minDeposit = this.parent.minDeposit;
+        return minDeposit === undefined || value > minDeposit;
+      }
+    ),
 
   // Money Won
   moneyWon: Yup.boolean(),
@@ -159,6 +191,11 @@ export const createSegmentationSchema = Yup.object().shape({
     .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
       if (value === undefined || value === null) return true;
       return /^\d+(\.\d{1,2})?$/.test(value.toString());
+    })
+    .test('is-greater-than-min', 'Maximum won must be greater than minimum won', function (value) {
+      if (value === undefined || value === null || !this.parent.moneyWon) return true;
+      const minWon = this.parent.minWon;
+      return minWon === undefined || value > minWon;
     }),
 
   // Money Loss
@@ -187,4 +224,13 @@ export const createSegmentationSchema = Yup.object().shape({
       if (value === undefined || value === null) return true;
       return /^\d+(\.\d{1,2})?$/.test(value.toString());
     })
+    .test(
+      'is-greater-than-min',
+      'Maximum loss must be greater than minimum loss',
+      function (value) {
+        if (value === undefined || value === null || !this.parent.moneyLoss) return true;
+        const minLoss = this.parent.minLoss;
+        return minLoss === undefined || value > minLoss;
+      }
+    )
 });

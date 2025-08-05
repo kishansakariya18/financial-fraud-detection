@@ -15,8 +15,16 @@ export const editGameSchema = yup.object().shape({
   maxBetAmount: yup
     .number()
     .typeError('Maximum bet amount must be a number')
-    .min(yup.ref('minBetAmount'), 'Maximum bet amount must be greater than minimum bet amount')
     .required('Maximum bet amount is required')
+    .test(
+      'is-greater-than-min',
+      'Maximum bet amount must be greater than minimum bet amount',
+      function (value) {
+        if (value === undefined || value === null) return false;
+        const minBet = this.parent.minBetAmount;
+        return minBet === undefined || value > minBet;
+      }
+    )
     .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
       if (value === undefined || value === null) return true;
       return /^\d+(\.\d{1,2})?$/.test(value.toString());
