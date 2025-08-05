@@ -196,6 +196,7 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          step="any"
                           suffix={
                             <ContextualHelp
                               title={t('dailyWagerLimit')}
@@ -229,6 +230,7 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          step="any"
                           suffix={
                             <ContextualHelp
                               title={t('weeklyWagerLimit')}
@@ -262,6 +264,7 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          step="any"
                           suffix={
                             <ContextualHelp
                               title={t('monthlyWagerLimit')}
@@ -294,6 +297,7 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          step="any"
                           suffix={
                             <ContextualHelp
                               title={t('dailyDepositLimit')}
@@ -326,6 +330,7 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          step="any"
                           suffix={
                             <ContextualHelp
                               title={t('weeklyDepositLimit')}
@@ -358,6 +363,7 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          step="any"
                           suffix={
                             <ContextualHelp
                               title={t('weeklyDepositLimit')}
@@ -390,6 +396,7 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          step="any"
                           suffix={
                             <ContextualHelp
                               title={t('dailyWithdrawLimit')}
@@ -422,6 +429,7 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          step="any"
                           suffix={
                             <ContextualHelp
                               title={t('weeklyWithdrawLimit')}
@@ -454,6 +462,7 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          step="any"
                           suffix={
                             <ContextualHelp
                               title={t('monthlyWithdrawLimit')}
@@ -488,6 +497,7 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          step="any"
                           suffix={
                             <ContextualHelp
                               title={t('dailyLossLimit')}
@@ -520,6 +530,7 @@ const PlayerLimit = () => {
                             input: 'relative rounded-none hover:z-1 focus:z-1'
                           }}
                           type="number"
+                          step="any"
                           suffix={
                             <ContextualHelp
                               title={t('weeklyLossLimit')}
@@ -544,6 +555,7 @@ const PlayerLimit = () => {
                       <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
                         <Input
                           type="number"
+                          step="any"
                           {...register('monthlyLossLimit')}
                           error={errors?.monthlyLossLimit?.message}
                           id="monthlyLossLimit"
@@ -576,6 +588,7 @@ const PlayerLimit = () => {
                       <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
                         <Input
                           type="number"
+                          step="any"
                           {...register('oneTimeBetLimit')}
                           error={errors?.oneTimeBetLimit?.message}
                           id="oneTimeBetLimit"
@@ -608,6 +621,7 @@ const PlayerLimit = () => {
                       <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
                         <Input
                           type="number"
+                          step="any"
                           {...register('oneTimeWinLimit')}
                           error={errors?.oneTimeWinLimit?.message}
                           id="oneTimeWinLimit"

@@ -1,10 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
-
-// Local Imports - UI,Services,Helper,Utils
-import { CategoryFilters } from './categoryFilters';
+import { Toolbar } from './Toolbar';
 import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
@@ -13,21 +11,20 @@ import { responseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
-import BankService from 'services/bank.services';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
-import CategoryService from 'services/category.services';
+import ReleaseNotesService from 'services/release-notes.services';
 
-export default function Banks() {
+export default function ReleaseNotes() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('casino_category');
-  const [summary, setSummary] = useState(null);
+  const pageTitle = t('release_notes');
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
-  const fetchCategory = async () => {
-    const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
-    const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
-    const result = await BankService.getBankList({
+  const fetchReleaseNotes = async () => {
+    // setError(null);
+    const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
+    const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
+    const result = await ReleaseNotesService.releaseNotesList({
       pagination: { pageIndex, pageSize },
       filters: queryParams
     });
@@ -36,40 +33,23 @@ export default function Banks() {
       return {
         status: 200,
         data: responseMapper(result.response.data),
-        totalRecords: parseInt(result.response.totalRecords, 10) || 0
+        totalPages: parseInt(result.response.total_pages, 10) || 0,
+        totalRecords: parseInt(result.response.total_record, 10) || 0
       };
     }
 
     return { status: result.status, error: result.error };
   };
-  const fetchSummary = async () => {
-    // setError(null);
 
-    const result = await CategoryService.getCategorySummary();
-
-    if (result.status === 200) {
-      setSummary(result.response.data);
-      return {
-        status: 200,
-        data: result.response.data,
-        totalRecords: parseInt(result.response.total_records, 10) || 0
-      };
-    }
-
-    return { status: result.status, error: result.error };
-  };
-  useEffect(() => {
-    fetchSummary();
-  }, []);
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
-    fetchSummary: fetchSummary,
-    fetchData: fetchCategory,
+    fetchData: fetchReleaseNotes,
     queryParams,
     setSearchParams,
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
-      tableSettings: {}
+      tableSettings: {},
+      columnVisibility: { firstname: false }
     }
   });
 
@@ -83,74 +63,70 @@ export default function Banks() {
 
   useEffect(() => {
     const filtersFromQuery = [];
+
+    // Handle keyword filter (for version, uid, and title)
     if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'name', value: queryParams.keyword });
-    }
-    if (queryParams.status) {
-      filtersFromQuery.push({ id: 'status', value: queryParams.status });
+      filtersFromQuery.push(
+        { id: 'version', value: queryParams.keyword },
+        { id: 'uid', value: queryParams.keyword },
+        { id: 'title', value: queryParams.keyword }
+      );
     }
 
-    if (queryParams.startDate && queryParams.endDate) {
+    // Handle status filter
+    if (queryParams.status) {
       filtersFromQuery.push({
-        id: 'createdAt',
-        value: [+queryParams.startDate, +queryParams.endDate]
+        id: 'status',
+        value: queryParams.status === '1' ? 'active' : 'inactive'
       });
     }
+
     setColumnFilters(filtersFromQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryParams]);
 
   const applyFilterHandler = () => {
     const filterItems = {};
-    // console.log('table.getState().columnFilters:', table.getState().columnFilters);
+    const columnFilters = table.getState().columnFilters;
 
-    for (let data of table.getState().columnFilters) {
-      if (data.id === 'name') {
-        filterItems.keyword = data.value;
+    // Process each filter
+    columnFilters.forEach((filter) => {
+      if (['version', 'uid', 'title'].includes(filter.id) && filter.value) {
+        // For keyword search (version, uid, title)
+        filterItems.keyword = filter.value;
+      } else if (filter.id === 'status' && filter.value) {
+        // For status filter
+        filterItems.status = filter.value === 'active' ? '1' : '0';
       }
-
-      if (data.id === 'status') {
-        filterItems.status = data.value;
-      }
-
-      if (data.id === 'createdAt') {
-        filterItems.date = data.value;
-      }
-    }
+    });
 
     setSearchParams({
       pageIndex: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
-      ...(filterItems.status && { status: filterItems.status }),
-      ...(filterItems.date && { startDate: filterItems.date[0] }),
-      ...(filterItems.date && { endDate: filterItems?.date[1] })
+      ...(filterItems.status && { status: filterItems.status })
     });
   };
 
   const clearFilterHandler = () => {
     if (!isEmptyObject(queryParams)) {
       setSearchParams({
-        pageIndex: 0,
-        pageSize: 10
+        pageIndex: DEFAULT_PAGE_INDEX,
+        pageSize: DEFAULT_PER_PAGE_RECORD
       });
     }
     table.resetColumnFilters();
   };
 
   useLockScrollbar(tableSettings.enableFullScreen);
-  // console.log('tableSettings: from reports', table);
 
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
-      {/* <Toolbar breadcrumbs={breadcrumbs} table={table} pageTitle={pageTitle} /> */}
-      <CategoryFilters
+      <Toolbar
         pageTitle={pageTitle}
         table={table}
-        summary={summary}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
-        // filters= {}
       />
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>

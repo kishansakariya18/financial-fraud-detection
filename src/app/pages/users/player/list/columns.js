@@ -7,8 +7,8 @@ import {
   IdCell,
   DateCell,
   BoldCell,
-  BadgeCell,
-  AmountCell
+  BadgeCell
+  // AmountCell
 } from '../../../../../components/custom/table/cell';
 import { CopyableCell } from '../../../../../components/shared/table/CopyableCell';
 import { playerStatusOptions, genderOptions } from '../helper';
@@ -55,20 +55,20 @@ export const columns = [
     cell: CopyableCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.realCash, {
-    id: 'realCash',
-    header: 'Real Cash',
-    label: 'Real Cash',
-    cell: AmountCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => row.bonus, {
-    id: 'bonus',
-    header: 'Bonus',
-    label: 'Bonus',
-    cell: AmountCell,
-    enableSorting: false
-  }),
+  // columnHelper.accessor((row) => row.realCash, {
+  //   id: 'realCash',
+  //   header: 'Real Cash',
+  //   label: 'Real Cash',
+  //   cell: AmountCell,
+  //   enableSorting: false
+  // }),
+  // columnHelper.accessor((row) => row.bonus, {
+  //   id: 'bonus',
+  //   header: 'Bonus',
+  //   label: 'Bonus',
+  //   cell: AmountCell,
+  //   enableSorting: false
+  // }),
   columnHelper.accessor((row) => row.status, {
     id: 'status',
     label: 'Admin Status',

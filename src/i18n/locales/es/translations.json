@@ -514,5 +514,16 @@
   "show_as_optional":"Mostrar como opcional",
   "show_as_required":"Mostrar como obligatorio",
   "admin_exchange_rate":"Admin Rate",
-  "enter_admin_exchange_rate":"Ingrese Admin Rate"
+  "enter_admin_exchange_rate":"Ingrese Admin Rate",
+  "release_notes": "Notas de lanzamiento",
+  "release_note": "Nota de lanzamiento",
+  "release_date": "Fecha de lanzamiento",
+  "release_note_delete_desc": "¿Estás seguro de querer eliminar esta Nota de lanzamiento?",
+  "id": "ID",
+  "uid": "UID",
+  "version": "Version",
+  "modifiedAt": "Modified At",
+  "release_note_status_suceess": "Nota de lanzamiento El estado se ha cambiado correctamente",
+  "release_note_status_conf": "¿Estás seguro de querer cambiar el estado de la nota de lanzamiento?",
+  "done": "Hecho"
   }

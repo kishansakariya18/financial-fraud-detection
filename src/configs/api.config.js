@@ -36,26 +36,26 @@ export const apiConfig = {
       UPDATE: '/content/admin/pages/update'
     },
     USER: {
-      DETAIL: '/users/admin/detail/:userUID',
-      LIST: '/users/admin/list',
-      REFERRAL_LIST: '/users/admin/referral/:userID',
-      FUND: '/users/admin/fund',
-      TRANSACTION_LIST: '/users/admin/transaction-list',
-      TDS_SUMMARY_TRANSACTION_LIST: '/users/admin/tds-summary-transaction-list',
-      TRANSACTION_DETAIL: '/users/admin/transaction-detail',
-      CHANGE_STATUS: '/users/admin/change-status',
-      REST_BANK_COUNT: '/users/admin/reset-bank-request-count',
-      UPDATE_RISK_MANAGEMENT: '/users/admin/update-user-risk-management/:userID',
-      ALL_TRANSACTION_LIST: '/users/admin/all-transaction-list',
-      GET_COMMENT: '/users/admin/get-comment',
-      UPDATE_COMMENT: '/users/admin/update-comment',
-      LOGIN_HISTORY: '/users/admin/:userID/login-history',
-      GET_COMMENT_DETAIL: '/users/admin/get-comment-detail',
-      ADD_COMMENT: '/users/admin/add-comment',
-      DELETE_COMMENT: '/users/admin/delete-comment',
+      DETAIL: '/users/admin/users/detail/:userUID',
+      LIST: '/users/admin/users/list',
+      REFERRAL_LIST: '/users/admin/users/referral/:userID',
+      FUND: '/users/admin/users/fund',
+      TRANSACTION_LIST: '/users/admin/users/transaction-list',
+      TDS_SUMMARY_TRANSACTION_LIST: '/users/admin/users/tds-summary-transaction-list',
+      TRANSACTION_DETAIL: '/users/admin/users/transaction-detail',
+      CHANGE_STATUS: '/users/admin/users/change-status',
+      REST_BANK_COUNT: '/users/admin/users/reset-bank-request-count',
+      UPDATE_RISK_MANAGEMENT: '/users/admin/users/update-user-risk-management/:userID',
+      ALL_TRANSACTION_LIST: '/users/admin/users/all-transaction-list',
+      GET_COMMENT: '/users/admin/users/get-comment',
+      UPDATE_COMMENT: '/users/admin/users/update-comment',
+      LOGIN_HISTORY: '/users/admin/users/:userID/login-history',
+      GET_COMMENT_DETAIL: '/users/admin/users/get-comment-detail',
+      ADD_COMMENT: '/users/admin/users/add-comment',
+      DELETE_COMMENT: '/users/admin/users/delete-comment',
       CHANE_PLAYER_FUND_PASSWORD: '/admin/user/change-manage-fund-password',
-      SUMMARY: '/users/admin/summary',
-      USER_SUMMARY: '/users/admin/user/summary',
+      SUMMARY: '/users/admin/users/summary',
+      USER_SUMMARY: '/users/admin/users/summary',
       COUNTRY_LIST: '/config/admin/config/countries',
       SEGMENTATION_LIST: '/bonus/admin/segmentation/list'
     },
@@ -321,7 +321,18 @@ export const apiConfig = {
     },
     REGISTRATION_FIELDS: {
       LIST: '/payments/admin/user-bank-deposit/list',
-      SUBMIT: '/payments/admin/user-bank-deposit/:depositId/manual-deposit/verify'
+      SUBMIT: '/payments/admin/user-bank-deposit/:depositId/manual-deposit/verify',
+      DETAIL: '/admin/user-bank-deposit/:depositId/details',
+      EDIT: '/admin/user-bank-deposit/:depositId/edit',
+      DELETE: '/admin/user-bank-deposit/:depositId/delete'
+    },
+    RELEASE_NOTES: {
+      LIST: '/content/admin/release-note/list',
+      CREATE: '/content/admin/release-note/create',
+      DELETE: '/content/admin/release-note/:releaseNoteUID/delete',
+      DETAIL: '/content/admin/release-note/:releaseNoteUID/details',
+      CHANGE_STATUS: '/content/admin/release-note/:releaseNoteUID/change-status',
+      EDIT: '/content/admin/release-note/:releaseNoteUID/edit'
     }
   }
 };

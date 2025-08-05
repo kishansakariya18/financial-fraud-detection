@@ -23,6 +23,7 @@ import { blacklist } from './blacklist';
 import { bank } from './bank';
 import { userManualDepositTransaction } from './user-manual-deposit-transaction';
 import { registrationFields } from './registration-fields';
+import { releaseNotes } from './release-notes';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -66,6 +67,7 @@ export const dashboards = () => ({
     blacklist,
     bank,
     registrationFields,
-    userManualDepositTransaction
+    userManualDepositTransaction,
+    releaseNotes
   ]
 });

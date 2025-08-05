@@ -26,7 +26,7 @@ export function RowActions({ row, table }) {
   const deleteConfirmMessages = {
     pending: {
       description: t('segmentation_limit_delete_desc'),
-      actionText: t('Delete')
+      actionText: t('delete_text')
     },
     success: {
       title: t('segmentationLimit') + ' ' + t('deleted'),

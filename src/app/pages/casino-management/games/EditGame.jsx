@@ -194,7 +194,7 @@ const EditGame = () => {
                 error={errors?.minBetAmount?.message}
                 placeholder={t('enter') + ' ' + t('minBetAmount')}
                 type="number"
-                step="0.01"
+                step="any"
                 min="0"
               />
               <Input
@@ -203,7 +203,7 @@ const EditGame = () => {
                 error={errors?.maxBetAmount?.message}
                 placeholder={t('enter') + ' ' + t('maxBetAmount')}
                 type="number"
-                step="0.01"
+                step="any"
                 min="0"
               />
             </div>

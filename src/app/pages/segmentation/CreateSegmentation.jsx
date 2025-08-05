@@ -237,6 +237,7 @@ const CreateSegmentation = () => {
                     error={errors?.minAge?.message}
                     placeholder={t('enter') + ' ' + t('minimum') + ' ' + t('age')}
                     type="number"
+                    step="any"
                     disabled={!ageGroup}
                   />
                   <Input
@@ -244,6 +245,7 @@ const CreateSegmentation = () => {
                     error={errors?.maxAge?.message}
                     placeholder={t('enter') + ' ' + t('maximum') + ' ' + t('age')}
                     type="number"
+                    step="any"
                     disabled={!ageGroup}
                   />
                 </>
@@ -284,6 +286,7 @@ const CreateSegmentation = () => {
                     error={errors?.minLoginCount?.message}
                     placeholder={t('minimum') + ' ' + t('login') + ' ' + t('count')}
                     type="number"
+                    step="any"
                   />
                   <Input
                     disabled={!loginCounter}
@@ -291,6 +294,7 @@ const CreateSegmentation = () => {
                     error={errors?.maxLoginCount?.message}
                     placeholder={t('maximum') + ' ' + t('login') + ' ' + t('count')}
                     type="number"
+                    step="any"
                   />
                 </>
               }
@@ -306,6 +310,7 @@ const CreateSegmentation = () => {
                     error={errors?.minReferral?.message}
                     placeholder={t('minimum') + ' ' + t('referral') + ' ' + t('count')}
                     type="number"
+                    step="any"
                     disabled={!referral}
                   />
                   <Input
@@ -314,6 +319,7 @@ const CreateSegmentation = () => {
                     error={errors?.maxReferral?.message}
                     placeholder={t('maximum') + ' ' + t('referral') + ' ' + t('count')}
                     type="number"
+                    step="any"
                   />
                 </>
               }
@@ -329,6 +335,7 @@ const CreateSegmentation = () => {
                     error={errors?.minDeposit?.message}
                     placeholder={t('minimum') + ' ' + t('deposit')}
                     type="number"
+                    step="any"
                     disabled={!moneyDeposit}
                   />
                   <Input
@@ -336,6 +343,7 @@ const CreateSegmentation = () => {
                     error={errors?.maxDeposit?.message}
                     placeholder={t('maximum') + ' ' + t('deposit')}
                     type="number"
+                    step="any"
                     disabled={!moneyDeposit}
                   />
                 </>
@@ -352,6 +360,7 @@ const CreateSegmentation = () => {
                     error={errors?.minWon?.message}
                     placeholder={t('minimum') + ' ' + t('won')}
                     type="number"
+                    step="any"
                     disabled={!moneyWon}
                   />
                   <Input
@@ -359,6 +368,7 @@ const CreateSegmentation = () => {
                     error={errors?.maxWon?.message}
                     placeholder={t('maximum') + ' ' + t('won')}
                     type="number"
+                    step="any"
                     disabled={!moneyWon}
                   />
                 </>
@@ -376,6 +386,7 @@ const CreateSegmentation = () => {
                     error={errors?.minLoss?.message}
                     placeholder={t('minimum') + ' ' + t('loss')}
                     type="number"
+                    step="any"
                   />
                   <Input
                     disabled={!moneyLoss}
@@ -383,6 +394,7 @@ const CreateSegmentation = () => {
                     error={errors?.maxLoss?.message}
                     placeholder={t('maximum') + ' ' + t('loss')}
                     type="number"
+                    step="any"
                   />
                 </>
               }

@@ -259,8 +259,7 @@ const EditBanner = () => {
                     error={errors?.startDate?.message}
                     options={{
                       disableMobile: true,
-                      time_24hr: true,
-                      minDate: new Date()
+                      time_24hr: true
                     }}
                     placeholder="Choose date..."
                     {...rest}

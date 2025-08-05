@@ -1,34 +1,32 @@
 // Import Dependencies
-import { MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, MapPinIcon, PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 // import { TbCurrencyDollar } from "react-icons/tb";
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
 
 // Local Imports
-// import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
+
 // import { RangeFilter } from "components/shared/table/RangeFilter";
 import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
-// import { globallyBlockedStatusOptions, statusOptions } from '../helper';
-import { DashboardCard } from 'components/custom/DashboardCard';
-import { dummyCards } from 'helpers/functions';
+import { useNavigate } from 'react-router';
+import { t } from 'i18next';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
-import { globallyBlockedStatusOptions } from '../helper';
+import { releaseNoteStatusOption } from '../helper';
+// import { statusOptions } from '../helper';
 
 // ----------------------------------------------------------------------
 
-export function CountryFilters({
+export function Toolbar({
   table,
   onApplyFilters = () => {},
   onClearFilters = () => {},
-  pageTitle = '',
-  summary = {}
+  pageTitle = ''
 }) {
   const { isXs } = useBreakpointsContext();
+  const navigate = useNavigate();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
-  const { t } = useTranslation();
 
   return (
     <div className="table-toolbar">
@@ -42,29 +40,16 @@ export function CountryFilters({
             {pageTitle}
           </h2>
         </div>
+
+        <Button
+          className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
+          color="primary"
+          onClick={() => navigate('/release-notes/add')}>
+          <PlusIcon className="size-5" />
+          <span>{t('add') + ' ' + t('release_note')}</span>
+        </Button>
       </div>
-      <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
-        <DashboardCard
-          label={dummyCards.Country.TOTAL_COUNTRY.key}
-          value={summary ? summary.totalCountries : dummyCards.Country.TOTAL_COUNTRY.value}
-          gradientFrom={dummyCards.Country.TOTAL_COUNTRY.gradientFrom}
-          gradientTo={dummyCards.Country.TOTAL_COUNTRY.gradientTo}
-          textColor="text-sky-100"
-          maskShape="is-reuleaux-triangle"
-        />
-        <DashboardCard
-          label={dummyCards.Country.BLOCKED_COUNTRY.key}
-          value={
-            summary.blockedCountries
-              ? summary.blockedCountries
-              : dummyCards.Country.BLOCKED_COUNTRY.value
-          }
-          gradientFrom={dummyCards.Country.BLOCKED_COUNTRY.gradientFrom}
-          gradientTo={dummyCards.Country.BLOCKED_COUNTRY.gradientTo}
-          textColor="text-sky-100"
-          maskShape="is-reuleaux-triangle"
-        />
-      </div>
+
       {isXs ? (
         <>
           <div
@@ -84,7 +69,6 @@ export function CountryFilters({
               table={table}
               onApplyFilters={onApplyFilters}
               onClearFilters={onClearFilters}
-              t={t}
             />
           </div>
         </>
@@ -103,7 +87,6 @@ export function CountryFilters({
               table={table}
               onApplyFilters={onApplyFilters}
               onClearFilters={onClearFilters}
-              t={t}
             />
           </div>
 
@@ -115,10 +98,27 @@ export function CountryFilters({
 }
 
 function SearchInput({ table, onApplyFilters }) {
+  const keywordFilter = table
+    .getState()
+    .columnFilters.find(
+      (filter) => ['version', 'uid', 'title'].includes(filter.id) && filter.value
+    );
+
+  const handleChange = (e) => {
+    ['version', 'uid', 'title'].forEach((columnId) => {
+      table.getColumn(columnId)?.setFilterValue(undefined);
+    });
+
+    const value = e.target.value;
+    ['version', 'uid', 'title'].forEach((columnId) => {
+      table.getColumn(columnId)?.setFilterValue(value);
+    });
+  };
+
   return (
     <Input
-      value={table?.getColumn('countryName')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('countryName').setFilterValue(e.target.value)}
+      value={keywordFilter?.value || ''}
+      onChange={handleChange}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
           onApplyFilters();
@@ -129,36 +129,47 @@ function SearchInput({ table, onApplyFilters }) {
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
         root: 'shrink-0'
       }}
-      placeholder="Search Country Name, Code . . ."
+      placeholder={t('search') + ' ' + t('version') + ', ' + t('uid') + '...'}
     />
   );
 }
 
-function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {}, t }) {
+function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }) {
   const isFiltered = table.getState().columnFilters.length > 0;
+
+  // Handle clear filter for status column
+  const handleClearFilter = () => {
+    const statusColumn = table.getColumn('status');
+    if (statusColumn) {
+      statusColumn.setFilterValue(undefined);
+      onClearFilters();
+    }
+  };
+
   return (
     <>
-      {/* {table.getColumn('status') && (
+      {table.getColumn('status') && (
         <FacedtedFilter
-          options={statusOptions}
+          options={releaseNoteStatusOption}
           column={table.getColumn('status')}
           title="Status"
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}
-        />
-      )} */}
-
-      {table.getColumn('globallyBlocked') && (
-        <FacedtedFilter
-          options={globallyBlockedStatusOptions}
-          column={table.getColumn('globallyBlocked')}
-          title="Global Status"
-          Icon={MapPinIcon}
-          isMultiple={false}
-          showCheckbox={false}
+          onClear={handleClearFilter}
         />
       )}
+
+      {/* {table.getColumn('createdAt') && (
+        <DateFilter
+          column={table.getColumn('createdAt')}
+          title={t('date') + ' ' + t('range')}
+          config={{
+            maxDate: new Date().fp_incr(1),
+            mode: 'range'
+          }}
+        />
+      )} */}
 
       <div>
         <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
@@ -175,7 +186,7 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {}, 
   );
 }
 
-CountryFilters.propTypes = {
+Toolbar.propTypes = {
   table: PropTypes.object
 };
 

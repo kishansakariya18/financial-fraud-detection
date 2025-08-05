@@ -18,6 +18,10 @@ export const playerLimitSchema = Yup.object().shape({
             'Value must be zero or positive value',
             (val) => val === null || val >= 0
           )
+    })
+    .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
+      if (value === undefined || value === null) return true;
+      return /^\d+(\.\d{1,2})?$/.test(value.toString());
     }),
   weeklyWagerLimit: Yup.number()
     .transform((val, originalVal) => (originalVal === '' ? 0 : val))
@@ -35,6 +39,10 @@ export const playerLimitSchema = Yup.object().shape({
             'Value must be zero or positive value',
             (val) => val === null || val >= 0
           )
+    })
+    .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
+      if (value === undefined || value === null) return true;
+      return /^\d+(\.\d{1,2})?$/.test(value.toString());
     }),
   monthlyWagerLimit: Yup.number()
     .transform((val, originalVal) => (originalVal === '' ? 0 : val))
@@ -52,6 +60,10 @@ export const playerLimitSchema = Yup.object().shape({
             'Value must be zero or positive value',
             (val) => val === null || val >= 0
           )
+    })
+    .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
+      if (value === undefined || value === null) return true;
+      return /^\d+(\.\d{1,2})?$/.test(value.toString());
     }),
 
   // Deposit Limits
@@ -71,6 +83,10 @@ export const playerLimitSchema = Yup.object().shape({
             'Value must be zero or positive value',
             (val) => val === null || val >= 0
           )
+    })
+    .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
+      if (value === undefined || value === null) return true;
+      return /^\d+(\.\d{1,2})?$/.test(value.toString());
     }),
   weeklyDepositLimit: Yup.number()
     .transform((val, originalVal) => (originalVal === '' ? 0 : val))
@@ -88,6 +104,10 @@ export const playerLimitSchema = Yup.object().shape({
             'Value must be zero or positive value',
             (val) => val === null || val >= 0
           )
+    })
+    .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
+      if (value === undefined || value === null) return true;
+      return /^\d+(\.\d{1,2})?$/.test(value.toString());
     }),
   monthlyDepositLimit: Yup.number()
     .transform((val, originalVal) => (originalVal === '' ? 0 : val))
@@ -105,6 +125,10 @@ export const playerLimitSchema = Yup.object().shape({
             'Value must be zero or positive value',
             (val) => val === null || val >= 0
           )
+    })
+    .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
+      if (value === undefined || value === null) return true;
+      return /^\d+(\.\d{1,2})?$/.test(value.toString());
     }),
 
   // Withdraw Limits
@@ -124,6 +148,10 @@ export const playerLimitSchema = Yup.object().shape({
             'Value must be zero or positive value',
             (val) => val === null || val >= 0
           )
+    })
+    .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
+      if (value === undefined || value === null) return true;
+      return /^\d+(\.\d{1,2})?$/.test(value.toString());
     }),
   weeklyWithdrawLimit: Yup.number()
     .transform((val, originalVal) => (originalVal === '' ? 0 : val))
@@ -141,6 +169,10 @@ export const playerLimitSchema = Yup.object().shape({
             'Value must be zero or positive value',
             (val) => val === null || val >= 0
           )
+    })
+    .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
+      if (value === undefined || value === null) return true;
+      return /^\d+(\.\d{1,2})?$/.test(value.toString());
     }),
   monthlyWithdrawLimit: Yup.number()
     .transform((val, originalVal) => (originalVal === '' ? 0 : val))
@@ -158,6 +190,10 @@ export const playerLimitSchema = Yup.object().shape({
             'Value must be zero or positive value',
             (val) => val === null || val >= 0
           )
+    })
+    .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
+      if (value === undefined || value === null) return true;
+      return /^\d+(\.\d{1,2})?$/.test(value.toString());
     }),
 
   // Exclusion
@@ -190,7 +226,11 @@ export const manageFundSchema = Yup.object().shape({
   amount: Yup.number('Amount Must Be number')
     .transform((val) => (isNaN(val) ? null : val))
     .required('Amount Required')
-    .positive('Amount Must Be Positive'),
+    .positive('Amount Must Be Positive')
+    .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
+      if (value === undefined || value === null) return true;
+      return /^\d+(\.\d{1,2})?$/.test(value.toString());
+    }),
   fundType: Yup.string().trim().required('Fund Type Required'),
   fundMessage: Yup.string()
     .trim()

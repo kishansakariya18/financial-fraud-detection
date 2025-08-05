@@ -59,13 +59,13 @@ export const columns = [
     enableSorting: false
   }),
 
-  columnHelper.accessor((row) => row.realCash, {
-    id: 'realCash',
-    label: 'Real Cash',
-    header: 'Real Cash',
-    cell: AmountCell,
-    enableSorting: false
-  }),
+  // columnHelper.accessor((row) => row.realCash, {
+  //   id: 'realCash',
+  //   label: 'Real Cash',
+  //   header: 'Real Cash',
+  //   cell: AmountCell,
+  //   enableSorting: false
+  // }),
   columnHelper.accessor((row) => row.bonus, {
     id: 'bonus',
     label: 'Bonus',
