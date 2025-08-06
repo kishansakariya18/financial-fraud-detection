@@ -71,10 +71,10 @@ export const depositTransactionResponseMapper = (apiData) => {
   const resultData = apiData.map((data) => ({
     id: data.TransactionID,
     transactionUID: data.TransactionUID,
-    userId: data.user.UserID,
-    username: data.user.Username,
-    mobile: data.user.Mobile,
-    amount: parseFloat(data.RealCash) + parseFloat(data.Winning),
+    userId: data.UserID,
+    username: data.Username,
+    mobile: data.Mobile,
+    amount: parseFloat(data.TransactionAmount),
     status: transactionStatusToAPP(data.TransactionStatus),
     createdAt: getDateInUTCToTimeZone(data.DateCreated)
   }));

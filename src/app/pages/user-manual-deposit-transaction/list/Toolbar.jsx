@@ -55,7 +55,7 @@ export function Toolbar({
               'flex space-x-2 pt-4 rtl:space-x-reverse [&_.input-root]:flex-1',
               isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x]'
             )}>
-            <SearchInput table={table} />
+            <SearchInput table={table} onApplyFilters={onApplyFilters} />
             <TableConfig table={table} />
           </div>
           <div
@@ -80,7 +80,7 @@ export function Toolbar({
             '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)'
           }}>
           <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
-            <SearchInput table={table} />
+            <SearchInput table={table} onApplyFilters={onApplyFilters} />
             <Filters
               table={table}
               onApplyFilters={onApplyFilters}
@@ -95,11 +95,14 @@ export function Toolbar({
   );
 }
 
-function SearchInput({ table }) {
+function SearchInput({ table, onApplyFilters }) {
   return (
     <Input
       value={table?.getColumn('amount')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('amount').setFilterValue(e.target.value)}
+      onChange={(e) => {
+        table.getColumn('amount').setFilterValue(e.target.value);
+        onApplyFilters();
+      }}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
@@ -156,9 +159,12 @@ Toolbar.propTypes = {
 };
 
 SearchInput.propTypes = {
-  table: PropTypes.object
+  table: PropTypes.object,
+  onApplyFilters: PropTypes.func
 };
 
 Filters.propTypes = {
-  table: PropTypes.object
+  table: PropTypes.object,
+  onApplyFilters: PropTypes.func,
+  onClearFilters: PropTypes.func
 };

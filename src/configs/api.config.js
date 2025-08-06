@@ -222,10 +222,13 @@ export const apiConfig = {
       ADD_GAME_SEGMENTATION: '/games/admin/casino-management/games/:gameId/segmentation'
     },
     REPORTS: {
-      BETSLIP: '/admin/reports/betslip-transactions',
-      BETSLIP_EXPORT: '/admin/reports/betslip',
-      TRANSACTIONS: '/admin/reports/get-transactions',
-      TRANSACTIONS_EXPORT: '/admin/reports/transactions/export',
+      BETSLIP: '/bets/admin/report/betslip',
+      BETSLIP_EXPORT: '/bets/admin/report/betslip/export',
+      DEPOSIT_TRANSACTIONS: '/wallet/admin/report/deposit',
+      WITHDRAW_TRANSACTIONS: '/wallet/admin/report/withdraw',
+      DEPOSIT_TRANSACTIONS_EXPORT: '/wallet/admin/report/deposit/export',
+      WITHDRAW_TRANSACTIONS_EXPORT: '/wallet/admin/report/withdraw/export',
+
       PLAYER_BALANCE_LIST: '/admin/reports/player-balance/list',
       PLAYER_BALANCE_EXPORT: '/admin/reports/player-balance/export',
       DEPOSIT_BONUS_LIST: '/admin/reports/deposit-bonus/list',
@@ -299,9 +302,9 @@ export const apiConfig = {
       CHANGE_STATUS: '/config/admin/rate-limit-rules/:rateLimitUID/change-status'
     },
     BLACKLIST: {
-      LIST: '/admin/blacklist/list',
-      BLOCK: '/admin/blacklist/block',
-      DELETE: '/admin/blacklist/:blacklistUID/delete'
+      LIST: '/users/admin/blacklist/list',
+      BLOCK: '/users/admin/blacklist/block',
+      DELETE: '/users/admin/blacklist/:blacklistUID/delete'
     },
     BANK: {
       LIST: '/payments/admin/deposit-bank/list',

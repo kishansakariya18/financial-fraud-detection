@@ -29,7 +29,7 @@ export default function WithdrawTxnReports() {
 
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
-    const result = await ReportService.getDepositTransactions({
+    const result = await ReportService.getWithdrawTransactions({
       pagination: { pageIndex, pageSize },
       filters: queryParams
     });
