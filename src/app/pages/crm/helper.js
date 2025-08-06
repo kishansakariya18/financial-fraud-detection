@@ -47,6 +47,23 @@ import { CheckBadgeIcon } from '@heroicons/react/24/outline';
 //   }
 // };
 
+export const mapUserClassOptions = (apiData) => {
+  let options = [];
+  if (apiData.length > 0) {
+    options = apiData.map((data) => ({
+      key: data.UserClassID,
+      value: data.UserClassID,
+      label: data.ClassName || 'User Class ' + data.UserClassID,
+      color: 'success',
+      icon: CheckBadgeIcon
+    }));
+  } else {
+    const defaultops = { label: 'No options available', value: '' };
+    options = [defaultops];
+  }
+  return options;
+};
+
 export const mapSegmentationOptions = (apiData) => {
   let options = [];
   if (apiData.length > 0) {

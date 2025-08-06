@@ -2,7 +2,7 @@
 import { Page } from 'components/shared/Page';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
-import { Button, Input } from 'components/ui';
+import { Button, Input, Radio } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
@@ -11,8 +11,9 @@ import { crmSchema } from './schema';
 import { TextEditor } from 'components/shared/form/TextEditor';
 import Quill, { Delta } from 'quill';
 import { Listbox } from 'components/shared/form/Listbox';
-import { mapSegmentationOptions, sendOptions } from './helper';
+import { mapSegmentationOptions, mapUserClassOptions, sendOptions } from './helper';
 import SegmentationService from 'services/segmentation.services';
+import UserClassService from 'services/user-class.services';
 import { DatePicker } from 'components/shared/form/Datepicker';
 
 // import { getQueryParams } from 'utils/custom.utilities';
@@ -42,19 +43,34 @@ const Send = () => {
     formState: { errors },
     control,
     watch,
-    reset
+    reset,
+    setValue
   } = useForm({
     resolver: yupResolver(crmSchema),
     defaultValues: {
       sendType: 1,
       channel: null,
-      segmentationID: defaultValue
+      segmentationID: null,
+      UserClassID: null,
+      sendTo: 'segmentation'
     }
   });
 
   const [content, setContent] = useState(defaultValue);
   const [segmentationOptions, setSegmentationOptions] = useState([]);
+  const [userClassOptions, setUserClassOptions] = useState([]);
   const watchSentType = watch('sendType');
+  const watchSendTo = watch('sendTo');
+
+  //fetch user segmentation list
+  const fetchUserClasses = async () => {
+    const result = await UserClassService.userclassList({
+      pagination: { pageIndex: 0, pageSize: 1000 }
+    });
+    if (result.status === 200) {
+      setUserClassOptions(mapUserClassOptions(result.response.data));
+    }
+  };
 
   //fetch user segmentation list
   const fetchSegmentations = async () => {
@@ -82,7 +98,7 @@ const Send = () => {
     if (result) {
       if (result.status === 200 || result.status === 201) {
         setResponse(result.response);
-        restForm();
+        resetForm();
       } else {
         setError(result.error);
       }
@@ -101,6 +117,7 @@ const Send = () => {
   }
 
   const onSubmit = async (data) => {
+    console.log('here is the data : ', data);
     await send({ ...data, description: htmlContent });
   };
 
@@ -110,9 +127,18 @@ const Send = () => {
 
   useEffect(() => {
     fetchSegmentations();
+    fetchUserClasses();
   }, []);
 
-  const restForm = () => {
+  useEffect(() => {
+    if (watchSendTo === 'segmentation') {
+      setValue('UserClassID', null, { shouldValidate: true });
+    } else if (watchSendTo === 'userClass') {
+      setValue('segmentationID', null, { shouldValidate: true });
+    }
+  }, [watchSendTo, setValue]);
+
+  const resetForm = () => {
     setContent(defaultValue);
     reset();
   };
@@ -134,7 +160,6 @@ const Send = () => {
                   <Listbox
                     key={'channel'}
                     data={sendOptions}
-                    // value={sendOptions}
                     value={sendOptions.find((item) => item.value === field.value) || sendOptions}
                     onChange={(val) => field.onChange(val.value)}
                     name={field.name}
@@ -147,26 +172,74 @@ const Send = () => {
                 control={control}
                 name="channel"
               />
-              <Controller
-                render={({ field }) => (
-                  <Listbox
-                    key={'segmentationID'}
-                    data={segmentationOptions}
-                    value={
-                      segmentationOptions.find((item) => item.value === field.value) ||
-                      segmentationOptions
-                    }
-                    onChange={(val) => field.onChange(val.value)}
-                    name={field.name}
+            </div>
+
+            <Controller
+              name="sendTo"
+              control={control}
+              render={({ field }) => (
+                <div className="mb-4 flex items-center space-x-4 rtl:space-x-reverse">
+                  <Radio
+                    {...field}
                     label={t('segmentation')}
-                    placeholder={t('select') + ' ' + t('segmentation')}
-                    displayField="label"
-                    error={errors?.segmentationID?.message}
+                    value="segmentation"
+                    checked={field.value === 'segmentation'}
                   />
-                )}
-                control={control}
-                name="segmentationID"
-              />
+                  <Radio
+                    {...field}
+                    label={t('userClass')}
+                    value="userClass"
+                    checked={field.value === 'userClass'}
+                  />
+                </div>
+              )}
+            />
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              {watchSendTo === 'segmentation' && (
+                <Controller
+                  render={({ field }) => (
+                    <Listbox
+                      key={'segmentationID'}
+                      data={segmentationOptions}
+                      value={
+                        segmentationOptions.find((item) => item.value === field.value) ||
+                        segmentationOptions
+                      }
+                      onChange={(val) => field.onChange(val.value)}
+                      name={field.name}
+                      label={t('segmentation')}
+                      placeholder={t('select') + ' ' + t('segmentation')}
+                      displayField="label"
+                      error={errors?.segmentationID?.message}
+                    />
+                  )}
+                  control={control}
+                  name="segmentationID"
+                />
+              )}
+              {watchSendTo === 'userClass' && (
+                <Controller
+                  render={({ field }) => (
+                    <Listbox
+                      key={'UserClassID'}
+                      data={userClassOptions}
+                      value={
+                        userClassOptions.find((item) => item.value === field.value) ||
+                        userClassOptions
+                      }
+                      onChange={(val) => field.onChange(val.value)}
+                      name={field.name}
+                      label={t('userClass')}
+                      placeholder={t('select') + ' ' + t('userClass')}
+                      displayField="label"
+                      error={errors?.UserClassID?.message}
+                    />
+                  )}
+                  control={control}
+                  name="UserClassID"
+                />
+              )}
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Controller
@@ -229,7 +302,7 @@ const Send = () => {
             </div>
           </div>
           <div className="mt-12 flex justify-end space-x-3 rtl:space-x-reverse">
-            <Button className="min-w-[7rem]" onClick={() => restForm()} disabled={loading}>
+            <Button className="min-w-[7rem]" onClick={() => resetForm()} disabled={loading}>
               {t('reset')}
             </Button>
             <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
