@@ -37,20 +37,11 @@ pipeline {
 
     stage('Build Docker Image') {
        steps {
-         script {
-            withCredentials([
-               string(credentialsId: 'VITE_S3_URL', variable: 'VITE_S3_URL'),
-               string(credentialsId: 'VITE_API_URL', variable: 'VITE_API_URL')
-                            ]) {
-               sh 'docker --version'
-               sh 'docker build -t $DOCKERHUB_REPO:$IMAGE_TAG --build-arg VITE_S3_URL=$VITE_S3_URL --build-arg VITE_API_URL=$VITE_API_URL .'                      
-                                 }
-                     // Build the Docker image with the dynamic tag
-		    // docker.build("${DOCKERHUB_REPO}:${IMAGE_TAG}")
-                }
-             } 
+            sh """
+             docker build -t ${DOCKERHUB_REPO}:${IMAGE_TAG} .
+             """
           }
-
+     }
 
    stage('Scan with Trivy') {
       steps {
