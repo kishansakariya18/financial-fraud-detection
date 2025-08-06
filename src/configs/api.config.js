@@ -159,7 +159,6 @@ export const apiConfig = {
       ALL_LIST: '/bonus/admin/segmentation/allList',
       DETAIL: '/bonus/admin/segmentation/:segmentationUID/details',
       ADD_EDIT: '/bonus/admin/segmentation/add-edit',
-      COUNTRY_LIST: '/bonus/admin/segmentation/countries',
       CHANGE_STATUS: '/bonus/admin/segmentation/:segmentationUID/change-status',
       USER_LIST: '/bonus/admin/segmentation/player-list',
       REFRESH_USER_LIST: '/bonus/admin/segmentation/:segmentationId/refresh'
@@ -176,7 +175,7 @@ export const apiConfig = {
     },
     RISK_MANAGEMENT: {
       LIST: '/config/admin/risk-management/list',
-      UPDATE: '/config/admin/update-risk-management'
+      UPDATE: '/config/admin/risk-management/update-risk-management'
     },
     CATEGORY: {
       LIST: '/games/admin/casino-management/category/list',

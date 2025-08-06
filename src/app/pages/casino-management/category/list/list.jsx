@@ -13,11 +13,10 @@ import { responseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
-import BankService from 'services/bank.services';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import CategoryService from 'services/category.services';
 
-export default function Banks() {
+export default function Category() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t('casino_category');
@@ -27,7 +26,7 @@ export default function Banks() {
   const fetchCategory = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
-    const result = await BankService.getBankList({
+    const result = await CategoryService.getCategoryList({
       pagination: { pageIndex, pageSize },
       filters: queryParams
     });

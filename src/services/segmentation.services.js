@@ -185,7 +185,7 @@ const SegmentationService = {
   },
   getCountries: async () => {
     try {
-      let apiURL = `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.SEGMENTATION.COUNTRY_LIST}`;
+      let apiURL = `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.USER.COUNTRY_LIST}`;
 
       if (apiURL) {
         const response = await sendRequest({
