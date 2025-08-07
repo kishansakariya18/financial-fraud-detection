@@ -20,6 +20,8 @@ export const getBatdgeForStage = (type) => {
       return 'betplaced';
     case 1:
       return 'result';
+    case 2:
+      return 'rollback';
     default:
       break;
   }
@@ -30,6 +32,8 @@ export const getStageAppToApi = (type) => {
       return 0;
     case 'result':
       return 1;
+    case 'rollback':
+      return 2;
     default:
       break;
   }
@@ -48,7 +52,7 @@ export const mapType = (item) => {
 };
 export const responseMapper = (apiData) => {
   const resultData = apiData.map((data) => ({
-    id: data.ID,
+    id: data.UserBetOutcomeID,
     userId: data.UserID,
     betPlacementId: data.BetPlacementTransactionID,
     gameName: data.GameName,
@@ -95,25 +99,25 @@ export const playerBalanceResponseMapper = (apiData) => {
   return resultData;
 };
 export const getBatdgeForType = (type) => {
-  switch (type) {
-    case 'profit':
-      return type;
-    case 'loss':
-      return type;
-    case 'not-decided':
-      return type;
+  switch (+type) {
+    case 1:
+      return 'profit';
+    case 2:
+      return 'loss';
+    case 3:
+      return 'not-decided';
     default:
       return 'not-decided';
   }
 };
 export const getBadgeForPlatform = (type) => {
-  switch (type) {
-    case 'profit':
+  switch (+type) {
+    case 1:
       return 'loss';
-    case 'loss':
+    case 2:
       return 'profit';
-    case 'not-decided':
-      return type;
+    case 3:
+      return 'not-decided';
     default:
       return 'not-decided';
   }
@@ -148,6 +152,11 @@ export const stageOptions = [
     value: 'result',
     label: 'Result',
     color: 'success'
+  },
+  {
+    value: 'rollback',
+    label: 'Rollback',
+    color: 'warning'
   }
 ];
 export const typeOptions = [
