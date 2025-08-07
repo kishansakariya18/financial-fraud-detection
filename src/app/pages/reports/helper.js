@@ -62,7 +62,7 @@ export const responseMapper = (apiData) => {
     stage: getBatdgeForStage(data.Stage),
     betWinningTxnId: data.BetWinningTransactionID,
     resultDate: data.ResultDate ? data.ResultDate : '',
-    winAmount: data.WinningAmount || '-',
+    winAmount: data.WinningAmount,
     userAmount: amountColorBasedOnType(data.Amount, data.OutcomeType),
     platformAmount: amountColorBasedOnTypeForPlatform(data.Amount, data.OutcomeType),
     type: getBatdgeForType(data.OutcomeType),
@@ -123,20 +123,20 @@ export const getBadgeForPlatform = (type) => {
   }
 };
 export const amountColorBasedOnType = (amount, type) => {
-  switch (type) {
-    case 'loss':
+  switch (+type) {
+    case 2:
       return `- ${amount}`;
-    case 'profit':
+    case 1:
       return `+ ${amount}`;
     default:
       return `${amount}`;
   }
 };
 export const amountColorBasedOnTypeForPlatform = (amount, type) => {
-  switch (type) {
-    case 'loss':
+  switch (+type) {
+    case 2:
       return `+ ${amount}`;
-    case 'profit':
+    case 1:
       return `- ${amount}`;
     default:
       return `${amount}`;
