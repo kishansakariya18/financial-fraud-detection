@@ -24,8 +24,8 @@ export const apiConfig = {
     RESET_PASSWORD: '/admin/admin/auth/reset-password',
 
     AUDIT_LOGS: {
-      VIEW: '/notify/admin/audit-logs/list',
-      DETAIL: '/notify/admin/audit-logs/view/:Id'
+      VIEW: '/notifications/admin/audit-logs/list',
+      DETAIL: '/notifications/admin/audit-logs/view/:Id'
     },
     PAGE: {
       LIST: '/content/admin/pages/list',
