@@ -159,7 +159,6 @@ export const apiConfig = {
       ALL_LIST: '/bonus/admin/segmentation/allList',
       DETAIL: '/bonus/admin/segmentation/:segmentationUID/details',
       ADD_EDIT: '/bonus/admin/segmentation/add-edit',
-      COUNTRY_LIST: '/bonus/admin/segmentation/countries',
       CHANGE_STATUS: '/bonus/admin/segmentation/:segmentationUID/change-status',
       USER_LIST: '/bonus/admin/segmentation/player-list',
       REFRESH_USER_LIST: '/bonus/admin/segmentation/:segmentationId/refresh'
@@ -176,7 +175,7 @@ export const apiConfig = {
     },
     RISK_MANAGEMENT: {
       LIST: '/config/admin/risk-management/list',
-      UPDATE: '/config/admin/update-risk-management'
+      UPDATE: '/config/admin/risk-management/update-risk-management'
     },
     CATEGORY: {
       LIST: '/games/admin/casino-management/category/list',
@@ -223,10 +222,13 @@ export const apiConfig = {
       ADD_GAME_SEGMENTATION: '/games/admin/casino-management/games/:gameId/segmentation'
     },
     REPORTS: {
-      BETSLIP: '/admin/reports/betslip-transactions',
-      BETSLIP_EXPORT: '/admin/reports/betslip',
-      TRANSACTIONS: '/admin/reports/get-transactions',
-      TRANSACTIONS_EXPORT: '/admin/reports/transactions/export',
+      BETSLIP: '/bets/admin/report/betslip',
+      BETSLIP_EXPORT: '/bets/admin/report/betslip/export',
+      DEPOSIT_TRANSACTIONS: '/wallet/admin/report/deposit',
+      WITHDRAW_TRANSACTIONS: '/wallet/admin/report/withdraw',
+      DEPOSIT_TRANSACTIONS_EXPORT: '/wallet/admin/report/deposit/export',
+      WITHDRAW_TRANSACTIONS_EXPORT: '/wallet/admin/report/withdraw/export',
+
       PLAYER_BALANCE_LIST: '/admin/reports/player-balance/list',
       PLAYER_BALANCE_EXPORT: '/admin/reports/player-balance/export',
       DEPOSIT_BONUS_LIST: '/admin/reports/deposit-bonus/list',
@@ -300,9 +302,9 @@ export const apiConfig = {
       CHANGE_STATUS: '/config/admin/rate-limit-rules/:rateLimitUID/change-status'
     },
     BLACKLIST: {
-      LIST: '/admin/blacklist/list',
-      BLOCK: '/admin/blacklist/block',
-      DELETE: '/admin/blacklist/:blacklistUID/delete'
+      LIST: '/users/admin/blacklist/list',
+      BLOCK: '/users/admin/blacklist/block',
+      DELETE: '/users/admin/blacklist/:blacklistUID/delete'
     },
     BANK: {
       LIST: '/payments/admin/deposit-bank/list',

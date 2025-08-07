@@ -548,5 +548,8 @@
   "modifiedAt": "Modified At",
   "release_note_status_suceess": "Release Note Status has been changed successfully",
   "release_note_status_conf": "Are you sure you want to change status of release note ?",
-  "done": "Done"
+  "done": "Done",
+  "user_class": "User Class",
+  "unassign": "Unassign",
+  "assign": "Assign"
 }
