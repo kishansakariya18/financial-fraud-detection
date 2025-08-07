@@ -25,7 +25,6 @@ const Send = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
-  // const [searchParams, setSearchParams] = useSearchParams();
 
   const SendTimeType = [
     { value: 1, label: t('immediate') },
@@ -34,8 +33,6 @@ const Send = () => {
 
   const [response, setResponse] = useState(null);
   const [htmlContent, setHtmlContent] = useState('');
-
-  // const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const {
     register,
@@ -62,7 +59,6 @@ const Send = () => {
   const watchSentType = watch('sendType');
   const watchSendTo = watch('sendTo');
 
-  //fetch user segmentation list
   const fetchUserClasses = async () => {
     const result = await UserClassService.userclassList({
       pagination: { pageIndex: 0, pageSize: 1000 }
@@ -72,10 +68,7 @@ const Send = () => {
     }
   };
 
-  //fetch user segmentation list
   const fetchSegmentations = async () => {
-    // const pageIndex = 0;
-    // const pageSize = 1000;
     const result = await SegmentationService.getAllSegmentationList();
     if (result.status === 200) {
       setSegmentationOptions(mapSegmentationOptions(result.response.data));
@@ -92,8 +85,6 @@ const Send = () => {
   const send = async (requestObject) => {
     setLoading(true);
     setError(null);
-    console.log('here is the request : ', requestObject);
-
     const result = await CrmService.send(requestObject);
     if (result) {
       if (result.status === 200 || result.status === 201) {
@@ -117,13 +108,8 @@ const Send = () => {
   }
 
   const onSubmit = async (data) => {
-    console.log('here is the data : ', data);
     await send({ ...data, description: htmlContent });
   };
-
-  useEffect(() => {
-    console.log('Validation Errors:', errors);
-  }, [errors]);
 
   useEffect(() => {
     fetchSegmentations();
@@ -153,59 +139,82 @@ const Send = () => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-          <div className="mt-6 space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {/* Row 1 */}
+            <Controller
+              name="channel"
+              control={control}
+              render={({ field }) => (
+                <Listbox
+                  data={sendOptions}
+                  value={sendOptions.find((item) => item.value === field.value) || null}
+                  onChange={(val) => field.onChange(val.value)}
+                  name={field.name}
+                  label={t('channel')}
+                  placeholder={t('select') + ' ' + t('channel')}
+                  displayField="label"
+                  error={errors?.channel?.message}
+                />
+              )}
+            />
+            <div>
+              <p className="mb-3 font-medium text-gray-700 dark:text-gray-200">{t('sendTo')}</p>
               <Controller
-                render={({ field }) => (
-                  <Listbox
-                    key={'channel'}
-                    data={sendOptions}
-                    value={sendOptions.find((item) => item.value === field.value) || sendOptions}
-                    onChange={(val) => field.onChange(val.value)}
-                    name={field.name}
-                    label={t('channel')}
-                    placeholder={t('select') + ' ' + t('channel')}
-                    displayField="label"
-                    error={errors?.channel?.message}
-                  />
-                )}
+                name="sendTo"
                 control={control}
-                name="channel"
+                render={({ field }) => (
+                  <div className="flex items-center space-x-4 rtl:space-x-reverse">
+                    <Radio
+                      {...field}
+                      label={t('segmentation')}
+                      value="segmentation"
+                      checked={field.value === 'segmentation'}
+                    />
+                    <Radio
+                      {...field}
+                      label={t('userClass')}
+                      value="userClass"
+                      checked={field.value === 'userClass'}
+                    />
+                  </div>
+                )}
               />
             </div>
 
+            {/* Row 2 */}
+            <Input
+              {...register('subject')}
+              label={t('subject')}
+              error={errors?.subject?.message}
+              placeholder={t('enter') + ' ' + t('subject')}
+            />
             <Controller
-              name="sendTo"
+              name="sendType"
               control={control}
               render={({ field }) => (
-                <div className="mb-4 flex items-center space-x-4 rtl:space-x-reverse">
-                  <Radio
-                    {...field}
-                    label={t('segmentation')}
-                    value="segmentation"
-                    checked={field.value === 'segmentation'}
-                  />
-                  <Radio
-                    {...field}
-                    label={t('userClass')}
-                    value="userClass"
-                    checked={field.value === 'userClass'}
-                  />
-                </div>
+                <Listbox
+                  data={SendTimeType}
+                  value={SendTimeType.find((item) => item.value === field.value) || null}
+                  onChange={(val) => field.onChange(val.value)}
+                  name={field.name}
+                  label={t('sendType')}
+                  placeholder={t('select') + ' ' + t('sendType')}
+                  displayField="label"
+                  error={errors?.sendType?.message}
+                />
               )}
             />
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              {watchSendTo === 'segmentation' && (
+            {/* Row 3: Conditional Fields */}
+            <div className="min-h-[88px]">
+              {watchSendTo === 'segmentation' ? (
                 <Controller
+                  name="segmentationID"
+                  control={control}
                   render={({ field }) => (
                     <Listbox
-                      key={'segmentationID'}
                       data={segmentationOptions}
-                      value={
-                        segmentationOptions.find((item) => item.value === field.value) ||
-                        segmentationOptions
-                      }
+                      value={segmentationOptions.find((item) => item.value === field.value) || null}
                       onChange={(val) => field.onChange(val.value)}
                       name={field.name}
                       label={t('segmentation')}
@@ -214,20 +223,15 @@ const Send = () => {
                       error={errors?.segmentationID?.message}
                     />
                   )}
-                  control={control}
-                  name="segmentationID"
                 />
-              )}
-              {watchSendTo === 'userClass' && (
+              ) : watchSendTo === 'userClass' ? (
                 <Controller
+                  name="UserClassID"
+                  control={control}
                   render={({ field }) => (
                     <Listbox
-                      key={'UserClassID'}
                       data={userClassOptions}
-                      value={
-                        userClassOptions.find((item) => item.value === field.value) ||
-                        userClassOptions
-                      }
+                      value={userClassOptions.find((item) => item.value === field.value) || null}
                       onChange={(val) => field.onChange(val.value)}
                       name={field.name}
                       label={t('userClass')}
@@ -236,31 +240,15 @@ const Send = () => {
                       error={errors?.UserClassID?.message}
                     />
                   )}
-                  control={control}
-                  name="UserClassID"
                 />
-              )}
+              ) : null}
             </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Controller
-                render={({ field }) => (
-                  <Listbox
-                    key={'sendType'}
-                    data={SendTimeType}
-                    value={SendTimeType.find((item) => item.value === field.value) || SendTimeType}
-                    onChange={(val) => field.onChange(val.value)}
-                    name={field.name}
-                    label={t('sendType')}
-                    placeholder={t('select') + ' ' + t('sendType')}
-                    displayField="label"
-                    error={errors?.sendType?.message}
-                  />
-                )}
-                control={control}
-                name="sendType"
-              />
-              {parseInt(watchSentType) === 2 && (
+
+            <div className="min-h-[88px]">
+              {parseInt(watchSentType) === 2 ? (
                 <Controller
+                  name="deliveryDateTime"
+                  control={control}
                   render={({ field: { onChange, value, ...rest } }) => (
                     <DatePicker
                       onChange={onChange}
@@ -272,35 +260,24 @@ const Send = () => {
                       {...rest}
                     />
                   )}
-                  control={control}
-                  name="deliveryDateTime"
                 />
-              )}
+              ) : null}
             </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Input
-                key={'subject'}
-                {...register('subject')}
-                label={t('subject')}
-                error={errors?.subject?.message}
-                placeholder={t('enter') + ' ' + t('subject')}
+
+            {/* Full-width row */}
+            <div className="sm:col-span-2">
+              <TextEditor
+                value={content}
+                label={t('description')}
+                onChange={handleChange}
+                placeholder={
+                  t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
+                }
+                className="[&_.ql-editor]:max-h-40 [&_.ql-editor]:min-h-[12rem]"
               />
             </div>
-            <div className="grid gap-4 sm:grid-cols-1">
-              <div className="mt-1">
-                <TextEditor
-                  key={'description'}
-                  value={content}
-                  label={t('description')}
-                  onChange={handleChange}
-                  placeholder={
-                    t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
-                  }
-                  className="[&_.ql-editor]:max-h-40 [&_.ql-editor]:min-h-[12rem]"
-                />
-              </div>
-            </div>
           </div>
+
           <div className="mt-12 flex justify-end space-x-3 rtl:space-x-reverse">
             <Button className="min-w-[7rem]" onClick={() => resetForm()} disabled={loading}>
               {t('reset')}

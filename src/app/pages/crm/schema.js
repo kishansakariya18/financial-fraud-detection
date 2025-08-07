@@ -7,18 +7,18 @@ export const crmSchema = Yup.object().shape({
     is: 'segmentation',
     then: (schema) =>
       schema
-        .typeError('Segmentation ID Required')
-        .integer('Segmentation ID Required')
-        .required('Segmentation ID Required'),
+        .typeError('Segmentation Required')
+        .integer('Segmentation Required')
+        .required('Segmentation Required'),
     otherwise: (schema) => schema.notRequired()
   }),
   UserClassID: Yup.number().when('sendTo', {
     is: 'userClass',
     then: (schema) =>
       schema
-        .typeError('UserClass ID Required')
-        .integer('UserClass ID Required')
-        .required('UserClass ID Required'),
+        .typeError('Player Class Required')
+        .integer('Player Class Required')
+        .required('Player Class Required'),
     otherwise: (schema) => schema.notRequired()
   }),
   subject: Yup.string().trim().required('Subject Required'),
