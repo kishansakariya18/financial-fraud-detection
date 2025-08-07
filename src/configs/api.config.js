@@ -202,12 +202,12 @@ export const apiConfig = {
         '/games/admin/casino-management/provider/:providerId/restricted-country/delete'
     },
     CURRENCY: {
-      LIST: '/games/admin/casino-management/currency/list',
+      LIST: '/wallet/admin/currency/list',
       SUMMARY: '/games/admin/casino-management/currency/summary',
       CREATE: '/games/admin/casino-management/currency/create',
       EDIT: '/games/admin/casino-management/currency/:currencyId/edit',
       DELETE: '/games/admin/casino-management/currency/:currencyId/delete',
-      CHANGE_STATUS: '/games/admin/casino-management/currency/:currencyId/change-status'
+      CHANGE_STATUS: '/wallet/admin/currency/status/:currencyId'
     },
     GAME: {
       LIST: '/games/admin/casino-management/games/list',

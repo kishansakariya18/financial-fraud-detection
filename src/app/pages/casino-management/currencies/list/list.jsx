@@ -12,6 +12,8 @@ import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
+import CurrencyService from 'services/currency.services';
+import { currencyListResponseMapper } from '../helper';
 
 export default function Currency() {
   const { t } = useTranslation();
@@ -38,63 +40,29 @@ export default function Currency() {
   // useEffect(() => {
   //   fetchSummary();
   // }, []);
-  const fetchProvider = async () => {
-    const dummyData = [
-      {
-        id: 1,
-        name: 'US Dollar',
-        code: 'USD',
-        symbol: '$',
-        exchange_rate: 150,
-        admin_exchange_rate: 300,
-        type: 'Fiat',
-        status: 'active'
-      },
-      {
-        id: 2,
-        name: 'Euro',
-        code: 'EUR',
-        symbol: '€',
-        exchange_rate: 200,
-        admin_exchange_rate: 400,
-        type: 'Fiat',
-        status: 'inactive'
-      },
-      {
-        id: 3,
-        name: 'Bitcoin',
-        code: 'BTC',
-        symbol: '₿',
-        exchange_rate: 50,
-        admin_exchange_rate: 500,
-        type: 'Crypto',
-        status: 'inactive'
-      },
-      {
-        id: 4,
-        name: 'Indian Rupee',
-        code: 'INR',
-        symbol: '₹',
-        exchange_rate: 120,
-        admin_exchange_rate: 600,
-        type: 'Fiat',
-        status: 'inactive'
-      }
-    ];
+  const fetchCurrencies = async () => {
+    const pageIndex = isNaN(queryParams.pageIndex) ? 1 : +queryParams.pageIndex;
+    const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
+    const result = await CurrencyService.getCurrencyList({
+      filters: queryParams,
+      pagination: { pageIndex, pageSize }
+    });
 
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    const apiData = currencyListResponseMapper(result.response);
 
-    return {
-      status: 200,
-      data: dummyData,
-      totalRecords: dummyData.length
-    };
+    if (result.status === 200) {
+      return {
+        status: 200,
+        data: apiData.list,
+        totalRecords: parseInt(apiData.total_records, 10) || 0
+      };
+    }
+    return { status: result.status, error: result.error };
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
-    fetchData: fetchProvider,
+    fetchData: fetchCurrencies,
     queryParams,
     setSearchParams,
     initialSettings: {

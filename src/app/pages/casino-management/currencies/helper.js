@@ -1,3 +1,27 @@
+export const currencyListResponseMapper = (response) => {
+  if (!response || !response.data || !Array.isArray(response.data)) {
+    return { list: [], total_records: 0 };
+  }
+
+  const mappedData = response.data.map((d) => ({
+    id: d.CurrencyID,
+    name: d.Name,
+    code: d.Code,
+    symbol: d.Symbol,
+    decimal_places: d.DecimalPlaces,
+    type: d.CurrencyType === 0 ? 'Fiat' : 'Crypto',
+    status: d.IsActive ? 'active' : 'inactive',
+    is_default: d.IsDefault,
+    created_at: d.DateCreated,
+    updated_at: d.DateUpdated
+  }));
+
+  return {
+    list: mappedData,
+    total_records: response.total_records
+  };
+};
+
 export const statusOptions = [
   {
     value: 'active',

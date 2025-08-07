@@ -5,30 +5,26 @@ import { replaceText } from 'utils/custom.utilities';
 const CurrencyService = {
   getCurrencyList: async (body) => {
     const { pagination, filters } = body;
-    const { status, keyword } = filters;
+    const { status, keyword } = filters || {};
 
     const apiQueryParams = {
-      perPage: pagination.pageSize,
-      page: pagination.pageIndex + 1
-    };
-
-    const apiRequestParams = {
+      per_page: pagination.pageSize,
+      page: 1,
       status: status || undefined,
       keyword: keyword || undefined
     };
 
     return await sendRequest({
       url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.CURRENCY.LIST}`,
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: { filters: apiRequestParams },
       params: apiQueryParams
     });
   },
 
-  changeCurrencyStatus: async (currencyId) => {
+  changeCurrencyStatus: async (currencyId, changeStatus) => {
     const endpoint = replaceText(
       apiConfig.endPoints.CURRENCY.CHANGE_STATUS,
       ':currencyId',
@@ -36,7 +32,10 @@ const CurrencyService = {
     );
     return await sendRequest({
       url: apiConfig.baseURL.API_BASE_URL + endpoint,
-      method: 'GET',
+      method: 'PATCH',
+      body: {
+        isActive: changeStatus == 'active' ? 0 : 1
+      },
       headers: {
         'Content-Type': 'application/json'
       }

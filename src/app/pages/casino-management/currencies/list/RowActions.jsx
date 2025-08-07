@@ -16,7 +16,7 @@ import { Button } from 'components/ui';
 
 import { TbEdit, TbStatusChange } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
-import ProviderService from 'services/provider.services';
+import CurrencyServices from 'services/currency.services';
 import { CustomModal } from 'components/custom';
 import { useNavigate } from 'react-router';
 import usePermissions from 'app/router/usePermissions';
@@ -68,7 +68,10 @@ export function RowActions({ row, table }) {
   };
   const handleChangeStatusRows = useCallback(async () => {
     setConfirmStatusLoading(true);
-    const result = await ProviderService.changeProviderStatus(row.original.id);
+    const result = await CurrencyServices.changeCurrencyStatus(
+      row.original.id,
+      row.original.status
+    );
     if (result.status === 200) {
       console.log('table.options: ', table.options);
       table.options.meta?.fetchSummary();

@@ -24,15 +24,6 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
-  // columnHelper.accessor((row) => row.status, {
-  //   id: 'status',
-  //   label: 'Status',
-  //   header: 'Status',
-  //   cell: BadgeCell,
-  //   meta: { optionData: statusOptions },
-  //   filterFn: 'arrIncludesSome',
-  //   enableSorting: false
-  // }),
   columnHelper.accessor((row) => row.code, {
     id: 'code',
     label: 'Code',
@@ -47,17 +38,17 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.exchange_rate, {
-    id: 'exchange_rate',
-    label: 'Exchange Rate',
-    header: 'Exchange Rate',
+  columnHelper.accessor((row) => row.type, {
+    id: 'type',
+    label: 'Type',
+    header: 'Type',
     cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.admin_exchange_rate, {
-    id: 'admin_exchange_rate',
-    label: 'Admin Exchange Rate',
-    header: 'Admin Exchange Rate',
+  columnHelper.accessor((row) => row.decimal_places, {
+    id: 'decimal_places',
+    label: 'Decimal Places',
+    header: 'Decimal Places',
     cell: BoldCell,
     enableSorting: false
   }),
