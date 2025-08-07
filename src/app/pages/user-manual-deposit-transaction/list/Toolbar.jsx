@@ -99,9 +99,11 @@ function SearchInput({ table, onApplyFilters }) {
   return (
     <Input
       value={table?.getColumn('amount')?.getFilterValue() || ''}
-      onChange={(e) => {
-        table.getColumn('amount').setFilterValue(e.target.value);
-        onApplyFilters();
+      onChange={(e) => table.getColumn('amount').setFilterValue(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          onApplyFilters();
+        }
       }}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{

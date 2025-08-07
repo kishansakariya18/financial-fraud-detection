@@ -72,7 +72,7 @@ export default function UserManualDepositTransaction() {
   useEffect(() => {
     const filtersFromQuery = [];
     if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'keyword', value: queryParams.keyword });
+      filtersFromQuery.push({ id: 'amount', value: queryParams.keyword });
     }
     if (queryParams.status) {
       filtersFromQuery.push({ id: 'status', value: queryParams.status });
@@ -92,8 +92,8 @@ export default function UserManualDepositTransaction() {
   const applyFilterHandler = () => {
     const filterItems = {};
     for (let data of table.getState().columnFilters) {
-      if (data.id === 'keyword') {
-        filterItems.keyword = data.amount;
+      if (data.id === 'amount') {
+        filterItems.keyword = data.value;
       }
 
       if (data.id === 'depositStatus') {

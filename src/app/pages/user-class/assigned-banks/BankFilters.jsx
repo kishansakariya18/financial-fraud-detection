@@ -9,6 +9,8 @@ import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { useNavigate } from 'react-router';
+import { useParams } from 'react-router';
 
 // ----------------------------------------------------------------------
 
@@ -17,10 +19,13 @@ export function BankFilters({
   onApplyFilters = () => {},
   onClearFilters = () => {},
   pageTitle = '',
-  breadcrumbItem
+  breadcrumbItem,
+  isAssignBank = false
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const navigate = useNavigate();
+  const { id: userClassId } = useParams();
 
   return (
     <div className="table-toolbar">
@@ -38,6 +43,13 @@ export function BankFilters({
           </div>
           <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
+        {isAssignBank && (
+          <Button
+            color="primary"
+            onClick={() => navigate(`/user-class/${userClassId}/assign-bank/add`)}>
+            {t('assign_bank')}
+          </Button>
+        )}
       </div>
 
       {isXs ? (

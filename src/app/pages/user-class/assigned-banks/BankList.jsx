@@ -4,6 +4,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router';
 
 // Local Imports
 import { bankColumns } from './columns';
+import { bankResponseMapper } from './helper';
 import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
@@ -34,7 +35,7 @@ export default function BankList() {
     if (result.status === 200) {
       return {
         status: 200,
-        data: result.response.data, // Assuming API returns correct format
+        data: bankResponseMapper(result.response.data), // Use the response mapper
         totalRecords: parseInt(result.response.total_record, 10) || 0
       };
     }
