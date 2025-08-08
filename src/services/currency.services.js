@@ -43,15 +43,32 @@ const CurrencyService = {
   },
 
   createCurrency: async (data) => {
+    console.log('data', data);
     return await sendRequest({
       url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.CURRENCY.CREATE}`,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: data
+      body: {
+        name: data.name,
+        code: data.code,
+        symbol: data.symbol,
+        exchange_rate: data.exchange_rate,
+        currencyType: data.type == 'Fiat' ? 0 : data.type == 'Crypto' ? 1 : 2,
+        isActive: 0,
+        exchangeUpdateType: 1,
+        decimalPlaces: parseInt(data.decimal_places, 10)
+      }
     });
   },
+  // "code": "USD",
+  // "name": "US Dollar",
+  // "symbol": "$",
+  // "decimalPlaces": 2,
+  // "currencyType": 0,
+  // "exchangeUpdateType": 1,
+  // "isActive": 1
 
   addAdminExchangeRate: async (currencyId, data) => {
     const endpoint = replaceText(
@@ -66,6 +83,38 @@ const CurrencyService = {
         'Content-Type': 'application/json'
       },
       body: data
+    });
+  },
+
+  getCurrencyById: async (currencyId) => {
+    return sendRequest({
+      method: 'GET',
+      url: apiConfig.endPoints.CURRENCY.GET_BY_ID.replace(':currencyId', currencyId),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  },
+
+  updateCurrency: async (currencyId, data) => {
+    const endpoint = replaceText(apiConfig.endPoints.CURRENCY.UPDATE, ':currencyId', currencyId);
+    return await sendRequest({
+      url: apiConfig.baseURL.API_BASE_URL + endpoint,
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: data
+    });
+  },
+  deleteCurrency: async (currencyId) => {
+    const endpoint = replaceText(apiConfig.endPoints.CURRENCY.DELETE, ':currencyId', currencyId);
+    return await sendRequest({
+      url: apiConfig.baseURL.API_BASE_URL + endpoint,
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
   }
 };

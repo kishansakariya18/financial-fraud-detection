@@ -74,8 +74,7 @@ export function RowActions({ row, table }) {
     );
     if (result.status === 200) {
       console.log('table.options: ', table.options);
-      table.options.meta?.fetchSummary();
-      table.options.meta?.deleteRow(row);
+      table.options.meta?.fetchNewList();
       setStatusSuccess(true);
     } else {
       setStatusError(true);
@@ -84,6 +83,13 @@ export function RowActions({ row, table }) {
     setConfirmStatusLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [row]);
+
+  const handleDeleteRows = async () => {
+    const result = await CurrencyServices.deleteCurrency(row.original.id);
+    if (result.status === 200) {
+      table.options.meta?.fetchNewList();
+    }
+  };
 
   const state = statusError ? 'error' : statusSuccess ? 'success' : 'pending';
 
@@ -179,11 +185,7 @@ export function RowActions({ row, table }) {
                         'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
                         focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
                       )}
-                      onClick={() =>
-                        navigate(
-                          `/casino/provider/restricted-countries/${row.original.providerUID}/list`
-                        )
-                      }>
+                      onClick={() => handleDeleteRows()}>
                       <TrashIcon className="size-4.5 stroke-1" />
                       <span>{t('delete')}</span>
                     </button>

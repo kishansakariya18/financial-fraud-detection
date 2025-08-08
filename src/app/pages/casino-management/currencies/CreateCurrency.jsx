@@ -100,14 +100,6 @@ const CreateCurrency = () => {
                 error={errors?.symbol?.message}
                 placeholder={t('enter') + ' ' + t('symbol')}
               />
-              <Input
-                {...register('exchange_rate')}
-                label={t('exchange_rate')}
-                error={errors?.exchange_rate?.message}
-                placeholder={t('enter') + ' ' + t('exchange_rate')}
-              />
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
               <label className="block">
                 <span>{t('type')}</span>
                 <select
@@ -121,6 +113,16 @@ const CreateCurrency = () => {
                   <span className="text-tiny+ text-error">{errors.type.message}</span>
                 )}
               </label>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Input
+                {...register('decimal_places')}
+                label={t('decimal_places')}
+                type="number"
+                error={errors?.decimal_places?.message}
+                placeholder={t('enter') + ' ' + t('decimal_places')}
+              />
             </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">

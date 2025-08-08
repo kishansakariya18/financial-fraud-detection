@@ -551,5 +551,8 @@
   "done": "Done",
   "user_class": "User Class",
   "unassign": "Unassign",
-  "assign": "Assign"
+  "assign": "Assign",
+  "decimal_places": "Decimal Places",
+  "decimal_places_required": "Decimal Places Required"
+
 }

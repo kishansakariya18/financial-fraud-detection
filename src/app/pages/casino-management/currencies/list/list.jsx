@@ -41,7 +41,7 @@ export default function Currency() {
   //   fetchSummary();
   // }, []);
   const fetchCurrencies = async () => {
-    const pageIndex = isNaN(queryParams.pageIndex) ? 1 : +queryParams.pageIndex;
+    const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
     const result = await CurrencyService.getCurrencyList({
       filters: queryParams,
@@ -54,7 +54,8 @@ export default function Currency() {
       return {
         status: 200,
         data: apiData.list,
-        totalRecords: parseInt(apiData.total_records, 10) || 0
+        totalRecords: parseInt(apiData.total_records, 10) || apiData.list?.length || 0,
+        totalPages: apiData.total_pages || 1
       };
     }
     return { status: result.status, error: result.error };
@@ -66,8 +67,8 @@ export default function Currency() {
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
-      tableSettings: {}
+      columnPinning: { left: ['ID'], right: ['Actions'] },
+      tableSettings: { enableFullScreen: false }
     }
   });
 
@@ -82,10 +83,10 @@ export default function Currency() {
   useEffect(() => {
     const filtersFromQuery = [];
     if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'name', value: queryParams.keyword });
+      filtersFromQuery.push({ id: 'Name', value: queryParams.keyword });
     }
     if (queryParams.status) {
-      filtersFromQuery.push({ id: 'status', value: queryParams.status });
+      filtersFromQuery.push({ id: 'Status', value: queryParams.status });
     }
 
     if (queryParams.startDate && queryParams.endDate) {
@@ -103,11 +104,11 @@ export default function Currency() {
     // console.log('table.getState().columnFilters:', table.getState().columnFilters);
 
     for (let data of table.getState().columnFilters) {
-      if (data.id === 'name') {
+      if (data.id === 'Name') {
         filterItems.keyword = data.value;
       }
 
-      if (data.id === 'status') {
+      if (data.id === 'Status') {
         filterItems.status = data.value;
       }
 
@@ -128,10 +129,7 @@ export default function Currency() {
 
   const clearFilterHandler = () => {
     if (!isEmptyObject(queryParams)) {
-      setSearchParams({
-        pageIndex: 0,
-        pageSize: 10
-      });
+      setSearchParams({ pageIndex: DEFAULT_PAGE_INDEX, pageSize: DEFAULT_PER_PAGE_RECORD });
     }
     table.resetColumnFilters();
   };

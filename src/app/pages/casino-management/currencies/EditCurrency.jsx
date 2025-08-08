@@ -1,158 +1,126 @@
-import { Page } from 'components/shared/Page';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Card, CardContent, CardHeader } from 'components/ui/card';
+import { Form } from 'components/ui/Form';
+import { Page } from 'components/shared/Page';
 import { useForm } from 'react-hook-form';
-import { Button, Input } from 'components/ui';
+import * as yup from 'yup';
+import { Button } from 'components/ui';
+import { FormInput } from 'components/shared/FormInput';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import CurrencyService from 'services/currency.services';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { useNavigate, useParams } from 'react-router';
-import { useTranslation } from 'react-i18next';
-import { createCurrencySchema } from './schema';
-import { Breadcrumbs } from 'components/shared/Breadcrumbs';
-import CurrencyService from 'services/currency.services';
+import { getError } from 'utils/axios';
 
-const EditCurrency = () => {
-  const { id } = useParams();
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [response, setResponse] = useState(null);
+const formSchema = yup.object().shape({
+  name: yup.string().required('Name is required'),
+  code: yup.string().required('Code is required'),
+  symbol: yup.string().required('Symbol is required'),
+  exchange_rate: yup
+    .number()
+    .typeError('Exchange rate must be a number')
+    .min(0, 'Exchange rate must be a positive number')
+    .required('Exchange rate is required')
+});
+
+export function EditCurrency() {
   const { t } = useTranslation();
-
   const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset
-  } = useForm({
-    resolver: yupResolver(createCurrencySchema)
+  const { currencyId } = useParams();
+  const [loading, setLoading] = useState(false);
+
+  const form = useForm({
+    resolver: yupResolver(formSchema),
+    defaultValues: {
+      name: '',
+      code: '',
+      symbol: '',
+      exchange_rate: 0
+    }
   });
 
   useEffect(() => {
-    const fetchCurrency = async () => {
+    if (currencyId) {
       setLoading(true);
-      const data = await CurrencyService.getCurrencyById(id);
-      if (data) {
-        reset(data);
-      }
-      setLoading(false);
-    };
-    if (id) {
-      fetchCurrency();
+      CurrencyService.getCurrencyById(currencyId)
+        .then((res) => {
+          const currency = res.data.data;
+          form.reset({
+            name: currency.name,
+            code: currency.code,
+            symbol: currency.symbol,
+            exchange_rate: currency.exchange_rate
+          });
+        })
+        .catch((err) => {
+          toast.error(getError(err));
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
-  }, [id, reset]);
-
-  const breadcrumbItem = [
-    { title: t('currencies'), path: '/casino-management/currencies' },
-    { title: t('edit') }
-  ];
-
-  const updateCurrencyAPI = async (requestObject) => {
-    setLoading(true);
-    setError(null);
-
-    const result = await CurrencyService.updateCurrency(id, requestObject);
-    if (result) {
-      if (result.status === 200 || result.status === 201) {
-        setResponse(result.response);
-      } else {
-        setError(result.error);
-      }
-    }
-    setLoading(false);
-  };
-
-  if (!loading && error) {
-    toast.error(error);
-    setError('');
-  }
-
-  useEffect(() => {
-    if (!loading && !error && response) {
-      toast.success(response.message);
-      setResponse(null);
-      reset();
-      navigate('/casino-management/currencies');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [response]);
+  }, [currencyId, form]);
 
   const onSubmit = async (data) => {
-    await updateCurrencyAPI(data);
+    try {
+      setLoading(true);
+      await CurrencyService.updateCurrency(currencyId, data);
+      toast.success(t('Currency updated successfully'));
+      navigate('/casino-management/currencies/list');
+    } catch (error) {
+      toast.error(getError(error));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Page title={t('edit') + ' ' + t('currency')}>
-      <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
-        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
-          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
-            {t('edit') + ' ' + t('currency') + ' ' + t('form')}
-          </h2>
-          <div className="hidden self-stretch py-1 sm:flex">
-            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
-          </div>
-          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
-        </div>
-        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-          <div className="mt-6 space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Input
-                {...register('name')}
-                label={t('name')}
-                error={errors?.name?.message}
-                placeholder={t('enter') + ' ' + t('name')}
-              />
-              <Input
-                {...register('code')}
-                label={t('code')}
-                error={errors?.code?.message}
-                placeholder={t('enter') + ' ' + t('code')}
-              />
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Input
-                {...register('symbol')}
-                label={t('symbol')}
-                error={errors?.symbol?.message}
-                placeholder={t('enter') + ' ' + t('symbol')}
-              />
-              <Input
-                {...register('exchange_rate')}
+    <Page
+      loading={loading}
+      pageTitle={t('edit_currency')}
+      breadcrumbs={[
+        {
+          title: t('casino_management')
+        },
+        {
+          title: t('currencies'),
+          href: '/casino-management/currencies/list'
+        },
+        {
+          title: t('edit_currency')
+        }
+      ]}>
+      <Card>
+        <CardHeader>
+          <h4 className="text-lg font-semibold tracking-wide">{t('edit_currency')}</h4>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <FormInput name="name" label={t('name')} placeholder={t('enter_name')} />
+              <FormInput name="code" label={t('code')} placeholder={t('enter_code')} />
+              <FormInput name="symbol" label={t('symbol')} placeholder={t('enter_symbol')} />
+              <FormInput
+                name="exchange_rate"
                 label={t('exchange_rate')}
-                error={errors?.exchange_rate?.message}
-                placeholder={t('enter') + ' ' + t('exchange_rate')}
+                placeholder={t('enter_exchange_rate')}
+                type="number"
               />
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="block">
-                <span>{t('type')}</span>
-                <select
-                  {...register('type')}
-                  className="focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400">
-                  <option value="Fiat">Fiat</option>
-                  <option value="Crypto">Crypto</option>
-                  <option value="Points">Points</option>
-                </select>
-                {errors.type && (
-                  <span className="text-tiny+ text-error">{errors.type.message}</span>
-                )}
-              </label>
-            </div>
-          </div>
-          <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-            <Button
-              className="min-w-[7rem]"
-              onClick={() => navigate('/casino-management/currencies')}
-              disabled={loading}>
-              {t('cancel')}
-            </Button>
-            <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
-              {t('update')}
-            </Button>
-          </div>
-        </form>
-      </div>
+              <div className="col-span-full flex justify-end space-x-2">
+                <Button type="button" variant="outline" onClick={() => navigate(-1)}>
+                  {t('cancel')}
+                </Button>
+                <Button type="submit" disabled={loading}>
+                  {t('submit')}
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </Page>
   );
-};
-
-export default EditCurrency;
+}

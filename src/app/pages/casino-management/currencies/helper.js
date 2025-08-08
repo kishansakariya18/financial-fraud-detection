@@ -11,6 +11,7 @@ export const currencyListResponseMapper = (response) => {
     decimal_places: d.DecimalPlaces,
     type: d.CurrencyType === 0 ? 'Fiat' : 'Crypto',
     status: d.IsActive ? 'active' : 'inactive',
+    exchangeUpdateType: d.ExchangeUpdateType === 0 ? 'Manual' : 'Auto',
     is_default: d.IsDefault,
     created_at: d.DateCreated,
     updated_at: d.DateUpdated
@@ -31,6 +32,19 @@ export const statusOptions = [
   {
     value: 'inactive',
     label: 'Inactive',
+    color: 'error'
+  }
+];
+
+export const exchangeUpdateTypeOptions = [
+  {
+    value: 'Manual',
+    label: 'Manual',
+    color: 'success'
+  },
+  {
+    value: 'Auto',
+    label: 'Auto',
     color: 'error'
   }
 ];

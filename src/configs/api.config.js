@@ -204,10 +204,12 @@ export const apiConfig = {
     CURRENCY: {
       LIST: '/wallet/admin/currency/list',
       SUMMARY: '/games/admin/casino-management/currency/summary',
-      CREATE: '/games/admin/casino-management/currency/create',
-      EDIT: '/games/admin/casino-management/currency/:currencyId/edit',
-      DELETE: '/games/admin/casino-management/currency/:currencyId/delete',
-      CHANGE_STATUS: '/wallet/admin/currency/status/:currencyId'
+      CREATE: '/wallet/admin/currency/create',
+      GET_BY_ID: '/wallet/admin/currency/:currencyId',
+      UPDATE: '/wallet/admin/currency/:currencyId',
+      DELETE: '/wallet/admin/currency/:currencyId',
+      CHANGE_STATUS: '/wallet/admin/currency/status/:currencyId',
+      ADMIN_EXCHANGE_RATE: '/wallet/admin/currency/:currencyId/exchange-rate'
     },
     GAME: {
       LIST: '/games/admin/casino-management/games/list',

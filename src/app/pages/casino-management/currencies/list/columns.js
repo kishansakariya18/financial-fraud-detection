@@ -11,66 +11,57 @@ const columnHelper = createColumnHelper();
 
 export const columns = [
   columnHelper.accessor((row) => row.id, {
-    id: 'id',
-    label: 'ID',
+    id: 'ID',
     header: 'ID',
     cell: IdCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.name, {
-    id: 'name',
-    label: 'Name',
+    id: 'Name',
     header: 'Name',
     cell: BoldCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.code, {
-    id: 'code',
-    label: 'Code',
+    id: 'Code',
     header: 'Code',
     cell: BoldCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.symbol, {
-    id: 'symbol',
-    label: 'Symbol',
+    id: 'Symbol',
     header: 'Symbol',
     cell: BoldCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.type, {
-    id: 'type',
-    label: 'Type',
+    id: 'Type',
     header: 'Type',
     cell: BoldCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.decimal_places, {
-    id: 'decimal_places',
-    label: 'Decimal Places',
+    id: 'Decimal Places',
     header: 'Decimal Places',
     cell: BoldCell,
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.exchangeUpdateType, {
+    id: 'Exchange Update Type',
+    header: 'Exchange Update Type',
+    cell: BoldCell,
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.status, {
-    id: 'status',
-    label: 'Status',
+    id: 'Status',
     header: 'Status',
     cell: BadgeCell,
     meta: { optionData: statusOptions },
     filterFn: 'arrIncludesSome',
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.type, {
-    id: 'type',
-    label: 'Type',
-    header: 'Type',
-    cell: BoldCell,
-    enableSorting: false
-  }),
   columnHelper.display({
-    id: 'actions',
-    label: 'Row Actions',
+    id: 'Actions',
     header: 'Actions',
     cell: RowActions,
     enableSorting: false
