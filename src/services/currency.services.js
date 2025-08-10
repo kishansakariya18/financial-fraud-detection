@@ -104,7 +104,9 @@ const CurrencyService = {
   getCurrencyById: async (currencyId) => {
     return sendRequest({
       method: 'GET',
-      url: apiConfig.endPoints.CURRENCY.GET_BY_ID.replace(':currencyId', currencyId),
+      url:
+        apiConfig.baseURL.API_BASE_URL +
+        apiConfig.endPoints.CURRENCY.GET_BY_ID.replace(':currencyId', currencyId),
       headers: {
         'Content-Type': 'application/json'
       }
@@ -119,7 +121,13 @@ const CurrencyService = {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: data
+      body: {
+        name: data.name,
+        code: data.code,
+        symbol: data.symbol,
+        currencyType: data.type == 'Fiat' ? 0 : data.type == 'Crypto' ? 1 : 2,
+        decimalPlaces: data.decimal_places
+      }
     });
   },
   deleteCurrency: async (currencyId) => {

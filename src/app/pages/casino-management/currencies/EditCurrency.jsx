@@ -45,14 +45,24 @@ const EditCurrency = () => {
       try {
         setLoading(true);
         setError('');
-        const result = await CurrencyService.getCurrencyById(currencyId);
-        if (result) {
+        const response = await CurrencyService.getCurrencyById(currencyId);
+
+        // Handle different response structures
+        const currencyData = response?.data?.data || response;
+        console.log(currencyData);
+        console.log(currencyData.response.data);
+        if (currencyData) {
           reset({
-            name: result.name,
-            code: result.code,
-            symbol: result.symbol,
-            type: result.type,
-            decimal_places: result.decimal_places
+            name: currencyData.response.data.Name || '',
+            code: currencyData.response.data.Code || '',
+            symbol: currencyData.response.data.Symbol || '',
+            type:
+              currencyData.response.data.CurrencyType == 0
+                ? 'Fiat'
+                : currencyData.response.data.CurrencyType == 1
+                  ? 'Crypto'
+                  : 'Points',
+            decimal_places: currencyData.response.data.DecimalPlaces || 2
           });
         } else {
           setError(t('invalid_response_format'));
@@ -157,10 +167,10 @@ const EditCurrency = () => {
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
             <Button
               className="min-w-[7rem]"
-              onClick={() => navigate('/casino-management/currencies')}
+              onClick={() => reset()}
               disabled={loading}
               variant="outlined">
-              {t('cancel')}
+              {t('reset')}
             </Button>
             <Button
               type="submit"
