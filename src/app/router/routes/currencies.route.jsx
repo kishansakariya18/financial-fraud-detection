@@ -19,7 +19,7 @@ const currenciesRoutes = [
     element: <CreateCurrency />
   },
   {
-    path: 'casino-management/currencies/edit/:id',
+    path: 'casino-management/currencies/edit/:currencyId',
     element: <EditCurrency />
   },
   {
