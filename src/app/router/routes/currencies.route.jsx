@@ -23,7 +23,7 @@ const currenciesRoutes = [
     element: <EditCurrency />
   },
   {
-    path: 'casino-management/currencies/exchange-history/:id/list',
+    path: 'casino-management/currencies/exchange-history/:currencyCode/list',
     element: <ExchangeHistoryList />
   }
 ];

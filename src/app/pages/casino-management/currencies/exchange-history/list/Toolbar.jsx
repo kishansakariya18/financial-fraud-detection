@@ -83,8 +83,8 @@ function SearchInput({ table, onApplyFilters }) {
   const { t } = useTranslation();
   return (
     <Input
-      value={table?.getColumn('From Currency')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('From Currency').setFilterValue(e.target.value)}
+      value={table?.getColumn('Base Currency')?.getFilterValue() || ''}
+      onChange={(e) => table.getColumn('Base Currency').setFilterValue(e.target.value)}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
           onApplyFilters();

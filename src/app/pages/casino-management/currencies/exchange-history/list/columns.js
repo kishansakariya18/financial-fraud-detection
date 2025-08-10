@@ -13,33 +13,33 @@ export const columns = [
     cell: IdCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.fromRate, {
-    id: 'From Rate',
-    header: 'From Rate',
+  columnHelper.accessor((row) => row.rate, {
+    id: 'Rate',
+    header: 'Rate',
     cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.toRate, {
-    id: 'To Rate',
-    header: 'To Rate',
+  // columnHelper.accessor((row) => row.source, {
+  //   id: 'Source',
+  //   header: 'Source',
+  //   cell: BoldCell,
+  //   enableSorting: false
+  // }),
+  columnHelper.accessor((row) => row.base_currency, {
+    id: 'Base Currency',
+    header: 'Base Currency',
     cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.currency, {
-    id: 'Currency',
-    header: 'Currency',
+  columnHelper.accessor((row) => row.quote_currency, {
+    id: 'Quote Currency',
+    header: 'Quote Currency',
     cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.amount, {
-    id: 'Amount',
-    header: 'Amount',
-    cell: BoldCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => row.date, {
-    id: 'Date',
-    header: 'Date',
+  columnHelper.accessor((row) => row.effective_at, {
+    id: 'Effective At',
+    header: 'Effective At',
     cell: DateCell,
     filterFn: 'inNumberRange',
     enableSorting: false

@@ -9,7 +9,7 @@ const CurrencyService = {
 
     const apiQueryParams = {
       per_page: pagination.pageSize,
-      page: 1,
+      page: pagination.pageIndex + 1,
       status: status || undefined,
       keyword: keyword || undefined
     };
@@ -78,11 +78,26 @@ const CurrencyService = {
     );
     return await sendRequest({
       url: apiConfig.baseURL.API_BASE_URL + endpoint,
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: data
+      body: { rate: data.exchange_rate }
+    });
+  },
+  changeExchangeUpdateType: async (currencyId, data) => {
+    const endpoint = replaceText(
+      apiConfig.endPoints.CURRENCY.ADMIN_EXCHANGE_TYPE_UPDATE,
+      ':currencyId',
+      currencyId
+    );
+    return await sendRequest({
+      url: apiConfig.baseURL.API_BASE_URL + endpoint,
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: { exchangeUpdateType: data.exchange_update_type }
     });
   },
 
@@ -115,6 +130,21 @@ const CurrencyService = {
       headers: {
         'Content-Type': 'application/json'
       }
+    });
+  },
+  getExchangeRateHistory: async (currencyId, body) => {
+    const endpoint = replaceText(
+      apiConfig.endPoints.EXCHANGE_RATE.HISTORY,
+      ':currencyId',
+      currencyId
+    );
+    return await sendRequest({
+      url: apiConfig.baseURL.API_BASE_URL + endpoint,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      params: body
     });
   }
 };

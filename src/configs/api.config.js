@@ -209,7 +209,15 @@ export const apiConfig = {
       UPDATE: '/wallet/admin/currency/:currencyId',
       DELETE: '/wallet/admin/currency/:currencyId',
       CHANGE_STATUS: '/wallet/admin/currency/status/:currencyId',
-      ADMIN_EXCHANGE_RATE: '/wallet/admin/currency/:currencyId/exchange-rate'
+      ADMIN_EXCHANGE_RATE: '/wallet/admin/currency/add-exchange-rate/:currencyId',
+      ADMIN_EXCHANGE_TYPE_UPDATE: '/wallet/admin/currency/exchange-update-type/:currencyId'
+    },
+    EXCHANGE_RATE: {
+      HISTORY: '/wallet/admin/exchange-rate/history/:currencyId',
+      CREATE: '/wallet/admin/exchange-rate/create',
+      UPDATE: '/wallet/admin/exchange-rate/:exchangeRateId',
+      DELETE: '/wallet/admin/exchange-rate/:exchangeRateId',
+      CHANGE_STATUS: '/wallet/admin/exchange-rate/status/:exchangeRateId'
     },
     GAME: {
       LIST: '/games/admin/casino-management/games/list',

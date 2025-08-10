@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
-import { useSearchParams } from 'react-router';
+import { useParams, useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
 
 // Local Imports - UI, Services, Helpers, Utils
@@ -12,43 +12,55 @@ import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
-import { exchangeHistoryListResponseMapper, dummyData } from './helper';
+import CurrencyService from 'services/currency.services';
+import { exchangeHistoryListResponseMapper } from './helper';
 
 export default function ExchangeHistoryList() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t('exchange_history');
+  const { currencyCode } = useParams();
+  console.log('Currency Code:', currencyCode);
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
+  // const fetchExchangeHistory = async () => {
+  //   const response = await CurrencyService.getExchangeRateHistory(currencyCode, {
+  //     page: 1,
+  //     per_page: queryParams.pageSize,
+  //     search: queryParams.keyword
+  //   });
+  //   console.log('API Response:', response);
+  //   return exchangeHistoryListResponseMapper(response);
+  //   if (result.status === 200) {
+  //     return {
+  //       status: 200,
+  //       data: apiData.list,
+  //       totalRecords: parseInt(apiData.total_records, 10) || apiData.list?.length || 0,
+  //       totalPages: apiData.total_pages || 1
+  //     };
+  //   }
+  //   return { status: result.status, error: result.error };
+  // };
   const fetchExchangeHistory = async () => {
-    // Dummy data implementation
-    const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
+    const pageIndex = isNaN(queryParams.pageIndex) ? 1 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
-
-    const keyword = queryParams.keyword?.toLowerCase();
-    let filteredData = dummyData;
-
-    if (keyword) {
-      filteredData = dummyData.filter((item) => item.currency.toLowerCase().includes(keyword));
-    }
-
-    const start = pageIndex * pageSize;
-    const end = start + pageSize;
-    const paginatedData = filteredData.slice(start, end);
-
-    const apiData = exchangeHistoryListResponseMapper({
-      data: paginatedData,
-      total_records: filteredData.length,
-      total_pages: Math.ceil(filteredData.length / pageSize)
+    const result = await CurrencyService.getExchangeRateHistory(currencyCode, {
+      filters: queryParams,
+      pagination: { pageIndex, pageSize }
     });
 
-    return {
-      status: 200,
-      data: apiData.list,
-      totalRecords: apiData.totalRecords,
-      totalPages: apiData.totalPages
-    };
+    const apiData = exchangeHistoryListResponseMapper(result.response);
+
+    if (result.status === 200) {
+      return {
+        status: 200,
+        data: apiData.list,
+        totalRecords: parseInt(apiData.totalRecords, 10) || apiData.list?.length || 0,
+        totalPages: apiData.totalPages || 1
+      };
+    }
+    return { status: result.status, error: result.error };
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
@@ -73,7 +85,7 @@ export default function ExchangeHistoryList() {
   useEffect(() => {
     const filtersFromQuery = [];
     if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'From Currency', value: queryParams.keyword });
+      filtersFromQuery.push({ id: 'Base Currency', value: queryParams.keyword });
     }
 
     setColumnFilters(filtersFromQuery);
@@ -83,7 +95,7 @@ export default function ExchangeHistoryList() {
   const applyFilterHandler = () => {
     const filterItems = {};
     for (let data of table.getState().columnFilters) {
-      if (data.id === 'From Currency') {
+      if (data.id === 'Base Currency') {
         filterItems.keyword = data.value;
       }
     }

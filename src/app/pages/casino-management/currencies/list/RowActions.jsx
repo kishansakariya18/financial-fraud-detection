@@ -29,12 +29,12 @@ export function RowActions({ row, table }) {
   const confirmMessages = {
     pending: {
       title: t('change') + ' ' + t('status'),
-      description: t('provider_status_desc'),
+      description: t('currency_status_desc'),
       actionText: t('submit')
     },
     success: {
-      title: t('casino_provider') + ' ' + t('status') + ' ' + t('changed'),
-      description: t('provider_status_suceess')
+      title: t('currency') + ' ' + t('status') + ' ' + t('changed'),
+      description: t('currency_status_suceess')
     }
   };
 
@@ -149,7 +149,7 @@ export function RowActions({ row, table }) {
                     <button
                       onClick={() => {
                         navigate(
-                          `/casino-management/currencies/exchange-history/${row.original.id}/list`
+                          `/casino-management/currencies/exchange-history/${row.original.code}/list`
                         );
                       }}
                       className={clsx(
