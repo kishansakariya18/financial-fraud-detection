@@ -551,5 +551,7 @@
   "done": "Done",
   "user_class": "User Class",
   "unassign": "Unassign",
-  "assign": "Assign"
+  "assign": "Assign",
+  "expand": "Expand",
+  "collapse": "Collapse"
 }

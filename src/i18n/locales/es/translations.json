@@ -528,5 +528,7 @@
   "done": "Hecho",
   "user_class": "Clase de usuario",
   "unassign": "Desasignar",
-  "assign": "Asignar"
+  "assign": "Asignar",
+  "expand": "Expandir",
+  "collapse": "Colapsar"
   }
