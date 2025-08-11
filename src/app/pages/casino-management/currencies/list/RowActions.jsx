@@ -38,10 +38,26 @@ export function RowActions({ row, table }) {
     }
   };
 
+  const exchangeUpdateTypeConfirmMessages = {
+    pending: {
+      title: t('change') + ' ' + t('exchange_update_type'),
+      description: t('exchange_update_type_desc'),
+      actionText: t('submit')
+    },
+    success: {
+      title: t('exchange_update_type') + ' ' + t('changed'),
+      description: t('exchange_update_type_success')
+    }
+  };
+
   const [statusModalOpen, setStatusModalOpen] = useState(false);
+  const [exchangeUpdateTypeModalOpen, setExchangeUpdateTypeModalOpen] = useState(false);
   const [confirmStatusLoading, setConfirmStatusLoading] = useState(false);
+  const [confirmExchangeUpdateTypeLoading, setConfirmExchangeUpdateTypeLoading] = useState(false);
   const [statusSuccess, setStatusSuccess] = useState(false);
   const [statusError, setStatusError] = useState(false);
+  const [exchangeUpdateTypeSuccess, setExchangeUpdateTypeSuccess] = useState(false);
+  const [exchangeUpdateTypeError, setExchangeUpdateTypeError] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isAdminRateModalOpen, setAdminRateModalOpen] = useState(false);
 
@@ -61,6 +77,17 @@ export function RowActions({ row, table }) {
   const closeModal = () => {
     setStatusModalOpen(false);
   };
+
+  const closeExchangeUpdateTypeModal = () => {
+    setExchangeUpdateTypeModalOpen(false);
+  };
+
+  const openExchangeUpdateTypeModal = () => {
+    setExchangeUpdateTypeModalOpen(true);
+    setExchangeUpdateTypeError(false);
+    setExchangeUpdateTypeSuccess(false);
+  };
+
   const openModal = () => {
     setStatusModalOpen(true);
     setStatusError(false);
@@ -84,6 +111,24 @@ export function RowActions({ row, table }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [row]);
 
+  const handleExchangeUpdateTypeRows = useCallback(async () => {
+    setConfirmExchangeUpdateTypeLoading(true);
+    console.log('row.original.exchangeUpdateType: ', row.original.exchangeUpdateType);
+    const result = await CurrencyServices.changeExchangeUpdateType(
+      row.original.id,
+      row.original.exchangeUpdateType
+    );
+    if (result.status === 200) {
+      table.options.meta?.fetchNewList();
+      setExchangeUpdateTypeSuccess(true);
+    } else {
+      setExchangeUpdateTypeError(true);
+    }
+
+    setConfirmExchangeUpdateTypeLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [row]);
+
   const handleDeleteRows = async () => {
     const result = await CurrencyServices.deleteCurrency(row.original.id);
     if (result.status === 200) {
@@ -91,7 +136,12 @@ export function RowActions({ row, table }) {
     }
   };
 
-  const state = statusError ? 'error' : statusSuccess ? 'success' : 'pending';
+  const statusState = statusError ? 'error' : statusSuccess ? 'success' : 'pending';
+  const exchangeUpdateTypeState = exchangeUpdateTypeError
+    ? 'error'
+    : exchangeUpdateTypeSuccess
+      ? 'success'
+      : 'pending';
 
   return (
     <>
@@ -162,17 +212,34 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              {hasPermission(PERMISSIONS.CURRENCIES.ADMIN_EXCHANGE_RATE) && (
+
+              {hasPermission(PERMISSIONS.CURRENCIES.ADMIN_EXCHANGE_RATE) &&
+                row.original.exchangeUpdateType === 'Manual' && (
+                  <MenuItem>
+                    {({ focus }) => (
+                      <button
+                        onClick={() => setAdminRateModalOpen(true)}
+                        className={clsx(
+                          'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                          focus && 'bg-this/10 dark:bg-this-light/10'
+                        )}>
+                        <ClockIcon className="size-4.5 stroke-1" />
+                        <span>{t('admin_exchange_rate')}</span>
+                      </button>
+                    )}
+                  </MenuItem>
+                )}
+              {hasPermission(PERMISSIONS.CURRENCIES.EXCHANGE_UPDATE_TYPE) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
-                      onClick={() => setAdminRateModalOpen(true)}
+                      onClick={openExchangeUpdateTypeModal}
                       className={clsx(
                         'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
                         focus && 'bg-this/10 dark:bg-this-light/10'
                       )}>
                       <ClockIcon className="size-4.5 stroke-1" />
-                      <span>{t('admin_exchange_rate')}</span>
+                      <span>{t('exchange_update_type')}</span>
                     </button>
                   )}
                 </MenuItem>
@@ -187,7 +254,7 @@ export function RowActions({ row, table }) {
                       )}
                       onClick={() => handleDeleteRows()}>
                       <TrashIcon className="size-4.5 stroke-1" />
-                      <span>{t('delete')}</span>
+                      <span>{t('remove')}</span>
                     </button>
                   )}
                 </MenuItem>
@@ -221,7 +288,15 @@ export function RowActions({ row, table }) {
         messages={confirmMessages}
         onOk={handleChangeStatusRows}
         confirmLoading={confirmStatusLoading}
-        state={state}
+        state={statusState}
+      />
+      <ConfirmModal
+        show={exchangeUpdateTypeModalOpen}
+        onClose={closeExchangeUpdateTypeModal}
+        messages={exchangeUpdateTypeConfirmMessages}
+        onOk={handleExchangeUpdateTypeRows}
+        confirmLoading={confirmExchangeUpdateTypeLoading}
+        state={exchangeUpdateTypeState}
       />
       <AdminExchangeRateModal
         show={isAdminRateModalOpen}

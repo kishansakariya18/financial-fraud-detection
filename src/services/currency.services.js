@@ -7,12 +7,21 @@ const CurrencyService = {
     const { pagination, filters } = body;
     const { status, keyword } = filters || {};
 
+    console.log('status: ', status);
     const apiQueryParams = {
       per_page: pagination.pageSize,
-      page: pagination.pageIndex + 1,
-      status: status || undefined,
-      keyword: keyword || undefined
+      page: pagination.pageIndex + 1
     };
+
+    // Add status filter only if a specific status is selected
+    if (status) {
+      apiQueryParams['filters[isActive]'] = status == 'active' ? 1 : 0;
+    }
+
+    // Add keyword filter only if it exists
+    if (keyword) {
+      apiQueryParams['filters[keyword]'] = keyword;
+    }
 
     return await sendRequest({
       url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.CURRENCY.LIST}`,
@@ -85,7 +94,7 @@ const CurrencyService = {
       body: { rate: data.exchange_rate }
     });
   },
-  changeExchangeUpdateType: async (currencyId, data) => {
+  changeExchangeUpdateType: async (currencyId, exchangeUpdateType) => {
     const endpoint = replaceText(
       apiConfig.endPoints.CURRENCY.ADMIN_EXCHANGE_TYPE_UPDATE,
       ':currencyId',
@@ -97,7 +106,7 @@ const CurrencyService = {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: { exchangeUpdateType: data.exchange_update_type }
+      body: { exchangeUpdateType: exchangeUpdateType === 'Manual' ? 1 : 0 }
     });
   },
 

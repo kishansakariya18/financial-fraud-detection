@@ -9,7 +9,7 @@ export const currencyListResponseMapper = (response) => {
     code: d.Code,
     symbol: d.Symbol,
     decimal_places: d.DecimalPlaces,
-    type: d.CurrencyType === 0 ? 'Fiat' : 'Crypto',
+    type: d.CurrencyType == 0 ? 'Fiat' : d.CurrencyType === 1 ? 'Crypto' : 'Points',
     status: d.IsActive ? 'active' : 'inactive',
     exchangeUpdateType: d.ExchangeUpdateType === 0 ? 'Manual' : 'Auto',
     is_default: d.IsDefault,

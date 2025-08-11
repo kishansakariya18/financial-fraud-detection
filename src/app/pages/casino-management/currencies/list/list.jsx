@@ -88,13 +88,6 @@ export default function Currency() {
     if (queryParams.status) {
       filtersFromQuery.push({ id: 'Status', value: queryParams.status });
     }
-
-    if (queryParams.startDate && queryParams.endDate) {
-      filtersFromQuery.push({
-        id: 'createdAt',
-        value: [+queryParams.startDate, +queryParams.endDate]
-      });
-    }
     setColumnFilters(filtersFromQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [queryParams]);
@@ -105,15 +98,13 @@ export default function Currency() {
 
     for (let data of table.getState().columnFilters) {
       if (data.id === 'Name') {
-        filterItems.keyword = data.value;
-      }
-
-      if (data.id === 'Status') {
-        filterItems.status = data.value;
-      }
-
-      if (data.id === 'createdAt') {
-        filterItems.date = data.value;
+        if (data.value) {
+          filterItems.keyword = data.value;
+        }
+      } else if (data.id === 'Status') {
+        if (data.value) {
+          filterItems.status = data.value;
+        }
       }
     }
 
@@ -121,9 +112,7 @@ export default function Currency() {
       pageIndex: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
-      ...(filterItems.status && { status: filterItems.status }),
-      ...(filterItems.date && { startDate: filterItems.date[0] }),
-      ...(filterItems.date && { endDate: filterItems?.date[1] })
+      ...(filterItems.status && { status: filterItems.status })
     });
   };
 
@@ -146,7 +135,6 @@ export default function Currency() {
         // summary={summary}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
-        // filters= {}
       />
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>

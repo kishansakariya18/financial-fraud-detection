@@ -73,7 +73,15 @@ export default function Tabs() {
       title: t('referral'),
       path: `/users/player/${playerId}/tab/referrals`,
       icon: UserGroupIcon,
-      index: 0,
+      index: 6,
+      permission: PERMISSIONS.USER.LIST
+    },
+    {
+      id: randomId(),
+      title: t('wallets'),
+      path: `/users/player/${playerId}/tab/wallets`,
+      icon: WalletIcon,
+      index: 7,
       permission: PERMISSIONS.USER.LIST
     }
   ];
