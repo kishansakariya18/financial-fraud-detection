@@ -236,5 +236,6 @@ export const manageFundSchema = Yup.object().shape({
     .trim()
     .required('Fund Message Required')
     .max(100, 'Fund Message Should Not More Than 100 Characters'),
-  type: Yup.string().trim().required('Type Required')
+  type: Yup.string().trim().required('Type Required'),
+  currency: Yup.string().trim().required('Select Currency')
 });
