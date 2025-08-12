@@ -553,5 +553,6 @@
   "unassign": "Unassign",
   "assign": "Assign",
   "expand": "Expand",
-  "collapse": "Collapse"
+  "collapse": "Collapse",
+  "updating": "Updating..."
 }

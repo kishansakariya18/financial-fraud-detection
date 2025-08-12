@@ -337,7 +337,6 @@ export const apiConfig = {
       EDIT: '/content/admin/release-note/:releaseNoteUID/edit'
     },
     APP_SETTINGS: {
-      LIST: '/config/admin/config/app-settings',
       UPDATE: '/config/admin/config/app-setting/update'
     }
   }

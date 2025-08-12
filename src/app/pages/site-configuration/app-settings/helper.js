@@ -23,7 +23,8 @@ export const responseMapper = (apiData = []) => {
     name: item?.Name,
     key: item?.Key,
     value: item?.Value,
-    valueType: item?.ValueType
+    valueType: item?.ValueType,
+    isEditable: item?.IsEditable
   }));
 };
 
@@ -37,5 +38,6 @@ export const detailMapper = (apiData = {}) => ({
   name: apiData?.Name,
   key: apiData?.Key,
   value: apiData?.Value,
-  valueType: apiData?.ValueType
+  valueType: apiData?.ValueType,
+  isEditable: apiData?.IsEditable
 });

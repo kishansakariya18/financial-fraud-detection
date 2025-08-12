@@ -7,8 +7,12 @@ import { Input, Select, Radio, Textarea } from 'components/ui/Form';
 import { Button } from 'components/ui/Button';
 import { Collapse } from 'components/ui/Collapse';
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
+import AuthService from 'services/auth.services';
 import AppSettingsService from 'services/app-settings.services';
 import { responseMapper } from './helper';
+import { validateNumberValue } from '../schema';
+import { capitalizeFirstLetter } from 'helpers/functions';
+import { toast } from 'sonner';
 
 export default function ApplicationSettings() {
   const [settings, setSettings] = useState([]); // normalized list of settings
@@ -16,6 +20,7 @@ export default function ApplicationSettings() {
   const [loadingIds, setLoadingIds] = useState({}); // id => boolean
   const [expandedKeys, setExpandedKeys] = useState({}); // key => boolean
   const [jsonForms, setJsonForms] = useState({}); // key => parsed object for editing
+  const [errors, setErrors] = useState({}); // key => error message
   const { t } = useTranslation();
   const pageTitle = t('appSettings');
   const currencies = [
@@ -38,7 +43,7 @@ export default function ApplicationSettings() {
 
   const fetchSettings = async () => {
     try {
-      const response = await AppSettingsService.loadInitialSettings();
+      const response = await AuthService.loadInitialSettings();
       if (response.status === 200 || response.status === 201) {
         const apiData = Array.isArray(response?.response?.data)
           ? response.response.data
@@ -89,7 +94,15 @@ export default function ApplicationSettings() {
     if (!expandedKeys[key]) {
       try {
         const src = formValues[key];
-        const parsed = typeof src === 'string' ? JSON.parse(src) : src;
+        // Safe parse with double-decode support
+        let parsed = typeof src === 'string' ? JSON.parse(src) : src;
+        if (typeof parsed === 'string' && /^\s*[{[]/.test(parsed)) {
+          try {
+            parsed = JSON.parse(parsed);
+          } catch {
+            // ignore second parse fail
+          }
+        }
         if (parsed && typeof parsed === 'object') {
           setJsonForms((p) => ({ ...p, [key]: parsed }));
         }
@@ -101,8 +114,21 @@ export default function ApplicationSettings() {
 
   const updateJsonField = (rowKey, field, newVal) => {
     setJsonForms((prev) => {
-      const next = { ...(prev[rowKey] || {}) };
-      next[field] = newVal;
+      let base = prev[rowKey];
+      if (!base || typeof base !== 'object') {
+        try {
+          base =
+            typeof formValues[rowKey] === 'string'
+              ? JSON.parse(formValues[rowKey])
+              : formValues[rowKey];
+          if (typeof base === 'string' && /^\s*[{[]/.test(base)) {
+            base = JSON.parse(base);
+          }
+        } catch {
+          base = {};
+        }
+      }
+      const next = { ...(base || {}), [field]: newVal };
       // sync back to Value string
       setFormValues((fv) => ({ ...fv, [rowKey]: JSON.stringify(next) }));
       return { ...prev, [rowKey]: next };
@@ -111,6 +137,17 @@ export default function ApplicationSettings() {
 
   const renderInput = (row) => {
     const value = formValues[row.key];
+    // Keys that should always render as boolean radios (0/1)
+    const FORCE_RADIO_KEYS = new Set([
+      'IsAffiliateMFAEnabled',
+      'IsMFAEnabled',
+      'CheckCalanderTime',
+      'DefaultOTP',
+      'IsGeoRestricted'
+    ]);
+    const forceBooleanRadio = FORCE_RADIO_KEYS.has(row.key);
+    // Decide early if this should be treated as a number field
+    const isNumberField = String(row?.valueType).toLowerCase() === 'number' || isNumeric(value);
     // Prefer value type hints if present on the original response
     // We don't have ValueType here via mapper; derive by heuristics
     // KYC mode: dropdown manual/auto
@@ -138,21 +175,28 @@ export default function ApplicationSettings() {
       );
     }
 
-    if (isBooleanString(value)) {
+    // Force radios for specific keys or when value clearly boolean-like string
+    if (forceBooleanRadio || (!isNumberField && isBooleanString(value))) {
       // Radio Yes/No
       return (
         <div className="flex items-center gap-4">
           <Radio
             name={`radio-${row.key}`}
-            label={t('Yes')}
+            label={t('yes')}
             checked={String(value) === '1'}
-            onChange={() => setValue(row.key, '1')}
+            onChange={() => {
+              setValue(row.key, '1');
+              setErrors((prev) => ({ ...prev, [row.key]: '' }));
+            }}
           />
           <Radio
             name={`radio-${row.key}`}
-            label={t('No')}
+            label={t('no')}
             checked={String(value) === '0'}
-            onChange={() => setValue(row.key, '0')}
+            onChange={() => {
+              setValue(row.key, '0');
+              setErrors((prev) => ({ ...prev, [row.key]: '' }));
+            }}
           />
         </div>
       );
@@ -170,12 +214,23 @@ export default function ApplicationSettings() {
       );
     }
 
-    // rudimentary JSON detection with expand/collapse editor
-    const looksJson = typeof value === 'string' && /^\s*[{[]/.test(value);
-    if (looksJson) {
+    // JSON detection with valueType support and object fallback
+    const isJsonField =
+      String(row?.valueType).toLowerCase() === 'json' ||
+      typeof value === 'object' ||
+      (typeof value === 'string' && /^\s*[{[]/.test(value));
+    if (isJsonField) {
       let parsed;
       try {
-        parsed = JSON.parse(value);
+        parsed = typeof value === 'string' ? JSON.parse(value) : value;
+        // Handle double-encoded JSON strings like "{\"max\":\"100\"}"
+        if (typeof parsed === 'string' && /^\s*[{[]/.test(parsed)) {
+          try {
+            parsed = JSON.parse(parsed);
+          } catch {
+            // keep as string if second parse fails
+          }
+        }
       } catch {
         parsed = null;
       }
@@ -207,7 +262,9 @@ export default function ApplicationSettings() {
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   {Object.entries(jsonForms[row.key] || parsed).map(([k, v]) => (
                     <div key={k} className="flex flex-col gap-1">
-                      <span className="text-xs text-gray-500 dark:text-dark-300">{k}</span>
+                      <span className="text-xs text-gray-500 dark:text-dark-300">
+                        {capitalizeFirstLetter(k)}
+                      </span>
                       <Input
                         value={v ?? ''}
                         onChange={(e) => updateJsonField(row.key, k, e.target.value)}
@@ -228,9 +285,43 @@ export default function ApplicationSettings() {
       );
     }
 
-    if (isNumeric(value)) {
+    // Numeric field rendering (non-negative, up to 2 decimals)
+    if (isNumberField && !forceBooleanRadio) {
+      const onChange = (e) => {
+        const v = e.target.value;
+        setValue(row.key, v);
+        const err = validateNumberValue(v, {
+          positive: true,
+          allowZero: true,
+          maxDecimals: 2
+        });
+        setErrors((prev) => ({ ...prev, [row.key]: err }));
+      };
+      const onKeyDown = (e) => {
+        // Block minus, plus and scientific notation
+        if (['e', 'E', '-', '+'].includes(e.key)) {
+          e.preventDefault();
+        }
+      };
+      const onPaste = (e) => {
+        const text = (e.clipboardData || window.clipboardData).getData('text');
+        if (/[-+eE]/.test(text)) {
+          e.preventDefault();
+        }
+      };
       return (
-        <Input type="number" value={value} onChange={(e) => setValue(row.key, e.target.value)} />
+        <Input
+          type="number"
+          inputMode="decimal"
+          step="0.01"
+          min={0}
+          pattern="^\\d*(?:\\.\\d{0,2})?$"
+          value={value}
+          onChange={onChange}
+          onKeyDown={onKeyDown}
+          onPaste={onPaste}
+          error={errors[row.key] || false}
+        />
       );
     }
 
@@ -240,6 +331,17 @@ export default function ApplicationSettings() {
 
   const handleUpdate = async (row) => {
     try {
+      // Validate current value before update (non-negative, up to 2 decimals)
+      const currentVal = formValues[row.key];
+      const err = validateNumberValue(currentVal, {
+        positive: true,
+        allowZero: true,
+        maxDecimals: 2
+      });
+      if (err) {
+        setErrors((prev) => ({ ...prev, [row.key]: err }));
+        return;
+      }
       setLoadingIds((prev) => ({ ...prev, [row.id]: true }));
       const payload = {
         id: row.id,
@@ -248,9 +350,13 @@ export default function ApplicationSettings() {
       };
       const res = await AppSettingsService.updateAppSettings(payload);
       if (res?.status === 200 || res?.status === 201) {
+        toast.success(res?.response.message);
         await fetchSettings();
+      } else {
+        toast.error(res?.response.message);
       }
     } catch (err) {
+      toast.error(err?.response?.message);
       console.error('Failed to update app setting', err);
     } finally {
       setLoadingIds((prev) => ({ ...prev, [row.id]: false }));
@@ -286,8 +392,16 @@ export default function ApplicationSettings() {
                     <Button
                       color="primary"
                       onClick={() => handleUpdate(row)}
-                      disabled={!!loadingIds[row.id]}>
-                      {loadingIds[row.id] ? t('Updating...') : t('Update')}
+                      disabled={
+                        !!loadingIds[row.id] ||
+                        !!errors[row.key] ||
+                        !(
+                          row?.isEditable === 1 ||
+                          row?.isEditable === true ||
+                          Number(row?.isEditable) === 1
+                        )
+                      }>
+                      {loadingIds[row.id] ? t('updating') : t('update')}
                     </Button>
                   </div>
                 </div>

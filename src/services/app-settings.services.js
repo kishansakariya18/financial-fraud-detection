@@ -2,22 +2,6 @@ import apiConfig from '../configs/api.config';
 import { sendRequest } from '../utils/axios';
 
 const AppSettingsService = {
-  loadInitialSettings: async () => {
-    try {
-      const endPoint = apiConfig.endPoints.ADMIN_USER.ADMIN_APPSETTINGS;
-      const response = await sendRequest({
-        url: apiConfig.baseURL.API_BASE_URL + endPoint,
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      return response;
-    } catch (err) {
-      console.log('Error', err);
-    }
-  },
   updateAppSettings: async (data) => {
     try {
       const endPoint = apiConfig.endPoints.APP_SETTINGS.UPDATE;

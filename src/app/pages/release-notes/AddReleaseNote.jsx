@@ -65,6 +65,8 @@ const AddReleaseNote = () => {
         setTimeout(() => {
           navigate('/release-notes');
         }, 1000);
+      } else {
+        toast.error(result.response.message);
       }
     } catch (error) {
       console.error('Error:', error);
