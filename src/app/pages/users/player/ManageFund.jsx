@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import PlayerService from 'services/player.services';
+import WalletService from 'services/wallet-services';
 import { Listbox } from 'components/shared/form/Listbox';
 import { fundTypeOption, transactionTypeOption } from './helper';
 import { TbCoinRupeeFilled } from 'react-icons/tb';
@@ -16,17 +17,17 @@ import { manageFundSchema } from './schema';
 import { useParams } from 'react-router';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { useDisclosure } from 'hooks';
-import { FaMoneyBill1Wave, FaMoneyBillTransfer } from 'react-icons/fa6';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 const ManageFund = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
-  const [userDetails, setUserDetails] = useState(null);
   const [show, { toggle }] = useDisclosure();
+  const [walletOptions, setWalletOptions] = useState([]);
+  const [isLoadingWallets, setIsLoadingWallets] = useState(false);
 
-  const { playerId } = useParams();
+  const { playerId, userID } = useParams();
   const { t } = useTranslation();
 
   const {
@@ -56,8 +57,7 @@ const ManageFund = () => {
     const result = await PlayerService.userDetail(playerId);
 
     if (result.status === 200) {
-      const apiData = result.response.data;
-      setUserDetails(apiData);
+      // const apiData = result.response.data;
     } else {
       setError(result.error);
     }
@@ -66,8 +66,36 @@ const ManageFund = () => {
 
   useEffect(() => {
     fetchPlayerDetails();
+    fetchWalletData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerId, response]);
+
+  const fetchWalletData = async () => {
+    try {
+      setIsLoadingWallets(true);
+      const result = await WalletService.getWalletList({
+        pageIndex: 0,
+        pageSize: 100,
+        userID
+      });
+
+      console.log(result.response.data);
+      if (result?.response?.data) {
+        const formattedWallets = result.response.data.map((wallet) => ({
+          value: wallet.Currency != null ? wallet.Currency.CurrencyID : '-',
+          label: `${wallet.Currency != null ? wallet.Currency.Code : '-'} (Balance: ${wallet.Balance}) (Bonus: ${wallet.Bonus || 0})`,
+          amount: wallet.Balance,
+          bonus: wallet.Bonus || 0
+        }));
+        setWalletOptions(formattedWallets);
+      }
+    } catch (error) {
+      console.error('Error fetching wallet data:', error);
+      toast.error(t('failed_to_load_wallets'));
+    } finally {
+      setIsLoadingWallets(false);
+    }
+  };
 
   const manageFundAPI = async (requestObject) => {
     setLoading(true);
@@ -119,7 +147,7 @@ const ManageFund = () => {
             <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        {/* <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <div className="rounded-lg bg-gray-100 p-3 dark:bg-surface-3 2xl:p-4">
             <div className="flex justify-between space-x-1">
               <p className="text-xl font-semibold text-gray-800 dark:text-dark-100">
@@ -138,7 +166,7 @@ const ManageFund = () => {
             </div>
             <p className="mt-1 text-xs+"> {t('winning')}</p>
           </div>
-        </div>
+        </div> */}
 
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div className="mt-6 space-y-4">
@@ -159,6 +187,27 @@ const ManageFund = () => {
                 )}
                 control={control}
                 name="type"
+              />
+
+              {/* Currency Dropdown */}
+              <Controller
+                render={({ field }) => (
+                  <Listbox
+                    data={walletOptions}
+                    value={walletOptions.find((option) => option.value === field.value) || null}
+                    onChange={(val) => field.onChange(val.value)}
+                    name={field.name}
+                    label={t('currency')}
+                    placeholder={isLoadingWallets ? t('loading') : t('select_currency')}
+                    displayField="label"
+                    error={errors?.currency?.message}
+                    disabled={isLoadingWallets || walletOptions.length === 0}
+                    isLoading={isLoadingWallets}
+                  />
+                )}
+                control={control}
+                name="currency"
+                rules={{ required: t('currency_is_required') }}
               />
 
               {/* Fund Type (Conditional Options) */}

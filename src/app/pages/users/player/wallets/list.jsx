@@ -17,12 +17,13 @@ export default function PlayerWallets() {
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t('player') + ' ' + t('wallets');
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
-  const { userId } = useParams();
+  const { userID } = useParams();
 
   const fetchPlayerWallets = useCallback(async (params = {}) => {
     try {
       console.log(params);
-      const response = await WalletService.getWalletList({ userId, ...params });
+      console.log(userID);
+      const response = await WalletService.getWalletList({ userID, ...params });
       console.log(response.response);
       // Transform the API response to match the expected format
       const wallets = response.response.data?.map((wallet) => ({

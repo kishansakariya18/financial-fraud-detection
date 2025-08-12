@@ -347,7 +347,8 @@ export const apiConfig = {
       EDIT: '/content/admin/release-note/:releaseNoteUID/edit'
     },
     WALLET: {
-      LIST: '/wallet/admin/wallet/list/:userId'
+      LIST: '/wallet/admin/wallet/list/:userId',
+      FUND: '/wallet/admin/wallet/fund'
     }
   }
 };

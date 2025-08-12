@@ -124,15 +124,17 @@ const PlayerService = {
   },
   managePlayerFund: async (data) => {
     try {
+      console.log(data);
       const requestBody = {
         amount: data.amount,
         userUID: data.playerId,
         amountType: fundTypeToAPI(data.fundType),
         type: transactionTypeAppToApi(data.type),
         fundMessage: data.fundMessage,
-        password: data.password
+        password: data.password,
+        currencyID: data.currency
       };
-      const endPoint = apiConfig.endPoints.USER.FUND;
+      const endPoint = apiConfig.endPoints.WALLET.FUND;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
