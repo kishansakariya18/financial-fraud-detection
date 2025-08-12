@@ -153,15 +153,15 @@ const AddReleaseNote = () => {
                 />
               )}
             />
-            <div className="space-y-2">
-              <Textarea
-                {...register('description')}
-                placeholder={t('enter') + ' ' + t('description')}
-                label={t('description')}
-                error={errors?.description?.message}
-                rows={4}
-              />
-            </div>
+          </div>
+          <div className="space-y-2">
+            <Textarea
+              {...register('description')}
+              placeholder={t('enter') + ' ' + t('description')}
+              label={t('description')}
+              error={errors?.description?.message}
+              rows={16}
+            />
           </div>
 
           <div className="flex justify-end space-x-3">

@@ -156,25 +156,6 @@ export function ViewDetails() {
                     </p>
                     <p>{releaseNote?.Title || '-'}</p>
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {t('description')}
-                    </p>
-                    <Card className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-dark-600 dark:bg-dark-700">
-                      <div className="prose prose-sm dark:prose-invert max-w-none">
-                        {releaseNote?.Description ? (
-                          <div
-                            className="whitespace-pre-line leading-relaxed text-gray-800 dark:text-gray-200"
-                            dangerouslySetInnerHTML={{
-                              __html: releaseNote.Description.replace(/\\n/g, '<br />')
-                            }}
-                          />
-                        ) : (
-                          <span className="italic text-gray-400">-</span>
-                        )}
-                      </div>
-                    </Card>
-                  </div>
 
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
@@ -182,6 +163,25 @@ export function ViewDetails() {
                     </p>
                     <p>{getDateInUTCToTimeZone(releaseNote?.ReleaseDate) || '-'}</p>
                   </div>
+                </div>
+                <div className="mt-4">
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('description')}
+                  </p>
+                  <Card className="mt-2 rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-dark-600 dark:bg-dark-700">
+                    <div className="prose prose-sm dark:prose-invert max-w-none">
+                      {releaseNote?.Description ? (
+                        <div
+                          className="whitespace-pre-line leading-relaxed text-gray-800 dark:text-gray-200"
+                          dangerouslySetInnerHTML={{
+                            __html: releaseNote.Description.replace(/\\n/g, '<br />')
+                          }}
+                        />
+                      ) : (
+                        <span className="italic text-gray-400">-</span>
+                      )}
+                    </div>
+                  </Card>
                 </div>
               </Card>
               <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
