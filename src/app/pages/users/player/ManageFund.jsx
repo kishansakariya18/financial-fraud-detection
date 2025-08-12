@@ -49,7 +49,7 @@ const ManageFund = () => {
     selectedType === 'credit'
       ? fundTypeOption.filter((option) => option.value === 'realCash')
       : selectedType === 'debit'
-        ? fundTypeOption.filter((option) => option.value === 'winning')
+        ? fundTypeOption.filter((option) => option.value === 'realCash')
         : [];
 
   const fetchPlayerDetails = async () => {
