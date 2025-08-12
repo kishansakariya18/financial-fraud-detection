@@ -202,12 +202,22 @@ export const apiConfig = {
         '/games/admin/casino-management/provider/:providerId/restricted-country/delete'
     },
     CURRENCY: {
-      LIST: '/games/admin/casino-management/currency/list',
+      LIST: '/wallet/admin/currency/list',
       SUMMARY: '/games/admin/casino-management/currency/summary',
-      CREATE: '/games/admin/casino-management/currency/create',
-      EDIT: '/games/admin/casino-management/currency/:currencyId/edit',
-      DELETE: '/games/admin/casino-management/currency/:currencyId/delete',
-      CHANGE_STATUS: '/games/admin/casino-management/currency/:currencyId/change-status'
+      CREATE: '/wallet/admin/currency/create',
+      GET_BY_ID: '/wallet/admin/currency/:currencyId',
+      UPDATE: '/wallet/admin/currency/:currencyId',
+      DELETE: '/wallet/admin/currency/:currencyId',
+      CHANGE_STATUS: '/wallet/admin/currency/status/:currencyId',
+      ADMIN_EXCHANGE_RATE: '/wallet/admin/currency/add-exchange-rate/:currencyId',
+      ADMIN_EXCHANGE_TYPE_UPDATE: '/wallet/admin/currency/exchange-update-type/:currencyId'
+    },
+    EXCHANGE_RATE: {
+      HISTORY: '/wallet/admin/exchange-rate/history/:currencyId',
+      CREATE: '/wallet/admin/exchange-rate/create',
+      UPDATE: '/wallet/admin/exchange-rate/:exchangeRateId',
+      DELETE: '/wallet/admin/exchange-rate/:exchangeRateId',
+      CHANGE_STATUS: '/wallet/admin/exchange-rate/status/:exchangeRateId'
     },
     GAME: {
       LIST: '/games/admin/casino-management/games/list',
@@ -338,6 +348,9 @@ export const apiConfig = {
     },
     APP_SETTINGS: {
       UPDATE: '/config/admin/config/app-setting/update'
+    },
+    WALLET: {
+      LIST: '/wallet/admin/wallet/list/:userId'
     }
   }
 };

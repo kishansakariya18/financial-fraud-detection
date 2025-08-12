@@ -162,6 +162,19 @@ export const playerRoutes = [
             )
           };
         }
+      },
+      {
+        path: 'wallets',
+        lazy: async () => {
+          const { default: PlayerWallets } = await import('../../pages/users/player/wallets/list');
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.USER.LIST}>
+                <PlayerWallets />
+              </PrivateRoute>
+            )
+          };
+        }
       }
     ]
   }

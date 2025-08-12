@@ -12,10 +12,13 @@ import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
-import { DateFilter } from 'components/shared/table/DateFilter';
 import { useNavigate } from 'react-router';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
+import { statusOptions } from '../helper';
+import { MapPinIcon } from '@heroicons/react/24/outline';
+import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
+
 // import { useSearchParams } from 'react-router';
 // import { CreateCategory } from '../CreateCategory';
 
@@ -145,8 +148,8 @@ export function CurrencyFilters({
 function SearchInput({ table, onApplyFilters }) {
   return (
     <Input
-      value={table?.getColumn('name')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('name').setFilterValue(e.target.value)}
+      value={table?.getColumn('Name')?.getFilterValue() || ''}
+      onChange={(e) => table.getColumn('Name').setFilterValue(e.target.value)}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
           onApplyFilters();
@@ -166,26 +169,26 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>
-      {/* {table.getColumn('status') && (
+      {table.getColumn('Status') && (
         <FacedtedFilter
           options={statusOptions}
-          column={table.getColumn('status')}
+          column={table.getColumn('Status')}
           title="Status"
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}
         />
-      )} */}
-      {table.getColumn('createdAt') && (
+      )}
+      {/* {table.getColumn('CreatedAt') && (
         <DateFilter
-          column={table.getColumn('createdAt')}
+          column={table.getColumn('CreatedAt')}
           title={t('date') + ' ' + t('range')}
           config={{
             maxDate: new Date().fp_incr(1),
             mode: 'range'
           }}
         />
-      )}
+      )} */}
 
       <div>
         <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
