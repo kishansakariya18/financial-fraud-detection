@@ -211,6 +211,8 @@ const CreateAdmin = () => {
                         value: c.PhoneCode,
                         label: `${c.PhoneCode} (${c.CountryCode}) ${c.CountryName}`
                       }))}
+                      searchable
+                      searchPlaceholder={t('search') + ' ' + t('countryCode')}
                       value={
                         countries
                           .map((c) => ({

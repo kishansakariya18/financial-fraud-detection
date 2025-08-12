@@ -245,6 +245,8 @@ const EditAdmin = () => {
                           value: c.PhoneCode,
                           label: `${c.PhoneCode} ${c.CountryName}`
                         }))}
+                        searchable
+                        searchPlaceholder={t('search') + ' ' + t('countryCode')}
                         value={
                           countries
                             .map((c) => ({
