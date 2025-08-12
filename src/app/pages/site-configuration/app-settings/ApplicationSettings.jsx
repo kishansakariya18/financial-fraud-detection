@@ -13,6 +13,7 @@ import { responseMapper } from './helper';
 import { validateNumberValue } from '../schema';
 import { capitalizeFirstLetter } from 'helpers/functions';
 import { toast } from 'sonner';
+import CurrencyService from 'services/currency.services';
 
 export default function ApplicationSettings() {
   const [settings, setSettings] = useState([]); // normalized list of settings
@@ -23,23 +24,26 @@ export default function ApplicationSettings() {
   const [errors, setErrors] = useState({}); // key => error message
   const { t } = useTranslation();
   const pageTitle = t('appSettings');
-  const currencies = [
-    'CLP',
-    'BDT',
-    'CNY',
-    'EUR',
-    'IDR',
-    'INR',
-    'JPY',
-    'KRW',
-    'MYR',
-    'THB',
-    'USD',
-    'VND',
-    'KZT',
-    'NOK',
-    'MAD'
-  ];
+  const [currencies, setCurrencies] = useState([]);
+
+  const fetchCurrencies = async () => {
+    try {
+      const response = await CurrencyService.getCurrencyList({
+        pagination: { pageIndex: 0, pageSize: 500 }
+      });
+      // Support either direct or nested response shapes
+      // console.log(response);
+      const list = Array.isArray(response?.data)
+        ? response.data
+        : Array.isArray(response?.response?.data)
+          ? response.response.data
+          : [];
+      const codes = Array.from(new Set(list.map((w) => w?.Code).filter(Boolean))).sort();
+      setCurrencies(codes);
+    } catch (error) {
+      console.error('Error fetching currencies:', error);
+    }
+  };
 
   const fetchSettings = async () => {
     try {
@@ -65,6 +69,7 @@ export default function ApplicationSettings() {
   };
 
   useEffect(() => {
+    fetchCurrencies();
     fetchSettings();
   }, []);
 
@@ -149,6 +154,22 @@ export default function ApplicationSettings() {
     // Decide early if this should be treated as a number field
     const isNumberField = String(row?.valueType).toLowerCase() === 'number' || isNumeric(value);
     // Prefer value type hints if present on the original response
+    // Currency selection: render a Select using wallet currencies, preserving default from app settings
+    const keyLower = String(row.key || '').toLowerCase();
+    if ((row.key === 'DefaultCurrency' || keyLower.includes('currency')) && currencies.length > 0) {
+      const current = String(value ?? '');
+      const options = Array.from(new Set([current, ...currencies].filter(Boolean)));
+      return (
+        <Select value={current} onChange={(e) => setValue(row.key, e.target.value)}>
+          {options.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </Select>
+      );
+    }
+
     // We don't have ValueType here via mapper; derive by heuristics
     // KYC mode: dropdown manual/auto
     if (row.key && String(row.key).toLowerCase().includes('kyc')) {
@@ -385,9 +406,11 @@ export default function ApplicationSettings() {
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="min-w-0">
                     <div className="font-semibold text-gray-800 dark:text-dark-50">{row.name}</div>
-                    <div className="font-medium text-gray-500 dark:text-dark-300">{row.key}</div>
+                    <div className="font-medium text-gray-500 dark:text-dark-300">
+                      {row.description}
+                    </div>
                   </div>
-                  <div className="flex flex-1 items-center gap-3 sm:max-w-xl">
+                  <div className="flex flex-1 items-center gap-3 sm:max-w-3xl">
                     <div className="flex-1">{renderInput(row)}</div>
                     <Button
                       color="primary"
