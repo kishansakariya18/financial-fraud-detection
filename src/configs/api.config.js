@@ -76,7 +76,8 @@ export const apiConfig = {
       ADMIN_EDIT: '/admin/admin/admin/edit',
       UPDATE_PROFILE: '/admin/admin/update-profile',
       ADMIN_COUNTRY_LIST: '/admin/admin/countries',
-      ADMIN_SUMMARY: '/admin/admin/admin/summary'
+      ADMIN_SUMMARY: '/admin/admin/admin/summary',
+      COUNTRY_LIST: '/config/country/list'
     },
     TENANT: {
       LIST: '/config/admin/tenant/list',

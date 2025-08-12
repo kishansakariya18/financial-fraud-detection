@@ -18,6 +18,7 @@ import { statusOptions } from './helper';
 
 const CreateAdmin = () => {
   const [roles, setRoles] = useState([]);
+  const [countries, setCountries] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -58,6 +59,16 @@ const CreateAdmin = () => {
     setLoading(false);
   };
 
+  const fetchCountryList = async () => {
+    setLoading(true);
+    const result = await AdminService.fetchCountryList();
+    if (result.status === 200 || result.status === 201) {
+      setCountries(result.response.data);
+    }
+    setLoading(false);
+    return { status: result.status, error: result.error };
+  };
+
   const createAdminAPI = async (requestObject) => {
     setLoading(true);
     setError(null);
@@ -74,6 +85,7 @@ const CreateAdmin = () => {
 
   useEffect(() => {
     fetchRoles();
+    fetchCountryList();
   }, []);
 
   if (!loading && error) {
@@ -191,13 +203,44 @@ const CreateAdmin = () => {
                 name="status"
               />
 
-              <Input
-                {...register('mobile')}
-                prefix={<CiMobile1 className="size-5" />}
-                label={t('enter') + ' ' + t('mobile')}
-                error={errors?.mobile?.message}
-                placeholder={t('enter') + ' ' + t('mobile') + ' ' + t('number')}
-              />
+              <div className="grid grid-cols-3 gap-2">
+                <Controller
+                  render={({ field }) => (
+                    <Listbox
+                      data={countries.map((c) => ({
+                        value: c.PhoneCode,
+                        label: `${c.PhoneCode} (${c.CountryCode}) ${c.CountryName}`
+                      }))}
+                      value={
+                        countries
+                          .map((c) => ({
+                            value: c.PhoneCode,
+                            label: `${c.PhoneCode} (${c.CountryCode}) ${c.CountryName}`
+                          }))
+                          .find((c) => c.value === field.value) || null
+                      }
+                      onChange={(val) => field.onChange(val.value)}
+                      name={field.name}
+                      label={t('countryCode')}
+                      placeholder={t('select') + ' ' + t('countryCode')}
+                      displayField="label"
+                      error={errors?.countryCode?.message}
+                    />
+                  )}
+                  control={control}
+                  name="phoneCode"
+                />
+
+                <div className="col-span-2">
+                  <Input
+                    {...register('mobile')}
+                    prefix={<CiMobile1 className="size-5" />}
+                    label={t('enter') + ' ' + t('mobile')}
+                    error={errors?.mobile?.message}
+                    placeholder={t('enter') + ' ' + t('mobile') + ' ' + t('number')}
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="grid gap-4 lg:grid-cols-2">

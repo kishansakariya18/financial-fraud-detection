@@ -134,6 +134,7 @@ const AdminService = {
         firstname: data.firstName,
         lastname: data.lastName,
         email: data.email,
+        phoneCode: data.phoneCode,
         mobile: data.mobile,
         password: data.password,
         status: parseAdminStatusToApi(data.status),
@@ -162,6 +163,7 @@ const AdminService = {
         firstname: data.firstName,
         lastname: data.lastName,
         email: data.email,
+        phoneCode: data.phoneCode,
         mobile: data.mobile,
         password: data.password || undefined,
         status: parseAdminStatusToApi(data.status),
@@ -208,6 +210,25 @@ const AdminService = {
       return response;
     } catch (error) {
       console.log('Error from getAdminLoginHistory ', error);
+    }
+  },
+  fetchCountryList: async () => {
+    try {
+      const query = {
+        page: 1,
+        perPage: 243
+      };
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.ADMIN_USER.COUNTRY_LIST,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        params: query
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from fetchCountryList ', error);
     }
   }
   // checkPassword: async (type, password) => {

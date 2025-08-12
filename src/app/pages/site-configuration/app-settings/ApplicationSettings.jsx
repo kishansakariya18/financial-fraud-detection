@@ -397,41 +397,39 @@ export default function ApplicationSettings() {
         </div>
       </div>
       <div className="px-[--margin-x]">
-        <Card className="px-[--margin-x]">
-          <div className="grid grid-cols-1 gap-6 py-6">
-            {settings.map((row) => (
-              <div
-                key={row.id}
-                className="flex flex-col gap-2 rounded-md border border-gray-200 p-4 dark:border-dark-500">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                  <div className="min-w-0">
-                    <div className="font-semibold text-gray-800 dark:text-dark-50">{row.name}</div>
-                    <div className="font-medium text-gray-500 dark:text-dark-300">
-                      {row.description}
-                    </div>
-                  </div>
-                  <div className="flex flex-1 items-center gap-3 sm:max-w-3xl">
-                    <div className="flex-1">{renderInput(row)}</div>
-                    <Button
-                      color="primary"
-                      onClick={() => handleUpdate(row)}
-                      disabled={
-                        !!loadingIds[row.id] ||
-                        !!errors[row.key] ||
-                        !(
-                          row?.isEditable === 1 ||
-                          row?.isEditable === true ||
-                          Number(row?.isEditable) === 1
-                        )
-                      }>
-                      {loadingIds[row.id] ? t('updating') : t('update')}
-                    </Button>
+        <div className="grid grid-cols-1 gap-6">
+          {settings.map((row) => (
+            <div
+              key={row.id}
+              className="flex flex-col gap-2 rounded-md border border-gray-200 p-4 dark:border-dark-500">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="min-w-0">
+                  <div className="font-semibold text-gray-800 dark:text-dark-50">{row.name}</div>
+                  <div className="font-medium text-gray-500 dark:text-dark-300">
+                    {row.description}
                   </div>
                 </div>
+                <div className="flex flex-1 items-center gap-3 sm:max-w-3xl">
+                  <div className="flex-1">{renderInput(row)}</div>
+                  <Button
+                    color="primary"
+                    onClick={() => handleUpdate(row)}
+                    disabled={
+                      !!loadingIds[row.id] ||
+                      !!errors[row.key] ||
+                      !(
+                        row?.isEditable === 1 ||
+                        row?.isEditable === true ||
+                        Number(row?.isEditable) === 1
+                      )
+                    }>
+                    {loadingIds[row.id] ? t('updating') : t('update')}
+                  </Button>
+                </div>
               </div>
-            ))}
-          </div>
-        </Card>
+            </div>
+          ))}
+        </div>
       </div>
     </ContentWrapper>
   );
