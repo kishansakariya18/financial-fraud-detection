@@ -12,6 +12,7 @@ export const exchangeHistoryListResponseMapper = (response) => {
     source: d.Source,
     effective_at: d.EffectiveAt,
     date_created: d.DateCreated
+    // exchangeRate: d.ExchangeRate
   }));
 
   return {

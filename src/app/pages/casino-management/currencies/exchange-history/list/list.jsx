@@ -53,6 +53,7 @@ export default function ExchangeHistoryList() {
     const apiData = exchangeHistoryListResponseMapper(result.response);
 
     if (result.status === 200) {
+      console.log('API Data:', apiData);
       return {
         status: 200,
         data: apiData.list,

@@ -79,7 +79,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('wallets'),
-      path: `/users/player/${playerId}/tab/wallets`,
+      path: `/users/player/${23923}/tab/wallets`,
       icon: WalletIcon,
       index: 7,
       permission: PERMISSIONS.USER.LIST

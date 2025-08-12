@@ -161,7 +161,10 @@ const CurrencyService = {
       headers: {
         'Content-Type': 'application/json'
       },
-      params: body
+      params: {
+        page: body.pagination.pageIndex + 1,
+        per_page: body.pagination.pageSize
+      }
     });
   }
 };

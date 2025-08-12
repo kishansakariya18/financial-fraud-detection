@@ -19,9 +19,9 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
-  // columnHelper.accessor((row) => row.source, {
-  //   id: 'Source',
-  //   header: 'Source',
+  // columnHelper.accessor((row) => row.exchangeRate, {
+  //   id: 'Exchange Rate',
+  //   header: 'Exchange Rate',
   //   cell: BoldCell,
   //   enableSorting: false
   // }),

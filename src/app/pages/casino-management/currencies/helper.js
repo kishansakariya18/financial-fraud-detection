@@ -14,7 +14,8 @@ export const currencyListResponseMapper = (response) => {
     exchangeUpdateType: d.ExchangeUpdateType === 0 ? 'Manual' : 'Auto',
     is_default: d.IsDefault,
     created_at: d.DateCreated,
-    updated_at: d.DateUpdated
+    updated_at: d.DateUpdated,
+    exchange_rate: d.ExchangeRate == null ? '-' : d.ExchangeRate
   }));
 
   return {

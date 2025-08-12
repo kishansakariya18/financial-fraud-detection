@@ -3,62 +3,53 @@ import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
 
 // Local Imports - UI, Services, Helpers, Utils
-import { Toolbar } from './Toolbar';
 import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 import { getQueryParams } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
+import WalletService from 'services/wallet-services';
+import { useParams } from 'react-router';
 
 export default function PlayerWallets() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t('player') + ' ' + t('wallets');
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { userId } = useParams();
 
-  const fetchPlayerWallets = useCallback(async () => {
-    // Mock data for wallets - replace with actual API call
-    const mockWallets = [
-      {
-        id: 1,
-        currencyCode: 'USD',
-        currencyName: 'US Dollar',
-        realCashAmount: 1500.5,
-        bonusAmount: 250.0,
-        totalAmount: 1750.5,
-        status: 'active'
-      },
-      {
-        id: 2,
-        currencyCode: 'EUR',
-        currencyName: 'Euro',
-        realCashAmount: 800.25,
-        bonusAmount: 100.0,
-        totalAmount: 900.25,
-        status: 'active'
-      },
-      {
-        id: 3,
-        currencyCode: 'BTC',
-        currencyName: 'Bitcoin',
-        realCashAmount: 0.05,
-        bonusAmount: 0.01,
-        totalAmount: 0.06,
-        status: 'frozen'
-      }
-    ];
+  const fetchPlayerWallets = useCallback(async (params = {}) => {
+    try {
+      console.log(params);
+      const response = await WalletService.getWalletList({ userId, ...params });
+      console.log(response.response);
+      // Transform the API response to match the expected format
+      const wallets = response.response.data?.map((wallet) => ({
+        id: wallet.WalletID,
+        currencyCode: wallet.currency_code || '',
+        currencyName: wallet.currency_name || '',
+        realCashAmount: wallet.Balance || 0,
+        bonusAmount: wallet.Bonus || 0,
+        code: wallet.Currency != null ? wallet.Currency.Code : '-',
+        name: wallet.Currency != null ? wallet.Currency.Name : '-'
+      }));
 
-    // Simulate API call
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          status: 200,
-          data: mockWallets,
-          totalRecords: mockWallets.length
-        });
-      }, 500);
-    });
+      return {
+        status: 200,
+        data: wallets,
+        totalRecords: response.response.total_records || wallets.length,
+        totalPages: response.response.total_pages || 1
+      };
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to fetch wallets');
+      return {
+        status: error.response?.status || 500,
+        data: [],
+        totalRecords: 0,
+        error: error.response?.data?.message || 'Failed to fetch wallets'
+      };
+    }
   }, []);
 
   const { table, isLoading, error, setError, tableSettings } = useTable({
@@ -81,12 +72,12 @@ export default function PlayerWallets() {
 
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
-      <Toolbar
+      {/* <Toolbar
         table={table}
         pageTitle={pageTitle}
         onApplyFilters={() => {}}
         onClearFilters={() => {}}
-      />
+      /> */}
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>
   );

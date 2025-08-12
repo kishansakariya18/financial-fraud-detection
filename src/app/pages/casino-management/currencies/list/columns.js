@@ -46,6 +46,12 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.exchange_rate, {
+    id: 'Exchange Rate',
+    header: 'Exchange Rate',
+    cell: BoldCell,
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.exchangeUpdateType, {
     id: 'Exchange Update Type',
     header: 'Exchange Update Type',

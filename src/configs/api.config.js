@@ -345,6 +345,9 @@ export const apiConfig = {
       DETAIL: '/content/admin/release-note/:releaseNoteUID/details',
       CHANGE_STATUS: '/content/admin/release-note/:releaseNoteUID/change-status',
       EDIT: '/content/admin/release-note/:releaseNoteUID/edit'
+    },
+    WALLET: {
+      LIST: '/wallet/admin/wallet/list/:userId'
     }
   }
 };

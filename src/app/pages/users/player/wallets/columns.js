@@ -2,13 +2,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 
 // Local Imports
-import { RowActions } from './RowActions';
-import {
-  IdCell,
-  BoldCell,
-  BadgeCell,
-  AmountCell
-} from '../../../../../components/custom/table/cell';
+import { BoldCell, AmountCell, IdCell } from '../../../../../components/custom/table/cell';
 
 // ----------------------------------------------------------------------
 
@@ -22,14 +16,14 @@ export const columns = [
     cell: IdCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.currencyCode, {
+  columnHelper.accessor((row) => row.code, {
     id: 'currencyCode',
     label: 'Currency Code',
     header: 'Currency Code',
     cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.currencyName, {
+  columnHelper.accessor((row) => row.name, {
     id: 'currencyName',
     label: 'Currency Name',
     header: 'Currency Name',
@@ -49,34 +43,34 @@ export const columns = [
     label: 'Bonus',
     cell: AmountCell,
     enableSorting: false
-  }),
-  columnHelper.accessor((row) => row.totalAmount, {
-    id: 'totalAmount',
-    header: 'Total Amount',
-    label: 'Total Amount',
-    cell: AmountCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => row.status, {
-    id: 'status',
-    label: 'Status',
-    header: 'Status',
-    cell: BadgeCell,
-    meta: {
-      optionData: [
-        { value: 'active', label: 'Active', color: 'success' },
-        { value: 'inactive', label: 'Inactive', color: 'error' },
-        { value: 'frozen', label: 'Frozen', color: 'warning' }
-      ]
-    },
-    filterFn: 'arrIncludesSome',
-    enableSorting: false
-  }),
-  columnHelper.display({
-    id: 'actions',
-    label: 'Row Actions',
-    header: 'Actions',
-    cell: RowActions,
-    enableSorting: false
   })
+  // columnHelper.accessor((row) => row.totalAmount, {
+  //   id: 'totalAmount',
+  //   header: 'Total Amount',
+  //   label: 'Total Amount',
+  //   cell: AmountCell,
+  //   enableSorting: false
+  // }),
+  // columnHelper.accessor((row) => row.status, {
+  //   id: 'status',
+  //   label: 'Status',
+  //   header: 'Status',
+  //   cell: BadgeCell,
+  //   meta: {
+  //     optionData: [
+  //       { value: 'active', label: 'Active', color: 'success' },
+  //       { value: 'inactive', label: 'Inactive', color: 'error' },
+  //       { value: 'frozen', label: 'Frozen', color: 'warning' }
+  //     ]
+  //   },
+  //   filterFn: 'arrIncludesSome',
+  //   enableSorting: false
+  // }),
+  // columnHelper.display({
+  //   id: 'actions',
+  //   label: 'Row Actions',
+  //   header: 'Actions',
+  //   cell: RowActions,
+  //   enableSorting: false
+  // })
 ];
