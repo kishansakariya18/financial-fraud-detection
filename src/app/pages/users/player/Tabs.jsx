@@ -16,14 +16,14 @@ import { PERMISSIONS } from 'constants/app.constant';
 // ----------------------------------------------------------------------
 
 export default function Tabs() {
-  const { playerId } = useParams();
+  const { playerId, userID } = useParams();
   const { t } = useTranslation();
 
   const tabs = [
     {
       id: randomId(),
       title: t('details'),
-      path: `/users/player/${playerId}/tab/details`,
+      path: `/users/player/${playerId}/${userID}/tab/details`,
       icon: HomeIcon,
       index: 0,
       permission: PERMISSIONS.USER.LIST
@@ -31,7 +31,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('limits'),
-      path: `/users/player/${playerId}/tab/limits`,
+      path: `/users/player/${playerId}/${userID}/tab/limits`,
       icon: AdjustmentsVerticalIcon,
       index: 1,
       permission: PERMISSIONS.USER.USER_LEVEL_LIMITS
@@ -39,7 +39,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('transactions'),
-      path: `/users/player/${playerId}/tab/transactions`,
+      path: `/users/player/${playerId}/${userID}/tab/transactions`,
       icon: ListBulletIcon,
       index: 2,
       permission: PERMISSIONS.USER.TRANSACTION_LIST
@@ -47,7 +47,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('login') + ' ' + t('history'),
-      path: `/users/player/${playerId}/tab/login-history`,
+      path: `/users/player/${playerId}/${userID}/tab/login-history`,
       icon: ListBulletIcon,
       index: 3,
       permission: PERMISSIONS.USER.VIEW_LOGIN_HISTORY
@@ -55,7 +55,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('manage') + ' ' + t('fund'),
-      path: `/users/player/${playerId}/tab/manage-fund`,
+      path: `/users/player/${playerId}/${userID}/tab/manage-fund`,
       icon: WalletIcon,
       index: 4,
       permission: PERMISSIONS.USER.ADD_MONEY
@@ -63,7 +63,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('notes'),
-      path: `/users/player/${playerId}/tab/player-notes`,
+      path: `/users/player/${playerId}/${userID}/tab/player-notes`,
       icon: ListBulletIcon,
       index: 5,
       permission: PERMISSIONS.USER.COMMENT_VIEW
@@ -71,7 +71,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('referral'),
-      path: `/users/player/${playerId}/tab/referrals`,
+      path: `/users/player/${playerId}/${userID}/tab/referrals`,
       icon: UserGroupIcon,
       index: 6,
       permission: PERMISSIONS.USER.LIST
@@ -79,7 +79,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('wallets'),
-      path: `/users/player/${23923}/tab/wallets`,
+      path: `/users/player/${playerId}/${userID}/tab/wallets`,
       icon: WalletIcon,
       index: 7,
       permission: PERMISSIONS.USER.LIST

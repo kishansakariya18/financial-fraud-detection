@@ -19,7 +19,7 @@ export const playerRoutes = [
     }
   },
   {
-    path: 'users/player/:playerId/tab',
+    path: 'users/player/:playerId/:userID/tab',
     lazy: async () => ({
       Component: (await import('../../pages/users/player/Tabs')).default
     }),
