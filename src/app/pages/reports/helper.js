@@ -68,6 +68,7 @@ export const responseMapper = (apiData) => {
   return resultData;
 };
 export const depositTransactionResponseMapper = (apiData) => {
+  console.log('apiData: ', apiData);
   const resultData = apiData.map((data) => ({
     id: data.TransactionID,
     transactionUID: data.TransactionUID,
@@ -76,7 +77,13 @@ export const depositTransactionResponseMapper = (apiData) => {
     mobile: data.Mobile,
     amount: parseFloat(data.TransactionAmount),
     status: transactionStatusToAPP(data.TransactionStatus),
-    createdAt: getDateInUTCToTimeZone(data.DateCreated)
+    createdAt: getDateInUTCToTimeZone(data.DateCreated),
+    currencyCode: data.Currency != null ? data.Currency.Code : '-',
+    currencySymbol: data.Currency != null ? data.Currency.Symbol : '-',
+    baseCurrencyRate:
+      data.BaseCurrencyRate != null && data.BaseCurrencyRate >= 0 ? data.BaseCurrencyRate : '-',
+    BaseCurrencyValue:
+      data.BaseCurrencyValue != null && data.BaseCurrencyValue >= 0 ? data.BaseCurrencyValue : '-'
   }));
   return resultData;
 };
