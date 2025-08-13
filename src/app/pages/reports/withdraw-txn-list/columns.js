@@ -57,13 +57,6 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.currencySymbol, {
-    id: 'currencySymbol',
-    label: 'Currency Symbol',
-    header: 'Currency Symbol',
-    cell: BoldCell,
-    enableSorting: false
-  }),
   columnHelper.accessor((row) => row.baseCurrencyRate, {
     id: 'baseCurrencyRate',
     label: 'Base Currency Rate',

@@ -22,6 +22,7 @@ import { useNavigate } from 'react-router';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
 import { AdminExchangeRateModal } from './AdminExchangeRateModal';
+import { toast } from 'sonner';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
@@ -103,6 +104,7 @@ export function RowActions({ row, table }) {
       console.log('table.options: ', table.options);
       table.options.meta?.fetchNewList();
       setStatusSuccess(true);
+      toast.success(result.response.message);
     } else {
       setStatusError(true);
     }
@@ -121,6 +123,7 @@ export function RowActions({ row, table }) {
     if (result.status === 200) {
       table.options.meta?.fetchNewList();
       setExchangeUpdateTypeSuccess(true);
+      toast.success(result.response.message);
     } else {
       setExchangeUpdateTypeError(true);
     }
@@ -133,6 +136,9 @@ export function RowActions({ row, table }) {
     const result = await CurrencyServices.deleteCurrency(row.original.id);
     if (result.status === 200) {
       table.options.meta?.fetchNewList();
+      toast.success(result.response.message);
+    } else {
+      toast.error(result.response.message || 'Failed to delete currency');
     }
   };
 
