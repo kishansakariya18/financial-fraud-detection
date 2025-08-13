@@ -1,3 +1,29 @@
+export const currencyListResponseMapper = (response) => {
+  if (!response || !response.data || !Array.isArray(response.data)) {
+    return { list: [], total_records: 0 };
+  }
+
+  const mappedData = response.data.map((d) => ({
+    id: d.CurrencyID,
+    name: d.Name,
+    code: d.Code,
+    symbol: d.Symbol,
+    decimal_places: d.DecimalPlaces,
+    type: d.CurrencyType == 0 ? 'Fiat' : d.CurrencyType === 1 ? 'Crypto' : 'Points',
+    status: d.IsActive ? 'active' : 'inactive',
+    exchangeUpdateType: d.ExchangeUpdateType === 0 ? 'Manual' : 'Auto',
+    is_default: d.IsDefault,
+    created_at: d.DateCreated,
+    updated_at: d.DateUpdated,
+    exchange_rate: d.ExchangeRate == null ? '-' : d.ExchangeRate
+  }));
+
+  return {
+    list: mappedData,
+    total_records: response.total_records
+  };
+};
+
 export const statusOptions = [
   {
     value: 'active',
@@ -7,6 +33,19 @@ export const statusOptions = [
   {
     value: 'inactive',
     label: 'Inactive',
+    color: 'error'
+  }
+];
+
+export const exchangeUpdateTypeOptions = [
+  {
+    value: 'Manual',
+    label: 'Manual',
+    color: 'success'
+  },
+  {
+    value: 'Auto',
+    label: 'Auto',
     color: 'error'
   }
 ];

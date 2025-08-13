@@ -551,5 +551,20 @@
   "done": "Done",
   "user_class": "User Class",
   "unassign": "Unassign",
-  "assign": "Assign"
+  "assign": "Assign",
+  "expand": "Expand",
+  "collapse": "Collapse",
+  "updating": "Updating...",
+  "decimal_places": "Decimal Places",
+  "decimal_places_required": "Decimal Places Required",
+  "currency_status_desc": "Are you sure you want to update this Currency's status ?",
+  "currency_status_suceess": "Currency Status has been changed successfully",
+  "currency_exchange_update_type_desc": "Are you sure you want to update this Currency's exchange update type ?",
+  "currency_exchange_update_type_suceess": "Currency Exchange Update Type has been changed successfully",
+  "exchange_update_type":"Exchange Update Type",
+  "exchange_update_type_desc":"Are you sure you want to update this Currency's exchange update type ?",
+  "exchange_update_type_suceess":"Currency Exchange Update Type has been changed successfully",
+  "countryCode": "Country Code",
+  "select_currency":"Select Currency"
+
 }

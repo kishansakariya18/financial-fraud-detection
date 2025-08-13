@@ -14,7 +14,7 @@ export const createSegmentationSchema = Yup.object().shape({
 
   // Country
   countryCheck: Yup.boolean(),
-  countries: Yup.string().when('countryCheck', {
+  countries: Yup.array().when('countryCheck', {
     is: true,
     then: (schema) => schema.required('Country is required'),
     otherwise: (schema) => schema.notRequired()
@@ -24,7 +24,7 @@ export const createSegmentationSchema = Yup.object().shape({
   ageGroup: Yup.boolean(),
   minAge: Yup.number()
     .typeError('Minimum Age must be a number')
-    .min(0, 'Minimum Age Must Be Positive')
+    .min(1, 'Minimum Age Must Be Greater Than 0')
     .integer('Age must be a whole number')
     .when('ageGroup', {
       is: true,
@@ -33,7 +33,7 @@ export const createSegmentationSchema = Yup.object().shape({
     }),
   maxAge: Yup.number()
     .typeError('Maximum Age must be a number')
-    .min(0, 'Maximum Age Must Be Positive')
+    .min(1, 'Maximum Age Must Be Greater Than Minimum Age')
     .integer('Age must be a whole number')
     .when('ageGroup', {
       is: true,

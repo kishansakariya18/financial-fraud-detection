@@ -1,6 +1,6 @@
 import { Page } from 'components/shared/Page';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Button, Input } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -8,12 +8,18 @@ import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { createCurrencySchema } from './schema';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { Listbox } from 'components/shared/form/Listbox';
 import CurrencyService from 'services/currency.services';
 
 const CreateCurrency = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
+  const currencyTypeOptions = [
+    { value: 'Fiat', label: 'Fiat' },
+    { value: 'Crypto', label: 'Crypto' },
+    { value: 'Points', label: 'Points' }
+  ];
   const { t } = useTranslation();
 
   const breadcrumbItem = [
@@ -26,7 +32,8 @@ const CreateCurrency = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
+    control
   } = useForm({
     resolver: yupResolver(createCurrencySchema)
   });
@@ -100,27 +107,33 @@ const CreateCurrency = () => {
                 error={errors?.symbol?.message}
                 placeholder={t('enter') + ' ' + t('symbol')}
               />
-              <Input
-                {...register('exchange_rate')}
-                label={t('exchange_rate')}
-                error={errors?.exchange_rate?.message}
-                placeholder={t('enter') + ' ' + t('exchange_rate')}
+              <Controller
+                name="type"
+                control={control}
+                render={({ field }) => (
+                  <Listbox
+                    data={currencyTypeOptions}
+                    value={currencyTypeOptions.find((opt) => opt.value === field.value) || null}
+                    onChange={(val) => field.onChange(val.value)}
+                    name={field.name}
+                    label={t('type')}
+                    placeholder={t('select') + ' ' + t('type')}
+                    displayField="label"
+                    error={errors.type?.message}
+                    required
+                  />
+                )}
               />
             </div>
+
             <div className="grid gap-4 sm:grid-cols-2">
-              <label className="block">
-                <span>{t('type')}</span>
-                <select
-                  {...register('type')}
-                  className="focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400">
-                  <option value="Fiat">Fiat</option>
-                  <option value="Crypto">Crypto</option>
-                  <option value="Points">Points</option>
-                </select>
-                {errors.type && (
-                  <span className="text-tiny+ text-error">{errors.type.message}</span>
-                )}
-              </label>
+              <Input
+                {...register('decimal_places')}
+                label={t('decimal_places')}
+                type="number"
+                error={errors?.decimal_places?.message}
+                placeholder={t('enter') + ' ' + t('decimal_places')}
+              />
             </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">

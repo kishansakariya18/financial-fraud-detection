@@ -2,7 +2,13 @@
 import { createColumnHelper } from '@tanstack/react-table';
 
 // Local Imports
-import { IdCell, BoldCell, BadgeCell, DateCell } from '../../../../components/custom/table/cell';
+import {
+  IdCell,
+  BoldCell,
+  BadgeCell,
+  DateCell,
+  AmountCell
+} from '../../../../components/custom/table/cell';
 import { transactionStatusOption } from 'app/pages/users/player/helper';
 // ----------------------------------------------------------------------
 
@@ -41,7 +47,35 @@ export const columns = [
     id: 'amount',
     label: 'Amount',
     header: 'Amount',
+    cell: AmountCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.currencyCode, {
+    id: 'currencyCode',
+    label: 'Currency',
+    header: 'Currency',
     cell: BoldCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.currencySymbol, {
+    id: 'currencySymbol',
+    label: 'Currency Symbol',
+    header: 'Currency Symbol',
+    cell: BoldCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.baseCurrencyRate, {
+    id: 'baseCurrencyRate',
+    label: 'Base Currency Rate',
+    header: 'Base Currency Rate',
+    cell: AmountCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.BaseCurrencyValue, {
+    id: 'BaseCurrencyValue',
+    label: 'Base Currency Value',
+    header: 'Base Currency Value',
+    cell: AmountCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.status, {

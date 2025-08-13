@@ -20,6 +20,8 @@ export const getBatdgeForStage = (type) => {
       return 'betplaced';
     case 1:
       return 'result';
+    case 2:
+      return 'rollback';
     default:
       break;
   }
@@ -30,6 +32,8 @@ export const getStageAppToApi = (type) => {
       return 0;
     case 'result':
       return 1;
+    case 'rollback':
+      return 2;
     default:
       break;
   }
@@ -48,7 +52,7 @@ export const mapType = (item) => {
 };
 export const responseMapper = (apiData) => {
   const resultData = apiData.map((data) => ({
-    id: data.ID,
+    id: data.UserBetOutcomeID,
     userId: data.UserID,
     betPlacementId: data.BetPlacementTransactionID,
     gameName: data.GameName,
@@ -58,7 +62,7 @@ export const responseMapper = (apiData) => {
     stage: getBatdgeForStage(data.Stage),
     betWinningTxnId: data.BetWinningTransactionID,
     resultDate: data.ResultDate ? data.ResultDate : '',
-    winAmount: data.WinningAmount || '-',
+    winAmount: data.WinningAmount,
     userAmount: amountColorBasedOnType(data.Amount, data.OutcomeType),
     platformAmount: amountColorBasedOnTypeForPlatform(data.Amount, data.OutcomeType),
     type: getBatdgeForType(data.OutcomeType),
@@ -68,6 +72,7 @@ export const responseMapper = (apiData) => {
   return resultData;
 };
 export const depositTransactionResponseMapper = (apiData) => {
+  console.log('apiData: ', apiData);
   const resultData = apiData.map((data) => ({
     id: data.TransactionID,
     transactionUID: data.TransactionUID,
@@ -76,7 +81,13 @@ export const depositTransactionResponseMapper = (apiData) => {
     mobile: data.Mobile,
     amount: parseFloat(data.TransactionAmount),
     status: transactionStatusToAPP(data.TransactionStatus),
-    createdAt: getDateInUTCToTimeZone(data.DateCreated)
+    createdAt: getDateInUTCToTimeZone(data.DateCreated),
+    currencyCode: data.Currency != null ? data.Currency.Code : '-',
+    currencySymbol: data.Currency != null ? data.Currency.Symbol : '-',
+    baseCurrencyRate:
+      data.BaseCurrencyRate != null && data.BaseCurrencyRate >= 0 ? data.BaseCurrencyRate : '-',
+    BaseCurrencyValue:
+      data.BaseCurrencyValue != null && data.BaseCurrencyValue >= 0 ? data.BaseCurrencyValue : '-'
   }));
   return resultData;
 };
@@ -95,44 +106,44 @@ export const playerBalanceResponseMapper = (apiData) => {
   return resultData;
 };
 export const getBatdgeForType = (type) => {
-  switch (type) {
-    case 'profit':
-      return type;
-    case 'loss':
-      return type;
-    case 'not-decided':
-      return type;
+  switch (+type) {
+    case 1:
+      return 'profit';
+    case 2:
+      return 'loss';
+    case 3:
+      return 'not-decided';
     default:
       return 'not-decided';
   }
 };
 export const getBadgeForPlatform = (type) => {
-  switch (type) {
-    case 'profit':
+  switch (+type) {
+    case 1:
       return 'loss';
-    case 'loss':
+    case 2:
       return 'profit';
-    case 'not-decided':
-      return type;
+    case 3:
+      return 'not-decided';
     default:
       return 'not-decided';
   }
 };
 export const amountColorBasedOnType = (amount, type) => {
-  switch (type) {
-    case 'loss':
+  switch (+type) {
+    case 2:
       return `- ${amount}`;
-    case 'profit':
+    case 1:
       return `+ ${amount}`;
     default:
       return `${amount}`;
   }
 };
 export const amountColorBasedOnTypeForPlatform = (amount, type) => {
-  switch (type) {
-    case 'loss':
+  switch (+type) {
+    case 2:
       return `+ ${amount}`;
-    case 'profit':
+    case 1:
       return `- ${amount}`;
     default:
       return `${amount}`;
@@ -148,6 +159,11 @@ export const stageOptions = [
     value: 'result',
     label: 'Result',
     color: 'success'
+  },
+  {
+    value: 'rollback',
+    label: 'Rollback',
+    color: 'warning'
   }
 ];
 export const typeOptions = [

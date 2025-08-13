@@ -23,6 +23,7 @@ const EditAdmin = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
+  const [countries, setCountries] = useState([]);
 
   const pageTitle = t('edit') + ' ' + t('admin');
 
@@ -88,6 +89,16 @@ const EditAdmin = () => {
     }
   };
 
+  const fetchCountries = async () => {
+    setLoading(true);
+    const result = await AdminService.fetchCountryList();
+    if (result.status === 200 || result.status === 201) {
+      setCountries(result.response.data);
+    }
+    setLoading(false);
+    return { status: result.status, error: result.error };
+  };
+
   const editAdminApi = async (requestObject) => {
     setLoading(true);
     setError(null);
@@ -104,6 +115,7 @@ const EditAdmin = () => {
 
   useEffect(() => {
     fetchRoles();
+    fetchCountries();
   }, [adminId]);
 
   if (!loading && error) {
@@ -225,14 +237,45 @@ const EditAdmin = () => {
                   control={control}
                   name="status"
                 />
-
-                <Input
-                  {...register('mobile')}
-                  prefix={<CiMobile1 className="size-5" />}
-                  label={t('enter') + ' ' + t('mobile')}
-                  error={errors?.mobile?.message}
-                  placeholder={t('enter') + ' ' + t('mobile') + ' ' + t('number')}
-                />
+                <div className="grid grid-cols-3 gap-2">
+                  <Controller
+                    render={({ field }) => (
+                      <Listbox
+                        data={countries.map((c) => ({
+                          value: c.PhoneCode,
+                          label: `${c.PhoneCode} ${c.CountryName}`
+                        }))}
+                        searchable
+                        searchPlaceholder={t('search') + ' ' + t('countryCode')}
+                        value={
+                          countries
+                            .map((c) => ({
+                              value: c.PhoneCode,
+                              label: `${c.PhoneCode} ${c.CountryName}`
+                            }))
+                            .find((c) => c.value === field.value) || null
+                        }
+                        onChange={(val) => field.onChange(val.value)}
+                        name={field.name}
+                        label={t('countryCode')}
+                        placeholder={t('select') + ' ' + t('countryCode')}
+                        displayField="label"
+                        error={errors?.countryCode?.message}
+                      />
+                    )}
+                    control={control}
+                    name="phoneCode"
+                  />
+                  <div className="col-span-2">
+                    <Input
+                      {...register('mobile')}
+                      prefix={<CiMobile1 className="size-5" />}
+                      label={t('enter') + ' ' + t('mobile')}
+                      error={errors?.mobile?.message}
+                      placeholder={t('enter') + ' ' + t('mobile') + ' ' + t('number')}
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="grid gap-4 lg:grid-cols-2">

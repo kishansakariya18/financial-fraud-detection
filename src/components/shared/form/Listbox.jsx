@@ -9,7 +9,7 @@ import {
 } from '@headlessui/react';
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import clsx from 'clsx';
-import { forwardRef, Fragment } from 'react';
+import { forwardRef, Fragment, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
 // Local Imports
@@ -30,10 +30,25 @@ const CustomListbox = forwardRef(
       rootProps,
       className,
       classNames,
+      searchable = false,
+      searchPlaceholder = 'Search... ',
       ...rest
     },
     ref
   ) => {
+    const [query, setQuery] = useState('');
+
+    const filteredData = useMemo(() => {
+      if (!searchable) return data;
+      const q = query.trim().toLowerCase();
+      if (!q) return data;
+      return data.filter((item) =>
+        String(item?.[displayField] ?? '')
+          ?.toLowerCase()
+          ?.includes(q)
+      );
+    }, [data, displayField, query, searchable]);
+
     return (
       <div
         className={clsx('flex flex-col [&_.suffix]:pointer-events-none', classNames?.root)}
@@ -82,7 +97,23 @@ const CustomListbox = forwardRef(
                   <ListboxOptions
                     anchor={{ to: 'bottom end', gap: 8 }}
                     className="absolute z-[100] max-h-60 w-[--button-width] overflow-auto rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none">
-                    {data.map((item, i) => (
+                    {searchable && (
+                      <div className="sticky top-0 z-10 mb-1 border-b border-gray-200 bg-white p-2 dark:border-dark-600 dark:bg-dark-750">
+                        <input
+                          autoFocus
+                          type="text"
+                          value={query}
+                          onChange={(e) => setQuery(e.target.value)}
+                          onKeyDown={(e) => {
+                            // Prevent Listbox from handling type-to-select/close
+                            e.stopPropagation();
+                          }}
+                          placeholder={searchPlaceholder}
+                          className="w-full rounded-md border border-gray-300 bg-white px-2 py-1 text-sm text-gray-800 outline-none focus:border-primary-500 focus:ring-0 dark:border-dark-500 dark:bg-dark-700 dark:text-dark-100"
+                        />
+                      </div>
+                    )}
+                    {filteredData.map((item, i) => (
                       <ListboxOption
                         key={i}
                         className={({ selected, focus, disabled }) =>
@@ -135,7 +166,9 @@ CustomListbox.propTypes = {
   inputProps: PropTypes.object,
   rootProps: PropTypes.object,
   classNames: PropTypes.object,
-  className: PropTypes.string
+  className: PropTypes.string,
+  searchable: PropTypes.bool,
+  searchPlaceholder: PropTypes.string
 };
 
 export { CustomListbox as Listbox };

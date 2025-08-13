@@ -12,6 +12,8 @@ import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
+import CurrencyService from 'services/currency.services';
+import { currencyListResponseMapper } from '../helper';
 
 export default function Currency() {
   const { t } = useTranslation();
@@ -38,68 +40,35 @@ export default function Currency() {
   // useEffect(() => {
   //   fetchSummary();
   // }, []);
-  const fetchProvider = async () => {
-    const dummyData = [
-      {
-        id: 1,
-        name: 'US Dollar',
-        code: 'USD',
-        symbol: '$',
-        exchange_rate: 150,
-        admin_exchange_rate: 300,
-        type: 'Fiat',
-        status: 'active'
-      },
-      {
-        id: 2,
-        name: 'Euro',
-        code: 'EUR',
-        symbol: '€',
-        exchange_rate: 200,
-        admin_exchange_rate: 400,
-        type: 'Fiat',
-        status: 'inactive'
-      },
-      {
-        id: 3,
-        name: 'Bitcoin',
-        code: 'BTC',
-        symbol: '₿',
-        exchange_rate: 50,
-        admin_exchange_rate: 500,
-        type: 'Crypto',
-        status: 'inactive'
-      },
-      {
-        id: 4,
-        name: 'Indian Rupee',
-        code: 'INR',
-        symbol: '₹',
-        exchange_rate: 120,
-        admin_exchange_rate: 600,
-        type: 'Fiat',
-        status: 'inactive'
-      }
-    ];
+  const fetchCurrencies = async () => {
+    const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
+    const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
+    const result = await CurrencyService.getCurrencyList({
+      filters: queryParams,
+      pagination: { pageIndex, pageSize }
+    });
 
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    const apiData = currencyListResponseMapper(result.response);
 
-    return {
-      status: 200,
-      data: dummyData,
-      totalRecords: dummyData.length
-    };
+    if (result.status === 200) {
+      return {
+        status: 200,
+        data: apiData.list,
+        totalRecords: parseInt(apiData.total_records, 10) || apiData.list?.length || 0,
+        totalPages: apiData.total_pages || 1
+      };
+    }
+    return { status: result.status, error: result.error };
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
-    fetchData: fetchProvider,
+    fetchData: fetchCurrencies,
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
-      tableSettings: {}
+      columnPinning: { left: ['ID'], right: ['Actions'] },
+      tableSettings: { enableFullScreen: false }
     }
   });
 
@@ -114,17 +83,10 @@ export default function Currency() {
   useEffect(() => {
     const filtersFromQuery = [];
     if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'name', value: queryParams.keyword });
+      filtersFromQuery.push({ id: 'Name', value: queryParams.keyword });
     }
     if (queryParams.status) {
-      filtersFromQuery.push({ id: 'status', value: queryParams.status });
-    }
-
-    if (queryParams.startDate && queryParams.endDate) {
-      filtersFromQuery.push({
-        id: 'createdAt',
-        value: [+queryParams.startDate, +queryParams.endDate]
-      });
+      filtersFromQuery.push({ id: 'Status', value: queryParams.status });
     }
     setColumnFilters(filtersFromQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -135,16 +97,14 @@ export default function Currency() {
     // console.log('table.getState().columnFilters:', table.getState().columnFilters);
 
     for (let data of table.getState().columnFilters) {
-      if (data.id === 'name') {
-        filterItems.keyword = data.value;
-      }
-
-      if (data.id === 'status') {
-        filterItems.status = data.value;
-      }
-
-      if (data.id === 'createdAt') {
-        filterItems.date = data.value;
+      if (data.id === 'Name') {
+        if (data.value) {
+          filterItems.keyword = data.value;
+        }
+      } else if (data.id === 'Status') {
+        if (data.value) {
+          filterItems.status = data.value;
+        }
       }
     }
 
@@ -152,18 +112,13 @@ export default function Currency() {
       pageIndex: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
-      ...(filterItems.status && { status: filterItems.status }),
-      ...(filterItems.date && { startDate: filterItems.date[0] }),
-      ...(filterItems.date && { endDate: filterItems?.date[1] })
+      ...(filterItems.status && { status: filterItems.status })
     });
   };
 
   const clearFilterHandler = () => {
     if (!isEmptyObject(queryParams)) {
-      setSearchParams({
-        pageIndex: 0,
-        pageSize: 10
-      });
+      setSearchParams({ pageIndex: DEFAULT_PAGE_INDEX, pageSize: DEFAULT_PER_PAGE_RECORD });
     }
     table.resetColumnFilters();
   };
@@ -180,7 +135,6 @@ export default function Currency() {
         // summary={summary}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
-        // filters= {}
       />
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>

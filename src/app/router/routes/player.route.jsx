@@ -19,7 +19,7 @@ export const playerRoutes = [
     }
   },
   {
-    path: 'users/player/:playerId/tab',
+    path: 'users/player/:playerId/:userID/tab',
     lazy: async () => ({
       Component: (await import('../../pages/users/player/Tabs')).default
     }),
@@ -158,6 +158,19 @@ export const playerRoutes = [
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.AFFILIATES.LIST}>
                 <ChangePassword />
+              </PrivateRoute>
+            )
+          };
+        }
+      },
+      {
+        path: 'wallets',
+        lazy: async () => {
+          const { default: PlayerWallets } = await import('../../pages/users/player/wallets/list');
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.USER.LIST}>
+                <PlayerWallets />
               </PrivateRoute>
             )
           };

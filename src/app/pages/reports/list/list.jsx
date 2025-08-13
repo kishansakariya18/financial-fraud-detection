@@ -105,6 +105,7 @@ export default function Reports() {
       if (data.id === 'createdAt') {
         filterItems.date = data.value;
       }
+      console.log('filterItems:', filterItems);
     }
 
     setSearchParams({
