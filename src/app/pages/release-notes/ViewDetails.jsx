@@ -60,8 +60,8 @@ export function ViewDetails() {
   return (
     <Page title={pageTitle}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
-        <div className="flex w-full items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
-          <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
+        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
             {pageTitle}
           </h2>
           <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
