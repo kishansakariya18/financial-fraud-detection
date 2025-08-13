@@ -53,7 +53,7 @@ export const apiConfig = {
       GET_COMMENT_DETAIL: '/users/admin/users/get-comment-detail',
       ADD_COMMENT: '/users/admin/users/add-comment',
       DELETE_COMMENT: '/users/admin/users/delete-comment',
-      CHANE_PLAYER_FUND_PASSWORD: '/admin/user/change-manage-fund-password',
+      CHANE_PLAYER_FUND_PASSWORD: '/config/admin/config/user/change-manage-fund-password',
       SUMMARY: '/users/admin/users/summary',
       USER_SUMMARY: '/users/admin/users/summary',
       COUNTRY_LIST: '/config/admin/config/countries',
@@ -134,7 +134,7 @@ export const apiConfig = {
       UPDATE_PAYOUT: '/affiliates/admin/affiliates/update-payout',
       FUND: '/affiliates/admin/affiliates/fund',
       AFFILIATE_LOGIN_HISTORY: '/affiliates/admin/affiliates/:affiliateID/login-history',
-      CHANGE_AFFILIATE_FUND_PASSWORD: '/affiliates/admin/affiliate/change-manage-fund-password',
+      CHANGE_AFFILIATE_FUND_PASSWORD: '/config/admin/config/affiliate/change-manage-fund-password',
       SUMMARY: '/affiliates/admin/affiliates/summary'
     },
     SETTINGS: {
