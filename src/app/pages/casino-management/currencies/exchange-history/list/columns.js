@@ -19,24 +19,30 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.source, {
+    id: 'Source',
+    header: 'Source',
+    cell: BoldCell,
+    enableSorting: false
+  }),
   // columnHelper.accessor((row) => row.exchangeRate, {
   //   id: 'Exchange Rate',
   //   header: 'Exchange Rate',
   //   cell: BoldCell,
   //   enableSorting: false
   // }),
-  columnHelper.accessor((row) => row.base_currency, {
-    id: 'Base Currency',
-    header: 'Base Currency',
-    cell: BoldCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => row.quote_currency, {
-    id: 'Quote Currency',
-    header: 'Quote Currency',
-    cell: BoldCell,
-    enableSorting: false
-  }),
+  // columnHelper.accessor((row) => row.base_currency, {
+  //   id: 'Base Currency',
+  //   header: 'Base Currency',
+  //   cell: BoldCell,
+  //   enableSorting: false
+  // }),
+  // columnHelper.accessor((row) => row.quote_currency, {
+  //   id: 'Quote Currency',
+  //   header: 'Quote Currency',
+  //   cell: BoldCell,
+  //   enableSorting: false
+  // }),
   columnHelper.accessor((row) => row.effective_at, {
     id: 'Effective At',
     header: 'Effective At',

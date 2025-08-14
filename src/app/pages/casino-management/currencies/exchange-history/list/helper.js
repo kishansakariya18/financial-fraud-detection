@@ -1,3 +1,4 @@
+import { getDateInUTCToTimeZone } from 'helpers/functions';
 export const exchangeHistoryListResponseMapper = (response) => {
   if (!response || !response.data) {
     return { list: [], totalRecords: 0, totalPages: 1 };
@@ -9,8 +10,8 @@ export const exchangeHistoryListResponseMapper = (response) => {
     base_currency: d.BaseCurrency,
     quote_currency: d.QuoteCurrency,
     rate: d.Rate,
-    source: d.Source,
-    effective_at: d.EffectiveAt,
+    source: d.Source == 0 ? 'Manual' : 'Auto',
+    effective_at: getDateInUTCToTimeZone(d.EffectiveAt),
     date_created: d.DateCreated
     // exchangeRate: d.ExchangeRate
   }));

@@ -536,5 +536,6 @@
   "exchange_update_type":"Tipo de actualización de la moneda",
   "exchange_update_type_desc":"¿Estás seguro de querer actualizar el tipo de actualización de la moneda?",
   "exchange_update_type_suceess":"Moneda El tipo de actualización se ha cambiado correctamente",
-  "select_currency":"Select Currency"
+  "select_currency":"Seleccionar moneda",
+  "wallets":"carteras"
   }
