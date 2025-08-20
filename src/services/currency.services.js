@@ -133,22 +133,29 @@ const CurrencyService = {
   },
 
   updateCurrency: async (currencyId, data) => {
-    console.log(data);
-    // const endpoint = replaceText(apiConfig.endPoints.CURRENCY.UPDATE, ':currencyId', currencyId);
-    // return await sendRequest({
-    //   url: apiConfig.baseURL.API_BASE_URL + endpoint,
-    //   method: 'PUT',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: {
-    //     name: data.name,
-    //     code: data.code,
-    //     symbol: data.symbol,
-    //     currencyType: data.type == 'Fiat' ? 0 : data.type == 'Crypto' ? 1 : 2,
-    //     decimalPlaces: data.decimal_places
-    //   }
-    // });
+    const endpoint = replaceText(apiConfig.endPoints.CURRENCY.UPDATE, ':currencyId', currencyId);
+    return await sendRequest({
+      url: apiConfig.baseURL.API_BASE_URL + endpoint,
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: {
+        name: data.name,
+        code: data.code,
+        symbol: data.symbol,
+        // Prefer currencyType from request; fallback to legacy mapping based on type string
+        currencyType:
+          data.currencyType !== undefined && data.currencyType !== null
+            ? data.currencyType
+            : data.type == 'Fiat'
+              ? 0
+              : data.type == 'Crypto'
+                ? 1
+                : 2,
+        decimalPlaces: parseInt(data.decimal_places, 10)
+      }
+    });
   },
   deleteCurrency: async (currencyId) => {
     const endpoint = replaceText(apiConfig.endPoints.CURRENCY.DELETE, ':currencyId', currencyId);
