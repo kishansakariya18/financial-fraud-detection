@@ -2,7 +2,13 @@
 import { createColumnHelper } from '@tanstack/react-table';
 
 // Local Imports
-import { IdCell, BoldCell, BadgeCell, DateCell } from '../../../../components/custom/table/cell';
+import {
+  IdCell,
+  BoldCell,
+  BadgeCell,
+  DateCell,
+  AmountCell
+} from '../../../../components/custom/table/cell';
 import { stageOptions, typeOptions } from '../helper';
 // ----------------------------------------------------------------------
 
@@ -62,14 +68,14 @@ export const columns = [
     id: 'betAmount',
     label: 'Bet Amount',
     header: 'Bet Amount',
-    cell: BoldCell,
+    cell: AmountCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.winAmount, {
     id: 'winAmount',
     label: 'Win Amount',
     header: 'Win Amount',
-    cell: BoldCell,
+    cell: AmountCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.userAmount, {

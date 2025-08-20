@@ -106,6 +106,7 @@ const EditSegmentation = () => {
     if (!moneyLoss) setValue('lossAmount', null);
     if (!moneyLoss) setValue('maxLoss', null);
     if (!moneyLoss) setValue('minLoss', null);
+    if (!countryCheck) setValue('countries', []);
   }, [
     kyc,
     countryCheck,
@@ -132,8 +133,8 @@ const EditSegmentation = () => {
             gender: result?.Filters?.Gender || null,
             // Age
             ageGroup: result?.Filters?.AgeCheck === 'on',
-            minAge: result?.Filters?.MinAge ? Number(result?.Filters?.MinAge) : null,
-            maxAge: result?.Filters?.MaxAge ? Number(result?.Filters?.MaxAge) : null,
+            minAge: Number(result?.Filters?.MinAge) >= 0 ? Number(result?.Filters?.MinAge) : null,
+            maxAge: Number(result?.Filters?.MaxAge) >= 0 ? Number(result?.Filters?.MaxAge) : null,
 
             // KYC
             kyc: result?.Filters?.KYCCheck === 'on',
@@ -141,36 +142,65 @@ const EditSegmentation = () => {
 
             // Country
             countryCheck: result?.Filters?.CountryCheck === 'on',
-            countries: result?.Filters?.Countries ? Number(result?.Filters?.Countries) : null,
+            countries: (() => {
+              const raw = result?.Filters?.Countries;
+              if (!raw && raw !== 0) return [];
+              if (Array.isArray(raw)) {
+                return raw
+                  .map((c) => (Number(c) >= 0 ? Number(c) : c))
+                  .filter((v) => v !== null && v !== undefined && v !== '');
+              }
+              if (typeof raw === 'string') {
+                return raw
+                  .split(',')
+                  .map((s) => s.trim())
+                  .filter(Boolean)
+                  .map((c) => (Number(c) >= 0 ? Number(c) : c));
+              }
+              if (typeof raw === 'number') {
+                return [raw];
+              }
+              return [];
+            })(),
 
             // Login Counter
             loginCounter: result?.Filters?.LoginCounterCheck === 'on',
-            minLoginCount: result?.Filters?.MinLoginCount
-              ? Number(result?.Filters?.MinLoginCount)
-              : null,
-            maxLoginCount: result?.Filters?.MaxLoginCount
-              ? Number(result?.Filters?.MaxLoginCount)
-              : null,
+            minLoginCount:
+              Number(result?.Filters?.MinLoginCount) >= 0
+                ? Number(result?.Filters?.MinLoginCount)
+                : null,
+            maxLoginCount:
+              Number(result?.Filters?.MaxLoginCount) >= 0
+                ? Number(result?.Filters?.MaxLoginCount)
+                : null,
 
             // Referral
             referral: result?.Filters?.RefCheck === 'on',
-            minReferral: result?.Filters?.RefMin ? Number(result?.Filters?.RefMin) : null,
-            maxReferral: result?.Filters?.RefMax ? Number(result?.Filters?.RefMax) : null,
+            minReferral:
+              Number(result?.Filters?.RefMin) >= 0 ? Number(result?.Filters?.RefMin) : null,
+            maxReferral:
+              Number(result?.Filters?.RefMax) >= 0 ? Number(result?.Filters?.RefMax) : null,
 
             // Money Deposit
             moneyDeposit: result?.Filters?.MoneyDepositCheck === 'on',
-            minDeposit: result?.Filters?.MinMonDep ? Number(result?.Filters?.MinMonDep) : null,
-            maxDeposit: result?.Filters?.MaxMonDep ? Number(result?.Filters?.MaxMonDep) : null,
+            minDeposit:
+              Number(result?.Filters?.MinMonDep) >= 0 ? Number(result?.Filters?.MinMonDep) : null,
+            maxDeposit:
+              Number(result?.Filters?.MaxMonDep) >= 0 ? Number(result?.Filters?.MaxMonDep) : null,
 
             // Money Won
             moneyWon: result?.Filters?.MoneyWonCheck === 'on',
-            minWon: result?.Filters?.MinMonWon ? Number(result?.Filters?.MinMonWon) : null,
-            maxWon: result?.Filters?.MaxMonWon ? Number(result?.Filters?.MaxMonWon) : null,
+            minWon:
+              Number(result?.Filters?.MinMonWon) >= 0 ? Number(result?.Filters?.MinMonWon) : null,
+            maxWon:
+              Number(result?.Filters?.MaxMonWon) >= 0 ? Number(result?.Filters?.MaxMonWon) : null,
 
             // Money Loss
             moneyLoss: result?.Filters?.MoneyLossCheck === 'on',
-            minLoss: result?.Filters?.MinMonLoss ? Number(result?.Filters?.MinMonLoss) : null,
-            maxLoss: result?.Filters?.MaxMonLoss ? Number(result?.Filters?.MaxMonLoss) : null
+            minLoss:
+              Number(result?.Filters?.MinMonLoss) >= 0 ? Number(result?.Filters?.MinMonLoss) : null,
+            maxLoss:
+              Number(result?.Filters?.MaxMonLoss) >= 0 ? Number(result?.Filters?.MaxMonLoss) : null
           };
 
           reset(mappedData);
@@ -287,9 +317,14 @@ const EditSegmentation = () => {
                       render={({ field }) => (
                         <Listbox
                           data={countryOptions}
+                          multiple
                           disabled={!countryCheck}
-                          value={countryOptions.find((opt) => opt.value === field.value) || null}
-                          onChange={(val) => field.onChange(val.value)}
+                          value={
+                            Array.isArray(field.value)
+                              ? countryOptions.filter((opt) => field.value.includes(opt.value))
+                              : []
+                          }
+                          onChange={(vals) => field.onChange(vals.map((v) => v.value))}
                           name={field.name}
                           placeholder={t('select') + ' ' + t('countries')}
                           displayField="label"

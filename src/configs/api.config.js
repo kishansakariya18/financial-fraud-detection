@@ -53,7 +53,7 @@ export const apiConfig = {
       GET_COMMENT_DETAIL: '/users/admin/users/get-comment-detail',
       ADD_COMMENT: '/users/admin/users/add-comment',
       DELETE_COMMENT: '/users/admin/users/delete-comment',
-      CHANE_PLAYER_FUND_PASSWORD: '/admin/user/change-manage-fund-password',
+      CHANE_PLAYER_FUND_PASSWORD: '/config/admin/config/user/change-manage-fund-password',
       SUMMARY: '/users/admin/users/summary',
       USER_SUMMARY: '/users/admin/users/summary',
       COUNTRY_LIST: '/config/admin/config/countries',
@@ -76,7 +76,8 @@ export const apiConfig = {
       ADMIN_EDIT: '/admin/admin/admin/edit',
       UPDATE_PROFILE: '/admin/admin/update-profile',
       ADMIN_COUNTRY_LIST: '/admin/admin/countries',
-      ADMIN_SUMMARY: '/admin/admin/admin/summary'
+      ADMIN_SUMMARY: '/admin/admin/admin/summary',
+      COUNTRY_LIST: '/config/country/list'
     },
     TENANT: {
       LIST: '/config/admin/tenant/list',
@@ -133,7 +134,7 @@ export const apiConfig = {
       UPDATE_PAYOUT: '/affiliates/admin/affiliates/update-payout',
       FUND: '/affiliates/admin/affiliates/fund',
       AFFILIATE_LOGIN_HISTORY: '/affiliates/admin/affiliates/:affiliateID/login-history',
-      CHANGE_AFFILIATE_FUND_PASSWORD: '/affiliates/admin/affiliate/change-manage-fund-password',
+      CHANGE_AFFILIATE_FUND_PASSWORD: '/config/admin/config/affiliate/change-manage-fund-password',
       SUMMARY: '/affiliates/admin/affiliates/summary'
     },
     SETTINGS: {
@@ -346,6 +347,9 @@ export const apiConfig = {
       DETAIL: '/content/admin/release-note/:releaseNoteUID/details',
       CHANGE_STATUS: '/content/admin/release-note/:releaseNoteUID/change-status',
       EDIT: '/content/admin/release-note/:releaseNoteUID/edit'
+    },
+    APP_SETTINGS: {
+      UPDATE: '/config/admin/config/app-setting/update'
     },
     WALLET: {
       LIST: '/wallet/admin/wallet/list/:userId',
