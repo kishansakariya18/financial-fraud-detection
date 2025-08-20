@@ -5,7 +5,7 @@ import {
   UserPlusIcon,
   ViewColumnsIcon
 } from '@heroicons/react/24/outline';
-
+import { HiOutlineCurrencyRupee } from 'react-icons/hi2';
 // Local Imports
 // import SettingIcon from 'assets/dualicons/setting.svg?react';
 import { NAV_TYPE_COLLAPSE, NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
@@ -43,7 +43,7 @@ export const casinoManagement = {
       path: '/casino-management/currencies',
       title: 'Currencies',
       transKey: 'casino_currencies',
-      Icon: null, // Please replace with the correct icon
+      Icon: HiOutlineCurrencyRupee, // Please replace with the correct icon
       permission: null // Please replace with the correct permission
     },
     {

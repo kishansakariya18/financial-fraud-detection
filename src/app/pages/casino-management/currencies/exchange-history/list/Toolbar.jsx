@@ -6,17 +6,17 @@ import { useTranslation } from 'react-i18next';
 
 // Local Imports
 import { Button, Input } from 'components/ui';
-import { TableConfig } from 'components/ui/custom/TableConfig';
-import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
+// import { TableConfig } from 'components/ui/custom/TableConfig';
+// import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 export function Toolbar({
   table,
-  pageTitle = '',
-  onApplyFilters = () => {},
-  onClearFilters = () => {}
+  pageTitle = ''
+  // onApplyFilters = () => {},
+  // onClearFilters = () => {}
 }) {
-  const { isXs } = useBreakpointsContext();
+  // const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
   const { t } = useTranslation();
@@ -43,7 +43,7 @@ export function Toolbar({
         </div>
       </div>
 
-      {isXs ? (
+      {/* {isXs ? (
         <>
           <div
             className={clsx(
@@ -85,7 +85,7 @@ export function Toolbar({
 
           <TableConfig table={table} />
         </div>
-      )}
+      )} */}
     </div>
   );
 }
