@@ -444,7 +444,7 @@ export function ViewDetails() {
                       </Button>
                     </div>
                   </div>
-                  <div>
+                  {/* <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {t('realCash')}
                     </p>
@@ -455,7 +455,7 @@ export function ViewDetails() {
                       {t('bonus')}
                     </p>
                     <p>{response?.Bonus || '0'}</p>
-                  </div>
+                  </div> */}
 
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">

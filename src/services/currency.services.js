@@ -33,6 +33,15 @@ const CurrencyService = {
     });
   },
 
+  getCurrencyCodeList: async () => {
+    return await sendRequest({
+      url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.CURRENCY.CODES}`,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  },
   changeCurrencyStatus: async (currencyId, changeStatus) => {
     const endpoint = replaceText(
       apiConfig.endPoints.CURRENCY.CHANGE_STATUS,
@@ -64,7 +73,8 @@ const CurrencyService = {
         code: data.code,
         symbol: data.symbol,
         exchange_rate: data.exchange_rate,
-        currencyType: data.type == 'Fiat' ? 0 : data.type == 'Crypto' ? 1 : 2,
+        // Prefer currencyType passed from UI (derived from selected code). Fallback to legacy mapping if absent.
+        currencyType: data.currencyType == 'Fiat' ? 0 : data.currencyType == 'Crypto' ? 1 : 2,
         isActive: 0,
         exchangeUpdateType: 1,
         decimalPlaces: parseInt(data.decimal_places, 10)
@@ -134,8 +144,16 @@ const CurrencyService = {
         name: data.name,
         code: data.code,
         symbol: data.symbol,
-        currencyType: data.type == 'Fiat' ? 0 : data.type == 'Crypto' ? 1 : 2,
-        decimalPlaces: data.decimal_places
+        // Prefer currencyType from request; fallback to legacy mapping based on type string
+        currencyType:
+          data.currencyType !== undefined && data.currencyType !== null
+            ? data.currencyType
+            : data.type == 'Fiat'
+              ? 0
+              : data.type == 'Crypto'
+                ? 1
+                : 2,
+        decimalPlaces: parseInt(data.decimal_places, 10)
       }
     });
   },
@@ -164,6 +182,15 @@ const CurrencyService = {
       params: {
         page: body.pagination.pageIndex + 1,
         per_page: body.pagination.pageSize
+      }
+    });
+  },
+  getCurrencyCodes: async () => {
+    return await sendRequest({
+      url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.CURRENCY.CODES}`,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
       }
     });
   }

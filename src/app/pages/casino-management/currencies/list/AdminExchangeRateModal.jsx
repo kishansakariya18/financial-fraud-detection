@@ -65,6 +65,7 @@ export function AdminExchangeRateModal({ show, onClose, row, table }) {
             <Input
               type="number"
               {...register('exchange_rate')}
+              step="any"
               label={t('exchange_rate')}
               error={errors?.exchange_rate?.message}
               placeholder={t('enter') + ' ' + t('exchange_rate')}
