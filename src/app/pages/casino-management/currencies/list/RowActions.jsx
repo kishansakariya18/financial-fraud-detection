@@ -1,11 +1,6 @@
 // Import Dependencies
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
-import {
-  EllipsisHorizontalIcon,
-  TrashIcon,
-  PencilIcon,
-  ClockIcon
-} from '@heroicons/react/24/outline';
+import { EllipsisHorizontalIcon, PencilIcon, ClockIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -22,6 +17,7 @@ import { useNavigate } from 'react-router';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
 import { AdminExchangeRateModal } from './AdminExchangeRateModal';
+import { toast } from 'sonner';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
@@ -103,8 +99,9 @@ export function RowActions({ row, table }) {
       console.log('table.options: ', table.options);
       table.options.meta?.fetchNewList();
       setStatusSuccess(true);
+      toast.success(result.response.message);
     } else {
-      setStatusError(true);
+      toast.error(result.response.message);
     }
 
     setConfirmStatusLoading(false);
@@ -121,20 +118,24 @@ export function RowActions({ row, table }) {
     if (result.status === 200) {
       table.options.meta?.fetchNewList();
       setExchangeUpdateTypeSuccess(true);
+      toast.success(result.response.message);
     } else {
-      setExchangeUpdateTypeError(true);
+      toast.error(result.response.message);
     }
 
     setConfirmExchangeUpdateTypeLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [row]);
 
-  const handleDeleteRows = async () => {
-    const result = await CurrencyServices.deleteCurrency(row.original.id);
-    if (result.status === 200) {
-      table.options.meta?.fetchNewList();
-    }
-  };
+  // const handleDeleteRows = async () => {
+  //   const result = await CurrencyServices.deleteCurrency(row.original.id);
+  //   if (result.status === 200) {
+  //     table.options.meta?.fetchNewList();
+  //     toast.success(result.response.message);
+  //   } else {
+  //     toast.error(result.response.message || 'Failed to delete currency');
+  //   }
+  // };
 
   const statusState = statusError ? 'error' : statusSuccess ? 'success' : 'pending';
   const exchangeUpdateTypeState = exchangeUpdateTypeError
@@ -213,22 +214,21 @@ export function RowActions({ row, table }) {
                 </MenuItem>
               )}
 
-              {hasPermission(PERMISSIONS.CURRENCIES.ADMIN_EXCHANGE_RATE) &&
-                row.original.exchangeUpdateType === 'Manual' && (
-                  <MenuItem>
-                    {({ focus }) => (
-                      <button
-                        onClick={() => setAdminRateModalOpen(true)}
-                        className={clsx(
-                          'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
-                          focus && 'bg-this/10 dark:bg-this-light/10'
-                        )}>
-                        <ClockIcon className="size-4.5 stroke-1" />
-                        <span>{t('admin_exchange_rate')}</span>
-                      </button>
-                    )}
-                  </MenuItem>
-                )}
+              {hasPermission(PERMISSIONS.CURRENCIES.ADMIN_EXCHANGE_RATE) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={() => setAdminRateModalOpen(true)}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                        focus && 'bg-this/10 dark:bg-this-light/10'
+                      )}>
+                      <ClockIcon className="size-4.5 stroke-1" />
+                      <span>{t('admin_exchange_rate')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
               {hasPermission(PERMISSIONS.CURRENCIES.EXCHANGE_UPDATE_TYPE) && (
                 <MenuItem>
                   {({ focus }) => (
@@ -244,7 +244,7 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              {hasPermission(PERMISSIONS.CURRENCIES.DELETE) && (
+              {/* {hasPermission(PERMISSIONS.CURRENCIES.DELETE) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -258,7 +258,7 @@ export function RowActions({ row, table }) {
                     </button>
                   )}
                 </MenuItem>
-              )}
+              )} */}
             </MenuItems>
           </Transition>
         </Menu>

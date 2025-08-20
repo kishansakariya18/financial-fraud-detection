@@ -564,7 +564,7 @@
   "exchange_update_type":"Exchange Update Type",
   "exchange_update_type_desc":"Are you sure you want to update this Currency's exchange update type ?",
   "exchange_update_type_suceess":"Currency Exchange Update Type has been changed successfully",
-  "countryCode": "Country Code",
-  "select_currency":"Select Currency"
-
+  "select_currency":"Select Currency",
+  "wallets":"Wallets",
+  "countryCode": "Country Code"
 }

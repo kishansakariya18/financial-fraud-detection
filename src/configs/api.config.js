@@ -204,6 +204,7 @@ export const apiConfig = {
     },
     CURRENCY: {
       LIST: '/wallet/admin/currency/list',
+      CODES: '/wallet/admin/currency/codes/list',
       SUMMARY: '/games/admin/casino-management/currency/summary',
       CREATE: '/wallet/admin/currency/create',
       GET_BY_ID: '/wallet/admin/currency/:currencyId',

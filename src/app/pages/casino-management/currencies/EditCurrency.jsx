@@ -23,11 +23,14 @@ const EditCurrency = () => {
     { title: t('edit') }
   ];
 
-  const currencyTypeOptions = [
-    { value: 'Fiat', label: 'Fiat' },
-    { value: 'Crypto', label: 'Crypto' },
-    { value: 'Points', label: 'Points' }
-  ];
+  // const currencyTypeOptions = [
+  //   { value: 'Fiat', label: 'Fiat' },
+  //   { value: 'Crypto', label: 'Crypto' },
+  //   { value: 'Points', label: 'Points' }
+  // ];
+  // Currency codes dropdown state
+  const [codes, setCodes] = useState([]);
+  const [codesLoading, setCodesLoading] = useState(false);
 
   const {
     register,
@@ -39,6 +42,7 @@ const EditCurrency = () => {
     resolver: yupResolver(createCurrencySchema)
   });
 
+  // Fetch existing currency details
   useEffect(() => {
     const fetchCurrency = async () => {
       if (!currencyId) return;
@@ -77,6 +81,24 @@ const EditCurrency = () => {
 
     fetchCurrency();
   }, [currencyId, reset]);
+
+  // Fetch currency codes for dropdown
+  useEffect(() => {
+    const fetchCodes = async () => {
+      setCodesLoading(true);
+      const res = await CurrencyService.getCurrencyCodes();
+      if (res) {
+        if (res.status === 200) {
+          const data = res.response?.data ?? res.response?.codes ?? res.response ?? [];
+          setCodes(data);
+        } else if (res.error) {
+          toast.error(res.error);
+        }
+      }
+      setCodesLoading(false);
+    };
+    fetchCodes();
+  }, []);
 
   const updateCurrency = async (data) => {
     setLoading(true);
@@ -123,11 +145,23 @@ const EditCurrency = () => {
                 error={errors?.name?.message}
                 placeholder={t('enter') + ' ' + t('name')}
               />
-              <Input
-                {...register('code')}
-                label={t('code')}
-                error={errors?.code?.message}
-                placeholder={t('enter') + ' ' + t('code')}
+              <Controller
+                name="code"
+                control={control}
+                render={({ field }) => (
+                  <Listbox
+                    data={codes}
+                    value={codes.find((opt) => opt.AlphabeticName === field.value) || null}
+                    onChange={(val) => field.onChange(val.AlphabeticName)}
+                    name={field.name}
+                    label={t('code')}
+                    placeholder={(codesLoading ? t('loading') : t('select')) + ' ' + t('code')}
+                    displayField="AlphabeticName"
+                    error={errors.code?.message}
+                    disabled
+                    required
+                  />
+                )}
               />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -137,7 +171,7 @@ const EditCurrency = () => {
                 error={errors?.symbol?.message}
                 placeholder={t('enter') + ' ' + t('symbol')}
               />
-              <Controller
+              {/* <Controller
                 name="type"
                 control={control}
                 render={({ field }) => (
@@ -152,9 +186,7 @@ const EditCurrency = () => {
                     error={errors.type?.message}
                   />
                 )}
-              />
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
+              /> */}
               <Input
                 {...register('decimal_places')}
                 label={t('decimal_places')}
@@ -163,6 +195,7 @@ const EditCurrency = () => {
                 placeholder={t('enter') + ' ' + t('decimal_places')}
               />
             </div>
+            <div className="grid gap-4 sm:grid-cols-2"></div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
             <Button
