@@ -31,15 +31,16 @@ export const users = {
       transKey: 'nav.users.players',
       Icon: UserGroupIcon,
       permission: PERMISSIONS.USER.LIST
-    },
-    {
-      id: 'affiliate',
-      type: NAV_TYPE_ITEM,
-      path: '/users/affiliate',
-      title: 'Affiliates',
-      transKey: 'affiliates',
-      Icon: UsersIcon,
-      permission: PERMISSIONS.AFFILIATES.LIST
     }
+    // ,
+    // {
+    //   id: 'affiliate',
+    //   type: NAV_TYPE_ITEM,
+    //   path: '/users/affiliate',
+    //   title: 'Affiliates',
+    //   transKey: 'affiliates',
+    //   Icon: UsersIcon,
+    //   permission: PERMISSIONS.AFFILIATES.LIST
+    // }
   ]
 };

@@ -3,27 +3,27 @@ import MonitorIcon from 'assets/nav-icons/monitor.svg?react';
 import { NAV_TYPE_ITEM, NAV_TYPE_ROOT } from 'constants/app.constant';
 import { users } from './users';
 import { platform } from './platoform';
-import { reports } from './report';
-import { playerKyc } from './player-kyc';
+// import { reports } from './report';
+// import { playerKyc } from './player-kyc';
 import { casinoManagement } from './casino-management';
 import { segmentation } from './segmentation';
-import { emailTemplate } from './email-template';
-import { peomocode } from './promocode';
-import { roles } from './roles';
-import { auditlogs } from './auditlogs';
+// import { emailTemplate } from './email-template';
+// import { peomocode } from './promocode';
+// import { roles } from './roles';
+// import { auditlogs } from './auditlogs';
 import { crm } from './crm';
 import { frontend } from './front-end';
-import { tenants } from './tenant';
+// import { tenants } from './tenant';
 import { contentManagement } from './content-management';
 import { siteConfiguration } from './site-configuration';
-import { bonusManagement } from './bonus-management';
-import { paymentProvider } from './payment-provider';
-import { userClass } from './user-class';
-import { blacklist } from './blacklist';
-import { bank } from './bank';
-import { userManualDepositTransaction } from './user-manual-deposit-transaction';
+// import { bonusManagement } from './bonus-management';
+// import { paymentProvider } from './payment-provider';
+// import { userClass } from './user-class';
+// import { blacklist } from './blacklist';
+// import { bank } from './bank';
+// import { userManualDepositTransaction } from './user-manual-deposit-transaction';
 // import { registrationFields } from './registration-fields';
-import { releaseNotes } from './release-notes';
+// import { releaseNotes } from './release-notes';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -41,33 +41,33 @@ export const dashboards = () => ({
       transKey: 'nav.dashboards.dashboard',
       Icon: MonitorIcon
     },
-    roles,
+    // roles,
     users,
     platform,
     // country,
     // banner,
     contentManagement,
     siteConfiguration,
-    bonusManagement,
+    // bonusManagement,
     // pages,
     frontend,
     // payment,
-    reports,
-    tenants,
-    playerKyc,
+    // reports,
+    // tenants,
+    // playerKyc,
     // affliate,
     casinoManagement,
     segmentation,
-    emailTemplate,
-    peomocode,
-    auditlogs,
-    crm,
-    paymentProvider,
-    userClass,
-    blacklist,
-    bank,
+    // emailTemplate,
+    // peomocode,
+    // auditlogs,
+    crm
+    // paymentProvider,
+    // userClass,
+    // blacklist,
+    // bank,
     // registrationFields,
-    userManualDepositTransaction,
-    releaseNotes
+    // userManualDepositTransaction,
+    // releaseNotes
   ]
 });

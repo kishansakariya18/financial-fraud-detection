@@ -781,16 +781,16 @@ export default function Home() {
   console.log('demographicResponse:', demographicResponse);
 
   useEffect(() => {
-    fetchDashboard();
-    fetchCards();
-    fetchDepositStats();
-    // fetchWithdrawStats();
-    fetchGGRReport();
-    fetchLoggedInPlayers();
-    fetchActivePlayers();
-    fetchDemographicReport();
-    fetchCountryList();
-    fetchCasinoStats();
+    //TODO: uncomment when implemented
+    // fetchDashboard();
+    // fetchCards();
+    // fetchDepositStats();
+    // fetchGGRReport();
+    // fetchLoggedInPlayers();
+    // fetchActivePlayers();
+    // fetchDemographicReport();
+    // fetchCountryList();
+    // fetchCasinoStats();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dateFilterApplied]);
 
