@@ -530,7 +530,7 @@
   "fiat": "Fiat",
   "crypto": "Crypto",
   "points": "Points",
-  "casino_currencies":"Currencies",
+  "casino_currencies":"Currency",
   "registration_fields":"Registration Fields",
   "field_name":"Field Name",
   "hide":"Hide",
@@ -566,5 +566,8 @@
   "exchange_update_type_suceess":"Currency Exchange Update Type has been changed successfully",
   "select_currency":"Select Currency",
   "wallets":"Wallets",
-  "countryCode": "Country Code"
+  "countryCode": "Country Code",
+  "code":"Code",
+  "symbol":"Symbol",
+  "currencies":"Currency"
 }
