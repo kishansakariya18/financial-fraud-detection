@@ -2,24 +2,24 @@
 import clsx from 'clsx';
 
 // Local Imports
-import { LanguageSelector } from 'components/template/LaguageSelector';
+// import { LanguageSelector } from 'components/template/LaguageSelector';
 import { SidebarToggleBtn } from 'components/shared/SidebarToggleBtn';
 import { Profile } from '../Profile';
 import { useThemeContext } from 'app/contexts/theme/context';
-import { Button } from '@headlessui/react';
-import { RiRobot2Line } from 'react-icons/ri';
-import apiConfig from 'configs/api.config';
-import usePermissions from 'app/router/usePermissions';
-import { PERMISSIONS } from 'constants/app.constant';
+// import { Button } from '@headlessui/react';
+// import { RiRobot2Line } from 'react-icons/ri';
+// import apiConfig from 'configs/api.config';
+// import usePermissions from 'app/router/usePermissions';
+// import { PERMISSIONS } from 'constants/app.constant';
 // import { ChatBubbleBottomCenterIcon } from '@heroicons/react/24/outline';
 
 // ----------------------------------------------------------------------
 
 export function Header() {
   const { cardSkin } = useThemeContext();
-  const { hasPermission } = usePermissions();
+  // const { hasPermission } = usePermissions();
   // `${apiConfig.baseURL.AI_CHAT_URL}?token=${token}
-  const token = localStorage.getItem('AuthToken');
+  // const token = localStorage.getItem('AuthToken');
   return (
     <header
       className={clsx(
@@ -31,7 +31,7 @@ export function Header() {
       </div>
       <div className="flex items-center gap-3 sm:flex-1">
         <div className="flex-1"></div>
-        {hasPermission(PERMISSIONS.BUX_AI.VIEW) && (
+        {/* {hasPermission(PERMISSIONS.BUX_AI.VIEW) && (
           <Button
             unstyled
             onClick={() => window.open(`${apiConfig.baseURL.AI_CHAT_URL}?token=${token}`)}
@@ -42,7 +42,7 @@ export function Header() {
             </div>
           </Button>
         )}
-        <LanguageSelector />
+        <LanguageSelector /> */}
         <Profile />
       </div>
     </header>
