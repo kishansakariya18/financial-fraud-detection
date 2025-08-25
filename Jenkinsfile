@@ -23,7 +23,7 @@ pipeline {
                   if (branchName == 'admin-qa-ms') {
                      env.IMAGE_TAG = "admin-qa-ms-latest"
                                            }
-                  else if (branchName == 'brij-devops') {
+                  else if (branchName == 'brijesh-devops') {
                      env.IMAGE_TAG = "brij-devops-latest"
                                                         }                              
                   else {
@@ -35,7 +35,7 @@ pipeline {
                 }
            } 
 
-    stage('Build Docker Image') {
+       stage('Build Docker Image') {
        steps {
             sh """
              docker build -t ${DOCKERHUB_REPO}:${IMAGE_TAG} .
@@ -80,7 +80,7 @@ pipeline {
             // Pull latest image
             
             sh "docker pull ${imageName}"
-            // Run new container on port 9443 (you will reverse-proxy this via Apache)
+            // Run new container on port 4111 (you will reverse-proxy this via Apache)
             sh """
             docker run -d --name ${containerName} -p 6443:443 ${imageName}
                """

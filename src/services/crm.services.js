@@ -8,11 +8,20 @@ const EmailTemplateService = {
       const reqBody = {
         channel: data.channel || undefined,
         description: data.description || undefined,
-        segmentationID: data.segmentationID || undefined,
+        recipientGroupID: [],
+        recipientGroup: '',
         subject: data.subject || undefined,
         sendType: data.sendType || 1,
         deliveryDateTime: data.deliveryDateTime || undefined
       };
+
+      if (data.sendTo === 'segmentation') {
+        reqBody.recipientGroup = 'segmentation';
+        reqBody.recipientGroupID = [data.segmentationID];
+      } else if (data.sendTo === 'userClass') {
+        reqBody.recipientGroup = 'userclass';
+        reqBody.recipientGroupID = [data.UserClassID];
+      }
       const endPoint = apiConfig.endPoints.CRM.SEND;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({

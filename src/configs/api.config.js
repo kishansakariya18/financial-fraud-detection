@@ -40,7 +40,7 @@ export const apiConfig = {
       LIST: '/users/admin/users/list',
       REFERRAL_LIST: '/users/admin/users/referral/:userID',
       FUND: '/users/admin/users/fund',
-      TRANSACTION_LIST: '/users/admin/users/transaction-list',
+      TRANSACTION_LIST: '/wallet/admin/wallet/transaction-list',
       TDS_SUMMARY_TRANSACTION_LIST: '/users/admin/users/tds-summary-transaction-list',
       TRANSACTION_DETAIL: '/users/admin/users/transaction-detail',
       CHANGE_STATUS: '/users/admin/users/change-status',
@@ -247,7 +247,7 @@ export const apiConfig = {
       DEPOSIT_BONUS_EXPORT: '/admin/reports/deposit-bonus/export'
     },
     CRM: {
-      SEND: '/admin/crm/sendNotification'
+      SEND: '/notifications/admin/crm/sendNotification'
     },
     HOME_PAGE: {
       HOME_CATEGORY_LIST: '/config/admin/home-page/home-category/list',

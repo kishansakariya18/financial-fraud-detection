@@ -3,6 +3,9 @@ import { createColumnHelper } from '@tanstack/react-table';
 // Local Imports
 import { RowActions } from './RowActions';
 import { IdCell, BoldCell, BadgeCell } from '../../../../../components/custom/table/cell';
+import { Badge } from 'components/ui';
+import { Highlight } from 'components/shared/Highlight';
+import { ensureString } from 'utils/ensureString';
 // import {  } from '../helper';
 import { statusOptions } from '../helper';
 // ----------------------------------------------------------------------
@@ -19,7 +22,21 @@ export const columns = [
   columnHelper.accessor((row) => row.name, {
     id: 'Name',
     header: 'Name',
-    cell: BoldCell,
+    cell: ({ getValue, column, table, row }) => {
+      const globalQuery = ensureString(table.getState().globalFilter);
+      const columnQuery = ensureString(column.getFilterValue());
+      const name = getValue();
+      const isDefault = row?.original?.is_default == 1;
+
+      return (
+        <div className="flex items-center space-x-2 rtl:space-x-reverse">
+          <span className="font-medium text-gray-800 dark:text-dark-100">
+            <Highlight query={[globalQuery, columnQuery]}>{name || 'not-found'}</Highlight>
+          </span>
+          {isDefault && <Badge color="primary">Base</Badge>}
+        </div>
+      );
+    },
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.code, {
