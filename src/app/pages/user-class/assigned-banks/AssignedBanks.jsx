@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { useNavigate, useParams, useSearchParams } from 'react-router';
+import { useParams, useSearchParams } from 'react-router';
 
 // Local Imports
 import { bankColumns } from './columns';
+import { bankResponseMapper } from './helper';
 import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
@@ -15,7 +16,6 @@ import { Button, Circlebar } from 'components/ui';
 
 export default function AssignedBanks() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { id: userClassId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t('assign_bank');
@@ -44,7 +44,7 @@ export default function AssignedBanks() {
     if (result.status === 200) {
       return {
         status: 200,
-        data: result.response.data, // Assuming API returns correct format
+        data: bankResponseMapper(result.response.data), // Use the response mapper
         totalRecords: parseInt(result.response.total_record, 10) || 0
       };
     }
@@ -56,7 +56,9 @@ export default function AssignedBanks() {
     columns: columns,
     fetchData: fetchAssignedBanks,
     queryParams,
-    setSearchParams
+    setSearchParams,
+    enableRowSelection: true,
+    getRowId: (row) => row.id
   });
 
   useEffect(() => {
@@ -124,15 +126,8 @@ export default function AssignedBanks() {
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
         breadcrumbItem={breadcrumbItem}
+        isAssignBank={true}
       />
-
-      <div className="mb-4 flex justify-end">
-        <Button
-          color="primary"
-          onClick={() => navigate(`/user-class/${userClassId}/assign-bank/add`)}>
-          {t('assign_bank')}
-        </Button>
-      </div>
 
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
 

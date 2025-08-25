@@ -35,7 +35,10 @@ const CreateSegmentation = () => {
     reset,
     setValue
   } = useForm({
-    resolver: yupResolver(createSegmentationSchema)
+    resolver: yupResolver(createSegmentationSchema),
+    defaultValues: {
+      countries: []
+    }
   });
   const kyc = watch('kyc');
   const countryCheck = watch('countryCheck');
@@ -52,7 +55,7 @@ const CreateSegmentation = () => {
     console.log('countryCheck:', countryCheck);
 
     if (!kyc) setValue('kycType', null);
-    if (!countryCheck) setValue('countries', null);
+    if (!countryCheck) setValue('countries', []);
 
     if (!ageGroup) setValue('minAge', null);
     if (!ageGroup) setValue('maxAge', null);
@@ -139,6 +142,7 @@ const CreateSegmentation = () => {
   }
 
   const onSubmit = async (data) => {
+    // Match EditSegmentation: pass data directly, service maps keys
     await createSegmentationAPI(data);
   };
   return (
@@ -210,9 +214,14 @@ const CreateSegmentation = () => {
                       render={({ field }) => (
                         <Listbox
                           data={countryOptions}
+                          multiple
                           disabled={!countryCheck}
-                          value={countryOptions.find((opt) => opt.value === field.value) || null}
-                          onChange={(val) => field.onChange(val.value)}
+                          value={
+                            Array.isArray(field.value)
+                              ? countryOptions.filter((opt) => field.value.includes(opt.value))
+                              : []
+                          }
+                          onChange={(vals) => field.onChange(vals.map((v) => v.value))}
                           name={field.name}
                           placeholder={t('select') + ' ' + t('countries')}
                           displayField="label"

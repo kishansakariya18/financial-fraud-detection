@@ -114,7 +114,7 @@ const RoleService = {
   deleteRole: async (rolePermissionId) => {
     try {
       const reqData = {
-        rolePermissionID: rolePermissionId
+        roleID: rolePermissionId
       };
       const endPoint = apiConfig.endPoints.ROLES.DELETE;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;

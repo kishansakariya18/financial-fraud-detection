@@ -25,10 +25,10 @@ export function AdminExchangeRateModal({ show, onClose, row, table }) {
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
-      const result = await CurrencyService.addAdminExchangeRate(row.original.id, data);
+      const result = await CurrencyService.addAdminExchangeRate(row.original.code, data);
       if (result.status === 200) {
         toast.success('Exchange rate added successfully');
-        table.options.meta?.fetchSummary();
+        table.options.meta?.fetchNewList();
         setIsSuccess(true);
       } else {
         toast.error(result.error || 'Failed to add exchange rate');
@@ -65,6 +65,7 @@ export function AdminExchangeRateModal({ show, onClose, row, table }) {
             <Input
               type="number"
               {...register('exchange_rate')}
+              step="any"
               label={t('exchange_rate')}
               error={errors?.exchange_rate?.message}
               placeholder={t('enter') + ' ' + t('exchange_rate')}

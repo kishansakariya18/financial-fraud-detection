@@ -316,7 +316,8 @@ export const PERMISSIONS = {
     CHANGE_STATUS: 'currencies-change-status',
     DELETE: 'currencies-delete',
     EXCHANGE_HISTORY: 'currencies-exchange-history',
-    ADMIN_EXCHANGE_RATE: 'currencies-admin-exchange-history'
+    ADMIN_EXCHANGE_RATE: 'currencies-admin-exchange-history',
+    EXCHANGE_UPDATE_TYPE: 'currencies-exchange-update-type'
   },
   REGISTRATION_FIELDS: {
     VIEW: 'registration-fields-view'

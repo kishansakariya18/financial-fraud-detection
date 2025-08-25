@@ -5,16 +5,22 @@ import { useLockScrollbar } from 'hooks';
 import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import useTable from 'components/ui/useTable';
-import DashboardService from 'services/dashboard.services';
+// import DashboardService from 'services/dashboard.services';
 import { t } from 'i18next';
 
 export default function KPISummaryList() {
   const title = `${t('kpi')} ${t('summary')}`;
 
   const fetchKPISummaryList = async () => {
-    const result = await DashboardService.getKPISummary({
-      filters: {}
-    });
+    //TODO: uncomment when implemented
+    // const result = await DashboardService.getKPISummary({
+    //   filters: {}
+    // });
+    const result = {
+      response: {
+        data: []
+      }
+    };
     console.log('result: ', result.response);
 
     const apiData = result.response.data;

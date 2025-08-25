@@ -6,17 +6,24 @@ import { useTranslation } from 'react-i18next';
 
 // Local Imports
 import { Button, Input } from 'components/ui';
-import { TableConfig } from 'components/ui/custom/TableConfig';
-import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
+// import { TableConfig } from 'components/ui/custom/TableConfig';
+// import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 export function Toolbar({
   table,
-  pageTitle = '',
-  onApplyFilters = () => {},
-  onClearFilters = () => {}
+  pageTitle = ''
+  // onApplyFilters = () => {},
+  // onClearFilters = () => {}
 }) {
-  const { isXs } = useBreakpointsContext();
+  // const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+
+  const { t } = useTranslation();
+  const breadcrumbItem = [
+    { title: t('Currency'), path: '/casino-management/currencies' },
+    { title: t('exchange_history') }
+  ];
 
   return (
     <div className="table-toolbar">
@@ -25,14 +32,18 @@ export function Toolbar({
           'transition-content flex items-center justify-between gap-4',
           isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x] pt-4'
         )}>
-        <div className="min-w-0">
+        <div className="flex items-center space-x-4 rtl:space-x-reverse">
           <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
             {pageTitle}
           </h2>
+          <div className="hidden self-stretch py-1 sm:flex">
+            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          </div>
+          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
       </div>
 
-      {isXs ? (
+      {/* {isXs ? (
         <>
           <div
             className={clsx(
@@ -74,7 +85,7 @@ export function Toolbar({
 
           <TableConfig table={table} />
         </div>
-      )}
+      )} */}
     </div>
   );
 }
@@ -83,8 +94,8 @@ function SearchInput({ table, onApplyFilters }) {
   const { t } = useTranslation();
   return (
     <Input
-      value={table?.getColumn('From Currency')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('From Currency').setFilterValue(e.target.value)}
+      value={table?.getColumn('Base Currency')?.getFilterValue() || ''}
+      onChange={(e) => table.getColumn('Base Currency').setFilterValue(e.target.value)}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
           onApplyFilters();

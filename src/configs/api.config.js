@@ -24,8 +24,8 @@ export const apiConfig = {
     RESET_PASSWORD: '/admin/admin/auth/reset-password',
 
     AUDIT_LOGS: {
-      VIEW: '/notify/admin/audit-logs/list',
-      DETAIL: '/notify/admin/audit-logs/view/:Id'
+      VIEW: '/notifications/admin/audit-logs/list',
+      DETAIL: '/notifications/admin/audit-logs/view/:Id'
     },
     PAGE: {
       LIST: '/content/admin/pages/list',
@@ -53,7 +53,7 @@ export const apiConfig = {
       GET_COMMENT_DETAIL: '/users/admin/users/get-comment-detail',
       ADD_COMMENT: '/users/admin/users/add-comment',
       DELETE_COMMENT: '/users/admin/users/delete-comment',
-      CHANE_PLAYER_FUND_PASSWORD: '/admin/user/change-manage-fund-password',
+      CHANE_PLAYER_FUND_PASSWORD: '/config/admin/config/user/change-manage-fund-password',
       SUMMARY: '/users/admin/users/summary',
       USER_SUMMARY: '/users/admin/users/summary',
       COUNTRY_LIST: '/config/admin/config/countries',
@@ -76,7 +76,8 @@ export const apiConfig = {
       ADMIN_EDIT: '/admin/admin/admin/edit',
       UPDATE_PROFILE: '/admin/admin/update-profile',
       ADMIN_COUNTRY_LIST: '/admin/admin/countries',
-      ADMIN_SUMMARY: '/admin/admin/admin/summary'
+      ADMIN_SUMMARY: '/admin/admin/admin/summary',
+      COUNTRY_LIST: '/config/country/list'
     },
     TENANT: {
       LIST: '/config/admin/tenant/list',
@@ -133,7 +134,7 @@ export const apiConfig = {
       UPDATE_PAYOUT: '/affiliates/admin/affiliates/update-payout',
       FUND: '/affiliates/admin/affiliates/fund',
       AFFILIATE_LOGIN_HISTORY: '/affiliates/admin/affiliates/:affiliateID/login-history',
-      CHANGE_AFFILIATE_FUND_PASSWORD: '/affiliates/admin/affiliate/change-manage-fund-password',
+      CHANGE_AFFILIATE_FUND_PASSWORD: '/config/admin/config/affiliate/change-manage-fund-password',
       SUMMARY: '/affiliates/admin/affiliates/summary'
     },
     SETTINGS: {
@@ -202,12 +203,23 @@ export const apiConfig = {
         '/games/admin/casino-management/provider/:providerId/restricted-country/delete'
     },
     CURRENCY: {
-      LIST: '/games/admin/casino-management/currency/list',
+      LIST: '/wallet/admin/currency/list',
+      CODES: '/wallet/admin/currency/codes/list',
       SUMMARY: '/games/admin/casino-management/currency/summary',
-      CREATE: '/games/admin/casino-management/currency/create',
-      EDIT: '/games/admin/casino-management/currency/:currencyId/edit',
-      DELETE: '/games/admin/casino-management/currency/:currencyId/delete',
-      CHANGE_STATUS: '/games/admin/casino-management/currency/:currencyId/change-status'
+      CREATE: '/wallet/admin/currency/create',
+      GET_BY_ID: '/wallet/admin/currency/:currencyId',
+      UPDATE: '/wallet/admin/currency/:currencyId',
+      DELETE: '/wallet/admin/currency/:currencyId',
+      CHANGE_STATUS: '/wallet/admin/currency/status/:currencyId',
+      ADMIN_EXCHANGE_RATE: '/wallet/admin/currency/add-exchange-rate/:currencyId',
+      ADMIN_EXCHANGE_TYPE_UPDATE: '/wallet/admin/currency/exchange-update-type/:currencyId'
+    },
+    EXCHANGE_RATE: {
+      HISTORY: '/wallet/admin/exchange-rate/history/:currencyId',
+      CREATE: '/wallet/admin/exchange-rate/create',
+      UPDATE: '/wallet/admin/exchange-rate/:exchangeRateId',
+      DELETE: '/wallet/admin/exchange-rate/:exchangeRateId',
+      CHANGE_STATUS: '/wallet/admin/exchange-rate/status/:exchangeRateId'
     },
     GAME: {
       LIST: '/games/admin/casino-management/games/list',
@@ -222,10 +234,13 @@ export const apiConfig = {
       ADD_GAME_SEGMENTATION: '/games/admin/casino-management/games/:gameId/segmentation'
     },
     REPORTS: {
-      BETSLIP: '/admin/reports/betslip-transactions',
-      BETSLIP_EXPORT: '/admin/reports/betslip',
-      TRANSACTIONS: '/admin/reports/get-transactions',
-      TRANSACTIONS_EXPORT: '/admin/reports/transactions/export',
+      BETSLIP: '/bets/admin/report/betslip',
+      BETSLIP_EXPORT: '/bets/admin/report/betslip/export',
+      DEPOSIT_TRANSACTIONS: '/wallet/admin/report/deposit',
+      WITHDRAW_TRANSACTIONS: '/wallet/admin/report/withdraw',
+      DEPOSIT_TRANSACTIONS_EXPORT: '/wallet/admin/report/deposit/export',
+      WITHDRAW_TRANSACTIONS_EXPORT: '/wallet/admin/report/withdraw/export',
+
       PLAYER_BALANCE_LIST: '/admin/reports/player-balance/list',
       PLAYER_BALANCE_EXPORT: '/admin/reports/player-balance/export',
       DEPOSIT_BONUS_LIST: '/admin/reports/deposit-bonus/list',
@@ -299,9 +314,9 @@ export const apiConfig = {
       CHANGE_STATUS: '/config/admin/rate-limit-rules/:rateLimitUID/change-status'
     },
     BLACKLIST: {
-      LIST: '/admin/blacklist/list',
-      BLOCK: '/admin/blacklist/block',
-      DELETE: '/admin/blacklist/:blacklistUID/delete'
+      LIST: '/users/admin/blacklist/list',
+      BLOCK: '/users/admin/blacklist/block',
+      DELETE: '/users/admin/blacklist/:blacklistUID/delete'
     },
     BANK: {
       LIST: '/payments/admin/deposit-bank/list',
@@ -332,6 +347,13 @@ export const apiConfig = {
       DETAIL: '/content/admin/release-note/:releaseNoteUID/details',
       CHANGE_STATUS: '/content/admin/release-note/:releaseNoteUID/change-status',
       EDIT: '/content/admin/release-note/:releaseNoteUID/edit'
+    },
+    APP_SETTINGS: {
+      UPDATE: '/config/admin/config/app-setting/update'
+    },
+    WALLET: {
+      LIST: '/wallet/admin/wallet/list/:userId',
+      FUND: '/wallet/admin/wallet/fund'
     }
   }
 };

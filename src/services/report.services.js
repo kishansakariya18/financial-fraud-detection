@@ -1,7 +1,6 @@
 import { getStageAppToApi, mapType } from 'app/pages/reports/helper';
 import { playerStatusToAPI, transactionStatusToAPI } from 'app/pages/users/player/helper';
 import apiConfig from 'configs/api.config';
-import { TRANSACTION } from 'constants/app.constant';
 import dayjs from 'dayjs';
 import { sendRequest } from 'utils/axios';
 
@@ -60,12 +59,11 @@ const ReportService = {
         endDate: endDate
           ? dayjs(+endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
           : undefined,
-        status: status ? transactionStatusToAPI(status) : undefined,
-        transactionType: TRANSACTION.TRANSACTION_TYPE.DEPOSIT
+        status: status ? transactionStatusToAPI(status) : undefined
       };
 
       const response = await sendRequest({
-        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.REPORTS.TRANSACTIONS}`,
+        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.REPORTS.DEPOSIT_TRANSACTIONS}`,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -94,12 +92,11 @@ const ReportService = {
         keyword: keyword || undefined,
         startDate: startDate ? dayjs(+startDate).format('YYYY-MM-DD HH:mm:ss') : undefined,
         endDate: endDate ? dayjs(+endDate).format('YYYY-MM-DD HH:mm:ss') : undefined,
-        status: status ? transactionStatusToAPI(status) : undefined,
-        transactionType: TRANSACTION.TRANSACTION_TYPE.WITHDRAW
+        status: status ? transactionStatusToAPI(status) : undefined
       };
 
       const response = await sendRequest({
-        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.REPORTS.TRANSACTIONS}`,
+        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.REPORTS.WITHDRAW_TRANSACTIONS}`,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

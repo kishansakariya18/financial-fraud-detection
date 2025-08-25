@@ -9,5 +9,12 @@ export const addReleaseNoteSchema = Yup.object().shape({
     .max(100, 'Title must be 100 characters or less')
     .required('Title is required'),
   description: Yup.string().trim().required('Description is required'),
-  releaseDate: Yup.date().required('Release date is required')
+  releaseDate: Yup.date()
+    .nullable()
+    .transform((value, originalValue) => {
+      // Treat empty string or null as an actual null value so Yup doesn't cast to Invalid Date
+      return originalValue === '' || originalValue === null ? null : value;
+    })
+    .typeError('Please provide a valid date')
+    .required('Release date is required')
 });

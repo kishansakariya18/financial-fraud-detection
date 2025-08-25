@@ -525,5 +525,21 @@
   "modifiedAt": "Modified At",
   "release_note_status_suceess": "Nota de lanzamiento El estado se ha cambiado correctamente",
   "release_note_status_conf": "¿Estás seguro de querer cambiar el estado de la nota de lanzamiento?",
-  "done": "Hecho"
+  "done": "Hecho",
+  "user_class": "Clase de usuario",
+  "unassign": "Desasignar",
+  "assign": "Asignar",
+  "expand": "Expandir",
+  "collapse": "Colapsar",
+  "updating": "Actualizando...",
+  "currency_status_desc": "¿Estás seguro de querer actualizar el estado de esta moneda?",
+  "currency_status_suceess": "Moneda El estado se ha cambiado correctamente",
+  "currency_exchange_update_type_desc": "¿Estás seguro de querer actualizar el tipo de actualización de la moneda?",
+  "currency_exchange_update_type_suceess": "Moneda El tipo de actualización se ha cambiado correctamente",
+  "exchange_update_type":"Tipo de actualización de la moneda",
+  "exchange_update_type_desc":"¿Estás seguro de querer actualizar el tipo de actualización de la moneda?",
+  "exchange_update_type_suceess":"Moneda El tipo de actualización se ha cambiado correctamente",
+  "select_currency":"Seleccionar moneda",
+  "wallets":"carteras",
+  "countryCode": "Código de país"
   }

@@ -1,6 +1,6 @@
 import { Page } from 'components/shared/Page';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Button, Input } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -8,12 +8,20 @@ import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { createCurrencySchema } from './schema';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { Listbox } from 'components/shared/form/Listbox';
 import CurrencyService from 'services/currency.services';
 
 const CreateCurrency = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
+  // const currencyTypeOptions = [
+  //   { value: 'Fiat', label: 'Fiat' },
+  //   { value: 'Crypto', label: 'Crypto' },
+  //   { value: 'Points', label: 'Points' }
+  // ];
+  const [codes, setCodes] = useState([]);
+  const [codesLoading, setCodesLoading] = useState(false);
   const { t } = useTranslation();
 
   const breadcrumbItem = [
@@ -26,10 +34,29 @@ const CreateCurrency = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
+    control
   } = useForm({
     resolver: yupResolver(createCurrencySchema)
   });
+
+  // Fetch currency codes for dropdown
+  useEffect(() => {
+    const fetchCodes = async () => {
+      setCodesLoading(true);
+      const res = await CurrencyService.getCurrencyCodes();
+      if (res) {
+        if (res.status === 200) {
+          const data = res.response?.data ?? res.response?.codes ?? res.response ?? [];
+          setCodes(data);
+        } else if (res.error) {
+          toast.error(res.error);
+        }
+      }
+      setCodesLoading(false);
+    };
+    fetchCodes();
+  }, []);
 
   const createCurrencyAPI = async (requestObject) => {
     setLoading(true);
@@ -62,8 +89,16 @@ const CreateCurrency = () => {
   }, [response]);
 
   const onSubmit = async (data) => {
-    await createCurrencyAPI(data);
+    // Derive currencyType from selected code
+    const selected = codes.find((c) => c.AlphabeticName === data.code);
+    const currencyType = selected?.CurrencyType;
+    const requestObject = { ...data, currencyType };
+    console.log('Submit payload:', requestObject);
+    await createCurrencyAPI(requestObject);
   };
+
+  // Placeholder text for currency code dropdown (lint-friendly)
+  const codePlaceholder = codesLoading ? t('loading') + '...' : t('select') + ' ' + t('code');
 
   return (
     <Page title={t('create') + ' ' + t('currency')}>
@@ -86,11 +121,27 @@ const CreateCurrency = () => {
                 error={errors?.name?.message}
                 placeholder={t('enter') + ' ' + t('name')}
               />
-              <Input
-                {...register('code')}
-                label={t('code')}
-                error={errors?.code?.message}
-                placeholder={t('enter') + ' ' + t('code')}
+              <Controller
+                name="Code"
+                control={control}
+                render={({ field }) => (
+                  <Listbox
+                    data={codes}
+                    value={codes.find((opt) => opt.AlphabeticName === field.value) || null}
+                    onChange={(val) => {
+                      field.onChange(val.AlphabeticName);
+                      const currencyType = val.CurrencyType; // store in a variable
+                      console.log('Selected CurrencyType:', currencyType);
+                    }}
+                    name={field.name}
+                    label={t('code')}
+                    placeholder={codePlaceholder}
+                    displayField="AlphabeticName"
+                    error={errors.code?.message}
+                    disabled={codesLoading}
+                    required
+                  />
+                )}
               />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -100,28 +151,33 @@ const CreateCurrency = () => {
                 error={errors?.symbol?.message}
                 placeholder={t('enter') + ' ' + t('symbol')}
               />
+              {/* <Controller
+                name="type"
+                control={control}
+                render={({ field }) => (
+                  <Listbox
+                    data={currencyTypeOptions}
+                    value={currencyTypeOptions.find((opt) => opt.value === field.value) || null}
+                    onChange={(val) => field.onChange(val.value)}
+                    name={field.name}
+                    label={t('type')}
+                    placeholder={t('select') + ' ' + t('type')}
+                    displayField="label"
+                    error={errors.type?.message}
+                    required
+                  />
+                )}
+              /> */}
               <Input
-                {...register('exchange_rate')}
-                label={t('exchange_rate')}
-                error={errors?.exchange_rate?.message}
-                placeholder={t('enter') + ' ' + t('exchange_rate')}
+                {...register('decimal_places')}
+                label={t('decimal_places')}
+                type="number"
+                error={errors?.decimal_places?.message}
+                placeholder={t('enter') + ' ' + t('decimal_places')}
               />
             </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <label className="block">
-                <span>{t('type')}</span>
-                <select
-                  {...register('type')}
-                  className="focus:border-primary dark:border-navy-450 dark:bg-navy-700 dark:hover:border-navy-400 dark:focus:border-accent form-select mt-1.5 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 hover:border-slate-400">
-                  <option value="Fiat">Fiat</option>
-                  <option value="Crypto">Crypto</option>
-                  <option value="Points">Points</option>
-                </select>
-                {errors.type && (
-                  <span className="text-tiny+ text-error">{errors.type.message}</span>
-                )}
-              </label>
-            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2"></div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
             <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>

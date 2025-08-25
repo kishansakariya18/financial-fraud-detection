@@ -5,16 +5,22 @@ import { useLockScrollbar } from 'hooks';
 import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import useTable from 'components/ui/useTable';
-import DashboardService from 'services/dashboard.services';
+// import DashboardService from 'services/dashboard.services';
 import { t } from 'i18next';
 
 export default function LastTenRegistrationList() {
   const title = `${t('lastTenRegistration')}`;
 
   const fetchLastTenDepositList = async () => {
-    const result = await DashboardService.getLastSignup({
-      filters: {}
-    });
+    //TODO: uncomment when implemented
+    // const result = await DashboardService.getLastSignup({
+    //   filters: {}
+    // });
+    const result = {
+      response: {
+        data: []
+      }
+    };
     console.log('result: ', result.response);
 
     const apiData = result.response.data;
