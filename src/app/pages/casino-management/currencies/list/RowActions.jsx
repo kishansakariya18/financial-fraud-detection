@@ -145,8 +145,8 @@ export function RowActions({ row, table }) {
       : 'pending';
 
   // Hide row actions for INR currency
-  const isINR = (row?.original?.code || '').toUpperCase() === 'INR';
-  if (isINR) {
+  const isDefault = row?.original?.is_default == 1;
+  if (isDefault) {
     return null;
   }
 
