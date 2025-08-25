@@ -247,7 +247,7 @@ export const apiConfig = {
       DEPOSIT_BONUS_EXPORT: '/admin/reports/deposit-bonus/export'
     },
     CRM: {
-      SEND: '/notifications/admin/crm/sendNotification'
+      SEND: '/admin/crm/sendNotification'
     },
     HOME_PAGE: {
       HOME_CATEGORY_LIST: '/config/admin/home-page/home-category/list',
@@ -354,6 +354,10 @@ export const apiConfig = {
     WALLET: {
       LIST: '/wallet/admin/wallet/list/:userId',
       FUND: '/wallet/admin/wallet/fund'
+    },
+    RESPONSIBLE_GAMING_LIMITS: {
+      USER_ALL_LIMITS: '/users/admin/responsible-gaming-limits/users/:userId/all-limits',
+      USER_BULK_UPDATE: '/users/admin/responsible-gaming-limits/users/:userId/bulk-update'
     }
   }
 };

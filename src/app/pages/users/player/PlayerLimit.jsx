@@ -1,7 +1,7 @@
 // Local Imports
 import { Box, Button, Input, Skeleton, Switch } from 'components/ui';
 import { Page } from 'components/shared/Page';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { useParams } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,21 +9,21 @@ import { useEffect, useState } from 'react';
 import PlayerService from 'services/player.services';
 import { ContextualHelp } from 'components/shared/ContextualHelp';
 import { playerLimitSchema } from './schema';
-import { Listbox } from 'components/shared/form/Listbox';
-import { DatePicker } from 'components/shared/form/Datepicker';
-import { getDateInUTCToTimeZone } from 'helpers/functions';
+// import { Listbox } from 'components/shared/form/Listbox';
+// import { DatePicker } from 'components/shared/form/Datepicker';
+// import { getDateInUTCToTimeZone } from 'helpers/functions';
 import { useTranslation } from 'react-i18next';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
-const exclusionTimeOptions = [
-  { label: '1 day', value: 1 },
-  { label: '7 day', value: 2 },
-  { label: '1 month', value: 3 },
-  { label: '6 month', value: 4 },
-  { label: '12 month', value: 5 },
-  { label: 'Custom', value: 6 },
-  { label: 'Permenent', value: 7 }
-];
+// const exclusionTimeOptions = [
+//   { label: '1 day', value: 1 },
+//   { label: '7 day', value: 2 },
+//   { label: '1 month', value: 3 },
+//   { label: '6 month', value: 4 },
+//   { label: '12 month', value: 5 },
+//   { label: 'Custom', value: 6 },
+//   { label: 'Permenent', value: 7 }
+// ];
 
 const PlayerLimit = () => {
   const [error, setError] = useState('');
@@ -31,7 +31,10 @@ const PlayerLimit = () => {
   const [detailLoading, setDetailLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const { playerId } = useParams();
-  const [exclusionType, setExclusionType] = useState('');
+  const [userId, setUserId] = useState(null); // numeric user ID
+  // const [exclusionType, setExclusionType] = useState('');
+  const [limitIdMap, setLimitIdMap] = useState({});
+  const [limitsData, setLimitsData] = useState([]); // API-driven limits for dynamic UI
   const { t } = useTranslation();
   const pageTitle = t('player') + ' ' + t('limit');
 
@@ -39,8 +42,7 @@ const PlayerLimit = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
-    control
+    formState: { errors }
   } = useForm({
     resolver: yupResolver(playerLimitSchema)
   });
@@ -49,62 +51,111 @@ const PlayerLimit = () => {
 
   useEffect(() => {
     if (playerId) {
-      fetchUserDetails().then((result) => {
-        if (result) {
-          setExclusionType(result.ExclusionType);
-          reset({
-            dailyWagerLimit: result.BetDailyWageLimit,
-            weeklyWagerLimit: result.BetWeeklyWageLimit,
-            monthlyWagerLimit: result.BetMonthlyWageLimit,
-            dailyDepositLimit: result.MaxDepositPerMonth,
-            weeklyDepositLimit: result.MaxDepositPerWeek,
-            monthlyDepositLimit: result.MaxDepositPerMonth,
-            dailyWithdrawLimit: result.MaxWithdrawPerDay,
-            weeklyWithdrawLimit: result.MaxWithdrawPerWeek,
-            monthlyWithdrawLimit: result.MaxWithdrawPerMonth,
-            dailyLossLimit: result.DailyLossLimit,
-            weeklyLossLimit: result.WeeklyLossLimit,
-            monthlyLossLimit: result.MonthlyLossLimit,
-            oneTimeBetLimit: result.BetLimit,
-            oneTimeWinLimit: result.WinLimit,
-            selfExclusionType: result.ExclusionType,
-            exclusionStartAt: result.ExclusionStartAt
-              ? getDateInUTCToTimeZone(result.ExclusionStartAt, 'Asia/Kolkata', 'YYYY-MM-DD HH:mm')
-              : null,
-            exclusionEndAt: result.ExclusionEndAt
-              ? getDateInUTCToTimeZone(result.ExclusionEndAt, 'Asia/Kolkata', 'YYYY-MM-DD HH:mm')
-              : null,
+      // Resolve numeric user ID from UID first, then fetch limits
+      resolveUserId().then((resolvedId) => {
+        if (!resolvedId) return;
+        fetchUserDetails(resolvedId).then((list) => {
+          if (Array.isArray(list)) {
+            // Build ID map and form defaults
+            const map = {};
+            const get = (type, period) =>
+              list.find((x) => x.limitType === type && x.limitPeriod === period);
+            const depD = get('deposit', 'daily');
+            const depW = get('deposit', 'weekly');
+            const depM = get('deposit', 'monthly');
+            const wdrD = get('withdraw', 'daily');
+            const wdrW = get('withdraw', 'weekly');
+            const wdrM = get('withdraw', 'monthly');
+            const wagD = get('wager', 'daily');
+            const wagW = get('wager', 'weekly');
+            const wagM = get('wager', 'monthly');
+            const losD = get('loss', 'daily');
+            const losW = get('loss', 'weekly');
+            const losM = get('loss', 'monthly');
 
-            // Flags
-            hasDailyWagerLimit: result.HasDailyBetWageLimit,
-            hasWeeklyWagerLimit: result.HasWeeklyBetWageLimit,
-            hasMonthlyWagerLimit: result.HasMonthlyBetWageLimit,
-            hasDailyDepositLimit: result.HasMaxDepositPerDayLimit,
-            hasWeeklyDepositLimit: result.HasMaxDepositPerWeekLimit,
-            hasMonthlyDepositLimit: result.HasMaxDepositPerMonthLimit,
-            hasDailyWithdrawLimit: result.HasMaxWithdrawPerDayLimit,
-            hasWeeklyWithdrawLimit: result.HasMaxWithdrawPerWeekLimit,
-            hasMonthlyWithdrawLimit: result.HasMaxWithdrawPerMonthLimit,
-            hasDailyLossLimit: result.HasDailyLossLimit || false,
-            hasWeeklyLossLimit: result.HasWeeklyLossLimit || false,
-            hasMonthlyLossLimit: result.HasMonthlyLossLimit || false,
-            hasOneTimeBetLimit: result.HasBetLimit || false,
-            hasOneTimeWinLimit: result.HasWinLimit || false
-          });
-        }
+            const setEntry = (obj) => {
+              if (!obj) return;
+              map[`${obj.limitType}_${obj.limitPeriod}`] = obj.id;
+            };
+            [depD, depW, depM, wdrD, wdrW, wdrM, wagD, wagW, wagM, losD, losW, losM].forEach(
+              setEntry
+            );
+            setLimitIdMap(map);
+
+            reset({
+              dailyWagerLimit: wagD?.limitAmount || 0,
+              weeklyWagerLimit: wagW?.limitAmount || 0,
+              monthlyWagerLimit: wagM?.limitAmount || 0,
+              dailyDepositLimit: depD?.limitAmount || 0,
+              weeklyDepositLimit: depW?.limitAmount || 0,
+              monthlyDepositLimit: depM?.limitAmount || 0,
+              dailyWithdrawLimit: wdrD?.limitAmount || 0,
+              weeklyWithdrawLimit: wdrW?.limitAmount || 0,
+              monthlyWithdrawLimit: wdrM?.limitAmount || 0,
+              dailyLossLimit: losD?.limitAmount || 0,
+              weeklyLossLimit: losW?.limitAmount || 0,
+              monthlyLossLimit: losM?.limitAmount || 0,
+
+              // Flags from isApply
+              hasDailyWagerLimit: wagD?.isApply || false,
+              hasWeeklyWagerLimit: wagW?.isApply || false,
+              hasMonthlyWagerLimit: wagM?.isApply || false,
+              hasDailyDepositLimit: depD?.isApply || false,
+              hasWeeklyDepositLimit: depW?.isApply || false,
+              hasMonthlyDepositLimit: depM?.isApply || false,
+              hasDailyWithdrawLimit: wdrD?.isApply || false,
+              hasWeeklyWithdrawLimit: wdrW?.isApply || false,
+              hasMonthlyWithdrawLimit: wdrM?.isApply || false,
+              hasDailyLossLimit: losD?.isApply || false,
+              hasWeeklyLossLimit: losW?.isApply || false,
+              hasMonthlyLossLimit: losM?.isApply || false
+            });
+          }
+        });
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerId, response]);
 
-  const fetchUserDetails = async () => {
-    setDetailLoading(true);
-    const result = await PlayerService.userDetail(playerId);
-    let details = null;
+  // Get numeric user ID from UID using user detail API
+  const resolveUserId = async () => {
+    try {
+      const res = await PlayerService.userDetail(playerId);
+      if (res && res.status === 200) {
+        const data = res.response?.data || {};
+        // Handle various possible API shapes/keys
+        const id =
+          data?.UserID ??
+          data?.userID ??
+          data?.userId ??
+          data?.ID ??
+          data?.Id ??
+          data?.id ??
+          data?.User?.UserID ??
+          data?.User?.Id ??
+          data?.user?.id ??
+          null;
+        if (id) {
+          setUserId(id);
+          return id;
+        }
+      }
+    } catch {
+      // noop
+    }
+    return null;
+  };
 
+  const fetchUserDetails = async (resolvedUserId) => {
+    setDetailLoading(true);
+    const targetUserId = resolvedUserId ?? userId;
+    const result = await PlayerService.getUserAllLimits(targetUserId);
+    let details = null;
     if (result && result.status === 200) {
       details = result.response.data;
     }
+    // Store for dynamic rendering
+    setLimitsData(Array.isArray(details) ? details : []);
     setDetailLoading(false);
     return details;
   };
@@ -112,9 +163,99 @@ const PlayerLimit = () => {
   const updatePlayerLimit = async (requestObject) => {
     setLoading(true);
     setError(null);
+    // Ensure we have numeric userId
+    let targetUserId = userId;
+    if (!targetUserId) {
+      targetUserId = await resolveUserId();
+      if (!targetUserId) {
+        setLoading(false);
+        setError('Unable to resolve user ID');
+        return;
+      }
+    }
+    // Build bulk limits payload from form values and stored IDs
+    const limits = [
+      {
+        limitType: 'deposit',
+        limitPeriod: 'daily',
+        valueKey: 'dailyDepositLimit',
+        flagKey: 'hasDailyDepositLimit'
+      },
+      {
+        limitType: 'deposit',
+        limitPeriod: 'weekly',
+        valueKey: 'weeklyDepositLimit',
+        flagKey: 'hasWeeklyDepositLimit'
+      },
+      {
+        limitType: 'deposit',
+        limitPeriod: 'monthly',
+        valueKey: 'monthlyDepositLimit',
+        flagKey: 'hasMonthlyDepositLimit'
+      },
+      {
+        limitType: 'withdraw',
+        limitPeriod: 'daily',
+        valueKey: 'dailyWithdrawLimit',
+        flagKey: 'hasDailyWithdrawLimit'
+      },
+      {
+        limitType: 'withdraw',
+        limitPeriod: 'weekly',
+        valueKey: 'weeklyWithdrawLimit',
+        flagKey: 'hasWeeklyWithdrawLimit'
+      },
+      {
+        limitType: 'withdraw',
+        limitPeriod: 'monthly',
+        valueKey: 'monthlyWithdrawLimit',
+        flagKey: 'hasMonthlyWithdrawLimit'
+      },
+      {
+        limitType: 'wager',
+        limitPeriod: 'daily',
+        valueKey: 'dailyWagerLimit',
+        flagKey: 'hasDailyWagerLimit'
+      },
+      {
+        limitType: 'wager',
+        limitPeriod: 'weekly',
+        valueKey: 'weeklyWagerLimit',
+        flagKey: 'hasWeeklyWagerLimit'
+      },
+      {
+        limitType: 'wager',
+        limitPeriod: 'monthly',
+        valueKey: 'monthlyWagerLimit',
+        flagKey: 'hasMonthlyWagerLimit'
+      },
+      {
+        limitType: 'loss',
+        limitPeriod: 'daily',
+        valueKey: 'dailyLossLimit',
+        flagKey: 'hasDailyLossLimit'
+      },
+      {
+        limitType: 'loss',
+        limitPeriod: 'weekly',
+        valueKey: 'weeklyLossLimit',
+        flagKey: 'hasWeeklyLossLimit'
+      },
+      {
+        limitType: 'loss',
+        limitPeriod: 'monthly',
+        valueKey: 'monthlyLossLimit',
+        flagKey: 'hasMonthlyLossLimit'
+      }
+    ].map((item) => ({
+      id: limitIdMap[`${item.limitType}_${item.limitPeriod}`] ?? null,
+      limitType: item.limitType,
+      limitPeriod: item.limitPeriod,
+      limitAmount: Number(requestObject[item.valueKey] || 0),
+      isApply: !!requestObject[item.flagKey]
+    }));
 
-    console.log('requestObject: ', requestObject);
-    const result = await PlayerService.updateUserLimit(requestObject, playerId);
+    const result = await PlayerService.bulkUpdateUserLimits(targetUserId, limits);
     if (result) {
       if (result.status === 200 || result.status === 201) {
         setResponse(result.response);
@@ -143,10 +284,10 @@ const PlayerLimit = () => {
     await updatePlayerLimit(data);
   };
 
-  const handleChangeExclusionType = (field, val) => {
-    field.onChange(val.value);
-    setExclusionType(val.value);
-  };
+  // const handleChangeExclusionType = (field, val) => {
+  //   field.onChange(val.value);
+  //   setExclusionType(val.value);
+  // };
   const breadcrumbItem = [
     { title: t('players'), path: '/users/player' },
     { title: t('player') + ' ' + t('limit') }
@@ -171,412 +312,97 @@ const PlayerLimit = () => {
           <div className="grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-3 lg:gap-6">
             {/* Simple Box */}
             {detailLoading ? (
-              [...Array(10)].map((_, i) => (
-                <Skeleton key={i} className="h-100 w-full rounded-lg bg-white px-4 py-4 sm:px-5" />
+              [...Array(9)].map((_, i) => (
+                <Box
+                  key={i}
+                  className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
+                  <div className="mt-1.5 flex items-center justify-between">
+                    <Skeleton className="h-5 w-40 rounded bg-gray-200 dark:bg-dark-600" />
+                    <Skeleton className="h-6 w-10 rounded bg-gray-200 dark:bg-dark-600" />
+                  </div>
+                  <div className="pt-2">
+                    <div className="max-w-xl">
+                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
+                        <Skeleton className="h-10 w-full rounded bg-gray-200 dark:bg-dark-600" />
+                      </div>
+                    </div>
+                  </div>
+                </Box>
               ))
             ) : (
               <>
-                <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
-                  <div className="mt-1.5 flex items-center justify-between">
-                    <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                      {t('dailyWagerLimit')}
-                    </h2>
-                    <Switch {...register('hasDailyWagerLimit')} label="" />
-                  </div>
-                  <div className="pt-2">
-                    <div className="max-w-xl">
-                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
-                        <Input
-                          id="dailyWagerLimit"
-                          {...register('dailyWagerLimit')}
-                          error={errors?.dailyWagerLimit?.message}
-                          placeholder="Enter Daily Wager Limit"
-                          classNames={{
-                            root: 'flex-1',
-                            input: 'relative rounded-none hover:z-1 focus:z-1'
-                          }}
-                          type="number"
-                          step="any"
-                          suffix={
-                            <ContextualHelp
-                              title={t('dailyWagerLimit')}
-                              anchor={{ to: 'bottom', gap: 8 }}
-                              content={<p>{t('dailyWagerLimitDesc')}</p>}
-                            />
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </Box>
-                <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
-                  <div className="mt-1.5 flex items-center justify-between">
-                    <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                      {t('weeklyWagerLimit')}
-                    </h2>
+                <>
+                  {
+                    // Helper functions
+                  }
+                  {(() => {
+                    const typeOrder = ['wager', 'deposit', 'withdraw', 'loss'];
+                    const periodOrder = ['daily', 'weekly', 'monthly'];
+                    const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+                    const mapTypeToKey = (type) => cap(type); // Wager/Deposit/Withdraw/Loss
 
-                    <Switch {...register('hasWeeklyWagerLimit')} label="" />
-                  </div>
-                  <div className="pt-2">
-                    <div className="max-w-xl">
-                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
-                        <Input
-                          {...register('weeklyWagerLimit')}
-                          error={errors?.weeklyWagerLimit?.message}
-                          id="weeklyWagerLimit"
-                          placeholder="Enter Weekly Wager Limit"
-                          classNames={{
-                            root: 'flex-1',
-                            input: 'relative rounded-none hover:z-1 focus:z-1'
-                          }}
-                          type="number"
-                          step="any"
-                          suffix={
-                            <ContextualHelp
-                              title={t('weeklyWagerLimit')}
-                              anchor={{ to: 'bottom', gap: 8 }}
-                              content={<p>{t('weeklyWagerLimitDesc')}</p>}
-                            />
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </Box>
-                <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
-                  <div className="mt-1.5 flex items-center justify-between">
-                    <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                      {t('monthlyWagerLimit')}
-                    </h2>
+                    const sorted = [...limitsData]
+                      .filter(
+                        (x) =>
+                          typeOrder.includes(x.limitType) && periodOrder.includes(x.limitPeriod)
+                      )
+                      .sort((a, b) => {
+                        const t = typeOrder.indexOf(a.limitType) - typeOrder.indexOf(b.limitType);
+                        if (t !== 0) return t;
+                        return (
+                          periodOrder.indexOf(a.limitPeriod) - periodOrder.indexOf(b.limitPeriod)
+                        );
+                      });
 
-                    <Switch {...register('hasMonthlyWagerLimit')} label="" />
-                  </div>
-                  <div className="pt-2">
-                    <div className="max-w-xl">
-                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
-                        <Input
-                          {...register('monthlyWagerLimit')}
-                          error={errors?.monthlyWagerLimit?.message}
-                          id="monthlyWagerLimit"
-                          placeholder="Enter Monthly Wager Limit"
-                          classNames={{
-                            root: 'flex-1',
-                            input: 'relative rounded-none hover:z-1 focus:z-1'
-                          }}
-                          type="number"
-                          step="any"
-                          suffix={
-                            <ContextualHelp
-                              title={t('monthlyWagerLimit')}
-                              anchor={{ to: 'bottom', gap: 8 }}
-                              content={<p>{t('monthlyWagerLimitDesc')}</p>}
-                            />
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </Box>
-                <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
-                  <div className="mt-1.5 flex items-center justify-between">
-                    <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                      {t('dailyDepositLimit')}
-                    </h2>
-                    <Switch {...register('hasDailyDepositLimit')} label="" />
-                  </div>
-                  <div className="pt-2">
-                    <div className="max-w-xl">
-                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
-                        <Input
-                          {...register('dailyDepositLimit')}
-                          error={errors?.dailyDepositLimit?.message}
-                          id="dailyDepositLimit"
-                          placeholder="Enter Daily Deposit Limit"
-                          classNames={{
-                            root: 'flex-1',
-                            input: 'relative rounded-none hover:z-1 focus:z-1'
-                          }}
-                          type="number"
-                          step="any"
-                          suffix={
-                            <ContextualHelp
-                              title={t('dailyDepositLimit')}
-                              anchor={{ to: 'bottom', gap: 8 }}
-                              content={<p>{t('dailyDepositLimitDesc')}</p>}
-                            />
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </Box>
-                <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
-                  <div className="mt-1.5 flex items-center justify-between">
-                    <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                      {t('weeklyDepositLimit')}
-                    </h2>
-                    <Switch {...register('hasWeeklyDepositLimit')} label="" />
-                  </div>
-                  <div className="pt-2">
-                    <div className="max-w-xl">
-                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
-                        <Input
-                          {...register('weeklyDepositLimit')}
-                          error={errors?.weeklyDepositLimit?.message}
-                          id="weeklyDepositLimit"
-                          placeholder="Enter Weekly Deposit Limit"
-                          classNames={{
-                            root: 'flex-1',
-                            input: 'relative rounded-none hover:z-1 focus:z-1'
-                          }}
-                          type="number"
-                          step="any"
-                          suffix={
-                            <ContextualHelp
-                              title={t('weeklyDepositLimit')}
-                              anchor={{ to: 'bottom', gap: 8 }}
-                              content={<p>{t('weeklyDepositLimitDesc')}</p>}
-                            />
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </Box>
-                <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
-                  <div className="mt-1.5 flex items-center justify-between">
-                    <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                      {t('monthlyDepositLimit')}
-                    </h2>
-                    <Switch {...register('hasMonthlyDepositLimit')} label="" />
-                  </div>
-                  <div className="pt-2">
-                    <div className="max-w-xl">
-                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
-                        <Input
-                          {...register('monthlyDepositLimit')}
-                          error={errors?.monthlyDepositLimit?.message}
-                          id="monthlyDepositLimit"
-                          placeholder="Enter Monthly Deposit Limit"
-                          classNames={{
-                            root: 'flex-1',
-                            input: 'relative rounded-none hover:z-1 focus:z-1'
-                          }}
-                          type="number"
-                          step="any"
-                          suffix={
-                            <ContextualHelp
-                              title={t('weeklyDepositLimit')}
-                              anchor={{ to: 'bottom', gap: 8 }}
-                              content={<p>{t('monthlyDepositLimitDesc')}</p>}
-                            />
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </Box>
-                <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
-                  <div className="mt-1.5 flex items-center justify-between">
-                    <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                      {t('dailyWithdrawLimit')}
-                    </h2>
-                    <Switch {...register('hasDailyWithdrawLimit')} label="" />
-                  </div>
-                  <div className="pt-2">
-                    <div className="max-w-xl">
-                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
-                        <Input
-                          {...register('dailyWithdrawLimit')}
-                          error={errors?.dailyWithdrawLimit?.message}
-                          id="dailyWithdrawLimit"
-                          placeholder="Enter Daily Withdraw Limit"
-                          classNames={{
-                            root: 'flex-1',
-                            input: 'relative rounded-none hover:z-1 focus:z-1'
-                          }}
-                          type="number"
-                          step="any"
-                          suffix={
-                            <ContextualHelp
-                              title={t('dailyWithdrawLimit')}
-                              anchor={{ to: 'bottom', gap: 8 }}
-                              content={<p>{t('dailyWithdrawLimitDesc')}</p>}
-                            />
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </Box>
-                <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
-                  <div className="mt-1.5 flex items-center justify-between">
-                    <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                      {t('weeklyWithdrawLimit')}
-                    </h2>
-                    <Switch {...register('hasWeeklyWithdrawLimit')} label="" />
-                  </div>
-                  <div className="pt-2">
-                    <div className="max-w-xl">
-                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
-                        <Input
-                          {...register('weeklyWithdrawLimit')}
-                          error={errors?.weeklyWithdrawLimit?.message}
-                          id="weeklyWithdrawLimit"
-                          placeholder="Enter Weekly Withdraw Limit"
-                          classNames={{
-                            root: 'flex-1',
-                            input: 'relative rounded-none hover:z-1 focus:z-1'
-                          }}
-                          type="number"
-                          step="any"
-                          suffix={
-                            <ContextualHelp
-                              title={t('weeklyWithdrawLimit')}
-                              anchor={{ to: 'bottom', gap: 8 }}
-                              content={<p>{t('weeklyWithdrawLimitDesc')}</p>}
-                            />
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </Box>
-                <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
-                  <div className="mt-1.5 flex items-center justify-between">
-                    <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                      {t('monthlyWithdrawLimit')}
-                    </h2>
-                    <Switch {...register('hasMonthlyWithdrawLimit')} label="" />
-                  </div>
-                  <div className="pt-2">
-                    <div className="max-w-xl">
-                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
-                        <Input
-                          {...register('monthlyWithdrawLimit')}
-                          error={errors?.monthlyWithdrawLimit?.message}
-                          id="monthlyWithdrawLimit"
-                          placeholder="Enter Monthly Withdraw Limit"
-                          classNames={{
-                            root: 'flex-1',
-                            input: 'relative rounded-none hover:z-1 focus:z-1'
-                          }}
-                          type="number"
-                          step="any"
-                          suffix={
-                            <ContextualHelp
-                              title={t('monthlyWithdrawLimit')}
-                              anchor={{ to: 'bottom', gap: 8 }}
-                              content={<p>{t('monthlyWithdrawLimitDesc')}</p>}
-                            />
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </Box>
-                <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
-                  <div className="mt-1.5 flex items-center justify-between">
-                    <div className="flex flex-wrap gap-1">
-                      <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                        {t('dailyLossLimit')}
-                      </h2>
-                    </div>
-                    <Switch {...register('hasDailyLossLimit')} label="" />
-                  </div>
-                  <div className="pt-2">
-                    <div className="max-w-xl">
-                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
-                        <Input
-                          {...register('dailyLossLimit')}
-                          error={errors?.dailyLossLimit?.message}
-                          id="dailyLossLimit"
-                          placeholder="Enter Daily Loss Limit"
-                          classNames={{
-                            root: 'flex-1',
-                            input: 'relative rounded-none hover:z-1 focus:z-1'
-                          }}
-                          type="number"
-                          step="any"
-                          suffix={
-                            <ContextualHelp
-                              title={t('dailyLossLimit')}
-                              anchor={{ to: 'bottom', gap: 8 }}
-                              content={<p>{t('dailyLossLimitDesc')}</p>}
-                            />
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </Box>
-                <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
-                  <div className="mt-1.5 flex items-center justify-between">
-                    <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                      {t('weeklyLossLimit')}
-                    </h2>
-                    <Switch {...register('hasWeeklyLossLimit')} label="" />
-                  </div>
-                  <div className="pt-2">
-                    <div className="max-w-xl">
-                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
-                        <Input
-                          {...register('weeklyLossLimit')}
-                          error={errors?.weeklyLossLimit?.message}
-                          id="weeklyLossLimit"
-                          placeholder="Enter Weekly Loss Limit"
-                          classNames={{
-                            root: 'flex-1',
-                            input: 'relative rounded-none hover:z-1 focus:z-1'
-                          }}
-                          type="number"
-                          step="any"
-                          suffix={
-                            <ContextualHelp
-                              title={t('weeklyLossLimit')}
-                              anchor={{ to: 'bottom', gap: 8 }}
-                              content={<p>{t('weeklyLossLimitDesc')}</p>}
-                            />
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </Box>
-                <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
-                  <div className="mt-1.5 flex items-center justify-between">
-                    <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                      {t('monthlyLossLimit')}
-                    </h2>
-                    <Switch {...register('hasMonthlyLossLimit')} label="" />
-                  </div>
-                  <div className="pt-2">
-                    <div className="max-w-xl">
-                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
-                        <Input
-                          type="number"
-                          step="any"
-                          {...register('monthlyLossLimit')}
-                          error={errors?.monthlyLossLimit?.message}
-                          id="monthlyLossLimit"
-                          placeholder="Enter Monthly Loss Limit"
-                          classNames={{
-                            root: 'flex-1',
-                            input: 'relative rounded-none hover:z-1 focus:z-1'
-                          }}
-                          suffix={
-                            <ContextualHelp
-                              title={t('monthlyLossLimit')}
-                              anchor={{ to: 'bottom', gap: 8 }}
-                              content={<p>{t('monthlyLossLimitDesc')}</p>}
-                            />
-                          }
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </Box>
-                <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
+                    return sorted.map((item, idx) => {
+                      const TypeKey = mapTypeToKey(item.limitType);
+                      const PeriodKey = cap(item.limitPeriod);
+                      const valueKey = `${item.limitPeriod}${TypeKey}Limit`; // e.g., dailyWagerLimit
+                      const flagKey = `has${PeriodKey}${TypeKey}Limit`; // e.g., hasDailyWagerLimit
+                      const titleKey = `${item.limitPeriod}${TypeKey}Limit`; // translation key
+                      const descKey = `${titleKey}Desc`;
+
+                      return (
+                        <Box
+                          key={`${item.limitType}_${item.limitPeriod}_${idx}`}
+                          className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
+                          <div className="mt-1.5 flex items-center justify-between">
+                            <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
+                              {t(titleKey)}
+                            </h2>
+                            <Switch {...register(flagKey)} label="" />
+                          </div>
+                          <div className="pt-2">
+                            <div className="max-w-xl">
+                              <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
+                                <Input
+                                  id={valueKey}
+                                  {...register(valueKey)}
+                                  error={errors?.[valueKey]?.message}
+                                  placeholder={`Enter ${t(titleKey)}`}
+                                  classNames={{
+                                    root: 'flex-1',
+                                    input: 'relative rounded-none hover:z-1 focus:z-1'
+                                  }}
+                                  type="number"
+                                  step="any"
+                                  suffix={
+                                    <ContextualHelp
+                                      title={t(titleKey)}
+                                      anchor={{ to: 'bottom', gap: 8 }}
+                                      content={<p>{t(descKey)}</p>}
+                                    />
+                                  }
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </Box>
+                      );
+                    });
+                  })()}
+                </>
+                {/* <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
                   <div className="mt-1.5 flex items-center justify-between">
                     <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
                       {t('oneTimeBetLimit')}
@@ -641,9 +467,9 @@ const PlayerLimit = () => {
                       </div>
                     </div>
                   </div>
-                </Box>
+                </Box> */}
                 <div>
-                  <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
+                  {/* <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
                     <div>
                       <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
                         {t('selfExclusionTime')}
@@ -727,7 +553,7 @@ const PlayerLimit = () => {
                         </div>
                       </div>
                     </div>
-                  </Box>
+                  </Box> */}
                 </div>
               </>
             )}
