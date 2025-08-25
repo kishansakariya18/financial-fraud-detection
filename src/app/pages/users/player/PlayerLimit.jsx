@@ -124,17 +124,7 @@ const PlayerLimit = () => {
       if (res && res.status === 200) {
         const data = res.response?.data || {};
         // Handle various possible API shapes/keys
-        const id =
-          data?.UserID ??
-          data?.userID ??
-          data?.userId ??
-          data?.ID ??
-          data?.Id ??
-          data?.id ??
-          data?.User?.UserID ??
-          data?.User?.Id ??
-          data?.user?.id ??
-          null;
+        const id = data?.UserID ?? null;
         if (id) {
           setUserId(id);
           return id;
