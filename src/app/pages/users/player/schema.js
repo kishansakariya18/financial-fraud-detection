@@ -2,6 +2,27 @@ import * as Yup from 'yup';
 
 export const playerLimitSchema = Yup.object().shape({
   // Wager Limits
+  oneTimeWagerLimit: Yup.number()
+    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .when('hasOneTimeWagerLimit', {
+      is: true,
+      then: (schema) =>
+        schema
+          .required('One-time Wager Limit is required')
+          .positive('One-time Wager Limit must be positive'),
+      otherwise: (schema) =>
+        schema
+          .nullable()
+          .test(
+            'is-empty-or-positive',
+            'Value must be zero or positive value',
+            (val) => val === null || val >= 0
+          )
+    })
+    .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
+      if (value === undefined || value === null) return true;
+      return /^\d+(\.\d{1,2})?$/.test(value.toString());
+    }),
   dailyWagerLimit: Yup.number()
     .transform((val, originalVal) => (originalVal === '' ? 0 : val))
     .when('hasDailyWagerLimit', {
@@ -210,6 +231,7 @@ export const playerLimitSchema = Yup.object().shape({
   }),
 
   // Flags
+  hasOneTimeWagerLimit: Yup.boolean(),
   hasDailyWagerLimit: Yup.boolean(),
   hasWeeklyWagerLimit: Yup.boolean(),
   hasMonthlyWagerLimit: Yup.boolean(),
