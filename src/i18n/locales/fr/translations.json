@@ -526,5 +526,7 @@
   "exchange_update_type_suceess": "Moneda El tipo de actualización se ha cambiado correctamente",
   "select_currency": "Sélectionnez la devise",
   "wallets": "portefeuilles",
-  "countryCode": "Code du pays"
+  "countryCode": "Code du pays",
+  "noData": "Aucune donnée trouvée",
+  "global": "Global"
 }

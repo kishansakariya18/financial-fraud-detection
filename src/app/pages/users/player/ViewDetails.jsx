@@ -7,13 +7,14 @@ import { Button, Card, Skeleton } from 'components/ui';
 import { Chart } from 'components/custom/Chart';
 import { Link, useNavigate, useParams } from 'react-router';
 import { Page } from 'components/shared/Page';
-import { playerStatusToApp, selfExclusionMapper } from './helper';
+import { playerStatusToApp } from './helper';
+import { mapLimitSummary } from 'app/pages/Auth/schema';
 import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
 import PlayerService from 'services/player.services';
 // import { showImage } from 'utils/showImage';
 import { useTranslation } from 'react-i18next';
 import { useClipboard } from 'hooks';
-import { DocumentDuplicateIcon } from '@heroicons/react/20/solid';
+import { DocumentDuplicateIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { toast } from 'sonner';
 import RenderImage from 'components/ui/custom/ImageRender';
 import apiConfig from 'configs/api.config';
@@ -24,6 +25,18 @@ export function ViewDetails() {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState('');
   const [userSummary, setUserSummary] = useState(null);
+  const [limitSummary, setLimitSummary] = useState({
+    userLimits: [],
+    adminLimits: [],
+    userClassLimits: [],
+    globalPlatformLimits: null
+  });
+  const [sectionsOpen, setSectionsOpen] = useState({
+    user: true,
+    admin: true,
+    userClass: false,
+    global: true
+  });
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { playerId } = useParams();
@@ -43,9 +56,24 @@ export function ViewDetails() {
     setLoading(false);
   };
 
-  const fetchUserSummary = async () => {
+  const fetchLimitSummary = async (userID) => {
     try {
-      const summaryResult = await PlayerService.getUserSummary(playerId);
+      if (!userID) return;
+      const result = await PlayerService.getLimitSummary(userID);
+      if (result?.status === 200) {
+        const payload = result?.response?.data;
+        const mapped = mapLimitSummary(payload?.data || payload?.Data || payload);
+        setLimitSummary(mapped);
+      }
+    } catch (e) {
+      console.log('Error fetching limit summary:', e);
+    }
+  };
+
+  const fetchUserSummary = async (userID) => {
+    try {
+      if (!userID) return;
+      const summaryResult = await PlayerService.getUserSummary(userID);
       console.log('User Summary API Response:', summaryResult);
       if (summaryResult.status === 200) {
         setUserSummary(summaryResult.response.data);
@@ -57,9 +85,18 @@ export function ViewDetails() {
 
   useEffect(() => {
     fetchPlayerDetails();
-    fetchUserSummary();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerId]);
+
+  // After user detail is fetched, use numeric UserID for summary and limit APIs
+  useEffect(() => {
+    const userID = response?.UserID || response?.ID || response?.userID;
+    if (userID) {
+      fetchUserSummary(userID);
+      fetchLimitSummary(userID);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response?.UserID]);
 
   if (!loading && error) {
     toast.error(error);
@@ -635,245 +672,258 @@ export function ViewDetails() {
                     )}
                   </div>
                 </div>
-
-                <h6 className="mt-8 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
-                  {t('player') + ' ' + t('limit')}
-                </h6>
-                <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('dailyWagerLimit')}`}
-                    </p>
-                    <p>{response?.HasDailyBetWageLimit === true ? t('yes') : t('no')}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('weeklyWagerLimit')}`}
-                    </p>
-                    <p>{response?.HasWeeklyBetWageLimit === true ? t('yes') : t('no')}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('monthlyWagerLimit')}`}
-                    </p>
-                    <p>{response?.HasMonthlyBetWageLimit === true ? t('yes') : t('no')}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('dailyWagerValue')}`}
-                    </p>
-                    <p>
-                      {response?.HasDailyBetWageLimit === true ? response?.BetDailyWageLimit : '-'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('weeklyWagerValue')}`}
-                    </p>
-                    <p>
-                      {response?.HasWeeklyBetWageLimit === true
-                        ? response?.BetWeeklyWageLimit
-                        : '-'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('monthlyWagerValue')}`}
-                    </p>
-                    <p>
-                      {response?.HasMonthlyBetWageLimit === true
-                        ? response?.BetMonthlyWageLimit
-                        : '-'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('dailyDepositLimit')}`}
-                    </p>
-                    <p>{response?.HasMaxDepositPerDayLimit === true ? t('yes') : t('no')}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('weeklyDepositLimit')}`}
-                    </p>
-                    <p>{response?.HasMaxDepositPerWeekLimit === true ? t('yes') : t('no')}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('monthlyDepositLimit')}`}
-                    </p>
-                    <p>{response?.HasMaxDepositPerMonthLimit === true ? t('yes') : t('no')}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('dailyDepositValue')}`}
-                    </p>
-                    <p>
-                      {response?.HasMaxDepositPerDayLimit === true
-                        ? response?.MaxDepositPerDay
-                        : '-'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('weeklyDepositValue')}`}
-                    </p>
-                    <p>
-                      {response?.HasMaxDepositPerWeekLimit === true
-                        ? response?.MaxDepositPerWeek
-                        : '-'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('monthlyDepositValue')}`}
-                    </p>
-                    <p>
-                      {response?.HasMaxDepositPerMonthLimit === true
-                        ? response?.MaxDepositPerMonth
-                        : '-'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('dailyWithdrawLimit')}`}
-                    </p>
-                    <p>{response?.HasMaxWithdrawPerDayLimit === true ? t('yes') : t('no')}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('weeklyWithdrawLimit')}`}
-                    </p>
-                    <p>{response?.HasMaxWithdrawPerWeekLimit === true ? t('yes') : t('no')}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('monthlyWithdrawLimit')}`}
-                    </p>
-                    <p>{response?.HasMaxWithdrawPerMonthLimit === true ? t('yes') : t('no')}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('dailyWithdrawValue')}`}
-                    </p>
-                    <p>
-                      {response?.HasMaxWithdrawPerDayLimit === true
-                        ? response?.MaxWithdrawPerDay
-                        : '-'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('weeklyWithdrawValue')}`}
-                    </p>
-                    <p>
-                      {response?.HasMaxWithdrawPerWeekLimit === true
-                        ? response?.MaxWithdrawPerWeek
-                        : '-'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('monthlyWithdrawValue')}`}
-                    </p>
-                    <p>
-                      {response?.HasMaxWithdrawPerMonthLimit === true
-                        ? response?.MaxWithdrawPerMonth
-                        : '-'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('dailyLossLimit')}`}
-                    </p>
-                    <p>{response?.HasDailyLossLimit === true ? t('yes') : t('no')}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('weeklyLossLimit')}`}
-                    </p>
-                    <p>{response?.HasWeeklyLossLimit === true ? t('yes') : t('no')}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('monthlyLossLimit')}`}
-                    </p>
-                    <p>{response?.HasMonthlyLossLimit === true ? t('yes') : t('no')}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('dailyLossValue')}`}
-                    </p>
-                    <p>{response?.HasDailyLossLimit === true ? response?.DailyLossLimit : '-'}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('weeklyLossValue')}`}
-                    </p>
-                    <p>{response?.HasWeeklyLossLimit === true ? response?.WeeklyLossLimit : '-'}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('monthlyLossValue')}`}
-                    </p>
-                    <p>
-                      {response?.HasMonthlyLossLimit === true ? response?.MonthlyLossLimit : '-'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('oneTimeBetLimit')}`}
-                    </p>
-                    <p>{response?.HasBetLimit === true ? t('yes') : t('no')}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('oneTimeWinLimit')}`}
-                    </p>
-                    <p>{response?.HasWinLimit === true ? t('yes') : t('no')}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('selfExclusionTime')}`}
-                    </p>
-                    <p>{`${selfExclusionMapper(response?.ExclusionType)}`}</p>
-                  </div>
-
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('oneTimeBetValue')}`}
-                    </p>
-                    <p>{response?.HasBetLimit === true ? response?.BetLimit : '-'}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('oneTimeWinValue')}`}
-                    </p>
-                    <p>{response?.HasWinLimit === true ? response?.WinLimit : '-'}</p>
-                  </div>
-
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {`${t('selfExclusionDate')}`}
-                    </p>
-                    <p>
-                      {response.ExclusionStartAt &&
-                        `${t('start')} : ${response?.ExclusionType === '0' ? '-' : getDateInUTCToTimeZone(response?.ExclusionStartAt)}`}
-                    </p>
-                    <p>
-                      {response.ExclusionEndAt &&
-                        `${t('end')} : ${response?.ExclusionType === '0' ? '-' : getDateInUTCToTimeZone(response?.ExclusionEndAt)}`}
-                    </p>
-                    <p>{!response.ExclusionStartAt || !response.ExclusionEndAt ? '-' : ''}</p>
-                  </div>
-                </div>
-
-                <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-                  <Button className="min-w-[7rem]" onClick={() => navigate('/users/player')}>
-                    {t('back')}
-                  </Button>
-                </div>
               </Card>
+
+              {/* User Limits Card */}
+              <Card className="mt-6 p-4 sm:p-5">
+                <button
+                  type="button"
+                  className="flex w-full items-center justify-between pb-2 text-left text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200"
+                  onClick={() => setSectionsOpen((s) => ({ ...s, user: !s.user }))}>
+                  <span>
+                    {t('user')} {t('limit')}
+                  </span>
+                  {sectionsOpen.user ? (
+                    <ChevronUpIcon className="size-7" />
+                  ) : (
+                    <ChevronDownIcon className="size-7" />
+                  )}
+                </button>
+                {sectionsOpen.user && (
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {limitSummary.userLimits.length === 0 ? (
+                      <p className="col-span-3 text-sm text-gray-600">{t('noData')}</p>
+                    ) : (
+                      limitSummary.userLimits.reduce((acc, l) => {
+                        acc.push(
+                          <div key={`u-${l.id}-limit`}>
+                            <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                              {`${capitalizeFirstLetter(l.type)} ${capitalizeFirstLetter(l.period)} ${t('limit')}`}
+                            </p>
+                            <p>{(Number(l.amount) || 0) > 0 ? t('yes') : t('no')}</p>
+                          </div>
+                        );
+                        acc.push(
+                          <div key={`u-${l.id}-value`}>
+                            <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                              {`${capitalizeFirstLetter(l.type)} ${capitalizeFirstLetter(l.period)} ${t('value')}`}
+                            </p>
+                            <p>{(Number(l.amount) || 0) > 0 ? l.amount : '-'}</p>
+                          </div>
+                        );
+                        return acc;
+                      }, [])
+                    )}
+                  </div>
+                )}
+              </Card>
+
+              {/* Admin Limits Card */}
+              <Card className="mt-6 p-4 sm:p-5">
+                <button
+                  type="button"
+                  className="flex w-full items-center justify-between pb-2 text-left text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200"
+                  onClick={() => setSectionsOpen((s) => ({ ...s, admin: !s.admin }))}>
+                  <span>
+                    {t('admin')} {t('limit')}
+                  </span>
+                  {sectionsOpen.admin ? (
+                    <ChevronUpIcon className="size-7" />
+                  ) : (
+                    <ChevronDownIcon className="size-7" />
+                  )}
+                </button>
+                {sectionsOpen.admin && (
+                  <div className="mt-2 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {limitSummary.adminLimits.length === 0 ? (
+                      <p className="col-span-3 text-sm text-gray-600">{t('noData')}</p>
+                    ) : (
+                      limitSummary.adminLimits.reduce((acc, l) => {
+                        acc.push(
+                          <div key={`a-${l.id}-limit`}>
+                            <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                              {`${capitalizeFirstLetter(l.type)} ${capitalizeFirstLetter(l.period)} ${t('limit')}`}
+                            </p>
+                            <p>{(Number(l.amount) || 0) > 0 ? t('yes') : t('no')}</p>
+                          </div>
+                        );
+                        acc.push(
+                          <div key={`a-${l.id}-value`}>
+                            <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                              {`${capitalizeFirstLetter(l.type)} ${capitalizeFirstLetter(l.period)} ${t('value')}`}
+                            </p>
+                            <p>{(Number(l.amount) || 0) > 0 ? l.amount : '-'}</p>
+                          </div>
+                        );
+                        return acc;
+                      }, [])
+                    )}
+                  </div>
+                )}
+              </Card>
+
+              {/* User Class Limits Card */}
+              <Card className="mt-6 p-4 sm:p-5">
+                <button
+                  type="button"
+                  className="flex w-full items-center justify-between pb-2 text-left text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200"
+                  onClick={() => setSectionsOpen((s) => ({ ...s, userClass: !s.userClass }))}>
+                  <span>
+                    {t('user')} {t('class')} {t('limit')}
+                  </span>
+                  {sectionsOpen.userClass ? (
+                    <ChevronUpIcon className="size-7" />
+                  ) : (
+                    <ChevronDownIcon className="size-7" />
+                  )}
+                </button>
+                {sectionsOpen.userClass && (
+                  <div className="mt-2 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {limitSummary.userClassLimits.length === 0 ? (
+                      <p className="col-span-3 text-sm text-gray-600">{t('noData')}</p>
+                    ) : (
+                      limitSummary.userClassLimits.reduce((acc, l) => {
+                        acc.push(
+                          <div key={`uc-${l.id}-limit`}>
+                            <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                              {`${capitalizeFirstLetter(l.type)} ${capitalizeFirstLetter(l.period)} ${t('limit')}`}
+                            </p>
+                            <p>{(Number(l.amount) || 0) > 0 ? t('yes') : t('no')}</p>
+                          </div>
+                        );
+                        acc.push(
+                          <div key={`uc-${l.id}-value`}>
+                            <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                              {`${capitalizeFirstLetter(l.type)} ${capitalizeFirstLetter(l.period)} ${t('value')}`}
+                            </p>
+                            <p>{(Number(l.amount) || 0) > 0 ? l.amount : '-'}</p>
+                          </div>
+                        );
+                        return acc;
+                      }, [])
+                    )}
+                  </div>
+                )}
+              </Card>
+
+              {/* Global Platform Limits Card */}
+              <Card className="mt-6 p-4 sm:p-5">
+                <button
+                  type="button"
+                  className="flex w-full items-center justify-between pb-2 text-left text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200"
+                  onClick={() => setSectionsOpen((s) => ({ ...s, global: !s.global }))}>
+                  <span>
+                    {t('global')} {t('platform')} {t('limit')}
+                  </span>
+                  {sectionsOpen.global ? (
+                    <ChevronUpIcon className="size-7" />
+                  ) : (
+                    <ChevronDownIcon className="size-7" />
+                  )}
+                </button>
+                {sectionsOpen.global && (
+                  <div className="mt-2 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {!limitSummary.globalPlatformLimits ? (
+                      <p className="col-span-3 text-sm text-gray-600">{t('noData')}</p>
+                    ) : (
+                      <>
+                        {/* Daily Deposit */}
+                        <div>
+                          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                            {`${t('dailyDepositLimit')}`}
+                          </p>
+                          <p>
+                            {(Number(limitSummary.globalPlatformLimits.maxDepositPerDay) || 0) > 0
+                              ? t('yes')
+                              : t('no')}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                            {`${t('dailyDepositValue')}`}
+                          </p>
+                          <p>
+                            {(Number(limitSummary.globalPlatformLimits.maxDepositPerDay) || 0) > 0
+                              ? limitSummary.globalPlatformLimits.maxDepositPerDay
+                              : '-'}
+                          </p>
+                        </div>
+
+                        {/* Daily Withdraw */}
+                        <div>
+                          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                            {`${t('dailyWithdrawLimit')}`}
+                          </p>
+                          <p>
+                            {(Number(limitSummary.globalPlatformLimits.maxWithdrawPerDay) || 0) > 0
+                              ? t('yes')
+                              : t('no')}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                            {`${t('dailyWithdrawValue')}`}
+                          </p>
+                          <p>
+                            {(Number(limitSummary.globalPlatformLimits.maxWithdrawPerDay) || 0) > 0
+                              ? limitSummary.globalPlatformLimits.maxWithdrawPerDay
+                              : '-'}
+                          </p>
+                        </div>
+
+                        {/* One Time Bet */}
+                        <div>
+                          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                            {`${t('oneTimeBetLimit')}`}
+                          </p>
+                          <p>
+                            {(Number(limitSummary.globalPlatformLimits.betLimit) || 0) > 0
+                              ? t('yes')
+                              : t('no')}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                            {`${t('oneTimeBetValue')}`}
+                          </p>
+                          <p>
+                            {(Number(limitSummary.globalPlatformLimits.betLimit) || 0) > 0
+                              ? limitSummary.globalPlatformLimits.betLimit
+                              : '-'}
+                          </p>
+                        </div>
+
+                        {/* One Time Win */}
+                        <div>
+                          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                            {`${t('oneTimeWinLimit')}`}
+                          </p>
+                          <p>
+                            {(Number(limitSummary.globalPlatformLimits.winLimit) || 0) > 0
+                              ? t('yes')
+                              : t('no')}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                            {`${t('oneTimeWinValue')}`}
+                          </p>
+                          <p>
+                            {(Number(limitSummary.globalPlatformLimits.winLimit) || 0) > 0
+                              ? limitSummary.globalPlatformLimits.winLimit
+                              : '-'}
+                          </p>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )}
+              </Card>
+              <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
+                <Button className="min-w-[7rem]" onClick={() => navigate('/users/player')}>
+                  {t('back')}
+                </Button>
+              </div>
             </>
           )}
         </div>

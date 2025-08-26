@@ -573,5 +573,7 @@
   "countryCode": "Country Code",
   "code": "Code",
   "symbol": "Symbol",
-  "currencies": "Currency"
+  "currencies": "Currency",
+  "noData": "No Data Found",
+  "global": "Global"
 }

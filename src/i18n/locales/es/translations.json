@@ -545,5 +545,7 @@
   "exchange_update_type_suceess": "Moneda El tipo de actualización se ha cambiado correctamente",
   "select_currency": "Seleccionar moneda",
   "wallets": "carteras",
-  "countryCode": "Código de país"
+  "countryCode": "Código de país",
+  "noData": "No se encontraron datos",
+  "global": "Global"
 }
