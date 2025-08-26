@@ -41,7 +41,7 @@ export const casinoManagement = {
       id: 'casino_currencies',
       type: NAV_TYPE_ITEM,
       path: '/casino-management/currencies',
-      title: 'Currencies',
+      title: 'Currency',
       transKey: 'casino_currencies',
       Icon: HiOutlineCurrencyRupee, // Please replace with the correct icon
       permission: null // Please replace with the correct permission

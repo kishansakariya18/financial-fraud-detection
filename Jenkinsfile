@@ -20,10 +20,10 @@ pipeline {
               // Dynamically assign Docker tag based on branch name
                   def branchName = env.GIT_BRANCH?.replaceFirst(/^origin\//, '') ?: env.BRANCH_NAME
                   echo "Branch: ${branchName}"
-                  if (branchName == 'dev') {
-                     env.IMAGE_TAG = "dev-admin-latest"
+                  if (branchName == 'admin-qa-ms') {
+                     env.IMAGE_TAG = "admin-qa-ms-latest"
                                            }
-                  else if (branchName == 'brij-devops') {
+                  else if (branchName == 'brijesh-devops') {
                      env.IMAGE_TAG = "brij-devops-latest"
                                                         }                              
                   else {
@@ -35,22 +35,13 @@ pipeline {
                 }
            } 
 
-    stage('Build Docker Image') {
+       stage('Build Docker Image') {
        steps {
-         script {
-            withCredentials([
-               string(credentialsId: 'VITE_S3_URL', variable: 'VITE_S3_URL'),
-               string(credentialsId: 'VITE_API_URL', variable: 'VITE_API_URL')
-                            ]) {
-               sh 'docker --version'
-               sh 'docker build -t $DOCKERHUB_REPO:$IMAGE_TAG --build-arg VITE_S3_URL=$VITE_S3_URL --build-arg VITE_API_URL=$VITE_API_URL .'                      
-                                 }
-                     // Build the Docker image with the dynamic tag
-		    // docker.build("${DOCKERHUB_REPO}:${IMAGE_TAG}")
-                }
-             } 
+            sh """
+             docker build -t ${DOCKERHUB_REPO}:${IMAGE_TAG} .
+             """
           }
-
+     }
 
    stage('Scan with Trivy') {
       steps {
@@ -79,7 +70,7 @@ pipeline {
      stage('Run Docker Container') {
        steps {
          script {
-            def containerName = "admin-panel"
+            def containerName = "admin-qa-panel"
             def imageName = "${DOCKERHUB_REPO}:${IMAGE_TAG}"
           // stop and remove the old container if it's alreday running
            sh """
@@ -89,9 +80,9 @@ pipeline {
             // Pull latest image
             
             sh "docker pull ${imageName}"
-            // Run new container on port 9443 (you will reverse-proxy this via Apache)
+            // Run new container on port 4111 (you will reverse-proxy this via Apache)
             sh """
-            docker run -d --name ${containerName} -p 9443:443 ${imageName}
+            docker run -d --name ${containerName} -p 6443:443 ${imageName}
                """
      }  
     }

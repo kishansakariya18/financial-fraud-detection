@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import CategoryService from 'services/category.services';
 import { toast } from 'sonner';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { validateSchema } from './validate';
 
 export function EditCategory({ value = '', categoryId, closeModal = () => {} }) {
   const [error, setError] = useState('');
@@ -15,6 +17,7 @@ export function EditCategory({ value = '', categoryId, closeModal = () => {} }) 
     handleSubmit,
     formState: { errors }
   } = useForm({
+    resolver: yupResolver(validateSchema),
     defaultValues: async () => {
       return {
         name: value
@@ -55,7 +58,7 @@ export function EditCategory({ value = '', categoryId, closeModal = () => {} }) 
               <Input
                 {...register('name')}
                 label={t('casino_category') + ' ' + t('name')}
-                error={errors?.userName?.message}
+                error={errors?.name?.message}
                 placeholder={t('enter') + ' ' + t('casino_category')}
               />
             </div>

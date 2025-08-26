@@ -2,11 +2,25 @@ import * as Yup from 'yup';
 
 export const crmSchema = Yup.object().shape({
   channel: Yup.string().trim().required('Channel Required'),
-  // segmentationID: Yup.string().required('Segmentation ID Required'),
-  segmentationID: Yup.number()
-    .typeError('Segmentation ID Required')
-    .integer('Segmentation ID Required')
-    .required('Segmentation ID Required'),
+  sendTo: Yup.string(),
+  segmentationID: Yup.number().when('sendTo', {
+    is: 'segmentation',
+    then: (schema) =>
+      schema
+        .typeError('Segmentation Required')
+        .integer('Segmentation Required')
+        .required('Segmentation Required'),
+    otherwise: (schema) => schema.notRequired()
+  }),
+  UserClassID: Yup.number().when('sendTo', {
+    is: 'userClass',
+    then: (schema) =>
+      schema
+        .typeError('Player Class Required')
+        .integer('Player Class Required')
+        .required('Player Class Required'),
+    otherwise: (schema) => schema.notRequired()
+  }),
   subject: Yup.string().trim().required('Subject Required'),
   // description: Yup.string().trim().required('Description Required')
   sendType: Yup.number().required('Send type is required'),

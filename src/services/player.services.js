@@ -430,6 +430,48 @@ const PlayerService = {
       console.log('Error from User Level Limit Update', error);
     }
   },
+  // Responsible Gaming Limits
+  getUserAllLimits: async (userId) => {
+    try {
+      const endPoint = replaceText(
+        apiConfig.endPoints.RESPONSIBLE_GAMING_LIMITS.USER_ALL_LIMITS,
+        ':userId',
+        userId
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from getUserAllLimits', error);
+    }
+  },
+  bulkUpdateUserLimits: async (userId, limits) => {
+    try {
+      const endPoint = replaceText(
+        apiConfig.endPoints.RESPONSIBLE_GAMING_LIMITS.USER_BULK_UPDATE,
+        ':userId',
+        userId
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: { limits }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from bulkUpdateUserLimits', error);
+    }
+  },
   getAllUserTransactionList: async (reqBody) => {
     try {
       const query = {

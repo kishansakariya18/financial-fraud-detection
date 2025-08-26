@@ -144,6 +144,12 @@ export function RowActions({ row, table }) {
       ? 'success'
       : 'pending';
 
+  // Hide row actions for INR currency
+  const isDefault = row?.original?.is_default == 1;
+  if (isDefault) {
+    return null;
+  }
+
   return (
     <>
       <div className="flex justify-center space-x-1.5 rtl:space-x-reverse">
