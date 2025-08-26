@@ -247,7 +247,7 @@ export const apiConfig = {
       DEPOSIT_BONUS_EXPORT: '/admin/reports/deposit-bonus/export'
     },
     CRM: {
-      SEND: '/admin/crm/sendNotification'
+      SEND: '/notifications/admin/crm/sendNotification'
     },
     HOME_PAGE: {
       HOME_CATEGORY_LIST: '/config/admin/home-page/home-category/list',
