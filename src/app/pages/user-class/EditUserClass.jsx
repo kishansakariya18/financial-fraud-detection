@@ -9,21 +9,14 @@ import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import UserClassService from 'services/user-class.services';
 import { createUserClassSchema } from './schema';
-import { Avatar } from 'components/ui';
-import { Upload } from 'components/ui';
-import { HiPencil } from 'react-icons/hi';
-import { XMarkIcon } from '@heroicons/react/20/solid';
-import { PreviewImg } from 'components/shared/PreviewImg';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { userclassStatusToAPP } from './helper';
-import apiConfig from 'configs/api.config';
 
 const EditUserClass = () => {
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { userClassUID } = useParams();
-  const [avatar, setAvatar] = useState(null);
 
   const [response, setResponse] = useState(null);
   const { t } = useTranslation();
@@ -34,18 +27,17 @@ const EditUserClass = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
-    watch
+    reset
   } = useForm({
     resolver: yupResolver(createUserClassSchema)
   });
-  const editUserClassAPI = async (data, avatarFile) => {
-    console.log('Update request data:', { data, avatarFile });
+  const editUserClassAPI = async (data) => {
+    console.log('Update request data:', { data });
     setLoading(true);
     setError(null);
 
     try {
-      const result = await UserClassService.userClassUpdate(data, avatarFile);
+      const result = await UserClassService.userClassUpdate(data);
       console.log('Update response:', result);
 
       if (result) {
@@ -85,12 +77,21 @@ const EditUserClass = () => {
     if (userClassUID) {
       fetchUserClassDetails().then((result) => {
         if (result) {
+          const depositRule = Array.isArray(result?.rules)
+            ? result.rules.find((r) => r?.RuleType === 'deposit')
+            : undefined;
+          const wagerRule = Array.isArray(result?.rules)
+            ? result.rules.find((r) => r?.RuleType === 'wager')
+            : undefined;
+          const depositVal = depositRule?.Threshold;
+          const wagerVal = wagerRule?.Threshold;
           const mappedData = {
             className: result?.ClassName,
             classCode: result?.ClassCode,
-            status: result.IsActive ? userclassStatusToAPP(result.IsActive) : undefined
+            status: result.IsActive ? userclassStatusToAPP(result.IsActive) : undefined,
+            deposit: depositVal ?? undefined,
+            wager: wagerVal ?? undefined
           };
-          setAvatar(result?.AvatarURL);
           reset(mappedData);
         }
       });
@@ -116,13 +117,12 @@ const EditUserClass = () => {
     const requestData = {
       classUID: userClassUID,
       className: formData.className,
-      classCode: formData.classCode
+      classCode: formData.classCode,
+      deposit: formData.deposit,
+      wager: formData.wager
     };
 
-    // Only include the avatar file if it's a new file upload
-    const avatarFile = avatar && typeof avatar === 'object' ? avatar : null;
-
-    editUserClassAPI(requestData, avatarFile);
+    editUserClassAPI(requestData);
   };
   return (
     <Page title={t('edit') + ' ' + t('userClass')}>
@@ -151,48 +151,23 @@ const EditUserClass = () => {
                 error={errors?.classCode?.message}
                 placeholder={t('enter') + ' ' + t('class_code')}
               />
+              <Input
+                {...register('deposit', { valueAsNumber: true })}
+                type="number"
+                label={t('deposit')}
+                step="any"
+                error={errors?.deposit?.message}
+                placeholder={t('enter') + ' ' + t('deposit')}
+              />
+              <Input
+                {...register('wager', { valueAsNumber: true })}
+                type="number"
+                label={t('wager')}
+                step="any"
+                error={errors?.wager?.message}
+                placeholder={t('enter') + ' ' + t('wager')}
+              />
             </div>
-          </div>
-          <div className="mt-4 flex flex-col space-y-1.5">
-            <span className="text-base font-medium text-gray-800 dark:text-dark-100">Avatar</span>
-            <Avatar
-              size={20}
-              imgComponent={PreviewImg}
-              imgProps={{ file: avatar }}
-              {...(avatar && {
-                src: (() => {
-                  if (typeof avatar === 'object' && avatar) {
-                    return URL.createObjectURL(avatar);
-                  }
-                  if (avatar) {
-                    return `${apiConfig.baseURL.S3_URL}/user-class/${avatar}`;
-                  }
-                  return '';
-                })()
-              })}
-              name={watch('className')}
-              classNames={{
-                root: 'rounded-xl ring-primary-600 ring-offset-[3px] ring-offset-white transition-all hover:ring dark:ring-primary-500 dark:ring-offset-dark-700',
-                display: 'rounded-xl'
-              }}
-              indicator={
-                <div className="absolute bottom-0 right-0 -m-1 flex items-center justify-center rounded-full bg-white dark:bg-dark-700">
-                  {avatar ? (
-                    <Button onClick={() => setAvatar(null)} isIcon className="size-6 rounded-full">
-                      <XMarkIcon className="size-4" />
-                    </Button>
-                  ) : (
-                    <Upload name="avatar" onChange={setAvatar} accept="image/*">
-                      {({ ...props }) => (
-                        <Button isIcon className="size-6 rounded-full" {...props}>
-                          <HiPencil className="size-3.5" />
-                        </Button>
-                      )}
-                    </Upload>
-                  )}
-                </div>
-              }
-            />
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
             <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
