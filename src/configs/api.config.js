@@ -120,7 +120,7 @@ export const apiConfig = {
       BANNER_CREATE: '/content/admin/banner/create',
       BANNER_DELETE: `/content/admin/banner/:bannerId/delete`,
       BANNER_DETAIL: `/content/admin/banner/:bannerId/details`,
-      BANNER_EDIT: `/content/admin//banner/:bannerId/edit`,
+      BANNER_EDIT: `/content/admin/banner/:bannerId/edit`,
       BANNER_REORDER: '/content/admin/banner/reorder'
     },
     AFFILIATE: {
