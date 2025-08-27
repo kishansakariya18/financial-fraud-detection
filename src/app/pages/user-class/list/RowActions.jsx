@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 // Local Imports
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
-import { TbStatusChange, TbTicketOff, TbTrash, TbBuildingBank } from 'react-icons/tb';
+import { TbStatusChange, TbTicketOff, TbBuildingBank } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import usePermissions from 'app/router/usePermissions';
@@ -60,11 +60,11 @@ export function RowActions({ row, table }) {
     setChangeStatusSuccess(false);
   };
 
-  const openDeleteModal = () => {
-    setDeleteModalOpen(true);
-    setDeleteError(false);
-    setDeleteSuccess(false);
-  };
+  // const openDeleteModal = () => {
+  //   setDeleteModalOpen(true);
+  //   setDeleteError(false);
+  //   setDeleteSuccess(false);
+  // };
 
   const closeDeleteModal = () => {
     setDeleteModalOpen(false);
@@ -154,7 +154,7 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              {hasPermission(PERMISSIONS.USER_CLASS.DELETE) && (
+              {/* {hasPermission(PERMISSIONS.USER_CLASS.DELETE) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -168,7 +168,7 @@ export function RowActions({ row, table }) {
                     </button>
                   )}
                 </MenuItem>
-              )}
+              )} */}
               {hasPermission(PERMISSIONS.USER_CLASS.LIMITS) && (
                 <MenuItem>
                   {({ focus }) => (
