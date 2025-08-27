@@ -2,7 +2,7 @@
 import { Page } from 'components/shared/Page';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
-import { Button, Input, Upload } from 'components/ui';
+import { Button, Circlebar, Input, Upload } from 'components/ui';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { useParams, useNavigate } from 'react-router';
@@ -264,7 +264,10 @@ const EditGame = () => {
               {t('reset')}
             </Button>
             <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
-              {t('edit')}
+              <span className="inline-flex items-center gap-2">
+                {loading && <Circlebar size={4} strokeWidth={8} color="primary" isIndeterminate />}
+                <span>{t('edit')}</span>
+              </span>
             </Button>
           </div>
         </form>

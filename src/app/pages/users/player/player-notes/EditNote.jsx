@@ -1,15 +1,16 @@
 // Import Dependencies
 import { useForm } from 'react-hook-form';
 import { Button, Checkbox } from 'components/ui';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import PlayerService from 'services/player.services';
 import Quill from 'quill'; // Ensure Quill is imported
 
 // import { useParams } from 'react-router';
-import { TextEditor } from 'components/shared/form/TextEditor';
+import { Delta, TextEditor } from 'components/shared/form/TextEditor';
 import { htmlToDelta } from 'utils/quillUtils';
+const defaultValue = new Delta();
 
 const EditNote = ({ noteId, onClose, note: noteText }) => {
   const [error, setError] = useState('');
@@ -19,16 +20,31 @@ const EditNote = ({ noteId, onClose, note: noteText }) => {
 
   const { t } = useTranslation();
   const { handleSubmit, reset, register } = useForm({});
-  const [content, setContent] = useState(htmlToDelta(noteText));
+  const [content, setContent] = useState(defaultValue);
   const [textError, setTextError] = useState('');
   const [initialValues] = useState({
     isPinned: false
   });
 
+  // When API-provided noteText changes, sync editor Delta and HTML
+  useEffect(() => {
+    const html = typeof noteText === 'string' ? noteText : '';
+    try {
+      const delta = htmlToDelta(html);
+      setContent(delta);
+      setHtmlContent(html);
+    } catch {
+      // Fallback to empty on conversion error
+      setContent(defaultValue);
+      setHtmlContent('');
+    }
+  }, [noteText]);
+
   const handleReset = () => {
     reset(initialValues);
-    setContent(htmlToDelta(noteText));
-    setHtmlContent(noteText);
+    const html = typeof noteText === 'string' ? noteText : '';
+    setContent(htmlToDelta(html));
+    setHtmlContent(html);
     setTextError('');
     setError('');
   };

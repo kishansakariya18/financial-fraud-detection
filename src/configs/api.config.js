@@ -229,6 +229,7 @@ export const apiConfig = {
       CREATE: '/games/admin/casino-management/games/create',
       EDIT: '/games/admin/casino-management/games/:gameId/edit',
       DELETE: '/games/admin/casino-management/games/:gameId/delete',
+      CHANGE_STATUS: '/games/admin/casino-management/games/:gameId/change-status',
       PROVIDER_LIST: '/games/admin/casino-management/games/providers',
       CATEGORY_LIST: '/games/admin/casino-management/category/list',
       GET_GAME_SEGMENTATION: '/games/admin/casino-management/games/:gameId/segmentation',

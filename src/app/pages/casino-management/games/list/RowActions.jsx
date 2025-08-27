@@ -54,18 +54,21 @@ export function RowActions({ row, table }) {
 
   const handleChangeStatusRows = useCallback(async () => {
     setConfirmStatusLoading(true);
-    const result = await GameService.changeGameStatus(row.original.id);
-    if (result.status === 200) {
-      table.options.meta?.fetchSummary();
-      table.options.meta?.deleteRow(row);
-      setStatusSuccess(true);
-    } else {
+    try {
+      const result = await GameService.changeGameStatus(row?.original?.id);
+      if (result?.status === 200) {
+        table?.options?.meta?.fetchSummary?.();
+        table?.options?.meta?.deleteRow?.(row);
+        setStatusSuccess(true);
+      } else {
+        setStatusError(true);
+      }
+    } catch {
       setStatusError(true);
+    } finally {
+      setConfirmStatusLoading(false);
     }
-
-    setConfirmStatusLoading(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [row]);
+  }, [row, table]);
 
   const onOpenDialogBox = () => {
     setIsDialogOpen(true);
