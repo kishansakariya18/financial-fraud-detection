@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 
 // Local Imports
 import { ConfirmModal } from 'components/shared/ConfirmModal';
-import { Button } from 'components/ui';
+import { Button, Textarea } from 'components/ui';
 
 import { useTranslation } from 'react-i18next';
 import UserManualDepositTransactionService from 'services/user-manual-deposit-transaction.services';
@@ -165,25 +165,25 @@ export function RowActions({ row, table }) {
         state={state}
         messages={{
           pending: {
-            description: 'Please enter a reason for rejection.',
+            description: t('pleaseEnterRejectionReason'),
             actionText: t('submit')
           },
           success: {
-            title: t('status') + ' ' + t('changed'),
-            description: 'Transaction has been successfully rejected.'
+            title: t('success'),
+            description: t('transactionHasBeenSuccessfullyRejected')
           }
         }}>
         <div className="mt-4">
           <label
             htmlFor="rejectionReason"
             className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Rejection Reason
+            {t('rejectionReason')}
           </label>
-          <textarea
+          <Textarea
             id="rejectionReason"
             name="rejectionReason"
             rows={3}
-            className="border-black-300 mt-1 block w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-dark-500 dark:bg-dark-700 dark:text-white sm:text-sm"
+            className="mt-1"
             value={rejectionReason}
             onChange={(e) => setRejectionReason(e.target.value)}
             disabled={loading || success}

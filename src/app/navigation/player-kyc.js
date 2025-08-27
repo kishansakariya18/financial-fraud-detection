@@ -1,5 +1,7 @@
+// Import Dependencies
+import { GoVerified } from 'react-icons/go';
+
 // Local Imports
-import { IdentificationIcon } from '@heroicons/react/24/outline';
 import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
 
 export const playerKyc = {
@@ -8,6 +10,6 @@ export const playerKyc = {
   path: '/player-kyc',
   title: 'User KYC',
   transKey: 'playerKyc',
-  Icon: IdentificationIcon,
+  Icon: GoVerified,
   permission: PERMISSIONS.USER_KYC.VIEW
 };

@@ -575,5 +575,9 @@
   "symbol": "Symbol",
   "currencies": "Currency",
   "noData": "No Data Found",
-  "global": "Global"
+  "global": "Global",
+  "accept": "Accept",
+  "transactionHasBeenSuccessfullyRejected": "Transaction has been successfully rejected",
+  "pleaseEnterRejectionReason": "Please enter a reason for rejection",
+  "rejectionReason": "Rejection Reason"
 }

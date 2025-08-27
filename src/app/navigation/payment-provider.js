@@ -1,5 +1,5 @@
 // Import Dependencies
-import { BanknotesIcon } from '@heroicons/react/24/outline';
+import { TbCreditCardPay } from 'react-icons/tb';
 
 // Local Imports
 import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
@@ -9,6 +9,6 @@ export const paymentProvider = {
   path: '/payment-provider',
   title: 'Payment Provider',
   transKey: 'payment_provider',
-  Icon: BanknotesIcon,
+  Icon: TbCreditCardPay,
   permission: PERMISSIONS.PAYMENT_PROVIDER.VIEW
 };

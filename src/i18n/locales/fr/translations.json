@@ -528,5 +528,9 @@
   "wallets": "portefeuilles",
   "countryCode": "Code du pays",
   "noData": "Aucune donnée trouvée",
-  "global": "Global"
+  "global": "Global",
+  "accept": "Accepter",
+  "transactionHasBeenSuccessfullyRejected": "Transaction rechazada con éxito",
+  "pleaseEnterRejectionReason": "Por favor, ingresa una razón para rechazar",
+  "rejectionReason": "Razón de rechazo"
 }

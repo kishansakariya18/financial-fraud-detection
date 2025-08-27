@@ -547,5 +547,9 @@
   "wallets": "carteras",
   "countryCode": "Código de país",
   "noData": "No se encontraron datos",
-  "global": "Global"
+  "global": "Global",
+  "accept": "Aceptar",
+  "transactionHasBeenSuccessfullyRejected": "Transacción rechazada con éxito",
+  "pleaseEnterRejectionReason": "Por favor, ingresa una razón para rechazar",
+  "rejectionReason": "Razón de rechazo"
 }
