@@ -260,7 +260,7 @@ const EditAdmin = () => {
                         label={t('countryCode')}
                         placeholder={t('select') + ' ' + t('countryCode')}
                         displayField="label"
-                        error={errors?.countryCode?.message}
+                        error={errors?.phoneCode?.message}
                       />
                     )}
                     control={control}
