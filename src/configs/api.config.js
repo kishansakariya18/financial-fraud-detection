@@ -271,7 +271,7 @@ export const apiConfig = {
     },
     PAYMENT_PROVIDER: {
       VIEW: '/payments/admin/payment-provider/list',
-      STATUS: '/payments/admin/payment-provider/change-status'
+      STATUS: '/payments/admin/payment-provider/:gatewayId/change-status'
     },
     GEORESTRICTION: {
       COUNTRY_LIST: '/config/admin/country/restrictions/list',

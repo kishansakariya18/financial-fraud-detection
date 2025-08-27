@@ -2,6 +2,8 @@ import apiConfig from '../configs/api.config';
 import { sendRequest } from '../utils/axios';
 import { DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import { gatewayStatusToAPI } from 'app/pages/payment-provider/helper';
+import { replaceText } from 'utils/custom.utilities';
+
 const PaymentProviderService = {
   paymentProviderList: async (data) => {
     try {
@@ -35,18 +37,18 @@ const PaymentProviderService = {
   },
   changePlayerStatus: async (gatewayID) => {
     try {
-      const body = {
-        gatewayID: gatewayID
-      };
-      const endPoint = apiConfig.endPoints.PAYMENT_PROVIDER.STATUS;
+      const endPoint = replaceText(
+        apiConfig.endPoints.PAYMENT_PROVIDER.STATUS,
+        ':gatewayId',
+        gatewayID
+      );
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
-        },
-        body
+        }
       });
       return response;
     } catch (error) {

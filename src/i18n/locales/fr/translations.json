@@ -532,5 +532,6 @@
   "accept": "Accepter",
   "transactionHasBeenSuccessfullyRejected": "Transaction rechazada con éxito",
   "pleaseEnterRejectionReason": "Por favor, ingresa una razón para rechazar",
-  "rejectionReason": "Razón de rechazo"
+  "rejectionReason": "Razón de rechazo",
+  "email_template_status_success": "Plantilla de correo electrónico El estado se ha cambiado correctamente"
 }

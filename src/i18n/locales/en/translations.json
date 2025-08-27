@@ -579,5 +579,6 @@
   "accept": "Accept",
   "transactionHasBeenSuccessfullyRejected": "Transaction has been successfully rejected",
   "pleaseEnterRejectionReason": "Please enter a reason for rejection",
-  "rejectionReason": "Rejection Reason"
+  "rejectionReason": "Rejection Reason",
+  "email_template_status_success": "Email Template Status has been changed successfully"
 }

@@ -30,8 +30,8 @@ export function RowActions({ row, table }) {
       actionText: t('submit')
     },
     success: {
-      title: t('emailTemplate') + ' ' + t('status') + ' ' + t('changed'),
-      description: t('affiliate_status_suceess')
+      title: t('success'),
+      description: t('email_template_status_success')
     }
   };
 
