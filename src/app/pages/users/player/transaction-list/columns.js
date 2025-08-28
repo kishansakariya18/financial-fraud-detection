@@ -34,13 +34,13 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.username, {
-    id: 'username',
-    label: 'User Name',
-    header: 'User Name',
-    cell: BoldCell,
-    enableSorting: false
-  }),
+  // columnHelper.accessor((row) => row.username, {
+  //   id: 'username',
+  //   label: 'User Name',
+  //   header: 'User Name',
+  //   cell: BoldCell,
+  //   enableSorting: false
+  // }),
   columnHelper.accessor((row) => row.transactionType, {
     id: 'transactionType',
     label: 'Message',

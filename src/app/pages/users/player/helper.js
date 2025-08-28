@@ -414,8 +414,8 @@ export const loginHistoryResponseMapper = (apiData) => {
       userId: data.UserID,
       ip: data.IPAddress,
       userAgent: data.UserAgent,
-      expiredAt: data.ExpiredAt,
-      loginAt: data.DateCreated
+      expiredAt: data.ExpiredAt ? getDateInUTCToTimeZone(data.ExpiredAt) : '',
+      loginAt: data.DateCreated ? getDateInUTCToTimeZone(data.DateCreated) : ''
     };
   });
 };
