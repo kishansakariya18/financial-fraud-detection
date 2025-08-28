@@ -28,9 +28,7 @@ const EditBanner = () => {
 
   const [file, setFile] = useState();
   const [preview, setPreview] = useState();
-  const [segmentationType, setSegmentationType] = useState('0');
   const [segmentationList, setSegmentationList] = useState([]);
-  const [segmentationIds, setSegmentationIds] = useState([]);
   const [bannerImage, setBannerImage] = useState('');
 
   bannerImage;
@@ -52,10 +50,18 @@ const EditBanner = () => {
     handleSubmit,
     formState: { errors },
     reset,
-    control
+    control,
+    watch
   } = useForm({
-    resolver: yupResolver(editBannerSchema)
+    resolver: yupResolver(editBannerSchema),
+    defaultValues: {
+      segmentationType: 0,
+      segmentIds: []
+    }
   });
+
+  const segmentationType = watch('segmentationType');
+  const segmentIds = watch('segmentIds');
 
   const fetchBannerDetails = async () => {
     const result = await BannerService.getBannerDetails(bannerId);
@@ -91,7 +97,7 @@ const EditBanner = () => {
             bannerName: result.BannerName,
             placementType: result?.PlacementType || 0,
             segmentationType: result?.HasUserSegmentation || 0,
-            segmentIds: result?.SegmentationIds,
+            segmentIds: result?.SegmentationIds?.map((s) => parseInt(s)) || [],
             startDate: getDateInUTCToTimeZone(result?.StartDate, undefined, 'YYYY-MM-DD HH:mm'),
             endDate: getDateInUTCToTimeZone(result?.EndDate, undefined, 'YYYY-MM-DD HH:mm'),
             bannerHeadline: result?.bannerContent[0]?.HeadLine,
@@ -99,9 +105,6 @@ const EditBanner = () => {
             targetUrl: result?.bannerContent[0]?.TargetURL,
             image: result?.bannerContent[0]?.MediaFileName
           };
-          setSegmentationType(result?.HasUserSegmentation);
-          const segmentIds = result?.SegmentationIds?.map((s) => parseInt(s));
-          setSegmentationIds(segmentIds);
           setBannerImage(result?.bannerContent[0]?.MediaFileName);
           reset(mappedData);
         }
@@ -110,7 +113,7 @@ const EditBanner = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bannerId]);
 
-  console.log('segmentationIds: ', segmentationIds);
+  console.log('segmentationIds: ', segmentIds);
 
   const segmentationOptions = segmentationList.map((segmentation) => {
     const mapping = {
@@ -153,10 +156,10 @@ const EditBanner = () => {
 
   const onSubmit = async (data) => {
     const apiData = {
-      segmentationType,
-      segmentationIds
+      ...data,
+      segmentationIds: data.segmentIds
     };
-    await editBannerAPI({ name: data.gameName, ...data, ...apiData });
+    await editBannerAPI({ name: data.gameName, ...apiData });
   };
   return (
     <Page title={t('edit') + ' ' + t('banner')}>
@@ -206,46 +209,54 @@ const EditBanner = () => {
               <div>
                 <p className="mb-1">{t('segmentation') + ' ' + t('type')}</p>
                 <div className="flex flex-wrap gap-2">
-                  <Radio
-                    label={t('all')}
-                    value="0"
-                    checked={segmentationType === 0}
-                    onChange={(e) => setSegmentationType(parseInt(e.target.value))}
-                  />
-                  <Radio
-                    label={t('specific')}
-                    value="1"
-                    checked={segmentationType === 1}
-                    onChange={(e) => setSegmentationType(parseInt(e.target.value))}
+                  <Controller
+                    name="segmentationType"
+                    control={control}
+                    render={({ field }) => (
+                      <>
+                        <Radio
+                          label={t('all')}
+                          value="0"
+                          checked={(field.value ?? 0) === 0}
+                          onChange={(e) => field.onChange(parseInt(e.target.value))}
+                        />
+                        <Radio
+                          label={t('specific')}
+                          value="1"
+                          checked={field.value === 1}
+                          onChange={(e) => field.onChange(parseInt(e.target.value))}
+                        />
+                      </>
+                    )}
                   />
                 </div>
+                {errors?.segmentationType?.message && (
+                  <p className="mt-1 text-sm text-red-600">{errors.segmentationType.message}</p>
+                )}
               </div>
 
               {segmentationType === 1 && (
                 <Controller
                   render={({ field }) => (
                     <Listbox
-                      key={'segmemtation'}
+                      key={'segmentation'}
                       data={segmentationOptions}
                       multiple={true}
                       value={
-                        segmentationOptions?.filter((status) =>
-                          segmentationIds?.includes(status.value)
+                        segmentationOptions?.filter((opt) =>
+                          (segmentIds || []).includes(opt.value)
                         ) || null
                       }
-                      onChange={(val) => {
-                        console.log(val);
-                        setSegmentationIds(val.map((option) => option.value));
-                      }}
+                      onChange={(val) => field.onChange(val.map((option) => option.value))}
                       name={field.name}
                       label={t('banner') + ' ' + t('segmentation')}
                       placeholder={t('select') + ' ' + t('segmentation')}
                       displayField="label"
-                      error={errors?.segmemtation?.message}
+                      error={errors?.segmentIds?.message}
                     />
                   )}
                   control={control}
-                  name="bannerType"
+                  name="segmentIds"
                 />
               )}
             </div>

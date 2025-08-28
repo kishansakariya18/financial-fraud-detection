@@ -2,22 +2,18 @@
 import { Page } from 'components/shared/Page';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { Button, Input, Upload, Avatar } from 'components/ui';
+import { Button, Input } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import UserClassService from 'services/user-class.services';
 import { createUserClassSchema } from './schema';
-import { PreviewImg } from 'components/shared/PreviewImg';
-import { HiPencil } from 'react-icons/hi';
-import { XMarkIcon } from '@heroicons/react/20/solid';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 const CreateUserClass = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [avatar, setAvatar] = useState(null);
   const [response, setResponse] = useState(null);
   const { t } = useTranslation();
 
@@ -33,11 +29,11 @@ const CreateUserClass = () => {
     resolver: yupResolver(createUserClassSchema)
   });
 
-  const creatUserClassAPI = async (requestObject, avatarFile) => {
+  const creatUserClassAPI = async (requestObject) => {
     setLoading(true);
     setError(null);
 
-    const result = await UserClassService.createUserClass(requestObject, avatarFile);
+    const result = await UserClassService.createUserClass(requestObject);
     if (result) {
       if (result.status === 200 || result.status === 201) {
         setResponse(result.response);
@@ -57,7 +53,6 @@ const CreateUserClass = () => {
     if (!loading && !error && response) {
       toast.success(response.message);
       setResponse(null);
-      setAvatar(null);
       reset();
       navigate('/user-class');
     }
@@ -65,7 +60,7 @@ const CreateUserClass = () => {
   }, [response]);
 
   const onSubmit = async (data) => {
-    await creatUserClassAPI(data, avatar);
+    await creatUserClassAPI(data);
   };
 
   return (
@@ -95,37 +90,23 @@ const CreateUserClass = () => {
                 error={errors?.classCode?.message}
                 placeholder={t('enter') + ' ' + t('class_code')}
               />
+              <Input
+                {...register('deposit', { valueAsNumber: true })}
+                type="number"
+                label={t('deposit')}
+                step="any"
+                error={errors?.deposit?.message}
+                placeholder={t('enter') + ' ' + t('deposit')}
+              />
+              <Input
+                {...register('wager', { valueAsNumber: true })}
+                type="number"
+                label={t('wager')}
+                step="any"
+                error={errors?.wager?.message}
+                placeholder={t('enter') + ' ' + t('wager')}
+              />
             </div>
-          </div>
-          <div className="mt-4 flex flex-col space-y-1.5">
-            <span className="text-base font-medium text-gray-800 dark:text-dark-100">Avatar</span>
-            <Avatar
-              size={20}
-              imgComponent={PreviewImg}
-              imgProps={{ file: avatar }}
-              {...(avatar && { src: URL.createObjectURL(avatar) })}
-              classNames={{
-                root: 'rounded-xl ring-primary-600 ring-offset-[3px] ring-offset-white transition-all hover:ring dark:ring-primary-500 dark:ring-offset-dark-700',
-                display: 'rounded-xl'
-              }}
-              indicator={
-                <div className="absolute bottom-0 right-0 -m-1 flex items-center justify-center rounded-full bg-white dark:bg-dark-700">
-                  {avatar ? (
-                    <Button onClick={() => setAvatar(null)} isIcon className="size-6 rounded-full">
-                      <XMarkIcon className="size-4" />
-                    </Button>
-                  ) : (
-                    <Upload name="avatar" onChange={setAvatar} accept="image/*">
-                      {({ ...props }) => (
-                        <Button isIcon className="size-6 rounded-full" {...props}>
-                          <HiPencil className="size-3.5" />
-                        </Button>
-                      )}
-                    </Upload>
-                  )}
-                </div>
-              }
-            />
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
             <Button className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>

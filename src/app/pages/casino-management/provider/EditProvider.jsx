@@ -84,7 +84,10 @@ export function EditProvider({ providerName = '', value = '', providerId, closeM
                   />
                 )}
                 <Upload
-                  onChange={setFile}
+                  onChange={(f) => {
+                    setFile(f);
+                    setIsUpdated(true);
+                  }}
                   ref={uploadRef}
                   setPreview={setPreview}
                   accept={'image/*'}>
@@ -101,6 +104,7 @@ export function EditProvider({ providerName = '', value = '', providerId, closeM
                     uploadRef.current.value = '';
                     setFile();
                     setPreview();
+                    setIsUpdated(true);
                   }}>
                   Reset
                 </Button>

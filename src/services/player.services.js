@@ -451,6 +451,22 @@ const PlayerService = {
       console.log('Error from getUserAllLimits', error);
     }
   },
+  getLimitSummary: async (userId) => {
+    try {
+      const endPoint = replaceText(apiConfig.endPoints.USER.LIMIT_SUMMARY, ':userId', userId);
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from getLimitSummary', error);
+    }
+  },
   bulkUpdateUserLimits: async (userId, limits) => {
     try {
       const endPoint = replaceText(

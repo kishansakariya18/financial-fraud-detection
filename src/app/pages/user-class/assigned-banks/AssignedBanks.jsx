@@ -131,15 +131,17 @@ export default function AssignedBanks() {
 
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
 
-      <div className="mt-4 flex justify-center">
-        <Button
-          type="button"
-          color="primary"
-          disabled={checked.length === 0 || submitLoading}
-          onClick={handleUnassign}>
-          {submitLoading ? <Circlebar size={6} /> : t('unassign')}
-        </Button>
-      </div>
+      {table.getRowModel().rows.length > 0 && (
+        <div className="mt-4 flex justify-center">
+          <Button
+            type="button"
+            color="primary"
+            disabled={checked.length === 0 || submitLoading}
+            onClick={handleUnassign}>
+            {submitLoading ? <Circlebar size={6} /> : t('unassign')}
+          </Button>
+        </div>
+      )}
     </ContentWrapper>
   );
 }

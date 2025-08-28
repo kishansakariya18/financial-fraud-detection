@@ -56,6 +56,7 @@ export const apiConfig = {
       CHANE_PLAYER_FUND_PASSWORD: '/config/admin/config/user/change-manage-fund-password',
       SUMMARY: '/users/admin/users/summary',
       USER_SUMMARY: '/users/admin/users/summary',
+      LIMIT_SUMMARY: '/users/admin/limit-summary/:userId',
       COUNTRY_LIST: '/config/admin/config/countries',
       SEGMENTATION_LIST: '/bonus/admin/segmentation/list'
     },
@@ -119,7 +120,7 @@ export const apiConfig = {
       BANNER_CREATE: '/content/admin/banner/create',
       BANNER_DELETE: `/content/admin/banner/:bannerId/delete`,
       BANNER_DETAIL: `/content/admin/banner/:bannerId/details`,
-      BANNER_EDIT: `/content/admin//banner/:bannerId/edit`,
+      BANNER_EDIT: `/content/admin/banner/:bannerId/edit`,
       BANNER_REORDER: '/content/admin/banner/reorder'
     },
     AFFILIATE: {
@@ -228,6 +229,7 @@ export const apiConfig = {
       CREATE: '/games/admin/casino-management/games/create',
       EDIT: '/games/admin/casino-management/games/:gameId/edit',
       DELETE: '/games/admin/casino-management/games/:gameId/delete',
+      CHANGE_STATUS: '/games/admin/casino-management/games/:gameId/change-status',
       PROVIDER_LIST: '/games/admin/casino-management/games/providers',
       CATEGORY_LIST: '/games/admin/casino-management/category/list',
       GET_GAME_SEGMENTATION: '/games/admin/casino-management/games/:gameId/segmentation',
@@ -270,7 +272,7 @@ export const apiConfig = {
     },
     PAYMENT_PROVIDER: {
       VIEW: '/payments/admin/payment-provider/list',
-      STATUS: '/payments/admin/payment-provider/change-status'
+      STATUS: '/payments/admin/payment-provider/:gatewayId/change-status'
     },
     GEORESTRICTION: {
       COUNTRY_LIST: '/config/admin/country/restrictions/list',

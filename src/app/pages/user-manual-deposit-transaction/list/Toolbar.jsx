@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 // Local Imports
 
 // import { RangeFilter } from "components/shared/table/RangeFilter";
+import { DateFilter } from 'components/shared/table/DateFilter';
 import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
@@ -130,16 +131,16 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
         />
       )}
 
-      {/* {table.getColumn('createdAt') && (
+      {table.getColumn('dateCreated') && (
         <DateFilter
-          column={table.getColumn('createdAt')}
+          column={table.getColumn('dateCreated')}
           title={t('date') + ' ' + t('range')}
           config={{
             maxDate: new Date().fp_incr(1),
             mode: 'range'
           }}
         />
-      )} */}
+      )}
 
       <div>
         <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">

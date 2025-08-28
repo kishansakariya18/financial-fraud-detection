@@ -66,6 +66,7 @@ const PlayerLimit = () => {
             const wdrD = get('withdraw', 'daily');
             const wdrW = get('withdraw', 'weekly');
             const wdrM = get('withdraw', 'monthly');
+            const wagO = get('wager', 'one-time');
             const wagD = get('wager', 'daily');
             const wagW = get('wager', 'weekly');
             const wagM = get('wager', 'monthly');
@@ -77,38 +78,44 @@ const PlayerLimit = () => {
               if (!obj) return;
               map[`${obj.limitType}_${obj.limitPeriod}`] = obj.id;
             };
-            [depD, depW, depM, wdrD, wdrW, wdrM, wagD, wagW, wagM, losD, losW, losM].forEach(
+            [depD, depW, depM, wdrD, wdrW, wdrM, wagO, wagD, wagW, wagM, losD, losW, losM].forEach(
               setEntry
             );
             setLimitIdMap(map);
 
-            reset({
-              dailyWagerLimit: wagD?.limitAmount || 0,
-              weeklyWagerLimit: wagW?.limitAmount || 0,
-              monthlyWagerLimit: wagM?.limitAmount || 0,
-              dailyDepositLimit: depD?.limitAmount || 0,
-              weeklyDepositLimit: depW?.limitAmount || 0,
-              monthlyDepositLimit: depM?.limitAmount || 0,
-              dailyWithdrawLimit: wdrD?.limitAmount || 0,
-              weeklyWithdrawLimit: wdrW?.limitAmount || 0,
-              monthlyWithdrawLimit: wdrM?.limitAmount || 0,
-              dailyLossLimit: losD?.limitAmount || 0,
-              weeklyLossLimit: losW?.limitAmount || 0,
-              monthlyLossLimit: losM?.limitAmount || 0,
+            const amt = (x) => Number(x?.limitAmount || 0);
+            const ap = (x) => Boolean(x?.isApply);
+            const on = (x) => ap(x) && amt(x) > 0;
 
-              // Flags from isApply
-              hasDailyWagerLimit: wagD?.isApply || false,
-              hasWeeklyWagerLimit: wagW?.isApply || false,
-              hasMonthlyWagerLimit: wagM?.isApply || false,
-              hasDailyDepositLimit: depD?.isApply || false,
-              hasWeeklyDepositLimit: depW?.isApply || false,
-              hasMonthlyDepositLimit: depM?.isApply || false,
-              hasDailyWithdrawLimit: wdrD?.isApply || false,
-              hasWeeklyWithdrawLimit: wdrW?.isApply || false,
-              hasMonthlyWithdrawLimit: wdrM?.isApply || false,
-              hasDailyLossLimit: losD?.isApply || false,
-              hasWeeklyLossLimit: losW?.isApply || false,
-              hasMonthlyLossLimit: losM?.isApply || false
+            reset({
+              dailyWagerLimit: amt(wagD),
+              weeklyWagerLimit: amt(wagW),
+              monthlyWagerLimit: amt(wagM),
+              oneTimeWagerLimit: amt(wagO),
+              dailyDepositLimit: amt(depD),
+              weeklyDepositLimit: amt(depW),
+              monthlyDepositLimit: amt(depM),
+              dailyWithdrawLimit: amt(wdrD),
+              weeklyWithdrawLimit: amt(wdrW),
+              monthlyWithdrawLimit: amt(wdrM),
+              dailyLossLimit: amt(losD),
+              weeklyLossLimit: amt(losW),
+              monthlyLossLimit: amt(losM),
+
+              // Flags forced false if amount not > 0
+              hasOneTimeWagerLimit: on(wagO),
+              hasDailyWagerLimit: on(wagD),
+              hasWeeklyWagerLimit: on(wagW),
+              hasMonthlyWagerLimit: on(wagM),
+              hasDailyDepositLimit: on(depD),
+              hasWeeklyDepositLimit: on(depW),
+              hasMonthlyDepositLimit: on(depM),
+              hasDailyWithdrawLimit: on(wdrD),
+              hasWeeklyWithdrawLimit: on(wdrW),
+              hasMonthlyWithdrawLimit: on(wdrM),
+              hasDailyLossLimit: on(losD),
+              hasWeeklyLossLimit: on(losW),
+              hasMonthlyLossLimit: on(losM)
             });
           }
         });
@@ -153,107 +160,117 @@ const PlayerLimit = () => {
   const updatePlayerLimit = async (requestObject) => {
     setLoading(true);
     setError(null);
-    // Ensure we have numeric userId
-    let targetUserId = userId;
-    if (!targetUserId) {
-      targetUserId = await resolveUserId();
+    try {
+      // Ensure we have numeric userId
+      let targetUserId = userId;
       if (!targetUserId) {
-        setLoading(false);
-        setError('Unable to resolve user ID');
-        return;
+        targetUserId = await resolveUserId();
+        if (!targetUserId) {
+          setError('Unable to resolve user ID');
+          return;
+        }
       }
-    }
-    // Build bulk limits payload from form values and stored IDs
-    const limits = [
-      {
-        limitType: 'deposit',
-        limitPeriod: 'daily',
-        valueKey: 'dailyDepositLimit',
-        flagKey: 'hasDailyDepositLimit'
-      },
-      {
-        limitType: 'deposit',
-        limitPeriod: 'weekly',
-        valueKey: 'weeklyDepositLimit',
-        flagKey: 'hasWeeklyDepositLimit'
-      },
-      {
-        limitType: 'deposit',
-        limitPeriod: 'monthly',
-        valueKey: 'monthlyDepositLimit',
-        flagKey: 'hasMonthlyDepositLimit'
-      },
-      {
-        limitType: 'withdraw',
-        limitPeriod: 'daily',
-        valueKey: 'dailyWithdrawLimit',
-        flagKey: 'hasDailyWithdrawLimit'
-      },
-      {
-        limitType: 'withdraw',
-        limitPeriod: 'weekly',
-        valueKey: 'weeklyWithdrawLimit',
-        flagKey: 'hasWeeklyWithdrawLimit'
-      },
-      {
-        limitType: 'withdraw',
-        limitPeriod: 'monthly',
-        valueKey: 'monthlyWithdrawLimit',
-        flagKey: 'hasMonthlyWithdrawLimit'
-      },
-      {
-        limitType: 'wager',
-        limitPeriod: 'daily',
-        valueKey: 'dailyWagerLimit',
-        flagKey: 'hasDailyWagerLimit'
-      },
-      {
-        limitType: 'wager',
-        limitPeriod: 'weekly',
-        valueKey: 'weeklyWagerLimit',
-        flagKey: 'hasWeeklyWagerLimit'
-      },
-      {
-        limitType: 'wager',
-        limitPeriod: 'monthly',
-        valueKey: 'monthlyWagerLimit',
-        flagKey: 'hasMonthlyWagerLimit'
-      },
-      {
-        limitType: 'loss',
-        limitPeriod: 'daily',
-        valueKey: 'dailyLossLimit',
-        flagKey: 'hasDailyLossLimit'
-      },
-      {
-        limitType: 'loss',
-        limitPeriod: 'weekly',
-        valueKey: 'weeklyLossLimit',
-        flagKey: 'hasWeeklyLossLimit'
-      },
-      {
-        limitType: 'loss',
-        limitPeriod: 'monthly',
-        valueKey: 'monthlyLossLimit',
-        flagKey: 'hasMonthlyLossLimit'
-      }
-    ].map((item) => ({
-      id: limitIdMap[`${item.limitType}_${item.limitPeriod}`] ?? null,
-      limitType: item.limitType,
-      limitPeriod: item.limitPeriod,
-      limitAmount: Number(requestObject[item.valueKey] || 0),
-      isApply: !!requestObject[item.flagKey]
-    }));
+      // Build bulk limits payload from form values and stored IDs
+      const limits = [
+        {
+          limitType: 'deposit',
+          limitPeriod: 'daily',
+          valueKey: 'dailyDepositLimit',
+          flagKey: 'hasDailyDepositLimit'
+        },
+        {
+          limitType: 'deposit',
+          limitPeriod: 'weekly',
+          valueKey: 'weeklyDepositLimit',
+          flagKey: 'hasWeeklyDepositLimit'
+        },
+        {
+          limitType: 'deposit',
+          limitPeriod: 'monthly',
+          valueKey: 'monthlyDepositLimit',
+          flagKey: 'hasMonthlyDepositLimit'
+        },
+        {
+          limitType: 'withdraw',
+          limitPeriod: 'daily',
+          valueKey: 'dailyWithdrawLimit',
+          flagKey: 'hasDailyWithdrawLimit'
+        },
+        {
+          limitType: 'withdraw',
+          limitPeriod: 'weekly',
+          valueKey: 'weeklyWithdrawLimit',
+          flagKey: 'hasWeeklyWithdrawLimit'
+        },
+        {
+          limitType: 'withdraw',
+          limitPeriod: 'monthly',
+          valueKey: 'monthlyWithdrawLimit',
+          flagKey: 'hasMonthlyWithdrawLimit'
+        },
+        {
+          limitType: 'wager',
+          limitPeriod: 'one-time',
+          valueKey: 'oneTimeWagerLimit',
+          flagKey: 'hasOneTimeWagerLimit'
+        },
+        {
+          limitType: 'wager',
+          limitPeriod: 'daily',
+          valueKey: 'dailyWagerLimit',
+          flagKey: 'hasDailyWagerLimit'
+        },
+        {
+          limitType: 'wager',
+          limitPeriod: 'weekly',
+          valueKey: 'weeklyWagerLimit',
+          flagKey: 'hasWeeklyWagerLimit'
+        },
+        {
+          limitType: 'wager',
+          limitPeriod: 'monthly',
+          valueKey: 'monthlyWagerLimit',
+          flagKey: 'hasMonthlyWagerLimit'
+        },
+        {
+          limitType: 'loss',
+          limitPeriod: 'daily',
+          valueKey: 'dailyLossLimit',
+          flagKey: 'hasDailyLossLimit'
+        },
+        {
+          limitType: 'loss',
+          limitPeriod: 'weekly',
+          valueKey: 'weeklyLossLimit',
+          flagKey: 'hasWeeklyLossLimit'
+        },
+        {
+          limitType: 'loss',
+          limitPeriod: 'monthly',
+          valueKey: 'monthlyLossLimit',
+          flagKey: 'hasMonthlyLossLimit'
+        }
+      ].map((item) => ({
+        id: limitIdMap[`${item.limitType}_${item.limitPeriod}`] ?? null,
+        limitType: item.limitType,
+        limitPeriod: item.limitPeriod,
+        limitAmount: Number(requestObject[item.valueKey] || 0),
+        isApply: !!requestObject[item.flagKey]
+      }));
 
-    const result = await PlayerService.bulkUpdateUserLimits(targetUserId, limits);
-    if (result) {
-      if (result.status === 200 || result.status === 201) {
-        setResponse(result.response);
-      } else {
-        setError(result.error);
+      const result = await PlayerService.bulkUpdateUserLimits(targetUserId, limits);
+      if (result) {
+        if (result.status === 200 || result.status === 201) {
+          setResponse(result.response);
+        } else {
+          setError(result.error);
+        }
       }
+    } catch (err) {
+      setError(err?.message || 'Something went wrong while updating limits');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   if (!loading && error) {
@@ -327,7 +344,7 @@ const PlayerLimit = () => {
                   }
                   {(() => {
                     const typeOrder = ['wager', 'deposit', 'withdraw', 'loss'];
-                    const periodOrder = ['daily', 'weekly', 'monthly'];
+                    const periodOrder = ['one-time', 'daily', 'weekly', 'monthly'];
                     const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
                     const mapTypeToKey = (type) => cap(type); // Wager/Deposit/Withdraw/Loss
 
@@ -347,10 +364,23 @@ const PlayerLimit = () => {
                     return sorted.map((item, idx) => {
                       const TypeKey = mapTypeToKey(item.limitType);
                       const PeriodKey = cap(item.limitPeriod);
-                      const valueKey = `${item.limitPeriod}${TypeKey}Limit`; // e.g., dailyWagerLimit
-                      const flagKey = `has${PeriodKey}${TypeKey}Limit`; // e.g., hasDailyWagerLimit
-                      const titleKey = `${item.limitPeriod}${TypeKey}Limit`; // translation key
-                      const descKey = `${titleKey}Desc`;
+                      const isOneTimeWager =
+                        item.limitType === 'wager' && item.limitPeriod === 'one-time';
+                      const valueKey = isOneTimeWager
+                        ? 'oneTimeWagerLimit'
+                        : `${item.limitPeriod}${TypeKey}Limit`; // e.g., dailyWagerLimit
+                      const flagKey = isOneTimeWager
+                        ? 'hasOneTimeWagerLimit'
+                        : `has${PeriodKey}${TypeKey}Limit`; // e.g., hasDailyWagerLimit
+                      // Use camelCase translation keys specifically for one-time wager to avoid any i18n separator issues
+                      const titleKey =
+                        item.limitType === 'wager' && item.limitPeriod === 'one-time'
+                          ? 'oneTimeWagerLimit'
+                          : `${item.limitPeriod}${TypeKey}Limit`; // translation key
+                      const descKey =
+                        item.limitType === 'wager' && item.limitPeriod === 'one-time'
+                          ? 'oneTimeWagerLimitDesc'
+                          : `${titleKey}Desc`;
 
                       return (
                         <Box
@@ -367,9 +397,9 @@ const PlayerLimit = () => {
                               <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
                                 <Input
                                   id={valueKey}
-                                  {...register(valueKey)}
+                                  {...register(valueKey, { valueAsNumber: true })}
                                   error={errors?.[valueKey]?.message}
-                                  placeholder={`Enter ${t(titleKey)}`}
+                                  placeholder={`Enter ${cap(item.limitPeriod)} ${TypeKey} Limit`}
                                   classNames={{
                                     root: 'flex-1',
                                     input: 'relative rounded-none hover:z-1 focus:z-1'

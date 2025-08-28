@@ -1,5 +1,5 @@
 // Import Dependencies
-import { BanknotesIcon } from '@heroicons/react/24/outline';
+import { PiHandDepositThin } from 'react-icons/pi';
 
 // Local Imports
 import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
@@ -9,6 +9,6 @@ export const userManualDepositTransaction = {
   path: '/user-manual-deposit-transaction',
   title: 'User Manual Deposit',
   transKey: 'user_manual_deposit_transaction_view',
-  Icon: BanknotesIcon,
+  Icon: PiHandDepositThin,
   permission: PERMISSIONS.USER_MANUAL_DEPOSIT_TRANSACTION.VIEW
 };

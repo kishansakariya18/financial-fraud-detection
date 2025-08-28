@@ -3,6 +3,16 @@ import * as Yup from 'yup';
 export const createBannerSchema = Yup.object().shape({
   bannerName: Yup.string().trim().required('Banner Name is required'),
   placementType: Yup.number().required('Placement Type is required'),
+  segmentationType: Yup.number()
+    .oneOf([0, 1], 'Invalid segmentation type')
+    .required('Segmentation Type is required'),
+  segmentIds: Yup.array()
+    .of(Yup.number())
+    .when('segmentationType', {
+      is: 1,
+      then: (schema) => schema.min(1, 'Select at least one banner segmentation').required(),
+      otherwise: (schema) => schema.optional()
+    }),
   startDate: Yup.date()
     .nullable()
     .notRequired()
@@ -57,6 +67,16 @@ export const createBannerSchema = Yup.object().shape({
 export const editBannerSchema = Yup.object().shape({
   bannerName: Yup.string().trim().required('Banner Name is required'),
   placementType: Yup.number().required('Placement Type is required'),
+  segmentationType: Yup.number()
+    .oneOf([0, 1], 'Invalid segmentation type')
+    .required('Segmentation Type is required'),
+  segmentIds: Yup.array()
+    .of(Yup.number())
+    .when('segmentationType', {
+      is: 1,
+      then: (schema) => schema.min(1, 'Select at least one banner segmentation').required(),
+      otherwise: (schema) => schema.optional()
+    }),
   startDate: Yup.date()
     .nullable()
     .notRequired()

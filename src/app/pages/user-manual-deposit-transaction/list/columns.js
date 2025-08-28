@@ -3,7 +3,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 
 // Local Imports
 import { RowActions } from './RowActions';
-import { IdCell } from '../../../../components/custom/table/cell';
+import { DateCell, IdCell } from '../../../../components/custom/table/cell';
 import { BoldCell, BadgeCell } from '../../../../components/custom/table/cell';
 import { payoutStatusOptions } from '../helper';
 // ----------------------------------------------------------------------
@@ -57,7 +57,7 @@ export const columns = [
     id: 'depositTime',
     label: 'Deposit Time',
     header: 'Deposit Time',
-    cell: BoldCell,
+    cell: DateCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.bankTransactionID, {
@@ -80,14 +80,14 @@ export const columns = [
     id: 'dateCreated',
     label: 'Date Created',
     header: 'Date Created',
-    cell: BoldCell,
+    cell: DateCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.dateModified, {
     id: 'dateModified',
     label: 'Date Modified',
     header: 'Date Modified',
-    cell: BoldCell,
+    cell: DateCell,
     enableSorting: false
   }),
   // columnHelper.accessor((row) => row.isActive, {

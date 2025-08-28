@@ -3,6 +3,7 @@ import { MagnifyingGlassIcon, MapPinIcon, PlusIcon } from '@heroicons/react/24/o
 import clsx from 'clsx';
 // import { TbCurrencyDollar } from "react-icons/tb";
 import PropTypes from 'prop-types';
+import { useEffect, useMemo, useState } from 'react';
 
 // Local Imports
 
@@ -98,27 +99,47 @@ export function Toolbar({
 }
 
 function SearchInput({ table, onApplyFilters }) {
-  const keywordFilter = table
-    .getState()
-    .columnFilters.find(
-      (filter) => ['version', 'uid', 'title'].includes(filter.id) && filter.value
-    );
+  // Determine initial keyword from existing filters once
+  const initialKeyword = useMemo(() => {
+    const existing = table
+      .getState()
+      .columnFilters.find(
+        (filter) => ['version', 'uid', 'title'].includes(filter.id) && filter.value
+      );
+    return existing?.value || '';
+  }, [table]);
 
-  const handleChange = (e) => {
-    ['version', 'uid', 'title'].forEach((columnId) => {
-      table.getColumn(columnId)?.setFilterValue(undefined);
-    });
+  const [keyword, setKeyword] = useState(initialKeyword);
 
-    const value = e.target.value;
+  // If external filters change (e.g., reset), keep local input in sync ONLY when cleared
+  useEffect(() => {
+    const ids = ['version', 'uid', 'title'];
+    const relevant = table.getState().columnFilters.filter((f) => ids.includes(f.id));
+    const anyHasValue = relevant.some((f) => f.value);
+
+    // Only force clear the input when all related filters are cleared externally.
+    if (!anyHasValue && keyword !== '') {
+      setKeyword('');
+    }
+    // Do not push non-empty filter values into the input to avoid refilling after manual clear.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [table.getState().columnFilters, keyword]);
+
+  const applyToColumns = (value) => {
     ['version', 'uid', 'title'].forEach((columnId) => {
-      table.getColumn(columnId)?.setFilterValue(value);
+      table.getColumn(columnId)?.setFilterValue(value || undefined);
     });
   };
 
   return (
     <Input
-      value={keywordFilter?.value || ''}
-      onChange={handleChange}
+      value={keyword}
+      onChange={(e) => {
+        const value = e.target.value;
+        setKeyword(value);
+        // Keep live filtering behavior
+        applyToColumns(value);
+      }}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
           onApplyFilters();

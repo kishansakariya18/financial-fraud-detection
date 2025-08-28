@@ -20,8 +20,8 @@ pipeline {
               // Dynamically assign Docker tag based on branch name
                   def branchName = env.GIT_BRANCH?.replaceFirst(/^origin\//, '') ?: env.BRANCH_NAME
                   echo "Branch: ${branchName}"
-                  if (branchName == 'admin-qa-ms') {
-                     env.IMAGE_TAG = "admin-qa-ms-latest"
+                  if (branchName == 'admin-dev-ms') {
+                     env.IMAGE_TAG = "admin-dev-ms"
                                            }
                   else if (branchName == 'brijesh-devops') {
                      env.IMAGE_TAG = "brij-devops-latest"
@@ -70,7 +70,7 @@ pipeline {
      stage('Run Docker Container') {
        steps {
          script {
-            def containerName = "admin-qa-panel"
+            def containerName = "admin-dev-panel"
             def imageName = "${DOCKERHUB_REPO}:${IMAGE_TAG}"
           // stop and remove the old container if it's alreday running
            sh """
@@ -80,9 +80,9 @@ pipeline {
             // Pull latest image
             
             sh "docker pull ${imageName}"
-            // Run new container on port 4111 (you will reverse-proxy this via Apache)
+            // Run new container on port 9443 (you will reverse-proxy this via Apache)
             sh """
-            docker run -d --name ${containerName} -p 6443:443 ${imageName}
+            docker run -d --name ${containerName} -p 9443:443 ${imageName}
                """
      }  
     }
