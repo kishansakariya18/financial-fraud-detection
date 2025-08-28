@@ -43,7 +43,7 @@ export const apiConfig = {
       FUND: '/users/admin/users/fund',
       TRANSACTION_LIST: '/wallet/admin/wallet/transaction-list',
       TDS_SUMMARY_TRANSACTION_LIST: '/users/admin/users/tds-summary-transaction-list',
-      TRANSACTION_DETAIL: '/users/admin/users/transaction-detail',
+      TRANSACTION_DETAIL: '/wallet/admin/wallet/transaction-detail',
       CHANGE_STATUS: '/users/admin/users/change-status',
       REST_BANK_COUNT: '/users/admin/users/reset-bank-request-count',
       UPDATE_RISK_MANAGEMENT: '/users/admin/users/update-user-risk-management/:userID',
