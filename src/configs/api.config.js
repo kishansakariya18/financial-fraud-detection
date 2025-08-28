@@ -11,7 +11,8 @@ export const apiConfig = {
       RESENDOTP: '/admin/admin/auth/resend-otp',
       CHANGE_PASSWORD: '/admin/admin/auth/change-password',
       VALIDATE_RESET_PASSWORD: '/admin/admin/auth/validate-reset-password',
-      RESET_PASSWORD: '/admin/admin/auth/reset-password'
+      RESET_PASSWORD: '/admin/admin/auth/reset-password',
+      LOGOUT: '/admin/admin/auth/logout'
     },
     ROLES: {
       LIST: '/admin/admin/roles/list',

@@ -175,6 +175,23 @@ const AuthService = {
     } catch (err) {
       console.log('Error getCountries: ', err);
     }
+  },
+  logout: async () => {
+    try {
+      const endPoint = apiConfig.endPoints.AUTH.LOGOUT;
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + endPoint,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      return response;
+    } catch (err) {
+      console.log(err);
+      throw new Error('Logout failed');
+    }
   }
 };
 

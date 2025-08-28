@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { TbUser } from 'react-icons/tb';
 import apiConfig from 'configs/api.config';
+import AuthService from 'services/auth.services';
 
 const links = [
   {
@@ -31,19 +32,21 @@ export function Profile() {
   const { t } = useTranslation();
   const logoutHandler = (e) => {
     e.preventDefault();
-    toast.success(t('logout_success'));
-    dispatch(AuthAction.logout());
-    localStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN);
-    localStorage.removeItem(LOCAL_STORAGE.USER_DATA);
-    localStorage.removeItem(LOCAL_STORAGE.IS_MASTER_ADMIN);
-    localStorage.removeItem(LOCAL_STORAGE.PERMISSIONS);
-    localStorage.removeItem(LOCAL_STORAGE.AUTH_PASSWORD);
-    localStorage.removeItem(LOCAL_STORAGE.AUTH_EMAIL);
-    localStorage.removeItem(LOCAL_STORAGE.SETTINGS);
-    localStorage.removeItem(LOCAL_STORAGE.TWO_STEP_MODE);
-    setTimeout(() => {
-      navigate('/login');
-    }, 0);
+    AuthService.logout().then(() => {
+      dispatch(AuthAction.logout());
+      localStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN);
+      localStorage.removeItem(LOCAL_STORAGE.USER_DATA);
+      localStorage.removeItem(LOCAL_STORAGE.IS_MASTER_ADMIN);
+      localStorage.removeItem(LOCAL_STORAGE.PERMISSIONS);
+      localStorage.removeItem(LOCAL_STORAGE.AUTH_PASSWORD);
+      localStorage.removeItem(LOCAL_STORAGE.AUTH_EMAIL);
+      localStorage.removeItem(LOCAL_STORAGE.SETTINGS);
+      localStorage.removeItem(LOCAL_STORAGE.TWO_STEP_MODE);
+      toast.success(t('logout_success'));
+      setTimeout(() => {
+        navigate('/login');
+      }, 0);
+    });
   };
 
   const userData = useSelector((data) => data.auth.userData);
