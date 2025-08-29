@@ -31,6 +31,15 @@ export const users = {
       transKey: 'nav.users.players',
       Icon: UserGroupIcon,
       permission: PERMISSIONS.USER.LIST
+    },
+    {
+      id: 'users.supervisors',
+      path: '/users/supervisor',
+      type: NAV_TYPE_ITEM,
+      title: 'Supervisors',
+      transKey: 'nav.users.supervisors',
+      Icon: UserGroupIcon,
+      permission: PERMISSIONS.SUPERVISOR.LIST
     }
     // ,
     // {

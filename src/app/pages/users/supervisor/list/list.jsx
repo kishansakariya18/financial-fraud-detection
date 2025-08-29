@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
@@ -7,31 +7,33 @@ import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 
-import AdminService from '../../../../../services/admin.services';
+import SupervisorService from '../../../../../services/supervisor.services';
 
 import { responseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
-import { ADMIN_TYPE, DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
+import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 
-export default function Admin() {
+export default function Supervisor() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('admins');
-  const [summary, setSummary] = useState(null);
-  const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const pageTitle = t('supervisor');
+  // const [summary, setSummary] = useState(null);
+  const queryParams = useMemo(() => {
+    return getQueryParams(searchParams);
+  }, [searchParams]);
 
-  const fetchAdmin = async () => {
-    // setError(null);
+  const fetchSupervisor = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
-    const result = await AdminService.getAllAdmin({
+    const result = await SupervisorService.getAllSupervisor({
       pagination: { pageIndex, pageSize },
-      filters: { ...queryParams, adminType: ADMIN_TYPE.ADMIN }
+      filters: { ...queryParams }
     });
 
     if (result.status === 200) {
+      console.log('result: ', result.response);
       return {
         status: 200,
         data: responseMapper(result.response.data),
@@ -41,29 +43,10 @@ export default function Admin() {
 
     return { status: result.status, error: result.error };
   };
-  const fetchSummary = async () => {
-    // setError(null);
-
-    const result = await AdminService.getAdminSummary();
-
-    if (result.status === 200) {
-      setSummary(result.response.data);
-      return {
-        status: 200,
-        data: result.response.data,
-        totalRecords: parseInt(result.response.total_records, 10) || 0
-      };
-    }
-
-    return { status: result.status, error: result.error };
-  };
-  useEffect(() => {
-    fetchSummary();
-  }, []);
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
-    fetchSummary: fetchSummary,
-    fetchData: fetchAdmin,
+    // fetchSummary: fetchSummary,
+    fetchData: fetchSupervisor,
     queryParams,
     setSearchParams,
     initialSettings: {
@@ -141,7 +124,6 @@ export default function Admin() {
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
       <Toolbar
-        summary={summary}
         pageTitle={pageTitle}
         table={table}
         onApplyFilters={applyFilterHandler}

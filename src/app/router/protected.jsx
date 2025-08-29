@@ -33,6 +33,7 @@ import blacklistRoutes from './routes/blacklist.route';
 import { bankRoute } from './routes/bank.route';
 import { userManualDepositTransactionRoute } from './routes/user-manual-deposit-transaction.route';
 import { releaseNotesRoutes } from './routes/release-notes.route';
+import { supervisorRoute } from './routes/supervisor.route';
 
 // ----------------------------------------------------------------------
 
@@ -48,6 +49,7 @@ const protectedRoutes = {
         ...adminRoute,
         ...bannerRoute,
         ...playerRoutes,
+        ...supervisorRoute,
         ...roleRoutes,
         ...auditlogsRoutes,
         ...platformRoute,

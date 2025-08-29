@@ -81,6 +81,13 @@ export const apiConfig = {
       ADMIN_SUMMARY: '/admin/admin/admin/summary',
       COUNTRY_LIST: '/config/country/list'
     },
+    SUPERVISOR: {
+      LIST: '/admin/supervisor/list',
+      CREATE: '/admin/supervisor/create',
+      EDIT: '/admin/supervisor/edit',
+      DETAIL: '/admin/supervisor/:supervisorId/details',
+      DELETE: '/admin/supervisor/:supervisorId/delete'
+    },
     TENANT: {
       LIST: '/config/admin/tenant/list',
       CHANGE_STATUS: '/config/admin/tenant/:tenantUID/change-status',
