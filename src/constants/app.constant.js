@@ -124,6 +124,12 @@ export const PERMISSIONS = {
     USER_LEVEL_LIMITS: 'user-level-risk-mangement',
     VIEW_LOGIN_HISTORY: 'user-login-history-view'
   },
+  SUPERVISOR: {
+    LIST: 'supervisor-view',
+    ADD: 'supervisor-add',
+    EDIT: 'supervisor-edit',
+    DELETE: 'supervisor-delete'
+  },
   REPORT: {
     BETSLIP_REPORT_VIEW: 'betslip-report-view',
     DEPOSIT_REPORT_VIEW: 'deposit-report-view',
@@ -352,4 +358,10 @@ export const BANNER = {
 export const GENERAL_STATUS = {
   ACTIVE: 1,
   INACTIVE: 0
+};
+
+export const ADMIN_TYPE = {
+  ADMIN: 0,
+  SUPERVISOR: 1,
+  AGENT: 2
 };

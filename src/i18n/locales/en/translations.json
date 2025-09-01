@@ -17,7 +17,8 @@
       "users": "Users",
       "admin": "Admin",
       "players": "Players",
-      "platform-limit": "Platform Limit"
+      "platform-limit": "Platform Limit",
+      "supervisors": "Supervisors"
     },
     "platform": {
       "platform": "Platform",
@@ -580,5 +581,6 @@
   "transactionHasBeenSuccessfullyRejected": "Transaction has been successfully rejected",
   "pleaseEnterRejectionReason": "Please enter a reason for rejection",
   "rejectionReason": "Rejection Reason",
-  "email_template_status_success": "Email Template Status has been changed successfully"
+  "email_template_status_success": "Email Template Status has been changed successfully",
+  "supervisor": "Supervisor"
 }

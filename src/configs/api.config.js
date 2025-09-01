@@ -11,7 +11,8 @@ export const apiConfig = {
       RESENDOTP: '/admin/admin/auth/resend-otp',
       CHANGE_PASSWORD: '/admin/admin/auth/change-password',
       VALIDATE_RESET_PASSWORD: '/admin/admin/auth/validate-reset-password',
-      RESET_PASSWORD: '/admin/admin/auth/reset-password'
+      RESET_PASSWORD: '/admin/admin/auth/reset-password',
+      LOGOUT: '/admin/admin/auth/logout'
     },
     ROLES: {
       LIST: '/admin/admin/roles/list',
@@ -42,7 +43,7 @@ export const apiConfig = {
       FUND: '/users/admin/users/fund',
       TRANSACTION_LIST: '/wallet/admin/wallet/transaction-list',
       TDS_SUMMARY_TRANSACTION_LIST: '/users/admin/users/tds-summary-transaction-list',
-      TRANSACTION_DETAIL: '/users/admin/users/transaction-detail',
+      TRANSACTION_DETAIL: '/wallet/admin/wallet/transaction-detail',
       CHANGE_STATUS: '/users/admin/users/change-status',
       REST_BANK_COUNT: '/users/admin/users/reset-bank-request-count',
       UPDATE_RISK_MANAGEMENT: '/users/admin/users/update-user-risk-management/:userID',
@@ -79,6 +80,13 @@ export const apiConfig = {
       ADMIN_COUNTRY_LIST: '/admin/admin/countries',
       ADMIN_SUMMARY: '/admin/admin/admin/summary',
       COUNTRY_LIST: '/config/country/list'
+    },
+    SUPERVISOR: {
+      LIST: '/admin/supervisor/list',
+      CREATE: '/admin/supervisor/create',
+      EDIT: '/admin/supervisor/edit',
+      DETAIL: '/admin/supervisor/:supervisorId/details',
+      DELETE: '/admin/supervisor/:supervisorId/delete'
     },
     TENANT: {
       LIST: '/config/admin/tenant/list',

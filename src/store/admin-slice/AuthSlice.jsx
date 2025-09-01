@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { LOCAL_STORAGE } from 'constants/app.constant';
+import { ADMIN_TYPE, LOCAL_STORAGE } from 'constants/app.constant';
 
 const userToken = localStorage.getItem(LOCAL_STORAGE.AUTH_TOKEN)
   ? localStorage.getItem(LOCAL_STORAGE.AUTH_TOKEN)
@@ -21,7 +21,8 @@ const initialState = {
   isLoggedIn: userToken ? true : false,
   userData: userData,
   isMasterAdmin: isMasterAdmin,
-  permissions: permissions
+  permissions: permissions,
+  adminType: ADMIN_TYPE.ADMIN
 };
 
 const AuthSlice = createSlice({
@@ -33,6 +34,7 @@ const AuthSlice = createSlice({
       state.userData = action.payload.adminData;
       state.isMasterAdmin = action.payload.isMasterAdmin;
       state.permissions = action.payload.permissions;
+      state.adminType = action.payload.adminType;
     },
     logout(state, message) {
       console.log('message: ', message);

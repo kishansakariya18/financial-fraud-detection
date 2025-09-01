@@ -234,10 +234,12 @@ function Filters({
         <FacedtedFilter
           options={
             segmentation
-              ? segmentation.map((segment) => ({
-                  label: segment.Name,
-                  value: segment.UserSegmentID
-                }))
+              ? segmentation
+                  .filter((segment) => segment?.IsActive === true)
+                  .map((segment) => ({
+                    label: segment.Name,
+                    value: segment.UserSegmentID
+                  }))
               : []
           }
           title={t('segmentation')}

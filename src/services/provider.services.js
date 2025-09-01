@@ -127,8 +127,8 @@ const ProviderService = {
       };
 
       const apiQueryParams = {
-        page: state.page,
-        perPage: state.perPage
+        page: state?.pagination ? state.pagination.pageIndex + 1 : (state?.page ?? 1),
+        perPage: state?.pagination ? state.pagination.pageSize : (state?.perPage ?? 10)
       };
 
       const endPoints = replaceText(

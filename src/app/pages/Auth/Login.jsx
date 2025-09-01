@@ -15,7 +15,7 @@ import AuthService from 'services/auth.services';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AuthAction } from 'store/admin-slice/AuthSlice';
-import { LOCAL_STORAGE } from 'constants/app.constant';
+import { ADMIN_TYPE, LOCAL_STORAGE } from 'constants/app.constant';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { useThemeContext } from 'app/contexts/theme/context';
@@ -66,13 +66,15 @@ export default function Login() {
       if (result.status === 200) {
         if (!result.response.data?.mfaEnabled) {
           localStorage.setItem(LOCAL_STORAGE.AUTH_TOKEN, result.response.data.AdminSessionToken);
-          const responseData = await performPostLoginActions();
+          const userData = result.response.data.adminData;
+          const responseData = await performPostLoginActions(userData?.adminType);
           setResponse({
             message: result.response.message,
             adminData: result.response.data.adminData,
-            appSettings: responseData.appSettings,
-            permissions: responseData.permissions.permissions,
-            isMasterAdmin: responseData.permissions.isMasterAdmin
+            appSettings: responseData?.appSettings,
+            permissions: responseData?.permissions?.permissions,
+            isMasterAdmin: responseData?.permissions?.isMasterAdmin,
+            adminType: userData?.adminType
           });
         }
         setValidateResponse({ ...result.response.data, userPassword: data.password });
@@ -148,10 +150,12 @@ export default function Login() {
     };
   };
 
-  const performPostLoginActions = async () => {
+  const performPostLoginActions = async (adminType) => {
     const appSettings = await loadInitialVariables();
-    const permissions = await loadPermissions();
-
+    let permissions = [];
+    if (adminType === ADMIN_TYPE.ADMIN) {
+      permissions = await loadPermissions();
+    }
     return {
       appSettings,
       permissions
