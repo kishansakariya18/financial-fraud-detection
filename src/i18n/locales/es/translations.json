@@ -172,7 +172,8 @@
   "admin_status_desc": "¿Estás seguro de querer actualizar el estado de este administrador?",
   "admin_status_suceess": "Estado del administrador cambiado exitosamente",
   "role_delete_desc": "¿Estás seguro de querer eliminar este rol?",
-  "role_delete_suceess": "Rol eliminado exitosamente",
+  "currency_deleted_successfully": "Moneda eliminada exitosamente",
+  "enable_switch_to_apply_limit": "Habilita interruptor para aplicar este límite",
   "changed": "Cambiado",
   "welcome_back": "Bienvenido de nuevo",
   "forgot": "Olvidé",
@@ -552,5 +553,9 @@
   "transactionHasBeenSuccessfullyRejected": "Transacción rechazada con éxito",
   "pleaseEnterRejectionReason": "Por favor, ingresa una razón para rechazar",
   "rejectionReason": "Razón de rechazo",
-  "email_template_status_success": "Plantilla de correo electrónico El estado se ha cambiado correctamente"
+  "email_template_status_success": "Plantilla de correo electrónico El estado se ha cambiado correctamente",
+  "global_plafrom_limit":"Límite de plataforma (Admin Managed)",
+  "player_class_limit":"Límite de clases de jugadores (administrado por el administrador)",
+  "player_account_limit":"Límite de cuentas de jugador (administrado por el administrador)",
+  "responsible_gambling_limit":"Límite de juego responsable (Jugadora gestionada)"
 }

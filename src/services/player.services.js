@@ -351,6 +351,26 @@ const PlayerService = {
       console.log('Error from user specific summary', error);
     }
   },
+  getUserOverAllSummary: async () => {
+    try {
+      const endPoint = replaceText(
+        apiConfig.endPoints.USER.USER_OVER_ALL_SUMMARY,
+        ':userId',
+        '23987'
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from user overall summary', error);
+    }
+  },
   playerTransactionDetail: async (data) => {
     try {
       const endPoint = apiConfig.endPoints.USER.TRANSACTION_DETAIL;

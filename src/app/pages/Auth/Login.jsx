@@ -3,15 +3,17 @@ import { useLocation, useNavigate } from 'react-router';
 import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 
 // Local Imports
 import LightThemeLogo from 'assets/appLogo_light_theme.svg?react';
 import DarkThemeLogo from 'assets/appLogo_dark_theme.svg?react';
 import { Button, Card, Checkbox, Input } from 'components/ui';
+import { Listbox } from 'components/shared/form/Listbox';
 import { loginSchema } from './schema';
 import { Page } from 'components/shared/Page';
 import AuthService from 'services/auth.services';
+import AdminService from 'services/admin.services';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AuthAction } from 'store/admin-slice/AuthSlice';
@@ -28,18 +30,21 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    control
   } = useForm({
     resolver: yupResolver(loginSchema),
     defaultValues: {
       mobile: '',
-      password: ''
+      password: '',
+      phoneCode: '+1'
     }
   });
 
   const [response, setResponse] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [countries, setCountries] = useState([]);
   const navigate = useNavigate();
   const { state } = useLocation();
   const dispatch = useDispatch();
@@ -51,10 +56,18 @@ export default function Login() {
   const { t } = useTranslation();
   const [show, { toggle }] = useDisclosure();
 
+  const fetchCountryList = async () => {
+    const result = await AdminService.fetchCountryList();
+    if (result.status === 200 || result.status === 201) {
+      setCountries(result.response.data);
+    }
+  };
+
   useEffect(() => {
     if (isLoggedIn) {
       navigate(state?.path || '/');
     }
+    fetchCountryList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -178,15 +191,48 @@ export default function Login() {
           <Card className="mt-5 rounded-lg p-5 lg:p-7">
             <form onSubmit={handleSubmit(submitHandler)} autoComplete="off">
               <div className="space-y-4">
-                <Input
-                  label={t('mobile')}
-                  placeholder={t('enter') + ' ' + t('mobile')}
-                  prefix={
-                    <CiMobile1 className="size-5 transition-colors duration-200" strokeWidth="1" />
-                  }
-                  {...register('mobile')}
-                  error={errors?.mobile?.message}
-                />
+                <div className="grid grid-cols-3 gap-2">
+                  <Controller
+                    render={({ field }) => (
+                      <Listbox
+                        data={countries.map((c) => ({
+                          value: c.PhoneCode,
+                          label: `${c.PhoneCode}`
+                        }))}
+                        value={
+                          countries
+                            .map((c) => ({
+                              value: c.PhoneCode,
+                              label: `${c.PhoneCode}`
+                            }))
+                            .find((c) => c.value === field.value) || null
+                        }
+                        onChange={(val) => field.onChange(val.value)}
+                        name={field.name}
+                        label={t('Code')}
+                        placeholder={t('select') + ' ' + t('countryCode')}
+                        displayField="label"
+                        error={errors?.phoneCode?.message}
+                      />
+                    )}
+                    control={control}
+                    name="phoneCode"
+                  />
+                  <div className="col-span-2">
+                    <Input
+                      label={t('mobile')}
+                      placeholder={t('enter') + ' ' + t('mobile')}
+                      prefix={
+                        <CiMobile1
+                          className="size-5 transition-colors duration-200"
+                          strokeWidth="1"
+                        />
+                      }
+                      {...register('mobile')}
+                      error={errors?.mobile?.message}
+                    />
+                  </div>
+                </div>
                 <Input
                   label={t('password')}
                   type={show ? 'text' : 'password'}

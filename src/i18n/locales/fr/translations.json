@@ -378,7 +378,8 @@
   "isDepositCommissionEnabled": "La commission sur dépôt est-elle activée ?",
   "isUserLossCommissionEnabled": "La commission sur perte utilisateur est-elle activée ?",
   "player_note_delete_desc": "Êtes-vous sûr de vouloir supprimer cette note ?",
-  "player_note_delete_suceess": "Note supprimée avec succès",
+  "currency_deleted_successfully": "Devise supprimée avec succès",
+  "enable_switch_to_apply_limit": "Activez commutateur pour appliquer cette limite",
   "category_status_suceess": "Le statut de la catégorie a été modifié avec succès",
   "category_status_desc": "Êtes-vous sûr de vouloir modifier le statut de la catégorie?",
   "segmented": "segmenté",
@@ -533,5 +534,9 @@
   "transactionHasBeenSuccessfullyRejected": "Transaction rechazada con éxito",
   "pleaseEnterRejectionReason": "Por favor, ingresa una razón para rechazar",
   "rejectionReason": "Razón de rechazo",
-  "email_template_status_success": "Plantilla de correo electrónico El estado se ha cambiado correctamente"
+  "email_template_status_success": "Plantilla de correo electrónico El estado se ha cambiado correctamente",
+  "global_plafrom_limit":"Límite de plataforma (Admin Managed)",
+  "player_class_limit":"Límite de clases de jugadores (administrado por el administrador)",
+  "player_account_limit":"Límite de cuentas de jugador (administrado por el administrador)",
+  "responsible_gambling_limit":"Límite de juego responsable (joueur géré)"
 }

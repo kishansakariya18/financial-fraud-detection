@@ -6,6 +6,7 @@ export const loginSchema = Yup.object().shape({
     .required('Mobile Is Required')
     .matches(/^(\+\d{1,3}[- ]?)?\d{10}$/, 'Invalid Mobile Number')
     .length(10, 'Mobile Length Must Be 10'),
+  phoneCode: Yup.string().trim().required('Country Code Is Required'),
   password: Yup.string().trim().required('Password Is Required')
   // password: Yup.string()
   //   .required('Password is required')

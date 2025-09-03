@@ -57,6 +57,7 @@ export const apiConfig = {
       CHANE_PLAYER_FUND_PASSWORD: '/config/admin/config/user/change-manage-fund-password',
       SUMMARY: '/users/admin/users/summary',
       USER_SUMMARY: '/users/admin/users/summary',
+      USER_OVER_ALL_SUMMARY: '/users/admin/user-summary/:userId',
       LIMIT_SUMMARY: '/users/admin/limit-summary/:userId',
       COUNTRY_LIST: '/config/admin/config/countries',
       SEGMENTATION_LIST: '/bonus/admin/segmentation/list'

@@ -3,7 +3,18 @@
 import { useEffect, useState } from 'react';
 
 // Local Imports
-import { Button, Card, Skeleton } from 'components/ui';
+import {
+  Button,
+  Card,
+  Skeleton,
+  Table,
+  TBody,
+  Td,
+  Th,
+  THead,
+  Tr,
+  GhostSpinner
+} from 'components/ui';
 import { Chart } from 'components/custom/Chart';
 import { Link, useNavigate, useParams } from 'react-router';
 import { Page } from 'components/shared/Page';
@@ -25,6 +36,8 @@ export function ViewDetails() {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState('');
   const [userSummary, setUserSummary] = useState(null);
+  const [userSummaryData, setUserSummaryData] = useState([]);
+  const [summaryLoading, setSummaryLoading] = useState(false);
   const [limitSummary, setLimitSummary] = useState({
     userLimits: [],
     adminLimits: [],
@@ -83,6 +96,20 @@ export function ViewDetails() {
     }
   };
 
+  const fetchUserOverAllSummary = async (userID) => {
+    setSummaryLoading(true);
+    try {
+      if (!userID) return;
+      const result = await PlayerService.getUserOverAllSummary(userID);
+      if (result.status === 200 && result.response?.data) {
+        setUserSummaryData(result.response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching user overall summary:', error);
+    }
+    setSummaryLoading(false);
+  };
+
   useEffect(() => {
     fetchPlayerDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -93,6 +120,7 @@ export function ViewDetails() {
     const userID = response?.UserID || response?.ID || response?.userID;
     if (userID) {
       fetchUserSummary(userID);
+      fetchUserOverAllSummary(userID);
       fetchLimitSummary(userID);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -634,7 +662,7 @@ export function ViewDetails() {
                     </p>
                     <p>{response?.country?.CountryName}</p>
                   </div>
-                  <div>
+                  {/* <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {t('pan') + ' ' + t('status')}
                     </p>
@@ -644,8 +672,8 @@ export function ViewDetails() {
                         ? `${response.PanDetail} (Verified)`
                         : `Pending`}
                     </p>
-                  </div>
-                  <div>
+                  </div> */}
+                  {/* <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {t('bank') + ' ' + t('status')}
                     </p>
@@ -655,7 +683,7 @@ export function ViewDetails() {
                         ? `${response.BankDetail} (Verified)`
                         : `Pending`}
                     </p>
-                  </div>
+                  </div> */}
 
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
@@ -674,15 +702,103 @@ export function ViewDetails() {
                 </div>
               </Card>
 
+              {/* User Overall Summary Box */}
+              <Card className="mt-6 p-4 sm:p-5">
+                <h6 className="border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
+                  {t('user_overall_summary')}
+                </h6>
+                <div className="mt-4">
+                  {summaryLoading ? (
+                    <div className="flex justify-center py-4">
+                      <GhostSpinner className="size-4 border-2" />
+                    </div>
+                  ) : userSummaryData.length === 0 ? (
+                    <p className="text-sm text-gray-600">{t('noData')}</p>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <Table hoverable className="w-full text-left rtl:text-right">
+                        <THead>
+                          <Tr>
+                            <Th className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
+                              {t('currency')}
+                            </Th>
+                            <Th className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
+                              {t('total_bets')}
+                            </Th>
+                            <Th className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
+                              {t('total_wins')}
+                            </Th>
+                            <Th className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
+                              {t('total_ggr')}
+                            </Th>
+                            <Th className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
+                              {t('bet_count')}
+                            </Th>
+                            <Th className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
+                              {t('average_bet_size')}
+                            </Th>
+                            <Th className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
+                              {t('total_deposits')}
+                            </Th>
+                            <Th className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
+                              {t('total_withdrawals')}
+                            </Th>
+                            {/* <Th className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
+                              {t('last_active')}
+                            </Th> */}
+                          </Tr>
+                        </THead>
+                        <TBody>
+                          {userSummaryData.map((summary, index) => (
+                            <Tr key={index} className="hover:bg-gray-50 dark:hover:bg-dark-600">
+                              <Td className="font-medium text-gray-900 dark:text-white">
+                                {summary.CurrencyID}
+                              </Td>
+                              <Td className="text-center">{summary.TotalBets || 0}</Td>
+                              <Td className="text-center">{summary.TotalWins || 0}</Td>
+                              <Td className="text-center">
+                                <span
+                                  className={
+                                    summary.TotalGGR > 0
+                                      ? 'text-success dark:text-success-light'
+                                      : 'text-gray-600 dark:text-gray-400'
+                                  }>
+                                  {summary.TotalGGR || 0}
+                                </span>
+                              </Td>
+                              <Td className="text-center">{summary.BetCount || 0}</Td>
+                              <Td className="text-center">{summary.AverageBetSize || 0}</Td>
+                              <Td className="text-center">
+                                <span className="text-success dark:text-success-light">
+                                  {summary.TotalDeposits || 0}
+                                </span>
+                              </Td>
+                              <Td className="text-center">
+                                <span className="text-error dark:text-error-light">
+                                  {summary.TotalWithdrawals || 0}
+                                </span>
+                              </Td>
+                              {/* <Td className="text-center text-sm text-gray-600 dark:text-gray-400">
+                                {summary.LastActiveAt
+                                  ? getDateInUTCToTimeZone(summary.LastActiveAt)
+                                  : '-'}
+                              </Td> */}
+                            </Tr>
+                          ))}
+                        </TBody>
+                      </Table>
+                    </div>
+                  )}
+                </div>
+              </Card>
+
               {/* User Limits Card */}
               <Card className="mt-6 p-4 sm:p-5">
                 <button
                   type="button"
                   className="flex w-full items-center justify-between pb-2 text-left text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200"
                   onClick={() => setSectionsOpen((s) => ({ ...s, user: !s.user }))}>
-                  <span>
-                    {t('user')} {t('limit')}
-                  </span>
+                  <span>{t('responsible_gambling_limit')}</span>
                   {sectionsOpen.user ? (
                     <ChevronUpIcon className="size-7" />
                   ) : (
@@ -695,18 +811,18 @@ export function ViewDetails() {
                       <p className="col-span-3 text-sm text-gray-600">{t('noData')}</p>
                     ) : (
                       limitSummary.userLimits.reduce((acc, l) => {
-                        acc.push(
-                          <div key={`u-${l.id}-limit`}>
-                            <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                              {`${capitalizeFirstLetter(l.type)} ${capitalizeFirstLetter(l.period)} ${t('limit')}`}
-                            </p>
-                            <p>{(Number(l.amount) || 0) > 0 ? t('yes') : t('no')}</p>
-                          </div>
-                        );
+                        // acc.push(
+                        //   <div key={`u-${l.id}-limit`}>
+                        //     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                        //       {`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
+                        //     </p>
+                        //     <p>{(Number(l.amount) || 0) > 0 ? t('yes') : t('no')}</p>
+                        //   </div>
+                        // );
                         acc.push(
                           <div key={`u-${l.id}-value`}>
                             <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                              {`${capitalizeFirstLetter(l.type)} ${capitalizeFirstLetter(l.period)} ${t('value')}`}
+                              {`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
                             </p>
                             <p>{(Number(l.amount) || 0) > 0 ? l.amount : '-'}</p>
                           </div>
@@ -724,9 +840,7 @@ export function ViewDetails() {
                   type="button"
                   className="flex w-full items-center justify-between pb-2 text-left text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200"
                   onClick={() => setSectionsOpen((s) => ({ ...s, admin: !s.admin }))}>
-                  <span>
-                    {t('admin')} {t('limit')}
-                  </span>
+                  <span>{t('player_account_limit')}</span>
                   {sectionsOpen.admin ? (
                     <ChevronUpIcon className="size-7" />
                   ) : (
@@ -739,18 +853,18 @@ export function ViewDetails() {
                       <p className="col-span-3 text-sm text-gray-600">{t('noData')}</p>
                     ) : (
                       limitSummary.adminLimits.reduce((acc, l) => {
-                        acc.push(
-                          <div key={`a-${l.id}-limit`}>
-                            <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                              {`${capitalizeFirstLetter(l.type)} ${capitalizeFirstLetter(l.period)} ${t('limit')}`}
-                            </p>
-                            <p>{(Number(l.amount) || 0) > 0 ? t('yes') : t('no')}</p>
-                          </div>
-                        );
+                        // acc.push(
+                        //   <div key={`a-${l.id}-limit`}>
+                        //     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                        //       {`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
+                        //     </p>
+                        //     <p>{(Number(l.amount) || 0) > 0 ? t('yes') : t('no')}</p>
+                        //   </div>
+                        // );
                         acc.push(
                           <div key={`a-${l.id}-value`}>
                             <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                              {`${capitalizeFirstLetter(l.type)} ${capitalizeFirstLetter(l.period)} ${t('value')}`}
+                              {` ${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
                             </p>
                             <p>{(Number(l.amount) || 0) > 0 ? l.amount : '-'}</p>
                           </div>
@@ -768,9 +882,7 @@ export function ViewDetails() {
                   type="button"
                   className="flex w-full items-center justify-between pb-2 text-left text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200"
                   onClick={() => setSectionsOpen((s) => ({ ...s, userClass: !s.userClass }))}>
-                  <span>
-                    {t('user')} {t('class')} {t('limit')}
-                  </span>
+                  <span>{t('player_class_limit')}</span>
                   {sectionsOpen.userClass ? (
                     <ChevronUpIcon className="size-7" />
                   ) : (
@@ -783,18 +895,18 @@ export function ViewDetails() {
                       <p className="col-span-3 text-sm text-gray-600">{t('noData')}</p>
                     ) : (
                       limitSummary.userClassLimits.reduce((acc, l) => {
-                        acc.push(
-                          <div key={`uc-${l.id}-limit`}>
-                            <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                              {`${capitalizeFirstLetter(l.type)} ${capitalizeFirstLetter(l.period)} ${t('limit')}`}
-                            </p>
-                            <p>{(Number(l.amount) || 0) > 0 ? t('yes') : t('no')}</p>
-                          </div>
-                        );
+                        // acc.push(
+                        //   // <div key={`uc-${l.id}-limit`}>
+                        //   //   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                        //   //     {`${capitalizeFirstLetter(l.type)} ${capitalizeFirstLetter(l.period)} ${t('limit')}`}
+                        //   //   </p>
+                        //   //   <p>{(Number(l.amount) || 0) > 0 ? t('yes') : t('no')}</p>
+                        //   // </div>
+                        // );
                         acc.push(
                           <div key={`uc-${l.id}-value`}>
                             <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                              {`${capitalizeFirstLetter(l.type)} ${capitalizeFirstLetter(l.period)} ${t('value')}`}
+                              {`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
                             </p>
                             <p>{(Number(l.amount) || 0) > 0 ? l.amount : '-'}</p>
                           </div>
@@ -812,9 +924,7 @@ export function ViewDetails() {
                   type="button"
                   className="flex w-full items-center justify-between pb-2 text-left text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200"
                   onClick={() => setSectionsOpen((s) => ({ ...s, global: !s.global }))}>
-                  <span>
-                    {t('global')} {t('platform')} {t('limit')}
-                  </span>
+                  <span>{t('global_plafrom_limit')}</span>
                   {sectionsOpen.global ? (
                     <ChevronUpIcon className="size-7" />
                   ) : (
@@ -828,7 +938,7 @@ export function ViewDetails() {
                     ) : (
                       <>
                         {/* Daily Deposit */}
-                        <div>
+                        {/* <div>
                           <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                             {`${t('dailyDepositLimit')}`}
                           </p>
@@ -837,7 +947,7 @@ export function ViewDetails() {
                               ? t('yes')
                               : t('no')}
                           </p>
-                        </div>
+                        </div> */}
                         <div>
                           <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                             {`${t('dailyDepositValue')}`}
@@ -850,7 +960,7 @@ export function ViewDetails() {
                         </div>
 
                         {/* Daily Withdraw */}
-                        <div>
+                        {/* <div>
                           <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                             {`${t('dailyWithdrawLimit')}`}
                           </p>
@@ -859,7 +969,7 @@ export function ViewDetails() {
                               ? t('yes')
                               : t('no')}
                           </p>
-                        </div>
+                        </div> */}
                         <div>
                           <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                             {`${t('dailyWithdrawValue')}`}
@@ -872,7 +982,7 @@ export function ViewDetails() {
                         </div>
 
                         {/* One Time Bet */}
-                        <div>
+                        {/* <div>
                           <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                             {`${t('oneTimeBetLimit')}`}
                           </p>
@@ -881,7 +991,7 @@ export function ViewDetails() {
                               ? t('yes')
                               : t('no')}
                           </p>
-                        </div>
+                        </div> */}
                         <div>
                           <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                             {`${t('oneTimeBetValue')}`}
@@ -894,7 +1004,7 @@ export function ViewDetails() {
                         </div>
 
                         {/* One Time Win */}
-                        <div>
+                        {/* <div>
                           <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                             {`${t('oneTimeWinLimit')}`}
                           </p>
@@ -903,7 +1013,7 @@ export function ViewDetails() {
                               ? t('yes')
                               : t('no')}
                           </p>
-                        </div>
+                        </div> */}
                         <div>
                           <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                             {`${t('oneTimeWinValue')}`}
