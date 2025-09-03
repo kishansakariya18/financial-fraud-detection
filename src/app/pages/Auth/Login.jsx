@@ -9,7 +9,6 @@ import { Controller, useForm } from 'react-hook-form';
 import LightThemeLogo from 'assets/appLogo_light_theme.svg?react';
 import DarkThemeLogo from 'assets/appLogo_dark_theme.svg?react';
 import { Button, Card, Checkbox, Input } from 'components/ui';
-import { Listbox } from 'components/shared/form/Listbox';
 import { loginSchema } from './schema';
 import { Page } from 'components/shared/Page';
 import AuthService from 'services/auth.services';
@@ -191,47 +190,46 @@ export default function Login() {
           <Card className="mt-5 rounded-lg p-5 lg:p-7">
             <form onSubmit={handleSubmit(submitHandler)} autoComplete="off">
               <div className="space-y-4">
-                <div className="grid grid-cols-3 gap-2">
-                  <Controller
-                    render={({ field }) => (
-                      <Listbox
-                        data={countries.map((c) => ({
-                          value: c.PhoneCode,
-                          label: `${c.PhoneCode}`
-                        }))}
-                        value={
-                          countries
-                            .map((c) => ({
-                              value: c.PhoneCode,
-                              label: `${c.PhoneCode}`
-                            }))
-                            .find((c) => c.value === field.value) || null
-                        }
-                        onChange={(val) => field.onChange(val.value)}
-                        name={field.name}
-                        label={t('Code')}
-                        placeholder={t('select') + ' ' + t('countryCode')}
-                        displayField="label"
-                        error={errors?.phoneCode?.message}
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-dark-100">
+                    {t('mobile')}
+                  </label>
+                  <div className="relative flex rounded-lg border border-gray-300 bg-white shadow-sm transition-colors duration-200 focus-within:border-primary-500 focus-within:ring-1 focus-within:ring-primary-500 hover:border-gray-400 dark:border-dark-500 dark:bg-dark-700 dark:focus-within:border-primary-500 dark:hover:border-dark-400">
+                    <div className="flex items-center pl-3">
+                      <CiMobile1
+                        className="size-5 text-gray-400 dark:text-dark-300"
+                        strokeWidth="1"
                       />
-                    )}
-                    control={control}
-                    name="phoneCode"
-                  />
-                  <div className="col-span-2">
-                    <Input
-                      label={t('mobile')}
+                      <Controller
+                        render={({ field }) => (
+                          <select
+                            value={field.value}
+                            onChange={(e) => field.onChange(e.target.value)}
+                            className="w-16 border-none bg-transparent pr-1 text-sm font-medium text-gray-700 outline-none dark:text-dark-100">
+                            {countries.map((country) => (
+                              <option key={country.PhoneCode} value={country.PhoneCode}>
+                                {country.PhoneCode}
+                              </option>
+                            ))}
+                          </select>
+                        )}
+                        control={control}
+                        name="phoneCode"
+                      />
+                      <div className="mx-1 h-4 w-px bg-gray-300 dark:bg-gray-600"></div>
+                    </div>
+                    <input
+                      type="tel"
                       placeholder={t('enter') + ' ' + t('mobile')}
-                      prefix={
-                        <CiMobile1
-                          className="size-5 transition-colors duration-200"
-                          strokeWidth="1"
-                        />
-                      }
+                      className="flex-1 border-none bg-transparent px-1 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none dark:text-dark-100 dark:placeholder-dark-300"
                       {...register('mobile')}
-                      error={errors?.mobile?.message}
                     />
                   </div>
+                  {(errors?.mobile?.message || errors?.phoneCode?.message) && (
+                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                      {errors?.mobile?.message || errors?.phoneCode?.message}
+                    </p>
+                  )}
                 </div>
                 <Input
                   label={t('password')}
