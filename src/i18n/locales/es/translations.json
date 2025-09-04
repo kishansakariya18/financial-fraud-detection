@@ -557,5 +557,10 @@
   "global_plafrom_limit":"Límite de plataforma (Admin Managed)",
   "player_class_limit":"Límite de clases de jugadores (administrado por el administrador)",
   "player_account_limit":"Límite de cuentas de jugador (administrado por el administrador)",
-  "responsible_gambling_limit":"Límite de juego responsable (Jugadora gestionada)"
+  "responsible_gambling_limit":"Límite de juego responsable (Jugadora gestionada)",
+  "recipient_group_type":"Tipo de grupo de destinatarios",
+  "failed_count":"conteo fallido",
+  "notification_detail":"Detalle de notificación",
+  "crm_notifications":"Historial de notificaciones",
+  "send_date_time":"Fecha de envío"
 }

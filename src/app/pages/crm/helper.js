@@ -104,3 +104,27 @@ export const sendOptions = [
     icon: CheckBadgeIcon
   }
 ];
+export const parseNotificationStatusToApp = (status) => {
+  switch (+status) {
+    case 1:
+      return 'success';
+    case 2:
+      return 'failure';
+    case 0:
+      return 'pending';
+    default:
+      break;
+  }
+};
+export const parseNotificationStatusToApi = (status) => {
+  switch (status) {
+    case 'success':
+      return 1;
+    case 'failure':
+      return 2;
+    case 'pending':
+      return 0;
+    default:
+      return -1; // or null, depending on how you want to handle invalid input
+  }
+};

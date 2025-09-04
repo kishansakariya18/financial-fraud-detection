@@ -12,6 +12,8 @@ import { NotificationFilters } from './NotificationFilters';
 import { columns } from './columns';
 import CRMService from 'services/crm.services';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
+import { parseNotificationStatusToApi } from 'app/pages/crm/helper';
+import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 function responseMapper(apiData) {
   const list =
@@ -20,8 +22,21 @@ function responseMapper(apiData) {
       NotificationLogID: item?.NotificationLogID || '-',
       Title: item?.Title || '-',
       MsgBody: item?.MsgBody || '-',
-      RecipientGroupType: item?.RecipientGroupType || '-'
+      RecipientGroupType: item?.RecipientGroupType || '-',
+      Status: parseNotificationStatusToApi(item?.Status),
+      DateCreated: getDateInUTCToTimeZone(
+        item?.DateCreated || '-',
+        undefined,
+        'DD MMM YYYY, hh:mm A'
+      ),
+      DateModified: getDateInUTCToTimeZone(
+        item?.DateModified || '-',
+        undefined,
+        'DD MMM YYYY, hh:mm A'
+      ),
+      Channel: item?.Channel
     })) || [];
+  console.log(list[0].Status);
   return list;
 }
 
@@ -60,9 +75,8 @@ export default function NotificationList() {
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: [] },
-      tableSettings: {},
-      columnVisibility: {}
+      columnPinning: { left: ['id'], right: ['actions'] },
+      tableSettings: {}
     }
   });
 

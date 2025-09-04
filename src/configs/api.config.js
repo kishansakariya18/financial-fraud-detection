@@ -259,7 +259,8 @@ export const apiConfig = {
     },
     CRM: {
       SEND: '/notifications/admin/crm/sendNotification',
-      LIST: '/notifications/admin/crm/notification/list'
+      LIST: '/notifications/admin/crm/notification/list',
+      DETAIL: '/notifications/admin/crm/notification/:notificationId'
     },
     HOME_PAGE: {
       HOME_CATEGORY_LIST: '/config/admin/home-page/home-category/list',

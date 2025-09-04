@@ -602,5 +602,10 @@
   "average_bet_size": "Average Bet Size",
   "total_deposits": "Total Deposits",
   "total_withdrawals": "Total Withdrawals",
-  "last_active": "Last Active"
+  "last_active": "Last Active",
+  "recipient_group_type":"Recipient Group Type",
+  "failed_count":"Failed Count",
+  "notification_detail":"Notification Detail",
+  "crm_notifications": "Notification History",
+  "send_date_time":"Send Date Time"
 }
