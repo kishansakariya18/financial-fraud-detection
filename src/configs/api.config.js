@@ -322,7 +322,9 @@ export const apiConfig = {
     },
     RATE_LIMIT_RULES: {
       LIST: '/config/admin/rate-limit-rules/list',
-      CHANGE_STATUS: '/config/admin/rate-limit-rules/:rateLimitUID/change-status'
+      CHANGE_STATUS: '/config/admin/rate-limit-rules/:rateLimitUID/change-status',
+      DETAIL: '/config/admin/rate-limit-rules/:rateLimitUID/detail',
+      UPDATE: '/config/admin/rate-limit-rules/:rateLimitUID/update'
     },
     BLACKLIST: {
       LIST: '/users/admin/blacklist/list',
