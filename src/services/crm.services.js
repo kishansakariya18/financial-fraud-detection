@@ -2,7 +2,7 @@ import apiConfig from 'configs/api.config';
 import { sendRequest } from 'utils/axios';
 import { replaceText } from 'utils/custom.utilities';
 import dayjs from 'dayjs';
-import { parseTypeToApi } from 'app/pages/crm/helper';
+import { parseTypeToApi, parseNotificationStatusToApi } from 'app/pages/crm/helper';
 
 const EmailTemplateService = {
   getNotificationsList: async ({ pagination, filters }) => {
@@ -27,6 +27,10 @@ const EmailTemplateService = {
           type:
             filters?.type && parseTypeToApi(filters.type) !== -1
               ? parseTypeToApi(filters.type)
+              : undefined,
+          status:
+            filters?.status && parseNotificationStatusToApi(filters.status) !== -1
+              ? parseNotificationStatusToApi(filters.status)
               : undefined,
           keyword: filters?.keyword || undefined
         }

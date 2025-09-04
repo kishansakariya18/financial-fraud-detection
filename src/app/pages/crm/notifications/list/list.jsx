@@ -12,7 +12,7 @@ import { NotificationFilters } from './NotificationFilters';
 import { columns } from './columns';
 import CRMService from 'services/crm.services';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
-import { parseNotificationStatusToApi, parseTypeToApp } from 'app/pages/crm/helper';
+import { parseNotificationStatusToApp, parseTypeToApp } from 'app/pages/crm/helper';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 function responseMapper(apiData) {
@@ -23,7 +23,7 @@ function responseMapper(apiData) {
       Title: item?.Title || '-',
       MsgBody: item?.MsgBody || '-',
       RecipientGroupType: item?.RecipientGroupType || '-',
-      Status: parseNotificationStatusToApi(item?.Status),
+      Status: parseNotificationStatusToApp(item?.Status),
       DateCreated: getDateInUTCToTimeZone(
         item?.DateCreated || '-',
         undefined,
@@ -104,6 +104,9 @@ export default function NotificationList() {
       // FacedtedFilter expects an array for arrIncludesSome; but single-select works with string too
       filtersFromQuery.push({ id: 'Type', value: queryParams.type });
     }
+    if (queryParams.status) {
+      filtersFromQuery.push({ id: 'Status', value: queryParams.status });
+    }
     if (queryParams.startDate && queryParams.endDate) {
       filtersFromQuery.push({
         id: 'createdAt',
@@ -127,6 +130,9 @@ export default function NotificationList() {
       if (data.id === 'Type') {
         filterItems.type = data.value;
       }
+      if (data.id === 'Status') {
+        filterItems.status = data.value;
+      }
       if (data.id === 'createdAt') {
         filterItems.date = data.value;
       }
@@ -138,6 +144,7 @@ export default function NotificationList() {
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
       ...(filterItems.channel && { channel: filterItems.channel }),
       ...(filterItems.type && { type: filterItems.type }),
+      ...(filterItems.status && { status: filterItems.status }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
       ...(filterItems.date && { endDate: filterItems.date[1] })
     });

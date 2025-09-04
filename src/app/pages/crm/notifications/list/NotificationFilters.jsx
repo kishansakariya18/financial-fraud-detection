@@ -10,7 +10,7 @@ import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
-import { typeOptions, sendOptions } from 'app/pages/crm/helper';
+import { typeOptions, sendOptions, statusOptions } from 'app/pages/crm/helper';
 import { useNavigate } from 'react-router';
 
 export function NotificationFilters({
@@ -73,6 +73,15 @@ export function NotificationFilters({
           )}
           style={{ '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)' }}>
           <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
+            {table.getColumn('Status') && (
+              <FacedtedFilter
+                options={statusOptions}
+                column={table.getColumn('Status')}
+                title={t('status') || 'Status'}
+                isMultiple={false}
+                showCheckbox={false}
+              />
+            )}
             <Filters
               table={table}
               onApplyFilters={onApplyFilters}

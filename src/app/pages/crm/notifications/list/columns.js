@@ -1,6 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { RowActions } from 'app/pages/crm/notifications/list/RowActions';
-import { IdCell, BoldCell, DateCell } from 'components/custom/table/cell';
+import { IdCell, BoldCell, DateCell, BadgeCell } from 'components/custom/table/cell';
+import { statusOptions } from 'app/pages/crm/helper';
 
 const columnHelper = createColumnHelper();
 
@@ -64,13 +65,14 @@ export const columns = [
     filterFn: 'inNumberRange',
     enableSorting: false
   }),
-  // columnHelper.accessor('Status', {
-  //   id: 'Status',
-  //   header: 'Status',
-  //   meta: { optionData: parseNotificationStatusToApp },
-  //   cell: BadgeCell,
-  //   enableSorting: false
-  // }),
+  columnHelper.accessor('Status', {
+    id: 'Status',
+    header: 'Status',
+    cell: BadgeCell,
+    meta: { optionData: statusOptions },
+    filterFn: 'arrIncludesSome',
+    enableSorting: false
+  }),
   columnHelper.display({
     id: 'actions',
     label: 'Row Actions',

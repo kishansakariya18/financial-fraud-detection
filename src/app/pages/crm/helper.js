@@ -167,3 +167,20 @@ export const typeOptions = [
     icon: CheckBadgeIcon
   }
 ];
+export const statusOptions = [
+  {
+    value: 'pending',
+    label: 'Pending',
+    color: 'warning'
+  },
+  {
+    value: 'success',
+    label: 'Success',
+    color: 'success'
+  },
+  {
+    value: 'failure',
+    label: 'Failure',
+    color: 'error'
+  }
+];
