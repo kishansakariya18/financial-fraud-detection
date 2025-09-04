@@ -28,6 +28,19 @@ export const pagesRoute = [
         )
       };
     }
+  },
+  {
+    path: 'crm/notifications',
+    lazy: async () => {
+      const { default: NotificationList } = await import('../../pages/crm/notifications/list/list');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.CRM.VIEW}>
+            <NotificationList />
+          </PrivateRoute>
+        )
+      };
+    }
   }
   // {
   //   path: 'pages/:id/tab',

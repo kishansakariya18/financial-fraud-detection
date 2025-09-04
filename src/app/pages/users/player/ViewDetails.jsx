@@ -743,9 +743,6 @@ export function ViewDetails() {
                             <Th className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
                               {t('total_withdrawals')}
                             </Th>
-                            {/* <Th className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
-                              {t('last_active')}
-                            </Th> */}
                           </Tr>
                         </THead>
                         <TBody>

@@ -2,6 +2,27 @@ import apiConfig from 'configs/api.config';
 import { sendRequest } from 'utils/axios';
 
 const EmailTemplateService = {
+  getNotificationsList: async ({ pagination, filters }) => {
+    try {
+      const endPoint = apiConfig.endPoints.CRM.LIST;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        params: {
+          page: pagination.pageIndex + 1,
+          perPage: pagination.pageSize,
+          keyword: filters?.keyword || undefined
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from CRM Notifications List', error);
+    }
+  },
   send: async (data) => {
     try {
       // const { filters, pagination } = data;
