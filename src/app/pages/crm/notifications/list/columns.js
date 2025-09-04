@@ -1,6 +1,6 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { RowActions } from 'app/pages/crm/notifications/list/RowActions';
-import { IdCell, BoldCell } from 'components/custom/table/cell';
+import { IdCell, BoldCell, DateCell } from 'components/custom/table/cell';
 
 const columnHelper = createColumnHelper();
 
@@ -33,6 +33,14 @@ export const columns = [
     id: 'Channel',
     header: 'Channel',
     cell: BoldCell,
+    filterFn: 'arrIncludesSome',
+    enableSorting: false
+  }),
+  columnHelper.accessor('Type', {
+    id: 'Type',
+    header: 'Type',
+    cell: BoldCell,
+    filterFn: 'arrIncludesSome',
     enableSorting: false
   }),
   columnHelper.accessor('DateCreated', {
@@ -45,6 +53,15 @@ export const columns = [
     id: 'DateModified',
     header: 'DateModified',
     cell: BoldCell,
+    enableSorting: false
+  }),
+  // Hidden technical column used for date range filtering via DateFilter
+  columnHelper.accessor((row) => row.createdAt, {
+    id: 'createdAt',
+    label: 'Created At (ts)',
+    header: 'Created At (ts)',
+    cell: DateCell,
+    filterFn: 'inNumberRange',
     enableSorting: false
   }),
   // columnHelper.accessor('Status', {

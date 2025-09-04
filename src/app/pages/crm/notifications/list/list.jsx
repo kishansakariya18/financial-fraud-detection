@@ -12,7 +12,7 @@ import { NotificationFilters } from './NotificationFilters';
 import { columns } from './columns';
 import CRMService from 'services/crm.services';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
-import { parseNotificationStatusToApi } from 'app/pages/crm/helper';
+import { parseNotificationStatusToApi, parseTypeToApp } from 'app/pages/crm/helper';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 function responseMapper(apiData) {
@@ -34,6 +34,9 @@ function responseMapper(apiData) {
         undefined,
         'DD MMM YYYY, hh:mm A'
       ),
+      Type: parseTypeToApp(item?.Type),
+      // numeric timestamp for filtering (hidden column)
+      createdAt: item?.DateCreated ? new Date(item.DateCreated).getTime() : null,
       Channel: item?.Channel
     })) || [];
   console.log(list[0].Status);
@@ -76,7 +79,8 @@ export default function NotificationList() {
     setSearchParams,
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
-      tableSettings: {}
+      tableSettings: {},
+      columnVisibility: { createdAt: false }
     }
   });
 
@@ -93,6 +97,19 @@ export default function NotificationList() {
     if (queryParams.keyword) {
       filtersFromQuery.push({ id: 'Title', value: queryParams.keyword });
     }
+    if (queryParams.channel) {
+      filtersFromQuery.push({ id: 'Channel', value: queryParams.channel });
+    }
+    if (queryParams.type) {
+      // FacedtedFilter expects an array for arrIncludesSome; but single-select works with string too
+      filtersFromQuery.push({ id: 'Type', value: queryParams.type });
+    }
+    if (queryParams.startDate && queryParams.endDate) {
+      filtersFromQuery.push({
+        id: 'createdAt',
+        value: [+queryParams.startDate, +queryParams.endDate]
+      });
+    }
 
     setColumnFilters(filtersFromQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -104,13 +121,25 @@ export default function NotificationList() {
       if (data.id === 'Title') {
         filterItems.keyword = data.value;
       }
+      if (data.id === 'Channel') {
+        filterItems.channel = data.value;
+      }
+      if (data.id === 'Type') {
+        filterItems.type = data.value;
+      }
+      if (data.id === 'createdAt') {
+        filterItems.date = data.value;
+      }
     }
 
     setSearchParams({
-      ...queryParams,
       pageIndex: 0,
       pageSize: 10,
-      ...(filterItems.keyword && { keyword: filterItems.keyword })
+      ...(filterItems.keyword && { keyword: filterItems.keyword }),
+      ...(filterItems.channel && { channel: filterItems.channel }),
+      ...(filterItems.type && { type: filterItems.type }),
+      ...(filterItems.date && { startDate: filterItems.date[0] }),
+      ...(filterItems.date && { endDate: filterItems.date[1] })
     });
   };
 

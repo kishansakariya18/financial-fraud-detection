@@ -1,10 +1,13 @@
 import apiConfig from 'configs/api.config';
 import { sendRequest } from 'utils/axios';
 import { replaceText } from 'utils/custom.utilities';
+import dayjs from 'dayjs';
+import { parseTypeToApi } from 'app/pages/crm/helper';
 
 const EmailTemplateService = {
   getNotificationsList: async ({ pagination, filters }) => {
     try {
+      console.log('filters: ', filters);
       const endPoint = apiConfig.endPoints.CRM.LIST;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
@@ -16,6 +19,15 @@ const EmailTemplateService = {
         params: {
           page: pagination.pageIndex + 1,
           perPage: pagination.pageSize,
+          startDate: filters.startDate ? dayjs(+filters.startDate).format('YYYY-MM-DD') : undefined,
+          endDate: filters.endDate
+            ? dayjs(+filters.endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
+            : undefined,
+          channel: filters?.channel || undefined,
+          type:
+            filters?.type && parseTypeToApi(filters.type) !== -1
+              ? parseTypeToApi(filters.type)
+              : undefined,
           keyword: filters?.keyword || undefined
         }
       });

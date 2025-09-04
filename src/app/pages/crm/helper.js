@@ -128,3 +128,42 @@ export const parseNotificationStatusToApi = (status) => {
       return -1; // or null, depending on how you want to handle invalid input
   }
 };
+//(1=Normal, 2=Scheduled)
+export const parseTypeToApp = (status) => {
+  switch (status) {
+    case 1:
+      return 'normal';
+    case 2:
+      return 'scheduled';
+    default:
+      return -1; // or null, depending on how you want to handle invalid input
+  }
+};
+export const parseTypeToApi = (status) => {
+  switch (status) {
+    case 'normal':
+      return 1;
+    case 'scheduled':
+      return 2;
+    default:
+      return -1; // or null, depending on how you want to handle invalid input
+  }
+};
+
+// Options for Type filter (Normal / Scheduled)
+export const typeOptions = [
+  {
+    key: 'normal',
+    value: 'normal',
+    label: 'Normal',
+    color: 'success',
+    icon: CheckBadgeIcon
+  },
+  {
+    key: 'scheduled',
+    value: 'scheduled',
+    label: 'Scheduled',
+    color: 'success',
+    icon: CheckBadgeIcon
+  }
+];
