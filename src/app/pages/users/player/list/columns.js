@@ -149,5 +149,13 @@ export const columns = [
     header: 'Segmentation ID',
     cell: BoldCell,
     enableSorting: false
+  }),
+  // Virtual/display column for Player Class filter support (server-side filtering)
+  columnHelper.display({
+    id: 'playerClassID',
+    label: 'Player Class',
+    header: 'Player Class',
+    cell: BoldCell,
+    enableSorting: false
   })
 ];

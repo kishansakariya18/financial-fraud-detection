@@ -24,6 +24,7 @@ const PlayerService = {
         isKYCVerified: filters.isKYCVerified ? playerKycToAPI(filters.isKYCVerified) : undefined,
         isBankVerified: filters.isBankVerified ? playerKycToAPI(filters.isBankVerified) : undefined,
         gender: filters.gender ? filters.gender : undefined,
+        playerClassID: filters.playerClassID ? filters.playerClassID : undefined,
         countries: filters.CountryID ? filters.CountryID.split(',') : [],
         segments: filters.SegmentationID ? filters.SegmentationID.split(',') : [],
         startDate: filters.startDate
