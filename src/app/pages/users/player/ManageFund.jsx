@@ -10,7 +10,6 @@ import PlayerService from 'services/player.services';
 import WalletService from 'services/wallet-services';
 import { Listbox } from 'components/shared/form/Listbox';
 import { fundTypeOption, transactionTypeOption } from './helper';
-import { TbCoinRupeeFilled } from 'react-icons/tb';
 import TextareaAutosize from 'react-textarea-autosize';
 import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { manageFundSchema } from './schema';
@@ -233,14 +232,36 @@ const ManageFund = () => {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <Input
-                {...register('amount')}
-                prefix={<TbCoinRupeeFilled className="size-5" />}
-                label={t('amount')}
-                type="number"
-                error={errors?.amount?.message}
-                placeholder={t('enter') + ' ' + t('amount')}
-                step="any"
+              <Controller
+                name="amount"
+                control={control}
+                render={({ field }) => {
+                  const selectedCurrency = walletOptions
+                    .find((w) => w.value === watch('currency'))
+                    ?.label?.split(' ')[0];
+
+                  return (
+                    <Input
+                      {...field}
+                      prefix={
+                        selectedCurrency && (
+                          <span className="m-8 flex items-center text-sm font-medium">
+                            {selectedCurrency}
+                          </span>
+                        )
+                      }
+                      label={t('amount')}
+                      type="number"
+                      error={errors?.amount?.message}
+                      placeholder={t('enter') + ' ' + t('amount')}
+                      step="any"
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        field.onChange(value);
+                      }}
+                    />
+                  );
+                }}
               />
               <Textarea
                 {...register('fundMessage')}
