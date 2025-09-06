@@ -42,7 +42,13 @@ const UserClassService = {
           'Content-Type': 'application/json'
         },
         body: {
-          filters: {}
+          isPagination: false,
+          page: '',
+          per_page: '',
+          filters: {
+            keyword: '',
+            status: ''
+          }
         }
       });
       return response;
