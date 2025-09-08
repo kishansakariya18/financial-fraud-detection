@@ -77,7 +77,7 @@ export default function UserManualDepositTransaction() {
       filtersFromQuery.push({ id: 'amount', value: queryParams.keyword });
     }
     if (queryParams.status) {
-      filtersFromQuery.push({ id: 'status', value: queryParams.status });
+      filtersFromQuery.push({ id: 'depositStatus', value: queryParams.status });
     }
     // Initialize date range filter from URL params (startDate/endDate)
     if (queryParams.startDate && queryParams.endDate) {

@@ -1,6 +1,12 @@
 // Import Dependencies
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
-import { EllipsisHorizontalIcon, PencilIcon, ClockIcon } from '@heroicons/react/24/outline';
+import {
+  EllipsisHorizontalIcon,
+  PencilIcon,
+  ChartBarIcon,
+  CurrencyDollarIcon,
+  Cog6ToothIcon
+} from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -167,7 +173,7 @@ export function RowActions({ row, table }) {
             leaveTo="opacity-0 translate-y-2">
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
-              className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
+              className="absolute z-[100] w-[15rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
               {hasPermission(PERMISSIONS.CURRENCIES.CHANGE_STATUS) && (
                 <MenuItem>
                   {({ focus }) => (
@@ -213,7 +219,7 @@ export function RowActions({ row, table }) {
                         'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
                         focus && 'bg-this/10 dark:bg-this-light/10'
                       )}>
-                      <ClockIcon className="size-4.5 stroke-1" />
+                      <ChartBarIcon className="size-4.5 stroke-1" />
                       <span>{t('exchange_history')}</span>
                     </button>
                   )}
@@ -229,7 +235,7 @@ export function RowActions({ row, table }) {
                         'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
                         focus && 'bg-this/10 dark:bg-this-light/10'
                       )}>
-                      <ClockIcon className="size-4.5 stroke-1" />
+                      <CurrencyDollarIcon className="size-4.5 stroke-1" />
                       <span>{t('admin_exchange_rate')}</span>
                     </button>
                   )}
@@ -244,7 +250,7 @@ export function RowActions({ row, table }) {
                         'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
                         focus && 'bg-this/10 dark:bg-this-light/10'
                       )}>
-                      <ClockIcon className="size-4.5 stroke-1" />
+                      <Cog6ToothIcon className="size-4.5 stroke-1" />
                       <span>{t('exchange_update_type')}</span>
                     </button>
                   )}
