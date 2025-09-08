@@ -607,5 +607,11 @@
   "failed_count":"Failed Count",
   "notification_detail":"Notification Detail",
   "crm_notifications": "Notification History",
-  "send_date_time":"Send Date Time"
+  "send_date_time":"Send Date Time",  
+  "responsible_gambling":"Responsible Gambling",
+  "responsible_gambling_list":"Responsible Gambling List",
+  "responsible_gambling_add":"Add Responsible Gambling",
+  "responsible_gambling_edit":"Edit Responsible Gambling",
+  "responsible_gambling_status":"Responsible Gambling Status",
+  "responsible_gambling_status_success":"Responsible Gambling Status has been changed successfully"
 }

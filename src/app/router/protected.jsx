@@ -34,6 +34,7 @@ import { bankRoute } from './routes/bank.route';
 import { userManualDepositTransactionRoute } from './routes/user-manual-deposit-transaction.route';
 import { releaseNotesRoutes } from './routes/release-notes.route';
 import { supervisorRoute } from './routes/supervisor.route';
+import responsibleGamblingRoute from './routes/responsible-gambling.route.jsx';
 
 // ----------------------------------------------------------------------
 
@@ -73,6 +74,7 @@ const protectedRoutes = {
         ...bankRoute,
         ...userManualDepositTransactionRoute,
         ...userClass,
+        ...responsibleGamblingRoute,
         ...rateLimitRulesRoute,
         ...registrationFieldsRoute,
         ...siteConfigurationRoutes,

@@ -543,5 +543,11 @@
   "failed_count":"décompte raté",
   "notification_detail":"Détails des notifications",
   "crm_notifications":"Historique des notifications",
-  "send_date_time":"Date d'envoi"
+  "send_date_time":"Date d'envoi",
+  "responsible_gambling":"Jeu responsable",
+  "responsible_gambling_list":"Liste de jeu responsable",
+  "responsible_gambling_add":"Ajouter un jeu responsable",
+  "responsible_gambling_edit":"Modifier un jeu responsable",
+  "responsible_gambling_status":"Statut du jeu responsable",
+  "responsible_gambling_status_success":"Statut du jeu responsable modifié avec succès"
 }

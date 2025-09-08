@@ -562,5 +562,11 @@
   "failed_count":"conteo fallido",
   "notification_detail":"Detalle de notificación",
   "crm_notifications":"Historial de notificaciones",
-  "send_date_time":"Fecha de envío"
+  "send_date_time":"Fecha de envío",
+  "responsible_gambling":"Juego responsable",
+  "responsible_gambling_list":"Lista de juego responsable",
+  "responsible_gambling_add":"Agregar juego responsable",
+  "responsible_gambling_edit":"Editar juego responsable",
+  "responsible_gambling_status":"Estado de juego responsable",
+  "responsible_gambling_status_success":"Estado de juego responsable cambiado exitosamente"
 }
