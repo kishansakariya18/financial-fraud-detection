@@ -15,7 +15,7 @@ import casinoRoutes from './routes/casino.route';
 import currenciesRoutes from './routes/currencies.route';
 import affiliateRoutes from './routes/affiliate.route';
 import segmentationRoutes from './routes/segmentation.route';
-import emailTemplateRoute from './routes/email-template.route';
+import emailTemplateRoute from './routes/event-template.route';
 import promocodeRoute from './routes/promocode.route';
 import pagesRoute from './routes/pages.route';
 import crmRoute from './routes/crm.route';

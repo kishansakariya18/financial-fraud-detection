@@ -4,12 +4,12 @@ import { Navigate } from 'react-router';
 
 export const emailTemplateRoute = [
   {
-    path: 'email-template',
+    path: 'event-template',
     lazy: async () => {
-      const { default: EmailTemplateList } = await import('../../pages/email-template/list/list');
+      const { default: EmailTemplateList } = await import('../../pages/event-template/list/list');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.EMAIL_TEMPLATE.LIST}>
+          <PrivateRoute permission={PERMISSIONS.EVENT_TEMPLATE.VIEW}>
             <EmailTemplateList />
           </PrivateRoute>
         )
@@ -17,14 +17,14 @@ export const emailTemplateRoute = [
     }
   },
   {
-    path: 'email-template/add',
+    path: 'event-template/add',
     lazy: async () => {
       const { default: CreateEmailTemplate } = await import(
-        '../../pages/email-template/CreateEmailTemplate'
+        '../../pages/event-template/CreateEventTemplate'
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.EMAIL_TEMPLATE.ADD}>
+          <PrivateRoute permission={PERMISSIONS.EVENT_TEMPLATE.ADD}>
             <CreateEmailTemplate />
           </PrivateRoute>
         )
@@ -32,14 +32,29 @@ export const emailTemplateRoute = [
     }
   },
   {
-    path: 'email-template/:templateId/edit',
+    path: '/event-template-assign',
     lazy: async () => {
-      const { default: EditEmailTemplate } = await import(
-        '../../pages/email-template/EditEmailTemplate'
+      const { default: AssignEventToGroup } = await import(
+        '../../pages/event-template/AssignEventtemplate'
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.EMAIL_TEMPLATE.EDIT}>
+          <PrivateRoute permission={PERMISSIONS.EVENT_TEMPLATE.EDIT}>
+            <AssignEventToGroup />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'event-template/:templateId/edit',
+    lazy: async () => {
+      const { default: EditEmailTemplate } = await import(
+        '../../pages/event-template/EditEventTemplate'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.EVENT_TEMPLATE.EDIT}>
             <EditEmailTemplate />
           </PrivateRoute>
         )
@@ -47,7 +62,7 @@ export const emailTemplateRoute = [
     }
   },
   {
-    path: 'email-template/:id/tab',
+    path: 'event-template/:id/tab',
     lazy: async () => ({
       Component: (await import('../../pages/player-kyc/Tabs')).default
     }),
@@ -60,7 +75,7 @@ export const emailTemplateRoute = [
         path: 'add',
         lazy: async () => {
           const { CreateEmailTemplate } = await import(
-            '../../pages/email-template/CreateEmailTemplate'
+            '../../pages/event-template/CreateEventTemplate'
           );
           return {
             Component: () => (

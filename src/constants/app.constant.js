@@ -199,6 +199,14 @@ export const PERMISSIONS = {
     ADD: 'setting-email-template-add',
     EDIT: 'setting-email-template-edit'
   },
+  EVENT_TEMPLATE: {
+    VIEW: 'event-template-view',
+    ADD: 'event-template-add',
+    EDIT: 'event-template-edit',
+    CHANGE_STATUS: 'event-template-status',
+    DELETE: 'event-template-delete',
+    ASSIGN: 'event-template-assign'
+  },
   REFERRAL_OFFERS: {
     VIEW: 'setting-referral-amount-view'
   },

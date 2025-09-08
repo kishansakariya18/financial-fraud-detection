@@ -9,7 +9,7 @@ export const pagesRoute = [
       const { default: PageList } = await import('../../pages/pages/list/list');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.EMAIL_TEMPLATE.LIST}>
+          <PrivateRoute permission={PERMISSIONS.EVENT_TEMPLATE.LIST}>
             <PageList />
           </PrivateRoute>
         )
@@ -22,7 +22,7 @@ export const pagesRoute = [
       const { default: EditPage } = await import('../../pages/pages/EditPages');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.EMAIL_TEMPLATE.EDIT}>
+          <PrivateRoute permission={PERMISSIONS.EVENT_TEMPLATE.EDIT}>
             <EditPage />
           </PrivateRoute>
         )
@@ -35,7 +35,7 @@ export const pagesRoute = [
       const { default: ViewPage } = await import('../../pages/pages/ViewDetails');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.EMAIL_TEMPLATE.LIST}>
+          <PrivateRoute permission={PERMISSIONS.EVENT_TEMPLATE.LIST}>
             <ViewPage />
           </PrivateRoute>
         )

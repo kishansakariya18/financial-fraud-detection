@@ -3,11 +3,11 @@ import { ArchiveBoxArrowDownIcon } from '@heroicons/react/24/outline';
 import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
 
 export const emailTemplate = {
-  id: 'email-template',
+  id: 'event-template',
   type: NAV_TYPE_ITEM,
-  path: '/email-template',
-  title: 'Email Template',
-  transKey: 'emailTemplate',
+  path: '/event-template',
+  title: 'Event Template',
+  transKey: 'eventTemplate',
   Icon: ArchiveBoxArrowDownIcon,
-  permission: PERMISSIONS.EMAIL_TEMPLATE.LIST
+  permission: PERMISSIONS.EVENT_TEMPLATE.VIEW
 };

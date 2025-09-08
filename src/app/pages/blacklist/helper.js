@@ -32,3 +32,11 @@ export const entityResponseMapper = (apiData) => {
     uid: data.uid
   }));
 };
+export const disposablEmailResponseMapper = (apiData) => {
+  const resultData = apiData.map((data) => ({
+    id: data.RestrictedEmailDomainID,
+    emailDomain: data.Domain,
+    createdAt: getDateInUTCToTimeZone(data.DateCreated)
+  }));
+  return resultData;
+};

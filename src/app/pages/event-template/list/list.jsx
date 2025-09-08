@@ -12,20 +12,20 @@ import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
-import EmailTemplateService from 'services/email-template.services';
+import EventTemplateService from 'services/event-template.services';
 import { emailtemplateListResponseMapper } from '../helper';
 
 export default function EmailTemplates() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('emailTemplate') + ' ' + t('list');
+  const pageTitle = t('eventTemplate') + ' ' + t('list');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const fetchEmailTemplate = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
-    const result = await EmailTemplateService.emailTemplateList({
+    const result = await EventTemplateService.eventTemplateList({
       pagination: { pageIndex, pageSize },
       filters: queryParams
     });
