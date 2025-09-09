@@ -153,12 +153,15 @@ export const apiConfig = {
         UPDATE: '/users/admin/kyc/update'
       }
     },
-    EMAIL_TEMPLATE: {
-      LIST: '/notifications/admin/email-template/list',
-      ADD: '/notifications/admin/email-template/add',
-      DETAIL: '/notifications/admin/email-template/detail',
-      UPDATE: '/notifications/admin/email-template/update',
-      STATUS: '/notifications/admin/email-template/status'
+    EVENT_TEMPLATE: {
+      LIST: '/notifications/admin/event-templates/list',
+      TEMPLATE_MASTER_DATA: '/notifications/admin/event-templates/get-template-master-data',
+      ADD: '/notifications/admin/event-templates/add',
+      DETAIL: '/notifications/admin/event-templates/detail',
+      UPDATE: '/notifications/admin/event-templates/update',
+      STATUS: '/notifications/admin/event-templates/status',
+      ASSIGN_EVENT_TEMPLATE: '/notifications/admin/event-templates/update-event-template',
+      TEMPLATE_LIST: '/notifications/admin/event-templates/event-channel-templates-list'
     },
     REFERRAL_OFFER: {
       LIST: '/bonus/admin/v1/offers/list',
@@ -326,7 +329,12 @@ export const apiConfig = {
     BLACKLIST: {
       LIST: '/users/admin/blacklist/list',
       BLOCK: '/users/admin/blacklist/block',
-      DELETE: '/users/admin/blacklist/:blacklistUID/delete'
+      DELETE: '/users/admin/blacklist/:blacklistUID/delete',
+      DISPOSABLE_EMAIL: {
+        LIST: '/users/admin/blacklist/email-domain/list',
+        CREATE: '/users/admin/blacklist/email-domain',
+        DELETE: '/users/admin/blacklist/email-domain/:restrictedDomainID'
+      }
     },
     BANK: {
       LIST: '/payments/admin/deposit-bank/list',

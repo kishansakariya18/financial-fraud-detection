@@ -1,10 +1,10 @@
-import { emailTemplateStatusToAPI } from 'app/pages/email-template/helper';
+import { emailTemplateStatusToAPI } from 'app/pages/event-template/helper';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
 import { sendRequest } from 'utils/axios';
 
-const EmailTemplateService = {
-  emailTemplateList: async (data) => {
+const EventTemplateService = {
+  eventTemplateList: async (data) => {
     try {
       const { filters, pagination } = data;
       console.log('filters:', filters);
@@ -23,7 +23,7 @@ const EmailTemplateService = {
             : undefined
         }
       };
-      const endPoint = apiConfig.endPoints.EMAIL_TEMPLATE.LIST;
+      const endPoint = apiConfig.endPoints.EVENT_TEMPLATE.LIST;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
@@ -35,10 +35,60 @@ const EmailTemplateService = {
       });
       return response;
     } catch (error) {
-      console.log('Error from Page List', error);
+      console.log('Error from eventTemplateList List', error);
     }
   },
-  emailTemplateSubmit: async (data) => {
+  getEventMasterData: async () => {
+    try {
+      const endPoint = apiConfig.endPoints.EVENT_TEMPLATE.TEMPLATE_MASTER_DATA;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from getEventMasterData List', error);
+    }
+  },
+  getTemplateData: async (groupID) => {
+    try {
+      const endPoint = apiConfig.endPoints.EVENT_TEMPLATE.TEMPLATE_LIST;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: { groupID }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from getTemplateData List', error);
+    }
+  },
+  assignEventTemplate: async (body) => {
+    try {
+      const endPoint = apiConfig.endPoints.EVENT_TEMPLATE.ASSIGN_EVENT_TEMPLATE;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from getTemplateData List', error);
+    }
+  },
+  eventTemplateSubmit: async (data) => {
     try {
       const reqBody = {
         title: data.title,
@@ -48,9 +98,12 @@ const EmailTemplateService = {
         to: data.to,
         cc: data.cc,
         bcc: data.bcc,
-        status: emailTemplateStatusToAPI(data.status)
+        status: emailTemplateStatusToAPI(data.status),
+        channelID: data.channel,
+        eventTypeID: data.eventType,
+        groupID: data.group
       };
-      const endPoint = apiConfig.endPoints.EMAIL_TEMPLATE.ADD;
+      const endPoint = apiConfig.endPoints.EVENT_TEMPLATE.ADD;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
@@ -65,10 +118,10 @@ const EmailTemplateService = {
       console.log('Error from emailTemplateSubmit', error);
     }
   },
-  emailTemplateUpdate: async (data) => {
+  eventTemplateUpdate: async (data) => {
     try {
       const reqBody = {
-        emailTemplateID: data.emailTemplateId,
+        templateID: data.templateID,
         title: data.title,
         slug: data.slug,
         heading: data.heading,
@@ -78,7 +131,7 @@ const EmailTemplateService = {
         bcc: data.bcc,
         status: emailTemplateStatusToAPI(data.status)
       };
-      const endPoint = apiConfig.endPoints.EMAIL_TEMPLATE.UPDATE;
+      const endPoint = apiConfig.endPoints.EVENT_TEMPLATE.UPDATE;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
@@ -93,12 +146,12 @@ const EmailTemplateService = {
       console.log('Error from emailTemplateSubmit', error);
     }
   },
-  emailTemplateDetail: async (emailTemplateID) => {
+  eventTemplateDetail: async (templateID) => {
     try {
       const reqBody = {
-        emailTemplateID
+        templateID
       };
-      const endPoint = apiConfig.endPoints.EMAIL_TEMPLATE.DETAIL;
+      const endPoint = apiConfig.endPoints.EVENT_TEMPLATE.DETAIL;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
@@ -110,12 +163,12 @@ const EmailTemplateService = {
       });
       return response;
     } catch (error) {
-      console.log('Error from emailTemplateSubmit', error);
+      console.log('Error from eventTemplateUpdate', error);
     }
   },
-  emailTemplateStatus: async (emailTemplateID) => {
+  eventTemplateStatus: async (templateID) => {
     try {
-      const endPoint = apiConfig.endPoints.EMAIL_TEMPLATE.STATUS;
+      const endPoint = apiConfig.endPoints.EVENT_TEMPLATE.STATUS;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
@@ -124,14 +177,14 @@ const EmailTemplateService = {
           'Content-Type': 'application/json'
         },
         params: {
-          emailTemplateID
+          templateID
         }
       });
       return response;
     } catch (error) {
-      console.log('Error from emailTemplateSubmit', error);
+      console.log('Error from eventTemplateStatus', error);
     }
   }
 };
 
-export default EmailTemplateService;
+export default EventTemplateService;

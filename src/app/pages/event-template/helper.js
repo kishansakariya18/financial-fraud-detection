@@ -5,11 +5,13 @@ export const emailtemplateListResponseMapper = (apiData) => {
   const totalRecords = apiData?.total_record;
   const list = apiData?.data?.map((item) => {
     return {
-      id: item?.EmailTemplateID,
+      id: item?.TemplateID,
       title: item?.Title,
       slug: item?.Slug,
       heading: item?.Subject,
-      template: item?.Template,
+      eventCode: item?.eventType?.EventCode,
+      channelCode: item?.channel?.ChannelCode,
+      eventGroup: item?.eventType?.eventGroup?.EventGroupCategory,
       status: emailTemplateStatusToAPP(item?.IsActive),
       createdAt: getDateInUTCToTimeZone(item?.DateCreated),
       dateModified: getDateInUTCToTimeZone(item?.DateModified)
@@ -19,7 +21,7 @@ export const emailtemplateListResponseMapper = (apiData) => {
 };
 export const emailtemplateDetailResponseMapper = (apiData) => {
   return {
-    emailTemplateID: apiData?.EmailTemplateID,
+    emailTemplateID: apiData?.TemplateID,
     title: apiData?.Title,
     slug: apiData?.Slug,
     heading: apiData?.Subject,

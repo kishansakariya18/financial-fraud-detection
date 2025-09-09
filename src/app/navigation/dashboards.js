@@ -7,7 +7,7 @@ import { reports } from './report';
 import { playerKyc } from './player-kyc';
 import { casinoManagement } from './casino-management';
 import { segmentation } from './segmentation';
-import { emailTemplate } from './email-template';
+import { emailTemplate } from './event-template';
 import { peomocode } from './promocode';
 import { roles } from './roles';
 import { auditlogs } from './auditlogs';
@@ -53,7 +53,7 @@ export const dashboards = () => ({
     playerKyc,
     casinoManagement,
     segmentation,
-    emailTemplate,
+    ...emailTemplate,
     peomocode,
     auditlogs,
     crm,

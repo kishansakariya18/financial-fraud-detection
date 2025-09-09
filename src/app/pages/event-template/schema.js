@@ -8,5 +8,8 @@ export const emailTemplateSchema = Yup.object().shape({
   to: Yup.array().of(Yup.string().email('Enter Valid Email')),
   cc: Yup.array().of(Yup.string().email('Enter Valid Email')),
   bcc: Yup.array().of(Yup.string().email('Enter Valid Email')),
-  status: Yup.string().trim().required('Select Status')
+  status: Yup.string().trim().required('Select Status'),
+  eventType: Yup.string().trim().required('Select Event Type'),
+  group: Yup.string().trim().required('Select Group'),
+  channel: Yup.string().trim().required('Select Channel')
 });

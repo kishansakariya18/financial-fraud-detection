@@ -14,6 +14,6 @@ export function getAiChatBot() {
     title: 'AI Chat',
     transKey: 'aiChat',
     Icon: RiRobot2Line,
-    permission: PERMISSIONS.EMAIL_TEMPLATE.LIST
+    permission: PERMISSIONS.EVENT_TEMPLATE.LIST
   };
 }
