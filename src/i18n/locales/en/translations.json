@@ -595,6 +595,7 @@
   "pleaseEnterRejectionReason": "Please enter a reason for rejection",
   "rejectionReason": "Rejection Reason",
   "email_template_status_success": "Email Template Status has been changed successfully",
+  "event_template_status_success": "Event Template Status has been changed successfully",
   "supervisor": "Supervisor",
   "supervisors": "Supervisors",
   "calling_agents": "Calling Agents",
