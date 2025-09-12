@@ -246,7 +246,7 @@ const callingAgentsRoute = [
         path: 'commission-summary',
         lazy: async () => {
           const { default: CommissionSummary } = await import(
-            '../../pages/users/calling-agents/comssionSummary'
+            '../../pages/users/calling-agents/ComssionSummary'
           );
           return {
             Component: () => (
