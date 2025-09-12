@@ -12,12 +12,14 @@ export const listResponseMapper = (apiResponse) => {
     email: item?.user?.Email ?? item?.user?.email ?? '-',
     status: statusToAPP(item?.Status),
     createdAt: item?.DateCreated ? getDateInUTCToTimeZone(item?.DateCreated) : undefined,
-    updatedAt: item?.DateModified ? getDateInUTCToTimeZone(item?.DateModified) : undefined
+    updatedAt: item?.DateModified ? getDateInUTCToTimeZone(item?.DateModified) : undefined,
+    approvedAt: item?.ApprovedAt ? getDateInUTCToTimeZone(item?.ApprovedAt) : null
   }));
 };
 
 export const statusToAPP = (status) => {
   if (status === 'active') return 'active';
+  if (status === 'expired') return 'expired';
   if (status === 'inactive') return 'inactive';
   return 'inactive';
 };
@@ -32,6 +34,12 @@ export const rgStatusOptions = [
   {
     value: 'inactive',
     label: 'Inactive',
+    color: 'error',
+    icon: XCircleIcon
+  },
+  {
+    value: 'expired',
+    label: 'Expired',
     color: 'error',
     icon: XCircleIcon
   }

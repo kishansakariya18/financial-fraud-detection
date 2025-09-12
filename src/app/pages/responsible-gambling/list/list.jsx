@@ -70,6 +70,9 @@ export default function ResponsibleGamblingList() {
     if (queryParams.status) {
       filtersFromQuery.push({ id: 'Status', value: queryParams.status });
     }
+    if (queryParams.setBy) {
+      filtersFromQuery.push({ id: 'Set By', value: queryParams.setBy });
+    }
     if (queryParams.startDate && queryParams.endDate) {
       filtersFromQuery.push({
         id: 'createdAt',
@@ -90,6 +93,9 @@ export default function ResponsibleGamblingList() {
       if (data.id === 'Status') {
         filterItems.status = data.value;
       }
+      if (data.id === 'Set By') {
+        filterItems.setBy = data.value;
+      }
       if (data.id === 'createdAt') {
         filterItems.date = data.value;
       }
@@ -100,6 +106,7 @@ export default function ResponsibleGamblingList() {
       pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
       ...(filterItems.status && { status: filterItems.status }),
+      ...(filterItems.setBy && { setBy: filterItems.setBy }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
       ...(filterItems.date && { endDate: filterItems?.date[1] })
     });

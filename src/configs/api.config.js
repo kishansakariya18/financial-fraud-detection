@@ -380,7 +380,8 @@ export const apiConfig = {
       CREATE: '/users/admin/responsible-gaming-restrictions/create',
       EDIT: '/users/admin/responsible-gaming-restrictions/:restrictionId/update',
       DELETE: '/users/admin/responsible-gaming-restrictions/:restrictionId/delete',
-      CHANGE_STATUS: '/users/admin/responsible-gaming-restrictions/:restrictionId/change-status'
+      CHANGE_STATUS: '/users/admin/responsible-gaming-restrictions/:restrictionId/change-status',
+      APPROVE: '/users/admin/responsible-gaming-restrictions/:restrictionId/approve'
     }
   }
 };

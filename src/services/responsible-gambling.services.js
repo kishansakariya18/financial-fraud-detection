@@ -10,7 +10,8 @@ const ResponsibleGamblingService = {
         per_page: pagination?.pageSize ?? 10,
         filters: {
           restrictionType: filters?.keyword || undefined,
-          status: filters?.status || undefined
+          status: filters?.status || undefined,
+          setBy: filters?.setBy || undefined
         }
       };
       const url =
@@ -62,14 +63,14 @@ const ResponsibleGamblingService = {
   changeStatus: async (restrictionId) => {
     try {
       const endPoint = replaceText(
-        apiConfig.endPoints.RESPONSIBLE_GAMBLING_RESTRICTIONS.CHANGE_STATUS,
+        apiConfig.endPoints.RESPONSIBLE_GAMBLING_RESTRICTIONS.APPROVE,
         ':restrictionId',
         restrictionId
       );
       const url = apiConfig.baseURL.API_BASE_URL + endPoint;
       return await sendRequest({
         url,
-        method: 'PATCH',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' }
       });
     } catch (error) {

@@ -17,6 +17,11 @@ const restrictionTypeOptions = [
   { value: 'self_exclusion', label: 'Self Exclusion' }
 ];
 
+const setByOptions = [
+  { value: 'user', label: 'User' },
+  { value: 'admin', label: 'Admin' }
+];
+
 export function Toolbar({
   table,
   pageTitle = '',
@@ -125,6 +130,17 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           options={restrictionTypeOptions}
           column={table.getColumn('Name')}
           title={t('type')}
+          Icon={MapPinIcon}
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
+
+      {table.getColumn('Set By') && (
+        <FacedtedFilter
+          options={setByOptions}
+          column={table.getColumn('Set By')}
+          title={'Set By'}
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}

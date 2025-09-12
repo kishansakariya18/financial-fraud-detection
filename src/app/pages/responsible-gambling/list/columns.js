@@ -67,6 +67,13 @@ export const columns = [
     filterFn: 'inNumberRange',
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.approvedAt, {
+    id: 'Approved At',
+    header: 'Approved At',
+    cell: DateCell,
+    filterFn: 'inNumberRange',
+    enableSorting: false
+  }),
   columnHelper.display({
     id: 'action',
     header: 'Action',

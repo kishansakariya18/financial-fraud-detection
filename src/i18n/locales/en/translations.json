@@ -613,5 +613,7 @@
   "responsible_gambling_add":"Add Responsible Gambling",
   "responsible_gambling_edit":"Edit Responsible Gambling",
   "responsible_gambling_status":"Responsible Gambling Status",
-  "responsible_gambling_status_success":"Responsible Gambling Status has been changed successfully"
+  "responsible_gambling_status_success":"Responsible Gambling Status has been changed successfully",
+  "areYouSureResponsible": "Are you sure you want to re-activate this user?",
+  "reactivate":"Reactivate"
 }

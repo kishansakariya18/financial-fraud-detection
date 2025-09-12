@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 // Local Imports
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
-import { TbTrash, TbStatusChange } from 'react-icons/tb';
+import { TbStatusChange } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import usePermissions from 'app/router/usePermissions';
@@ -52,8 +52,7 @@ export function RowActions({ row, table }) {
 
   const statusConfirmMessages = {
     pending: {
-      title: t('responsible_gambling_status'),
-      description: t('areYouSure'),
+      description: t('areYouSureResponsible'),
       actionText: t('submit')
     },
     success: {
@@ -66,11 +65,11 @@ export function RowActions({ row, table }) {
     setDeleteModalOpen(false);
   };
 
-  const openModal = () => {
-    setDeleteModalOpen(true);
-    setDeleteError(false);
-    setDeleteSuccess(false);
-  };
+  // const openModal = () => {
+  //   setDeleteModalOpen(true);
+  //   setDeleteError(false);
+  //   setDeleteSuccess(false);
+  // };
 
   const closeStatusModal = () => {
     setStatusModalOpen(false);
@@ -142,22 +141,24 @@ export function RowActions({ row, table }) {
                   </button>
                 )}
               </MenuItem>
-              {hasPermission(PERMISSIONS.RESPONSIBLE_GAMBLING.CHANGE_STATUS) && (
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      onClick={openStatusModal}
-                      className={clsx(
-                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
-                        focus && 'bg-this/10 dark:bg-this-light/10'
-                      )}>
-                      <TbStatusChange className="size-4.5 stroke-1" />
-                      <span>{t('change') + ' ' + t('status')}</span>
-                    </button>
-                  )}
-                </MenuItem>
-              )}
-              {hasPermission(PERMISSIONS.RESPONSIBLE_GAMBLING.DELETE) && (
+              {hasPermission(PERMISSIONS.RESPONSIBLE_GAMBLING.CHANGE_STATUS) &&
+                row?.original?.status === 'expired' &&
+                row?.original?.approvedAt == null && (
+                  <MenuItem>
+                    {({ focus }) => (
+                      <button
+                        onClick={openStatusModal}
+                        className={clsx(
+                          'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                          focus && 'bg-this/10 dark:bg-this-light/10'
+                        )}>
+                        <TbStatusChange className="size-4.5 stroke-1" />
+                        <span>{t('reactivate')}</span>
+                      </button>
+                    )}
+                  </MenuItem>
+                )}
+              {/* {hasPermission(PERMISSIONS.RESPONSIBLE_GAMBLING.DELETE) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -171,7 +172,7 @@ export function RowActions({ row, table }) {
                     </button>
                   )}
                 </MenuItem>
-              )}
+              )} */}
             </MenuItems>
           </Transition>
         </Menu>

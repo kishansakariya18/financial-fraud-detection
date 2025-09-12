@@ -568,5 +568,8 @@
   "responsible_gambling_add":"Agregar juego responsable",
   "responsible_gambling_edit":"Editar juego responsable",
   "responsible_gambling_status":"Estado de juego responsable",
-  "responsible_gambling_status_success":"Estado de juego responsable cambiado exitosamente"
+  "responsible_gambling_status_success":"Estado de juego responsable cambiado exitosamente",
+  "reactivate":"reactivar",
+  "areYouSureResponsible": "¿Estás segura de que quieres volver a activar a esta usuario?"
+
 }
