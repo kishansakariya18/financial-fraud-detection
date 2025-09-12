@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { dashboards } from './dashboards';
-import { agentNavigation } from './agent';
+import { agentNavigation } from './calling-agent';
 import { useSelector } from 'react-redux';
 import { ADMIN_TYPE } from 'constants/app.constant';
 
