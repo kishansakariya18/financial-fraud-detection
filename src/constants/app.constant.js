@@ -264,6 +264,18 @@ export const PERMISSIONS = {
   CRM: {
     VIEW: 'crm-view'
   },
+  EMAIL_PROVIDER: {
+    LIST: 'email-provider.list',
+    DELETE: 'email-provider.delete',
+    CHANGE_STATUS: 'email-provider.change-status',
+    EDIT: 'email-provider.edit'
+  },
+  KYC_PROVIDER: {
+    LIST: 'kyc-provider.list',
+    DELETE: 'kyc-provider.delete',
+    CHANGE_STATUS: 'kyc-provider.change-status',
+    EDIT: 'kyc-provider.edit'
+  },
   FRONTEND: {
     VIEW: 'frontend-home-category-list',
     ADD_HOME_CATEGORY: 'frontend-home-add-category',

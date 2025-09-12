@@ -31,7 +31,6 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
-  // New column for the image
   columnHelper.accessor((row) => row.image, {
     id: 'image',
     label: 'Image',

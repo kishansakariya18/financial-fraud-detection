@@ -9,6 +9,62 @@ export const siteConfigurationRoutes = [
         Component: () => <ApplicationSettings />
       };
     }
+  },
+  {
+    path: 'site-configuration/email-provider',
+    lazy: async () => {
+      const { default: EmailProvider } = await import('../../pages/email-provider/list/list');
+      return {
+        Component: () => <EmailProvider />
+      };
+    }
+  },
+  {
+    path: 'site-configuration/kyc-provider',
+    lazy: async () => {
+      const { default: KYCProvider } = await import('../../pages/kyc-provider/list/list');
+      return {
+        Component: () => <KYCProvider />
+      };
+    }
+  },
+  {
+    path: 'site-configuration/sms-provider',
+    lazy: async () => {
+      const { default: SMSProvider } = await import('../../pages/sms-provider/list/list');
+      return {
+        Component: () => <SMSProvider />
+      };
+    }
+  },
+  {
+    path: 'site-configuration/email-provider/edit/:providerUID',
+    lazy: async () => {
+      const { default: EditEmailProvider } = await import(
+        '../../pages/email-provider/EditProvider'
+      );
+      return {
+        Component: () => <EditEmailProvider />
+      };
+    }
+  },
+  {
+    path: 'site-configuration/sms-provider/edit/:providerUID',
+    lazy: async () => {
+      const { default: EditEmailProvider } = await import('../../pages/sms-provider/EditProvider');
+      return {
+        Component: () => <EditEmailProvider />
+      };
+    }
+  },
+  {
+    path: 'site-configuration/kyc-provider/edit/:providerUID',
+    lazy: async () => {
+      const { default: EditEmailProvider } = await import('../../pages/kyc-provider/EditProvider');
+      return {
+        Component: () => <EditEmailProvider />
+      };
+    }
   }
 ];
 
