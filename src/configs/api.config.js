@@ -81,6 +81,27 @@ export const apiConfig = {
       ADMIN_SUMMARY: '/admin/admin/admin/summary',
       COUNTRY_LIST: '/config/country/list'
     },
+    EMAIL_PROVIDER: {
+      VIEW: '/notifications/admin/email-provider/list',
+      DELETE: '/notifications/admin/email-provider/:providerUID/delete',
+      STATUS: '/notifications/admin/email-provider/:providerUID/change-status',
+      EDIT: '/notifications/admin/email-provider/:providerUID/edit',
+      DETAIL: '/notifications/admin/email-provider/:providerUID/details'
+    },
+    SMS_PROVIDER: {
+      VIEW: '/notifications/admin/sms-provider/list',
+      DELETE: '/notifications/admin/sms-provider/:providerUID/delete',
+      STATUS: '/notifications/admin/sms-provider/:providerUID/change-status',
+      EDIT: '/notifications/admin/sms-provider/:providerUID/edit',
+      DETAIL: '/notifications/admin/sms-provider/:providerUID/details'
+    },
+    KYC_PROVIDER: {
+      VIEW: '/users/admin/kyc-provider/list',
+      DELETE: '/users/admin/kyc-provider/:providerUID/delete',
+      STATUS: '/users/admin/kyc-provider/:providerUID/change-status',
+      EDIT: '/users/admin/kyc-provider/:providerUID/edit',
+      DETAIL: '/users/admin/kyc-provider/:providerUID/details'
+    },
     SUPERVISOR: {
       DASHBOARD: '/admin/supervisor/dashboard',
       LIST: '/admin/supervisor/list',
