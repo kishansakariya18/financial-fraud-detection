@@ -47,8 +47,6 @@ const PlayerLimit = () => {
     resolver: yupResolver(playerLimitSchema)
   });
 
-  console.log('errors: ', errors);
-
   useEffect(() => {
     if (playerId) {
       // Resolve numeric user ID from UID first, then fetch limits

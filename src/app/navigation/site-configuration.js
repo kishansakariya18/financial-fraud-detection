@@ -6,6 +6,9 @@ import { NAV_TYPE_COLLAPSE, PERMISSIONS } from 'constants/app.constant';
 // import { country } from './country';
 import { RateLimitRules } from './rateLimitRules';
 import { appSettings } from './app-settings';
+import emailProvider from './email-provider';
+import kycProvider from './kyc-provider';
+import smsProvider from './sms-provider';
 
 export const siteConfiguration = {
   id: 'site_configuration',
@@ -14,10 +17,18 @@ export const siteConfiguration = {
   title: 'Site Configuration',
   transKey: 'site_configuration',
   Icon: Cog6ToothIcon,
-  permission: [PERMISSIONS.COUNTRIES.LIST, PERMISSIONS.RATE_LIMIT_RULES.LIST],
+  permission: [
+    PERMISSIONS.COUNTRIES.LIST,
+    PERMISSIONS.RATE_LIMIT_RULES.LIST,
+    PERMISSIONS.EMAIL_PROVIDER.LIST,
+    PERMISSIONS.KYC_PROVIDER.LIST
+  ],
   childs: [
     // country,
     appSettings,
-    RateLimitRules
+    RateLimitRules,
+    emailProvider,
+    kycProvider,
+    smsProvider
   ]
 };

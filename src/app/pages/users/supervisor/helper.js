@@ -26,7 +26,17 @@ export const responseMapper = (apiData) => {
     email: data.Email,
     createdAt: getDateInUTCToTimeZone(data.DateCreated),
     lastLoginAt: data.LastLoginAt ? getDateInUTCToTimeZone(data.LastLoginAt) : '',
-    status: parseAdminStatusToApp(data.AccountStatus)
+    status: parseAdminStatusToApp(data.AccountStatus),
+    // Add supervisor-specific fields
+    hasSupervisorPermissions: data.HasSupervisorPermissions || false,
+    assignedAgentsCount: data.AssignedAgentsCount || 0,
+    // Create computed supervisorAccess field
+    supervisorAccessTooltip: (() => {
+      if (data.HasSupervisorPermissions) return null;
+      if (!data.HasSupervisorPermissions && (data.AssignedAgentsCount || 0) > 0)
+        return 'Agents are assigned, but this user lacks supervisor management permissions.';
+      return 'This user has neither supervisor permissions nor assigned agents.';
+    })()
   }));
   return resultData;
 };

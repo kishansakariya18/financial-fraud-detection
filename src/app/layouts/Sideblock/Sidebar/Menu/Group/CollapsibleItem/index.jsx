@@ -51,11 +51,11 @@ export function CollapsibleItem({ data }) {
             />
           </AccordionButton>
           <AccordionPanel className="flex flex-col space-y-1 px-3 py-1.5">
-            {childs.map((child) => {
-              if (hasPermission(child.permission)) {
-                return <MenuItem key={child.id} data={child} />;
+            {childs?.map((child) => {
+              if (child.permission && !hasPermission(child.permission)) {
+                return null;
               }
-              return null;
+              return <MenuItem key={child.id} data={child} />;
             })}
           </AccordionPanel>
         </>

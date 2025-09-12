@@ -84,7 +84,17 @@ export function BadgeCell({ getValue, column }) {
   const optionData = column.columnDef.meta?.optionData || [];
   const option = optionData.find((item) => item.value === val);
 
-  return <Badge color={option?.color}>{option.label}</Badge>;
+  const hasTooltip = !!column.columnDef.meta?.tooltip;
+  const tooltip = option?.tooltip;
+
+  if (!option?.label) {
+    return '-';
+  }
+  return (
+    <Badge color={option?.color} data-tooltip={hasTooltip} data-tooltip-content={tooltip}>
+      {option?.label}
+    </Badge>
+  );
 }
 
 export function AmountCell({ getValue }) {
@@ -197,7 +207,16 @@ export function StatusIconCell({ getValue, column }) {
     />
   );
 }
+export function ImageCell({ info }) {
+  const imageUrl = info.getValue();
+  return imageUrl ? (
+    <img src={imageUrl} alt="Category Icon" className="size-16 rounded object-cover" />
+  ) : null;
+}
 
+ImageCell.propTypes = {
+  info: PropTypes.object
+};
 DateCell.propTypes = {
   getValue: PropTypes.func
 };

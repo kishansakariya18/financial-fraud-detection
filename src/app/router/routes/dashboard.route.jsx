@@ -3,7 +3,7 @@ import { Navigate } from 'react-router';
 export const dashboardRoute = [
   {
     index: true,
-    element: <Navigate to="/dashboards/home" />
+    element: <Navigate to="/dashboards/home" replace />
   },
   {
     path: 'dashboards',
@@ -14,9 +14,12 @@ export const dashboardRoute = [
       },
       {
         path: 'home',
-        lazy: async () => ({
-          Component: (await import('../../pages/dashboards/home')).default
-        })
+        lazy: async () => {
+          const { default: AdminDashboard } = await import('../../pages/dashboards/home');
+          return {
+            Component: () => <AdminDashboard />
+          };
+        }
       }
     ]
   }

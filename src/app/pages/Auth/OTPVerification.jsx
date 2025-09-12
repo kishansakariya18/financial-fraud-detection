@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useMemo, useState } from 'react';
 import { getQueryParams } from 'utils/custom.utilities';
 import AuthService from '../../../services/auth.services';
-import { LOCAL_STORAGE } from 'constants/app.constant';
+import { ADMIN_TYPE, LOCAL_STORAGE } from 'constants/app.constant';
 import { toast } from 'sonner';
 import { AuthAction } from 'store/admin-slice/AuthSlice';
 import { useTranslation } from 'react-i18next';
@@ -73,7 +73,8 @@ export default function OTPVerification() {
       if (result.status === 200) {
         localStorage.setItem(LOCAL_STORAGE.AUTH_TOKEN, result.response.data.AdminSessionToken);
         localStorage.setItem(LOCAL_STORAGE.AUTH_EMAIL, result.response.data?.adminData?.Email);
-        const responseData = await performPostLoginActions();
+        const userData = result.response.data.adminData;
+        const responseData = await performPostLoginActions(userData?.AdminType);
         setResponse({
           message: result.response.message,
           adminData: result.response.data.adminData,
@@ -105,16 +106,23 @@ export default function OTPVerification() {
     const permissionList = permissions.map((permission) => {
       return permission.SlugName;
     });
-
     return {
       isMasterAdmin,
       permissions: permissionList
     };
   };
 
-  const performPostLoginActions = async () => {
+  const performPostLoginActions = async (adminType) => {
     const appSettings = await loadInitialVariables();
-    const permissions = await loadPermissions();
+    let permissions = [];
+    if (adminType === ADMIN_TYPE.ADMIN) {
+      permissions = await loadPermissions(adminType);
+    } else {
+      permissions = {
+        isMasterAdmin: 0,
+        permissions: []
+      };
+    }
 
     return {
       appSettings,

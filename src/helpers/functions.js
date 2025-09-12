@@ -218,7 +218,22 @@ export const dummyCards = {
     }
   }
 };
-
+export function getBoolOptions() {
+  return [
+    { key: 'true', label: 'Yes', value: true },
+    { key: 'false', label: 'No', value: false }
+  ];
+}
+export function providerConfigTypeMapper(type) {
+  if (type === 'string') {
+    return 'text';
+  } else if (type === 'boolean') {
+    return 'select';
+  } else if (type === 'number') {
+    return 'number';
+  }
+  return 'text';
+}
 export function getDummyCardData(type) {
   return dummyCards[type] || {};
 }

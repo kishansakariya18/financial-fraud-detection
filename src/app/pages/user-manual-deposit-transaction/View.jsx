@@ -49,7 +49,7 @@ export default function View() {
       title: t('user_manual_deposit_transaction'),
       path: '/user-manual-deposit-transaction'
     },
-    { title: pageTitle }
+    { title: t('details') }
   ];
 
   return (

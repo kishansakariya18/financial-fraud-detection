@@ -17,6 +17,7 @@ const TableCard = (props) => {
     disableDefaultPadding = false
   } = props;
 
+  console.log('table: ', table.getRowModel().rows);
   return (
     <div
       className={clsx(

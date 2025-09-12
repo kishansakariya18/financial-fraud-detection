@@ -22,7 +22,7 @@ export const auditlogsRoute = [
       const { default: ViewPage } = await import('../../pages/auditlogs/ViewDetails');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.EMAIL_TEMPLATE.LIST}>
+          <PrivateRoute permission={PERMISSIONS.EVENT_TEMPLATE.LIST}>
             <ViewPage />
           </PrivateRoute>
         )

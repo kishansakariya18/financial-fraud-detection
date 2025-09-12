@@ -1,17 +1,12 @@
-// Import Dependencies
-import { MagnifyingGlassIcon, MapPinIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
-// import { TbCurrencyDollar } from "react-icons/tb";
 import PropTypes from 'prop-types';
 
-// Local Imports
 import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
-// import { RangeFilter } from "components/shared/table/RangeFilter";
 import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
-import { useNavigate } from 'react-router';
 import { t } from 'i18next';
 import { statusOptions } from '../helper';
 
@@ -22,7 +17,6 @@ export function Toolbar({
   pageTitle = ''
 }) {
   const { isXs } = useBreakpointsContext();
-  const navigate = useNavigate();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
   return (
@@ -37,14 +31,6 @@ export function Toolbar({
             {pageTitle}
           </h2>
         </div>
-
-        <Button
-          className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
-          color="primary"
-          onClick={() => navigate('/users/supervisor/create')}>
-          <PlusIcon className="size-5" />
-          <span>{t('create') + ' ' + t('supervisor')}</span>
-        </Button>
       </div>
       {isXs ? (
         <>

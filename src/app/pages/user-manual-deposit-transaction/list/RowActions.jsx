@@ -174,11 +174,11 @@ export function RowActions({ row, table }) {
           }
         }}>
         <div className="mt-4">
-          <label
+          {/* <label
             htmlFor="rejectionReason"
             className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             {t('rejectionReason')}
-          </label>
+          </label> */}
           <Textarea
             id="rejectionReason"
             name="rejectionReason"

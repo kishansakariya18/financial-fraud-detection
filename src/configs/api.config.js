@@ -81,12 +81,56 @@ export const apiConfig = {
       ADMIN_SUMMARY: '/admin/admin/admin/summary',
       COUNTRY_LIST: '/config/country/list'
     },
+    EMAIL_PROVIDER: {
+      VIEW: '/notifications/admin/email-provider/list',
+      DELETE: '/notifications/admin/email-provider/:providerUID/delete',
+      STATUS: '/notifications/admin/email-provider/:providerUID/change-status',
+      EDIT: '/notifications/admin/email-provider/:providerUID/edit',
+      DETAIL: '/notifications/admin/email-provider/:providerUID/details'
+    },
+    SMS_PROVIDER: {
+      VIEW: '/notifications/admin/sms-provider/list',
+      DELETE: '/notifications/admin/sms-provider/:providerUID/delete',
+      STATUS: '/notifications/admin/sms-provider/:providerUID/change-status',
+      EDIT: '/notifications/admin/sms-provider/:providerUID/edit',
+      DETAIL: '/notifications/admin/sms-provider/:providerUID/details'
+    },
+    KYC_PROVIDER: {
+      VIEW: '/users/admin/kyc-provider/list',
+      DELETE: '/users/admin/kyc-provider/:providerUID/delete',
+      STATUS: '/users/admin/kyc-provider/:providerUID/change-status',
+      EDIT: '/users/admin/kyc-provider/:providerUID/edit',
+      DETAIL: '/users/admin/kyc-provider/:providerUID/details'
+    },
     SUPERVISOR: {
+      DASHBOARD: '/admin/supervisor/dashboard',
       LIST: '/admin/supervisor/list',
-      CREATE: '/admin/supervisor/create',
-      EDIT: '/admin/supervisor/edit',
       DETAIL: '/admin/supervisor/:supervisorId/details',
-      DELETE: '/admin/supervisor/:supervisorId/delete'
+      AGENT_LIST: '/admin/supervisor/agents',
+      CREATE_TARGET: '/admin/supervisor/commission-targets/:agentUID/create',
+      UPDATE_TARGET: '/admin/supervisor/commission-targets/:agentUID/update',
+      DELETE_TARGET: '/admin/supervisor/commission-targets/:agentUID/delete',
+      GET_TARGET: '/admin/supervisor/commission-targets/:agentUID',
+
+      REDEEM_COMMISSION_REQUESTS: '/admin/supervisor/redeem-commission-requests',
+      COMMISSION_REQUESTS_STATUS_UPDATE:
+        '/admin/supervisor/redeem-commission-requests/:requestID/status'
+    },
+    AGENT: {
+      DASHBOARD: '/admin/agent/dashboard',
+      LIST: '/admin/agent/list',
+      CREATE: '/admin/agent/create',
+      EDIT: '/admin/agent/edit',
+      DETAIL: '/admin/agent/:callingAgentUID/details',
+      PLAYER_LIST: '/admin/agent/:agentUID/players',
+      CHANGE_STATUS: '/admin/agent/:agentId/change-status',
+      ASSIGN_PLAYERS: '/admin/agent/assign-players',
+      UNASSIGN_PLAYERS: '/admin/agent/unassign-players',
+      UNASSIGNED_PLAYERS: '/admin/agent/unassigned-players',
+      GET_SUMMARY: '/admin/agent/commission-summary',
+      REDEEM_COMMISSION_REQUESTS: '/admin/agent/commission-redeem-request/:redeemSummaryID',
+      GET_TOTAL_EVENTS: '/admin/agent/commission-events',
+      GET_SUMMARY_DETAILS: '/admin/agent/commission-summary/:summaryId/details'
     },
     TENANT: {
       LIST: '/config/admin/tenant/list',
@@ -153,12 +197,15 @@ export const apiConfig = {
         UPDATE: '/users/admin/kyc/update'
       }
     },
-    EMAIL_TEMPLATE: {
-      LIST: '/notifications/admin/email-template/list',
-      ADD: '/notifications/admin/email-template/add',
-      DETAIL: '/notifications/admin/email-template/detail',
-      UPDATE: '/notifications/admin/email-template/update',
-      STATUS: '/notifications/admin/email-template/status'
+    EVENT_TEMPLATE: {
+      LIST: '/notifications/admin/event-templates/list',
+      TEMPLATE_MASTER_DATA: '/notifications/admin/event-templates/get-template-master-data',
+      ADD: '/notifications/admin/event-templates/add',
+      DETAIL: '/notifications/admin/event-templates/detail',
+      UPDATE: '/notifications/admin/event-templates/update',
+      STATUS: '/notifications/admin/event-templates/status',
+      ASSIGN_EVENT_TEMPLATE: '/notifications/admin/event-templates/update-event-template',
+      TEMPLATE_LIST: '/notifications/admin/event-templates/event-channel-templates-list'
     },
     REFERRAL_OFFER: {
       LIST: '/bonus/admin/v1/offers/list',
@@ -326,7 +373,12 @@ export const apiConfig = {
     BLACKLIST: {
       LIST: '/users/admin/blacklist/list',
       BLOCK: '/users/admin/blacklist/block',
-      DELETE: '/users/admin/blacklist/:blacklistUID/delete'
+      DELETE: '/users/admin/blacklist/:blacklistUID/delete',
+      DISPOSABLE_EMAIL: {
+        LIST: '/users/admin/blacklist/email-domain/list',
+        CREATE: '/users/admin/blacklist/email-domain',
+        DELETE: '/users/admin/blacklist/email-domain/:restrictedDomainID'
+      }
     },
     BANK: {
       LIST: '/payments/admin/deposit-bank/list',
@@ -362,7 +414,7 @@ export const apiConfig = {
       UPDATE: '/config/admin/config/app-setting/update'
     },
     WALLET: {
-      LIST: '/wallet/admin/wallet/list/:userId',
+      LIST: '/wallet/admin/wallet/list/:userUID',
       FUND: '/wallet/admin/wallet/fund'
     },
     RESPONSIBLE_GAMING_LIMITS: {

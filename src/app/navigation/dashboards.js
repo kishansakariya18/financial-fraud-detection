@@ -7,7 +7,7 @@ import { reports } from './report';
 import { playerKyc } from './player-kyc';
 import { casinoManagement } from './casino-management';
 import { segmentation } from './segmentation';
-import { emailTemplate } from './email-template';
+import { emailTemplate } from './event-template';
 import { peomocode } from './promocode';
 import { roles } from './roles';
 import { auditlogs } from './auditlogs';
@@ -24,6 +24,7 @@ import { bank } from './bank';
 import { userManualDepositTransaction } from './user-manual-deposit-transaction';
 import { registrationFields } from './registration-fields';
 import { releaseNotes } from './release-notes';
+import { supervisor } from './supervisor';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -43,6 +44,7 @@ export const dashboards = () => ({
     },
     roles,
     users,
+    supervisor,
     platform,
     contentManagement,
     siteConfiguration,
@@ -53,7 +55,7 @@ export const dashboards = () => ({
     playerKyc,
     casinoManagement,
     segmentation,
-    emailTemplate,
+    ...emailTemplate,
     peomocode,
     auditlogs,
     crm,

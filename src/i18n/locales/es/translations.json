@@ -192,7 +192,7 @@
   "affiliates": "Afiliados",
   "balance": "Balance",
   "affiliate_status_desc": "¿Estás seguro de querer actualizar el estado de este afiliado?",
-  "email_template_desc": "¿Estás seguro de querer actualizar el estado de esta plantilla de correo?",
+  "event_template_desc": "¿Estás seguro de querer actualizar el estado de esta plantilla de correo?",
   "affiliate_status_suceess": "Estado de afiliado cambiado exitosamente",
   "pages_status_desc": "¿Estás seguro de querer actualizar el estado de esta página?",
   "pages_status_suceess": "Estado de página cambiado exitosamente",
@@ -552,5 +552,5 @@
   "transactionHasBeenSuccessfullyRejected": "Transacción rechazada con éxito",
   "pleaseEnterRejectionReason": "Por favor, ingresa una razón para rechazar",
   "rejectionReason": "Razón de rechazo",
-  "email_template_status_success": "Plantilla de correo electrónico El estado se ha cambiado correctamente"
+  "event_template_status_success": "Plantilla de correo electrónico El estado se ha cambiado correctamente"
 }
