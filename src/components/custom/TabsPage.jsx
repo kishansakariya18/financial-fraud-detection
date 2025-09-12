@@ -23,7 +23,7 @@ export default function TabsPage({ tabs }) {
             <TabList className="-mb-0.5 flex">
               {tabs.map((tab) => (
                 <div key={tab.id}>
-                  {(!tab.permission || hasPermission(tab.permission)) && (
+                  {(!tab.permission || hasPermission(tab.permission)) && !tab.isHidden && (
                     <NavLink to={tab.path}>
                       <Tab
                         key={tab.id}

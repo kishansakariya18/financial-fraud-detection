@@ -1,4 +1,5 @@
 import { getDateInUTCToTimeZone, capitalizeFirstLetter } from 'helpers/functions';
+import moment from 'moment-timezone';
 
 // Event name constants
 export const EVENT_NAME = {
@@ -22,6 +23,7 @@ export const commissionSummaryResponseMapper = (apiData) => {
 };
 
 export const mapSingleSummaryData = (item) => {
+  const isPeriodEnded = moment().isAfter(moment(item.PeriodEnd));
   return {
     id: item.CallingAgentCommissionSummaryID,
     targetName: capitalizeFirstLetter(item.TargetName),
@@ -34,7 +36,9 @@ export const mapSingleSummaryData = (item) => {
     isRedeemed: mapRedeemStatus(item.IsRedeemed, item.RedeemRequest, item.CommissionAmount),
     // requestedStatus: mapRequestedStatus(item.RedeemRequestID),
     redeemRequestStatus:
-      item.CommissionAmount <= 0 ? null : item.RedeemRequest?.Status || 'not_requested',
+      item.CommissionAmount <= 0 || !isPeriodEnded
+        ? null
+        : item.RedeemRequest?.Status || 'not_requested',
     redeemRequestDetails: item.RedeemRequest,
     createdAt: getDateInUTCToTimeZone(item.CalculatedAt), // Use CalculatedAt as creation date
     // Store original data for actions
