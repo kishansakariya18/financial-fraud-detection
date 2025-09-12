@@ -5,11 +5,14 @@ import { randomId } from 'utils/randomId';
 import { useTranslation } from 'react-i18next';
 import TabsPage from 'components/custom/TabsPage';
 import { TbLockPassword, TbPassword } from 'react-icons/tb';
+import { ADMIN_TYPE } from 'constants/app.constant';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
 export default function Tabs() {
   const { t } = useTranslation();
+  const { userData } = useSelector((state) => state.auth);
 
   const tabs = [
     {
@@ -31,6 +34,7 @@ export default function Tabs() {
       title: t('change') + ' ' + t('transaction') + ' ' + t('password'),
       path: `/profile/player-fund-password`,
       icon: TbLockPassword,
+      isHidden: userData.AdminType === ADMIN_TYPE.AGENT,
       index: 2
     }
   ];

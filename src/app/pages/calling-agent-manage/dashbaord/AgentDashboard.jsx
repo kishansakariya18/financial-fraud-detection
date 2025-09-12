@@ -134,7 +134,7 @@ const AgentDashboard = () => {
           </div>
 
           {/* Target Progress Section */}
-          {dashboardData?.targetProgress && (
+          {dashboardData?.targetProgress?.hasTargets && (
             <div className="mt-6">
               <TargetProgressCard
                 targetProgress={dashboardData.targetProgress}

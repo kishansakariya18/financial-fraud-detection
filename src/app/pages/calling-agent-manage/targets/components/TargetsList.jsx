@@ -61,7 +61,6 @@ const TargetsList = ({ t, targets, loading }) => {
             <h3 className="mb-2 text-lg font-medium text-gray-900 dark:text-dark-100">
               No targets assigned
             </h3>
-            <p className="text-gray-600 dark:text-dark-300">No targets assigned description</p>
             <p className="mt-2 text-sm text-gray-500 dark:text-dark-400">
               Contact supervisor for targets
             </p>
