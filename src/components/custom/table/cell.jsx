@@ -84,7 +84,17 @@ export function BadgeCell({ getValue, column }) {
   const optionData = column.columnDef.meta?.optionData || [];
   const option = optionData.find((item) => item.value === val);
 
-  return <Badge color={option?.color}>{option.label}</Badge>;
+  const hasTooltip = !!column.columnDef.meta?.tooltip;
+  const tooltip = option?.tooltip;
+
+  if (!option?.label) {
+    return '-';
+  }
+  return (
+    <Badge color={option?.color} data-tooltip={hasTooltip} data-tooltip-content={tooltip}>
+      {option?.label}
+    </Badge>
+  );
 }
 
 export function AmountCell({ getValue }) {

@@ -67,7 +67,7 @@ export default function Login() {
         if (!result.response.data?.mfaEnabled) {
           localStorage.setItem(LOCAL_STORAGE.AUTH_TOKEN, result.response.data.AdminSessionToken);
           const userData = result.response.data.adminData;
-          const responseData = await performPostLoginActions(userData?.adminType);
+          const responseData = await performPostLoginActions(userData?.AdminType);
           setResponse({
             message: result.response.message,
             adminData: result.response.data.adminData,
@@ -155,6 +155,11 @@ export default function Login() {
     let permissions = [];
     if (adminType === ADMIN_TYPE.ADMIN) {
       permissions = await loadPermissions();
+    } else {
+      permissions = {
+        isMasterAdmin: 0,
+        permissions: []
+      };
     }
     return {
       appSettings,

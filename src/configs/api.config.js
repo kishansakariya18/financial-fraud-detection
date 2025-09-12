@@ -82,11 +82,34 @@ export const apiConfig = {
       COUNTRY_LIST: '/config/country/list'
     },
     SUPERVISOR: {
+      DASHBOARD: '/admin/supervisor/dashboard',
       LIST: '/admin/supervisor/list',
-      CREATE: '/admin/supervisor/create',
-      EDIT: '/admin/supervisor/edit',
       DETAIL: '/admin/supervisor/:supervisorId/details',
-      DELETE: '/admin/supervisor/:supervisorId/delete'
+      AGENT_LIST: '/admin/supervisor/agents',
+      CREATE_TARGET: '/admin/supervisor/commission-targets/:agentUID/create',
+      UPDATE_TARGET: '/admin/supervisor/commission-targets/:agentUID/update',
+      DELETE_TARGET: '/admin/supervisor/commission-targets/:agentUID/delete',
+      GET_TARGET: '/admin/supervisor/commission-targets/:agentUID',
+
+      REDEEM_COMMISSION_REQUESTS: '/admin/supervisor/redeem-commission-requests',
+      COMMISSION_REQUESTS_STATUS_UPDATE:
+        '/admin/supervisor/redeem-commission-requests/:requestID/status'
+    },
+    AGENT: {
+      DASHBOARD: '/admin/agent/dashboard',
+      LIST: '/admin/agent/list',
+      CREATE: '/admin/agent/create',
+      EDIT: '/admin/agent/edit',
+      DETAIL: '/admin/agent/:callingAgentUID/details',
+      PLAYER_LIST: '/admin/agent/:agentUID/players',
+      CHANGE_STATUS: '/admin/agent/:agentId/change-status',
+      ASSIGN_PLAYERS: '/admin/agent/assign-players',
+      UNASSIGN_PLAYERS: '/admin/agent/unassign-players',
+      UNASSIGNED_PLAYERS: '/admin/agent/unassigned-players',
+      GET_SUMMARY: '/admin/agent/commission-summary',
+      REDEEM_COMMISSION_REQUESTS: '/admin/agent/commission-redeem-request/:redeemSummaryID',
+      GET_TOTAL_EVENTS: '/admin/agent/commission-events',
+      GET_SUMMARY_DETAILS: '/admin/agent/commission-summary/:summaryId/details'
     },
     TENANT: {
       LIST: '/config/admin/tenant/list',
@@ -370,7 +393,7 @@ export const apiConfig = {
       UPDATE: '/config/admin/config/app-setting/update'
     },
     WALLET: {
-      LIST: '/wallet/admin/wallet/list/:userId',
+      LIST: '/wallet/admin/wallet/list/:userUID',
       FUND: '/wallet/admin/wallet/fund'
     },
     RESPONSIBLE_GAMING_LIMITS: {

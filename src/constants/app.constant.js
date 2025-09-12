@@ -125,10 +125,13 @@ export const PERMISSIONS = {
     VIEW_LOGIN_HISTORY: 'user-login-history-view'
   },
   SUPERVISOR: {
-    LIST: 'supervisor-view',
-    ADD: 'supervisor-add',
-    EDIT: 'supervisor-edit',
-    DELETE: 'supervisor-delete'
+    LIST: 'supervisor-view'
+  },
+  CALLING_AGENT: {
+    LIST: 'calling-agent-view',
+    Add: 'calling-agent-add',
+    DELETE: 'calling-agent-delete',
+    EDIT: 'calling-agent-edit'
   },
   REPORT: {
     BETSLIP_REPORT_VIEW: 'betslip-report-view',
@@ -370,6 +373,5 @@ export const GENERAL_STATUS = {
 
 export const ADMIN_TYPE = {
   ADMIN: 0,
-  SUPERVISOR: 1,
-  AGENT: 2
+  AGENT: 1
 };

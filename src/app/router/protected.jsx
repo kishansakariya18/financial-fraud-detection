@@ -1,6 +1,8 @@
 // Local Imports
 import { DynamicLayout } from 'app/layouts/DynamicLayout';
 import AuthGuard from 'middleware/AuthGuard';
+import AdminRouteGuard from './AdminRouteGuard';
+import AgentRouteGuard from './AgentRouteGuard';
 import dashboardRoute from './routes/dashboard.route';
 import adminRoute from './routes/admin.route';
 import playerRoutes from './routes/player.route';
@@ -33,8 +35,8 @@ import blacklistRoutes from './routes/blacklist.route';
 import { bankRoute } from './routes/bank.route';
 import { userManualDepositTransactionRoute } from './routes/user-manual-deposit-transaction.route';
 import { releaseNotesRoutes } from './routes/release-notes.route';
-import { supervisorRoute } from './routes/supervisor.route';
-
+import onlyCallingAgentRoutes from './routes/calling-agents.route';
+import { callingAgentsRoute, supervisorRoute } from './routes/supervisor.route';
 // ----------------------------------------------------------------------
 
 const protectedRoutes = {
@@ -45,39 +47,52 @@ const protectedRoutes = {
     {
       Component: DynamicLayout,
       children: [
-        ...dashboardRoute,
-        ...adminRoute,
-        ...bannerRoute,
-        ...playerRoutes,
-        ...supervisorRoute,
-        ...roleRoutes,
-        ...auditlogsRoutes,
-        ...platformRoute,
-        ...countryRoutes,
-        ...reportsRoutes,
-        ...paymentRoute,
-        ...userKycRoute,
-        ...casinoRoutes,
-        ...currenciesRoutes,
-        ...affiliateRoutes,
-        ...segmentationRoutes,
-        ...emailTemplateRoute,
-        ...promocodeRoute,
-        ...pagesRoute,
-        ...crmRoute,
-        ...homeCategoryRoute,
-        ...tenantRoute,
-        ...profileRoute,
-        ...bonusManagementRoute,
-        ...paymentProvider,
-        ...bankRoute,
-        ...userManualDepositTransactionRoute,
-        ...userClass,
-        ...rateLimitRulesRoute,
-        ...registrationFieldsRoute,
-        ...siteConfigurationRoutes,
-        ...blacklistRoutes,
-        ...releaseNotesRoutes
+        // Admin routes - centrally protected with AdminRouteGuard
+        {
+          Component: AdminRouteGuard,
+          children: [
+            ...dashboardRoute,
+            ...adminRoute,
+            ...bannerRoute,
+            ...playerRoutes,
+            ...supervisorRoute,
+            ...callingAgentsRoute,
+            ...roleRoutes,
+            ...auditlogsRoutes,
+            ...platformRoute,
+            ...countryRoutes,
+            ...reportsRoutes,
+            ...paymentRoute,
+            ...userKycRoute,
+            ...casinoRoutes,
+            ...currenciesRoutes,
+            ...affiliateRoutes,
+            ...segmentationRoutes,
+            ...emailTemplateRoute,
+            ...promocodeRoute,
+            ...pagesRoute,
+            ...crmRoute,
+            ...homeCategoryRoute,
+            ...tenantRoute,
+            ...bonusManagementRoute,
+            ...paymentProvider,
+            ...bankRoute,
+            ...userManualDepositTransactionRoute,
+            ...userClass,
+            ...rateLimitRulesRoute,
+            ...registrationFieldsRoute,
+            ...siteConfigurationRoutes,
+            ...blacklistRoutes,
+            ...releaseNotesRoutes
+          ]
+        },
+        // Agent-only routes - centrally protected with AgentRouteGuard
+        {
+          Component: AgentRouteGuard,
+          children: [...onlyCallingAgentRoutes]
+        },
+        // Shared routes accessible by both admin and agent
+        ...profileRoute
       ]
     }
   ]

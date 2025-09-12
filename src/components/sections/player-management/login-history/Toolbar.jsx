@@ -3,17 +3,14 @@ import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import clsx from 'clsx';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import PropTypes from 'prop-types';
+import { t } from 'i18next';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
-import { useTranslation } from 'react-i18next';
-
 // ----------------------------------------------------------------------
 
-export function Toolbar({ table, pageTitle = '' }) {
+export function Toolbar({ table, pageTitle = '', breadcrumbs = null }) {
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
   const { isXs } = useBreakpointsContext();
-  const { t } = useTranslation();
-
-  const breadcrumbItem = [
+  const breadcrumbItem = breadcrumbs || [
     { title: t('players'), path: '/users/player' },
     { title: t('login') + ' ' + t('history') }
   ];
@@ -22,13 +19,13 @@ export function Toolbar({ table, pageTitle = '' }) {
     <div className="table-toolbar">
       <div
         className={clsx(
-          'transition-content flex items-center justify-between gap-4',
+          'transition-content flex items-center gap-4',
           isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x] pt-4'
         )}>
+        <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
+          {pageTitle}
+        </h2>
         <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
-          <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
-            {pageTitle}
-          </h2>
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
           </div>

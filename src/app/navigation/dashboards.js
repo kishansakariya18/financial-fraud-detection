@@ -24,6 +24,7 @@ import { bank } from './bank';
 import { userManualDepositTransaction } from './user-manual-deposit-transaction';
 import { registrationFields } from './registration-fields';
 import { releaseNotes } from './release-notes';
+import { supervisor } from './supervisor';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -43,6 +44,7 @@ export const dashboards = () => ({
     },
     roles,
     users,
+    supervisor,
     platform,
     contentManagement,
     siteConfiguration,

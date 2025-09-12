@@ -40,7 +40,7 @@ export function Group({ data }) {
       </div>
       <Collapse in={isOpened} key={data.id}>
         <div className="flex flex-col space-y-1.5">
-          {data.childs.map((item) => {
+          {data.childs?.map((item) => {
             switch (item.type) {
               case NAV_TYPE_COLLAPSE:
                 if (!item.permission || item?.permission.some((p) => hasPermission(p))) {

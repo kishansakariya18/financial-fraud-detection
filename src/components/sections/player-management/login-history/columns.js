@@ -1,7 +1,7 @@
 // Import Dependencies
 import { createColumnHelper } from '@tanstack/react-table';
 
-import { IdCell, DateCell, BoldCell } from '../../../../../components/custom/table/cell';
+import { IdCell, DateCell, BoldCell } from 'components/custom/table/cell';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
 
 const columnHelper = createColumnHelper();

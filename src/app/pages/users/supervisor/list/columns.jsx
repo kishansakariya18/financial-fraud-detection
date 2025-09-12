@@ -1,11 +1,12 @@
-// Import Dependencies
 import { createColumnHelper } from '@tanstack/react-table';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
-// Local Imports
 import { RowActions } from './RowActions';
 import { IdCell, DateCell, BoldCell, BadgeCell } from '../../../../../components/custom/table/cell';
 import { CopyableCell } from '../../../../../components/shared/table/CopyableCell';
 import { statusOptions } from '../helper';
+import { ensureString } from 'utils/ensureString';
+import { Highlight } from 'components/shared/Highlight';
 
 // ----------------------------------------------------------------------
 
@@ -30,7 +31,25 @@ export const columns = [
     id: 'username',
     label: 'Username',
     header: 'User Name',
-    cell: BoldCell,
+    cell: (info) => {
+      const globalQuery = ensureString(info.table.getState().globalFilter);
+      const columnQuery = ensureString(info.column.getFilterValue());
+      const tooltip = info.row.original?.supervisorAccessTooltip;
+      return (
+        <div className="flex items-center space-x-4 rtl:space-x-reverse">
+          <span className="flex items-center gap-2 font-medium text-gray-800 dark:text-dark-100">
+            <Highlight query={[globalQuery, columnQuery]}>
+              {info.getValue() || 'not-found'}
+            </Highlight>
+            {!!tooltip && (
+              <span className="text-warning" data-tooltip={true} data-tooltip-content={tooltip}>
+                <ExclamationTriangleIcon className="size-4" />
+              </span>
+            )}
+          </span>
+        </div>
+      );
+    },
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.firstname, {
@@ -45,6 +64,12 @@ export const columns = [
     label: 'LastName',
     header: 'Last Name',
     cell: BoldCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.assignedAgentsCount, {
+    id: 'assignedAgentsCount',
+    label: 'Agents Count',
+    header: 'Agents Count',
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.email, {

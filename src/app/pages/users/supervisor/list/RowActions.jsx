@@ -1,6 +1,6 @@
 // Import Dependencies
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
-import { EllipsisHorizontalIcon, EyeIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { EllipsisHorizontalIcon, EyeIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -87,7 +87,7 @@ export function RowActions({ row, table }) {
                   </button>
                 )}
               </MenuItem>
-              <MenuItem>
+              {/* <MenuItem>
                 {({ focus }) => (
                   <button
                     className={clsx(
@@ -99,7 +99,7 @@ export function RowActions({ row, table }) {
                     <span>{t('edit')}</span>
                   </button>
                 )}
-              </MenuItem>
+              </MenuItem> */}
               {/* <MenuItem>
                 {({ focus }) => (
                   <button

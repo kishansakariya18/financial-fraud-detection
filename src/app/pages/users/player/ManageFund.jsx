@@ -26,7 +26,7 @@ const ManageFund = () => {
   const [walletOptions, setWalletOptions] = useState([]);
   const [isLoadingWallets, setIsLoadingWallets] = useState(false);
 
-  const { playerId, userID } = useParams();
+  const { playerId } = useParams();
   const { t } = useTranslation();
 
   const {
@@ -75,7 +75,7 @@ const ManageFund = () => {
       const result = await WalletService.getWalletList({
         pageIndex: 0,
         pageSize: 100,
-        userID
+        userUID: playerId
       });
 
       console.log(result.response.data);
