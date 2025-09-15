@@ -38,6 +38,17 @@ export const siteConfigurationRoutes = [
     }
   },
   {
+    path: 'site-configuration/payment-provider-config',
+    lazy: async () => {
+      const { default: PaymentProvider } = await import(
+        '../../pages/payment-provider-config/list/list'
+      );
+      return {
+        Component: () => <PaymentProvider />
+      };
+    }
+  },
+  {
     path: 'site-configuration/email-provider/edit/:providerUID',
     lazy: async () => {
       const { default: EditEmailProvider } = await import(
@@ -61,6 +72,17 @@ export const siteConfigurationRoutes = [
     path: 'site-configuration/kyc-provider/edit/:providerUID',
     lazy: async () => {
       const { default: EditEmailProvider } = await import('../../pages/kyc-provider/EditProvider');
+      return {
+        Component: () => <EditEmailProvider />
+      };
+    }
+  },
+  {
+    path: 'site-configuration/payment-provider-config/edit/:providerUID',
+    lazy: async () => {
+      const { default: EditEmailProvider } = await import(
+        '../../pages/payment-provider-config/EditProvider'
+      );
       return {
         Component: () => <EditEmailProvider />
       };
