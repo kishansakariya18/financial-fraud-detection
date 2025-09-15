@@ -205,7 +205,7 @@ function Filters({
         <FacedtedFilter
           options={Array.isArray(playerClasses) ? playerClasses : []}
           column={table.getColumn('playerClassID')}
-          title={t('playerClass') || 'Player Class'}
+          title={t('userClass') || 'Player Class'}
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}
