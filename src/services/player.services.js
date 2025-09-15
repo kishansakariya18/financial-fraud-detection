@@ -352,12 +352,12 @@ const PlayerService = {
       console.log('Error from user specific summary', error);
     }
   },
-  getUserOverAllSummary: async () => {
+  getUserOverAllSummary: async (userID) => {
     try {
       const endPoint = replaceText(
         apiConfig.endPoints.USER.USER_OVER_ALL_SUMMARY,
         ':userId',
-        '23987'
+        userID
       );
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
