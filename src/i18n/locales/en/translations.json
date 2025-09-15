@@ -772,5 +772,13 @@
   "responsible_gambling_status_success": "Responsible Gambling Status has been changed successfully",
   "areYouSureResponsible": "Are you sure you want to re-activate this user?",
   "reactivate": "Reactivate",
-  "recipients": "Recipients"
+  "recipients": "Recipients",
+  "rate_limit_rule_updated_successfully": "Rate Limit Rule updated successfully",
+  "action": "Action",
+  "block_minutes": "Block Minutes",
+  "window_minutes": "Window Minutes",
+  "max_attempts": "Max Attempts",
+  "rate_limit_rule": "Rate Limit Rule",
+  "currency_deleted_successfully": "Currency deleted successfully",
+  "enable_switch_to_apply_limit": "Enable switch to apply this limit"
 }
