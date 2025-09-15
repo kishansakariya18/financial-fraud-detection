@@ -30,8 +30,11 @@ const EditEmailTemplate = () => {
   const [eventChannelList, setEventChannelList] = useState([]);
   const [eventGroupList, setEventGroupList] = useState([]);
   const [eventTypeList, setEventTypeList] = useState([]);
+  const [currentChannelCode, setCurrentChannelCode] = useState('');
   const [eventTypeReplacerKeywords, setEventTypeReplacerKeywords] = useState([]);
   const [templateData, setTemplateData] = useState(null);
+  console.log('currentChannelCode:', currentChannelCode);
+
   const {
     register,
     handleSubmit,
@@ -51,7 +54,6 @@ const EditEmailTemplate = () => {
   // Watchers
   const selectedGroup = watch('group');
   const selectedEventType = watch('eventType');
-  const channelType = watch('channel');
   const breadcrumbItem = [
     { title: t('eventTemplate'), path: '/event-template' },
     { title: t('edit') }
@@ -175,13 +177,13 @@ const EditEmailTemplate = () => {
         group: templateData?.EventGroupID || null,
         eventType: templateData?.EventTypeID || null,
         channel: templateData?.ChannelID || null,
-        to: templateData?.ToEmail || [],
+        to: templateData?.ToRecipients || [],
         status: emailTemplateStatusToAPP(templateData.IsActive)
       };
-
-      // const delta = htmlToDelta(templateData?.Body);
-      // setHtmlContent(templateData?.Body || '');
-      // setContent(delta);
+      setCurrentChannelCode(templateData.channel.ChannelCode);
+      const delta = htmlToDelta(templateData?.Body);
+      setHtmlContent(templateData?.Body || '');
+      setContent(delta);
 
       reset(mappedData);
     }
@@ -204,16 +206,6 @@ const EditEmailTemplate = () => {
   const keywordsForSelectedType =
     eventTypeReplacerKeywords[`event_type_${selectedEventType}`] || [];
   const handleReset = () => {
-    // Reset the form with initial values
-    reset({
-      to: [],
-      cc: [],
-      bcc: [],
-      title: '',
-      heading: '',
-      status: ''
-    });
-
     // Reset the editor content
     setContent(defaultValue);
     setHtmlContent('');
@@ -221,28 +213,24 @@ const EditEmailTemplate = () => {
 
     // Re-fetch the original template data
     if (templateId) {
-      fetchEmailTemplateDetails().then((result) => {
-        if (result) {
-          const mappedData = {
-            title: result?.Title,
-            slug: result?.Slug,
-            heading: result?.Subject,
-            cc: result?.CC || [],
-            bcc: result?.BCC || [],
-            to: result?.ToEmail || [],
-            status: emailTemplateStatusToAPP(result.IsActive)
-          };
+      const mappedData = {
+        title: templateData?.Title,
+        slug: templateData?.Slug,
+        heading: templateData?.Subject,
+        cc: templateData?.CC || [],
+        bcc: templateData?.BCC || [],
+        group: templateData?.EventGroupID || null,
+        eventType: templateData?.EventTypeID || null,
+        channel: templateData?.ChannelID || null,
+        to: templateData?.ToRecipients || [],
+        status: emailTemplateStatusToAPP(templateData.IsActive)
+      };
 
-          const quill = new Quill(document.createElement('div'));
-          quill.root.innerHTML = result?.BodyHtml || '';
-          quill.setContents(result?.BodyHtml);
-          const delta = htmlToDelta(result?.BodyHtml);
-          setHtmlContent(result?.BodyHtml || '');
-          setContent(delta);
+      const delta = htmlToDelta(templateData?.Body);
+      setHtmlContent(templateData?.Body || '');
+      setContent(delta);
 
-          reset(mappedData);
-        }
-      });
+      reset(mappedData);
     }
   };
   const insertKeyword = (keyword) => {
@@ -269,11 +257,15 @@ const EditEmailTemplate = () => {
       setTemplateError('Template content is required');
       return;
     }
+    console.log('data==>:', data);
 
     const requestData = {
       ...data,
+      bcc: currentChannelCode === 'EMAIL' ? data.bcc : [],
+      cc: currentChannelCode === 'EMAIL' ? data.cc : [],
+      to: currentChannelCode === 'EMAIL' ? data.to : [],
       template: htmlContent,
-      emailTemplateId: templateId
+      templateID: templateId
     };
 
     await editEmailTemplateAPI(requestData);
@@ -303,6 +295,9 @@ const EditEmailTemplate = () => {
                     value={eventGroupList.find((group) => group.value === field.value) || null}
                     onChange={(val) => {
                       field.onChange(val.value);
+                      const delta = htmlToDelta('');
+                      setHtmlContent('');
+                      setContent(delta);
                       // Reset the eventType field when the group changes
                       if (val.value !== selectedGroup) {
                         setValue('eventType', null);
@@ -361,7 +356,11 @@ const EditEmailTemplate = () => {
                     value={
                       eventChannelList.find((channel) => channel.value === field.value) || null
                     }
-                    onChange={(val) => field.onChange(val.value)}
+                    onChange={(val) => {
+                      field.onChange(val.value);
+                      console.log('val;;', val);
+                      setCurrentChannelCode(val.label);
+                    }}
                     name={field.name}
                     label={t('event') + ' ' + t('channel')}
                     placeholder={t('select') + ' ' + t('event') + ' ' + t('channel')}
@@ -426,7 +425,7 @@ const EditEmailTemplate = () => {
               </div>
             </div>
 
-            {channelType === 1 && (
+            {currentChannelCode === 'EMAIL' && (
               <div className="grid gap-4 sm:grid-cols-1">
                 <Controller
                   name="to"
