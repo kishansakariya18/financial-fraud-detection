@@ -125,6 +125,8 @@ const EventTemplateService = {
         title: data.title,
         slug: data.slug,
         heading: data.heading,
+        eventTypeID: data.eventType,
+        channelID: data.channel,
         template: data.template,
         to: data.to,
         cc: data.cc,

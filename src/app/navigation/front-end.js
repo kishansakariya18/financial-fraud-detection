@@ -25,6 +25,15 @@ export const frontend = {
       transKey: 'homeCategory',
       Icon: TbCategoryPlus,
       permission: PERMISSIONS.FRONTEND.VIEW
+    },
+    {
+      id: 'layoutTheme',
+      path: '/layout/layout-theme',
+      type: NAV_TYPE_ITEM,
+      title: 'layoutTheme',
+      transKey: 'layoutTheme',
+      Icon: TbCategoryPlus,
+      permission: PERMISSIONS.FRONTEND.VIEW
     }
     // ,
     // {

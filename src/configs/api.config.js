@@ -109,6 +109,13 @@ export const apiConfig = {
       EDIT: '/users/admin/kyc-provider/:providerUID/edit',
       DETAIL: '/users/admin/kyc-provider/:providerUID/details'
     },
+    LAYOUT_THEME: {
+      VIEW: '/config/admin/layouts/list-theme',
+      DELETE: '/layouts/theme-config/:themeConfigId/delete',
+      STATUS: '/config/admin/layouts/:layoutId/create-theme',
+      EDIT: '/config/admin/kyc-provider/:providerUID/edit',
+      DETAIL: '/config/admin/layouts/:layoutId/detail'
+    },
     SUPERVISOR: {
       DASHBOARD: '/admin/supervisor/dashboard',
       LIST: '/admin/supervisor/list',
