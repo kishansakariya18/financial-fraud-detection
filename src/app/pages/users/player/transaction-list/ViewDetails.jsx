@@ -63,7 +63,7 @@ export function ViewDetails({ transactionId, onClose }) {
               <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                 {t('realCash')}
               </p>
-              <p>{response?.RealCashAmount || '0'}</p>
+              <p>{response?.TransactionAmount || '0'}</p>
             </div>
             <div>
               <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('status')}</p>
@@ -100,23 +100,23 @@ export function ViewDetails({ transactionId, onClose }) {
                   <Td key={0}>{t('realCash')}</Td>
                   <Td key={1} className={'text-center'}>
                     {' '}
-                    {response?.OpeningRealCashAmount}
+                    {response?.OpeningCurrencyBalance}
                   </Td>
                   <Td key={2} className={'text-center'}>
                     {+response?.Type === 1 && response?.RealCashAmount > 0 ? (
                       <span className={'text-error dark:text-error-light'}>
                         {' '}
-                        - {response?.RealCashAmount}{' '}
+                        - {response?.TransactionAmount}{' '}
                       </span>
                     ) : (
                       <span className="text-success dark:text-success-light">
                         {' '}
-                        {response?.RealCashAmount}{' '}
+                        {response?.TransactionAmount}{' '}
                       </span>
                     )}
                   </Td>
                   <Td key={3} className={'text-center'}>
-                    {response?.TotalRealCashAmount}
+                    {response?.ClosingCurrencyBalance}
                   </Td>
                 </Tr>
                 <Tr className="bg-gray-100 font-semibold text-gray-900 dark:bg-dark-700 dark:text-white">
@@ -138,7 +138,7 @@ export function ViewDetails({ transactionId, onClose }) {
                     )}
                   </Td>
                   <Td key={3} className={'text-center'}>
-                    {response?.TotalBonus}
+                    {response?.ClosingBonus}
                   </Td>
                 </Tr>
               </TBody>

@@ -43,8 +43,8 @@ export const columns = [
   // }),
   columnHelper.accessor((row) => row.transactionType, {
     id: 'transactionType',
-    label: 'Message',
-    header: 'Message',
+    label: 'TransactionType',
+    header: 'Transaction Type',
     cell: BoldCell,
     enableSorting: false
   }),
@@ -70,9 +70,30 @@ export const columns = [
   //     enableSorting: false,
   //   }),
   columnHelper.accessor((row) => row.realCashAmount, {
-    id: 'realCash',
-    header: 'RealCash',
-    label: 'RealCash',
+    id: 'amount',
+    header: 'Amount',
+    label: 'Amount',
+    cell: AmountCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.currency.name, {
+    id: 'currency',
+    header: 'Currency',
+    label: 'Currency',
+    cell: BoldCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.baseCurrencyRate, {
+    id: 'baseCurrencyRate',
+    header: 'Base Currency Rate',
+    label: 'BaseCurrencyRate',
+    cell: AmountCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.baseCurrencyValue, {
+    id: 'baseCurrencyValue',
+    header: 'Base Currency Value',
+    label: 'BaseCurrencyValue',
     cell: AmountCell,
     enableSorting: false
   }),

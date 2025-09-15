@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import RateLimitRuleService from 'services/rate-limit-rules.services';
 
-export function RowActions({ row }) {
+export function RowActions({ row, table }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ export function RowActions({ row }) {
       actionText: t('submit')
     },
     success: {
-      title: t('rule') + ' ' + t('status') + ' ' + t('changed'),
+      title: t('success'),
       description: t('rule_status_suceess')
     }
   };
@@ -47,6 +47,7 @@ export function RowActions({ row }) {
     setConfirmStatusLoading(true);
     const result = await RateLimitRuleService.updateRateLimitRuleStatus(row.original.rateLimitUID);
     if (result.status === 200) {
+      table.options.meta?.changeStatus(row);
       setStatusSuccess(true);
     } else {
       setStatusError(true);

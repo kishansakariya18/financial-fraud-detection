@@ -125,10 +125,13 @@ export const PERMISSIONS = {
     VIEW_LOGIN_HISTORY: 'user-login-history-view'
   },
   SUPERVISOR: {
-    LIST: 'supervisor-view',
-    ADD: 'supervisor-add',
-    EDIT: 'supervisor-edit',
-    DELETE: 'supervisor-delete'
+    LIST: 'supervisor-view'
+  },
+  CALLING_AGENT: {
+    LIST: 'calling-agent-view',
+    Add: 'calling-agent-add',
+    DELETE: 'calling-agent-delete',
+    EDIT: 'calling-agent-edit'
   },
   REPORT: {
     BETSLIP_REPORT_VIEW: 'betslip-report-view',
@@ -199,6 +202,14 @@ export const PERMISSIONS = {
     ADD: 'setting-email-template-add',
     EDIT: 'setting-email-template-edit'
   },
+  EVENT_TEMPLATE: {
+    VIEW: 'event-template-view',
+    ADD: 'event-template-add',
+    EDIT: 'event-template-edit',
+    CHANGE_STATUS: 'event-template-status',
+    DELETE: 'event-template-delete',
+    ASSIGN: 'event-template-assign'
+  },
   REFERRAL_OFFERS: {
     VIEW: 'setting-referral-amount-view'
   },
@@ -255,6 +266,18 @@ export const PERMISSIONS = {
   },
   CRM: {
     VIEW: 'crm-view'
+  },
+  EMAIL_PROVIDER: {
+    LIST: 'email-provider.list',
+    DELETE: 'email-provider.delete',
+    CHANGE_STATUS: 'email-provider.change-status',
+    EDIT: 'email-provider.edit'
+  },
+  KYC_PROVIDER: {
+    LIST: 'kyc-provider.list',
+    DELETE: 'kyc-provider.delete',
+    CHANGE_STATUS: 'kyc-provider.change-status',
+    EDIT: 'kyc-provider.edit'
   },
   FRONTEND: {
     VIEW: 'frontend-home-category-list',
@@ -369,6 +392,5 @@ export const GENERAL_STATUS = {
 
 export const ADMIN_TYPE = {
   ADMIN: 0,
-  SUPERVISOR: 1,
-  AGENT: 2
+  AGENT: 1
 };

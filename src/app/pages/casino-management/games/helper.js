@@ -26,6 +26,7 @@ export const responseMapper = (apiData) => {
     id: item.GameID,
     gameUID: item.GameUID,
     name: item.Name,
+    image: item.ImageURL,
     minBetAmount: item.MinBetAmount || '-',
     maxBetAmount: item.MaxBetAmount || '-',
     provider: item?.provider?.Name || '-',

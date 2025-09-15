@@ -67,7 +67,7 @@ export const responseMapper = (apiData) => {
     platformAmount: amountColorBasedOnTypeForPlatform(data.Amount, data.OutcomeType),
     type: getBatdgeForType(data.OutcomeType),
     platformType: getBadgeForPlatform(data.OutcomeType),
-    createdAt: getDateInUTCToTimeZone(data.Date)
+    createdAt: getDateInUTCToTimeZone(data.DateCreated)
   }));
   return resultData;
 };

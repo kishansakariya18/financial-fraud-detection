@@ -22,3 +22,4 @@ export * from './useEventCallback';
 export * from './useLocalStorage';
 export * from './useMediaQuery';
 export * from './useIsMounted';
+export * from './useAdminType';

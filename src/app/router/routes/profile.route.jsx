@@ -1,4 +1,5 @@
 import { Navigate } from 'react-router';
+import AdminRouteGuard from '../AdminRouteGuard';
 // import PrivateRoute from '../private';
 // import { PERMISSIONS } from 'constants/app.constant';
 
@@ -38,7 +39,11 @@ export const profileRoute = [
             '../../pages/profile/PlayerFundPassword'
           );
           return {
-            Component: () => <PlayerFundPassword />
+            Component: () => (
+              <AdminRouteGuard>
+                <PlayerFundPassword />
+              </AdminRouteGuard>
+            )
           };
         }
       },
@@ -49,7 +54,11 @@ export const profileRoute = [
             '../../pages/profile/AffiliateFundPassword'
           );
           return {
-            Component: () => <AffiliateFundPassword />
+            Component: () => (
+              <AdminRouteGuard>
+                <AffiliateFundPassword />
+              </AdminRouteGuard>
+            )
           };
         }
       }

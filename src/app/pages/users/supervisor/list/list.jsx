@@ -33,7 +33,6 @@ export default function Supervisor() {
     });
 
     if (result.status === 200) {
-      console.log('result: ', result.response);
       return {
         status: 200,
         data: responseMapper(result.response.data),

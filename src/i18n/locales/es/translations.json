@@ -193,7 +193,7 @@
   "affiliates": "Afiliados",
   "balance": "Balance",
   "affiliate_status_desc": "¿Estás seguro de querer actualizar el estado de este afiliado?",
-  "email_template_desc": "¿Estás seguro de querer actualizar el estado de esta plantilla de correo?",
+  "event_template_desc": "¿Estás seguro de querer actualizar el estado de esta plantilla de correo?",
   "affiliate_status_suceess": "Estado de afiliado cambiado exitosamente",
   "pages_status_desc": "¿Estás seguro de querer actualizar el estado de esta página?",
   "pages_status_suceess": "Estado de página cambiado exitosamente",
@@ -571,5 +571,6 @@
   "responsible_gambling_status_success": "Estado de juego responsable cambiado exitosamente",
   "reactivate": "reactivar",
   "areYouSureResponsible": "¿Estás segura de que quieres volver a activar a esta usuario?",
-  "recipients": "Recipients"
+  "recipients": "Recipients",
+  "event_template_status_success": "Plantilla de correo electrónico El estado se ha cambiado correctamente"
 }

@@ -192,7 +192,7 @@
   "affiliates": "Affiliés",
   "balance": "Solde",
   "affiliate_status_desc": "Êtes-vous sûr de vouloir mettre à jour le statut de cet affilié ?",
-  "email_template_desc": "Êtes-vous sûr de vouloir mettre à jour le statut de ce modèle d'e-mail ?",
+  "event_template_desc": "Êtes-vous sûr de vouloir mettre à jour le statut de ce modèle d'e-mail ?",
   "affiliate_status_suceess": "Le statut de l'affilié a été modifié avec succès",
   "pages_status_desc": "Êtes-vous sûr de vouloir mettre à jour le statut de cette page ?",
   "pages_status_suceess": "Le statut de la page a été modifié avec succès",
@@ -552,5 +552,6 @@
   "responsible_gambling_status_success": "Statut du jeu responsable modifié avec succès",
   "reactivate": "réactiver",
   "areYouSureResponsible": "Êtes-vous sûr de vouloir réactiver cet utilisateur ?",
-  "recipients": "Recipients"
+  "recipients": "Recipients",
+  "event_template_status_success": "Plantilla de correo electrónico El estado se ha cambiado correctamente"
 }

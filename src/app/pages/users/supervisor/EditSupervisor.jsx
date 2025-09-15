@@ -15,11 +15,10 @@ import { useNavigate, useParams } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { parseAdminStatusToApp, statusOptions } from './helper';
 import { useTranslation } from 'react-i18next';
-import SupervisorService from 'services/supervisor.services';
 
 const EditSupervisor = () => {
   const { t } = useTranslation();
-  const { supervisorId } = useParams();
+  const { supervisorUID } = useParams();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
@@ -40,7 +39,7 @@ const EditSupervisor = () => {
   } = useForm({
     resolver: yupResolver(editSupervisorSchema),
     defaultValues: async () => {
-      if (supervisorId) {
+      if (supervisorUID) {
         const result = await fetchSupervisorDetails();
 
         if (result) {
@@ -60,7 +59,7 @@ const EditSupervisor = () => {
   });
 
   const fetchSupervisorDetails = async () => {
-    const result = await SupervisorService.getSupervisorDetail(supervisorId);
+    const result = await AdminService.getAdminDetail(supervisorUID);
     if (result && result.status === 200) {
       const details = result.response.data;
       return details;
@@ -82,7 +81,7 @@ const EditSupervisor = () => {
   const editSupervisorApi = async (requestObject) => {
     setLoading(true);
     setError(null);
-    const result = await SupervisorService.editSupervisor(requestObject);
+    const result = await AdminService.editAdmin(requestObject);
     if (result) {
       if (result.status === 200 || result.status === 201) {
         setResponse(result.response);
@@ -95,7 +94,7 @@ const EditSupervisor = () => {
 
   useEffect(() => {
     fetchCountries();
-  }, [supervisorId]);
+  }, [supervisorUID]);
 
   if (!loading && error) {
     toast.error(error);
@@ -112,7 +111,7 @@ const EditSupervisor = () => {
   }
 
   const onSubmit = async (data) => {
-    await editSupervisorApi({ ...data, adminUID: supervisorId });
+    await editSupervisorApi({ ...data, adminUID: supervisorUID });
   };
   return (
     <Page title={pageTitle}>

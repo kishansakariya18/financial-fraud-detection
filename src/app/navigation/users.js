@@ -41,15 +41,5 @@ export const users = {
       Icon: UserGroupIcon,
       permission: PERMISSIONS.SUPERVISOR.LIST
     }
-    // ,
-    // {
-    //   id: 'affiliate',
-    //   type: NAV_TYPE_ITEM,
-    //   path: '/users/affiliate',
-    //   title: 'Affiliates',
-    //   transKey: 'affiliates',
-    //   Icon: UsersIcon,
-    //   permission: PERMISSIONS.AFFILIATES.LIST
-    // }
   ]
 };

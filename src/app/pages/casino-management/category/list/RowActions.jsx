@@ -146,6 +146,7 @@ export function RowActions({ row, table }) {
         <EditCategory
           categoryId={row.original.id}
           value={row.original.name}
+          image={row.original.image}
           closeModal={onOkDialogBox}
         />
       </CustomModal>

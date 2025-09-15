@@ -14,6 +14,7 @@ export default function TabsPage({ tabs }) {
   const initialTabIndex = tabs.findIndex((tab) => location.pathname.includes(tab.path));
   const { hasPermission } = usePermissions();
 
+  console.log('tab.permission: ', tabs);
   return (
     <Page>
       <TabGroup selectedIndex={initialTabIndex}>
@@ -22,7 +23,7 @@ export default function TabsPage({ tabs }) {
             <TabList className="-mb-0.5 flex">
               {tabs.map((tab) => (
                 <div key={tab.id}>
-                  {hasPermission(tab.permission) && (
+                  {(!tab.permission || hasPermission(tab.permission)) && !tab.isHidden && (
                     <NavLink to={tab.path}>
                       <Tab
                         key={tab.id}
