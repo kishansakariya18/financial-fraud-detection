@@ -9,6 +9,7 @@ import { appSettings } from './app-settings';
 import emailProvider from './email-provider';
 import kycProvider from './kyc-provider';
 import smsProvider from './sms-provider';
+import paymentProviderConfig from './payment-provider-config';
 
 export const siteConfiguration = {
   id: 'site_configuration',
@@ -29,6 +30,7 @@ export const siteConfiguration = {
     RateLimitRules,
     emailProvider,
     kycProvider,
-    smsProvider
+    smsProvider,
+    paymentProviderConfig
   ]
 };

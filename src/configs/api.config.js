@@ -57,6 +57,7 @@ export const apiConfig = {
       CHANE_PLAYER_FUND_PASSWORD: '/config/admin/config/user/change-manage-fund-password',
       SUMMARY: '/users/admin/users/summary',
       USER_SUMMARY: '/users/admin/users/summary',
+      USER_OVER_ALL_SUMMARY: '/users/admin/user-summary/:userId',
       LIMIT_SUMMARY: '/users/admin/limit-summary/:userId',
       COUNTRY_LIST: '/config/admin/config/countries',
       SEGMENTATION_LIST: '/bonus/admin/segmentation/list'
@@ -87,6 +88,13 @@ export const apiConfig = {
       STATUS: '/notifications/admin/email-provider/:providerUID/change-status',
       EDIT: '/notifications/admin/email-provider/:providerUID/edit',
       DETAIL: '/notifications/admin/email-provider/:providerUID/details'
+    },
+    PAYMENT_PROVIDER_CONFIG: {
+      VIEW: '/payments/admin/payment-provider/list',
+      DELETE: '/payments/admin/payment-provider/:providerUID/delete',
+      STATUS: '/payments/admin/payment-provider/:providerUID/change-status',
+      EDIT: '/payments/admin/payment-provider/:providerUID/edit',
+      DETAIL: '/payments/admin/payment-provider/:providerUID/details'
     },
     SMS_PROVIDER: {
       VIEW: '/notifications/admin/sms-provider/list',
@@ -304,7 +312,9 @@ export const apiConfig = {
       DEPOSIT_BONUS_EXPORT: '/admin/reports/deposit-bonus/export'
     },
     CRM: {
-      SEND: '/notifications/admin/crm/sendNotification'
+      SEND: '/notifications/admin/crm/sendNotification',
+      LIST: '/notifications/admin/crm/notification/list',
+      DETAIL: '/notifications/admin/crm/notification/:notificationId'
     },
     HOME_PAGE: {
       HOME_CATEGORY_LIST: '/config/admin/home-page/home-category/list',
@@ -368,7 +378,9 @@ export const apiConfig = {
     },
     RATE_LIMIT_RULES: {
       LIST: '/config/admin/rate-limit-rules/list',
-      CHANGE_STATUS: '/config/admin/rate-limit-rules/:rateLimitUID/change-status'
+      CHANGE_STATUS: '/config/admin/rate-limit-rules/:rateLimitUID/change-status',
+      DETAIL: '/config/admin/rate-limit-rules/:rateLimitUID/detail',
+      UPDATE: '/config/admin/rate-limit-rules/:rateLimitUID/update'
     },
     BLACKLIST: {
       LIST: '/users/admin/blacklist/list',
@@ -420,6 +432,15 @@ export const apiConfig = {
     RESPONSIBLE_GAMING_LIMITS: {
       USER_ALL_LIMITS: '/users/admin/responsible-gaming-limits/users/:userId/all-limits',
       USER_BULK_UPDATE: '/users/admin/responsible-gaming-limits/users/:userId/bulk-update'
+    },
+    RESPONSIBLE_GAMBLING_RESTRICTIONS: {
+      LIST: '/users/admin/responsible-gaming-restrictions/list',
+      DETAIL: '/users/admin/responsible-gaming-restrictions/:restrictionId/detail',
+      CREATE: '/users/admin/responsible-gaming-restrictions/create',
+      EDIT: '/users/admin/responsible-gaming-restrictions/:restrictionId/update',
+      DELETE: '/users/admin/responsible-gaming-restrictions/:restrictionId/delete',
+      CHANGE_STATUS: '/users/admin/responsible-gaming-restrictions/:restrictionId/change-status',
+      APPROVE: '/users/admin/responsible-gaming-restrictions/:restrictionId/approve'
     }
   }
 };

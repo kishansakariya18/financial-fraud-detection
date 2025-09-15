@@ -24,6 +24,7 @@ const PlayerService = {
         isKYCVerified: filters.isKYCVerified ? playerKycToAPI(filters.isKYCVerified) : undefined,
         isBankVerified: filters.isBankVerified ? playerKycToAPI(filters.isBankVerified) : undefined,
         gender: filters.gender ? filters.gender : undefined,
+        playerClassID: filters.playerClassID ? filters.playerClassID : undefined,
         countries: filters.CountryID ? filters.CountryID.split(',') : [],
         segments: filters.SegmentationID ? filters.SegmentationID.split(',') : [],
         startDate: filters.startDate
@@ -349,6 +350,26 @@ const PlayerService = {
       return response;
     } catch (error) {
       console.log('Error from user specific summary', error);
+    }
+  },
+  getUserOverAllSummary: async (userID) => {
+    try {
+      const endPoint = replaceText(
+        apiConfig.endPoints.USER.USER_OVER_ALL_SUMMARY,
+        ':userId',
+        userID
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from user overall summary', error);
     }
   },
   playerTransactionDetail: async (data) => {

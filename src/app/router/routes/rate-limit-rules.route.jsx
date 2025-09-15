@@ -14,6 +14,21 @@ export const rateLimitRulesRoute = [
         )
       };
     }
+  },
+  {
+    path: 'rate-limit-rules/edit/:rateLimitUID',
+    lazy: async () => {
+      const { default: EditRulesLimit } = await import(
+        '../../pages/rate-limit-rules/EditRulesLimit'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.RATE_LIMIT_RULES.EDIT}>
+            <EditRulesLimit />
+          </PrivateRoute>
+        )
+      };
+    }
   }
 ];
 

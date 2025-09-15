@@ -42,10 +42,27 @@ const PlayerLimit = () => {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors }
   } = useForm({
     resolver: yupResolver(playerLimitSchema)
   });
+
+  // Watch all form values to detect changes
+  const watchedValues = watch();
+
+  // Helper function to check if a limit has value but switch is disabled
+  const getValidationMessage = (valueKey, flagKey) => {
+    const hasValue = watchedValues?.[valueKey] && Number(watchedValues[valueKey]) > 0;
+    const isEnabled = watchedValues?.[flagKey];
+
+    if (hasValue && !isEnabled) {
+      return t('enable_switch_to_apply_limit');
+    }
+    return null;
+  };
+
+  console.log('errors: ', errors);
 
   useEffect(() => {
     if (playerId) {
@@ -286,6 +303,91 @@ const PlayerLimit = () => {
   }, [response]);
 
   const handlePlayerLimitUpdate = async (data) => {
+    // Validate that all limits with values have their switches enabled
+    const validationErrors = [];
+
+    const limitConfigs = [
+      {
+        valueKey: 'dailyWagerLimit',
+        flagKey: 'hasDailyWagerLimit',
+        name: 'Daily Wager Limit'
+      },
+      {
+        valueKey: 'weeklyWagerLimit',
+        flagKey: 'hasWeeklyWagerLimit',
+        name: 'Weekly Wager Limit'
+      },
+      {
+        valueKey: 'monthlyWagerLimit',
+        flagKey: 'hasMonthlyWagerLimit',
+        name: 'Monthly Wager Limit'
+      },
+      {
+        valueKey: 'oneTimeWagerLimit',
+        flagKey: 'hasOneTimeWagerLimit',
+        name: 'One Time Wager Limit'
+      },
+      {
+        valueKey: 'dailyDepositLimit',
+        flagKey: 'hasDailyDepositLimit',
+        name: 'Daily Deposit Limit'
+      },
+      {
+        valueKey: 'weeklyDepositLimit',
+        flagKey: 'hasWeeklyDepositLimit',
+        name: 'Weekly Deposit Limit'
+      },
+      {
+        valueKey: 'monthlyDepositLimit',
+        flagKey: 'hasMonthlyDepositLimit',
+        name: 'Monthly Deposit Limit'
+      },
+      {
+        valueKey: 'dailyWithdrawLimit',
+        flagKey: 'hasDailyWithdrawLimit',
+        name: 'Daily Withdraw Limit'
+      },
+      {
+        valueKey: 'weeklyWithdrawLimit',
+        flagKey: 'hasWeeklyWithdrawLimit',
+        name: 'Weekly Withdraw Limit'
+      },
+      {
+        valueKey: 'monthlyWithdrawLimit',
+        flagKey: 'hasMonthlyWithdrawLimit',
+        name: 'Monthly Withdraw Limit'
+      },
+      {
+        valueKey: 'dailyLossLimit',
+        flagKey: 'hasDailyLossLimit',
+        name: 'Daily Loss Limit'
+      },
+      {
+        valueKey: 'weeklyLossLimit',
+        flagKey: 'hasWeeklyLossLimit',
+        name: 'Weekly Loss Limit'
+      },
+      {
+        valueKey: 'monthlyLossLimit',
+        flagKey: 'hasMonthlyLossLimit',
+        name: 'Monthly Loss Limit'
+      }
+    ];
+
+    limitConfigs.forEach(({ valueKey, flagKey, name }) => {
+      const hasValue = data[valueKey] && Number(data[valueKey]) > 0;
+      const isEnabled = data[flagKey];
+
+      if (hasValue && !isEnabled) {
+        validationErrors.push(`${name}: ${t('enable_switch_to_apply_limit')}`);
+      }
+    });
+
+    if (validationErrors.length > 0) {
+      toast.error(validationErrors.join('\n'));
+      return;
+    }
+
     await updatePlayerLimit(data);
   };
 
@@ -396,7 +498,10 @@ const PlayerLimit = () => {
                                 <Input
                                   id={valueKey}
                                   {...register(valueKey, { valueAsNumber: true })}
-                                  error={errors?.[valueKey]?.message}
+                                  error={
+                                    errors?.[valueKey]?.message ||
+                                    getValidationMessage(valueKey, flagKey)
+                                  }
                                   placeholder={`Enter ${cap(item.limitPeriod)} ${TypeKey} Limit`}
                                   classNames={{
                                     root: 'flex-1',

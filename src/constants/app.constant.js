@@ -328,6 +328,13 @@ export const PERMISSIONS = {
   RATE_LIMIT_RULES: {
     LIST: 'rate-limit-rules-view'
   },
+  RESPONSIBLE_GAMBLING: {
+    LIST: 'responsible-gambling-list',
+    CREATE: 'responsible-gambling-create',
+    EDIT: 'responsible-gambling-edit',
+    CHANGE_STATUS: 'responsible-gambling-change-status',
+    DELETE: 'responsible-gambling-delete'
+  },
   BANK: {
     VIEW: 'bank-view',
     STATUS: 'bank-status',
