@@ -88,6 +88,13 @@ export const apiConfig = {
       EDIT: '/notifications/admin/email-provider/:providerUID/edit',
       DETAIL: '/notifications/admin/email-provider/:providerUID/details'
     },
+    PAYMENT_PROVIDER_CONFIG: {
+      VIEW: '/payments/admin/payment-provider/list',
+      DELETE: '/payments/admin/payment-provider/:providerUID/delete',
+      STATUS: '/payments/admin/payment-provider/:providerUID/change-status',
+      EDIT: '/payments/admin/payment-provider/:providerUID/edit',
+      DETAIL: '/payments/admin/payment-provider/:providerUID/details'
+    },
     SMS_PROVIDER: {
       VIEW: '/notifications/admin/sms-provider/list',
       DELETE: '/notifications/admin/sms-provider/:providerUID/delete',
