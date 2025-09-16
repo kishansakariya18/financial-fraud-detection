@@ -8,7 +8,7 @@ export const smsProvider = {
   title: 'SMS Provider',
   transKey: 'smsProvider',
   Icon: Cog6ToothIcon,
-  permission: [PERMISSIONS.SMS_PROVIDER.LIST]
+  permission: PERMISSIONS.SMS_PROVIDER.LIST
 };
 
 export default smsProvider;
