@@ -441,7 +441,7 @@ export const apiConfig = {
       USER_BULK_UPDATE: '/users/admin/responsible-gaming-limits/users/:userId/bulk-update'
     },
     RESPONSIBLE_GAMBLING_RESTRICTIONS: {
-      LIST: '/users/admin/responsible-gaming-restrictions/list',
+      LIST: '/users/admin/responsible-gaming-restrictions/self-exclusion/list',
       DETAIL: '/users/admin/responsible-gaming-restrictions/:restrictionId/detail',
       CREATE: '/users/admin/responsible-gaming-restrictions/create',
       EDIT: '/users/admin/responsible-gaming-restrictions/:restrictionId/update',
