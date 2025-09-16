@@ -18,26 +18,39 @@ const rateLimitRuleSchema = yup.object().shape({
     .number()
     .required('Block minutes is required')
     .min(1, 'Block minutes must be at least 1')
-    .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
-      if (value === undefined || value === null) return true;
-      return /^\d+(\.\d{1,2})?$/.test(value.toString());
-    }),
+    .test(
+      'max-2-decimals',
+      'Enter minimum 1 to maximum 10 digits with up to 2 decimals (e.g., 1234567890.12)',
+      (value) => {
+        if (value === undefined || value === null) return true;
+        return /^\d{1,10}(\.\d{1,2})?$/.test(value.toString());
+      }
+    ),
   windowMinutes: yup
     .number()
     .required('Window minutes is required')
     .min(1, 'Window minutes must be at least 1')
-    .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
-      if (value === undefined || value === null) return true;
-      return /^\d+(\.\d{1,2})?$/.test(value.toString());
-    }),
+    .test(
+      'max-2-decimals',
+      'Enter minimum 1 to maximum 10 digits with up to 2 decimals (e.g., 1234567890.12)',
+      (value) => {
+        if (value === undefined || value === null) return true;
+        // Enforce 1-10 digits before decimal and up to 2 decimal places
+        return /^\d{1,10}(\.\d{1,2})?$/.test(value.toString());
+      }
+    ),
   maxAttempts: yup
     .number()
     .required('Max attempts is required')
     .min(1, 'Max attempts must be at least 1')
-    .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
-      if (value === undefined || value === null) return true;
-      return /^\d+(\.\d{1,2})?$/.test(value.toString());
-    }),
+    .test(
+      'max-2-decimals',
+      'Enter minimum 1 to maximum 10 digits with up to 2 decimals (e.g., 1234567890.12)',
+      (value) => {
+        if (value === undefined || value === null) return true;
+        return /^\d{1,10}(\.\d{1,2})?$/.test(value.toString());
+      }
+    ),
   description: yup.string().required('Description is required')
 });
 
@@ -166,7 +179,7 @@ const EditRulesLimit = () => {
           <Breadcrumbs items={breadcrumbItems} />
         </div>
 
-        <form onSubmit={handleSubmit(updateRateLimitRule)} className="space-y-6">
+        <form onSubmit={handleSubmit(updateRateLimitRule)} noValidate className="space-y-6">
           <div className="mt-6 space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
@@ -180,7 +193,12 @@ const EditRulesLimit = () => {
                 {...register('blockMinutes', { valueAsNumber: true })}
                 label={t('block_minutes')}
                 type="number"
-                step="any"
+                onKeyDown={(e) => {
+                  if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
+                    e.preventDefault();
+                  }
+                }}
+                maxLength={13}
                 error={errors?.blockMinutes?.message}
                 placeholder={t('enter') + ' ' + t('block_minutes')}
                 disabled={loading}
@@ -191,7 +209,12 @@ const EditRulesLimit = () => {
                 {...register('windowMinutes', { valueAsNumber: true })}
                 label={t('window_minutes')}
                 type="number"
-                step="any"
+                onKeyDown={(e) => {
+                  if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
+                    e.preventDefault();
+                  }
+                }}
+                maxLength={13}
                 error={errors?.windowMinutes?.message}
                 placeholder={t('enter') + ' ' + t('window_minutes')}
                 disabled={loading}
@@ -200,7 +223,12 @@ const EditRulesLimit = () => {
                 {...register('maxAttempts', { valueAsNumber: true })}
                 label={t('max_attempts')}
                 type="number"
-                step="any"
+                onKeyDown={(e) => {
+                  if (e.key === 'e' || e.key === 'E' || e.key === '+' || e.key === '-') {
+                    e.preventDefault();
+                  }
+                }}
+                maxLength={13}
                 error={errors?.maxAttempts?.message}
                 placeholder={t('enter') + ' ' + t('max_attempts')}
                 disabled={loading}

@@ -12,15 +12,15 @@ import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { rgStatusOptions } from '../helper';
 
 // Local filter options
-const restrictionTypeOptions = [
-  { value: 'cooling_off', label: 'Cooling Off' },
-  { value: 'self_exclusion', label: 'Self Exclusion' }
-];
+// const restrictionTypeOptions = [
+//   { value: 'cooling_off', label: 'Cooling Off' },
+//   { value: 'self_exclusion', label: 'Self Exclusion' }
+// ];
 
-const setByOptions = [
-  { value: 'user', label: 'User' },
-  { value: 'admin', label: 'Admin' }
-];
+// const setByOptions = [
+//   { value: 'user', label: 'User' },
+//   { value: 'admin', label: 'Admin' }
+// ];
 
 export function Toolbar({
   table,
@@ -125,7 +125,7 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
         />
       )}
 
-      {table.getColumn('Name') && (
+      {/* {table.getColumn('Name') && (
         <FacedtedFilter
           options={restrictionTypeOptions}
           column={table.getColumn('Name')}
@@ -145,7 +145,7 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           isMultiple={false}
           showCheckbox={false}
         />
-      )}
+      )} */}
 
       <div>
         <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
