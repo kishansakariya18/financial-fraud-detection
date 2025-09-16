@@ -126,7 +126,7 @@ export const apiConfig = {
       UPDATE_TARGET: '/admin/supervisor/commission-targets/:agentUID/update',
       DELETE_TARGET: '/admin/supervisor/commission-targets/:agentUID/delete',
       GET_TARGET: '/admin/supervisor/commission-targets/:agentUID',
-
+      LOGIN_HISTORY: '/admin/supervisor/:callingAgentUID/login-history',
       REDEEM_COMMISSION_REQUESTS: '/admin/supervisor/redeem-commission-requests',
       COMMISSION_REQUESTS_STATUS_UPDATE:
         '/admin/supervisor/redeem-commission-requests/:requestID/status'
