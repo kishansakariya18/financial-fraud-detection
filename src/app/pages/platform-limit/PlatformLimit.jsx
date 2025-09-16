@@ -9,9 +9,11 @@ import PlatformLimitService from 'services/platform.services';
 import { updatePlatformLimitSchema } from './schema';
 import { useTranslation } from 'react-i18next';
 import { ContextualHelp } from 'components/shared/ContextualHelp';
+import { useCurrencyContext } from 'app/contexts/currency/context';
 
 const PlatformLimit = () => {
   const { t } = useTranslation();
+  const { symbol } = useCurrencyContext();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -108,6 +110,7 @@ const PlatformLimit = () => {
                 maxLength={10}
                 error={errors?.dailyDepositLimit?.message}
                 placeholder="Enter Daily Deposit Limit"
+                prefix={symbol}
                 onKeyDown={(e) => {
                   if (
                     e.key === 'e' ||
@@ -136,6 +139,7 @@ const PlatformLimit = () => {
                 maxLength={10}
                 error={errors?.dailyWithdrawLimit?.message}
                 placeholder="Enter Daily Withdraw Limit"
+                prefix={symbol}
                 onKeyDown={(e) => {
                   if (
                     e.key === 'e' ||
@@ -166,6 +170,7 @@ const PlatformLimit = () => {
                 maxLength={10}
                 error={errors?.oneTimeBetLimit?.message}
                 placeholder="Enter Bet Limit"
+                prefix={symbol}
                 onKeyDown={(e) => {
                   if (
                     e.key === 'e' ||
@@ -194,6 +199,7 @@ const PlatformLimit = () => {
                 maxLength={10}
                 error={errors?.oneTimeWinLimit?.message}
                 placeholder="Enter Win Limit"
+                prefix={symbol}
                 onKeyDown={(e) => {
                   if (
                     e.key === 'e' ||
