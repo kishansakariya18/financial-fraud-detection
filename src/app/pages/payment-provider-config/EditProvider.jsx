@@ -110,7 +110,7 @@ const EditProvider = () => {
     console.log('existingConfig:', existingConfig);
     await editPaymentProviderApi({
       providerUID: providerUID,
-      configData: existingConfig
+      providerConfig: existingConfig
     });
   };
   const boolOptions = getBoolOptions();

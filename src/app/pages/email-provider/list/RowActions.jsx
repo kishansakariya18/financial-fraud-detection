@@ -45,27 +45,27 @@ export function RowActions({ row, table }) {
       actionText: t('submit')
     },
     success: {
-      title: t('emailProvider') + ' ' + t('status'),
+      title: t('provider') + ' ' + t('status'),
       description: t('provider_status_success')
     },
     error: {
-      title: t('emailProvider') + ' ' + t('status'),
+      title: t('provider') + ' ' + t('status'),
       description: t('something_went_wrong')
     }
   };
 
   const deleteMessages = {
     pending: {
-      title: t('deleteItem') + ' ' + t('emailProvider'),
+      title: t('deleteItem') + ' ' + t('provider'),
       description: t('provider_delete'),
       actionText: t('deleteItem')
     },
     success: {
-      title: t('emailProvider'),
+      title: t('provider'),
       description: t('provider_delete_success')
     },
     error: {
-      title: t('emailProvider'),
+      title: t('provider'),
       description: t('something_went_wrong')
     }
   };

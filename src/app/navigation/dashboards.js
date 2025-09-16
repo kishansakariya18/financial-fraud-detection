@@ -17,7 +17,6 @@ import { tenants } from './tenant';
 import { contentManagement } from './content-management';
 import { siteConfiguration } from './site-configuration';
 import { bonusManagement } from './bonus-management';
-import { paymentProvider } from './payment-provider';
 import { userClass } from './user-class';
 import { blacklist } from './blacklist';
 import { bank } from './bank';
@@ -59,7 +58,6 @@ export const dashboards = () => ({
     peomocode,
     auditlogs,
     crm,
-    paymentProvider,
     userClass,
     blacklist,
     bank,

@@ -146,7 +146,7 @@ export function RowActions({ row, table }) {
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
               className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
-              {hasPermission(PERMISSIONS.EMAIL_PROVIDER.EDIT) && (
+              {hasPermission(PERMISSIONS.PAYMENT_PROVIDER.EDIT) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -161,7 +161,7 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              {hasPermission(PERMISSIONS.EMAIL_PROVIDER.CHANGE_STATUS) && (
+              {hasPermission(PERMISSIONS.PAYMENT_PROVIDER.CHANGE_STATUS) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -176,7 +176,7 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              {hasPermission(PERMISSIONS.EMAIL_PROVIDER.DELETE) && (
+              {hasPermission(PERMISSIONS.PAYMENT_PROVIDER.DELETE) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
