@@ -6,6 +6,7 @@ import { RowActions } from './RowActions';
 import { IdCell, BadgeCell } from '../../../../components/custom/table/cell';
 // import { CopyableCell } from '../../../../components/shared/table/CopyableCell';
 import { pagesOptions } from '../helper';
+import { CopyableCell } from 'components/shared/table/CopyableCell';
 
 const columnHelper = createColumnHelper();
 
@@ -20,7 +21,7 @@ export const columns = [
   columnHelper.accessor((row) => row.name, {
     id: 'name',
     header: 'Page Name',
-    cell: IdCell,
+    cell: CopyableCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.status, {

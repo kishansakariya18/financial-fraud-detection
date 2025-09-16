@@ -10,12 +10,14 @@ import { useTranslation } from 'react-i18next';
 import UserClassService from 'services/user-class.services';
 import { createUserClassSchema } from './schema';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { useCurrencyContext } from 'app/contexts/currency/context';
 
 const CreateUserClass = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const { t } = useTranslation();
+  const { symbol } = useCurrencyContext();
 
   const breadcrumbItem = [{ title: t('userClass'), path: '/user-class' }, { title: t('create') }];
 
@@ -97,6 +99,7 @@ const CreateUserClass = () => {
                 step="any"
                 error={errors?.deposit?.message}
                 placeholder={t('enter') + ' ' + t('deposit')}
+                prefix={symbol}
               />
               <Input
                 {...register('wager', { valueAsNumber: true })}
@@ -105,6 +108,7 @@ const CreateUserClass = () => {
                 step="any"
                 error={errors?.wager?.message}
                 placeholder={t('enter') + ' ' + t('wager')}
+                prefix={symbol}
               />
             </div>
           </div>

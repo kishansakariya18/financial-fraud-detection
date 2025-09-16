@@ -11,6 +11,7 @@ import UserClassService from 'services/user-class.services';
 import { createUserClassSchema } from './schema';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { userclassStatusToAPP } from './helper';
+import { useCurrencyContext } from 'app/contexts/currency/context';
 
 const EditUserClass = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const EditUserClass = () => {
 
   const [response, setResponse] = useState(null);
   const { t } = useTranslation();
+  const { symbol } = useCurrencyContext();
 
   const breadcrumbItem = [{ title: t('userClass'), path: '/user-class' }, { title: t('edit') }];
 
@@ -158,6 +160,7 @@ const EditUserClass = () => {
                 step="any"
                 error={errors?.deposit?.message}
                 placeholder={t('enter') + ' ' + t('deposit')}
+                prefix={symbol}
               />
               <Input
                 {...register('wager', { valueAsNumber: true })}
@@ -166,6 +169,7 @@ const EditUserClass = () => {
                 step="any"
                 error={errors?.wager?.message}
                 placeholder={t('enter') + ' ' + t('wager')}
+                prefix={symbol}
               />
             </div>
           </div>

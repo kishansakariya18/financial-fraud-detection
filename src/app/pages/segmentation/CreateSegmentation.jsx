@@ -13,6 +13,7 @@ import { Listbox } from 'components/shared/form/Listbox';
 import SegmentationService from 'services/segmentation.services';
 import { genderOptions, kycOptions } from './helper';
 import { createSegmentationSchema } from './schema';
+import { useCurrencyContext } from 'app/contexts/currency/context';
 
 const CreateSegmentation = () => {
   const [error, setError] = useState('');
@@ -21,6 +22,7 @@ const CreateSegmentation = () => {
 
   const [response, setResponse] = useState(null);
   const { t } = useTranslation();
+  const { symbol } = useCurrencyContext();
 
   const breadcrumbItem = [
     { title: t('segmentation'), path: '/segmentation' },
@@ -341,6 +343,7 @@ const CreateSegmentation = () => {
                 <>
                   <Input
                     {...register('minDeposit')}
+                    prefix={moneyDeposit && symbol}
                     error={errors?.minDeposit?.message}
                     placeholder={t('minimum') + ' ' + t('deposit')}
                     type="number"
@@ -349,6 +352,7 @@ const CreateSegmentation = () => {
                   />
                   <Input
                     {...register('maxDeposit')}
+                    prefix={moneyDeposit && symbol}
                     error={errors?.maxDeposit?.message}
                     placeholder={t('maximum') + ' ' + t('deposit')}
                     type="number"
@@ -366,6 +370,7 @@ const CreateSegmentation = () => {
                 <>
                   <Input
                     {...register('minWon')}
+                    prefix={moneyWon && symbol}
                     error={errors?.minWon?.message}
                     placeholder={t('minimum') + ' ' + t('won')}
                     type="number"
@@ -374,6 +379,7 @@ const CreateSegmentation = () => {
                   />
                   <Input
                     {...register('maxWon')}
+                    prefix={moneyWon && symbol}
                     error={errors?.maxWon?.message}
                     placeholder={t('maximum') + ' ' + t('won')}
                     type="number"
@@ -391,6 +397,7 @@ const CreateSegmentation = () => {
                 <>
                   <Input
                     disabled={!moneyLoss}
+                    prefix={moneyLoss && symbol}
                     {...register('minLoss')}
                     error={errors?.minLoss?.message}
                     placeholder={t('minimum') + ' ' + t('loss')}
@@ -399,6 +406,7 @@ const CreateSegmentation = () => {
                   />
                   <Input
                     disabled={!moneyLoss}
+                    prefix={moneyLoss && symbol}
                     {...register('maxLoss')}
                     error={errors?.maxLoss?.message}
                     placeholder={t('maximum') + ' ' + t('loss')}
