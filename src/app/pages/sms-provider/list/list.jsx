@@ -11,7 +11,7 @@ import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
-import { smsProviderResponseMapper, statusToAPI } from '../helper';
+import { smsProviderResponseMapper } from '../helper';
 
 export default function SMSProvider() {
   const { t } = useTranslation();
@@ -63,7 +63,7 @@ export default function SMSProvider() {
       filtersFromQuery.push({ id: 'providerName', value: queryParams.keyword });
     }
     if (queryParams.status) {
-      filtersFromQuery.push({ id: 'status', value: statusToAPI(queryParams.status) });
+      filtersFromQuery.push({ id: 'status', value: queryParams.status });
     }
     setColumnFilters(filtersFromQuery);
   }, [queryParams, setColumnFilters]);
@@ -82,7 +82,7 @@ export default function SMSProvider() {
       pageIndex: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
-      ...(filterItems.status && { status: statusToAPI(filterItems.status) })
+      ...(filterItems.status && { status: filterItems.status })
     });
   };
 
