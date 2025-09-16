@@ -8,7 +8,7 @@ export const kycProvider = {
   title: 'KYC Provider',
   transKey: 'kycProvider',
   Icon: Cog6ToothIcon,
-  permission: [PERMISSIONS.KYC_PROVIDER.LIST]
+  permission: PERMISSIONS.KYC_PROVIDER.LIST
 };
 
 export default kycProvider;

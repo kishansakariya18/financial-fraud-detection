@@ -1,4 +1,4 @@
-export const appearanceResponse = (apiData) => {
+export const layoutThemeResponseMapper = (apiData) => {
   return apiData.map((item) => ({
     id: item.AppearanceID,
     name: item.Name,

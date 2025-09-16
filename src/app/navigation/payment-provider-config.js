@@ -8,7 +8,7 @@ export const paymentProviderConfig = {
   title: 'Payment Provider',
   transKey: 'paymentProvider',
   Icon: Cog6ToothIcon,
-  permission: [PERMISSIONS.EMAIL_PROVIDER.LIST]
+  permission: PERMISSIONS.PAYMENT_PROVIDER.LIST
 };
 
 export default paymentProviderConfig;

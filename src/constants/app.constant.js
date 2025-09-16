@@ -268,16 +268,28 @@ export const PERMISSIONS = {
     VIEW: 'crm-view'
   },
   EMAIL_PROVIDER: {
-    LIST: 'email-provider.list',
-    DELETE: 'email-provider.delete',
-    CHANGE_STATUS: 'email-provider.change-status',
-    EDIT: 'email-provider.edit'
+    LIST: 'email-provider-view',
+    DELETE: 'email-provider-delete',
+    CHANGE_STATUS: 'email-provider-status',
+    EDIT: 'email-provider-edit'
   },
   KYC_PROVIDER: {
-    LIST: 'kyc-provider.list',
-    DELETE: 'kyc-provider.delete',
-    CHANGE_STATUS: 'kyc-provider.change-status',
-    EDIT: 'kyc-provider.edit'
+    LIST: 'kyc-provider-view',
+    DELETE: 'kyc-provider-delete',
+    CHANGE_STATUS: 'kyc-provider-status',
+    EDIT: 'kyc-provider-edit'
+  },
+  SMS_PROVIDER: {
+    LIST: 'sms-provider-view',
+    DELETE: 'sms-provider-delete',
+    CHANGE_STATUS: 'sms-provider-status',
+    EDIT: 'sms-provider-edit'
+  },
+  PAYMENT_PROVIDER: {
+    LIST: 'payment-provider-view',
+    DELETE: 'payment-provider-delete',
+    CHANGE_STATUS: 'payment-provider-status',
+    EDIT: 'payment-provider-edit'
   },
   FRONTEND: {
     VIEW: 'frontend-home-category-list',
@@ -304,10 +316,6 @@ export const PERMISSIONS = {
   },
   REFERRAL_MANAGEMENT: {
     VIEW: 'referral-management-view'
-  },
-  PAYMENT_PROVIDER: {
-    VIEW: 'payment-provider-view',
-    STATUS: 'payment-provider-status'
   },
   USER_CLASS: {
     LIST: 'player-class-list',
