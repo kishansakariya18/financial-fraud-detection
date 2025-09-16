@@ -14,6 +14,7 @@ import useTable from 'components/ui/useTable';
 import { LoginHistoryToolbar } from './LoginHistoryToolbar';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import AdminService from 'services/admin.services';
+import SupervisorService from 'services/supervisor.services';
 
 const LoginHistory = ({
   paramKey = 'adminId', // adminId, supervisorUID, agentUID
@@ -32,10 +33,19 @@ const LoginHistory = ({
   const fetchLoginHistory = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
-    const result = await AdminService.getAdminLoginHistory({
-      pagination: { pageIndex, pageSize },
-      adminUID: userUID
-    });
+    let result;
+
+    if (paramKey === 'agentUID') {
+      result = await SupervisorService.getCallingAgentLoginHistory({
+        pagination: { pageIndex, pageSize },
+        callingAgentUID: userUID
+      });
+    } else {
+      result = await AdminService.getAdminLoginHistory({
+        pagination: { pageIndex, pageSize },
+        adminUID: userUID
+      });
+    }
 
     if (result.status === 200) {
       return {

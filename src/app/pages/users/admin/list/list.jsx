@@ -83,6 +83,8 @@ export default function Admin() {
 
   useEffect(() => {
     const filtersFromQuery = [];
+    console.log('queryParams.statusqueryParams.status:', queryParams);
+
     if (queryParams.keyword) {
       filtersFromQuery.push({ id: 'username', value: queryParams.keyword });
     }

@@ -23,9 +23,9 @@ export const statusToAPP = (status) => {
 };
 export const statusToAPI = (status) => {
   if (status == 'inactive') {
-    return 0;
+    return '0';
   } else if (status == 'active') {
-    return 1;
+    return '1';
   }
 };
 

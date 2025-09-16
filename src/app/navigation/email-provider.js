@@ -8,7 +8,7 @@ export const emailProvider = {
   title: 'Email Provider',
   transKey: 'emailProvider',
   Icon: Cog6ToothIcon,
-  permission: [PERMISSIONS.EMAIL_PROVIDER.LIST]
+  permission: PERMISSIONS.EMAIL_PROVIDER.LIST
 };
 
 export default emailProvider;
