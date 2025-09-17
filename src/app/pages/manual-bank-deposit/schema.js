@@ -37,5 +37,14 @@ export const createBankDepositSchema = Yup.object().shape({
     .trim()
     .matches(upiIDRegex, 'Please enter a valid UPI ID (e.g., name@bank)')
     .required('UPI ID is required')
-    .lowercase('UPI ID should be in lowercase')
+    .lowercase('UPI ID should be in lowercase'),
+
+  // Require selecting a currency
+  currencyID: Yup.mixed()
+    .test(
+      'valid-currency',
+      'Currency is required',
+      (val) => val !== undefined && val !== null && `${val}`.trim() !== ''
+    )
+    .required('Currency is required')
 });

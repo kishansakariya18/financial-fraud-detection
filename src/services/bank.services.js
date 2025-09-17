@@ -32,10 +32,9 @@ const BankService = {
       const response = await sendRequest({
         url: apiURL,
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: data
+        body: data,
+        contentType: 'form-data',
+        headers: { 'Content-Type': 'multipart/form-data' }
       });
       return response;
     } catch (error) {
@@ -44,15 +43,22 @@ const BankService = {
   },
   updateBank: async (data) => {
     try {
-      const endPoint = replaceText(apiConfig.endPoints.BANK.EDIT, ':bankId', data.id);
+      const isFormData = typeof FormData !== 'undefined' && data instanceof FormData;
+      const id = isFormData ? data.get('id') : data.id;
+      const endPoint = replaceText(apiConfig.endPoints.BANK.EDIT, ':bankId', id);
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: data
+        body: data,
+        ...(isFormData
+          ? {
+              contentType: 'form-data',
+              headers: { 'Content-Type': 'multipart/form-data' }
+            }
+          : {
+              headers: { 'Content-Type': 'application/json' }
+            })
       });
       return response;
     } catch (error) {
