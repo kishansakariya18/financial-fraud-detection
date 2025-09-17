@@ -67,7 +67,9 @@ export const responseMapper = (apiData) => {
     platformAmount: amountColorBasedOnTypeForPlatform(data.Amount, data.OutcomeType),
     type: getBatdgeForType(data.OutcomeType),
     platformType: getBadgeForPlatform(data.OutcomeType),
-    createdAt: getDateInUTCToTimeZone(data.DateCreated)
+    createdAt: getDateInUTCToTimeZone(data.DateCreated),
+    currencyCode: data.Currency != null ? data.Currency.code : '-',
+    currencySymbol: data.Currency != null ? data.Currency.symbol : '-'
   }));
   return resultData;
 };
