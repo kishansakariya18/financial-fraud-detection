@@ -4,6 +4,7 @@ import { UserGroupIcon, UsersIcon } from '@heroicons/react/24/outline';
 
 // Local Imports
 import { NAV_TYPE_COLLAPSE, NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
+import { affliate } from './affiliates';
 
 export const users = {
   id: 'users.users',
@@ -40,6 +41,7 @@ export const users = {
       transKey: 'nav.users.supervisors',
       Icon: UserGroupIcon,
       permission: PERMISSIONS.SUPERVISOR.LIST
-    }
+    },
+    affliate
   ]
 };
