@@ -19,6 +19,7 @@ import CurrencyService from 'services/currency.services';
 import { currencyListResponseMapper } from '../casino-management/currencies/helper';
 import RenderImage from 'components/ui/custom/ImageRender';
 import { CloudArrowUpIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import apiConfig from 'configs/api.config';
 
 import { createBankDepositSchema } from './schema';
 import BankService from 'services/bank.services';
@@ -87,7 +88,8 @@ const EditBankDeposit = () => {
             upiID: bankData.UPIID,
             additionalInfo: bankData.AdditionalInfo,
             // Best-effort mapping if API provides currency details
-            currencyID: bankData.CurrencyID || bankData.currencyId || bankData.currencyID || ''
+            currencyID: bankData.CurrencyID,
+            qrCode: bankData.QRCode
           };
           setBankDetail(mappedData);
           reset(mappedData);
@@ -226,13 +228,14 @@ const EditBankDeposit = () => {
               </div>
 
               {/* QR Code Upload (optional) */}
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="ml-0 mt-2 w-40 space-y-4">
-                  {preview && (
+              <div className="mt-5 w-40 space-y-4">
+                <div className="grid gap-4 sm:grid-cols-1">
+                  {(preview || bankDetail?.qrCode) && (
                     <RenderImage
                       preview={preview}
                       id={'qrCodeImage'}
                       label="QR Code :"
+                      value={`${apiConfig.baseURL.S3_URL}/deposit-bank/${bankDetail.qrCode}`}
                       maxWidth="300px"
                       maxHeight="300px"
                     />
@@ -251,7 +254,6 @@ const EditBankDeposit = () => {
                   </Upload>
                   <Button
                     disabled={!file}
-                    className="space-x-2"
                     onClick={() => {
                       if (uploadRef.current) uploadRef.current.value = '';
                       setFile();

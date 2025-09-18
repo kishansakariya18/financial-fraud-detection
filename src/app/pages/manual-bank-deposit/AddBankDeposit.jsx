@@ -202,8 +202,8 @@ const CreateBankDeposit = () => {
             </div>
 
             {/* QR Code Upload (optional) */}
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="ml-0 mt-2 w-40 space-y-4">
+            <div className="mt-5 w-40 space-y-4">
+              <div className="grid gap-4 sm:grid-cols-1">
                 {preview && (
                   <RenderImage
                     preview={preview}
@@ -227,7 +227,6 @@ const CreateBankDeposit = () => {
                 </Upload>
                 <Button
                   disabled={!file}
-                  className="space-x-2"
                   onClick={() => {
                     if (uploadRef.current) uploadRef.current.value = '';
                     setFile();
