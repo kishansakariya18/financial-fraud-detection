@@ -32,37 +32,34 @@ const LayoutThemeService = {
       console.log('Error from email provider list', error);
     }
   },
-  deleteProvider: async (providerUID) => {
+  createLayoutTheme: async (data) => {
     try {
-      const endPoint = replaceText(
-        apiConfig.endPoints.LAYOUT_THEME.DELETE,
-        ':providerUID',
-        providerUID
-      );
-      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
-      const response = await sendRequest({
-        url: apiURL,
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      return response;
-    } catch (error) {
-      console.log('Error from delete provider', error);
-    }
-  },
-  changeProviderStatus: async (providerUID) => {
-    try {
-      const endPoint = replaceText(
-        apiConfig.endPoints.LAYOUT_THEME.STATUS,
-        ':providerUID',
-        providerUID
-      );
+      const endPoint = apiConfig.endPoints.LAYOUT_THEME.CREATE;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: data
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from create layout theme', error);
+    }
+  },
+  changeLayoutThemeStatus: async (layoutThemeID) => {
+    try {
+      const endPoint = replaceText(
+        apiConfig.endPoints.LAYOUT_THEME.STATUS,
+        ':layoutThemeID',
+        layoutThemeID
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json'
         }
@@ -72,13 +69,29 @@ const LayoutThemeService = {
       console.log('Error from provider status', error);
     }
   },
-  getProviderDetails: async (providerUID) => {
+  getLayoutDetail: async (layoutThemeID) => {
     try {
       const endPoint = replaceText(
         apiConfig.endPoints.LAYOUT_THEME.DETAIL,
-        ':providerUID',
-        providerUID
+        ':layoutThemeID',
+        layoutThemeID
       );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from provider status', error);
+    }
+  },
+  getLayoutList: async () => {
+    try {
+      const endPoint = apiConfig.endPoints.LAYOUT_THEME.LAYOUT_LIST;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
@@ -89,17 +102,14 @@ const LayoutThemeService = {
       console.log('Error from get provider details', error);
     }
   },
-  updateProvider: async (providerUID, data) => {
+  updateProvider: async (data) => {
     try {
-      const endPoint = replaceText(
-        apiConfig.endPoints.LAYOUT_THEME.EDIT,
-        ':providerUID',
-        providerUID
-      );
+      const endPoint = apiConfig.endPoints.LAYOUT_THEME.EDIT;
+
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'PUT',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },

@@ -35,9 +35,9 @@ export function Toolbar({ table, pageTitle = '' }) {
             <Button
               className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
               color="primary"
-              onClick={() => navigate(`/web/appearance/create`)}>
+              onClick={() => navigate('/layout/layout-theme/create')}>
               <PlusIcon className="size-5" />
-              <span>{t('add') + ' ' + t('appearance')}</span>
+              <span>{t('add') + ' ' + t('layoutTheme')}</span>
             </Button>
           )}
         </div>

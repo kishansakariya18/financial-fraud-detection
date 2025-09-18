@@ -18,7 +18,7 @@ import { layoutThemeResponseMapper } from '../helper';
 export default function LayoutThemeList() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('appearance') + ' ' + t('list');
+  const pageTitle = t('layoutTheme') + ' ' + t('list');
   const { homeCategoryId } = useParams();
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
@@ -27,7 +27,8 @@ export default function LayoutThemeList() {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
     const result = await LayoutThemeService.layoutList({
-      pagination: { pageIndex, pageSize }
+      pagination: { pageIndex, pageSize },
+      filters: queryParams
     });
 
     const apiData = layoutThemeResponseMapper(result.response.data);

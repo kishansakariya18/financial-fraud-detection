@@ -113,9 +113,11 @@ export const apiConfig = {
     LAYOUT_THEME: {
       VIEW: '/config/admin/layouts/list-theme',
       DELETE: '/layouts/theme-config/:themeConfigId/delete',
-      STATUS: '/config/admin/layouts/:layoutId/create-theme',
-      EDIT: '/config/admin/kyc-provider/:providerUID/edit',
-      DETAIL: '/config/admin/layouts/:layoutId/detail'
+      EDIT: '/config/admin/layouts/list-theme/edit',
+      DETAIL: '/config/admin/layouts/:layoutThemeID/detail',
+      LAYOUT_LIST: '/config/admin/layouts/list',
+      STATUS: '/config/admin/layouts/:layoutThemeID/status',
+      CREATE: '/config/admin/layouts/create-theme'
     },
     SUPERVISOR: {
       DASHBOARD: '/admin/supervisor/dashboard',

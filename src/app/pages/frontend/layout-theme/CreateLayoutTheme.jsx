@@ -1,238 +1,284 @@
 // Import Dependencies
 import { toast } from 'sonner';
-// import { HexColorPicker } from 'react-colorful';
-
-// Local Imports
-import { useThemeContext } from 'app/contexts/theme/context';
-import { useDidUpdate } from 'hooks';
 import { Button, Card, Input } from 'components/ui';
-import ContentWrapper from 'components/ui/custom/ContentWrapper';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
-import { HexColorInput, HexColorPicker } from 'react-colorful';
-import HomePageService from 'services/home-page.services';
-import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import LayoutThemeService from 'services/layout-theme.services';
+import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
+import { Listbox } from 'components/shared/form/Listbox';
+import { layoutThemeTypeOptions } from './helper';
+import { HexColorInput, HexColorPicker } from 'react-colorful';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { Page } from 'components/shared/Page';
 
-const notificationPos = [
-  {
-    value: 'top-left',
-    label: 'Top Left'
-  },
-  {
-    value: 'top-center',
-    label: 'Top Center'
-  },
-  {
-    value: 'top-right',
-    label: 'Top Right'
-  },
-  {
-    value: 'bottom-left',
-    label: 'Bottom Left'
-  },
-  {
-    value: 'bottom-center',
-    label: 'Bottom Center'
-  },
-  {
-    value: 'bottom-right',
-    label: 'Bottom Right'
-  }
-];
-
-// const MAX_NOTIFICATION_COUNT = 5;
-
-export default function CreateAppearance() {
-  const theme = useThemeContext();
+export default function CreateLayoutTheme() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [primaryColor, setPrimaryColor] = useState('#00A676');
-  const [secondaryColor, setSecondaryColor] = useState('#1BA9F5');
-  const [fontColor1, setFontColor1] = useState('#FF0000');
-  const [fontColor2, setFontColor2] = useState('#FF0000');
-  const [fontColor3, setFontColor3] = useState('#FF0000');
-  const [fontColor4, setFontColor4] = useState('#FF0000');
-  const [name, setName] = useState('');
+
   const [response, setResponse] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [layoutList, setLayoutList] = useState([]);
+  console.log('layoutList:', layoutList);
+
+  const breadcrumbItem = [
+    { title: t('layoutTheme'), path: '/layout/layout-theme' },
+    { title: t('create') }
+  ];
 
   const {
     register,
     handleSubmit,
-    formState: { errors }
-  } = useForm();
+    control,
+    formState: { errors },
+    reset,
+    watch,
+    setValue
+  } = useForm({
+    defaultValues: {
+      layoutValues: [{ label: '', value: '#FFFFFF', type: 1 }]
+    }
+  });
 
-  const handleAddAppearance = async () => {
+  const layoutValues = watch('layoutValues');
+
+  useEffect(() => {
+    if (!isLoading && error) {
+      toast.error(error);
+      setError('');
+    }
+  }, [isLoading, error]);
+
+  useEffect(() => {
+    if (!isLoading && response) {
+      toast.success(response.message);
+      setResponse(null);
+      navigate('/layout/layout-theme');
+    }
+  }, [isLoading, response, navigate]);
+
+  const handleAddAppearance = async (data) => {
+    console.log('dataLL', data);
     setIsLoading(true);
     setError('');
+    data.layoutID = data.layoutList;
+    delete data.layoutList;
+    const result = await LayoutThemeService.createLayoutTheme(data);
 
-    const result = await HomePageService.addAppearance({
-      name,
-      primaryColor,
-      secondaryColor,
-      fontColor1,
-      fontColor2,
-      fontColor3,
-      fontColor4
-    });
-
-    if (result.status === 200) {
+    if (result.status === 200 || result.status === 201) {
       setResponse(result.response);
     } else {
       setError(result.error);
     }
+    setIsLoading(false);
+  };
+  const getLayoutList = async () => {
+    setIsLoading(true);
+    setError('');
+    const result = await LayoutThemeService.getLayoutList();
 
+    if (result.status === 200) {
+      const layoutList = result.response?.data?.map((item) => ({
+        label: item.Name,
+        value: item.LayoutID,
+        key: item.LayoutID
+      }));
+      setLayoutList(layoutList || []);
+    } else {
+      setError(result.error);
+    }
     setIsLoading(false);
   };
 
-  if (!isLoading && error) {
-    toast.error(error);
-    setError('');
-  }
-
-  if (!isLoading && response) {
-    toast.success(response.message);
-    setResponse(null);
-    navigate('/web/appearance');
-  }
-  useDidUpdate(() => {
-    toast('Position updated', {
-      description: `Notification position updated to ${
-        notificationPos.find((pos) => pos.value === theme.notification?.position).label
-      }`,
-      descriptionClassName: 'text-gray-600 dark:text-dark-200 text-xs mt-0.5'
+  const addLayoutValue = () => {
+    reset({
+      ...watch(),
+      layoutValues: [...layoutValues, { label: '', value: '#FFFFFF', type: 1 }]
     });
-  }, [theme.notification?.position]);
+  };
+  useEffect(() => {
+    getLayoutList();
+  }, []);
+  const deleteLayoutValue = (index) => {
+    const currentLayoutValue = [...layoutValues];
+    currentLayoutValue.splice(index, 1);
+    reset({
+      ...watch(),
+      layoutValues: currentLayoutValue
+    });
+  };
 
-  useDidUpdate(() => {
-    for (let i = 0; i < 3; i++) toast('This is a Toast');
-  }, [theme.notification?.isExpanded]);
+  const handleReset = () => {
+    reset({
+      layoutValues: [{ label: '', value: '#FFFFFF', type: 1 }]
+    });
+  };
+  console.log('layoutValues', errors);
 
   return (
-    <ContentWrapper isTable={false} pageTitle={t('appearance')}>
-      <div className="w-full max-w-3xl 2xl:max-w-5xl">
-        <h5 className="text-lg font-medium text-gray-800 dark:text-dark-50">{t('appearance')}</h5>
-        <p className="mt-0.5 text-balance text-sm text-gray-500 dark:text-dark-200">
-          {t(t('appearance_desc'))}
-        </p>
-        <div className="my-3 h-px bg-gray-200 dark:bg-dark-500" />
-        <div>
-          <Input
-            label={t('appearance') + ' ' + t('name')}
-            error={errors?.name?.message}
-            placeholder={t('enter') + ' ' + t('appearance') + ' ' + t('name')}
-            {...register('name', {
-              required: 'Appearance Name Required',
-              onChange: (e) => setName(e.target.value)
-            })}
-          />
+    <Page title={t('create') + ' ' + t('theme')}>
+      <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
+        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
+            {t('create') + ' ' + t('theme') + ' ' + t('form')}
+          </h2>
+          <div className="hidden self-stretch py-1 sm:flex">
+            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          </div>
+          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
-        <div className="space-y-8">
-          <div>
-            <div>
-              <p className="text-base font-medium text-gray-800 dark:text-dark-100">
-                {t('primary') + ' ' + t('color')}
-              </p>
+
+        <form onSubmit={handleSubmit(handleAddAppearance)} autoComplete="off">
+          <div className="w-full max-w-5xl">
+            <div className="mb-6">
+              <Controller
+                name={'layoutList'}
+                control={control}
+                rules={{ required: 'Layout Required' }}
+                render={({ field }) => (
+                  <Listbox
+                    data={layoutList}
+                    value={layoutList.find((opt) => opt.value === field.value) || null}
+                    label={t('layout')}
+                    onChange={(val) => field.onChange(val.value)}
+                    placeholder={`${t('select')} ${t('option')}`}
+                    displayField="label"
+                    error={errors.layoutList?.message}
+                  />
+                )}
+              />
             </div>
-            <div className="flex flex-wrap gap-2">
-              <Card className="mt-2 px-4 py-4 pb-4 sm:px-5">
-                <HexColorPicker color={primaryColor} onChange={setPrimaryColor} />
-                <HexColorInput
-                  color={primaryColor}
-                  onChange={setPrimaryColor}
-                  className="mt-2 p-2"
-                />
-                <div
-                  className={`mt-2 border-l-[24px] pl-[10px]`}
-                  style={{ borderLeftColor: primaryColor }}>
-                  {t('current') + ' ' + t('color')} {primaryColor}
+            <div className="mb-6">
+              <Input
+                label={`${t('theme')} ${t('name')}`}
+                error={errors?.name?.message}
+                placeholder={`${t('enter')} ${t('theme')} ${t('name')}`}
+                {...register('themeName', {
+                  required: 'Theme Name Required'
+                })}
+              />
+            </div>
+
+            {layoutValues.map((item, index) => (
+              <Card key={index} className="mb-4 p-5">
+                <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-2 lg:grid-cols-4">
+                  {/* Label Input */}
+                  <div className="col-span-1">
+                    <Input
+                      label={t('label')}
+                      placeholder={`${t('enter')} ${t('label')}`}
+                      {...register(`layoutValues.${index}.label`, {
+                        required: 'Label Required'
+                      })}
+                      error={errors.layoutValues?.[index]?.label?.message}
+                    />
+                  </div>
+
+                  {/* Type Listbox */}
+                  <div className="col-span-1">
+                    <Controller
+                      name={`layoutValues.${index}.type`}
+                      control={control}
+                      render={({ field }) => (
+                        <Listbox
+                          data={layoutThemeTypeOptions}
+                          value={
+                            layoutThemeTypeOptions.find((opt) => opt.value === field.value) || null
+                          }
+                          label={t('type')}
+                          onChange={(val) => field.onChange(val.value)}
+                          placeholder={`${t('select')} ${t('option')}`}
+                          displayField="label"
+                          error={errors.layoutValues?.[index]?.type?.message}
+                        />
+                      )}
+                    />
+                  </div>
+
+                  {/* Conditional Value Input / Picker */}
+                  <div className="col-span-1">
+                    {item.type === 2 ? (
+                      <div>
+                        <label className="mb-2 block text-sm font-medium text-gray-700 dark:text-dark-200">
+                          {`${t('color')} ${t('value')}`}
+                        </label>
+                        <div className="rounded-lg border p-4 dark:border-dark-500 dark:bg-dark-700">
+                          <HexColorPicker
+                            color={item.value}
+                            onChange={(val) => {
+                              setValue(`layoutValues.${index}.value`, val, { shouldDirty: true });
+                            }}
+                            className="h-auto w-full"
+                          />
+                          <HexColorInput
+                            color={item.value}
+                            onChange={(val) => {
+                              setValue(`layoutValues.${index}.value`, val, { shouldDirty: true });
+                            }}
+                            className="mt-4 w-full rounded border p-2 dark:bg-dark-900"
+                          />
+                          <div className="mt-2 text-center text-sm">
+                            {t('current')}:{' '}
+                            <span className="font-semibold" style={{ color: item.value }}>
+                              {item.value}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <Input
+                        label={t('value')}
+                        placeholder={`${t('enter')} ${t('value')}`}
+                        {...register(`layoutValues.${index}.value`, {
+                          required: 'Value Required'
+                        })}
+                        error={errors.layoutValues?.[index]?.value?.message}
+                      />
+                    )}
+                  </div>
+
+                  {/* Delete Button */}
+                  <div className="col-span-1 mt-6 justify-center">
+                    {layoutValues.length > 1 && (
+                      <Button
+                        type="button"
+                        color="primary"
+                        onClick={() => deleteLayoutValue(index)}
+                        disabled={isLoading}>
+                        {t('deleteItem')}
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </Card>
+            ))}
+
+            <div className="mt-5 flex gap-2">
+              <Button
+                type="button"
+                onClick={addLayoutValue}
+                disabled={isLoading}
+                className="min-w-[7rem]">
+                {t('add')}
+              </Button>
+            </div>
+
+            <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
+              <Button
+                className="min-w-[7rem]"
+                onClick={handleReset}
+                type="button"
+                disabled={isLoading}>
+                {t('reset')}
+              </Button>
+              <Button type="submit" className="min-w-[7rem]" color="primary" disabled={isLoading}>
+                {t('create')}
+              </Button>
             </div>
           </div>
-        </div>
-        <div className="my-6 h-px bg-gray-200 dark:bg-dark-500"></div>
-        <div className="space-y-8">
-          <div>
-            <div>
-              <p className="text-base font-medium text-gray-800 dark:text-dark-100">
-                {t('secondary') + ' ' + t('color')}
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Card className="mt-2 px-4 py-4 pb-4 sm:px-5">
-                <HexColorPicker color={secondaryColor} onChange={setSecondaryColor} />
-                <HexColorInput
-                  color={secondaryColor}
-                  onChange={setSecondaryColor}
-                  className="mt-2 p-2"
-                />
-                <div
-                  className={`mt-2 border-l-[24px] pl-[10px]`}
-                  style={{ borderLeftColor: secondaryColor }}>
-                  {t('current') + ' ' + t('color')} {secondaryColor}
-                </div>
-              </Card>
-            </div>
-          </div>
-        </div>
-        <div className="my-6 h-px bg-gray-200 dark:bg-dark-500"></div>
-        <div className="space-y-8">
-          <div>
-            <div>
-              <p className="text-base font-medium text-gray-800 dark:text-dark-100">
-                {t('font') + ' ' + t('color')}
-              </p>
-            </div>
-            <div className="grid grid-cols-3 gap-2 sm:gap-2 lg:grid-cols-3 lg:gap-2">
-              <Card className="mt-2 h-fit w-fit px-2 py-2 sm:px-3">
-                <HexColorPicker color={fontColor1} onChange={setFontColor1} />
-                <HexColorInput color={fontColor1} onChange={setFontColor1} className="mt-2 p-2" />
-                <div
-                  className={`mt-2 border-l-[24px] pl-[10px]`}
-                  style={{ borderLeftColor: fontColor1 }}>
-                  {t('current') + ' ' + t('color')}
-                  {fontColor1}
-                </div>
-              </Card>
-              <Card className="mt-2 h-fit w-fit px-2 py-2 sm:px-3">
-                <HexColorPicker color={fontColor2} onChange={setFontColor2} />
-                <HexColorInput color={fontColor2} onChange={setFontColor2} className="mt-2 p-2" />
-                <div
-                  className={`mt-2 border-l-[24px] pl-[10px]`}
-                  style={{ borderLeftColor: fontColor2 }}>
-                  {t('current') + ' ' + t('color')} {fontColor2}
-                </div>
-              </Card>
-              <Card className="mt-2 h-fit w-fit px-2 py-2 sm:px-3">
-                <HexColorPicker color={fontColor3} onChange={setFontColor3} />
-                <HexColorInput color={fontColor3} onChange={setFontColor3} className="mt-2 p-2" />
-                <div
-                  className={`mt-2 border-l-[24px] pl-[10px]`}
-                  style={{ borderLeftColor: fontColor3 }}>
-                  {t('current') + ' ' + t('color')} {fontColor3}
-                </div>
-              </Card>
-              <Card className="mt-2 h-fit w-fit px-2 py-2 sm:px-3">
-                <HexColorPicker color={fontColor4} onChange={setFontColor4} />
-                <HexColorInput color={fontColor4} onChange={setFontColor4} className="mt-2 p-2" />
-                <div
-                  className={`mt-2 border-l-[24px] pl-[10px]`}
-                  style={{ borderLeftColor: fontColor4 }}>
-                  {t('current') + ' ' + t('color')} {fontColor4}
-                </div>
-              </Card>
-            </div>
-          </div>
-        </div>
-        <div className="mt-10 flex flex-wrap gap-2">
-          <Button color="primary" onClick={handleSubmit(handleAddAppearance)} disabled={isLoading}>
-            {t('create')}
-          </Button>
-        </div>
+        </form>
       </div>
-    </ContentWrapper>
+    </Page>
   );
 }
