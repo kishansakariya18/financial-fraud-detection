@@ -233,7 +233,7 @@ export function ImageCell({ info }) {
 
 export function ImageWithPreviewCell({ info }) {
   const imageUrl = info.getValue();
-  return imageUrl ? <ImagePreview src={imageUrl} alt="Photo 1" /> : null;
+  return imageUrl ? <ImagePreview src={imageUrl} /> : null;
 }
 
 ImageCell.propTypes = {
