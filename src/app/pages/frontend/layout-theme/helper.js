@@ -1,24 +1,10 @@
 export const layoutThemeResponseMapper = (apiData) => {
   return apiData.map((item) => ({
-    id: item.AppearanceID,
-    name: item.Name,
-    themePreview: [
-      item.PrimaryColor,
-      item.SecondaryColor,
-      item.FontColor1,
-      item.FontColor2,
-      item.FontColor3,
-      item.FontColor4
-    ],
-    primaryColor: item.PrimaryColor,
-    secondaryColor: item.SecondaryColor,
-    fontColor1: item.FontColor1,
-    fontColor2: item.FontColor2,
-    fontColor3: item.FontColor3,
-    fontColor4: item.FontColor4,
+    id: item.LayoutThemeID,
+    name: item?.layout.Name,
+    themeName: item.ThemeName,
     status: parseAppearanceStatusToApp(item.IsActive),
-    createdAt: item.DateCreated,
-    modifiedAt: item.DateModified
+    createdAt: item.CreatedAt
   }));
 };
 
@@ -41,5 +27,15 @@ export const appearanceStatusOptions = [
     label: 'Inactive',
     value: 'inactive',
     color: 'error'
+  }
+];
+export const layoutThemeTypeOptions = [
+  {
+    label: 'Colour Code',
+    value: 1
+  },
+  {
+    label: 'Colour Picker',
+    value: 2
   }
 ];

@@ -37,6 +37,7 @@ import { userManualDepositTransactionRoute } from './routes/user-manual-deposit-
 import { releaseNotesRoutes } from './routes/release-notes.route';
 import onlyCallingAgentRoutes from './routes/calling-agents.route';
 import { callingAgentsRoute, supervisorRoute } from './routes/supervisor.route';
+import layoutThemeRoute from './routes/layout-theme.route';
 // ----------------------------------------------------------------------
 
 const protectedRoutes = {
@@ -72,6 +73,7 @@ const protectedRoutes = {
             ...promocodeRoute,
             ...pagesRoute,
             ...crmRoute,
+            ...layoutThemeRoute,
             ...homeCategoryRoute,
             ...tenantRoute,
             ...bonusManagementRoute,
