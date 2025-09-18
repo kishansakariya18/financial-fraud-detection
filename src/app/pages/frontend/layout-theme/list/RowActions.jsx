@@ -27,12 +27,12 @@ export function RowActions({ row, table }) {
   const confirmMessages = {
     pending: {
       title: t('change') + ' ' + t('status'),
-      description: t('appearance_status_desc'),
+      description: t('layout_theme_status_desc'),
       actionText: t('submit')
     },
     success: {
-      title: t('appearance') + ' ' + t('status') + ' ' + t('changed'),
-      description: t('appearance_status_suceess')
+      title: t('layoutTheme') + ' ' + t('status') + ' ' + t('changed'),
+      description: t('layout_theme_status_suceess')
     }
   };
 
@@ -54,9 +54,7 @@ export function RowActions({ row, table }) {
   const handleChangeStatus = useCallback(async () => {
     setConfirmDeleteLoading(true);
 
-    const result = await LayoutThemeService.changeLayoutThemeStatus({
-      layoutThemeID: row.original.id
-    });
+    const result = await LayoutThemeService.changeLayoutThemeStatus(row.original.id);
     if (result.status === 200) {
       table.options.meta?.changeStatus();
       setChangeStatusSuccess(true);
