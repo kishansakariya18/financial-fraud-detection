@@ -8,7 +8,7 @@ import {
   BoldCell,
   BadgeCell,
   DateCell,
-  ImageCell
+  ImageWithPreviewCell
 } from '../../../../../components/custom/table/cell';
 import { statusOptions } from '../helper';
 
@@ -33,7 +33,7 @@ export const columns = [
     id: 'image',
     label: 'Image',
     header: 'Image',
-    cell: (row) => ImageCell({ info: row }),
+    cell: (row) => ImageWithPreviewCell({ info: row }),
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.provider, {

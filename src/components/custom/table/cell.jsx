@@ -9,6 +9,7 @@ import { Badge, Checkbox } from 'components/ui';
 import { setThisClass } from 'utils/setThisClass';
 import clsx from 'clsx';
 import { useCurrencyContext } from '../../../app/contexts/currency/context';
+import ImagePreview from 'components/ui/ImageOpen/ImagePreview';
 
 export function DateCell({ getValue }) {
   // const { locale } = useLocaleContext();
@@ -230,9 +231,19 @@ export function ImageCell({ info }) {
   ) : null;
 }
 
+export function ImageWithPreviewCell({ info }) {
+  const imageUrl = info.getValue();
+  return imageUrl ? <ImagePreview src={imageUrl} alt="Photo 1" /> : null;
+}
+
 ImageCell.propTypes = {
   info: PropTypes.object
 };
+
+ImageWithPreviewCell.propTypes = {
+  info: PropTypes.object
+};
+
 DateCell.propTypes = {
   getValue: PropTypes.func
 };
