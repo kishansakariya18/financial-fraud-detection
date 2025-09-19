@@ -11,48 +11,33 @@ export const CurrencyProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const resolveDefaultCurrency = (list) => {
-    if (!Array.isArray(list) || list.length === 0) {
-      return { code: null, symbol: '', decimalPlaces: 2 };
-    }
-    const def = list.find((c) => c?.IsDefault || c?.is_default);
-    const picked = def || list[0];
-    return {
-      code: picked?.Code || picked?.code || null,
-      symbol: picked?.Symbol || picked?.symbol || '',
-      decimalPlaces: Number(picked?.DecimalPlaces ?? picked?.decimal_places ?? 2)
-    };
-  };
-
   const fetchAndSetCurrency = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
+      CurrencyService.getDefaultCurrency()
+        .then((res) => {
+          const { Code = null, Symbol = '', DecimalPlaces = 2 } = res.response.data;
+          const decimalPlaces = DecimalPlaces === 0 ? 0 : DecimalPlaces || 2;
+          setCode(Code || null);
+          setSymbol(Symbol || '');
+          setDecimalPlaces(decimalPlaces);
 
-      // Fetch currency list and derive default currency solely from it
-      const listRes = await CurrencyService.getCurrencyList({
-        pagination: { pageIndex: 0, pageSize: 500 }
-      });
-      const list = Array.isArray(listRes?.response?.data)
-        ? listRes.response.data
-        : Array.isArray(listRes?.data)
-          ? listRes.data
-          : [];
-      const { code: resolvedCode, symbol: sym, decimalPlaces: dp } = resolveDefaultCurrency(list);
-
-      setCode(resolvedCode || null);
-      setSymbol(sym || '');
-      setDecimalPlaces(dp || 2);
-
-      // Store for quick reuse
-      try {
-        localStorage.setItem(
-          'BaseCurrency',
-          JSON.stringify({ code: resolvedCode, symbol: sym, decimalPlaces: dp })
-        );
-      } catch {
-        // ignore storage failure
-      }
+          localStorage.setItem(
+            'BaseCurrency',
+            JSON.stringify({
+              code: Code || null,
+              symbol: Symbol || '',
+              decimalPlaces: decimalPlaces
+            })
+          );
+        })
+        .catch((err) => {
+          setError(err?.message || err || 'Failed to load base currency');
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     } catch (err) {
       setError(err?.message || 'Failed to load base currency');
     } finally {

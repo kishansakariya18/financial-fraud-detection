@@ -1,4 +1,5 @@
 import apiConfig from 'configs/api.config';
+import apiInstance from 'utils/apiInstance';
 import { sendRequest } from 'utils/axios';
 import { replaceText } from 'utils/custom.utilities';
 
@@ -31,6 +32,10 @@ const CurrencyService = {
       },
       params: apiQueryParams
     });
+  },
+
+  getDefaultCurrency: async () => {
+    return apiInstance.get(apiConfig.endPoints.CURRENCY.DEFAULT);
   },
 
   getCurrencyCodeList: async () => {
