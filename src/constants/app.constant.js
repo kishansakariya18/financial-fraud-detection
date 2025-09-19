@@ -304,7 +304,13 @@ export const PERMISSIONS = {
     DELETE_HOME_GAME: 'frontend-delete-home-game',
     APPEARANCE_VIEW: 'frontend-view-appearance',
     ADD_APPEARANCE: 'frontend-add-appearance',
-    CHANGE_APPEARANCE_STATUS: 'frontend-change-appearance-status'
+    CHANGE_APPEARANCE_STATUS: 'frontend-change-appearance-status',
+    LAYOUT_THEME: {
+      VIEW: 'layout-theme-view',
+      ADD: 'layout-theme-add',
+      EDIT: 'layout-theme-edit',
+      STATUS: 'layout-theme-status'
+    }
   },
   BUX_AI: {
     VIEW: 'bux-ai-view'
