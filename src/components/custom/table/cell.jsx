@@ -8,6 +8,8 @@ import { ensureString } from 'utils/ensureString';
 import { Badge, Checkbox } from 'components/ui';
 import { setThisClass } from 'utils/setThisClass';
 import clsx from 'clsx';
+import { useCurrencyContext } from '../../../app/contexts/currency/context';
+import ImagePreview from 'components/ui/ImageOpen/ImagePreview';
 
 export function DateCell({ getValue }) {
   // const { locale } = useLocaleContext();
@@ -101,6 +103,21 @@ export function AmountCell({ getValue }) {
   return (
     <p className="text-sm+ font-medium text-gray-800 dark:text-dark-100">
       {getValue()?.toFixed(2)}
+    </p>
+  );
+}
+
+export function BaseCurrencyAmountCell({ getValue }) {
+  const { symbol, decimalPlaces } = useCurrencyContext();
+  const raw = getValue();
+  if (raw === null || raw === undefined || isNaN(Number(raw))) {
+    return <span className="font-medium">-</span>;
+  }
+  const amount = Number(raw);
+  const dp = Number.isFinite(decimalPlaces) ? decimalPlaces : 2;
+  return (
+    <p className="text-sm+ font-medium text-gray-800 dark:text-dark-100">
+      {symbol} {amount.toFixed(dp)}
     </p>
   );
 }
@@ -214,9 +231,19 @@ export function ImageCell({ info }) {
   ) : null;
 }
 
+export function ImageWithPreviewCell({ info }) {
+  const imageUrl = info.getValue();
+  return imageUrl ? <ImagePreview src={imageUrl} /> : null;
+}
+
 ImageCell.propTypes = {
   info: PropTypes.object
 };
+
+ImageWithPreviewCell.propTypes = {
+  info: PropTypes.object
+};
+
 DateCell.propTypes = {
   getValue: PropTypes.func
 };
@@ -233,6 +260,9 @@ BoldCell.propTypes = {
 };
 
 AmountCell.propTypes = {
+  getValue: PropTypes.func
+};
+BaseCurrencyAmountCell.propTypes = {
   getValue: PropTypes.func
 };
 AddressCell.propTypes = {

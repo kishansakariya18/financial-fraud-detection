@@ -25,7 +25,7 @@ import homeCategoryRoute from './routes/home-category.route';
 import tenantRoute from './routes/tenant.route';
 import profileRoute from './routes/profile.route';
 import bonusManagementRoute from './routes/bonus-management.route';
-import paymentProvider from './routes/payment-provider.route';
+
 import bannerRoute from './routes/banner.route';
 import userClass from './routes/user-class.route';
 import rateLimitRulesRoute from './routes/rate-limit-rules.route';
@@ -37,10 +37,10 @@ import { userManualDepositTransactionRoute } from './routes/user-manual-deposit-
 import { releaseNotesRoutes } from './routes/release-notes.route';
 import { supervisorRoute } from './routes/supervisor.route';
 import responsibleGamblingRoute from './routes/responsible-gambling.route.jsx';
-import affiliatesRoutesNew from './routes/affiliates.route.jsx';
 
 import onlyCallingAgentRoutes from './routes/calling-agents.route';
 import { callingAgentsRoute } from './routes/supervisor.route';
+import layoutThemeRoute from './routes/layout-theme.route';
 // ----------------------------------------------------------------------
 
 const protectedRoutes = {
@@ -76,10 +76,10 @@ const protectedRoutes = {
             ...promocodeRoute,
             ...pagesRoute,
             ...crmRoute,
+            ...layoutThemeRoute,
             ...homeCategoryRoute,
             ...tenantRoute,
             ...bonusManagementRoute,
-            ...paymentProvider,
             ...bankRoute,
             ...userManualDepositTransactionRoute,
             ...userClass,

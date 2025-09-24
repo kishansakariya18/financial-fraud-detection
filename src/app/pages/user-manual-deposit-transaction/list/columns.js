@@ -38,14 +38,14 @@ export const columns = [
   //   cell: BoldCell,
   //   enableSorting: false
   // }),
-  // columnHelper.accessor((row) => row.depositBankAccountID, {
-  //   id: 'depositBankAccountID',
-  //   label: 'Deposit Bank Account ID',
-  //   header: 'Deposit Bank Account ID',
-  //   cell: BoldCell,
+  columnHelper.accessor((row) => row.currencyCode, {
+    id: 'currency',
+    label: 'Currency',
+    header: 'Currency',
+    cell: BoldCell,
 
-  //   enableSorting: false
-  // }),
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.amount, {
     id: 'amount',
     label: 'Amount',

@@ -30,6 +30,7 @@ import { toast } from 'sonner';
 import RenderImage from 'components/ui/custom/ImageRender';
 import apiConfig from 'configs/api.config';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { useCurrencyContext } from 'app/contexts/currency/context';
 
 export function ViewDetails() {
   const { t } = useTranslation();
@@ -55,6 +56,7 @@ export function ViewDetails() {
   const { playerId } = useParams();
   const pageTitle = t('player') + ' ' + t('details');
   const { copied, copy } = useClipboard({ timeout: 2000 });
+  const { symbol } = useCurrencyContext();
 
   const fetchPlayerDetails = async () => {
     setLoading(true);
@@ -749,7 +751,7 @@ export function ViewDetails() {
                           {userSummaryData.map((summary, index) => (
                             <Tr key={index} className="hover:bg-gray-50 dark:hover:bg-dark-600">
                               <Td className="font-medium text-gray-900 dark:text-white">
-                                {summary.CurrencyID}
+                                {summary.currency.code}
                               </Td>
                               <Td className="text-center">{summary.TotalBets || 0}</Td>
                               <Td className="text-center">{summary.TotalWins || 0}</Td>
@@ -767,12 +769,12 @@ export function ViewDetails() {
                               <Td className="text-center">{summary.AverageBetSize || 0}</Td>
                               <Td className="text-center">
                                 <span className="text-success dark:text-success-light">
-                                  {summary.TotalDeposits || 0}
+                                  {summary.currency.symbol + ' ' + summary.TotalDeposits || 0}
                                 </span>
                               </Td>
                               <Td className="text-center">
                                 <span className="text-error dark:text-error-light">
-                                  {summary.TotalWithdrawals || 0}
+                                  {summary.currency.symbol + ' ' + summary.TotalWithdrawals || 0}
                                 </span>
                               </Td>
                               {/* <Td className="text-center text-sm text-gray-600 dark:text-gray-400">
@@ -821,7 +823,7 @@ export function ViewDetails() {
                             <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                               {`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
                             </p>
-                            <p>{(Number(l.amount) || 0) > 0 ? l.amount : '-'}</p>
+                            <p>{(Number(l.amount) || 0) > 0 ? symbol + ' ' + l.amount : '-'}</p>
                           </div>
                         );
                         return acc;
@@ -863,7 +865,7 @@ export function ViewDetails() {
                             <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                               {` ${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
                             </p>
-                            <p>{(Number(l.amount) || 0) > 0 ? l.amount : '-'}</p>
+                            <p>{(Number(l.amount) || 0) > 0 ? symbol + ' ' + l.amount : '-'}</p>
                           </div>
                         );
                         return acc;
@@ -905,7 +907,7 @@ export function ViewDetails() {
                             <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                               {`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
                             </p>
-                            <p>{(Number(l.amount) || 0) > 0 ? l.amount : '-'}</p>
+                            <p>{(Number(l.amount) || 0) > 0 ? symbol + ' ' + l.amount : '-'}</p>
                           </div>
                         );
                         return acc;
@@ -951,7 +953,7 @@ export function ViewDetails() {
                           </p>
                           <p>
                             {(Number(limitSummary.globalPlatformLimits.maxDepositPerDay) || 0) > 0
-                              ? limitSummary.globalPlatformLimits.maxDepositPerDay
+                              ? symbol + ' ' + limitSummary.globalPlatformLimits.maxDepositPerDay
                               : '-'}
                           </p>
                         </div>
@@ -973,7 +975,7 @@ export function ViewDetails() {
                           </p>
                           <p>
                             {(Number(limitSummary.globalPlatformLimits.maxWithdrawPerDay) || 0) > 0
-                              ? limitSummary.globalPlatformLimits.maxWithdrawPerDay
+                              ? symbol + ' ' + limitSummary.globalPlatformLimits.maxWithdrawPerDay
                               : '-'}
                           </p>
                         </div>
@@ -995,7 +997,7 @@ export function ViewDetails() {
                           </p>
                           <p>
                             {(Number(limitSummary.globalPlatformLimits.betLimit) || 0) > 0
-                              ? limitSummary.globalPlatformLimits.betLimit
+                              ? symbol + ' ' + limitSummary.globalPlatformLimits.betLimit
                               : '-'}
                           </p>
                         </div>
@@ -1017,7 +1019,7 @@ export function ViewDetails() {
                           </p>
                           <p>
                             {(Number(limitSummary.globalPlatformLimits.winLimit) || 0) > 0
-                              ? limitSummary.globalPlatformLimits.winLimit
+                              ? symbol + ' ' + limitSummary.globalPlatformLimits.winLimit
                               : '-'}
                           </p>
                         </div>

@@ -29,7 +29,7 @@ export const userKYCResponseMapper = (apiData, type) => {
         mobile: data.user.Mobile || '',
         status: parseUserKycStatusToApp(data.DocumentStatus),
         date: getDateInUTCToTimeZone(data.DateCreated),
-        type: +data.DocumentType === DOCUMENT_TYPE.DOCUMENT ? 'document' : 'bank'
+        type: String(data.DocumentType)
       };
     }
   });
@@ -60,6 +60,7 @@ export const parseUserKycStatusToApp = (status) => {
 
   return res;
 };
+
 export const parseUserKycStatusToAPI = (status) => {
   let res = 0; //PENDING
   if (status === 'approved') {
@@ -91,13 +92,18 @@ export const userKycStatusOptions = [
     icon: XCircleIcon
   }
 ];
+
 export const documentTypeOption = [
   {
-    value: 'document',
-    label: 'Document'
+    value: '1',
+    label: 'Identity'
   },
   {
-    value: 'bank',
-    label: 'Bank'
+    value: '2',
+    label: 'Source of fund'
+  },
+  {
+    value: '3',
+    label: 'Address'
   }
 ];

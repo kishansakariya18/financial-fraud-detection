@@ -113,9 +113,11 @@ export const apiConfig = {
     LAYOUT_THEME: {
       VIEW: '/config/admin/layouts/list-theme',
       DELETE: '/layouts/theme-config/:themeConfigId/delete',
-      STATUS: '/config/admin/layouts/:layoutId/create-theme',
-      EDIT: '/config/admin/kyc-provider/:providerUID/edit',
-      DETAIL: '/config/admin/layouts/:layoutId/detail'
+      EDIT: '/config/admin/layouts/list-theme/edit',
+      DETAIL: '/config/admin/layouts/:layoutThemeID/detail',
+      LAYOUT_LIST: '/config/admin/layouts/list',
+      STATUS: '/config/admin/layouts/:layoutThemeID/status',
+      CREATE: '/config/admin/layouts/create-theme'
     },
     SUPERVISOR: {
       DASHBOARD: '/admin/supervisor/dashboard',
@@ -126,7 +128,7 @@ export const apiConfig = {
       UPDATE_TARGET: '/admin/supervisor/commission-targets/:agentUID/update',
       DELETE_TARGET: '/admin/supervisor/commission-targets/:agentUID/delete',
       GET_TARGET: '/admin/supervisor/commission-targets/:agentUID',
-
+      LOGIN_HISTORY: '/admin/supervisor/:callingAgentUID/login-history',
       REDEEM_COMMISSION_REQUESTS: '/admin/supervisor/redeem-commission-requests',
       COMMISSION_REQUESTS_STATUS_UPDATE:
         '/admin/supervisor/redeem-commission-requests/:requestID/status'
@@ -274,6 +276,7 @@ export const apiConfig = {
         '/games/admin/casino-management/provider/:providerId/restricted-country/delete'
     },
     CURRENCY: {
+      DEFAULT: '/wallet/admin/default-currency',
       LIST: '/wallet/admin/currency/list',
       CODES: '/wallet/admin/currency/codes/list',
       SUMMARY: '/games/admin/casino-management/currency/summary',

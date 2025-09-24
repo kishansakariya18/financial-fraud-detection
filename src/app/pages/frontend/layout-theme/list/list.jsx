@@ -13,24 +13,25 @@ import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import LayoutThemeService from 'services/layout-theme.services';
-import { appearanceResponse } from '../helper';
+import { layoutThemeResponseMapper } from '../helper';
 
 export default function LayoutThemeList() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('appearance') + ' ' + t('list');
+  const pageTitle = t('layoutTheme') + ' ' + t('list');
   const { homeCategoryId } = useParams();
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
-  const fetchAppearanceList = async () => {
+  const fetchLayoutThemeList = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
     const result = await LayoutThemeService.layoutList({
-      pagination: { pageIndex, pageSize }
+      pagination: { pageIndex, pageSize },
+      filters: queryParams
     });
 
-    const apiData = appearanceResponse(result.response.data);
+    const apiData = layoutThemeResponseMapper(result.response.data);
 
     if (result.status === 200) {
       return {
@@ -44,7 +45,7 @@ export default function LayoutThemeList() {
 
   const { table, isLoading, error, setError, tableSettings } = useTable({
     columns,
-    fetchData: fetchAppearanceList,
+    fetchData: fetchLayoutThemeList,
     queryParams,
     setSearchParams,
     initialSettings: {

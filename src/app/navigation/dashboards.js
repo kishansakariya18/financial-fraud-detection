@@ -17,7 +17,6 @@ import { tenants } from './tenant';
 import { contentManagement } from './content-management';
 import { siteConfiguration } from './site-configuration';
 import { bonusManagement } from './bonus-management';
-import { paymentProvider } from './payment-provider';
 import { userClass } from './user-class';
 import { responsibleGambling } from './responsible-gambling';
 import { blacklist } from './blacklist';
@@ -46,8 +45,8 @@ export const dashboards = () => ({
     },
     roles,
     users,
-    affiliatesNew,
     supervisor,
+    affiliatesNew,
     platform,
     contentManagement,
     siteConfiguration,
@@ -62,7 +61,6 @@ export const dashboards = () => ({
     peomocode,
     auditlogs,
     crm,
-    paymentProvider,
     userClass,
     responsibleGambling,
     blacklist,

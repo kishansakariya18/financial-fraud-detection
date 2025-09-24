@@ -1,3 +1,4 @@
+import { statusToAPI } from 'app/pages/email-provider/helper';
 import apiConfig from '../configs/api.config';
 import { sendRequest } from '../utils/axios';
 import { DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
@@ -7,10 +8,12 @@ const EmailProviderService = {
   emailProviderList: async (data) => {
     try {
       const { pagination, filters } = data;
+      console.log('filters.statusL', filters.status);
+
       const apiRequestParams = {
         filter: {
           keyword: filters.keyword ? filters.keyword : undefined,
-          status: filters.status ? filters.status : undefined
+          status: filters.status ? statusToAPI(filters.status) : undefined
         },
         limit: pagination?.pageSize || DEFAULT_PER_PAGE_RECORD,
         page: pagination.pageIndex + 1

@@ -34,6 +34,21 @@ const SupervisorService = {
   getSupervisorDetail: (id) => {
     const endPoint = replaceText(apiConfig.endPoints.SUPERVISOR.DETAIL, ':supervisorId', id);
     return apiInstance.get(endPoint);
+  },
+
+  getCallingAgentLoginHistory: (data) => {
+    const { pagination, callingAgentUID } = data;
+    const endPoint = replaceText(
+      apiConfig.endPoints.SUPERVISOR.LOGIN_HISTORY,
+      ':callingAgentUID',
+      callingAgentUID
+    );
+    return apiInstance.get(endPoint, {
+      params: {
+        per_page: pagination?.pageSize || DEFAULT_PER_PAGE_RECORD,
+        page: pagination.pageIndex + 1
+      }
+    });
   }
 
   // changeSupervisorStatus: (supervisorUID) => {

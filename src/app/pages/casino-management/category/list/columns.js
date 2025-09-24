@@ -6,7 +6,7 @@ import { RowActions } from './RowActions';
 import {
   IdCell,
   BoldCell,
-  ImageCell,
+  ImageWithPreviewCell,
   BadgeCell,
   DateCell
 } from '../../../../../components/custom/table/cell';
@@ -35,7 +35,7 @@ export const columns = [
     id: 'image',
     label: 'Image',
     header: 'Image',
-    cell: (row) => ImageCell({ info: row }),
+    cell: (row) => ImageWithPreviewCell({ info: row }),
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.status, {

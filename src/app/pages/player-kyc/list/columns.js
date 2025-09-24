@@ -19,13 +19,13 @@ export const columns = [
     cell: IdCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.name, {
-    id: 'name',
-    label: 'Name',
-    header: 'Name',
-    cell: CopyableCell,
-    enableSorting: false
-  }),
+  // columnHelper.accessor((row) => row.name, {
+  //   id: 'name',
+  //   label: 'Name',
+  //   header: 'Name',
+  //   cell: CopyableCell,
+  //   enableSorting: false
+  // }),
   columnHelper.accessor((row) => row.username, {
     id: 'username',
     label: 'User Name',
@@ -33,13 +33,13 @@ export const columns = [
     cell: CopyableCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.number, {
-    id: 'number',
-    label: 'Number',
-    header: 'Number',
-    cell: CopyableCell,
-    enableSorting: false
-  }),
+  // columnHelper.accessor((row) => row.number, {
+  //   id: 'number',
+  //   label: 'Number',
+  //   header: 'Number',
+  //   cell: CopyableCell,
+  //   enableSorting: false
+  // }),
   columnHelper.accessor((row) => row.mobile, {
     id: 'mobile',
     label: 'Mobile',

@@ -14,6 +14,7 @@ import { CheckboxGroup } from 'components/shared/form/CheckboxGroup';
 import RenderImage from 'components/ui/custom/ImageRender';
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
 import apiConfig from 'configs/api.config';
+import { useCurrencyContext } from 'app/contexts/currency/context';
 
 const EditGame = () => {
   const [error, setError] = useState('');
@@ -28,6 +29,7 @@ const EditGame = () => {
   const uploadRef = useRef();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { symbol } = useCurrencyContext();
 
   console.log('preview: ', preview);
 
@@ -190,6 +192,7 @@ const EditGame = () => {
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
                 {...register('minBetAmount')}
+                prefix={symbol}
                 label={t('minBetAmount')}
                 error={errors?.minBetAmount?.message}
                 placeholder={t('enter') + ' ' + t('minBetAmount')}
@@ -199,6 +202,7 @@ const EditGame = () => {
               />
               <Input
                 {...register('maxBetAmount')}
+                prefix={symbol}
                 label={t('maxBetAmount')}
                 error={errors?.maxBetAmount?.message}
                 placeholder={t('enter') + ' ' + t('maxBetAmount')}
