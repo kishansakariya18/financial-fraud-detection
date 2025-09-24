@@ -26,6 +26,7 @@ import { userManualDepositTransaction } from './user-manual-deposit-transaction'
 import { registrationFields } from './registration-fields';
 import { releaseNotes } from './release-notes';
 import { supervisor } from './supervisor';
+import { affiliatesNew } from './affiliates-new';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -45,6 +46,7 @@ export const dashboards = () => ({
     },
     roles,
     users,
+    affiliatesNew,
     supervisor,
     platform,
     contentManagement,

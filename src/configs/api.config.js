@@ -448,6 +448,14 @@ export const apiConfig = {
       DELETE: '/users/admin/responsible-gaming-restrictions/:restrictionId/delete',
       CHANGE_STATUS: '/users/admin/responsible-gaming-restrictions/:restrictionId/change-status',
       APPROVE: '/users/admin/responsible-gaming-restrictions/:restrictionId/approve'
+    },
+    AFFILIATES: {
+      AFFILIATE_LIST: '/affiliates/admin/affiliates/list',
+      REFERRAL_LIST: '/affiliates/admin/affiliates/{affiliateId}/referred-users',
+      WITHDRAWAL_LIST: '/affiliates/admin/commission/withdrawal/list',
+      WITHDRAWAL_APPROVE: '/affiliates/admin/commission/withdrawal/approve',
+      WITHDRAWAL_REJECT: '/affiliates/admin/commission/withdrawal/reject',
+      AFFILIATE_DETAIL: '/affiliates/admin/affiliates/{affiliateId}/details'
     }
   }
 };
