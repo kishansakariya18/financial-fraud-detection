@@ -2,7 +2,7 @@
 FROM node:20 AS nodework
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN NODE_OPTIONS="--max-old-space-size=2014" npm install
 COPY . ./
 # Accept multiple build-time variables
 #ARG VITE_S3_URL
@@ -12,7 +12,7 @@ COPY . ./
 #ENV VITE_API_URL=$VITE_API_URL
 
 
-RUN npm run build
+RUN NODE_OPTIONS="--max-old-space-size=2014" npm run build
 #RUN vite build
 # Use Nginx for serving static files
 FROM nginx:alpine
