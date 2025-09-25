@@ -11,6 +11,7 @@ import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import AffiliatesService from 'services/affiliates.services';
 import { createColumnHelper } from '@tanstack/react-table';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 const columnHelper = createColumnHelper();
 const columns = [
@@ -79,9 +80,24 @@ export default function AffiliateUsersList() {
   }, [error]);
 
   useLockScrollbar(tableSettings.enableFullScreen);
+  const breadcrumbItem = [
+    { title: t('affiliates'), path: '/affiliates' },
+    { title: t('user') + ' ' + t('list') }
+  ];
 
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
+      <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
+        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
+            {t('affiliates') + ' ' + t('user') + ' ' + t('list')}
+          </h2>
+          <div className="hidden self-stretch py-1 sm:flex">
+            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          </div>
+          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
+        </div>
+      </div>
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>
   );

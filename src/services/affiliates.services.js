@@ -54,21 +54,24 @@ const AffiliatesService = {
       return { status: 500, error: error?.message || 'Unexpected error' };
     }
   },
-  getAffiliateDetail: async ({ affiliateId }) => {
+  getAffiliateDetail: async ({ affiliateId, pagination }) => {
     try {
       console.log(affiliateId);
       const endPoint = apiConfig.endPoints.AFFILIATES.AFFILIATE_DETAIL.replace(
         '{affiliateId}',
-        '1REF880534234'
+        affiliateId
       );
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        params: pagination
+          ? { page: pagination.pageIndex + 1, perPage: pagination.pageSize }
+          : undefined,
         body: {
-          filters: {
-            keyword: 'B67gKIYarwa'
+          filter: {
+            keyword: ''
           }
         }
       });

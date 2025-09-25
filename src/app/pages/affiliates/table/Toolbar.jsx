@@ -26,14 +26,6 @@ export function Toolbar({ table, pageTitle, onApplyFilters, onClearFilters }) {
             {pageTitle}
           </h2>
         </div>
-        <div className="flex gap-2">
-          <Button size="sm" variant="solid" onClick={onApplyFilters}>
-            {t('search')}
-          </Button>
-          <Button size="sm" variant="default" onClick={onClearFilters}>
-            {t('reset')}
-          </Button>
-        </div>
       </div>
 
       {isXs ? (

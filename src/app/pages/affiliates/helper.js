@@ -17,10 +17,10 @@ const statusToApp = (status) => {
 
 export const affiliatesListResponseMapper = (payload) => {
   const data = Array.isArray(payload) ? payload : Array.isArray(payload?.data) ? payload.data : [];
-  const list = data.map((item, idx) => {
+  const list = data.map((item) => {
     const user = item?.User || {};
     return {
-      id: idx + 1,
+      id: item?.UserID,
       affiliateUID: item?.AffiliateUID || '-',
       email: user?.Email || '-',
       firstName: user?.FirstName ?? '-',
