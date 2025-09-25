@@ -572,5 +572,7 @@
   "reactivate": "reactivar",
   "areYouSureResponsible": "¿Estás segura de que quieres volver a activar a esta usuario?",
   "recipients": "Recipients",
+  "campaign_name": "Nombre de la campaña",
+  "campaign_link": "Enlace de la campaña",
   "event_template_status_success": "Plantilla de correo electrónico El estado se ha cambiado correctamente"
 }

@@ -54,7 +54,7 @@ const AffiliatesService = {
       return { status: 500, error: error?.message || 'Unexpected error' };
     }
   },
-  getAffiliateDetail: async ({ affiliateId, pagination }) => {
+  getAffiliateDetail: async ({ affiliateId, pagination, filters }) => {
     try {
       console.log(affiliateId);
       const endPoint = apiConfig.endPoints.AFFILIATES.AFFILIATE_DETAIL.replace(
@@ -71,7 +71,7 @@ const AffiliatesService = {
           : undefined,
         body: {
           filter: {
-            keyword: ''
+            keyword: filters?.keyword || ''
           }
         }
       });

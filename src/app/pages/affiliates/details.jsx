@@ -14,6 +14,7 @@ import { DashboardCard } from 'components/custom/DashboardCard';
 import { dummyCards, getDateInUTCToTimeZone } from 'helpers/functions';
 import { BoldCell, DateCell, IdCell } from 'components/custom/table/cell';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
+import { Button, Input } from 'components/ui';
 
 const columnHelper = createColumnHelper();
 const columns = [
@@ -90,11 +91,13 @@ export default function AffiliateDetails() {
   const { affiliateId } = useParams();
   const [summary, setSummary] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [keyword, setKeyword] = useState(searchParams.get('keyword') || '');
 
-  const fetchData = async ({ pageIndex, pageSize }) => {
+  const fetchData = async ({ pageIndex, pageSize, keyword: q }) => {
     const res = await AffiliatesService.getAffiliateDetail({
       affiliateId,
-      pagination: { pageIndex, pageSize }
+      pagination: { pageIndex, pageSize },
+      filters: { keyword: q || '' }
     });
     if (res.status === 200) {
       const apiData = res.response?.data || {};
@@ -114,7 +117,8 @@ export default function AffiliateDetails() {
     queryParams: useMemo(
       () => ({
         pageIndex: searchParams.get('pageIndex'),
-        pageSize: searchParams.get('pageSize')
+        pageSize: searchParams.get('pageSize'),
+        keyword: searchParams.get('keyword') || ''
       }),
       [searchParams]
     ),
@@ -150,7 +154,7 @@ export default function AffiliateDetails() {
         </div>
       </div>
       {summary && (
-        <div className="grid grid-cols-1 gap-4 px-[--margin-x] py-4 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-3">
           <DashboardCard
             label={t('affiliate_uid', { defaultValue: 'Affiliate UID' })}
             value={`${summary?.AffiliateUID ?? '-'}`}
@@ -209,6 +213,56 @@ export default function AffiliateDetails() {
           />
         </div>
       )}
+      <div className="flex items-center gap-2 px-[--margin-x] pt-4">
+        <Input
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              setSearchParams(
+                (prev) => ({
+                  ...Object.fromEntries(prev),
+                  keyword: keyword.trim(),
+                  pageIndex: 0
+                }),
+                { replace: true }
+              );
+            }
+          }}
+          classNames={{ input: 'h-8 text-xs ring-primary-500/50 focus:ring', root: 'shrink-0' }}
+          placeholder={t('search') + ' ' + t('campaign_name') + ', ' + t('campaign_link') + '...'}
+        />
+        <Button
+          onClick={() =>
+            setSearchParams(
+              (prev) => ({
+                ...Object.fromEntries(prev),
+                keyword: keyword.trim(),
+                pageIndex: 0
+              }),
+              { replace: true }
+            )
+          }
+          className="h-8 whitespace-nowrap px-2.5 text-xs">
+          {t('search')}
+        </Button>
+        <Button
+          onClick={() => {
+            setKeyword('');
+            setSearchParams(
+              (prev) => {
+                const next = { ...Object.fromEntries(prev), pageIndex: 0 };
+                delete next.keyword;
+                return next;
+              },
+              { replace: true }
+            );
+          }}
+          className="h-8 whitespace-nowrap px-2.5 text-xs"
+          disabled={!keyword && !(searchParams.get('keyword') || '')}>
+          {t('reset') + ' ' + t('filter')}
+        </Button>
+      </div>
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>
   );
