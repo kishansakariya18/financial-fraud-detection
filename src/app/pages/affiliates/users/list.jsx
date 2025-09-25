@@ -12,25 +12,27 @@ import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.const
 import AffiliatesService from 'services/affiliates.services';
 import { createColumnHelper } from '@tanstack/react-table';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { BoldCell, IdCell } from 'components/custom/table/cell';
+import { CopyableCell } from 'components/shared/table/CopyableCell';
 
 const columnHelper = createColumnHelper();
 const columns = [
   columnHelper.accessor((row) => row.UserID, {
     id: 'UserID',
     header: 'User ID',
-    cell: (info) => info.getValue(),
+    cell: IdCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.Username, {
     id: 'Username',
     header: 'Username',
-    cell: (info) => info.getValue() || '-',
+    cell: CopyableCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.CampaignID, {
     id: 'CampaignID',
     header: 'Campaign ID',
-    cell: (info) => info.getValue(),
+    cell: BoldCell,
     enableSorting: false
   })
 ];

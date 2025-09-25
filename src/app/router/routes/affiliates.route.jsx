@@ -40,6 +40,21 @@ export const affiliatesRoutes = [
         )
       };
     }
+  },
+  {
+    path: 'affiliates/:affiliateId/withdrawals',
+    lazy: async () => {
+      const { default: AffiliateWithdrawalsList } = await import(
+        '../../pages/affiliates/withdrawals/list'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.AFFILIATES.WITHDRAWALS_LIST}>
+            <AffiliateWithdrawalsList />
+          </PrivateRoute>
+        )
+      };
+    }
   }
 ];
 

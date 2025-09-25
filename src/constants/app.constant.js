@@ -231,7 +231,8 @@ export const PERMISSIONS = {
     USER_SIGNUP_LIST: 'affiliate-user-signup-list',
     PAYOUT: 'affiliate-payout',
     UPDATE_PAYTOUT: 'affiliate-payout-update',
-    VIEW_LOGIN_HISTORY: 'affiliate-login-history-view'
+    VIEW_LOGIN_HISTORY: 'affiliate-login-history-view',
+    WITHDRAWALS_LIST: 'affiliate-withdrawals-list'
   },
   PAYMENT: {
     VIEW: 'payment-view'

@@ -1,6 +1,11 @@
 // Import Dependencies
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
-import { EllipsisHorizontalIcon, UsersIcon, EyeIcon } from '@heroicons/react/24/outline';
+import {
+  EllipsisHorizontalIcon,
+  UsersIcon,
+  EyeIcon,
+  ListBulletIcon
+} from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment } from 'react';
 import PropTypes from 'prop-types';
@@ -10,17 +15,22 @@ import { Button } from 'components/ui';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
 import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 export function RowActions({ row }) {
   const { hasPermission } = usePermissions();
   const navigate = useNavigate();
   const affiliateUID = row?.original?.affiliateUID;
+  const { t } = useTranslation();
 
   const goToUsers = () => {
     navigate(`/affiliates/${affiliateUID}/users`);
   };
   const goToDetails = () => {
     navigate(`/affiliates/${affiliateUID}/detail`);
+  };
+  const goToWithdrawals = () => {
+    navigate(`/affiliates/${affiliateUID}/withdrawals`);
   };
 
   return (
@@ -50,7 +60,7 @@ export function RowActions({ row }) {
                     )}
                     onClick={goToDetails}>
                     <EyeIcon className="size-4.5 stroke-1" />
-                    <span>View</span>
+                    <span>{t('view')}</span>
                   </button>
                 )}
               </MenuItem>
@@ -66,7 +76,23 @@ export function RowActions({ row }) {
                     )}
                     onClick={goToUsers}>
                     <UsersIcon className="size-4.5 stroke-1" />
-                    <span>Users</span>
+                    <span>{t('user') + ' ' + t('list')}</span>
+                  </button>
+                )}
+              </MenuItem>
+            )}
+            {(hasPermission(PERMISSIONS.AFFILIATES?.WITHDRAWALS_LIST) ||
+              hasPermission(PERMISSIONS.AFFILIATES?.LIST)) && (
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    className={clsx(
+                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                      focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                    )}
+                    onClick={goToWithdrawals}>
+                    <ListBulletIcon className="size-4.5 stroke-1" />
+                    <span>{t('withdrawals') + ' ' + t('list')}</span>
                   </button>
                 )}
               </MenuItem>

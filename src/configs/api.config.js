@@ -455,9 +455,9 @@ export const apiConfig = {
     AFFILIATES: {
       AFFILIATE_LIST: '/affiliates/admin/affiliates/list',
       REFERRAL_LIST: '/affiliates/admin/affiliates/{affiliateId}/referred-users',
-      WITHDRAWAL_LIST: '/affiliates/admin/commission/withdrawal/list',
-      WITHDRAWAL_APPROVE: '/affiliates/admin/commission/withdrawal/approve',
-      WITHDRAWAL_REJECT: '/affiliates/admin/commission/withdrawal/reject',
+      WITHDRAWAL_LIST: '/affiliates/admin/commission/withdraw/list',
+      WITHDRAWAL_APPROVE: '/affiliates/admin/commission/withdraw/approve',
+      WITHDRAWAL_REJECT: '/affiliates/admin/commission/withdraw/reject',
       AFFILIATE_DETAIL: '/affiliates/admin/affiliates/{affiliateId}/details'
     }
   }
