@@ -97,7 +97,7 @@ export const affiliatesWithdrawalsStatusOptions = [
   {
     value: 'pending',
     label: 'Pending',
-    color: 'pending',
+    color: 'warning',
     icon: XCircleIcon
   },
   {

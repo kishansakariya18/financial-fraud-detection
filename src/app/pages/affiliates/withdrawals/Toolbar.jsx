@@ -1,5 +1,5 @@
 // Import Dependencies
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 // import { TbCurrencyDollar } from "react-icons/tb";
 import PropTypes from 'prop-types';
@@ -12,7 +12,8 @@ import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { DateFilter } from 'components/shared/table/DateFilter';
-// import { statusOptions } from '../helper';
+import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
+import { affiliatesWithdrawalsStatusOptions } from '../helper';
 
 // ----------------------------------------------------------------------
 
@@ -97,8 +98,8 @@ export function Toolbar({
 function SearchInput({ table, onApplyFilters }) {
   return (
     <Input
-      value={table?.getColumn('moduleName')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('moduleName').setFilterValue(e.target.value)}
+      value={table?.getColumn('username')?.getFilterValue() || ''}
+      onChange={(e) => table.getColumn('username').setFilterValue(e.target.value)}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
           onApplyFilters();
@@ -118,16 +119,16 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>
-      {/* {table.getColumn('status') && (
+      {table.getColumn('transactionStatus') && (
         <FacedtedFilter
-          options={statusOptions}
-          column={table.getColumn('status')}
-          title="Status"
+          options={affiliatesWithdrawalsStatusOptions}
+          column={table.getColumn('transactionStatus')}
+          title={t('status')}
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}
         />
-      )} */}
+      )}
 
       {table.getColumn('createdAt') && (
         <DateFilter
@@ -139,7 +140,6 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           }}
         />
       )}
-
       <div>
         <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
           {t('search')}

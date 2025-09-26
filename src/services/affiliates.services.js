@@ -100,15 +100,33 @@ const AffiliatesService = {
     }
   },
 
-  getWithdrawals: async ({ pagination }) => {
+  getWithdrawals: async ({ pagination, filters }) => {
     try {
       const endPoint = apiConfig.endPoints.AFFILIATES.WITHDRAWAL_LIST;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const reqBody = {
+        filters: {
+          keyword: filters?.keyword || undefined,
+          currencyCode: filters?.currencyCode || undefined,
+          affiliateUID: filters?.affiliateUID || undefined,
+          // Allow both txnStatus and transactionStatus from UI/query to map to API's txnStatus
+          txnStatus:
+            (filters?.txnStatus || filters?.transactionStatus)?.toString().toUpperCase() ||
+            undefined,
+          startDate: filters?.startDate
+            ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
+            : undefined,
+          endDate: filters?.endDate
+            ? dayjs(+filters.endDate).endOf('day').format('YYYY-MM-DD HH:mm:ss')
+            : undefined
+        }
+      };
       const response = await sendRequest({
         url: apiURL,
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        params: { page: pagination.pageIndex + 1, perPage: pagination.pageSize }
+        params: { page: pagination.pageIndex + 1, perPage: pagination.pageSize },
+        body: reqBody
       });
       return response;
     } catch (error) {
