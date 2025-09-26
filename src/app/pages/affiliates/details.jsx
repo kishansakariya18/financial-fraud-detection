@@ -7,84 +7,12 @@ import { toast } from 'sonner';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 import TableCard from 'components/ui/custom/TableCard';
 import useTable from 'components/ui/useTable';
-import { createColumnHelper } from '@tanstack/react-table';
 import AffiliatesService from 'services/affiliates.services';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { DashboardCard } from 'components/custom/DashboardCard';
-import { dummyCards, getDateInUTCToTimeZone } from 'helpers/functions';
-import { BoldCell, DateCell, IdCell } from 'components/custom/table/cell';
-import { CopyableCell } from 'components/shared/table/CopyableCell';
-import { Button, Input } from 'components/ui';
-
-const columnHelper = createColumnHelper();
-const columns = [
-  columnHelper.accessor((row) => row.campaignStats.CampaignID, {
-    id: 'CampaignID',
-    header: 'Campaign ID',
-    cell: IdCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => row.CampaignName, {
-    id: 'CampaignName',
-    header: 'Campaign Name',
-    cell: CopyableCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => row.CampaignLink, {
-    id: 'CampaignLink',
-    header: 'Campaign Link',
-    cell: CopyableCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => getDateInUTCToTimeZone(row.DateCreated), {
-    id: 'DateCreated',
-    header: 'Created At',
-    cell: DateCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => (row.campaignStats?.Hits ? row.campaignStats?.Hits : '0'), {
-    id: 'Hits',
-    header: 'Hits',
-    cell: BoldCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor(
-    (row) => (row.campaignStats?.ReferredUsers ? row.campaignStats?.ReferredUsers : '0'),
-    {
-      id: 'ReferredUsers',
-      header: 'Referred Users',
-      cell: BoldCell,
-      enableSorting: false
-    }
-  ),
-  columnHelper.accessor(
-    (row) => (row.campaignStats?.FirstTimeDeposits ? row.campaignStats?.FirstTimeDeposits : '0'),
-    {
-      id: 'FirstTimeDeposits',
-      header: 'First Time Deposits',
-      cell: BoldCell,
-      enableSorting: false
-    }
-  ),
-  columnHelper.accessor(
-    (row) => (row.campaignStats?.TotalDeposits ? row.campaignStats?.TotalDeposits : '0'),
-    {
-      id: 'TotalDeposits',
-      header: 'Total Deposits',
-      cell: BoldCell,
-      enableSorting: false
-    }
-  ),
-  columnHelper.accessor(
-    (row) => (row.campaignStats?.OverallCommission ? row.campaignStats?.OverallCommission : '0'),
-    {
-      id: 'OverallCommission',
-      header: 'Overall Commission',
-      cell: BoldCell,
-      enableSorting: false
-    }
-  )
-];
+import { dummyCards } from 'helpers/functions';
+import { columns } from './campaigns/columns';
+import { Toolbar as CampaignsToolbar } from './campaigns/Toolbar';
 
 export default function AffiliateDetails() {
   const { t } = useTranslation();
@@ -153,6 +81,7 @@ export default function AffiliateDetails() {
           <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
       </div>
+
       {summary && (
         <div className="grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-3">
           <DashboardCard
@@ -213,56 +142,13 @@ export default function AffiliateDetails() {
           />
         </div>
       )}
-      <div className="flex items-center gap-2 px-[--margin-x] pt-4">
-        <Input
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              setSearchParams(
-                (prev) => ({
-                  ...Object.fromEntries(prev),
-                  keyword: keyword.trim(),
-                  pageIndex: 0
-                }),
-                { replace: true }
-              );
-            }
-          }}
-          classNames={{ input: 'h-8 text-xs ring-primary-500/50 focus:ring', root: 'shrink-0' }}
-          placeholder={t('search') + ' ' + t('campaign_name') + ', ' + t('campaign_link') + '...'}
-        />
-        <Button
-          onClick={() =>
-            setSearchParams(
-              (prev) => ({
-                ...Object.fromEntries(prev),
-                keyword: keyword.trim(),
-                pageIndex: 0
-              }),
-              { replace: true }
-            )
-          }
-          className="h-8 whitespace-nowrap px-2.5 text-xs">
-          {t('search')}
-        </Button>
-        <Button
-          onClick={() => {
-            setKeyword('');
-            setSearchParams(
-              (prev) => {
-                const next = { ...Object.fromEntries(prev), pageIndex: 0 };
-                delete next.keyword;
-                return next;
-              },
-              { replace: true }
-            );
-          }}
-          className="h-8 whitespace-nowrap px-2.5 text-xs"
-          disabled={!keyword && !(searchParams.get('keyword') || '')}>
-          {t('reset') + ' ' + t('filter')}
-        </Button>
-      </div>
+      <CampaignsToolbar
+        keyword={keyword}
+        setKeyword={setKeyword}
+        searchParams={searchParams}
+        setSearchParams={setSearchParams}
+        table={table}
+      />
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>
   );
