@@ -52,7 +52,7 @@ export default function AffiliateDetails() {
     ),
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['CampaignID'] },
+      columnPinning: { left: ['CampaignID'], right: ['actions'] },
       tableSettings: { enableFullScreen: false }
     }
   });

@@ -52,9 +52,11 @@ export function Toolbar({
         <div
           className={clsx(
             'custom-scrollbar transition-content flex justify-between space-x-4 overflow-x-auto pb-1 pt-4 rtl:space-x-reverse',
-            isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x]'
+            isFullScreenEnabled ? 'px-[--margin-x]' : 'px-[--margin-x]'
           )}
-          style={{ '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)' }}>
+          style={{
+            '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)'
+          }}>
           <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
             <SearchInput
               keyword={keyword}

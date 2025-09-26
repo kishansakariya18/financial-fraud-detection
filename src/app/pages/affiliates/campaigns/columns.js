@@ -2,6 +2,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { BoldCell, DateCell, IdCell } from 'components/custom/table/cell';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
+import { RowActions } from './RowActions';
 
 const columnHelper = createColumnHelper();
 export const columns = [
@@ -70,5 +71,12 @@ export const columns = [
       cell: BoldCell,
       enableSorting: false
     }
-  )
+  ),
+  columnHelper.display({
+    id: 'actions',
+    label: 'Row Actions',
+    header: 'Actions',
+    cell: RowActions,
+    enableSorting: false
+  })
 ];
