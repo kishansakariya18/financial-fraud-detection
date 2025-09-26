@@ -574,5 +574,9 @@
   "recipients": "Recipients",
   "campaign_name": "Nombre de la campaña",
   "campaign_link": "Enlace de la campaña",
-  "event_template_status_success": "Plantilla de correo electrónico El estado se ha cambiado correctamente"
+  "event_template_status_success": "Plantilla de correo electrónico El estado se ha cambiado correctamente",
+  "acceptWithdrawalDesc": "¿Estás seguro de que quieres aceptar esta solicitud de retiro?",
+  "acceptWithdrawalSuccess": "Solicitud de retiro aceptada exitosamente!",
+  "rejectWithdrawalDesc": "¿Estás seguro de que quieres rechazar esta solicitud de retiro?",
+  "rejectWithdrawalSuccess": "Solicitud de retiro rechazada exitosamente!"
 }

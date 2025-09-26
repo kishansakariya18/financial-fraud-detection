@@ -56,6 +56,7 @@ export const affiliatesWithdrawalsListResponseMapper = (payload) => {
   const list = data.map((item) => {
     return {
       transactionID: item?.TransactionID,
+      transactionUID: item?.TransactionUID,
       username: item?.Username,
       affiliateUID: item?.AffiliateUID || '-',
       amount: item?.Amount,

@@ -793,5 +793,9 @@
   "currency_deleted_successfully": "Currency deleted successfully",
   "enable_switch_to_apply_limit": "Enable switch to apply this limit",
   "campaign_name": "Campaign Name",
-  "campaign_link": "Campaign Link"
+  "campaign_link": "Campaign Link",
+  "acceptWithdrawalDesc": "Are you sure you want to accept this withdrawal request?",
+  "acceptWithdrawalSuccess": "Withdrawal request accepted successfully!",
+  "rejectWithdrawalDesc": "Are you sure you want to reject this withdrawal request?",
+  "rejectWithdrawalSuccess": "Withdrawal request rejected successfully!"
 }
