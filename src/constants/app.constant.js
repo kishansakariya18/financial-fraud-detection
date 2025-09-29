@@ -38,7 +38,8 @@ export const LOCAL_STORAGE = {
   AUTH_PASSWORD: 'authPassword',
   TWO_STEP_MODE: 'twoStepMode',
   AUTH_EMAIL: 'authEmail',
-  LANGUAGE: 'language'
+  LANGUAGE: 'language',
+  IS_AGENT_USER: 'IsAgentUser'
 };
 
 export const HOME_CATEGORY_STATUS = {
@@ -54,6 +55,12 @@ export const PAYOUT_STATUS = {
   PENDING: 0,
   APPROVED: 1,
   REJECTED: 2
+};
+export const AGENT_TRANSACTION_TYPE = {
+  ALLOCATION: 19,
+  DEALLOCATION: 20,
+  COMMISSION_CREDIT: 21,
+  COMMISSION_DEBIT: 22
 };
 
 export const TRANSACTION = {
@@ -76,7 +83,9 @@ export const TRANSACTION = {
     REFERRAL_BANK_VERIFICATION: 15,
     WITHOUT_REFERRAL_PAN_VERIFICATION: 16,
     WITHOUT_REFERRAL_BANK_VERIFICATION: 17,
-    ROLLBACK: 18
+    ROLLBACK: 18,
+    // agent transaction type
+    ...AGENT_TRANSACTION_TYPE
   }
 };
 
@@ -375,6 +384,12 @@ export const PERMISSIONS = {
   },
   RELEASE_NOTES: {
     VIEW: 'release-notes-view'
+  },
+  AGENTS: {
+    ADD: 'b2b-agent-add',
+    EDIT: 'b2b-agent-edit',
+    VIEW: 'b2b-agent-view',
+    CHANGE_STATUS: 'b2b-agent-change-status'
   }
 };
 
@@ -407,4 +422,15 @@ export const GENERAL_STATUS = {
 export const ADMIN_TYPE = {
   ADMIN: 0,
   AGENT: 1
+};
+
+export const AGENT_TIER_TYPE = {
+  TIER_1: 0,
+  TIER_2: 1,
+  TIER_3: 2
+};
+
+export const CREDIT_DEBIT_TYPE = {
+  CREDIT: 0,
+  DEBIT: 1
 };

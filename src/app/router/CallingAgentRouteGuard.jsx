@@ -6,7 +6,7 @@ import { ADMIN_TYPE } from 'constants/app.constant';
  * AgentRouteGuard - Central guard for all agent routes
  * Prevents non-agents from accessing agent routes without modifying individual route files
  */
-export default function AgentRouteGuard() {
+export default function CallingAgentRouteGuard() {
   const userData = useSelector((state) => state.auth.userData);
 
   // If user is not an agent, redirect to home
