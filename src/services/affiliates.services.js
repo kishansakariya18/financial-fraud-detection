@@ -190,6 +190,32 @@ const AffiliatesService = {
     } catch (error) {
       return { status: 500, error: error?.message || 'Unexpected error' };
     }
+  },
+  getCommissionSummary: async ({ affiliateId, pagination, filters }) => {
+    try {
+      console.log(affiliateId);
+      const endPoint = apiConfig.endPoints.AFFILIATES.COMMISSION_SUMMARY.replace(
+        '{affiliateId}',
+        affiliateId
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        params: pagination
+          ? { page: pagination.pageIndex + 1, perPage: pagination.pageSize }
+          : undefined,
+        body: {
+          filter: {
+            keyword: filters?.keyword || ''
+          }
+        }
+      });
+      return response;
+    } catch (error) {
+      return { status: 500, error: error?.message || 'Unexpected error' };
+    }
   }
 };
 

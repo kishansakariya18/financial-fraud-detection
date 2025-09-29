@@ -5,7 +5,6 @@ import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 
-// Toolbar replicates the player-kyc toolbar structure while using keyword/searchParams flow
 export function Toolbar({
   keyword,
   setKeyword,

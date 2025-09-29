@@ -29,6 +29,19 @@ export const affiliatesRoutes = [
     }
   },
   {
+    path: 'affiliates/:affiliateId/commission-summary',
+    lazy: async () => {
+      const { default: CommissionSummary } = await import('../../pages/affiliates/commission/list');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.AFFILIATES.COMMISSION_SUMMARY}>
+            <CommissionSummary />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
     path: 'affiliates/:affiliateId/detail/campaigns/:campaignUID/detail',
     lazy: async () => {
       const { default: AffiliateCampaignDetails } = await import(

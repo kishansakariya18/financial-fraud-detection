@@ -16,6 +16,7 @@ import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { HiOutlineCash } from 'react-icons/hi';
 
 export function RowActions({ row }) {
   const { hasPermission } = usePermissions();
@@ -31,6 +32,9 @@ export function RowActions({ row }) {
   };
   const goToWithdrawals = () => {
     navigate(`/affiliates/${affiliateUID}/withdrawals`);
+  };
+  const goToCommissionSummary = () => {
+    navigate(`/affiliates/${affiliateUID}/commission-summary`);
   };
 
   return (
@@ -93,6 +97,22 @@ export function RowActions({ row }) {
                     onClick={goToWithdrawals}>
                     <ListBulletIcon className="size-4.5 stroke-1" />
                     <span>{t('withdrawals') + ' ' + t('list')}</span>
+                  </button>
+                )}
+              </MenuItem>
+            )}
+            {(hasPermission(PERMISSIONS.AFFILIATES?.COMMISSION) ||
+              hasPermission(PERMISSIONS.AFFILIATES?.LIST)) && (
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    className={clsx(
+                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                      focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                    )}
+                    onClick={goToCommissionSummary}>
+                    <HiOutlineCash className="size-4.5 stroke-1" />
+                    <span>{t('commission')}</span>
                   </button>
                 )}
               </MenuItem>
