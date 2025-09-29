@@ -797,5 +797,6 @@
   "acceptWithdrawalDesc": "Are you sure you want to accept this withdrawal request?",
   "acceptWithdrawalSuccess": "Withdrawal request accepted successfully!",
   "rejectWithdrawalDesc": "Are you sure you want to reject this withdrawal request?",
-  "rejectWithdrawalSuccess": "Withdrawal request rejected successfully!"
+  "rejectWithdrawalSuccess": "Withdrawal request rejected successfully!",
+  "campaign": "Campaign"
 }

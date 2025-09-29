@@ -164,6 +164,32 @@ const AffiliatesService = {
     } catch (error) {
       return { status: 500, error: error?.message || 'Unexpected error' };
     }
+  },
+  getCampaignDetail: async ({ campaignUID, pagination, filters }) => {
+    try {
+      console.log(campaignUID);
+      const endPoint = apiConfig.endPoints.AFFILIATES.CAMPAIGN_DETAILS.replace(
+        '{campaignUID}',
+        campaignUID
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        params: pagination
+          ? { page: pagination.pageIndex + 1, perPage: pagination.pageSize }
+          : undefined,
+        body: {
+          filters: {
+            keyword: filters?.keyword || ''
+          }
+        }
+      });
+      return response;
+    } catch (error) {
+      return { status: 500, error: error?.message || 'Unexpected error' };
+    }
   }
 };
 

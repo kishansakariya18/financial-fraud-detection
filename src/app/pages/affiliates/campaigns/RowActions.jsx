@@ -15,11 +15,12 @@ import { useTranslation } from 'react-i18next';
 export function RowActions({ row }) {
   const { hasPermission } = usePermissions();
   const navigate = useNavigate();
-  const affiliateUID = row?.original?.affiliateUID;
+  const affiliateUID = row?.original?.affiliates?.AffiliateUID;
+  const campaignUID = row?.original?.CampaignCode;
   const { t } = useTranslation();
 
   const goToDetails = () => {
-    navigate(`/affiliates/${affiliateUID}/detail`);
+    navigate(`/affiliates/${affiliateUID}/detail/campaigns/${campaignUID}/detail`);
   };
 
   return (

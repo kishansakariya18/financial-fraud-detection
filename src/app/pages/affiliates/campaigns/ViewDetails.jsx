@@ -1,40 +1,41 @@
+// Import Dependencies
+// import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router';
-import { useSearchParams } from 'react-router';
+import { useParams, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import AffiliatesService from 'services/affiliates.services';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 import TableCard from 'components/ui/custom/TableCard';
 import useTable from 'components/ui/useTable';
-import AffiliatesService from 'services/affiliates.services';
-import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { columns } from './referred-users/columns';
+import { Toolbar as ReferredUsersToolbar } from './referred-users/Toolbar';
 import { DashboardCard } from 'components/custom/DashboardCard';
 import { dummyCards } from 'helpers/functions';
-import { columns } from './campaigns/columns';
-import { Toolbar as CampaignsToolbar } from './campaigns/Toolbar';
 
-export default function AffiliateDetails() {
+export function ViewDetails() {
   const { t } = useTranslation();
-  const { affiliateId } = useParams();
+  const { campaignUID } = useParams();
   const [summary, setSummary] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyword, setKeyword] = useState(searchParams.get('keyword') || '');
+  const pageTitle = t('campaign') + ' ' + t('details');
+  const { affiliateId } = useParams();
 
   const fetchData = async ({ pageIndex, pageSize, keyword: q }) => {
-    const res = await AffiliatesService.getAffiliateDetail({
-      affiliateId,
+    const res = await AffiliatesService.getCampaignDetail({
+      campaignUID,
       pagination: { pageIndex, pageSize },
       filters: { keyword: q || '' }
     });
     if (res.status === 200) {
       const apiData = res.response?.data || {};
-      // Handle both shapes: data at root or nested under data
       const payload = apiData?.data ? apiData.data : apiData;
-      const campaigns = Array.isArray(payload?.Camapgns) ? payload.Camapgns : [];
-      setSummary(payload?.Summary || null);
-      const totalRecords = apiData?.totalRecords ?? res.response?.totalRecords ?? campaigns.length;
-      return { status: 200, data: campaigns, totalRecords };
+      const users = Array.isArray(payload?.users) ? payload.users : [];
+      setSummary(payload?.summary || null);
+      const totalRecords = apiData?.totalRecords ?? res.response?.totalRecords ?? users.length;
+      return { status: 200, data: users, totalRecords };
     }
     return { status: res.status, error: res.error };
   };
@@ -52,7 +53,7 @@ export default function AffiliateDetails() {
     ),
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['CampaignID'], right: ['actions'] },
+      columnPinning: { left: ['ReferredUserID'] },
       tableSettings: { enableFullScreen: false }
     }
   });
@@ -64,11 +65,10 @@ export default function AffiliateDetails() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
-
-  const pageTitle = `${t('affiliates')} ${t('details')}`;
   const breadcrumbItem = [
     { title: t('affiliates'), path: '/affiliates' },
-    { title: t('affiliate') + ' ' + t('details') }
+    { title: t('affiliate') + ' ' + t('details'), path: `/affiliates/${affiliateId}/detail` },
+    { title: t('campaign') + ' ' + t('details') }
   ];
 
   return (
@@ -76,7 +76,7 @@ export default function AffiliateDetails() {
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x]">
         <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
-            {t('affiliates') + ' ' + t('details')}
+            {pageTitle}
           </h2>
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
@@ -88,16 +88,16 @@ export default function AffiliateDetails() {
       {summary && (
         <div className="grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-3">
           <DashboardCard
-            label={t('affiliate_uid', { defaultValue: 'Affiliate UID' })}
-            value={`${summary?.AffiliateUID ?? '-'}`}
+            label={t('campaign_name', { defaultValue: 'Campaign Name' })}
+            value={`${summary?.CampaignName ?? '-'}`}
             gradientFrom={dummyCards.Affiliate.AFFILIATE_UID.gradientFrom}
             gradientTo={dummyCards.Affiliate.AFFILIATE_UID.gradientTo}
             textColor="text-sky-100"
             maskShape="is-reuleaux-triangle"
           />
           <DashboardCard
-            label={t('user_id', { defaultValue: 'User ID' })}
-            value={`${summary?.UserID ?? '-'}`}
+            label={t('campaign_code', { defaultValue: 'Campaign Code' })}
+            value={`${summary?.CampaignCode ?? '-'}`}
             gradientFrom={dummyCards.Affiliate.USER_ID.gradientFrom}
             gradientTo={dummyCards.Affiliate.USER_ID.gradientTo}
             textColor="text-amber-50"
@@ -105,7 +105,7 @@ export default function AffiliateDetails() {
           />
           <DashboardCard
             label={t('hits', { defaultValue: 'Hits' })}
-            value={`${summary?.Hits ?? 0}`}
+            value={`${summary?.campaignStats?.Hits ?? 0}`}
             gradientFrom={dummyCards.Affiliate.HITS.gradientFrom}
             gradientTo={dummyCards.Affiliate.HITS.gradientTo}
             textColor="text-pink-100"
@@ -113,7 +113,7 @@ export default function AffiliateDetails() {
           />
           <DashboardCard
             label={t('referred_users', { defaultValue: 'Referred Users' })}
-            value={`${summary?.ReferredUsers ?? 0}`}
+            value={`${summary?.campaignStats?.ReferredUsers ?? 0}`}
             gradientFrom={dummyCards.Affiliate.REFERRED_USERS.gradientFrom}
             gradientTo={dummyCards.Affiliate.REFERRED_USERS.gradientTo}
             textColor="text-sky-100"
@@ -121,7 +121,7 @@ export default function AffiliateDetails() {
           />
           <DashboardCard
             label={t('first_time_deposits', { defaultValue: 'First Time Deposits' })}
-            value={`${summary?.FirstTimeDeposits ?? 0}`}
+            value={`${summary?.campaignStats?.FirstTimeDeposits ?? 0}`}
             gradientFrom={dummyCards.Affiliate.FIRST_TIME_DEPOSITS.gradientFrom}
             gradientTo={dummyCards.Affiliate.FIRST_TIME_DEPOSITS.gradientTo}
             textColor="text-amber-50"
@@ -129,7 +129,7 @@ export default function AffiliateDetails() {
           />
           <DashboardCard
             label={t('total_deposits', { defaultValue: 'Total Deposits' })}
-            value={`${summary?.TotalDeposits ?? 0}`}
+            value={`${summary?.campaignStats?.TotalDeposits ?? 0}`}
             gradientFrom={dummyCards.Affiliate.TOTAL_DEPOSITS.gradientFrom}
             gradientTo={dummyCards.Affiliate.TOTAL_DEPOSITS.gradientTo}
             textColor="text-pink-100"
@@ -137,7 +137,7 @@ export default function AffiliateDetails() {
           />
           <DashboardCard
             label={t('overall_commission', { defaultValue: 'Overall Commission' })}
-            value={`${summary?.OverallCommission ?? 0}`}
+            value={`${summary?.campaignStats?.OverallCommission ?? 0}`}
             gradientFrom={dummyCards.Affiliate.TOTAL_COMMISSION.gradientFrom}
             gradientTo={dummyCards.Affiliate.TOTAL_COMMISSION.gradientTo}
             textColor="text-sky-100"
@@ -145,8 +145,9 @@ export default function AffiliateDetails() {
           />
         </div>
       )}
-      <CampaignsToolbar
-        pageTitle={t('campaign') + ' ' + t('list')}
+
+      <ReferredUsersToolbar
+        pageTitle={t('referred_users', { defaultValue: 'Referred Users' })}
         keyword={keyword}
         setKeyword={setKeyword}
         searchParams={searchParams}
@@ -157,3 +158,5 @@ export default function AffiliateDetails() {
     </ContentWrapper>
   );
 }
+
+export default ViewDetails;

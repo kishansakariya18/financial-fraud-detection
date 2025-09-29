@@ -578,5 +578,6 @@
   "acceptWithdrawalDesc": "¿Estás seguro de que quieres aceptar esta solicitud de retiro?",
   "acceptWithdrawalSuccess": "Solicitud de retiro aceptada exitosamente!",
   "rejectWithdrawalDesc": "¿Estás seguro de que quieres rechazar esta solicitud de retiro?",
-  "rejectWithdrawalSuccess": "Solicitud de retiro rechazada exitosamente!"
+  "rejectWithdrawalSuccess": "Solicitud de retiro rechazada exitosamente!",
+  "campaign": "Campaña"
 }

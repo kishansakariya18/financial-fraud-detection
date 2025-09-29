@@ -559,5 +559,6 @@
   "acceptWithdrawalDesc": "Êtes-vous sûr de vouloir accepter cette demande de retrait ?",
   "acceptWithdrawalSuccess": "Demande de retrait acceptée avec succès !",
   "rejectWithdrawalDesc": "Êtes-vous sûr de vouloir rejeter cette demande de retrait ?",
-  "rejectWithdrawalSuccess": "Demande de retrait rejetée avec succès !"
+  "rejectWithdrawalSuccess": "Demande de retrait rejetée avec succès !",
+  "campaign": "Campagne"
 }

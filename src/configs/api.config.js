@@ -458,7 +458,8 @@ export const apiConfig = {
       WITHDRAWAL_LIST: '/affiliates/admin/commission/withdraw/list',
       WITHDRAWAL_APPROVE: '/affiliates/admin/commission/withdraw/approve',
       WITHDRAWAL_REJECT: '/affiliates/admin/commission/withdraw/reject',
-      AFFILIATE_DETAIL: '/affiliates/admin/affiliates/{affiliateId}/details'
+      AFFILIATE_DETAIL: '/affiliates/admin/affiliates/{affiliateId}/details',
+      CAMPAIGN_DETAILS: '/affiliates/admin/affiliates/campaign/{campaignUID}/details'
     }
   }
 };
