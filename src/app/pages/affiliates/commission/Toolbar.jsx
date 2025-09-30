@@ -99,7 +99,7 @@ function SearchInput({ keyword, setKeyword, searchParams, setSearchParams }) {
           }
         }}
         classNames={{ input: 'h-8 text-xs ring-primary-500/50 focus:ring', root: 'shrink-0' }}
-        placeholder={t('search') + ' ' + t('commission') + ' ' + t('id') + '...'}
+        placeholder={t('search') + ' ' + t('currency')}
       />
       <Button
         onClick={() =>

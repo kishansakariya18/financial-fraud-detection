@@ -1,5 +1,6 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import { AmountCell, BoldCell, DateCell, IdCell } from 'components/custom/table/cell';
+import { AmountCell, DateCell, IdCell } from 'components/custom/table/cell';
+import { CopyableCell } from 'components/shared/table/CopyableCell';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 const columnHelper = createColumnHelper();
@@ -13,7 +14,7 @@ export const columns = [
   columnHelper.accessor((row) => row.CurrencyCode, {
     id: 'Currency',
     header: 'Currency',
-    cell: BoldCell,
+    cell: CopyableCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.AvailableCommission, {

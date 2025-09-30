@@ -461,7 +461,7 @@ export const apiConfig = {
       AFFILIATE_DETAIL: '/affiliates/admin/affiliates/{affiliateId}/details',
       CAMPAIGNS_LIST: '/affiliates/admin/affiliates/{affiliateId}/campaign-list',
       CAMPAIGN_DETAILS: '/affiliates/admin/affiliates/campaign/{campaignUID}/details',
-      COMMISSION_SUMMARY: '/affiliates/admin/affiliates/{affiliateId}/commission-smmmary'
+      COMMISSION_SUMMARY: '/affiliates/admin/affiliates/{affiliateId}/commission-summary'
     }
   }
 };

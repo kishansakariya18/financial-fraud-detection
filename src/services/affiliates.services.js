@@ -234,7 +234,7 @@ const AffiliatesService = {
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'GET',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         params: pagination
           ? { page: pagination.pageIndex + 1, perPage: pagination.pageSize }

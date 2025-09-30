@@ -20,7 +20,7 @@ export const columns = [
   columnHelper.accessor((row) => row.CampaignID, {
     id: 'CampaignID',
     header: 'Campaign ID',
-    cell: BoldCell,
+    cell: CopyableCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.FirstDepositAmount, {
