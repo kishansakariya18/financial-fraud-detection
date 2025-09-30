@@ -4,17 +4,23 @@ import {
   UserIcon,
   BuildingLibraryIcon,
   CreditCardIcon,
-  HashtagIcon
+  HashtagIcon,
+  CurrencyDollarIcon
 } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
-import { Button, Input } from 'components/ui';
+import { Controller, useForm } from 'react-hook-form';
+import { Button, Input, Upload } from 'components/ui';
 import { CiMobile1 } from 'react-icons/ci';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
+import { Listbox } from 'components/shared/form/Listbox';
+import RenderImage from 'components/ui/custom/ImageRender';
+import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
+import CurrencyService from 'services/currency.services';
+import { currencyListResponseMapper } from '../casino-management/currencies/helper';
 
 import { createBankDepositSchema } from './schema';
 import BankService from 'services/bank.services';
@@ -33,17 +39,65 @@ const CreateBankDeposit = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     reset
   } = useForm({
     resolver: yupResolver(createBankDepositSchema)
   });
 
+  // Currency dropdown state
+  const [currencyOptions, setCurrencyOptions] = useState([]);
+  // Upload state for QR code (optional)
+  const [file, setFile] = useState();
+  const [preview, setPreview] = useState();
+  const uploadRef = useRef();
+
+  useEffect(() => {
+    const fetchCurrencies = async () => {
+      try {
+        const result = await CurrencyService.getCurrencyList({
+          filters: { status: 'active' },
+          pagination: { pageIndex: 0, pageSize: 1000 }
+        });
+
+        if (result.status === 200) {
+          const mapped = currencyListResponseMapper(result.response);
+          const options = (mapped.list || []).map((c) => ({
+            value: c.id,
+            label: `${c.name} (${c.code})${c.symbol ? ` - ${c.symbol}` : ''}`
+          }));
+          setCurrencyOptions(options);
+        } else {
+          toast.error(result.error || 'Failed to load currencies');
+        }
+      } catch (e) {
+        // Fallback error handling
+        console.error('Failed to load currencies:', e);
+        // toast.error('Failed to load currencies');
+      }
+    };
+
+    fetchCurrencies();
+  }, []);
+
   const createBankAPI = async (data) => {
     setLoading(true);
     setError(null);
 
-    const result = await BankService.createBank(data);
+    // Build multipart form data
+    const formData = new FormData();
+    formData.append('bankName', data.bankName);
+    formData.append('accountHolderName', data.accountHolderName);
+    formData.append('accountNumber', data.accountNumber);
+    formData.append('bankCode', data.bankCode);
+    formData.append('upiID', data.upiID);
+    formData.append('currencyID', data.currencyID);
+    if (file) {
+      formData.append('media', file);
+    }
+
+    const result = await BankService.createBank(formData);
 
     if (result) {
       if (result.status === 200 || result.status === 201) {
@@ -121,25 +175,23 @@ const CreateBankDeposit = () => {
             </div>
 
             <div className="grid gap-4 lg:grid-cols-2">
-              {/* <Controller
+              <Controller
                 render={({ field }) => (
                   <Listbox
-                    data={tenantStatusOptions}
-                    value={
-                      tenantStatusOptions.find((status) => status.value === field.value) || null
-                    }
+                    data={currencyOptions}
+                    prefix={<CurrencyDollarIcon className="size-5" />}
+                    value={currencyOptions.find((opt) => opt.value === field.value) || null}
                     onChange={(val) => field.onChange(val.value)}
                     name={field.name}
-                    label={t('status')}
-                    placeholder={t('select') + ' ' + t('status')}
+                    label={t('currency')}
+                    placeholder={t('select') + ' ' + t('currency')}
                     displayField="label"
-                    error={errors?.status?.message}
+                    error={errors?.currencyID?.message}
                   />
                 )}
                 control={control}
-                name="status"
-              /> */}
-
+                name="currencyID"
+              />
               <Input
                 {...register('upiID')}
                 prefix={<CiMobile1 className="size-5" />}
@@ -148,27 +200,48 @@ const CreateBankDeposit = () => {
                 placeholder={t('enter') + ' ' + t('upiID')}
               />
             </div>
-            {/* <div className="grid gap-4 lg:grid-cols-2">
-              <Input
-                label={t('additionalInfo')}
-                type={show ? 'text' : 'password'}
-                placeholder={t('enter') + ' ' + t('additionalInfo')}
-                prefix={<LockClosedIcon className="size-4.5" />}
-                suffix={
-                  <Button
-                    variant="flat"
-                    className="pointer-events-auto size-6 shrink-0 rounded-full p-0"
-                    onClick={toggle}>
-                    {show ? (
-                      <EyeSlashIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
-                    ) : (
-                      <EyeIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
-                    )}
-                  </Button>
-                }
-                {...register('additionalInfo')}
-                error={errors?.additionalInfo?.message}
-              />
+
+            {/* QR Code Upload (optional) */}
+            <div className="mt-5 w-40 space-y-4">
+              <div className="grid gap-4 sm:grid-cols-1">
+                {preview && (
+                  <RenderImage
+                    preview={preview}
+                    id={'qrCodeImage'}
+                    label="QR Code :"
+                    maxWidth="300px"
+                    maxHeight="300px"
+                  />
+                )}
+                <Upload
+                  onChange={setFile}
+                  ref={uploadRef}
+                  setPreview={setPreview}
+                  accept={'.png, .jpg, .jpeg'}>
+                  {({ ...props }) => (
+                    <Button color="primary" {...props} className="space-x-2">
+                      <CloudArrowUpIcon className="size-5" />
+                      <span>Choose File</span>
+                    </Button>
+                  )}
+                </Upload>
+                <Button
+                  disabled={!file}
+                  onClick={() => {
+                    if (uploadRef.current) uploadRef.current.value = '';
+                    setFile();
+                    setPreview();
+                  }}>
+                  {t('reset')}
+                </Button>
+                {file && (
+                  <div>
+                    File name : <span className="font-medium">{file.name}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+            {/* The following block remains intentionally commented (legacy additionalInfo input)
             </div> */}
             {/* <div className="grid gap-4 lg:grid-cols-2">
               <Controller

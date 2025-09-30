@@ -2,7 +2,7 @@
 import { DynamicLayout } from 'app/layouts/DynamicLayout';
 import AuthGuard from 'middleware/AuthGuard';
 import AdminRouteGuard from './AdminRouteGuard';
-import AgentRouteGuard from './AgentRouteGuard';
+import CallingAgentRouteGuard from './CallingAgentRouteGuard';
 import dashboardRoute from './routes/dashboard.route';
 import adminRoute from './routes/admin.route';
 import playerRoutes from './routes/player.route';
@@ -40,6 +40,10 @@ import responsibleGamblingRoute from './routes/responsible-gambling.route.jsx';
 
 import onlyCallingAgentRoutes from './routes/calling-agents.route';
 import { callingAgentsRoute } from './routes/supervisor.route';
+import b2bAgentRoutes from './routes/b2b-agent/b2b-agent-routes';
+import B2BAgentRouteGuard from './B2BAgentRouteGuard';
+import layoutThemeRoute from './routes/layout-theme.route';
+import b2bAgentAdminRoutes from './routes/b2b-agent/b2b-agent-for-admin';
 // ----------------------------------------------------------------------
 
 const protectedRoutes = {
@@ -75,6 +79,7 @@ const protectedRoutes = {
             ...promocodeRoute,
             ...pagesRoute,
             ...crmRoute,
+            ...layoutThemeRoute,
             ...homeCategoryRoute,
             ...tenantRoute,
             ...bonusManagementRoute,
@@ -86,13 +91,20 @@ const protectedRoutes = {
             ...siteConfigurationRoutes,
             ...blacklistRoutes,
             ...releaseNotesRoutes,
-            ...responsibleGamblingRoute
+            ...responsibleGamblingRoute,
+            ...b2bAgentAdminRoutes
           ]
         },
-        // Agent-only routes - centrally protected with AgentRouteGuard
+        // Calling Agent-only routes - centrally protected with CallingAgentRouteGuard
         {
-          Component: AgentRouteGuard,
+          Component: CallingAgentRouteGuard,
           children: [...onlyCallingAgentRoutes]
+        },
+
+        // B2B Agent routes - centrally protected with B2BAgentRouteGuard
+        {
+          Component: B2BAgentRouteGuard,
+          children: [...b2bAgentRoutes]
         },
         // Shared routes accessible by both admin and agent
         ...profileRoute

@@ -13,6 +13,7 @@ import { Listbox } from 'components/shared/form/Listbox';
 import SegmentationService from 'services/segmentation.services';
 import { genderOptions, kycOptions } from './helper';
 import { createSegmentationSchema } from './schema';
+import { useCurrencyContext } from 'app/contexts/currency/context';
 
 const EditSegmentation = () => {
   const [error, setError] = useState('');
@@ -21,6 +22,7 @@ const EditSegmentation = () => {
 
   const [response, setResponse] = useState(null);
   const { t } = useTranslation();
+  const { symbol } = useCurrencyContext();
 
   const breadcrumbItem = [
     { title: t('segmentation'), path: '/segmentation' },
@@ -448,6 +450,7 @@ const EditSegmentation = () => {
                     placeholder={t('minimum') + ' ' + t('deposit')}
                     type="number"
                     step="any"
+                    prefix={moneyDeposit && symbol}
                     disabled={!moneyDeposit}
                   />
                   <Input
@@ -456,6 +459,7 @@ const EditSegmentation = () => {
                     placeholder={t('maximum') + ' ' + t('deposit')}
                     type="number"
                     step="any"
+                    prefix={moneyDeposit && symbol}
                     disabled={!moneyDeposit}
                   />
                 </>
@@ -474,6 +478,7 @@ const EditSegmentation = () => {
                     type="number"
                     step="any"
                     disabled={!moneyWon}
+                    prefix={moneyWon && symbol}
                   />
                   <Input
                     {...register('maxWon')}
@@ -482,6 +487,7 @@ const EditSegmentation = () => {
                     type="number"
                     step="any"
                     disabled={!moneyWon}
+                    prefix={moneyWon && symbol}
                   />
                 </>
               }
@@ -494,6 +500,7 @@ const EditSegmentation = () => {
                 <>
                   <Input
                     disabled={!moneyLoss}
+                    prefix={moneyLoss && symbol}
                     {...register('minLoss')}
                     error={errors?.minLoss?.message}
                     placeholder={t('minimum') + ' ' + t('loss')}
@@ -502,6 +509,7 @@ const EditSegmentation = () => {
                   />
                   <Input
                     disabled={!moneyLoss}
+                    prefix={moneyLoss && symbol}
                     {...register('maxLoss')}
                     error={errors?.maxLoss?.message}
                     placeholder={t('maximum') + ' ' + t('loss')}

@@ -11,6 +11,7 @@ import router from 'app/router/router';
 import { Provider } from 'react-redux';
 import store from './store/index';
 import { useEffect } from 'react';
+import { CurrencyProvider } from 'app/contexts/currency/Provider';
 
 // ----------------------------------------------------------------------
 
@@ -29,17 +30,19 @@ function App() {
   }, []);
   return (
     <Provider store={store}>
-      <ThemeProvider>
-        <LocaleProvider>
-          <BreakpointProvider>
-            <SidebarProvider>
-              <TimezoneProvider>
-                <RouterProvider router={router} />
-              </TimezoneProvider>
-            </SidebarProvider>
-          </BreakpointProvider>
-        </LocaleProvider>
-      </ThemeProvider>
+      <CurrencyProvider>
+        <ThemeProvider>
+          <LocaleProvider>
+            <BreakpointProvider>
+              <SidebarProvider>
+                <TimezoneProvider>
+                  <RouterProvider router={router} />
+                </TimezoneProvider>
+              </SidebarProvider>
+            </BreakpointProvider>
+          </LocaleProvider>
+        </ThemeProvider>
+      </CurrencyProvider>
     </Provider>
   );
 }

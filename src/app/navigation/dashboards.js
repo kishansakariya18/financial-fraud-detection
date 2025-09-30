@@ -25,6 +25,7 @@ import { userManualDepositTransaction } from './user-manual-deposit-transaction'
 import { registrationFields } from './registration-fields';
 import { releaseNotes } from './release-notes';
 import { supervisor } from './supervisor';
+import { b2bAgent } from './b2b-agent';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -45,6 +46,7 @@ export const dashboards = () => ({
     roles,
     users,
     supervisor,
+    b2bAgent,
     platform,
     contentManagement,
     siteConfiguration,

@@ -23,7 +23,8 @@ import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 export function ViewDetails({
   isAgent = false,
   playerId: initialPlayerId = null,
-  customBreadcrumbs = null
+  customBreadcrumbs = null,
+  agentUID = null
 }) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
@@ -67,7 +68,7 @@ export function ViewDetails({
   const fetchLimitSummary = async (userID) => {
     try {
       if (!userID) return;
-      const result = await PlayerService.getLimitSummary(userID);
+      const result = await PlayerService.getLimitSummary(userID, agentUID);
       if (result?.status === 200) {
         const payload = result?.response?.data;
         const mapped = mapLimitSummary(payload?.data || payload?.Data || payload);

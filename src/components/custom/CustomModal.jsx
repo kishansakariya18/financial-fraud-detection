@@ -1,5 +1,6 @@
 // Import Dependencies
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react';
+import clsx from 'clsx';
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Fragment, useRef } from 'react';
 
@@ -17,7 +18,8 @@ export const CustomModal = ({
   show = false,
   onOpen = () => {},
   onClose = () => {},
-  isShowBtn = false
+  isShowBtn = false,
+  panalClassName = ''
 }) => {
   const saveRef = useRef(null);
 
@@ -55,7 +57,11 @@ export const CustomModal = ({
             leave="ease-in duration-200"
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95">
-            <DialogPanel className="relative flex w-full max-w-lg origin-top flex-col overflow-hidden rounded-lg bg-white transition-all duration-300 dark:bg-dark-700">
+            <DialogPanel
+              className={clsx(
+                'relative flex w-full max-w-lg origin-top flex-col overflow-hidden rounded-lg bg-white transition-all duration-300 dark:bg-dark-700',
+                panalClassName
+              )}>
               <div className="flex items-center justify-between rounded-t-lg bg-gray-200 px-4 py-3 dark:bg-dark-800 sm:px-5">
                 <DialogTitle
                   as="h3"

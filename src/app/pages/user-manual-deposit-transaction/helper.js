@@ -27,7 +27,8 @@ export const responseMapper = (apiData) => {
     bankTransactionID: data.BankTransactionID,
     dateCreated: data.DateCreated,
     dateModified: data.DateModified,
-    status: data.IsActive
+    status: data.IsActive,
+    currencyCode: data.currencyCode
   }));
   return resultData;
 };

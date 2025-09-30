@@ -14,6 +14,7 @@ import { playerLimitSchema } from './schema';
 // import { getDateInUTCToTimeZone } from 'helpers/functions';
 import { useTranslation } from 'react-i18next';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { useCurrencyContext } from 'app/contexts/currency/context';
 
 // const exclusionTimeOptions = [
 //   { label: '1 day', value: 1 },
@@ -37,6 +38,7 @@ const PlayerLimit = () => {
   const [limitsData, setLimitsData] = useState([]); // API-driven limits for dynamic UI
   const { t } = useTranslation();
   const pageTitle = t('player') + ' ' + t('limit');
+  const { symbol } = useCurrencyContext();
 
   const {
     register,
@@ -509,6 +511,7 @@ const PlayerLimit = () => {
                                   }}
                                   type="number"
                                   step="any"
+                                  prefix={symbol}
                                   suffix={
                                     <ContextualHelp
                                       title={t(titleKey)}

@@ -10,6 +10,7 @@ import {
 } from 'app/pages/users/player/helper';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
+import apiInstance from 'utils/apiInstance';
 import { sendRequest } from 'utils/axios';
 import { ConvertDateIntoUTC, replaceText } from 'utils/custom.utilities';
 
@@ -19,6 +20,7 @@ const PlayerService = {
       const { pagination, filters } = data;
       console.log('filters: ', filters);
       const apiRequestParams = {
+        ...(data.agentUID && { agentUID: data.agentUID }),
         keyword: filters.keyword ? filters.keyword : undefined,
         status: filters.status ? playerStatusToAPI(filters.status) : undefined,
         isKYCVerified: filters.isKYCVerified ? playerKycToAPI(filters.isKYCVerified) : undefined,
@@ -472,7 +474,7 @@ const PlayerService = {
       console.log('Error from getUserAllLimits', error);
     }
   },
-  getLimitSummary: async (userId) => {
+  getLimitSummary: async (userId, agentUID = null) => {
     try {
       const endPoint = replaceText(apiConfig.endPoints.USER.LIMIT_SUMMARY, ':userId', userId);
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
@@ -481,7 +483,8 @@ const PlayerService = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        params: agentUID ? { agentUID } : {}
       });
       return response;
     } catch (error) {
@@ -674,6 +677,16 @@ const PlayerService = {
     } catch (error) {
       console.log('Error from AddComment', error);
     }
+  },
+
+  getPlayerDashboardCounts: async () => {
+    return apiInstance.get(apiConfig.endPoints.B2B_AGENT.PLAYER_DASHBOARD_COUNTS);
+  },
+
+  resetPasswordAgentPlayer: async (userUID, password) => {
+    return apiInstance.patch(apiConfig.endPoints.B2B_AGENT.PLAYER_RESET_PASSWORD(userUID), {
+      password
+    });
   }
 };
 

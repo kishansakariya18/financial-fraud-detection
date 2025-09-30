@@ -1,197 +1,67 @@
 import apiConfig from 'configs/api.config';
-import { sendRequest } from 'utils/axios';
+import apiInstance from 'utils/apiInstance';
 
 const AuthService = {
   login: async (body) => {
-    try {
-      const response = await sendRequest({
-        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.AUTH.VALIDATE}`,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: {
-          mobile: String(body.mobile),
-          password: String(body.password)
-        }
-      });
-
-      return response;
-    } catch (err) {
-      console.log('Error', err);
-    }
+    const requestObject = {
+      mobile: String(body.mobile),
+      password: String(body.password)
+    };
+    return apiInstance.post(apiConfig.endPoints.AUTH.VALIDATE, requestObject);
   },
   otpVerification: async (body) => {
-    try {
-      const response = await sendRequest({
-        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.AUTH.VERIFYOTP}`,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: {
-          mobile: String(body.mobile),
-          password: String(body.password),
-          token: String(body.token),
-          otp: String(body.otp)
-        }
-      });
-
-      return response;
-    } catch (err) {
-      console.log('Error', err);
-    }
+    const requestObject = {
+      mobile: String(body.mobile),
+      password: String(body.password),
+      token: String(body.token),
+      otp: String(body.otp)
+    };
+    return apiInstance.post(apiConfig.endPoints.AUTH.VERIFYOTP, requestObject);
   },
   valdiateResetPassword: async (body) => {
-    try {
-      const response = await sendRequest({
-        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.AUTH.VALIDATE_RESET_PASSWORD}`,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: {
-          mobile: String(body.mobile),
-          email: String(body.email)
-        }
-      });
-
-      return response;
-    } catch (err) {
-      console.log('Error', err);
-    }
+    const requestObject = {
+      mobile: String(body.mobile),
+      email: String(body.email)
+    };
+    return apiInstance.post(apiConfig.endPoints.AUTH.VALIDATE_RESET_PASSWORD, requestObject);
   },
   resetPassword: async (body) => {
-    try {
-      const response = await sendRequest({
-        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.AUTH.RESET_PASSWORD}`,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: {
-          mobile: String(body.mobile),
-          email: String(body.email),
-          token: String(body.token),
-          otp: String(body.otp),
-          password: String(body.password),
-          confirm_password: String(body.confirmPassword)
-        }
-      });
-
-      return response;
-    } catch (err) {
-      console.log('Error', err);
-    }
+    const requestObject = {
+      mobile: String(body.mobile),
+      email: String(body.email),
+      token: String(body.token),
+      otp: String(body.otp),
+      password: String(body.password),
+      confirm_password: String(body.confirmPassword)
+    };
+    return apiInstance.post(apiConfig.endPoints.AUTH.RESET_PASSWORD, requestObject);
   },
   resedOtp: async (body) => {
-    try {
-      const response = await sendRequest({
-        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.AUTH.RESENDOTP}`,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: {
-          mobile: String(body.mobile),
-          token: String(body.token)
-        }
-      });
-
-      return response;
-    } catch (err) {
-      console.log('Error', err);
-    }
+    const requestObject = {
+      mobile: String(body.mobile),
+      token: String(body.token)
+    };
+    return apiInstance.post(apiConfig.endPoints.AUTH.RESENDOTP, requestObject);
   },
   changePassword: async (body) => {
-    try {
-      const response = await sendRequest({
-        url: `${apiConfig.baseURL.REACT_APP_API_URL}${apiConfig.endPoints.AUTH.CHANGE_PASSWORD}`,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: {
-          current_password: String(body.currentPassword),
-          new_password: String(body.newPassword),
-          confirm_password: String(body.confirmPassword)
-        }
-      });
-
-      return response;
-    } catch (err) {
-      console.log('Error', err);
-    }
+    const requestObject = {
+      current_password: String(body.currentPassword),
+      new_password: String(body.newPassword),
+      confirm_password: String(body.confirmPassword)
+    };
+    return apiInstance.post(apiConfig.endPoints.AUTH.CHANGE_PASSWORD, requestObject);
   },
   loadInitialSettings: async () => {
-    try {
-      const endPoint = apiConfig.endPoints.ADMIN_USER.ADMIN_APPSETTINGS;
-      const response = await sendRequest({
-        url: apiConfig.baseURL.API_BASE_URL + endPoint,
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      return response;
-    } catch (err) {
-      console.log('Error', err);
-    }
+    return apiInstance.get(apiConfig.endPoints.ADMIN_USER.ADMIN_APPSETTINGS);
   },
   loadAdminPermissions: async () => {
-    try {
-      const endPoint = apiConfig.endPoints.ADMIN_USER.ADMIN_PERMISSION;
-      const response = await sendRequest({
-        url: apiConfig.baseURL.API_BASE_URL + endPoint,
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      return response;
-    } catch (err) {
-      console.log('Error', err);
-    }
+    return apiInstance.get(apiConfig.endPoints.ADMIN_USER.ADMIN_PERMISSION);
   },
   getCountries: async () => {
-    try {
-      let apiURL = `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.ADMIN_USER.ADMIN_COUNTRY_LIST}`;
-
-      if (apiURL) {
-        const response = await sendRequest({
-          url: apiURL,
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-
-        return response;
-      }
-
-      return null;
-    } catch (err) {
-      console.log('Error getCountries: ', err);
-    }
+    return apiInstance.get(apiConfig.endPoints.ADMIN_USER.ADMIN_COUNTRY_LIST);
   },
-  logout: async () => {
-    try {
-      const endPoint = apiConfig.endPoints.AUTH.LOGOUT;
-      const response = await sendRequest({
-        url: apiConfig.baseURL.API_BASE_URL + endPoint,
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      return response;
-    } catch (err) {
-      console.log(err);
-      throw new Error('Logout failed');
-    }
+  logout: () => {
+    return apiInstance.get(apiConfig.endPoints.AUTH.LOGOUT);
   }
 };
 
