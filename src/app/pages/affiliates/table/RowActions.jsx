@@ -2,9 +2,9 @@
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
 import {
   EllipsisHorizontalIcon,
-  UsersIcon,
-  EyeIcon,
-  ListBulletIcon
+  // UsersIcon,
+  EyeIcon
+  // ListBulletIcon
 } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment } from 'react';
@@ -16,7 +16,7 @@ import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { HiOutlineCash } from 'react-icons/hi';
+// import { HiOutlineCash } from 'react-icons/hi';
 
 export function RowActions({ row }) {
   const { hasPermission } = usePermissions();
@@ -24,18 +24,18 @@ export function RowActions({ row }) {
   const affiliateUID = row?.original?.affiliateUID;
   const { t } = useTranslation();
 
-  const goToUsers = () => {
-    navigate(`/affiliates/${affiliateUID}/users`);
-  };
+  // const goToUsers = () => {
+  //   navigate(`/affiliates/${affiliateUID}/users`);
+  // };
   const handleView = () => {
     navigate(`/affiliates/${affiliateUID}/tab`);
   };
-  const goToWithdrawals = () => {
-    navigate(`/affiliates/${affiliateUID}/withdrawals`);
-  };
-  const goToCommissionSummary = () => {
-    navigate(`/affiliates/${affiliateUID}/commission-summary`);
-  };
+  // const goToWithdrawals = () => {
+  //   navigate(`/affiliates/${affiliateUID}/withdrawals`);
+  // };
+  // const goToCommissionSummary = () => {
+  //   navigate(`/affiliates/${affiliateUID}/commission-summary`);
+  // };
 
   return (
     <div className="flex justify-center space-x-1.5 rtl:space-x-reverse">
@@ -69,7 +69,7 @@ export function RowActions({ row }) {
                 )}
               </MenuItem>
             )}
-            {(hasPermission(PERMISSIONS.AFFILIATES?.USER_SIGNUP_LIST) ||
+            {/* {(hasPermission(PERMISSIONS.AFFILIATES?.USER_SIGNUP_LIST) ||
               hasPermission(PERMISSIONS.AFFILIATES?.LIST)) && (
               <MenuItem>
                 {({ focus }) => (
@@ -100,8 +100,8 @@ export function RowActions({ row }) {
                   </button>
                 )}
               </MenuItem>
-            )}
-            {(hasPermission(PERMISSIONS.AFFILIATES?.COMMISSION) ||
+            )} */}
+            {/* {(hasPermission(PERMISSIONS.AFFILIATES?.COMMISSION) ||
               hasPermission(PERMISSIONS.AFFILIATES?.LIST)) && (
               <MenuItem>
                 {({ focus }) => (
@@ -116,7 +116,7 @@ export function RowActions({ row }) {
                   </button>
                 )}
               </MenuItem>
-            )}
+            )} */}
           </MenuItems>
         </Transition>
       </Menu>

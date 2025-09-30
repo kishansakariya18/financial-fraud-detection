@@ -126,6 +126,49 @@ export const affiliatesRoutes = [
             )
           };
         }
+      },
+      {
+        path: 'referred_users',
+        lazy: async () => {
+          const { default: AffiliateUsersList } = await import('../../pages/affiliates/users/list');
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.AFFILIATES.USER_SIGNUP_LIST}>
+                <AffiliateUsersList />
+              </PrivateRoute>
+            )
+          };
+        }
+      },
+      {
+        path: 'withdrawals',
+        lazy: async () => {
+          const { default: AffiliateWithdrawalsList } = await import(
+            '../../pages/affiliates/withdrawals/list'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.AFFILIATES.WITHDRAWALS_LIST}>
+                <AffiliateWithdrawalsList />
+              </PrivateRoute>
+            )
+          };
+        }
+      },
+      {
+        path: 'commission',
+        lazy: async () => {
+          const { default: CommissionSummary } = await import(
+            '../../pages/affiliates/commission/list'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.AFFILIATES.COMMISSION_SUMMARY}>
+                <CommissionSummary />
+              </PrivateRoute>
+            )
+          };
+        }
       }
     ]
   }

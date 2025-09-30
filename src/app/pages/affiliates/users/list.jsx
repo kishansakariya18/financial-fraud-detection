@@ -84,15 +84,15 @@ export default function AffiliateUsersList() {
   useLockScrollbar(tableSettings.enableFullScreen);
   const breadcrumbItem = [
     { title: t('affiliates'), path: '/affiliates' },
-    { title: t('user') + ' ' + t('list') }
+    { title: t('referred_users') }
   ];
 
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
-      <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
+      <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pt-4">
         <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
-          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
-            {t('affiliates') + ' ' + t('user') + ' ' + t('list')}
+          <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
+            {t('referred_users')}
           </h2>
           <div className="hidden self-stretch py-1 sm:flex">
             <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>

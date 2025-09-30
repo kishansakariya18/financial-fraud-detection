@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import AffiliatesService from 'services/affiliates.services';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 import TableCard from 'components/ui/custom/TableCard';
@@ -47,7 +46,7 @@ export function List() {
     ),
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['ReferredUserID'] },
+      columnPinning: { left: ['AffiliateCommissionBalanceID'] },
       tableSettings: { enableFullScreen: false }
     }
   });
@@ -59,26 +58,11 @@ export function List() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
-  const breadcrumbItem = [
-    { title: t('affiliates'), path: '/affiliates' },
-    { title: t('commission') + ' ' + t('summary') }
-  ];
 
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
-      <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x]">
-        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
-          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
-            {t('commission') + ' ' + t('summary')}
-          </h2>
-          <div className="hidden self-stretch py-1 sm:flex">
-            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
-          </div>
-          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
-        </div>
-      </div>
-
       <CommissionSummaryToolbar
+        pageTitle={pageTitle}
         keyword={keyword}
         setKeyword={setKeyword}
         searchParams={searchParams}

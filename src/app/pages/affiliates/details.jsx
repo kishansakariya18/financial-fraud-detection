@@ -1,69 +1,54 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'sonner';
 
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
-import TableCard from 'components/ui/custom/TableCard';
-import useTable from 'components/ui/useTable';
 import AffiliatesService from 'services/affiliates.services';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
-import { DashboardCard } from 'components/custom/DashboardCard';
-import { dummyCards } from 'helpers/functions';
-import { columns } from './campaigns/columns';
-import { Toolbar as CampaignsToolbar } from './campaigns/Toolbar';
+import { Card, Button } from 'components/ui';
+import { useClipboard } from 'hooks';
+import { DocumentDuplicateIcon } from '@heroicons/react/20/solid';
 
 export default function AffiliateDetails() {
   const { t } = useTranslation();
   const { affiliateId } = useParams();
   const [summary, setSummary] = useState(null);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [keyword, setKeyword] = useState(searchParams.get('keyword') || '');
+  const { copied, copy } = useClipboard({ timeout: 2000 });
 
-  const fetchData = async ({ pageIndex, pageSize, keyword: q }) => {
+  const fetchData = async () => {
     const res = await AffiliatesService.getAffiliateDetail({
-      affiliateId,
-      pagination: { pageIndex, pageSize },
-      filters: { keyword: q || '' }
+      affiliateId
     });
     if (res.status === 200) {
+      console.log('log yaha hai', res);
       const apiData = res.response?.data || {};
-      // Handle both shapes: data at root or nested under data
-      const payload = apiData?.data ? apiData.data : apiData;
-      const campaigns = Array.isArray(payload?.Camapgns) ? payload.Camapgns : [];
-      setSummary(payload?.Summary || null);
-      const totalRecords = apiData?.totalRecords ?? res.response?.totalRecords ?? campaigns.length;
-      return { status: 200, data: campaigns, totalRecords };
+      const listPayload = Array.isArray(apiData?.data)
+        ? apiData.data
+        : Array.isArray(apiData)
+          ? apiData
+          : undefined;
+      const item = listPayload?.[0] || apiData;
+
+      const merged = {
+        AffiliateUID: item?.affiliates?.AffiliateUID ?? item?.AffiliateUID ?? '-',
+        AffiliateID: item?.affiliates?.AffiliateID ?? item?.AffiliateID ?? '-',
+        Hits: item?.Hits ?? 0,
+        ReferredUsers: item?.ReferredUsers ?? 0,
+        FirstTimeDeposits: item?.FirstTimeDeposits ?? 0,
+        TotalDeposits: item?.TotalDeposits ?? 0,
+        OverallCommission: item?.OverallCommission ?? 0
+      };
+      setSummary(merged);
+      const payload = apiData?.data ?? apiData;
+      return { status: 200, data: payload };
     }
     return { status: res.status, error: res.error };
   };
 
-  const { table, isLoading, error, setError, tableSettings } = useTable({
-    columns,
-    fetchData,
-    queryParams: useMemo(
-      () => ({
-        pageIndex: searchParams.get('pageIndex'),
-        pageSize: searchParams.get('pageSize'),
-        keyword: searchParams.get('keyword') || ''
-      }),
-      [searchParams]
-    ),
-    setSearchParams,
-    initialSettings: {
-      columnPinning: { left: ['CampaignID'], right: ['actions'] },
-      tableSettings: { enableFullScreen: false }
-    }
-  });
-
   useEffect(() => {
-    if (!isLoading && error) {
-      toast.error(error);
-      setError('');
-    }
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error]);
+  }, []);
 
   const pageTitle = `${t('affiliates')} ${t('details')}`;
   const breadcrumbItem = [
@@ -72,10 +57,10 @@ export default function AffiliateDetails() {
   ];
 
   return (
-    <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
-      <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x]">
+    <ContentWrapper pageTitle={pageTitle}>
+      <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pt-4">
         <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
-          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
+          <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
             {t('affiliates') + ' ' + t('details')}
           </h2>
           <div className="hidden self-stretch py-1 sm:flex">
@@ -86,74 +71,113 @@ export default function AffiliateDetails() {
       </div>
 
       {summary && (
-        <div className="grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-3">
-          <DashboardCard
-            label={t('affiliate_uid', { defaultValue: 'Affiliate UID' })}
-            value={`${summary?.AffiliateUID ?? '-'}`}
-            gradientFrom={dummyCards.Affiliate.AFFILIATE_UID.gradientFrom}
-            gradientTo={dummyCards.Affiliate.AFFILIATE_UID.gradientTo}
-            textColor="text-sky-100"
-            maskShape="is-reuleaux-triangle"
-          />
-          <DashboardCard
-            label={t('user_id', { defaultValue: 'User ID' })}
-            value={`${summary?.UserID ?? '-'}`}
-            gradientFrom={dummyCards.Affiliate.USER_ID.gradientFrom}
-            gradientTo={dummyCards.Affiliate.USER_ID.gradientTo}
-            textColor="text-amber-50"
-            maskShape="is-diamond"
-          />
-          <DashboardCard
-            label={t('hits', { defaultValue: 'Hits' })}
-            value={`${summary?.Hits ?? 0}`}
-            gradientFrom={dummyCards.Affiliate.HITS.gradientFrom}
-            gradientTo={dummyCards.Affiliate.HITS.gradientTo}
-            textColor="text-pink-100"
-            maskShape="is-hexagon-2"
-          />
-          <DashboardCard
-            label={t('referred_users', { defaultValue: 'Referred Users' })}
-            value={`${summary?.ReferredUsers ?? 0}`}
-            gradientFrom={dummyCards.Affiliate.REFERRED_USERS.gradientFrom}
-            gradientTo={dummyCards.Affiliate.REFERRED_USERS.gradientTo}
-            textColor="text-sky-100"
-            maskShape="is-reuleaux-triangle"
-          />
-          <DashboardCard
-            label={t('first_time_deposits', { defaultValue: 'First Time Deposits' })}
-            value={`${summary?.FirstTimeDeposits ?? 0}`}
-            gradientFrom={dummyCards.Affiliate.FIRST_TIME_DEPOSITS.gradientFrom}
-            gradientTo={dummyCards.Affiliate.FIRST_TIME_DEPOSITS.gradientTo}
-            textColor="text-amber-50"
-            maskShape="is-diamond"
-          />
-          <DashboardCard
-            label={t('total_deposits', { defaultValue: 'Total Deposits' })}
-            value={`${summary?.TotalDeposits ?? 0}`}
-            gradientFrom={dummyCards.Affiliate.TOTAL_DEPOSITS.gradientFrom}
-            gradientTo={dummyCards.Affiliate.TOTAL_DEPOSITS.gradientTo}
-            textColor="text-pink-100"
-            maskShape="is-hexagon-2"
-          />
-          <DashboardCard
-            label={t('overall_commission', { defaultValue: 'Overall Commission' })}
-            value={`${summary?.OverallCommission ?? 0}`}
-            gradientFrom={dummyCards.Affiliate.TOTAL_COMMISSION.gradientFrom}
-            gradientTo={dummyCards.Affiliate.TOTAL_COMMISSION.gradientTo}
-            textColor="text-sky-100"
-            maskShape="is-reuleaux-triangle"
-          />
+        <div className="px-[--margin-x]">
+          <div className="space-y-6">
+            {/* Details Grid - mirrors ViewDetails.jsx layout */}
+            <Card className="p-6">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {[
+                  {
+                    key: 'AffiliateID',
+                    label: t('affiliate_id', { defaultValue: 'Affiliate ID' }),
+                    value: summary.AffiliateID,
+                    copyable: true
+                  },
+                  {
+                    key: 'AffiliateUID',
+                    label: t('affiliate_uid', { defaultValue: 'Affiliate UID' }),
+                    value: summary.AffiliateUID,
+                    copyable: true
+                  },
+                  {
+                    key: 'Hits',
+                    label: t('hits', { defaultValue: 'Hits' }),
+                    value: summary.Hits
+                  },
+                  {
+                    key: 'ReferredUsers',
+                    label: t('referred_users', { defaultValue: 'Referred Users' }),
+                    value: summary.ReferredUsers
+                  },
+                  {
+                    key: 'FirstTimeDeposits',
+                    label: t('first_time_deposits', { defaultValue: 'First Time Deposits' }),
+                    value: summary.FirstTimeDeposits
+                  },
+                  {
+                    key: 'TotalDeposits',
+                    label: t('total_deposits', { defaultValue: 'Total Deposits' }),
+                    value: summary.TotalDeposits
+                  },
+                  {
+                    key: 'OverallCommission',
+                    label: t('overall_commission', { defaultValue: 'Overall Commission' }),
+                    value: summary.OverallCommission
+                  }
+                ].map((detail, index) => (
+                  <div key={index} className="space-y-1">
+                    <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                      {detail.label}
+                    </dt>
+                    <dd className="text-sm text-gray-900 dark:text-gray-100">
+                      {detail.copyable && detail.value ? (
+                        <div className="flex items-center space-x-1 rtl:space-x-reverse">
+                          <span>{`${detail.value}`}</span>
+                          <Button
+                            data-tooltip
+                            data-tooltip-content={copied ? 'Copied' : 'Copy'}
+                            onClick={() => copy(String(detail.value))}
+                            isIcon
+                            variant="flat"
+                            className="size-5 rounded-full"
+                            aria-label="Copy Button">
+                            <DocumentDuplicateIcon className="size-3.5" />
+                          </Button>
+                        </div>
+                      ) : (
+                        `${detail.value}`
+                      )}
+                    </dd>
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            {/* Placeholder sections to match the "card-like" composition of ViewDetails */}
+            <Card className="p-6">
+              <h4 className="mb-3 text-sm font-medium text-gray-900 dark:text-gray-100">
+                {t('performance_summary', { defaultValue: 'Performance Summary' })}
+              </h4>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                <div className="text-center">
+                  <div className="text-lg font-semibold text-blue-600 dark:text-blue-400">
+                    {summary.Hits}
+                  </div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                    {t('hits', { defaultValue: 'Hits' })}
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-semibold text-green-600 dark:text-green-400">
+                    {summary.ReferredUsers}
+                  </div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                    {t('referred_users', { defaultValue: 'Referred Users' })}
+                  </div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-semibold text-purple-600 dark:text-purple-400">
+                    {summary.OverallCommission}
+                  </div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                    {t('overall_commission', { defaultValue: 'Overall Commission' })}
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
         </div>
       )}
-      <CampaignsToolbar
-        pageTitle={t('campaign') + ' ' + t('list')}
-        keyword={keyword}
-        setKeyword={setKeyword}
-        searchParams={searchParams}
-        setSearchParams={setSearchParams}
-        table={table}
-      />
-      <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>
   );
 }

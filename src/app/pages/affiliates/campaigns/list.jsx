@@ -8,7 +8,6 @@ import ContentWrapper from 'components/ui/custom/ContentWrapper';
 import TableCard from 'components/ui/custom/TableCard';
 import useTable from 'components/ui/useTable';
 import AffiliatesService from 'services/affiliates.services';
-import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { columns } from './columns';
 import { Toolbar as CampaignsToolbar } from './Toolbar';
 
@@ -61,25 +60,10 @@ export default function AffiliateDetails() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
-  const pageTitle = `${t('affiliates')} ${t('details')}`;
-  const breadcrumbItem = [
-    { title: t('affiliates'), path: '/affiliates' },
-    { title: t('affiliate') + ' ' + t('details') }
-  ];
+  const pageTitle = `${t('affiliates') + ' ' + t('details')}`;
 
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
-      <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x]">
-        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
-          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
-            {t('affiliates') + ' ' + t('details')}
-          </h2>
-          <div className="hidden self-stretch py-1 sm:flex">
-            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
-          </div>
-          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
-        </div>
-      </div>
       <CampaignsToolbar
         pageTitle={t('campaign') + ' ' + t('list')}
         keyword={keyword}
