@@ -20,7 +20,7 @@ export function RowActions({ row }) {
   const { t } = useTranslation();
 
   const goToDetails = () => {
-    navigate(`/affiliates/${affiliateUID}/detail/campaigns/${campaignUID}/detail`);
+    navigate(`/affiliates/${affiliateUID}/tab/campaigns/${campaignUID}/detail`);
   };
 
   return (

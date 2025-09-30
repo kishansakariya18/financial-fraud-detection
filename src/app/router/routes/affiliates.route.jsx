@@ -43,21 +43,6 @@ export const affiliatesRoutes = [
     }
   },
   {
-    path: 'affiliates/:affiliateId/detail/campaigns/:campaignUID/detail',
-    lazy: async () => {
-      const { default: AffiliateCampaignDetails } = await import(
-        '../../pages/affiliates/campaigns/ViewDetails'
-      );
-      return {
-        Component: () => (
-          <PrivateRoute permission={PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST}>
-            <AffiliateCampaignDetails />
-          </PrivateRoute>
-        )
-      };
-    }
-  },
-  {
     path: 'affiliates/:affiliateId/users',
     lazy: async () => {
       const { default: AffiliateUsersList } = await import('../../pages/affiliates/users/list');
@@ -123,6 +108,21 @@ export const affiliatesRoutes = [
                   <AffiliateCampaignsList />
                 </PrivateRoute>
               </>
+            )
+          };
+        }
+      },
+      {
+        path: 'campaigns/:campaignUID/detail',
+        lazy: async () => {
+          const { default: AffiliateCampaignDetails } = await import(
+            '../../pages/affiliates/campaigns/ViewDetails'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST}>
+                <AffiliateCampaignDetails />
+              </PrivateRoute>
             )
           };
         }
