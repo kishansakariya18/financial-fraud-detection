@@ -13,7 +13,7 @@ export const getNavigation = () => {
     const isTyre3Agent = userData?.AgentType === AGENT_TIER_TYPE.TIER_3;
     if (isTyre3Agent) {
       b2bAgentNavigationLayout.childs = b2bAgentNavigationLayout.childs.filter(
-        (child) => child.id !== 'b2b_agents'
+        (child) => !['b2b_agents', 'b2b_agent_tree'].includes(child.id)
       );
     }
     return [b2bAgentNavigationLayout];

@@ -42,8 +42,8 @@ import onlyCallingAgentRoutes from './routes/calling-agents.route';
 import { callingAgentsRoute } from './routes/supervisor.route';
 import b2bAgentRoutes from './routes/b2b-agent/b2b-agent-routes';
 import B2BAgentRouteGuard from './B2BAgentRouteGuard';
-import b2bAgentAdminRoutes from './routes/b2b-agent/b2b-agent-for-admin';
 import layoutThemeRoute from './routes/layout-theme.route';
+import b2bAgentAdminRoutes from './routes/b2b-agent/b2b-agent-for-admin';
 // ----------------------------------------------------------------------
 
 const protectedRoutes = {

@@ -39,6 +39,12 @@ const B2BAgentService = {
     return apiInstance.get(apiConfig.endPoints.B2B_AGENT.DETAIL(agentUID));
   },
 
+  getAgentTree(agentUID = null) {
+    return apiInstance.get(apiConfig.endPoints.B2B_AGENT.TREE, {
+      params: agentUID ? { agentUID } : {}
+    });
+  },
+
   getAllChildAgent: async (data) => {
     const { pagination, filters, agentUID } = data;
 

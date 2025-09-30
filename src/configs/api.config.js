@@ -165,6 +165,7 @@ export const apiConfig = {
       EDIT: (agentUID) => `/agent/admin/b2b-agent/${agentUID}/edit`,
       CHANGE_STATUS: (agentUID) => `/agent/admin/b2b-agent/${agentUID}/status`,
       DETAIL: (agentUID) => `/agent/admin/b2b-agent/${agentUID}/details`,
+      TREE: `/agent/admin/b2b-agent/hierarchy`,
       // child agent
       CHILD_AGENT_LIST: '/agent/child-agent/list',
       CHILD_AGENT_CREATE: '/agent/child-agent',

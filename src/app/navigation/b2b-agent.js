@@ -1,4 +1,8 @@
-import { CurrencyDollarIcon, UserGroupIcon } from '@heroicons/react/24/outline';
+import {
+  AdjustmentsHorizontalIcon,
+  CurrencyDollarIcon,
+  UserGroupIcon
+} from '@heroicons/react/24/outline';
 
 import { NAV_TYPE_COLLAPSE, PERMISSIONS } from 'constants/app.constant';
 
@@ -17,6 +21,14 @@ export const b2bAgent = {
       title: 'B2B Agents',
       transKey: 'nav.users.b2b_agents',
       Icon: UserGroupIcon,
+      permission: [PERMISSIONS.AGENTS.LIST]
+    },
+    {
+      id: 'b2b-agent.b2b-agent-tree',
+      path: '/agent/tree',
+      title: 'Agent Tree',
+      transKey: 'nav.b2b_agent.agent_tree',
+      Icon: AdjustmentsHorizontalIcon,
       permission: [PERMISSIONS.AGENTS.LIST]
     },
     {

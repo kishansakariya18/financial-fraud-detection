@@ -43,7 +43,8 @@
       "withdraw_requests": "Withdraw Requests",
       "my_withdrawals": "My Withdrawals",
       "agent_withdrawals": "Agent Withdrawals",
-      "player_withdrawals": "Player Withdrawals"
+      "player_withdrawals": "Player Withdrawals",
+      "agent_tree": "Agent Tree"
     },
     "banner": "Banner"
   },

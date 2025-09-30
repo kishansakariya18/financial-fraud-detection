@@ -20,6 +20,17 @@ const b2bAgentAdminRoutes = [
         }
       },
       {
+        path: 'tree',
+        lazy: async () => {
+          const { default: AdminAgentTree } = await import(
+            '../../../pages/b2b-agent/admin/AdminAgantTree'
+          );
+          return {
+            Component: AdminAgentTree
+          };
+        }
+      },
+      {
         path: 'withdraw-requests',
         lazy: async () => {
           const { default: AdminWithdrawRequest } = await import(

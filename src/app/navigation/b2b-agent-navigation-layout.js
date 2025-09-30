@@ -2,7 +2,8 @@ import {
   UsersIcon,
   UserCircleIcon,
   BanknotesIcon,
-  CurrencyDollarIcon
+  CurrencyDollarIcon,
+  AdjustmentsHorizontalIcon
 } from '@heroicons/react/24/outline';
 import DashboardsIcon from 'assets/dualicons/dashboards.svg?react';
 import MonitorIcon from 'assets/nav-icons/monitor.svg?react';
@@ -24,6 +25,14 @@ export const b2bAgentNavigationLayout = {
       title: 'Dashboard',
       transKey: 'nav.dashboards.dashboard',
       Icon: MonitorIcon
+    },
+    {
+      id: 'b2b_agent_tree',
+      path: '/agent/tree-view',
+      type: NAV_TYPE_ITEM,
+      title: 'Agent Tree',
+      transKey: 'nav.b2b_agent.agent_tree',
+      Icon: AdjustmentsHorizontalIcon
     },
     {
       id: 'b2b_agents',

@@ -11,6 +11,17 @@ const b2bAgentRoutes = [
     }
   },
   {
+    path: 'agent/tree-view',
+    lazy: async () => {
+      const { default: AgentAgentTree } = await import(
+        '../../../pages/b2b-agent/agent/AgentAgentTree'
+      );
+      return {
+        Component: AgentAgentTree
+      };
+    }
+  },
+  {
     path: 'agent/transaction',
     lazy: async () => {
       const { default: AgentTransaction } = await import(
