@@ -4,6 +4,8 @@ import { t } from 'i18next';
 import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { useParams } from 'react-router';
 
 export function Toolbar({
   keyword,
@@ -15,18 +17,29 @@ export function Toolbar({
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table?.getState?.().tableSettings?.enableFullScreen ?? false;
+  const { affiliateId } = useParams();
+
+  const breadcrumbItem = [
+    { title: t('affiliates'), path: '/affiliates' },
+    { title: t('campaign') + ' ' + t('list'), path: `/affiliates/${affiliateId}/tab/campaigns` },
+    { title: t('referred_users') }
+  ];
 
   return (
     <div className="table-toolbar">
       <div
         className={clsx(
-          'transition-content flex items-center justify-between gap-4',
+          'transition-content flex items-center gap-4',
           isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x] pt-4'
         )}>
-        <div className="min-w-0">
-          <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
-            {pageTitle}
-          </h2>
+        <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
+          {pageTitle}
+        </h2>
+        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+          <div className="hidden self-stretch py-1 sm:flex">
+            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          </div>
+          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
       </div>
 
@@ -90,7 +103,7 @@ function SearchInput({ keyword, setKeyword, searchParams, setSearchParams }) {
           }
         }}
         classNames={{ input: 'h-8 text-xs ring-primary-500/50 focus:ring', root: 'shrink-0' }}
-        placeholder={t('search') + ' ' + t('user_id') + ', ' + t('username') + '...'}
+        placeholder={t('search') + ' ' + t('username')}
       />
       <Button
         onClick={() =>

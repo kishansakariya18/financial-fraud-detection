@@ -1,13 +1,13 @@
-import { createColumnHelper } from '@tanstack/react-table';
-import { BoldCell, DateCell, IdCell, AmountCell } from 'components/custom/table/cell';
+import { BaseCurrencyAmountCell, BoldCell, DateCell, IdCell } from 'components/custom/table/cell';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
+import { createColumnHelper } from '@tanstack/react-table';
 
 const columnHelper = createColumnHelper();
 export const columns = [
-  columnHelper.accessor((row) => row.ReferredUserID, {
-    id: 'ReferredUserID',
-    header: 'Referred User ID',
+  columnHelper.accessor((row) => row.UserID, {
+    id: 'UserID',
+    header: 'User ID',
     cell: IdCell,
     enableSorting: false
   }),
@@ -17,56 +17,55 @@ export const columns = [
     cell: CopyableCell,
     enableSorting: false
   }),
+  // columnHelper.accessor((row) => row.CampaignID, {
+  //   id: 'CampaignID',
+  //   header: 'Campaign ID',
+  //   cell: CopyableCell,
+  //   enableSorting: false
+  // }),
+  columnHelper.accessor((row) => row.FirstDepositAmount, {
+    id: 'FirstDepositAmount',
+    header: 'First Deposit Amount',
+    cell: BaseCurrencyAmountCell,
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => (row.DepositCount ? row.DepositCount : '0'), {
     id: 'DepositCount',
     header: 'Deposit Count',
     cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.CurrencySymbol, {
-    id: 'Currency',
-    header: 'Currency',
-    cell: BoldCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => (row.FirstDepositAmount ? row.FirstDepositAmount : 0), {
-    id: 'FirstDepositAmount',
-    header: 'First Deposit Amount',
-    cell: AmountCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => (row.TotalDeposited ? row.TotalDeposited : 0), {
+  columnHelper.accessor((row) => row.TotalDeposited, {
     id: 'TotalDeposited',
     header: 'Total Deposited',
-    cell: AmountCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => (row.TotalWagered ? row.TotalWagered : 0), {
-    id: 'TotalWagered',
-    header: 'Total Wagered',
-    cell: AmountCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => (row.TotalWagerLoss ? row.TotalWagerLoss : 0), {
-    id: 'TotalWagerLoss',
-    header: 'Total Wager Loss',
-    cell: AmountCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => (row.CommissionEarned ? row.CommissionEarned : 0), {
-    id: 'CommissionEarned',
-    header: 'Commission Earned',
-    cell: AmountCell,
+    cell: BaseCurrencyAmountCell,
     enableSorting: false
   }),
   columnHelper.accessor(
-    (row) => (row.LastDepositAt ? getDateInUTCToTimeZone(row.LastDepositAt) : ''),
+    (row) => (row.LastDepositAt ? getDateInUTCToTimeZone(row.LastDepositAt) : undefined),
     {
       id: 'LastDepositAt',
       header: 'Last Deposit At',
       cell: DateCell,
-      filterFn: 'inNumberRange',
       enableSorting: false
     }
-  )
+  ),
+  columnHelper.accessor((row) => row.TotalWagered, {
+    id: 'TotalWagered',
+    header: 'Total Wagered',
+    cell: BaseCurrencyAmountCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.TotalWagerLoss, {
+    id: 'TotalWagerLoss',
+    header: 'Total Wager Loss',
+    cell: BaseCurrencyAmountCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.CommissionEarned, {
+    id: 'CommissionEarned',
+    header: 'Commission Earned',
+    cell: BaseCurrencyAmountCell,
+    enableSorting: false
+  })
 ];
