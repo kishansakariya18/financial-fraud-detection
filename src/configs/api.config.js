@@ -459,6 +459,7 @@ export const apiConfig = {
       WITHDRAWAL_APPROVE: '/affiliates/admin/commission/withdraw/approve',
       WITHDRAWAL_REJECT: '/affiliates/admin/commission/withdraw/reject',
       AFFILIATE_DETAIL: '/affiliates/admin/affiliates/{affiliateId}/details',
+      CAMPAIGNS_LIST: '/affiliates/admin/affiliates/{affiliateId}/campaign-list',
       CAMPAIGN_DETAILS: '/affiliates/admin/affiliates/campaign/{campaignUID}/details',
       COMMISSION_SUMMARY: '/affiliates/admin/affiliates/{affiliateId}/commission-smmmary'
     }

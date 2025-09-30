@@ -1,5 +1,6 @@
 import PrivateRoute from '../private';
 import { PERMISSIONS } from 'constants/app.constant';
+import { Navigate } from 'react-router';
 
 export const affiliatesRoutes = [
   {
@@ -83,6 +84,50 @@ export const affiliatesRoutes = [
         )
       };
     }
+  },
+  {
+    path: 'affiliates/:affiliateId/tab',
+    lazy: async () => ({
+      Component: (await import('../../pages/affiliates/Tabs')).default
+    }),
+    children: [
+      {
+        index: true,
+        element: <Navigate to="./details" />
+      },
+      {
+        path: 'details',
+        lazy: async () => {
+          const { default: AffiliateDetails } = await import('../../pages/affiliates/details');
+          return {
+            Component: () => (
+              <>
+                <PrivateRoute permission={PERMISSIONS.AFFILIATES.LIST}>
+                  <AffiliateDetails />
+                </PrivateRoute>
+              </>
+            )
+          };
+        }
+      },
+      {
+        path: 'campaigns',
+        lazy: async () => {
+          const { default: AffiliateCampaignsList } = await import(
+            '../../pages/affiliates/campaigns/list'
+          );
+          return {
+            Component: () => (
+              <>
+                <PrivateRoute permission={PERMISSIONS.AFFILIATES.LIST}>
+                  <AffiliateCampaignsList />
+                </PrivateRoute>
+              </>
+            )
+          };
+        }
+      }
+    ]
   }
 ];
 

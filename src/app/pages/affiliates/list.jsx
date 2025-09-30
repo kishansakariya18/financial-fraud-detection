@@ -47,7 +47,8 @@ export default function AffiliatesList() {
     setSearchParams,
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
-      tableSettings: { enableFullScreen: false }
+      tableSettings: { enableFullScreen: false },
+      columnVisibility: { affiliateUID: false }
     }
   });
 

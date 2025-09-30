@@ -81,6 +81,33 @@ const AffiliatesService = {
     }
   },
 
+  getCampaignList: async ({ affiliateId, pagination, filters }) => {
+    try {
+      console.log(affiliateId);
+      const endPoint = apiConfig.endPoints.AFFILIATES.CAMPAIGNS_LIST.replace(
+        '{affiliateId}',
+        affiliateId
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        params: pagination
+          ? { page: pagination.pageIndex + 1, perPage: pagination.pageSize }
+          : undefined,
+        body: {
+          filter: {
+            keyword: filters?.keyword || ''
+          }
+        }
+      });
+      return response;
+    } catch (error) {
+      return { status: 500, error: error?.message || 'Unexpected error' };
+    }
+  },
+
   getReferrals: async ({ affiliateId, pagination }) => {
     try {
       const endPoint = apiConfig.endPoints.AFFILIATES.REFERRAL_LIST.replace(
@@ -90,7 +117,7 @@ const AffiliatesService = {
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'GET',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         params: { page: pagination.pageIndex + 1, perPage: pagination.pageSize }
       });

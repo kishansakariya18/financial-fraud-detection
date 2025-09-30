@@ -27,8 +27,8 @@ export function RowActions({ row }) {
   const goToUsers = () => {
     navigate(`/affiliates/${affiliateUID}/users`);
   };
-  const goToDetails = () => {
-    navigate(`/affiliates/${affiliateUID}/detail`);
+  const handleView = () => {
+    navigate(`/affiliates/${affiliateUID}/tab`);
   };
   const goToWithdrawals = () => {
     navigate(`/affiliates/${affiliateUID}/withdrawals`);
@@ -62,7 +62,7 @@ export function RowActions({ row }) {
                       'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
                       focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
                     )}
-                    onClick={goToDetails}>
+                    onClick={handleView}>
                     <EyeIcon className="size-4.5 stroke-1" />
                     <span>{t('view')}</span>
                   </button>
