@@ -560,5 +560,11 @@
   "acceptWithdrawalSuccess": "Demande de retrait acceptée avec succès !",
   "rejectWithdrawalDesc": "Êtes-vous sûr de vouloir rejeter cette demande de retrait ?",
   "rejectWithdrawalSuccess": "Demande de retrait rejetée avec succès !",
-  "campaign": "Campagne"
+  "campaign": "Campagne",
+  "faq": "FAQ",
+  "affiliate_id": "ID de afiliado",
+  "performance_summary": "Resumen de rendimiento",
+  "campaign_id": "ID de la campagne",
+  "campaign_code": "Código de la campagne",
+  "date_updated": "Fecha de actualización"
 }

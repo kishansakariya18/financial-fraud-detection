@@ -798,5 +798,11 @@
   "acceptWithdrawalSuccess": "Withdrawal request accepted successfully!",
   "rejectWithdrawalDesc": "Are you sure you want to reject this withdrawal request?",
   "rejectWithdrawalSuccess": "Withdrawal request rejected successfully!",
-  "campaign": "Campaign"
+  "campaign": "Campaign",
+  "faq": "FAQ",
+  "affiliate_id": "Affiliate ID",
+  "performance_summary": "Performance Summary",
+  "campaign_id": "Campaign ID",
+  "campaign_code": "Campaign Code",
+  "date_updated": "Date Updated"
 }
