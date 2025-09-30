@@ -67,7 +67,7 @@ export function ViewDetails() {
   }, [error]);
   const breadcrumbItem = [
     { title: t('affiliates'), path: '/affiliates' },
-    { title: t('affiliate') + ' ' + t('details'), path: `/affiliates/${affiliateId}/detail` },
+    { title: t('campaign') + ' ' + t('list'), path: `/affiliates/${affiliateId}/tab/campaigns` },
     { title: t('campaign') + ' ' + t('details') }
   ];
 

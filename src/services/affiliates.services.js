@@ -108,7 +108,7 @@ const AffiliatesService = {
     }
   },
 
-  getReferrals: async ({ affiliateId, pagination }) => {
+  getReferrals: async ({ affiliateId, pagination, filters, campaignID }) => {
     try {
       const endPoint = apiConfig.endPoints.AFFILIATES.REFERRAL_LIST.replace(
         '{affiliateId}',
@@ -119,7 +119,13 @@ const AffiliatesService = {
         url: apiURL,
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        params: { page: pagination.pageIndex + 1, perPage: pagination.pageSize }
+        params: { page: pagination.pageIndex + 1, perPage: pagination.pageSize },
+        body: {
+          filter: {
+            keyword: filters?.keyword || ''
+          },
+          campaignID: campaignID || ''
+        }
       });
       return response;
     } catch (error) {

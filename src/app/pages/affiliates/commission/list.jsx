@@ -15,7 +15,7 @@ export function List() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyword, setKeyword] = useState(searchParams.get('keyword') || '');
-  const pageTitle = t('campaign') + ' ' + t('details');
+  const pageTitle = t('commission') + ' ' + t('summary');
   const { affiliateId } = useParams();
 
   const fetchData = async ({ pageIndex, pageSize, keyword: q }) => {

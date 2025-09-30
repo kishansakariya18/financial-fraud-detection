@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { useParams, useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
@@ -10,39 +10,16 @@ import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import AffiliatesService from 'services/affiliates.services';
-import { createColumnHelper } from '@tanstack/react-table';
-import { Breadcrumbs } from 'components/shared/Breadcrumbs';
-import { BoldCell, IdCell } from 'components/custom/table/cell';
-import { CopyableCell } from 'components/shared/table/CopyableCell';
-
-const columnHelper = createColumnHelper();
-const columns = [
-  columnHelper.accessor((row) => row.UserID, {
-    id: 'UserID',
-    header: 'User ID',
-    cell: IdCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => row.Username, {
-    id: 'Username',
-    header: 'Username',
-    cell: CopyableCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => row.CampaignID, {
-    id: 'CampaignID',
-    header: 'Campaign ID',
-    cell: BoldCell,
-    enableSorting: false
-  })
-];
+import { columns } from './columns';
+import { Toolbar } from './Toolbar';
 
 export default function AffiliateUsersList() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [keyword, setKeyword] = useState(searchParams.get('keyword') || '');
   const { affiliateId } = useParams();
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
-  const pageTitle = `${t('affiliates')} ${t('users')}`;
+  const pageTitle = t('referred_users');
 
   const fetchData = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
@@ -50,7 +27,8 @@ export default function AffiliateUsersList() {
 
     const result = await AffiliatesService.getReferrals({
       affiliateId,
-      pagination: { pageIndex, pageSize }
+      pagination: { pageIndex, pageSize },
+      filters: { keyword: queryParams.keyword || '' }
     });
 
     if (result.status === 200) {
@@ -82,24 +60,17 @@ export default function AffiliateUsersList() {
   }, [error]);
 
   useLockScrollbar(tableSettings.enableFullScreen);
-  const breadcrumbItem = [
-    { title: t('affiliates'), path: '/affiliates' },
-    { title: t('referred_users') }
-  ];
 
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
-      <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pt-4">
-        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
-          <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
-            {t('referred_users')}
-          </h2>
-          <div className="hidden self-stretch py-1 sm:flex">
-            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
-          </div>
-          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
-        </div>
-      </div>
+      <Toolbar
+        keyword={keyword}
+        setKeyword={setKeyword}
+        searchParams={searchParams}
+        setSearchParams={setSearchParams}
+        pageTitle={pageTitle}
+        table={table}
+      />
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>
   );
