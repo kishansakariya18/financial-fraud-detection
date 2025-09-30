@@ -1,92 +1,100 @@
 // Import Dependencies
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { toast } from 'sonner';
-import { CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import { CurrencyDollarIcon, KeyIcon } from '@heroicons/react/24/outline';
 
 // Local Imports
-import { Button, Input, Select, Textarea } from 'components/ui';
+import { Button, Input, Textarea, Select } from 'components/ui';
 import b2bAgentWalletService from 'services/b2b-agent/b2b-agent-wallet.service';
-import { ADMIN_TYPE, CREDIT_DEBIT_TYPE } from 'constants/app.constant';
-import { useSelector } from 'react-redux';
+import { CREDIT_DEBIT_TYPE } from 'constants/app.constant';
 import { CustomModal } from 'components/custom';
 
 // Validation Schema
 const validationSchema = yup.object({
+  creditDebitType: yup
+    .string()
+    .required('Transaction type is required')
+    .oneOf(['credit', 'debit'], 'Invalid transaction type'),
   amount: yup
     .number()
     .required('Amount is required')
     .positive('Amount must be positive')
-    .min(0.01, 'Minimum amount is $0.01')
+    .min(0.001, 'Amount must be greater than 0')
     .max(9999999, 'Maximum amount is reached'),
-  reason: yup.string().optional().max(500, 'Reason cannot exceed 500 characters')
+  remarks: yup
+    .string()
+    .required('Remarks are required')
+    .max(500, 'Remarks cannot exceed 500 characters'),
+  password: yup.string().required('Password is required')
 });
 
-export function CreditDebitForm({ agentUID, onCancel, isOpen }) {
+export function ManualAdjustmentForm({ agentUID, onClose, isOpen }) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
-  const { userData } = useSelector((state) => state.auth);
-  const isAdmin = useMemo(() => userData?.AdminType === ADMIN_TYPE.ADMIN, [userData?.AdminType]);
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
     watch
   } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
-      amount: '',
-      reason: ''
+      creditDebitType: 'credit',
+      amount: null,
+      remarks: '',
+      password: ''
     }
   });
 
   const watchedAmount = watch('amount');
+  const watchedType = watch('creditDebitType');
 
   const onSubmit = async (data) => {
     setLoading(true);
+
     const creditDebitType =
       data.creditDebitType === 'credit' ? CREDIT_DEBIT_TYPE.CREDIT : CREDIT_DEBIT_TYPE.DEBIT;
 
-    let res = null;
-    if (isAdmin) {
-      res = b2bAgentWalletService.adminAddCreditDebit({
+    try {
+      const response = await b2bAgentWalletService.manualAdjustment({
         agentUID,
+        type: creditDebitType,
         amount: parseFloat(data.amount),
-        creditDebitType
+        remarks: data.remarks,
+        password: data.password
       });
-    } else {
-      res = b2bAgentWalletService.agentAddCreditDebit({
-        agentUID,
-        amount: parseFloat(data.amount),
-        creditDebitType
-      });
-    }
 
-    await res
-      .then(({ response }) => {
-        toast.success(response.message);
-        onCancel({ isRefresh: true });
-      })
-      .catch((error) => {
-        console.error('Transaction error:', error);
-        toast.error(error || `Failed to ${data.creditDebitType} amount. Please try again.`);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      toast.success(
+        response.response?.message || `${t('commission_balance')} adjustment successful`
+      );
+      onClose({ isRefresh: true });
+    } catch (error) {
+      console.error('Manual adjustment error:', error);
+      toast.error(error || `Failed to adjust ${t('commission_balance')}. Please try again.`);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const isCredit = watch('creditDebitType') === 'credit';
+  const isCredit = watchedType === 'credit';
   const buttonColor = isCredit ? 'success' : 'error';
 
+  useEffect(() => {
+    reset({});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
   return (
-    <CustomModal show={isOpen} onClose={onCancel} title={t('adjust_lineup_balance')}>
+    <CustomModal show={isOpen} onClose={onClose} title={t('adjust_commission_balance')}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Transaction Type Selection */}
         <div className="space-y-2">
           <Select
             {...register('creditDebitType')}
@@ -99,6 +107,7 @@ export function CreditDebitForm({ agentUID, onCancel, isOpen }) {
           />
         </div>
 
+        {/* Amount Input */}
         <div className="space-y-2">
           <Input
             {...register('amount')}
@@ -123,20 +132,32 @@ export function CreditDebitForm({ agentUID, onCancel, isOpen }) {
           )}
         </div>
 
-        {/* Reason Input */}
+        {/* Remarks Input */}
         <div className="space-y-2">
           <Textarea
-            {...register('reason')}
-            label={t('reason')}
+            {...register('remarks')}
+            label={t('remarks')}
             placeholder={isCredit ? t('enter_reason_for_credit') : t('enter_reason_for_debit')}
             rows={4}
-            error={errors.reason?.message}
+            error={errors.remarks?.message}
+          />
+        </div>
+
+        {/* Password Input */}
+        <div className="space-y-2">
+          <Input
+            {...register('password')}
+            type="password"
+            label={t('password')}
+            placeholder={t('enter') + ' ' + t('password')}
+            prefix={<KeyIcon className="h-5 w-5" />}
+            error={errors.password?.message}
           />
         </div>
 
         {/* Action Buttons */}
         <div className="flex items-center justify-end space-x-3 border-t border-gray-200 pt-4">
-          <Button type="button" variant="outline" onClick={onCancel} disabled={loading}>
+          <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
             {t('cancel')}
           </Button>
           <Button
@@ -148,9 +169,7 @@ export function CreditDebitForm({ agentUID, onCancel, isOpen }) {
               ? isCredit
                 ? t('crediting')
                 : t('debiting')
-              : isCredit
-                ? t('credit_amount')
-                : t('debit_amount')}
+              : `${isCredit ? t('credit') : t('debit')} ${t('commission_balance')}`}
           </Button>
         </div>
       </form>
@@ -158,9 +177,8 @@ export function CreditDebitForm({ agentUID, onCancel, isOpen }) {
   );
 }
 
-CreditDebitForm.propTypes = {
+ManualAdjustmentForm.propTypes = {
   agentUID: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['credit', 'debit']).isRequired,
-  onSuccess: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired
 };

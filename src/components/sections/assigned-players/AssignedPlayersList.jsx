@@ -59,24 +59,24 @@ export default function AssignedPlayersList({
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
 
-    const result = await AgentService.getAgentPlayerList(callingAgentUID, {
+    return AgentService.getAgentPlayerList(callingAgentUID, {
       pagination: { pageIndex, pageSize },
       filters: queryParams
-    });
-
-    if (result.status === 200) {
-      return {
-        status: 200,
-        data: unassignedPlayersResponseMapper(result.response?.data || []),
-        totalRecords:
-          parseInt(result.response.totalRecords || result.response.total_records || 0, 10) || 0
-      };
-    }
-
-    return { status: result.status, error: result.error };
+    })
+      .then(({ response }) => {
+        return {
+          status: 200,
+          data: unassignedPlayersResponseMapper(response.data || []),
+          totalRecords: parseInt(response.totalRecords || response.total_records || 0, 10) || 0
+        };
+      })
+      .catch((error) => {
+        toast.error(error || 'Failed to fetch assigned players');
+        return { status: 500, error: error || 'Failed to fetch assigned players' };
+      });
   };
 
-  const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
+  const { table, isLoading, tableSettings, setColumnFilters } = useTable({
     columns: columns,
     fetchData: fetchAssignedPlayers,
     queryParams,
@@ -86,15 +86,6 @@ export default function AssignedPlayersList({
       tableSettings: {}
     }
   });
-
-  useEffect(() => {
-    if (!isLoading && error) {
-      toast.error(error);
-      setError('');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error]);
-
   useEffect(() => {
     const filtersFromQuery = [];
     if (queryParams.search) {

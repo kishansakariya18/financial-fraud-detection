@@ -2,18 +2,13 @@
 import { useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import {
-  PlusIcon,
-  MinusIcon,
-  WalletIcon,
-  ArrowPathIcon,
-  BanknotesIcon
-} from '@heroicons/react/24/outline';
+import { WalletIcon, ArrowPathIcon, BanknotesIcon } from '@heroicons/react/24/outline';
 
 // Local Imports
 import { Button } from 'components/ui';
 import { CustomModal } from 'components/custom/CustomModal';
 import { CreditDebitForm } from './CreditDebitForm';
+import { ManualAdjustmentForm } from './ManualAdjustmentForm';
 import WithdrawRequestDialog from './WithdrawRequestDialog';
 import b2bAgentWalletService from 'services/b2b-agent/b2b-agent-wallet.service';
 import { toast } from 'sonner';
@@ -21,15 +16,15 @@ import AgentTransactionList from './agent-transaction/AgentTransactionList';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useSelector } from 'react-redux';
 import B2BAgentService from 'services/b2b-agent/b2b-agent.services';
-import { AGENT_TIER_TYPE } from 'constants/app.constant';
+import { AGENT_TIER_TYPE, ADMIN_TYPE } from 'constants/app.constant';
 
 export default function AgentWallet({ agentUID, breadcrumbs }) {
   const { t } = useTranslation();
   const { userData } = useSelector((state) => state.auth);
   const [walletData, setWalletData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showCreditDebitModal, setShowCreditDebitModal] = useState(null);
   const [showWithdrawRequestModal, setShowWithdrawRequestModal] = useState(false);
+  const [showAdjustBalanceModal, setShowAdjustBalanceModal] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const [walletAgent, setWalletAgent] = useState(null);
 
@@ -45,6 +40,8 @@ export default function AgentWallet({ agentUID, breadcrumbs }) {
         : walletAgent?.AgentType === AGENT_TIER_TYPE.TIER_1,
     [userData?.AgentID, walletAgent?.AgentType, walletAgent?.ParentAgentID]
   );
+
+  const isAdmin = useMemo(() => userData?.AdminType === ADMIN_TYPE.ADMIN, [userData?.AdminType]);
 
   const onFetchWalletAgentDetails = async (agentUID) => {
     return await B2BAgentService.getChildAgentDetails(agentUID)
@@ -86,15 +83,16 @@ export default function AgentWallet({ agentUID, breadcrumbs }) {
     setRefreshing(true);
     fetchWalletData();
   };
-
-  const handleTransactionSuccess = () => {
-    setShowCreditDebitModal(null);
-    fetchWalletData();
-  };
-
   const handleWithdrawRequestSuccess = () => {
     setShowWithdrawRequestModal(false);
     fetchWalletData();
+  };
+
+  const haddleCloseAdjustBalanceModal = (response) => {
+    setShowAdjustBalanceModal(null);
+    if (response?.isRefresh) {
+      fetchWalletData();
+    }
   };
 
   if (loading) {
@@ -127,35 +125,37 @@ export default function AgentWallet({ agentUID, breadcrumbs }) {
             <div></div>
           )}
 
-          {(isOwanChildAgent || isOwnWallet) && (
+          {(isOwanChildAgent || isOwnWallet || isAdmin) && (
             <div className="flex items-center space-x-2">
+              <Button
+                size="sm"
+                onClick={handleRefresh}
+                disabled={refreshing}
+                className="flex items-center space-x-1">
+                <ArrowPathIcon className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+                <span>{t('refresh')}</span>
+              </Button>
+
               {isOwanChildAgent && (
-                <>
-                  <Button
-                    size="sm"
-                    onClick={handleRefresh}
-                    disabled={refreshing}
-                    className="flex items-center space-x-1">
-                    <ArrowPathIcon className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-                    <span>{t('refresh')}</span>
-                  </Button>
-                  <Button
-                    size="sm"
-                    color="success"
-                    onClick={() => setShowCreditDebitModal('credit')}
-                    className="flex items-center space-x-1">
-                    <PlusIcon className="h-4 w-4" />
-                    <span>{t('credit')}</span>
-                  </Button>
-                  <Button
-                    size="sm"
-                    color="error"
-                    onClick={() => setShowCreditDebitModal('debit')}
-                    className="flex items-center space-x-1">
-                    <MinusIcon className="h-4 w-4" />
-                    <span>{t('debit')}</span>
-                  </Button>
-                </>
+                <Button
+                  size="sm"
+                  color="info"
+                  onClick={() => setShowAdjustBalanceModal('lineup')}
+                  className="flex items-center space-x-1">
+                  <WalletIcon className="h-4 w-4" />
+                  <span>{t('adjust_lineup_balance')}</span>
+                </Button>
+              )}
+
+              {isAdmin && (
+                <Button
+                  size="sm"
+                  color="warning"
+                  onClick={() => setShowAdjustBalanceModal('commission')}
+                  className="flex items-center space-x-1">
+                  <BanknotesIcon className="h-4 w-4" />
+                  <span>{t('adjust_commission_balance')}</span>
+                </Button>
               )}
 
               {isOwnWallet && (
@@ -201,7 +201,7 @@ export default function AgentWallet({ agentUID, breadcrumbs }) {
       </div>
       <AgentTransactionList agentUID={agentUID} />
       {/* Credit/Debit Modal */}
-      <CustomModal
+      {/* <CustomModal
         show={!!showCreditDebitModal}
         onClose={() => setShowCreditDebitModal(null)}
         title={t('credit_amount')}>
@@ -211,7 +211,7 @@ export default function AgentWallet({ agentUID, breadcrumbs }) {
           onSuccess={handleTransactionSuccess}
           onCancel={() => setShowCreditDebitModal(null)}
         />
-      </CustomModal>
+      </CustomModal> */}
 
       {/* Withdraw Request Modal */}
       <CustomModal
@@ -225,6 +225,17 @@ export default function AgentWallet({ agentUID, breadcrumbs }) {
           onCancel={() => setShowWithdrawRequestModal(false)}
         />
       </CustomModal>
+
+      <CreditDebitForm
+        agentUID={agentUID}
+        isOpen={showAdjustBalanceModal === 'lineup'}
+        onCancel={haddleCloseAdjustBalanceModal}
+      />
+      <ManualAdjustmentForm
+        agentUID={agentUID}
+        isOpen={showAdjustBalanceModal === 'commission'}
+        onClose={haddleCloseAdjustBalanceModal}
+      />
     </div>
   );
 }

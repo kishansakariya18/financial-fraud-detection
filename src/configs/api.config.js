@@ -174,6 +174,7 @@ export const apiConfig = {
       CHILD_AGENT_DETAIL: (agentUID) => `/agent/child-agent/${agentUID}/details`,
       AGENT_LOGIN_HISTORY: (agentUID) => `/agent/child-agent/${agentUID}/login-history`,
       CHILD_AGENT_DASHBOARD_COUNTS: '/agent/child-agent/dashboard/counts',
+      CHANGE_AGENT_FUND_PASSWORD: '/config/admin/config/b2b-agent/change-manage-fund-password',
       // player
       PLAYER_LIST: '/users/agent/player/list',
       PLAYER_CREATE: '/users/agent/player',
@@ -191,7 +192,8 @@ export const apiConfig = {
         CREATE_WITHDRAW_REQUEST: `/wallet/agent-player/wallet/withdraw-request`,
         GET_AGENT_WALLET: (agentUID) => `/wallet/agent/${agentUID}/wallet`,
         WITHDRAW_REQUEST_UPDATE_STATUS: (withdrawRequestID) =>
-          `/wallet/${withdrawRequestID}/handle-withdraw-request`
+          `/wallet/${withdrawRequestID}/handle-withdraw-request`,
+        AGENT_MANUAL_ADJUSTMENT: `wallet/admin/agent/wallet/manual-adjustment`
       }
     },
     TENANT: {

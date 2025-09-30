@@ -105,6 +105,9 @@ const B2BAgentWalletService = {
       console.error('Update Withdraw Request Status Error:', error);
       throw error;
     }
+  },
+  manualAdjustment: async (data) => {
+    return apiInstance.post(apiConfig.endPoints.B2B_AGENT.WALLET.AGENT_MANUAL_ADJUSTMENT, data);
   }
 };
 

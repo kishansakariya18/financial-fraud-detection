@@ -1,4 +1,5 @@
 import apiConfig from 'configs/api.config';
+import apiInstance from 'utils/apiInstance';
 import { sendRequest } from 'utils/axios';
 
 const ProfileService = {
@@ -50,6 +51,15 @@ const ProfileService = {
     } catch (err) {
       console.log('Error', err);
     }
+  },
+  changeB2BAgentFundPassword: async (data) => {
+    const { currentPassword, newPassword, verifyPassword } = data;
+    const apiData = {
+      currentPassword,
+      newPassword,
+      confirmPassword: verifyPassword
+    };
+    return apiInstance.post(apiConfig.endPoints.B2B_AGENT.CHANGE_AGENT_FUND_PASSWORD, apiData);
   },
   changeAffiliateFundPassword: async (data) => {
     try {

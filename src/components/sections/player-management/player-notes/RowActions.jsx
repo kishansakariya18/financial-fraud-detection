@@ -73,6 +73,13 @@ export function RowActions({ row, table }) {
 
   const state = deleteError ? 'error' : deleteSuccess ? 'success' : 'pending';
 
+  if (
+    !hasPermission(PERMISSIONS.USER.COMMENT_EDIT) &&
+    !hasPermission(PERMISSIONS.USER.COMMENT_DELETE)
+  ) {
+    return null;
+  }
+
   return (
     <>
       <div className="flex justify-center space-x-1.5 rtl:space-x-reverse">

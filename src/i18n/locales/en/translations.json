@@ -667,6 +667,7 @@
   "target_updated_successfully": "Target updated successfully",
   "target_deleted_successfully": "Target deleted successfully",
   "confirm_delete_target": "Are you sure you want to delete this target?",
+  "target_delete_success": "Target deleted successfully",
   "saving": "Saving",
   "no_event_types_available": "All event types are already in use",
   "adjust": "Adjust",
@@ -865,5 +866,7 @@
   "reset_password": "Reset Password",
   "new_password": "New Password",
   "confirm_password": "Confirm Password",
-  "my": "My"
+  "my": "My",
+  "adjust_commission_balance": "Adjust Commission Balance",
+  "adjust_lineup_balance": "Adjust Lineup Balance"
 }

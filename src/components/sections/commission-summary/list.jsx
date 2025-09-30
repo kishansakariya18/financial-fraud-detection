@@ -41,20 +41,21 @@ export default function CommissionSummaryList({
       ...(queryParams.isRedeemed && { isRedeemed: redeemStatusToAPI(queryParams.isRedeemed) })
     };
 
-    const result = await AgentService.getAgentSummary(requestParams);
-
-    if (result.status === 200) {
-      const response = commissionSummaryResponseMapper(result.response);
-      return {
-        status: 200,
-        data: response.list,
-        totalRecords: response.totalRecords || 0
-      };
-    }
-    return { status: result.status, error: result.error };
+    return AgentService.getAgentSummary(requestParams)
+      .then(({ response }) => {
+        return {
+          status: 200,
+          data: commissionSummaryResponseMapper(response.data),
+          totalRecords: response.totalRecords || 0
+        };
+      })
+      .catch((error) => {
+        toast.error(error || 'Failed to fetch commission summary');
+        return { status: 500, error: error || 'Failed to fetch commission summary' };
+      });
   }, [queryParams, agentUID]);
 
-  const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
+  const { table, isLoading, tableSettings, setColumnFilters } = useTable({
     columns,
     fetchData: fetchCommissionSummary,
     queryParams,
@@ -64,13 +65,6 @@ export default function CommissionSummaryList({
       tableSettings: {}
     }
   });
-
-  useEffect(() => {
-    if (!isLoading && error) {
-      toast.error(error);
-      setError('');
-    }
-  }, [error, isLoading, setError]);
 
   useEffect(() => {
     const filtersFromQuery = [];

@@ -165,6 +165,8 @@ export const agentTransactionTypeApiToApp = (type) => {
       return 'Commission Credit';
     case AGENT_TRANSACTION_TYPE.COMMISSION_DEBIT:
       return 'Commission Debit';
+    case AGENT_TRANSACTION_TYPE.MANUAL_ADJUSTMENT:
+      return 'Manual Adjustment';
     default:
       return 'Unknown';
   }
@@ -217,26 +219,27 @@ export const agentTransactionTypeOptions = [
   {
     value: 'Allocation',
     label: 'Allocation',
-    color: 'success',
-    icon: CheckBadgeIcon
+    color: 'success'
   },
   {
     value: 'Deallocation',
     label: 'Deallocation',
-    color: 'error',
-    icon: XCircleIcon
+    color: 'error'
   },
   {
     value: 'Commission Credit',
     label: 'Commission Credit',
-    color: 'success',
-    icon: CheckBadgeIcon
+    color: 'success'
   },
   {
     value: 'Commission Debit',
     label: 'Commission Debit',
-    color: 'error',
-    icon: XCircleIcon
+    color: 'error'
+  },
+  {
+    value: 'Manual Adjustment',
+    label: 'Manual Adjustment'
+    // color: 'warning'
   }
 ];
 
@@ -264,6 +267,8 @@ export const parseTransactionTypeToApi = (value) => {
       return AGENT_TRANSACTION_TYPE.COMMISSION_CREDIT;
     case 'Commission Debit':
       return AGENT_TRANSACTION_TYPE.COMMISSION_DEBIT;
+    case 'Manual Adjustment':
+      return AGENT_TRANSACTION_TYPE.MANUAL_ADJUSTMENT;
     default:
       return null;
   }
