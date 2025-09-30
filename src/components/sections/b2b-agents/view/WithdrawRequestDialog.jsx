@@ -52,7 +52,7 @@ export default function WithdrawRequestDialog({ currentBalance, onSuccess, onCan
           <div className="space-y-2 text-sm">
             <div>
               <span className="font-medium text-gray-700 dark:text-gray-300">
-                {t('current_balance')}:
+                {t('commission_balance')}:
               </span>
               <span className="ml-2 font-medium text-gray-900 dark:text-white">
                 {new Intl.NumberFormat('en-US', {

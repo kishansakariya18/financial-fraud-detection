@@ -177,7 +177,7 @@ export default function AgentWallet({ agentUID, breadcrumbs }) {
           <div className="rounded-lg border border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium">{t('current_balance')}</p>
+                <p className="text-sm font-medium">{t('commission_balance')}</p>
                 <p className="mt-2 text-3xl font-bold">{walletData?.Balance || 0}</p>
               </div>
               <div className="rounded-full bg-blue-100 p-3 dark:bg-blue-900/40">

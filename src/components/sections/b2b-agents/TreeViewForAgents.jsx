@@ -9,11 +9,11 @@ import { useSelector } from 'react-redux';
 import {
   MagnifyingGlassMinusIcon,
   MagnifyingGlassPlusIcon,
-  ArrowPathIcon,
   Bars3BottomLeftIcon,
   Bars3Icon,
   ChevronDownIcon,
-  ChevronUpIcon
+  ChevronUpIcon,
+  ArrowsPointingOutIcon
 } from '@heroicons/react/24/outline';
 
 // Transform API data to react-d3-tree format
@@ -200,8 +200,8 @@ export default function TreeViewForAgents() {
 
     if (orientation === 'horizontal') {
       // Horizontal: tree grows left to right
-      nx = 200; // horizontal spacing between levels
-      ny = 120; // vertical spacing between siblings
+      nx = 180; // horizontal spacing between levels
+      ny = 100; // vertical spacing between siblings
       setNodeSize({ x: nx, y: ny });
 
       // Calculate separation based on number of nodes
@@ -258,9 +258,9 @@ export default function TreeViewForAgents() {
     setZoom((prev) => Math.max(prev - 0.2, 0.1));
   };
 
-  const handleResetZoom = () => {
-    setZoom(0.8);
-  };
+  // const handleResetZoom = () => {
+  //   setZoom(0.8);
+  // };
 
   const toggleOrientation = () => {
     setOrientation((prev) => (prev === 'horizontal' ? 'vertical' : 'horizontal'));
@@ -312,10 +312,7 @@ export default function TreeViewForAgents() {
         ref={containerRef}
         className="w-full flex-1 bg-white dark:bg-dark-800"
         style={{
-          background: 'radial-gradient(circle, rgba(99, 102, 241, 0.05) 1px, transparent 1px)',
-          backgroundSize: '20px 20px',
           minHeight: 'calc(100vh - 200px)'
-          // minHeight: '500px'
         }}>
         <Tree
           key={treeKey}
@@ -377,7 +374,7 @@ export default function TreeViewForAgents() {
           </Button>
 
           {/* Reset Zoom */}
-          <Button
+          {/* <Button
             variant="soft"
             color="neutral"
             isIcon
@@ -385,21 +382,21 @@ export default function TreeViewForAgents() {
             className="size-9"
             title="Reset Zoom">
             <ArrowPathIcon className="size-5" />
-          </Button>
+          </Button> */}
 
           {/* Divider */}
           <div className="mx-1 h-6 w-px bg-gray-300 dark:bg-dark-500" />
 
           {/* Fit to Screen */}
-          {/* <Button
+          <Button
             variant="soft"
-            color="primary"
+            color="neutral"
             isIcon
             onClick={handleAutoFit}
             className="size-9"
             title="Fit to Screen">
             <ArrowsPointingOutIcon className="size-5" />
-          </Button> */}
+          </Button>
 
           {/* Expand/Collapse All */}
           <Button

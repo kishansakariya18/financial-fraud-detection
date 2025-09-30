@@ -827,7 +827,7 @@
   "credit_amount": "Credit Amount",
   "debit_amount": "Debit Amount",
   "agent_wallet": "Agent Wallet",
-  "current_balance": "Current Balance",
+  "commission_balance": "Commission Balance",
   "lineup_balance": "Lineup Balance",
   "wallet_details": "Wallet Details",
   "error_loading_wallet": "Error Loading Wallet",
