@@ -805,5 +805,15 @@
   "performance_summary": "Performance Summary",
   "campaign_id": "Campaign ID",
   "campaign_code": "Campaign Code",
-  "date_updated": "Date Updated"
+  "date_updated": "Date Updated",
+  "is_cpa_required": "Is CPA Required?",
+  "is_loss_commission_percentage_required": "Is Loss Commission Percentage Required?",
+  "cpa_amount": "CPA Amount",
+  "cpa_amount_placeholder": "Enter CPA Amount",
+  "min_deposit_for_cpa": "Min Deposit For CPA",
+  "min_deposit_for_cpa_placeholder": "Enter Min Deposit For CPA",
+  "min_wager_for_cpa": "Min Wager For CPA",
+  "min_wager_for_cpa_placeholder": "Enter Min Wager For CPA",
+  "loss_commission_percent": "Loss Commission %",
+  "loss_commission_percent_placeholder": "Enter Loss Commission %"
 }

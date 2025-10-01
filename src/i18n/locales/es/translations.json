@@ -586,5 +586,15 @@
   "performance_summary": "Resumen de rendimiento",
   "campaign_id": "ID de la campaña",
   "campaign_code": "Código de la campaña",
-  "date_updated": "Fecha de actualización"
+  "date_updated": "Fecha de actualización",
+  "is_cpa_required": "¿Es CPA requerido?",
+  "is_loss_commission_percentage_required": "¿Es porcentaje de comisión de pérdida requerido?",
+  "cpa_amount": "Cantidad de CPA",
+  "cpa_amount_placeholder": "Ingrese CPA",
+  "min_deposit_for_cpa": "Depósito mínimo para CPA",
+  "min_deposit_for_cpa_placeholder": "Ingrese depósito mínimo para CPA",
+  "min_wager_for_cpa": "Apuesta mínima para CPA",
+  "min_wager_for_cpa_placeholder": "Ingrese apuesta mínima para CPA",
+  "loss_commission_percent": "Porcentaje de comisión de pérdida",
+  "loss_commission_percent_placeholder": "Ingrese porcentaje de comisión de pérdida"
 }
