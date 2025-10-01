@@ -18,8 +18,19 @@ export const faqRoutes = [
             )
           };
         }
+      },
+      {
+        path: 'add',
+        lazy: async () => ({
+          Component: (await import('../../pages/faq/CreateFAQ')).default
+        })
+      },
+      {
+        path: 'edit/:faqUID',
+        lazy: async () => ({
+          Component: (await import('../../pages/faq/EditFAQ')).default
+        })
       }
-      // Additional routes (add/edit/view) can be added here when implemented
     ]
   }
 ];

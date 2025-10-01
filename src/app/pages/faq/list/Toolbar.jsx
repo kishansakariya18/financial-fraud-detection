@@ -1,4 +1,4 @@
-import { MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, MapPinIcon, PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
@@ -7,6 +7,7 @@ import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
+import { useNavigate } from 'react-router';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { moduleOptions, faqStatusOption } from '../helper';
 
@@ -17,6 +18,7 @@ export function Toolbar({
   pageTitle = ''
 }) {
   const { isXs } = useBreakpointsContext();
+  const navigate = useNavigate();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
   return (
@@ -31,6 +33,14 @@ export function Toolbar({
             {pageTitle}
           </h2>
         </div>
+
+        <Button
+          className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
+          color="primary"
+          onClick={() => navigate('/faq/add')}>
+          <PlusIcon className="size-5" />
+          <span>{t('add') + ' ' + t('faq')}</span>
+        </Button>
       </div>
 
       {isXs ? (

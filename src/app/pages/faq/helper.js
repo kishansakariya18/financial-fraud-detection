@@ -1,3 +1,5 @@
+import { getDateInUTCToTimeZone } from 'helpers/functions';
+
 export const parseFaqStatus = (status) => {
   const n = Number(status);
   if (!isNaN(n)) return n === 1 ? 'active' : 'inactive';
@@ -23,6 +25,6 @@ export const responseMapper = (apiData = []) => {
     question: item.Question || '',
     answer: item.Answer || '',
     status: parseFaqStatus(item.Status),
-    createdAt: item.DateCreated || item.createdAt || item.CreatedAt || item.created_at
+    createdAt: item.DateCreated ? getDateInUTCToTimeZone(item.DateCreated) : ''
   }));
 };
