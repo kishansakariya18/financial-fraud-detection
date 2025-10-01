@@ -19,6 +19,7 @@ import affiliateRoutes from './routes/affiliate.route';
 import segmentationRoutes from './routes/segmentation.route';
 import emailTemplateRoute from './routes/event-template.route';
 import promocodeRoute from './routes/promocode.route';
+import bonusCampaignRoute from './routes/bonus-campaign.route';
 import pagesRoute from './routes/pages.route';
 import crmRoute from './routes/crm.route';
 import homeCategoryRoute from './routes/home-category.route';
@@ -44,6 +45,9 @@ import b2bAgentRoutes from './routes/b2b-agent/b2b-agent-routes';
 import B2BAgentRouteGuard from './B2BAgentRouteGuard';
 import layoutThemeRoute from './routes/layout-theme.route';
 import b2bAgentAdminRoutes from './routes/b2b-agent/b2b-agent-for-admin';
+import affiliatesRoutes from './routes/affiliates.route';
+import globalCommissionSettingRoute from './routes/global-commission-setting.route';
+import faqRoutes from './routes/faq.route';
 // ----------------------------------------------------------------------
 
 const protectedRoutes = {
@@ -77,6 +81,7 @@ const protectedRoutes = {
             ...segmentationRoutes,
             ...emailTemplateRoute,
             ...promocodeRoute,
+            ...bonusCampaignRoute,
             ...pagesRoute,
             ...crmRoute,
             ...layoutThemeRoute,
@@ -92,7 +97,10 @@ const protectedRoutes = {
             ...blacklistRoutes,
             ...releaseNotesRoutes,
             ...responsibleGamblingRoute,
-            ...b2bAgentAdminRoutes
+            ...b2bAgentAdminRoutes,
+            ...affiliatesRoutes,
+            ...globalCommissionSettingRoute,
+            ...faqRoutes
           ]
         },
         // Calling Agent-only routes - centrally protected with CallingAgentRouteGuard

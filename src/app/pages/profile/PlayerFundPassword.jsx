@@ -79,9 +79,26 @@ export default function PlayerFundPassword() {
     setLoading(false);
   };
 
+  const changeB2BAgentFundPasswordAPI = async (requestObject) => {
+    setLoading(true);
+    setError(null);
+    await ProfileService.changeB2BAgentFundPassword(requestObject)
+      .then((result) => {
+        setResponse(result.response);
+      })
+      .catch((error) => {
+        setError(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   const onSubmit = (data) => {
     if (passwordType === 'playerFund') {
       changePlayerFundPasswordAPI(data);
+    } else if (passwordType === 'b2bAgentFund') {
+      changeB2BAgentFundPasswordAPI(data);
     } else {
       changeAffiliateFundPasswordAPI(data);
     }
@@ -124,6 +141,13 @@ export default function PlayerFundPassword() {
               name="affiliateFund"
               onChange={onPasswordTypeChange}
               checked={passwordType === 'affiliateFund'}
+            />
+            <Radio
+              color="primary"
+              label={t('agent') + ' ' + t('fund') + ' ' + t('password')}
+              name="b2bAgentFund"
+              onChange={onPasswordTypeChange}
+              checked={passwordType === 'b2bAgentFund'}
             />
           </div>
           <div>

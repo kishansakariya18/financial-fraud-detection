@@ -60,7 +60,8 @@ export const AGENT_TRANSACTION_TYPE = {
   ALLOCATION: 19,
   DEALLOCATION: 20,
   COMMISSION_CREDIT: 21,
-  COMMISSION_DEBIT: 22
+  COMMISSION_DEBIT: 22,
+  MANUAL_ADJUSTMENT: 23
 };
 
 export const TRANSACTION = {
@@ -206,6 +207,14 @@ export const PERMISSIONS = {
     DELETE: 'deposit-promo-code-delete',
     SEGMENTATION: 'deposit-promo-code-segmentation'
   },
+  BONUS_CAMPAIGN: {
+    LIST: 'bonus-campaign-view',
+    ADD: 'bonus-campaign-add',
+    USER_LIST: 'bonus-campaign-users-list',
+    CHANGE_STATUS: 'bonus-campaign-change-status',
+    DELETE: 'bonus-campaign-delete',
+    SEGMENTATION: 'bonus-campaign-segmentation'
+  },
   EMAIL_TEMPLATE: {
     LIST: 'setting-email-template-view',
     ADD: 'setting-email-template-add',
@@ -240,7 +249,10 @@ export const PERMISSIONS = {
     USER_SIGNUP_LIST: 'affiliate-user-signup-list',
     PAYOUT: 'affiliate-payout',
     UPDATE_PAYTOUT: 'affiliate-payout-update',
-    VIEW_LOGIN_HISTORY: 'affiliate-login-history-view'
+    VIEW_LOGIN_HISTORY: 'affiliate-login-history-view',
+    WITHDRAWALS_LIST: 'affiliate-withdrawals-list',
+    COMMISSION: 'affiliate-commission',
+    CAMPAIGNS: 'affiliate-campaigns'
   },
   PAYMENT: {
     VIEW: 'payment-view'
@@ -385,6 +397,12 @@ export const PERMISSIONS = {
   RELEASE_NOTES: {
     VIEW: 'release-notes-view'
   },
+  FAQ: {
+    VIEW: 'faq-view'
+  },
+  COMMISSION_SETTING: {
+    UPDATE: 'commission-setting-update'
+  },
   AGENTS: {
     ADD: 'b2b-agent-add',
     EDIT: 'b2b-agent-edit',
@@ -400,6 +418,13 @@ export const PROMOCODE = {
   TYPE: {
     EXACT_DEPOSIT: 0,
     DEPOSIT_IN_RANGE: 1
+  }
+};
+
+export const BONUS_CAMPAIGN = {
+  BONUS_TYPE: {
+    FIXED: 0,
+    PERCENTAGE: 1
   }
 };
 

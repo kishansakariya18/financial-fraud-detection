@@ -36,25 +36,39 @@ const LoginHistory = ({
     let result;
 
     if (paramKey === 'agentUID') {
-      result = await SupervisorService.getCallingAgentLoginHistory({
+      result = SupervisorService.getCallingAgentLoginHistory({
         pagination: { pageIndex, pageSize },
         callingAgentUID: userUID
       });
     } else {
-      result = await AdminService.getAdminLoginHistory({
+      result = AdminService.getAdminLoginHistory({
         pagination: { pageIndex, pageSize },
         adminUID: userUID
       });
     }
 
-    if (result.status === 200) {
-      return {
-        status: 200,
-        data: loginHistoryResponseMapper(result.response.data),
-        totalRecords: parseInt(result?.response?.totalRecords) || DEFAULT_PER_PAGE_RECORD
-      };
-    }
-    return { status: result.status, error: result.error };
+    return result
+      .then(({ response }) => {
+        return {
+          status: 200,
+          data: loginHistoryResponseMapper(response.data),
+          totalRecords: parseInt(response.totalRecords) || DEFAULT_PER_PAGE_RECORD
+        };
+      })
+      .catch((error) => {
+        return { status: 500, error: error || 'Failed to fetch login history' };
+      });
+
+    // console.log(result.status, '652653465346');
+
+    // if (result.status === 200) {
+    //   return {
+    //     status: 200,
+    //     data: loginHistoryResponseMapper(result.response.data),
+    //     totalRecords: parseInt(result?.response?.totalRecords) || DEFAULT_PER_PAGE_RECORD
+    //   };
+    // }
+    // return { status: 500, error: result.error || 'Failed to fetch login history' };
   };
 
   const { table, isLoading, error, setError, tableSettings } = useTable({

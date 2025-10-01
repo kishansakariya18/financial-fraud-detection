@@ -181,6 +181,15 @@ export default function ApplicationSettings() {
         </Select>
       );
     }
+    if (row.key && String(row.key).toLowerCase().includes('affiliateautotransfer')) {
+      const v = String(value ?? '').toLowerCase();
+      return (
+        <Select value={v} onChange={(e) => setValue(row.key, e.target.value)}>
+          <option value="manual">{t('Manual')}</option>
+          <option value="auto">{t('Auto')}</option>
+        </Select>
+      );
+    }
 
     // Currency: static dropdown
     if (row.key && String(row.key).toLowerCase().includes('currency')) {

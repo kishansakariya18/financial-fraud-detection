@@ -174,6 +174,7 @@ export const apiConfig = {
       CHILD_AGENT_DETAIL: (agentUID) => `/agent/child-agent/${agentUID}/details`,
       AGENT_LOGIN_HISTORY: (agentUID) => `/agent/child-agent/${agentUID}/login-history`,
       CHILD_AGENT_DASHBOARD_COUNTS: '/agent/child-agent/dashboard/counts',
+      CHANGE_AGENT_FUND_PASSWORD: '/config/admin/config/b2b-agent/change-manage-fund-password',
       // player
       PLAYER_LIST: '/users/agent/player/list',
       PLAYER_CREATE: '/users/agent/player',
@@ -191,7 +192,8 @@ export const apiConfig = {
         CREATE_WITHDRAW_REQUEST: `/wallet/agent-player/wallet/withdraw-request`,
         GET_AGENT_WALLET: (agentUID) => `/wallet/agent/${agentUID}/wallet`,
         WITHDRAW_REQUEST_UPDATE_STATUS: (withdrawRequestID) =>
-          `/wallet/${withdrawRequestID}/handle-withdraw-request`
+          `/wallet/${withdrawRequestID}/handle-withdraw-request`,
+        AGENT_MANUAL_ADJUSTMENT: `wallet/admin/agent/wallet/manual-adjustment`
       }
     },
     TENANT: {
@@ -227,6 +229,15 @@ export const apiConfig = {
       PROMOCODE_REMOVE_SEGMENTATION: '/bonus/admin/v1/deposit-promocode/:promocodeId/segmentation',
       PROMOCODE_DELETE: '/bonus/admin/v1/deposit-promocode/:promocodeId',
       SUMMARY: '/bonus/admin/v1/deposit-promocode/summary'
+    },
+    BONUS_CAMPAIGN: {
+      LIST: '/bonus/admin/v1/bonus-campaign/list',
+      DETAIL: '/bonus/admin/v1/bonus-campaign/:id/details',
+      CREATE: '/bonus/admin/v1/bonus-campaign/create',
+      UPDATE: '/bonus/admin/v1/bonus-campaign/:id',
+      CHANGE_STATUS: '/bonus/admin/v1/bonus-campaign/:id/change-status',
+      HISTORY: '/bonus/admin/v1/bonus-campaign/:id/history',
+      SUMMARY: '/bonus/admin/v1/bonus-campaign/summary'
     },
     BANNER: {
       BANNER_LIST: '/content/admin/banner/list',
@@ -302,7 +313,8 @@ export const apiConfig = {
       CREATE: '/games/admin/casino-management/category/create',
       EDIT: '/games/admin/casino-management/category/:categoryId/edit',
       DELETE: '/games/admin/casino-management/category/:categoryId/delete',
-      CHANGE_STATUS: '/games/admin/casino-management/category/:categoryId/change-status'
+      CHANGE_STATUS: '/games/admin/casino-management/category/:categoryId/change-status',
+      ALL_ACTIVE_LIST: '/games/admin/casino-management/category/all'
     },
     PROVIDER: {
       ALL_LIST: '/games/admin/casino-management/provider/all',
@@ -496,6 +508,28 @@ export const apiConfig = {
       DELETE: '/users/admin/responsible-gaming-restrictions/:restrictionId/delete',
       CHANGE_STATUS: '/users/admin/responsible-gaming-restrictions/:restrictionId/change-status',
       APPROVE: '/users/admin/responsible-gaming-restrictions/:restrictionId/approve'
+    },
+    AFFILIATES: {
+      AFFILIATE_LIST: '/affiliates/admin/affiliates/list',
+      REFERRAL_LIST: '/affiliates/admin/affiliates/{affiliateId}/referred-users',
+      TRANSACTION_LIST:
+        '/affiliates/admin/affiliates/{affiliateId}/referred-users-commission-transaction',
+      WITHDRAWAL_LIST: '/affiliates/admin/commission/withdraw/list',
+      WITHDRAWAL_APPROVE: '/affiliates/admin/commission/withdraw/approve',
+      WITHDRAWAL_REJECT: '/affiliates/admin/commission/withdraw/reject',
+      AFFILIATE_DETAIL: '/affiliates/admin/affiliates/{affiliateId}/details',
+      CAMPAIGNS_LIST: '/affiliates/admin/affiliates/{affiliateId}/campaign-list',
+      CAMPAIGN_DETAILS: '/affiliates/admin/affiliates/campaign/{campaignUID}/details',
+      COMMISSION_SUMMARY: '/affiliates/admin/affiliates/{affiliateId}/commission-summary',
+      COMMISSION_SETTINGS: '/affiliates/admin/affiliates/{affiliateId}/commission-settings',
+      COMMISSION_SETTINGS_UPDATE: '/affiliates/admin/affiliates/commission-setting/update',
+      GLOBAL_COMMISSION_SETTINGS: '/affiliates/admin/affiliates/global/commission-setting'
+    },
+    FAQ: {
+      LIST: '/affiliates/admin/faq/list',
+      CREATE: '/affiliates/admin/faq/create',
+      UPDATE: '/affiliates/admin/faq/update',
+      DELETE: '/affiliates/admin/faq/delete/{faqUID}'
     }
   }
 };

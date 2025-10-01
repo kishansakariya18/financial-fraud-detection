@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 
 const accountNumberRegex = /^\d{8,22}$/;
-const ifscCodeRegex = /^[A-Z]{4}0[A-Z0-9]{6}$/;
+const ifscCodeRegex = /^[A-Z]{4}[A-Z0-9]{7}$/;
 const upiIDRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+$/;
 
 export const createBankDepositSchema = Yup.object().shape({

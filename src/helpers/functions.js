@@ -86,6 +86,36 @@ export const dummyCards = {
       gradientFrom: 'from-info',
       gradientTo: 'to-info-darker'
     },
+    AFFILIATE_UID: {
+      key: 'Affiliate UID',
+      value: '-',
+      gradientFrom: 'from-info',
+      gradientTo: 'to-pink-500'
+    },
+    USER_ID: {
+      key: 'User ID',
+      value: '-',
+      gradientFrom: 'from-amber-400',
+      gradientTo: 'to-orange-600'
+    },
+    HITS: {
+      key: 'Hits',
+      value: 0,
+      gradientFrom: 'from-pink-500',
+      gradientTo: 'to-rose-500'
+    },
+    REFERRED_USERS: {
+      key: 'Referred Users',
+      value: 0,
+      gradientFrom: 'from-info',
+      gradientTo: 'to-pink-500'
+    },
+    FIRST_TIME_DEPOSITS: {
+      key: 'First Time Deposits',
+      value: 0,
+      gradientFrom: 'from-amber-400',
+      gradientTo: 'to-orange-600'
+    },
     TOTAL_SIGNUP_USERS: {
       key: 'Total Signup Users',
       value: '9,879',

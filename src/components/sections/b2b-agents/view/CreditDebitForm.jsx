@@ -9,10 +9,11 @@ import { toast } from 'sonner';
 import { CurrencyDollarIcon } from '@heroicons/react/24/outline';
 
 // Local Imports
-import { Button, Input, Textarea } from 'components/ui';
+import { Button, Input, Select, Textarea } from 'components/ui';
 import b2bAgentWalletService from 'services/b2b-agent/b2b-agent-wallet.service';
 import { ADMIN_TYPE, CREDIT_DEBIT_TYPE } from 'constants/app.constant';
 import { useSelector } from 'react-redux';
+import { CustomModal } from 'components/custom';
 
 // Validation Schema
 const validationSchema = yup.object({
@@ -21,11 +22,11 @@ const validationSchema = yup.object({
     .required('Amount is required')
     .positive('Amount must be positive')
     .min(0.01, 'Minimum amount is $0.01')
-    .max(999999.99, 'Maximum amount is $999,999.99'),
+    .max(9999999, 'Maximum amount is reached'),
   reason: yup.string().optional().max(500, 'Reason cannot exceed 500 characters')
 });
 
-export function CreditDebitForm({ agentUID, type, onSuccess, onCancel }) {
+export function CreditDebitForm({ agentUID, onCancel, isOpen }) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const { userData } = useSelector((state) => state.auth);
@@ -48,7 +49,8 @@ export function CreditDebitForm({ agentUID, type, onSuccess, onCancel }) {
 
   const onSubmit = async (data) => {
     setLoading(true);
-    const creditDebitType = type === 'credit' ? CREDIT_DEBIT_TYPE.CREDIT : CREDIT_DEBIT_TYPE.DEBIT;
+    const creditDebitType =
+      data.creditDebitType === 'credit' ? CREDIT_DEBIT_TYPE.CREDIT : CREDIT_DEBIT_TYPE.DEBIT;
 
     let res = null;
     if (isAdmin) {
@@ -68,76 +70,91 @@ export function CreditDebitForm({ agentUID, type, onSuccess, onCancel }) {
     await res
       .then(({ response }) => {
         toast.success(response.message);
-        onSuccess();
+        onCancel({ isRefresh: true });
       })
       .catch((error) => {
         console.error('Transaction error:', error);
-        toast.error(error || `Failed to ${type} amount. Please try again.`);
+        toast.error(error || `Failed to ${data.creditDebitType} amount. Please try again.`);
       })
       .finally(() => {
         setLoading(false);
       });
   };
 
-  const isCredit = type === 'credit';
+  const isCredit = watch('creditDebitType') === 'credit';
   const buttonColor = isCredit ? 'success' : 'error';
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div className="space-y-2">
-        <Input
-          {...register('amount')}
-          type="number"
-          step="0.01"
-          min="0.01"
-          max="999999.99"
-          label={t('amount')}
-          placeholder="0.00"
-          prefix={<CurrencyDollarIcon className="h-5 w-5" />}
-          error={errors.amount?.message}
-          className="text-lg font-medium"
-        />
-        {watchedAmount && (
-          <p className="text-sm text-gray-600">
-            {isCredit ? t('amount_to_credit') : t('amount_to_debit')}:
-            <span className={`ml-1 font-semibold ${isCredit ? 'text-green-600' : 'text-red-600'}`}>
-              ${parseFloat(watchedAmount || 0).toFixed(2)}
-            </span>
-          </p>
-        )}
-      </div>
+    <CustomModal show={isOpen} onClose={onCancel} title={t('adjust_lineup_balance')}>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <div className="space-y-2">
+          <Select
+            {...register('creditDebitType')}
+            label={t('type')}
+            error={errors.creditDebitType?.message}
+            data={[
+              { value: 'credit', label: t('credit') },
+              { value: 'debit', label: t('debit') }
+            ]}
+          />
+        </div>
 
-      {/* Reason Input */}
-      <div className="space-y-2">
-        <Textarea
-          {...register('reason')}
-          label={t('reason')}
-          placeholder={isCredit ? t('enter_reason_for_credit') : t('enter_reason_for_debit')}
-          rows={4}
-          error={errors.reason?.message}
-        />
-      </div>
+        <div className="space-y-2">
+          <Input
+            {...register('amount')}
+            type="number"
+            step="0.01"
+            min="0.01"
+            max="999999.99"
+            label={t('amount')}
+            placeholder="0.00"
+            prefix={<CurrencyDollarIcon className="h-5 w-5" />}
+            error={errors.amount?.message}
+            className="text-lg font-medium"
+          />
+          {watchedAmount && (
+            <p className="text-sm text-gray-600">
+              {isCredit ? t('amount_to_credit') : t('amount_to_debit')}:
+              <span
+                className={`ml-1 font-semibold ${isCredit ? 'text-green-600' : 'text-red-600'}`}>
+                ${parseFloat(watchedAmount || 0).toFixed(2)}
+              </span>
+            </p>
+          )}
+        </div>
 
-      {/* Action Buttons */}
-      <div className="flex items-center justify-end space-x-3 border-t border-gray-200 pt-4">
-        <Button type="button" variant="outline" onClick={onCancel} disabled={loading}>
-          {t('cancel')}
-        </Button>
-        <Button
-          type="submit"
-          color={buttonColor}
-          loading={loading}
-          disabled={!watchedAmount || parseFloat(watchedAmount || 0) <= 0}>
-          {loading
-            ? isCredit
-              ? t('crediting')
-              : t('debiting')
-            : isCredit
-              ? t('credit_amount')
-              : t('debit_amount')}
-        </Button>
-      </div>
-    </form>
+        {/* Reason Input */}
+        <div className="space-y-2">
+          <Textarea
+            {...register('reason')}
+            label={t('reason')}
+            placeholder={isCredit ? t('enter_reason_for_credit') : t('enter_reason_for_debit')}
+            rows={4}
+            error={errors.reason?.message}
+          />
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex items-center justify-end space-x-3 border-t border-gray-200 pt-4">
+          <Button type="button" variant="outline" onClick={onCancel} disabled={loading}>
+            {t('cancel')}
+          </Button>
+          <Button
+            type="submit"
+            color={buttonColor}
+            loading={loading}
+            disabled={!watchedAmount || parseFloat(watchedAmount || 0) <= 0}>
+            {loading
+              ? isCredit
+                ? t('crediting')
+                : t('debiting')
+              : isCredit
+                ? t('credit_amount')
+                : t('debit_amount')}
+          </Button>
+        </div>
+      </form>
+    </CustomModal>
   );
 }
 

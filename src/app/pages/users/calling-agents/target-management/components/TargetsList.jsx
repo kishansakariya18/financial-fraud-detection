@@ -17,9 +17,11 @@ const TargetsList = ({ t, targets, loading, onCreateNew, onDelete }) => {
       <Card className="p-6">
         <div className="text-center">
           <p className="text-gray-600 dark:text-dark-300">No targets configured yet.</p>
-          <Button onClick={onCreateNew} className="mt-2" color="primary">
-            Create First Target
-          </Button>
+          {targets && (
+            <Button onClick={onCreateNew} className="mt-2" color="primary">
+              Create First Target
+            </Button>
+          )}
         </div>
       </Card>
     );
