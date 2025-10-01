@@ -28,24 +28,25 @@ export default function RedeemRequests() {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
 
-    const result = await AgentService.getRedeemRequests({
+    return AgentService.getRedeemRequests({
       pagination: { pageIndex, pageSize },
       agentUID,
       filters: queryParams
-    });
-
-    if (result.status === 200) {
-      return {
-        status: 200,
-        data: responseMapper(result.response.data || []),
-        totalRecords: parseInt(result.response.totalRecords || 0, 10) || 0
-      };
-    }
-
-    return { status: result.status, error: result.error };
+    })
+      .then(({ response }) => {
+        return {
+          status: 200,
+          data: responseMapper(response.data || []),
+          totalRecords: parseInt(response.totalRecords || 0, 10) || 0
+        };
+      })
+      .catch((error) => {
+        toast.error(error || 'Failed to fetch redeem requests');
+        return { status: 500, error: error || 'Failed to fetch redeem requests' };
+      });
   };
 
-  const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
+  const { table, isLoading, tableSettings, setColumnFilters } = useTable({
     columns: columns({
       onApprove: handleApprove,
       onReject: handleReject,
@@ -83,14 +84,6 @@ export default function RedeemRequests() {
         toast.error(error || `Failed to ${actionModal.type} request`);
       });
   };
-
-  useEffect(() => {
-    if (!isLoading && error) {
-      toast.error(error);
-      setError('');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [error]);
 
   useEffect(() => {
     const filtersFromQuery = [];

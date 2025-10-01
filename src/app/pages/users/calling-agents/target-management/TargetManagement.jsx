@@ -7,6 +7,7 @@ import { PlusIcon } from '@heroicons/react/24/outline';
 import TargetForm from './components/TargetForm';
 import TargetsList from './components/TargetsList';
 import { useAgentTargets } from './hooks/useAgentTargets';
+import { ConfirmModal } from 'components/shared/ConfirmModal';
 
 // Event options to check against for disabling create button
 const eventOptions = [
@@ -19,15 +20,38 @@ const TargetManagement = () => {
   const { t } = useTranslation();
   const { agentUID } = useParams();
   const pageTitle = t('target_management');
+  const [deleteModalOpen, setDeleteModalOpen] = useState(null);
+  const [confirmDeleteLoading, setConfirmDeleteLoading] = useState(false);
+  const [deleteSuccess, setDeleteSuccess] = useState(false);
+  const [deleteError, setDeleteError] = useState(false);
 
   const [showForm, setShowForm] = useState(false);
 
-  const { loading, targets, createTarget, deleteTarget } = useAgentTargets(agentUID, t);
+  const { loading, targets, fetchTargets, createTarget, deleteTarget } = useAgentTargets(
+    agentUID,
+    t
+  );
 
-  const handleDelete = async (target) => {
-    if (window.confirm(t('confirm_delete_target'))) {
-      await deleteTarget(target);
-    }
+  const handleDeleteOpenConfirmModal = async (target) => {
+    setDeleteModalOpen(target);
+    setDeleteError(false);
+    setDeleteSuccess(false);
+    // await deleteTarget(target);
+  };
+
+  const handleDelete = async () => {
+    setConfirmDeleteLoading(true);
+    await deleteTarget(deleteModalOpen)
+      .then(() => {
+        setDeleteSuccess(true);
+        fetchTargets();
+      })
+      .catch(() => {
+        setDeleteError(true);
+      })
+      .finally(() => {
+        setConfirmDeleteLoading(false);
+      });
   };
 
   const handleSubmit = async (data) => {
@@ -50,14 +74,16 @@ const TargetManagement = () => {
           <div>
             <h3 className="text-lg font-medium text-gray-900 dark:text-dark-100">{pageTitle}</h3>
           </div>
-          <Button
-            onClick={() => setShowForm(true)}
-            className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
-            color="primary"
-            disabled={targets.length >= 3 || targets.length >= eventOptions.length}>
-            <PlusIcon className="size-4" />
-            <span>{t('target_create')}</span>
-          </Button>
+          {targets && (
+            <Button
+              onClick={() => setShowForm(true)}
+              className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
+              color="primary"
+              disabled={targets?.length >= 3 || targets?.length >= eventOptions.length}>
+              <PlusIcon className="size-4" />
+              <span>{t('target_create')}</span>
+            </Button>
+          )}
         </div>
 
         {showForm && (
@@ -73,17 +99,35 @@ const TargetManagement = () => {
 
         <div className="space-y-4">
           <h4 className="text-lg font-medium text-gray-900 dark:text-dark-100">
-            Existing Targets ({targets.length}/3)
+            Existing Targets ({targets?.length || 0}/3)
           </h4>
           <TargetsList
             t={t}
             targets={targets}
             loading={loading}
             onCreateNew={() => setShowForm(true)}
-            onDelete={handleDelete}
+            onDelete={handleDeleteOpenConfirmModal}
           />
         </div>
       </div>
+
+      <ConfirmModal
+        show={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(null)}
+        messages={{
+          pending: {
+            description: t('confirm_delete_target'),
+            actionText: t('submit')
+          },
+          success: {
+            title: t('target') + ' ' + t('delete_text'),
+            description: t('target_deleted_successfully')
+          }
+        }}
+        onOk={handleDelete}
+        confirmLoading={confirmDeleteLoading}
+        state={deleteError ? 'error' : deleteSuccess ? 'success' : 'pending'}
+      />
     </ContentWrapper>
   );
 };

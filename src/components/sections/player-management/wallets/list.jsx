@@ -10,15 +10,14 @@ import { getQueryParams } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import WalletService from 'services/wallet-services';
-import { useParams } from 'react-router';
 
 export default function PlayerWallets({ playerId = null } = {}) {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t('player') + ' ' + t('wallets');
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
-  const params = useParams();
-  const userID = playerId || params.userID;
+  // const params = useParams();
+  // const userID = playerId || params.userID;
 
   const fetchPlayerWallets = useCallback(
     async (params = {}) => {
@@ -51,7 +50,7 @@ export default function PlayerWallets({ playerId = null } = {}) {
         };
       }
     },
-    [userID]
+    [playerId]
   );
 
   const { table, isLoading, error, setError, tableSettings } = useTable({

@@ -8,7 +8,7 @@ import { playerKyc } from './player-kyc';
 import { casinoManagement } from './casino-management';
 import { segmentation } from './segmentation';
 import { emailTemplate } from './event-template';
-import { peomocode } from './promocode';
+// import { peomocode } from './promocode';
 import { roles } from './roles';
 import { auditlogs } from './auditlogs';
 import { crm } from './crm';
@@ -25,8 +25,10 @@ import { userManualDepositTransaction } from './user-manual-deposit-transaction'
 import { registrationFields } from './registration-fields';
 import { releaseNotes } from './release-notes';
 import { supervisor } from './supervisor';
-import { affiliatesNew } from './affiliates-new';
+import { b2bAgent } from './b2b-agent';
+import { bonusCampaign } from './bonus-campaign';
 import { faq } from './faq';
+import { affiliatesNew } from './affiliates-new';
 import { globalCommissionSetting } from './global-commission-setting';
 
 export const dashboards = () => ({
@@ -50,6 +52,7 @@ export const dashboards = () => ({
     supervisor,
     affiliatesNew,
     globalCommissionSetting,
+    b2bAgent,
     platform,
     contentManagement,
     siteConfiguration,
@@ -61,7 +64,8 @@ export const dashboards = () => ({
     casinoManagement,
     segmentation,
     ...emailTemplate,
-    peomocode,
+    // peomocode,
+    bonusCampaign,
     auditlogs,
     crm,
     userClass,

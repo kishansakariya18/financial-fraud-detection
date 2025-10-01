@@ -36,18 +36,20 @@ export default function UnassignedPlayersList() {
     const result = await AgentService.getUnassignedPlayerList({
       pagination: { pageIndex, pageSize },
       filters: queryParams
-    });
+    })
+      .then(({ response }) => {
+        return {
+          status: 200,
+          data: unassignedPlayersResponseMapper(response.data || []),
+          totalRecords: parseInt(response.totalRecords || response.total_records || 0, 10) || 0
+        };
+      })
+      .catch((error) => {
+        toast.error(error || 'Failed to fetch unassigned players');
+        return { status: 500, error: error || 'Failed to fetch unassigned players' };
+      });
 
-    if (result.status === 200) {
-      return {
-        status: 200,
-        data: unassignedPlayersResponseMapper(result.response?.data || []),
-        totalRecords:
-          parseInt(result.response.totalRecords || result.response.total_records || 0, 10) || 0
-      };
-    }
-
-    return { status: result.status, error: result.error };
+    return result;
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
@@ -107,32 +109,22 @@ export default function UnassignedPlayersList() {
   };
 
   useLockScrollbar(tableSettings.enableFullScreen);
-  const [submitResponse, setSubmitResponse] = useState(null);
   const [submitLoading, setSubmitLoading] = useState(false);
-  const [submitError, setSubmitError] = useState(null);
 
   const onSubmit = async () => {
     setSubmitLoading(true);
-    const result = await AgentService.assignPlayersToAgent(agentUID, checked);
-
-    if (result.status === 200 || result.status === 201) {
-      setSubmitResponse(result.response.message);
-      navigate(`/calling-agents/list/${agentUID}/tab/assigned-players`);
-    } else {
-      setSubmitError(result.error);
-    }
-    setSubmitLoading(false);
+    await AgentService.assignPlayersToAgent(agentUID, checked)
+      .then(({ response }) => {
+        toast.success(response.message);
+        navigate(`/calling-agents/list/${agentUID}/tab/assigned-players`);
+      })
+      .catch((error) => {
+        toast.error(error || 'Failed to assign players');
+      })
+      .finally(() => {
+        setSubmitLoading(false);
+      });
   };
-
-  if (!submitLoading && !submitError && submitResponse) {
-    toast.success(submitResponse);
-    setSubmitResponse(null);
-  }
-  if (!submitLoading && submitError) {
-    toast.error(submitError);
-    setSubmitError(null);
-  }
-
   const breadcrumbItem = [
     { title: t('calling_agents'), path: '/calling-agents/list' },
     {

@@ -262,7 +262,7 @@ export function ViewDetails() {
                     {t('claimSettlement')}
                   </p>
                   <p>
-                    {response?.BonusActivationMechanism === 1 ? t('audoCredit') : t('manulaCredit')}
+                    {response?.BonusActivationMechanism === 1 ? t('autoCredit') : t('manualCredit')}
                   </p>
                 </div>
 

@@ -4,6 +4,7 @@ export const apiConfig = {
     S3_URL: import.meta.env.VITE_S3_URL,
     AI_CHAT_URL: import.meta.env.VITE_AI_CHAT_URL
   },
+  isB2BPlatform: import.meta.env.VITE_PLATFORM_TYPE || 'b2b', // b2b (Business to Business) or b2c(Business to Customer)
   endPoints: {
     AUTH: {
       VALIDATE: '/admin/admin/auth/validate',
@@ -13,6 +14,15 @@ export const apiConfig = {
       VALIDATE_RESET_PASSWORD: '/admin/admin/auth/validate-reset-password',
       RESET_PASSWORD: '/admin/admin/auth/reset-password',
       LOGOUT: '/admin/admin/auth/logout'
+    },
+    AUTH_AGENT: {
+      VALIDATE: '/agent/auth/validate',
+      VERIFYOTP: '/agent/auth/login',
+      RESENDOTP: '/agent/auth/resend-otp',
+      CHANGE_PASSWORD: '/agent/auth/change-password',
+      VALIDATE_RESET_PASSWORD: '/agent/auth/validate-reset-password',
+      RESET_PASSWORD: '/agent/auth/reset-password',
+      LOGOUT: '/agent/auth/logout'
     },
     ROLES: {
       LIST: '/admin/admin/roles/list',
@@ -149,6 +159,43 @@ export const apiConfig = {
       GET_TOTAL_EVENTS: '/admin/agent/commission-events',
       GET_SUMMARY_DETAILS: '/admin/agent/commission-summary/:summaryId/details'
     },
+    B2B_AGENT: {
+      LIST: '/agent/admin/b2b-agent/list',
+      CREATE: '/agent/admin/b2b-agent',
+      EDIT: (agentUID) => `/agent/admin/b2b-agent/${agentUID}/edit`,
+      CHANGE_STATUS: (agentUID) => `/agent/admin/b2b-agent/${agentUID}/status`,
+      DETAIL: (agentUID) => `/agent/admin/b2b-agent/${agentUID}/details`,
+      TREE: `/agent/admin/b2b-agent/hierarchy`,
+      // child agent
+      CHILD_AGENT_LIST: '/agent/child-agent/list',
+      CHILD_AGENT_CREATE: '/agent/child-agent',
+      CHILD_AGENT_EDIT: (agentUID) => `/agent/child-agent/${agentUID}/edit`,
+      CHILD_AGENT_CHANGE_STATUS: (agentUID) => `/agent/child-agent/${agentUID}/status`,
+      CHILD_AGENT_DETAIL: (agentUID) => `/agent/child-agent/${agentUID}/details`,
+      AGENT_LOGIN_HISTORY: (agentUID) => `/agent/child-agent/${agentUID}/login-history`,
+      CHILD_AGENT_DASHBOARD_COUNTS: '/agent/child-agent/dashboard/counts',
+      CHANGE_AGENT_FUND_PASSWORD: '/config/admin/config/b2b-agent/change-manage-fund-password',
+      // player
+      PLAYER_LIST: '/users/agent/player/list',
+      PLAYER_CREATE: '/users/agent/player',
+      PLAYER_CHANGE_STATUS: (playerUID) => `/users/agent/player/${playerUID}/status`,
+      PLAYER_DETAIL: (playerUID) => `/users/agent/player/${playerUID}/details`,
+      PLAYER_DASHBOARD_COUNTS: '/users/agent/player-dashboard-counts',
+      PLAYER_RESET_PASSWORD: (userUID) => `/users/agent/player/${userUID}/reset-password`,
+      WALLET: {
+        CREDIT_DEBIT_ADMIN_AGENT: (agentUID) => `/wallet/admin/agent/${agentUID}/credit-debit`,
+        CREDIT_DEBIT_AGENT: (agentUID) => `/wallet/agent/${agentUID}/credit-debit`,
+        CREDIT_AGENT_PLAYER: (agentUID, userUID) =>
+          `/wallet/agent/${agentUID}/player/${userUID}/credit`,
+        AGENT_TRANSACTION_LIST: (agentUID) => `/wallet/agent/${agentUID}/transaction/list`,
+        WITHDRAW_REQUEST_LIST: `/wallet/agent-player/withdraw-requests`,
+        CREATE_WITHDRAW_REQUEST: `/wallet/agent-player/wallet/withdraw-request`,
+        GET_AGENT_WALLET: (agentUID) => `/wallet/agent/${agentUID}/wallet`,
+        WITHDRAW_REQUEST_UPDATE_STATUS: (withdrawRequestID) =>
+          `/wallet/${withdrawRequestID}/handle-withdraw-request`,
+        AGENT_MANUAL_ADJUSTMENT: `wallet/admin/agent/wallet/manual-adjustment`
+      }
+    },
     TENANT: {
       LIST: '/config/admin/tenant/list',
       CHANGE_STATUS: '/config/admin/tenant/:tenantUID/change-status',
@@ -182,6 +229,15 @@ export const apiConfig = {
       PROMOCODE_REMOVE_SEGMENTATION: '/bonus/admin/v1/deposit-promocode/:promocodeId/segmentation',
       PROMOCODE_DELETE: '/bonus/admin/v1/deposit-promocode/:promocodeId',
       SUMMARY: '/bonus/admin/v1/deposit-promocode/summary'
+    },
+    BONUS_CAMPAIGN: {
+      LIST: '/bonus/admin/v1/bonus-campaign/list',
+      DETAIL: '/bonus/admin/v1/bonus-campaign/:id/details',
+      CREATE: '/bonus/admin/v1/bonus-campaign/create',
+      UPDATE: '/bonus/admin/v1/bonus-campaign/:id',
+      CHANGE_STATUS: '/bonus/admin/v1/bonus-campaign/:id/change-status',
+      HISTORY: '/bonus/admin/v1/bonus-campaign/:id/history',
+      SUMMARY: '/bonus/admin/v1/bonus-campaign/summary'
     },
     BANNER: {
       BANNER_LIST: '/content/admin/banner/list',
@@ -257,7 +313,8 @@ export const apiConfig = {
       CREATE: '/games/admin/casino-management/category/create',
       EDIT: '/games/admin/casino-management/category/:categoryId/edit',
       DELETE: '/games/admin/casino-management/category/:categoryId/delete',
-      CHANGE_STATUS: '/games/admin/casino-management/category/:categoryId/change-status'
+      CHANGE_STATUS: '/games/admin/casino-management/category/:categoryId/change-status',
+      ALL_ACTIVE_LIST: '/games/admin/casino-management/category/all'
     },
     PROVIDER: {
       ALL_LIST: '/games/admin/casino-management/provider/all',

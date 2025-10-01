@@ -40,30 +40,28 @@ export const getUsedEventTypes = (targets, editingTarget = null) => {
 
 export const useAgentTargets = (agentUID, t) => {
   const [loading, setLoading] = useState(false);
-  const [targets, setTargets] = useState([]);
+  const [targets, setTargets] = useState(null);
+
+  console.log('targets', targets);
 
   const fetchTargets = useCallback(async () => {
     if (!agentUID) return;
     setLoading(true);
-    try {
-      const result = await AgentService.getCommissionTargets(agentUID);
-      if (result.status === 200) {
-        const apiData = result.response.data;
-        if (apiData && apiData.targets) {
-          setTargets(transformApiResponseToUI(apiData.targets));
+    await AgentService.getCommissionTargets(agentUID)
+      .then(({ response }) => {
+        if (response) {
+          setTargets(transformApiResponseToUI(response.data.targets));
         } else {
           setTargets([]);
         }
-      } else {
-        toast.error(result.error || 'Failed to fetch targets');
-        setTargets([]);
-      }
-    } catch (error) {
-      toast.error(error?.message || 'Failed to fetch targets');
-      setTargets([]);
-    } finally {
-      setLoading(false);
-    }
+      })
+      .catch((error) => {
+        toast.error(error || 'Failed to fetch targets');
+        setTargets(null);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [agentUID]);
 
   const createTarget = useCallback(
@@ -96,31 +94,12 @@ export const useAgentTargets = (agentUID, t) => {
   const deleteTarget = useCallback(
     async (target) => {
       if (!agentUID) return;
-      setLoading(true);
-      try {
-        const result = await AgentService.deleteCommissionTarget(agentUID, {
-          targetName: target.targetName,
-          eventName: target.eventName
-        });
-        if (result.status === 200 || result.status === 204) {
-          toast.success(t('target_deleted_successfully'));
-          await fetchTargets();
-        } else {
-          throw new Error(result.error || 'Failed to delete target');
-        }
-      } catch (error) {
-        if (error.response && error.response.data && error.response.data.message) {
-          toast.error(error.response.data.message);
-        } else if (error.message) {
-          toast.error(error.message);
-        } else {
-          toast.error('Failed to delete target');
-        }
-      } finally {
-        setLoading(false);
-      }
+      return AgentService.deleteCommissionTarget(agentUID, {
+        targetName: target.targetName,
+        eventName: target.eventName
+      });
     },
-    [agentUID, fetchTargets, t]
+    [agentUID]
   );
 
   useEffect(() => {

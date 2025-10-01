@@ -2,7 +2,7 @@
 import { DynamicLayout } from 'app/layouts/DynamicLayout';
 import AuthGuard from 'middleware/AuthGuard';
 import AdminRouteGuard from './AdminRouteGuard';
-import AgentRouteGuard from './AgentRouteGuard';
+import CallingAgentRouteGuard from './CallingAgentRouteGuard';
 import dashboardRoute from './routes/dashboard.route';
 import adminRoute from './routes/admin.route';
 import playerRoutes from './routes/player.route';
@@ -19,6 +19,7 @@ import affiliateRoutes from './routes/affiliate.route';
 import segmentationRoutes from './routes/segmentation.route';
 import emailTemplateRoute from './routes/event-template.route';
 import promocodeRoute from './routes/promocode.route';
+import bonusCampaignRoute from './routes/bonus-campaign.route';
 import pagesRoute from './routes/pages.route';
 import crmRoute from './routes/crm.route';
 import homeCategoryRoute from './routes/home-category.route';
@@ -37,11 +38,15 @@ import { userManualDepositTransactionRoute } from './routes/user-manual-deposit-
 import { releaseNotesRoutes } from './routes/release-notes.route';
 import { supervisorRoute } from './routes/supervisor.route';
 import responsibleGamblingRoute from './routes/responsible-gambling.route.jsx';
-import globalCommissionSettingRoute from './routes/global-commission-setting.route';
+
 import onlyCallingAgentRoutes from './routes/calling-agents.route';
 import { callingAgentsRoute } from './routes/supervisor.route';
+import b2bAgentRoutes from './routes/b2b-agent/b2b-agent-routes';
+import B2BAgentRouteGuard from './B2BAgentRouteGuard';
 import layoutThemeRoute from './routes/layout-theme.route';
+import b2bAgentAdminRoutes from './routes/b2b-agent/b2b-agent-for-admin';
 import affiliatesRoutes from './routes/affiliates.route';
+import globalCommissionSettingRoute from './routes/global-commission-setting.route';
 import faqRoutes from './routes/faq.route';
 // ----------------------------------------------------------------------
 
@@ -76,6 +81,7 @@ const protectedRoutes = {
             ...segmentationRoutes,
             ...emailTemplateRoute,
             ...promocodeRoute,
+            ...bonusCampaignRoute,
             ...pagesRoute,
             ...crmRoute,
             ...layoutThemeRoute,
@@ -91,15 +97,22 @@ const protectedRoutes = {
             ...blacklistRoutes,
             ...releaseNotesRoutes,
             ...responsibleGamblingRoute,
+            ...b2bAgentAdminRoutes,
             ...affiliatesRoutes,
             ...globalCommissionSettingRoute,
             ...faqRoutes
           ]
         },
-        // Agent-only routes - centrally protected with AgentRouteGuard
+        // Calling Agent-only routes - centrally protected with CallingAgentRouteGuard
         {
-          Component: AgentRouteGuard,
+          Component: CallingAgentRouteGuard,
           children: [...onlyCallingAgentRoutes]
+        },
+
+        // B2B Agent routes - centrally protected with B2BAgentRouteGuard
+        {
+          Component: B2BAgentRouteGuard,
+          children: [...b2bAgentRoutes]
         },
         // Shared routes accessible by both admin and agent
         ...profileRoute
