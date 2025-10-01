@@ -472,7 +472,7 @@ export const apiConfig = {
       LIST: '/affiliates/admin/faq/list',
       CREATE: '/affiliates/admin/faq/create',
       UPDATE: '/affiliates/admin/faq/update',
-      DELETE: '/affiliates/admin/faq/delete'
+      DELETE: '/affiliates/admin/faq/delete/{faqUID}'
     }
   }
 };

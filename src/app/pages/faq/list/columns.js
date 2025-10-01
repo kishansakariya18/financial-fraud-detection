@@ -1,8 +1,9 @@
 import { createColumnHelper } from '@tanstack/react-table';
 
 import { RowActions } from './RowActions';
-import { IdCell, DateCell, BoldCell, BadgeCell } from 'components/custom/table/cell';
+import { IdCell, DateCell, BadgeCell } from 'components/custom/table/cell';
 import { moduleOptions, faqStatusOption } from '../helper';
+import { CopyableCell } from 'components/shared/table/CopyableCell';
 
 const columnHelper = createColumnHelper();
 
@@ -18,7 +19,7 @@ export const columns = [
     id: 'question',
     label: 'Question',
     header: 'Question',
-    cell: BoldCell,
+    cell: CopyableCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.module || '', {

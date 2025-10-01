@@ -29,47 +29,47 @@ export function RowActions({ row, table }) {
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [statusModalOpen, setStatusModalOpen] = useState(false);
-  const [statusChangeLoading, setStatusChangeLoading] = useState(false);
-  const [statusChangeSuccess, setStatusChangeSuccess] = useState(false);
-  const [statusChangeError, setStatusChangeError] = useState(false);
+  //   const [statusModalOpen, setStatusModalOpen] = useState(false);
+  //   const [statusChangeLoading, setStatusChangeLoading] = useState(false);
+  //   const [statusChangeSuccess, setStatusChangeSuccess] = useState(false);
+  //   const [statusChangeError, setStatusChangeError] = useState(false);
   const navigate = useNavigate();
 
-  const statusMessages = {
-    pending: {
-      title: t('change') + ' ' + t('status'),
-      description: t('are_you_sure'),
-      actionText: t('yes'),
-      Icon: ExclamationTriangleIcon,
-      iconClassName: 'text-warning'
-    },
-    success: {
-      title: t('success'),
-      description: t('status_updated_successfully'),
-      Icon: AnimatedTick,
-      iconClassName: 'text-success',
-      actionText: t('done')
-    },
-    error: {
-      Icon: XCircleIcon,
-      title: t('error'),
-      description: errorMessage || t('failed_to_change_status'),
-      iconClassName: 'text-error',
-      actionText: t('retry')
-    }
-  };
+  //   const statusMessages = {
+  //     pending: {
+  //       title: t('areYouSure'),
+  //       description: t('are_you_sure'),
+  //       actionText: t('yes'),
+  //       Icon: ExclamationTriangleIcon,
+  //       iconClassName: 'text-warning'
+  //     },
+  //     success: {
+  //       title: t('success'),
+  //       description: t('status_updated_successfully'),
+  //       Icon: AnimatedTick,
+  //       iconClassName: 'text-success',
+  //       actionText: t('done')
+  //     },
+  //     error: {
+  //       Icon: XCircleIcon,
+  //       title: t('error'),
+  //       description: errorMessage || t('failed_to_change_status'),
+  //       iconClassName: 'text-error',
+  //       actionText: t('retry')
+  //     }
+  //   };
 
   const deleteMessages = {
     pending: {
-      title: t('delete_key') + ' ' + t('faq'),
-      description: t('are_you_sure'),
+      title: t('areYouSure'),
+      description: t('deleteFAQDesc'),
       actionText: t('submit'),
       Icon: ExclamationTriangleIcon,
       iconClassName: 'text-warning'
     },
     success: {
       title: t('success'),
-      description: t('faq') + ' ' + t('delete_success'),
+      description: t('faqDeleteSuccess'),
       Icon: AnimatedTick,
       iconClassName: 'text-success',
       actionText: t('done')
@@ -87,9 +87,9 @@ export function RowActions({ row, table }) {
     if (type === 'delete') {
       setDeleteModalOpen(false);
     } else {
-      setStatusModalOpen(false);
-      setStatusChangeError(false);
-      setStatusChangeSuccess(false);
+      //   setStatusModalOpen(false);
+      //   setStatusChangeError(false);
+      //   setStatusChangeSuccess(false);
     }
     table.options.meta?.fetchNewList();
   };
@@ -104,15 +104,15 @@ export function RowActions({ row, table }) {
       setDeleteError(false);
       setDeleteSuccess(false);
     } else {
-      setStatusModalOpen(true);
-      setStatusChangeError(false);
-      setStatusChangeSuccess(false);
+      //   setStatusModalOpen(true);
+      //   setStatusChangeError(false);
+      //   setStatusChangeSuccess(false);
     }
   };
 
   const handleDeleteRows = useCallback(async () => {
     setConfirmDeleteLoading(true);
-    const result = await FaqService.delete({ faqUID: row.original.id });
+    const result = await FaqService.delete(row.original.id);
     if (result.status === 200 || result.status === 201) {
       setDeleteSuccess(true);
       toast.success(result.response.message, {
@@ -132,17 +132,17 @@ export function RowActions({ row, table }) {
   }, [row]);
 
   const deleteState = deleteError ? 'error' : deleteSuccess ? 'success' : 'pending';
-  const statusState = statusChangeError ? 'error' : statusChangeSuccess ? 'success' : 'pending';
+  //   const statusState = statusChangeError ? 'error' : statusChangeSuccess ? 'success' : 'pending';
 
-  const handleStatusChange = async () => {
-    // If status change endpoint is introduced, integrate here.
-    // For now, simply close modal.
-    setStatusChangeLoading(true);
-    setTimeout(() => {
-      setStatusChangeLoading(false);
-      setStatusChangeSuccess(true);
-    }, 300);
-  };
+  //   const handleStatusChange = async () => {
+  //     // If status change endpoint is introduced, integrate here.
+  //     // For now, simply close modal.
+  //     setStatusChangeLoading(true);
+  //     setTimeout(() => {
+  //       setStatusChangeLoading(false);
+  //       setStatusChangeSuccess(true);
+  //     }, 300);
+  //   };
 
   return (
     <>
@@ -205,14 +205,14 @@ export function RowActions({ row, table }) {
         messages={deleteMessages}
         state={deleteState}
       />
-      <ConfirmModal
+      {/* <ConfirmModal
         show={statusModalOpen}
         onClose={() => closeModal('status')}
         onOk={handleStatusChange}
         confirmLoading={statusChangeLoading}
         messages={statusMessages}
         state={statusState}
-      />
+      /> */}
     </>
   );
 }

@@ -1,4 +1,5 @@
 import { MagnifyingGlassIcon, MapPinIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { MdOutlineViewModule } from 'react-icons/md';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
@@ -155,7 +156,7 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           options={moduleOptions}
           column={table.getColumn('module')}
           title="Module"
-          Icon={MapPinIcon}
+          Icon={MdOutlineViewModule}
           isMultiple={false}
           showCheckbox={false}
           onClear={handleClearModule}

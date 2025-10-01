@@ -60,11 +60,12 @@ const FaqService = {
   },
   delete: async (payload) => {
     try {
+      const endPoint = apiConfig.endPoints.FAQ.DELETE.replace('{faqUID}', payload);
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
-        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.FAQ.DELETE}`,
+        url: apiURL,
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: payload
+        headers: { 'Content-Type': 'application/json' }
       });
       return response;
     } catch (error) {

@@ -816,5 +816,8 @@
   "min_wager_for_cpa_placeholder": "Enter Min Wager For CPA",
   "loss_commission_percent": "Loss Commission %",
   "loss_commission_percent_placeholder": "Enter Loss Commission %",
-  "question": "Question"
+  "question": "Question",
+  "deleteFAQDesc": "Are you sure you want to delete this FAQ?",
+  "faqDeleteSuccess": "FAQ deleted successfully!",
+  "answer": "Answer"
 }
