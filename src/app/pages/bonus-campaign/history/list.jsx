@@ -14,16 +14,7 @@ import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.const
 
 // import { RiCashFill } from 'react-icons/ri';
 import BonusCampaignService from 'services/bonus-campaign.services';
-import {
-  currencyTypeToAPP,
-  discountTypeToAPP,
-  displayTypeToAPP,
-  historyResponseMapper,
-  parsePromoCodeStateToApp,
-  parsePromoCodeStatus,
-  segmentationTypeToAPP,
-  typeToAPP
-} from '../helper';
+import { discountTypeToAPP, bonusGrantResponseMapper, segmentationTypeToAPP } from '../helper';
 import { Button, Card, Skeleton } from 'components/ui';
 import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
 import { Toolbar } from './Toolbar';
@@ -74,7 +65,7 @@ export default function BonusGrants() {
       promocodeId: bonusCampaignId
     });
 
-    const apiData = historyResponseMapper(result.response.data);
+    const apiData = bonusGrantResponseMapper(result.response.data);
 
     // const recordsCount = parseInt(result.response.totalRecords, 10) || 0;
     // const uniqueUsers = parseInt(result.response.uniqueUsers, 10) || 0;
@@ -209,28 +200,6 @@ export default function BonusGrants() {
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('promocode') + ' ' + t('status')}
-                </p>
-                <p>{capitalizeFirstLetter(parsePromoCodeStatus(response?.PromoCodeStatus))}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('state')}</p>
-                <p>{capitalizeFirstLetter(parsePromoCodeStateToApp(response?.PromoCodeState))}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('benefit') + ' ' + t('currency') + ' ' + t('type')}
-                </p>
-                <p>{capitalizeFirstLetter(currencyTypeToAPP(response?.BenefitCurrencyType))}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('depositRequirement') + ' ' + t('type')}
-                </p>
-                <p>{capitalizeFirstLetter(typeToAPP(response?.DepositRequirementType))}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                   {t('discount')}
                 </p>
                 <p>{response?.Amount}</p>
@@ -282,12 +251,6 @@ export default function BonusGrants() {
                   {t('discount') + ' ' + t('type')}
                 </p>
                 <p>{discountTypeToAPP(response?.DiscountType)}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('isPublicVisible')}
-                </p>
-                <p>{capitalizeFirstLetter(displayTypeToAPP(response?.IsPubliclyVisible))}</p>
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
