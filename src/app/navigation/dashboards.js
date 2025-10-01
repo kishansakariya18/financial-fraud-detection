@@ -25,6 +25,7 @@ import { userManualDepositTransaction } from './user-manual-deposit-transaction'
 import { registrationFields } from './registration-fields';
 import { releaseNotes } from './release-notes';
 import { supervisor } from './supervisor';
+import { bonusCampaign } from './bonus-campaign';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -57,6 +58,7 @@ export const dashboards = () => ({
     segmentation,
     ...emailTemplate,
     peomocode,
+    bonusCampaign,
     auditlogs,
     crm,
     userClass,

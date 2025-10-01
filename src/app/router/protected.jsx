@@ -19,6 +19,7 @@ import affiliateRoutes from './routes/affiliate.route';
 import segmentationRoutes from './routes/segmentation.route';
 import emailTemplateRoute from './routes/event-template.route';
 import promocodeRoute from './routes/promocode.route';
+import bonusCampaignRoute from './routes/bonus-campaign.route';
 import pagesRoute from './routes/pages.route';
 import crmRoute from './routes/crm.route';
 import homeCategoryRoute from './routes/home-category.route';
@@ -74,6 +75,7 @@ const protectedRoutes = {
             ...segmentationRoutes,
             ...emailTemplateRoute,
             ...promocodeRoute,
+            ...bonusCampaignRoute,
             ...pagesRoute,
             ...crmRoute,
             ...layoutThemeRoute,

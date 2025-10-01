@@ -183,6 +183,15 @@ export const apiConfig = {
       PROMOCODE_DELETE: '/bonus/admin/v1/deposit-promocode/:promocodeId',
       SUMMARY: '/bonus/admin/v1/deposit-promocode/summary'
     },
+    BONUS_CAMPAIGN: {
+      LIST: '/bonus/admin/v1/bonus-campaign/list',
+      DETAIL: '/bonus/admin/v1/bonus-campaign/:id/details',
+      CREATE: '/bonus/admin/v1/bonus-campaign/create',
+      UPDATE: '/bonus/admin/v1/bonus-campaign/:id',
+      CHANGE_STATUS: '/bonus/admin/v1/bonus-campaign/:id/change-status',
+      HISTORY: '/bonus/admin/v1/bonus-campaign/:id/history',
+      SUMMARY: '/bonus/admin/v1/bonus-campaign/summary'
+    },
     BANNER: {
       BANNER_LIST: '/content/admin/banner/list',
       BANNER_CHANGE_STATUS: `/content/admin/banner/:bannerId/change-status`,
@@ -257,7 +266,8 @@ export const apiConfig = {
       CREATE: '/games/admin/casino-management/category/create',
       EDIT: '/games/admin/casino-management/category/:categoryId/edit',
       DELETE: '/games/admin/casino-management/category/:categoryId/delete',
-      CHANGE_STATUS: '/games/admin/casino-management/category/:categoryId/change-status'
+      CHANGE_STATUS: '/games/admin/casino-management/category/:categoryId/change-status',
+      ALL_ACTIVE_LIST: '/games/admin/casino-management/category/all'
     },
     PROVIDER: {
       ALL_LIST: '/games/admin/casino-management/provider/all',
