@@ -215,7 +215,7 @@ const CommissionSettings = () => {
                   minLength={1}
                   maxLength={10}
                   error={errors?.CPAAmount?.message}
-                  placeholder="Enter CPA Amount"
+                  placeholder={t('cpa_amount_placeholder', { defaultValue: 'Enter CPA Amount' })}
                   onKeyDown={(e) => {
                     if (['e', 'E', '+', '-', ' '].includes(e.key)) e.preventDefault();
                   }}
@@ -228,7 +228,9 @@ const CommissionSettings = () => {
                   minLength={1}
                   maxLength={10}
                   error={errors?.MinDepositForCPA?.message}
-                  placeholder="Enter Min Deposit For CPA"
+                  placeholder={t('min_deposit_for_cpa_placeholder', {
+                    defaultValue: 'Enter Min Deposit For CPA'
+                  })}
                   onKeyDown={(e) => {
                     if (['e', 'E', '+', '-', ' '].includes(e.key)) e.preventDefault();
                   }}
@@ -241,7 +243,9 @@ const CommissionSettings = () => {
                   minLength={1}
                   maxLength={10}
                   error={errors?.MinWagerForCPA?.message}
-                  placeholder="Enter Min Wager For CPA"
+                  placeholder={t('min_wager_for_cpa_placeholder', {
+                    defaultValue: 'Enter Min Wager For CPA'
+                  })}
                   onKeyDown={(e) => {
                     if (['e', 'E', '+', '-', ' '].includes(e.key)) e.preventDefault();
                   }}
@@ -260,7 +264,9 @@ const CommissionSettings = () => {
                   minLength={1}
                   maxLength={5}
                   error={errors?.LossCommissionPercent?.message}
-                  placeholder="Enter Loss Commission %"
+                  placeholder={t('loss_commission_percent_placeholder', {
+                    defaultValue: 'Enter Loss Commission %'
+                  })}
                   onKeyDown={(e) => {
                     if (['e', 'E', '+', '-', ' '].includes(e.key)) e.preventDefault();
                   }}
