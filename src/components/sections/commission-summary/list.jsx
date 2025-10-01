@@ -26,7 +26,7 @@ export default function CommissionSummaryList({
   const defaultPageTitle = pageTitle || t('commission_summary');
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
-  const fetchCommissionSummary = useCallback(async () => {
+  const fetchCommissionSummary = useCallback(() => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
 
@@ -43,10 +43,11 @@ export default function CommissionSummaryList({
 
     return AgentService.getAgentSummary(requestParams)
       .then(({ response }) => {
+        const { list = [], totalRecords = 0 } = commissionSummaryResponseMapper(response);
         return {
           status: 200,
-          data: commissionSummaryResponseMapper(response.data),
-          totalRecords: response.totalRecords || 0
+          data: list,
+          totalRecords
         };
       })
       .catch((error) => {
