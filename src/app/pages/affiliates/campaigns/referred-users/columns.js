@@ -2,6 +2,7 @@ import { BaseCurrencyAmountCell, BoldCell, DateCell, IdCell } from 'components/c
 import { CopyableCell } from 'components/shared/table/CopyableCell';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 import { createColumnHelper } from '@tanstack/react-table';
+import { RowActions } from './RowActions';
 
 const columnHelper = createColumnHelper();
 export const columns = [
@@ -66,6 +67,13 @@ export const columns = [
     id: 'CommissionEarned',
     header: 'Commission Earned',
     cell: BaseCurrencyAmountCell,
+    enableSorting: false
+  }),
+  columnHelper.display({
+    id: 'actions',
+    label: 'Row Actions',
+    header: 'Actions',
+    cell: RowActions,
     enableSorting: false
   })
 ];

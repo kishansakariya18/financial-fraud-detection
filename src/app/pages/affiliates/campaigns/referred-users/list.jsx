@@ -47,7 +47,7 @@ export default function AffiliateUsersList() {
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['UserID'] },
+      columnPinning: { left: ['UserID'], right: ['actions'] },
       tableSettings: { enableFullScreen: false }
     }
   });

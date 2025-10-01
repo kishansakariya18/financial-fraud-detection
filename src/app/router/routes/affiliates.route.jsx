@@ -143,6 +143,21 @@ export const affiliatesRoutes = [
         }
       },
       {
+        path: 'campaigns/:campaignID/referred_users/:userID/transactions',
+        lazy: async () => {
+          const { default: AffiliateCampaignReferredUsersTransactions } = await import(
+            '../../pages/affiliates/campaigns/referred-users/transactions/list'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST}>
+                <AffiliateCampaignReferredUsersTransactions />
+              </PrivateRoute>
+            )
+          };
+        }
+      },
+      {
         path: 'referred_users',
         lazy: async () => {
           const { default: AffiliateUsersList } = await import('../../pages/affiliates/users/list');

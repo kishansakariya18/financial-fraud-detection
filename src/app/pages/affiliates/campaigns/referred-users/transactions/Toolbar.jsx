@@ -25,11 +25,15 @@ export function Toolbar({
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
-  const { affiliateId } = useParams();
+  const { affiliateId, campaignID } = useParams();
 
   const breadcrumbItem = [
     { title: t('affiliates'), path: '/affiliates' },
-    { title: t('referred_users'), path: `/affiliates/${affiliateId}/tab/referred_users` },
+    { title: t('campaign') + ' ' + t('list'), path: `/affiliates/${affiliateId}/tab/campaigns` },
+    {
+      title: t('referred_users'),
+      path: `/affiliates/${affiliateId}/tab/campaigns/${campaignID}/referred_users`
+    },
     { title: t('transactions') }
   ];
 
