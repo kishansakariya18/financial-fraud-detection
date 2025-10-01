@@ -27,6 +27,7 @@ import { releaseNotes } from './release-notes';
 import { supervisor } from './supervisor';
 import { affiliatesNew } from './affiliates-new';
 import { faq } from './faq';
+import { globalCommissionSetting } from './global-commission-setting';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -48,6 +49,7 @@ export const dashboards = () => ({
     users,
     supervisor,
     affiliatesNew,
+    globalCommissionSetting,
     platform,
     contentManagement,
     siteConfiguration,

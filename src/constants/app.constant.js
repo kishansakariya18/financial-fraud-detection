@@ -381,6 +381,9 @@ export const PERMISSIONS = {
   },
   FAQ: {
     VIEW: 'faq-view'
+  },
+  COMMISSION_SETTING: {
+    UPDATE: 'commission-setting-update'
   }
 };
 

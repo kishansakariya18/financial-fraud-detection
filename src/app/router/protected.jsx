@@ -37,7 +37,7 @@ import { userManualDepositTransactionRoute } from './routes/user-manual-deposit-
 import { releaseNotesRoutes } from './routes/release-notes.route';
 import { supervisorRoute } from './routes/supervisor.route';
 import responsibleGamblingRoute from './routes/responsible-gambling.route.jsx';
-
+import globalCommissionSettingRoute from './routes/global-commission-setting.route';
 import onlyCallingAgentRoutes from './routes/calling-agents.route';
 import { callingAgentsRoute } from './routes/supervisor.route';
 import layoutThemeRoute from './routes/layout-theme.route';
@@ -90,7 +90,8 @@ const protectedRoutes = {
             ...blacklistRoutes,
             ...releaseNotesRoutes,
             ...responsibleGamblingRoute,
-            ...affiliatesRoutes
+            ...affiliatesRoutes,
+            ...globalCommissionSettingRoute
           ]
         },
         // Agent-only routes - centrally protected with AgentRouteGuard

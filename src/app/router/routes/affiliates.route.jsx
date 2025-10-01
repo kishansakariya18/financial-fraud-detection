@@ -214,6 +214,21 @@ export const affiliatesRoutes = [
             )
           };
         }
+      },
+      {
+        path: 'commission-settings',
+        lazy: async () => {
+          const { default: CommissionSettings } = await import(
+            '../../pages/affiliates/commission-settings'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST}>
+                <CommissionSettings />
+              </PrivateRoute>
+            )
+          };
+        }
       }
     ]
   }

@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import TabsPage from 'components/custom/TabsPage';
 import { PERMISSIONS } from 'constants/app.constant';
 import { HiOutlineCash, HiOutlineSpeakerphone } from 'react-icons/hi';
+import { GrSettingsOption } from 'react-icons/gr';
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +46,14 @@ export default function Tabs() {
       title: t('withdrawals') + ' ' + t('list'),
       path: `/affiliates/${affiliateId}/tab/withdrawals`,
       icon: ListBulletIcon,
+      index: 1,
+      permission: PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST
+    },
+    {
+      id: randomId(),
+      title: t('commission') + ' ' + t('setting'),
+      path: `/affiliates/${affiliateId}/tab/commission-settings`,
+      icon: GrSettingsOption,
       index: 1,
       permission: PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST
     },

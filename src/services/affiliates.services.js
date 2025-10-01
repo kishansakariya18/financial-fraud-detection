@@ -278,6 +278,41 @@ const AffiliatesService = {
     } catch (error) {
       return { status: 500, error: error?.message || 'Unexpected error' };
     }
+  },
+
+  // Commission Settings - Get
+  getCommissionSettings: async ({ affiliateId }) => {
+    try {
+      const endPoint = apiConfig.endPoints.AFFILIATES.COMMISSION_SETTINGS.replace(
+        '{affiliateId}',
+        affiliateId
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET'
+      });
+      return response;
+    } catch (error) {
+      return { status: 500, error: error?.message || 'Unexpected error' };
+    }
+  },
+
+  // Commission Settings - Update
+  updateCommissionSettings: async (data) => {
+    try {
+      const endPoint = apiConfig.endPoints.AFFILIATES.COMMISSION_SETTINGS_UPDATE;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: data
+      });
+      return response;
+    } catch (error) {
+      return { status: 500, error: error?.message || 'Unexpected error' };
+    }
   }
 };
 

@@ -33,7 +33,8 @@
       "redeem_commission": "Redeem Commission",
       "summary": "Summary"
     },
-    "banner": "Banner"
+    "banner": "Banner",
+    "commission-setting": "Commission Setting"
   },
   "delete_text": "Delete",
   "delete_theme": "Delete Theme",

@@ -23,7 +23,8 @@
       "platform": "Plateforme",
       "limit": "Limite de la plateforme"
     },
-    "banner": "Bannière"
+    "banner": "Bannière",
+    "commission-setting": "Paramètres de commission"
   },
   "aiChat": "Chat IA",
   "remove": "Supprimer",

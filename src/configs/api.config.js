@@ -463,7 +463,10 @@ export const apiConfig = {
       AFFILIATE_DETAIL: '/affiliates/admin/affiliates/{affiliateId}/details',
       CAMPAIGNS_LIST: '/affiliates/admin/affiliates/{affiliateId}/campaign-list',
       CAMPAIGN_DETAILS: '/affiliates/admin/affiliates/campaign/{campaignUID}/details',
-      COMMISSION_SUMMARY: '/affiliates/admin/affiliates/{affiliateId}/commission-summary'
+      COMMISSION_SUMMARY: '/affiliates/admin/affiliates/{affiliateId}/commission-summary',
+      COMMISSION_SETTINGS: '/affiliates/admin/affiliates/{affiliateId}/commission-settings',
+      COMMISSION_SETTINGS_UPDATE: '/affiliates/admin/affiliates/commission-setting/update',
+      GLOBAL_COMMISSION_SETTINGS: '/affiliates/admin/affiliates/global/commission-setting'
     }
   }
 };
