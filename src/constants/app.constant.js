@@ -207,6 +207,14 @@ export const PERMISSIONS = {
     DELETE: 'deposit-promo-code-delete',
     SEGMENTATION: 'deposit-promo-code-segmentation'
   },
+  BONUS_CAMPAIGN: {
+    LIST: 'bonus-campaign-view',
+    ADD: 'bonus-campaign-add',
+    USER_LIST: 'bonus-campaign-users-list',
+    CHANGE_STATUS: 'bonus-campaign-change-status',
+    DELETE: 'bonus-campaign-delete',
+    SEGMENTATION: 'bonus-campaign-segmentation'
+  },
   EMAIL_TEMPLATE: {
     LIST: 'setting-email-template-view',
     ADD: 'setting-email-template-add',
@@ -401,6 +409,13 @@ export const PROMOCODE = {
   TYPE: {
     EXACT_DEPOSIT: 0,
     DEPOSIT_IN_RANGE: 1
+  }
+};
+
+export const BONUS_CAMPAIGN = {
+  BONUS_TYPE: {
+    FIXED: 0,
+    PERCENTAGE: 1
   }
 };
 

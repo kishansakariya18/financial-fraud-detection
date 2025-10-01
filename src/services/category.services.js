@@ -136,6 +136,30 @@ const CategoryService = {
     } catch (err) {
       console.log('Error', err);
     }
+  },
+  getAllActiveCategories: async (body) => {
+    try {
+      const { pagination, isPaginationRequired = false } = body;
+
+      const apiQueryParams = {
+        perPage: pagination?.pageSize || 10,
+        page: (pagination?.pageIndex || 0) + 1
+      };
+
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.CATEGORY.ALL_ACTIVE_LIST,
+        method: 'POST',
+        body: { isPaginationRequired },
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        params: apiQueryParams
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
   }
 };
 

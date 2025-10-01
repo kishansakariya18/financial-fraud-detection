@@ -11,18 +11,17 @@ import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
 // import { useClipboard } from 'hooks';
 import { toast } from 'sonner';
-import PromoCodeService from 'services/promocode.services';
+import BonusCampaignService from 'services/bonus-campaign.services';
 import {
-  currencyTypeToAPP,
   discountTypeToAPP,
-  displayTypeToAPP,
-  parsePromoCodeStateToApp,
-  parsePromoCodeStatus,
+  parseCampaignStatus,
   segmentationTypeToAPP,
-  typeToAPP
+  wageringRequirementTypeToAPP
 } from './helper';
 import { useClipboard } from 'hooks';
 import { DocumentDuplicateIcon } from '@heroicons/react/20/solid';
+import apiConfig from 'configs/api.config';
+import RenderImage from 'components/ui/custom/ImageRender';
 
 export function ViewDetails() {
   const { t } = useTranslation();
@@ -30,19 +29,25 @@ export function ViewDetails() {
   const [response, setResponse] = useState();
   const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { promocodeId } = useParams();
-  const pageTitle = t('promocode') + ' ' + t('details');
+  const { bonusCampaignId } = useParams();
+  const pageTitle = t('bonusCampaign') + ' ' + t('details');
   const { copied, copy } = useClipboard({ timeout: 2000 });
+  const [bonusImage, setBonusImage] = useState('');
 
-  const breadcrumbs = [{ title: t('promocode'), path: '/promocode' }, { title: 'Details' }];
+  const breadcrumbs = [
+    { title: t('bonusCampaign'), path: '/bonus-campaign' },
+    { title: 'Details' }
+  ];
 
-  const fetchPromocodeDetails = async () => {
+  const fetchBonusCampaignDetails = async () => {
     setLoading(true);
-    const result = await PromoCodeService.getPromocodeDetail(promocodeId);
+    const result = await BonusCampaignService.getBonusCampaignDetails(bonusCampaignId);
 
     if (result.status === 200) {
       const apiData = result.response.data;
       setResponse(apiData);
+      setBonusImage(apiData?.ImageName);
+      console.log('response:', response);
     } else {
       setError(result.error);
     }
@@ -50,9 +55,9 @@ export function ViewDetails() {
   };
 
   useEffect(() => {
-    fetchPromocodeDetails();
+    fetchBonusCampaignDetails();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [promocodeId]);
+  }, [bonusCampaignId]);
 
   if (!loading && error) {
     toast.error(error);
@@ -80,15 +85,21 @@ export function ViewDetails() {
           ) : (
             <Card className="h-full p-4 sm:p-5">
               <h6 className="mt-8 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
-                {t('promocode') + ' ' + t('information')}
+                {t('bonusCampaign') + ' ' + t('information')}
               </h6>
               <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('promocode')}
+                    {t('campaignName')}
+                  </p>
+                  <p>{response?.CampaignName || '-'}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('campaignCode')}
                   </p>
                   <div className="flex space-x-1 rtl:space-x-reverse">
-                    <span> {response?.PromoCode || '-'}</span>
+                    <span> {response?.CampaignCode || '-'}</span>
 
                     <Button
                       data-tooltip
@@ -104,99 +115,57 @@ export function ViewDetails() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('promocode') + ' ' + t('status')}
+                    {t('bonusCampaign') + ' ' + t('status')}
                   </p>
-                  <p>{capitalizeFirstLetter(parsePromoCodeStatus(response?.PromoCodeStatus))}</p>
+                  <p>{capitalizeFirstLetter(parseCampaignStatus(response?.CampaignStatus))}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('state')}
+                    {`${t('minimum')} ${t('deposit')} ${t('amount')}`}
                   </p>
-                  <p>{capitalizeFirstLetter(parsePromoCodeStateToApp(response?.PromoCodeState))}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('benefit') + ' ' + t('currency') + ' ' + t('type')}
-                  </p>
-                  <p>{capitalizeFirstLetter(currencyTypeToAPP(response?.BenefitCurrencyType))}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('depositRequirement') + ' ' + t('type')}
-                  </p>
-                  <p>{capitalizeFirstLetter(typeToAPP(response?.DepositRequirementType))}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('isFirstDepositOnly')}
-                  </p>
-                  <p>{response?.IsFirstDepositOnly ? 'Yes' : 'No'}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('isSecondDepositOnly')}
-                  </p>
-                  <p>{response?.IsSecondDepositOnly ? 'Yes' : 'No'}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('amount')}
-                  </p>
-                  <p>{response?.Amount}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('min') + ' ' + t('amount')}
-                  </p>
-                  <p>{response?.MinAmount}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('max') + ' ' + t('amount')}
-                  </p>
-                  <p>{response?.MaxAmount}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('expiration') + ' ' + t('startAt')}
-                  </p>
-                  <p>{getDateInUTCToTimeZone(response?.StartDate)}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('expiration') + ' ' + t('endAt')}
-                  </p>
-                  <p>{getDateInUTCToTimeZone(response?.EndDate)}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('usageLimit')}
-                  </p>
-                  <p>{response?.UsageLimit}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('exact') + ' ' + t('amount')}
-                  </p>
-                  <p>{response?.ExactAmount}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('benefitCap')}
-                  </p>
-                  <p>{response?.BenefitCap}</p>
+                  <p>{response?.MinDepositAmount}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('discount') + ' ' + t('type')}
                   </p>
-                  <p>{discountTypeToAPP(response?.DiscountType)}</p>
+                  <p>{capitalizeFirstLetter(discountTypeToAPP(response?.BonusType))}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('isPublicVisible')}
+                    {t('discount') + ' ' + t('amount')}
                   </p>
-                  <p>{capitalizeFirstLetter(displayTypeToAPP(response?.IsPubliclyVisible))}</p>
+                  <p>{response?.BonusValue}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('maximum')} ${t('bonus')} ${t('amount')}`}
+                  </p>
+                  <p>{response?.MaxBonusAmount}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('bonusCampaign') + ' ' + t('quantity')}
+                  </p>
+                  <p>{response?.TotalMaxRedemptions}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('eligible') + ' ' + t('currency')}
+                  </p>
+                  <p>{response?.EligibleCurrencies?.map((e) => e).join(', ') || '-'}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('allowedPerUser')}
+                  </p>
+                  <p>{response?.MaxRedemptionsPerUser}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('bonus')} ${t('expiry')} ${t('days')}`}
+                  </p>
+                  <p>{response?.BonusExpiryDays}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
@@ -206,10 +175,22 @@ export function ViewDetails() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('bonusCampaign') + ' ' + t('startAt')}
+                  </p>
+                  <p>{getDateInUTCToTimeZone(response?.StartDate)}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('bonusCampaign') + ' ' + t('endAt')}
+                  </p>
+                  <p>{getDateInUTCToTimeZone(response?.EndDate)}</p>
+                </div>
+                {/* <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('segmentation')}
                   </p>
                   <p>{response?.segmentations?.map((seg) => seg.Name).join(', ') || '-'}</p>
-                </div>
+                </div> */}
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('createdAt')}
@@ -226,64 +207,89 @@ export function ViewDetails() {
               <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('Wagering')}
+                    {`${t('wagering')} ${t('multiplier')}`}
                   </p>
                   <div className="flex space-x-1 rtl:space-x-reverse">
-                    <span> {response?.WageringRequirementX || '-'}</span>
-                    {response?.WageringRequirementX && (
-                      <Button
-                        data-tooltip
-                        data-tooltip-content={copied ? 'Copied' : 'Copy'}
-                        onClick={() => copy(response?.WageringRequirementX)}
-                        isIcon
-                        variant="flat"
-                        className="size-5 rounded-full group-hover/td:opacity-100"
-                        aria-label="Copy Button">
-                        <DocumentDuplicateIcon className="size-3.5" />
-                      </Button>
-                    )}
+                    <span>
+                      {' '}
+                      {response?.WageringMultiplier ? `${response?.WageringMultiplier}x` : '-'}
+                    </span>
                   </div>
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('wagerFreeBounus')}
+                    {t('wagering') + ' ' + t('requirement')}
                   </p>
-                  <p>{response?.WagerFreeDepositMatchPercentage || '-'}</p>
+                  <div className="flex space-x-1 rtl:space-x-reverse">
+                    <span>
+                      {' '}
+                      {wageringRequirementTypeToAPP(response?.WageringRequirementType) || '-'}
+                    </span>
+                  </div>
                 </div>
+
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('isCodeRequired')}
+                    {`${t('cashout')} ${t('multiplier')}`}
                   </p>
-                  <p>{response?.IsPromoCodeRequired === 1 ? t('yes') : t('no')}</p>
+                  <div className="flex space-x-1 rtl:space-x-reverse">
+                    <span>
+                      {' '}
+                      {response?.CashoutMultiplier ? `${response?.CashoutMultiplier}x` : '-'}
+                    </span>
+                  </div>
                 </div>
 
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('claimSettlement')}
                   </p>
-                  <p>
-                    {response?.BonusActivationMechanism === 1 ? t('autoCredit') : t('manualCredit')}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('stackableWithOtherBonus')}
-                  </p>
-                  <p>{response?.IsStackableWithOtherBonuses === 1 ? t('yes') : t('no')}</p>
-                </div>
-
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('wagering') + ' ' + t('appliedGames')}
-                  </p>
-                  <p>{response?.WageringContributionType === 'all' ? t('all') : t('specific')}</p>
+                  <p>{response?.ClaimMethod === 'AUTO' ? t('autoCredit') : t('manualCredit')}</p>
                 </div>
               </div>
               <div className="my-4 h-px bg-gray-200 dark:bg-dark-500"></div>
+              <div className="mt-4 grid gap-4">
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('short')} ${t('message')}`}
+                  </p>
+                  <p>{response?.ShortMessage}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('title')} ${t('message')}`}
+                  </p>
+                  <p>{response?.TitleMessage}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('description')}:
+                  </p>
+                </div>
+                <div className="mt-1 w-full rounded border border-gray-200 p-4">
+                  <p
+                    dangerouslySetInnerHTML={{ __html: response?.Description }}
+                    className="mt-2 text-sm text-gray-700"
+                  />
+                </div>
+              </div>
+              <div className="my-4 h-px bg-gray-200 dark:bg-dark-500"></div>
+              <div className="mt-5 space-y-4">
+                <div className="grid gap-4 sm:grid-cols-1">
+                  {bonusImage && (
+                    <RenderImage
+                      id={'bonusImage'}
+                      label="Image :"
+                      value={`${apiConfig.baseURL.S3_URL}/campaign/${bonusImage}`}
+                      maxWidth="300px"
+                      maxHeight="300px"
+                    />
+                  )}
+                </div>
+              </div>
 
               <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-                <Button className="min-w-[7rem]" onClick={() => navigate('/promocode')}>
+                <Button className="min-w-[7rem]" onClick={() => navigate('/bonus-campaign')}>
                   {t('back')}
                 </Button>
               </div>

@@ -8,7 +8,7 @@ import { playerKyc } from './player-kyc';
 import { casinoManagement } from './casino-management';
 import { segmentation } from './segmentation';
 import { emailTemplate } from './event-template';
-import { peomocode } from './promocode';
+// import { peomocode } from './promocode';
 import { roles } from './roles';
 import { auditlogs } from './auditlogs';
 import { crm } from './crm';
@@ -26,6 +26,7 @@ import { registrationFields } from './registration-fields';
 import { releaseNotes } from './release-notes';
 import { supervisor } from './supervisor';
 import { b2bAgent } from './b2b-agent';
+import { bonusCampaign } from './bonus-campaign';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -58,7 +59,8 @@ export const dashboards = () => ({
     casinoManagement,
     segmentation,
     ...emailTemplate,
-    peomocode,
+    // peomocode,
+    bonusCampaign,
     auditlogs,
     crm,
     userClass,
