@@ -60,7 +60,7 @@ export default function AffiliateDetails() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 
-  const pageTitle = `${t('affiliates') + ' ' + t('details')}`;
+  const pageTitle = `${t('campaign') + ' ' + t('list')}`;
 
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>

@@ -16,28 +16,6 @@ const AffiliatesService = {
             : undefined,
           status: filters?.status || undefined
         },
-        // getAffiliateDetail: async ({ affiliateId }) => {
-        //   try {
-        //     const endPoint = apiConfig.endPoints.AFFILIATES.AFFILIATE_DETAIL.replace(
-        //       '{affiliateId}',
-        //       affiliateId
-        //     );
-        //     const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
-        //     const response = await sendRequest({
-        //       url: apiURL,
-        //       method: 'POST',
-        //       headers: { 'Content-Type': 'application/json' },
-        //       body: {
-        //         filters: {
-        //           keyword: 'B67gKIYarwa'
-        //         }
-        //       }
-        //     });
-        //     return response;
-        //   } catch (error) {
-        //     return { status: 500, error: error?.message || 'Unexpected error' };
-        //   }
-        // },
         ...(!pagination && { pagination: false })
       };
       const endPoint = apiConfig.endPoints.AFFILIATES.AFFILIATE_LIST;
@@ -54,9 +32,9 @@ const AffiliatesService = {
       return { status: 500, error: error?.message || 'Unexpected error' };
     }
   },
+
   getAffiliateDetail: async ({ affiliateId, pagination, filters }) => {
     try {
-      console.log(affiliateId);
       const endPoint = apiConfig.endPoints.AFFILIATES.AFFILIATE_DETAIL.replace(
         '{affiliateId}',
         affiliateId
@@ -83,7 +61,6 @@ const AffiliatesService = {
 
   getCampaignList: async ({ affiliateId, pagination, filters }) => {
     try {
-      console.log(affiliateId);
       const endPoint = apiConfig.endPoints.AFFILIATES.CAMPAIGNS_LIST.replace(
         '{affiliateId}',
         affiliateId
@@ -101,6 +78,59 @@ const AffiliatesService = {
             keyword: filters?.keyword || ''
           }
         }
+      });
+      return response;
+    } catch (error) {
+      return { status: 500, error: error?.message || 'Unexpected error' };
+    }
+  },
+
+  getReferredUsersCommissionTransactions: async ({
+    affiliateId,
+    pagination,
+    filters = {},
+    userID
+  }) => {
+    try {
+      const endPoint = apiConfig.endPoints.AFFILIATES.TRANSACTION_LIST.replace(
+        '{affiliateId}',
+        affiliateId
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+
+      const reqBody = {
+        ...(userID && { userID: String(userID) }),
+        filter: {
+          keyword: filters?.keyword ?? '',
+          startDate: filters?.startDate
+            ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
+            : '',
+          endDate: filters?.endDate
+            ? dayjs(+filters.endDate).endOf('day').format('YYYY-MM-DD HH:mm:ss')
+            : '',
+          txnStatus:
+            typeof filters?.txnStatus !== 'undefined' && filters?.txnStatus !== null
+              ? String(filters.txnStatus)
+              : '',
+          type:
+            typeof filters?.type !== 'undefined' && filters?.type !== null
+              ? String(filters.type)
+              : '',
+          currencyID:
+            typeof filters?.currencyID !== 'undefined' && filters?.currencyID !== null
+              ? String(filters.currencyID)
+              : ''
+        }
+      };
+
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        params: pagination
+          ? { page: pagination.pageIndex + 1, perPage: pagination.pageSize }
+          : undefined,
+        body: reqBody
       });
       return response;
     } catch (error) {
@@ -142,7 +172,6 @@ const AffiliatesService = {
           keyword: filters?.keyword || undefined,
           currencyCode: filters?.currencyCode || undefined,
           affiliateUID: filters?.affiliateUID || undefined,
-          // Allow both txnStatus and transactionStatus from UI/query to map to API's txnStatus
           txnStatus:
             (filters?.txnStatus || filters?.transactionStatus)?.toString().toUpperCase() ||
             undefined,
@@ -198,9 +227,9 @@ const AffiliatesService = {
       return { status: 500, error: error?.message || 'Unexpected error' };
     }
   },
+
   getCampaignDetail: async ({ campaignUID, pagination, filters }) => {
     try {
-      console.log(campaignUID);
       const endPoint = apiConfig.endPoints.AFFILIATES.CAMPAIGN_DETAILS.replace(
         '{campaignUID}',
         campaignUID
@@ -224,9 +253,9 @@ const AffiliatesService = {
       return { status: 500, error: error?.message || 'Unexpected error' };
     }
   },
+
   getCommissionSummary: async ({ affiliateId, pagination, filters }) => {
     try {
-      console.log(affiliateId);
       const endPoint = apiConfig.endPoints.AFFILIATES.COMMISSION_SUMMARY.replace(
         '{affiliateId}',
         affiliateId

@@ -378,6 +378,9 @@ export const PERMISSIONS = {
   },
   RELEASE_NOTES: {
     VIEW: 'release-notes-view'
+  },
+  FAQ: {
+    VIEW: 'faq-view'
   }
 };
 

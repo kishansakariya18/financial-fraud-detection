@@ -26,6 +26,7 @@ import { registrationFields } from './registration-fields';
 import { releaseNotes } from './release-notes';
 import { supervisor } from './supervisor';
 import { affiliatesNew } from './affiliates-new';
+import { faq } from './faq';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -67,6 +68,7 @@ export const dashboards = () => ({
     bank,
     registrationFields,
     userManualDepositTransaction,
-    releaseNotes
+    releaseNotes,
+    faq
   ]
 });

@@ -156,6 +156,21 @@ export const affiliatesRoutes = [
         }
       },
       {
+        path: 'referred_users/:userID/transactions',
+        lazy: async () => {
+          const { default: AffiliateUsersTransactionsList } = await import(
+            '../../pages/affiliates/users/transactions/list'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.AFFILIATES.USER_SIGNUP_LIST}>
+                <AffiliateUsersTransactionsList />
+              </PrivateRoute>
+            )
+          };
+        }
+      },
+      {
         path: 'withdrawals',
         lazy: async () => {
           const { default: AffiliateWithdrawalsList } = await import(

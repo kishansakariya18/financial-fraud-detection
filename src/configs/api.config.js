@@ -455,6 +455,8 @@ export const apiConfig = {
     AFFILIATES: {
       AFFILIATE_LIST: '/affiliates/admin/affiliates/list',
       REFERRAL_LIST: '/affiliates/admin/affiliates/{affiliateId}/referred-users',
+      TRANSACTION_LIST:
+        '/affiliates/admin/affiliates/{affiliateId}/referred-users-commission-transaction',
       WITHDRAWAL_LIST: '/affiliates/admin/commission/withdraw/list',
       WITHDRAWAL_APPROVE: '/affiliates/admin/commission/withdraw/approve',
       WITHDRAWAL_REJECT: '/affiliates/admin/commission/withdraw/reject',
