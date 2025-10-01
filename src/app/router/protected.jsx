@@ -42,6 +42,7 @@ import onlyCallingAgentRoutes from './routes/calling-agents.route';
 import { callingAgentsRoute } from './routes/supervisor.route';
 import layoutThemeRoute from './routes/layout-theme.route';
 import affiliatesRoutes from './routes/affiliates.route';
+import faqRoutes from './routes/faq.route';
 // ----------------------------------------------------------------------
 
 const protectedRoutes = {
@@ -91,7 +92,8 @@ const protectedRoutes = {
             ...releaseNotesRoutes,
             ...responsibleGamblingRoute,
             ...affiliatesRoutes,
-            ...globalCommissionSettingRoute
+            ...globalCommissionSettingRoute,
+            ...faqRoutes
           ]
         },
         // Agent-only routes - centrally protected with AgentRouteGuard

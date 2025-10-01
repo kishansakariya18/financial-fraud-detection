@@ -577,5 +577,6 @@
   "min_wager_for_cpa": "Apuesta mínima para CPA",
   "min_wager_for_cpa_placeholder": "Ingrese apuesta mínima para CPA",
   "loss_commission_percent": "Porcentaje de comisión de pérdida",
-  "loss_commission_percent_placeholder": "Ingrese porcentaje de comisión de pérdida"
+  "loss_commission_percent_placeholder": "Ingrese porcentaje de comisión de pérdida",
+  "question": "Question"
 }

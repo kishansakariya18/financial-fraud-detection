@@ -467,6 +467,12 @@ export const apiConfig = {
       COMMISSION_SETTINGS: '/affiliates/admin/affiliates/{affiliateId}/commission-settings',
       COMMISSION_SETTINGS_UPDATE: '/affiliates/admin/affiliates/commission-setting/update',
       GLOBAL_COMMISSION_SETTINGS: '/affiliates/admin/affiliates/global/commission-setting'
+    },
+    FAQ: {
+      LIST: '/affiliates/admin/faq/list',
+      CREATE: '/affiliates/admin/faq/create',
+      UPDATE: '/affiliates/admin/faq/update',
+      DELETE: '/affiliates/admin/faq/delete'
     }
   }
 };
