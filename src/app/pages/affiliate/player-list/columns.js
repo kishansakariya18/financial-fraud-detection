@@ -8,7 +8,7 @@ import {
   IdCell
 } from '../../../../components/custom/table/cell';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
-import { playerStatusOptions } from 'app/pages/users/player/helper';
+import { playerStatusOptions } from 'components/sections/player-management/helper';
 // import { CopyableCell } from 'components/shared/table/CopyableCell';
 
 // ----------------------------------------------------------------------

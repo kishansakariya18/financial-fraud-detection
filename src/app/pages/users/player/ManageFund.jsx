@@ -11,7 +11,6 @@ import WalletService from 'services/wallet-services';
 import { Listbox } from 'components/shared/form/Listbox';
 import TextareaAutosize from 'react-textarea-autosize';
 import { LockClosedIcon } from '@heroicons/react/24/outline';
-import { manageFundSchema } from './schema';
 import { useParams } from 'react-router';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { useDisclosure } from 'hooks';
@@ -20,6 +19,7 @@ import {
   fundTypeOption,
   transactionTypeOption
 } from 'components/sections/player-management/helper';
+import { manageFundSchema } from 'components/sections/player-management/schema';
 
 const ManageFund = () => {
   const [error, setError] = useState('');

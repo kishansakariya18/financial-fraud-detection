@@ -3,7 +3,7 @@ import {
   affiliateTransactionToAPI,
   parsePayoutStatusToAPI
 } from 'app/pages/affiliate/helper';
-import { transactionTypeAppToApi } from 'app/pages/users/player/helper';
+import { transactionTypeAppToApi } from 'components/sections/player-management/helper';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
 import { sendRequest } from 'utils/axios';
