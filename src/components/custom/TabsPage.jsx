@@ -11,10 +11,11 @@ import usePermissions from 'app/router/usePermissions';
 
 export default function TabsPage({ tabs }) {
   const location = useLocation();
-  const initialTabIndex = tabs.findIndex((tab) => location.pathname.includes(tab.path));
+  const initialTabIndex = tabs
+    .filter((tab) => (!tab.permission || hasPermission(tab.permission)) && !tab.isHidden)
+    .findIndex((tab) => location.pathname.includes(tab.path));
   const { hasPermission } = usePermissions();
 
-  console.log('tab.permission: ', tabs);
   return (
     <Page>
       <TabGroup selectedIndex={initialTabIndex}>
