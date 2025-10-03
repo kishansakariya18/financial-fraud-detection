@@ -252,7 +252,8 @@ export const PERMISSIONS = {
     VIEW_LOGIN_HISTORY: 'affiliate-login-history-view',
     WITHDRAWALS_LIST: 'affiliate-withdrawals-list',
     COMMISSION: 'affiliate-commission',
-    CAMPAIGNS: 'affiliate-campaigns'
+    CAMPAIGNS: 'affiliate-campaigns',
+    TRANSACTIONS_LIST: 'affiliate-transactions-list'
   },
   PAYMENT: {
     VIEW: 'payment-view'

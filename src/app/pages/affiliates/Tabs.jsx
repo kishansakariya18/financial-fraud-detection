@@ -9,6 +9,7 @@ import TabsPage from 'components/custom/TabsPage';
 import { PERMISSIONS } from 'constants/app.constant';
 import { HiOutlineCash, HiOutlineSpeakerphone } from 'react-icons/hi';
 import { GrSettingsOption } from 'react-icons/gr';
+import { CiViewList } from 'react-icons/ci';
 
 // ----------------------------------------------------------------------
 
@@ -45,7 +46,7 @@ export default function Tabs() {
       id: randomId(),
       title: t('withdrawals') + ' ' + t('list'),
       path: `/affiliates/${affiliateId}/tab/withdrawals`,
-      icon: ListBulletIcon,
+      icon: CiViewList,
       index: 1,
       permission: PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST
     },
@@ -62,6 +63,14 @@ export default function Tabs() {
       title: t('commission'),
       path: `/affiliates/${affiliateId}/tab/commission`,
       icon: HiOutlineCash,
+      index: 1,
+      permission: PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST
+    },
+    {
+      id: randomId(),
+      title: t('transactions'),
+      path: `/affiliates/${affiliateId}/tab/transactions`,
+      icon: ListBulletIcon,
       index: 1,
       permission: PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST
     }

@@ -313,6 +313,53 @@ const AffiliatesService = {
     } catch (error) {
       return { status: 500, error: error?.message || 'Unexpected error' };
     }
+  },
+  getAffiliatesTransactions: async ({ affiliateId, pagination, filters = {}, userID }) => {
+    try {
+      const endPoint = apiConfig.endPoints.AFFILIATES.AFFILIATE_TRANSACTIONS.replace(
+        '{affiliateId}',
+        affiliateId
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+
+      const reqBody = {
+        ...(userID && { userID: String(userID) }),
+        filter: {
+          keyword: filters?.keyword ?? '',
+          startDate: filters?.startDate
+            ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
+            : '',
+          endDate: filters?.endDate
+            ? dayjs(+filters.endDate).endOf('day').format('YYYY-MM-DD HH:mm:ss')
+            : '',
+          txnStatus:
+            typeof filters?.txnStatus !== 'undefined' && filters?.txnStatus !== null
+              ? String(filters.txnStatus)
+              : '',
+          txnType:
+            typeof filters?.type !== 'undefined' && filters?.type !== null
+              ? String(filters.type)
+              : '',
+          currencyID:
+            typeof filters?.currencyID !== 'undefined' && filters?.currencyID !== null
+              ? String(filters.currencyID)
+              : ''
+        }
+      };
+
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        params: pagination
+          ? { page: pagination.pageIndex + 1, perPage: pagination.pageSize }
+          : undefined,
+        body: reqBody
+      });
+      return response;
+    } catch (error) {
+      return { status: 500, error: error?.message || 'Unexpected error' };
+    }
   }
 };
 
