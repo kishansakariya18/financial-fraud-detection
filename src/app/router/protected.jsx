@@ -78,7 +78,6 @@ const protectedRoutes = {
             ...segmentationRoutes,
             ...emailTemplateRoute,
             ...promocodeRoute,
-            ...bonusCampaignRoute,
             ...pagesRoute,
             ...crmRoute,
             ...layoutThemeRoute,
@@ -87,7 +86,6 @@ const protectedRoutes = {
             ...bonusManagementRoute,
             ...userClass,
             ...rateLimitRulesRoute,
-            ...registrationFieldsRoute,
             ...siteConfigurationRoutes,
             ...blacklistRoutes,
             ...releaseNotesRoutes,
@@ -104,7 +102,9 @@ const protectedRoutes = {
                 ...affiliatesRoutes,
                 ...userManualDepositTransactionRoute,
                 ...bankRoute,
-                ...paymentRoute
+                ...registrationFieldsRoute,
+                ...paymentRoute,
+                ...bonusCampaignRoute
               ]
             },
 
@@ -136,7 +136,6 @@ const protectedRoutes = {
             }
           ]
         },
-        // Shared routes accessible by both admin and agent
         ...profileRoute
       ]
     }

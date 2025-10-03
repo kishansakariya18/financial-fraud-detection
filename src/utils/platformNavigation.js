@@ -1,4 +1,5 @@
 import { apiConfig } from 'configs/api.config';
+import { PLATFORM_TYPE } from 'constants/app.constant';
 
 /**
  * Checks if a navigation item is allowed for the current platform
@@ -30,7 +31,6 @@ export function isNavigationItemAllowed(navigationItem, platformType = null) {
  * @returns {Array} - Filtered navigation items
  */
 export function filterNavigationByPlatform(navigationItems, platformType = null) {
-  console.log('navigationItems', navigationItems);
   return navigationItems.filter((item) => {
     // Check if the main item is allowed
     if (!isNavigationItemAllowed(item, platformType)) {
@@ -38,7 +38,6 @@ export function filterNavigationByPlatform(navigationItems, platformType = null)
     }
     // If item has children, filter them too
     if (item.childs && Array.isArray(item.childs)) {
-      console.log('navigationItems', navigationItems);
       item.childs = filterNavigationByPlatform(item.childs, platformType);
 
       // If all children were filtered out, remove the parent item
@@ -56,7 +55,7 @@ export function filterNavigationByPlatform(navigationItems, platformType = null)
  * @returns {string} - Current platform type
  */
 export function getCurrentPlatformType() {
-  return apiConfig.platformType?.toLowerCase() || 'b2c';
+  return apiConfig.platformType?.toLowerCase() || PLATFORM_TYPE.B2C;
 }
 
 /**
@@ -64,7 +63,7 @@ export function getCurrentPlatformType() {
  * @returns {boolean}
  */
 export function isB2BPlatform() {
-  return getCurrentPlatformType() === 'b2b';
+  return getCurrentPlatformType() === PLATFORM_TYPE.B2B;
 }
 
 /**
@@ -72,5 +71,5 @@ export function isB2BPlatform() {
  * @returns {boolean}
  */
 export function isB2CPlatform() {
-  return getCurrentPlatformType() === 'b2c';
+  return getCurrentPlatformType() === PLATFORM_TYPE.B2C;
 }

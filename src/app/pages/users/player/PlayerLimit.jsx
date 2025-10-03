@@ -15,6 +15,7 @@ import { playerLimitSchema } from './schema';
 import { useTranslation } from 'react-i18next';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useCurrencyContext } from 'app/contexts/currency/context';
+import { isB2BPlatform } from 'utils/platformNavigation';
 
 // const exclusionTimeOptions = [
 //   { label: '1 day', value: 1 },
@@ -39,6 +40,7 @@ const PlayerLimit = () => {
   const { t } = useTranslation();
   const pageTitle = t('player') + ' ' + t('limit');
   const { symbol } = useCurrencyContext();
+  const isB2B = isB2BPlatform();
 
   const {
     register,
@@ -483,6 +485,10 @@ const PlayerLimit = () => {
                         item.limitType === 'wager' && item.limitPeriod === 'one-time'
                           ? 'oneTimeWagerLimitDesc'
                           : `${titleKey}Desc`;
+
+                      if (isB2B && item.limitType === 'deposit') {
+                        return null;
+                      }
 
                       return (
                         <Box

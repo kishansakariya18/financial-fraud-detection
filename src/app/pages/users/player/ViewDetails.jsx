@@ -31,6 +31,7 @@ import RenderImage from 'components/ui/custom/ImageRender';
 import apiConfig from 'configs/api.config';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useCurrencyContext } from 'app/contexts/currency/context';
+import { isB2BPlatform } from 'utils/platformNavigation';
 
 export function ViewDetails() {
   const { t } = useTranslation();
@@ -57,6 +58,7 @@ export function ViewDetails() {
   const pageTitle = t('player') + ' ' + t('details');
   const { copied, copy } = useClipboard({ timeout: 2000 });
   const { symbol } = useCurrencyContext();
+  const isB2B = isB2BPlatform();
 
   const fetchPlayerDetails = async () => {
     setLoading(true);
@@ -77,7 +79,7 @@ export function ViewDetails() {
       const result = await PlayerService.getLimitSummary(userID);
       if (result?.status === 200) {
         const payload = result?.response?.data;
-        const mapped = mapLimitSummary(payload?.data || payload?.Data || payload);
+        const mapped = mapLimitSummary(payload?.data || payload?.Data || payload, isB2B);
         setLimitSummary(mapped);
       }
     } catch (e) {
@@ -947,17 +949,18 @@ export function ViewDetails() {
                               : t('no')}
                           </p>
                         </div> */}
-                        <div>
-                          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                            {`${t('dailyDepositValue')}`}
-                          </p>
-                          <p>
-                            {(Number(limitSummary.globalPlatformLimits.maxDepositPerDay) || 0) > 0
-                              ? symbol + ' ' + limitSummary.globalPlatformLimits.maxDepositPerDay
-                              : '-'}
-                          </p>
-                        </div>
-
+                        {!isB2B && (
+                          <div>
+                            <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                              {`${t('dailyDepositValue')}`}
+                            </p>
+                            <p>
+                              {(Number(limitSummary.globalPlatformLimits.maxDepositPerDay) || 0) > 0
+                                ? symbol + ' ' + limitSummary.globalPlatformLimits.maxDepositPerDay
+                                : '-'}
+                            </p>
+                          </div>
+                        )}
                         {/* Daily Withdraw */}
                         {/* <div>
                           <p className="text-sm font-medium text-gray-800 dark:text-dark-100">

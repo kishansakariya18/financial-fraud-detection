@@ -1,5 +1,8 @@
 // import { Navigate } from "react-router";
 
+import { PLATFORM_TYPE } from 'constants/app.constant';
+import PrivateRoute from '../private';
+
 export const reportsRoutes = [
   {
     path: 'report/betslip-transctions',
@@ -9,9 +12,16 @@ export const reportsRoutes = [
   },
   {
     path: 'report/deposit-transctions',
-    lazy: async () => ({
-      Component: (await import('../../pages/reports/deposit-txn-list/list')).default
-    })
+    lazy: async () => {
+      const { default: DepositTxnList } = await import('../../pages/reports/deposit-txn-list/list');
+      return {
+        Component: () => (
+          <PrivateRoute allowedPlatforms={[PLATFORM_TYPE.B2C]}>
+            <DepositTxnList />
+          </PrivateRoute>
+        )
+      };
+    }
   },
   {
     path: 'report/withdraw-transctions',

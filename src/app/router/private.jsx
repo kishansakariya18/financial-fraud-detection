@@ -11,7 +11,7 @@ const PrivateRoute = ({ permission, children, allowedPlatforms = null, fallbackP
     fallbackPath = userData?.AdminType === ADMIN_TYPE.AGENT ? '/calling-agents/dashboard' : '/';
   }
 
-  if (!hasPermission(permission)) {
+  if (permission && !hasPermission(permission)) {
     // Redirect based on user type when permission is denied
     if (userData?.AdminType === ADMIN_TYPE.AGENT) {
       return <Navigate to={fallbackPath} replace />;

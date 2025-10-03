@@ -11,6 +11,7 @@ import UserClassService from 'services/user-class.services';
 import { createUserClassSchema } from './schema';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useCurrencyContext } from 'app/contexts/currency/context';
+import { isB2CPlatform } from 'utils/platformNavigation';
 
 const CreateUserClass = () => {
   const [error, setError] = useState('');
@@ -18,6 +19,7 @@ const CreateUserClass = () => {
   const [response, setResponse] = useState(null);
   const { t } = useTranslation();
   const { symbol } = useCurrencyContext();
+  const isB2C = isB2CPlatform();
 
   const breadcrumbItem = [{ title: t('userClass'), path: '/user-class' }, { title: t('create') }];
 
@@ -28,7 +30,7 @@ const CreateUserClass = () => {
     formState: { errors },
     reset
   } = useForm({
-    resolver: yupResolver(createUserClassSchema)
+    resolver: yupResolver(createUserClassSchema(isB2C))
   });
 
   const creatUserClassAPI = async (requestObject) => {
@@ -92,15 +94,17 @@ const CreateUserClass = () => {
                 error={errors?.classCode?.message}
                 placeholder={t('enter') + ' ' + t('class_code')}
               />
-              <Input
-                {...register('deposit', { valueAsNumber: true })}
-                type="number"
-                label={t('deposit')}
-                step="any"
-                error={errors?.deposit?.message}
-                placeholder={t('enter') + ' ' + t('deposit')}
-                prefix={symbol}
-              />
+              {isB2C && (
+                <Input
+                  {...register('deposit', { valueAsNumber: true })}
+                  type="number"
+                  label={t('deposit')}
+                  step="any"
+                  error={errors?.deposit?.message}
+                  placeholder={t('enter') + ' ' + t('deposit')}
+                  prefix={symbol}
+                />
+              )}
               <Input
                 {...register('wager', { valueAsNumber: true })}
                 type="number"

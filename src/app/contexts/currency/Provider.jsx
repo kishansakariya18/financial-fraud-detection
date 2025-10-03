@@ -45,6 +45,19 @@ export const CurrencyProvider = ({ children }) => {
     }
   }, []);
 
+  const formatCurrency = useCallback(
+    (amount) => {
+      if (code === null) return amount;
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: code || 'USD',
+        minimumFractionDigits: decimalPlaces,
+        maximumFractionDigits: decimalPlaces
+      }).format(amount);
+    },
+    [code, decimalPlaces]
+  );
+
   // Load on login success and once on mount (if settings already present)
   useEffect(() => {
     if (isLoggedIn) {
@@ -87,9 +100,10 @@ export const CurrencyProvider = ({ children }) => {
       decimalPlaces,
       loading,
       error,
-      refreshBaseCurrency: fetchAndSetCurrency
+      refreshBaseCurrency: fetchAndSetCurrency,
+      formatCurrency
     };
-  }, [code, symbol, decimalPlaces, loading, error, fetchAndSetCurrency]);
+  }, [code, symbol, decimalPlaces, loading, error, fetchAndSetCurrency, formatCurrency]);
 
   return <CurrencyContext value={value}>{children}</CurrencyContext>;
 };

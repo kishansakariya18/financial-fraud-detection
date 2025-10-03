@@ -10,14 +10,15 @@ import { updatePlatformLimitSchema } from './schema';
 import { useTranslation } from 'react-i18next';
 import { ContextualHelp } from 'components/shared/ContextualHelp';
 import { useCurrencyContext } from 'app/contexts/currency/context';
+import { isB2BPlatform } from 'utils/platformNavigation';
 
 const PlatformLimit = () => {
   const { t } = useTranslation();
   const { symbol } = useCurrencyContext();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
   const [response, setResponse] = useState(null);
+  const isB2B = isB2BPlatform();
 
   const pageTitle = t('platform') + ' ' + t('limit');
 
@@ -37,7 +38,7 @@ const PlatformLimit = () => {
         reset({
           oneTimeBetLimit: result?.BetLimit?.Value || '',
           oneTimeWinLimit: result?.WinLimit?.Value || '',
-          dailyDepositLimit: result?.MaxDepositPerDay?.Value || '',
+          dailyDepositLimit: isB2B ? result?.MaxDepositPerDay?.Value || '' : '',
           dailyWithdrawLimit: result?.MaxWithdrawPerDay?.Value || '',
           isCheckCaladerTime: +result?.CheckCalanderTime?.Value
         });
@@ -45,7 +46,7 @@ const PlatformLimit = () => {
     };
 
     loadData();
-  }, [reset]);
+  }, [reset, isB2B]);
 
   const updatePlatformLimit = async (requestObject) => {
     setLoading(true);
@@ -101,35 +102,37 @@ const PlatformLimit = () => {
         <form onSubmit={handleSubmit(onSubmit)} noValidate autoComplete="off">
           <div className="mt-6 space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
-              <Input
-                {...register('dailyDepositLimit')}
-                label={t('dailyDepositLimitPlatform')}
-                type="number"
-                step="any"
-                minLength={1}
-                maxLength={10}
-                error={errors?.dailyDepositLimit?.message}
-                placeholder="Enter Daily Deposit Limit"
-                prefix={symbol}
-                onKeyDown={(e) => {
-                  if (
-                    e.key === 'e' ||
-                    e.key === 'E' ||
-                    e.key === '+' ||
-                    e.key === '-' ||
-                    e.key === ' '
-                  ) {
-                    e.preventDefault();
+              {!isB2B && (
+                <Input
+                  {...register('dailyDepositLimit')}
+                  label={t('dailyDepositLimitPlatform')}
+                  type="number"
+                  step="any"
+                  minLength={1}
+                  maxLength={10}
+                  error={errors?.dailyDepositLimit?.message}
+                  placeholder="Enter Daily Deposit Limit"
+                  prefix={symbol}
+                  onKeyDown={(e) => {
+                    if (
+                      e.key === 'e' ||
+                      e.key === 'E' ||
+                      e.key === '+' ||
+                      e.key === '-' ||
+                      e.key === ' '
+                    ) {
+                      e.preventDefault();
+                    }
+                  }}
+                  suffix={
+                    <ContextualHelp
+                      title={t('dailyDepositLimitPlatform')}
+                      anchor={{ to: 'bottom', gap: 8 }}
+                      content={<p>{t('dailyDepositLimitPlatformDesc')}</p>}
+                    />
                   }
-                }}
-                suffix={
-                  <ContextualHelp
-                    title={t('dailyDepositLimitPlatform')}
-                    anchor={{ to: 'bottom', gap: 8 }}
-                    content={<p>{t('dailyDepositLimitPlatformDesc')}</p>}
-                  />
-                }
-              />
+                />
+              )}
               <Input
                 {...register('dailyWithdrawLimit')}
                 label={t('dailyWithdrawLimitPlatform')}
