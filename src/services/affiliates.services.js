@@ -337,6 +337,10 @@ const AffiliatesService = {
               ? String(filters.txnStatus)
               : '',
           txnType:
+            typeof filters?.txnType !== 'undefined' && filters?.txnType !== null
+              ? String(filters.txnType)
+              : '',
+          type:
             typeof filters?.type !== 'undefined' && filters?.type !== null
               ? String(filters.type)
               : '',

@@ -68,10 +68,19 @@ export default function AffiliateUsersTransactions() {
     if (queryParams.keyword) {
       filtersFromQuery.push({ id: 'username', value: queryParams.keyword });
     }
-    if (queryParams.type) {
+    if (queryParams.txnType) {
       // API uses REVSHARE/CPA; convert to table filter values
-      const planType = String(queryParams.type).toUpperCase() === 'CPA' ? 'cpa' : 'revshare';
-      filtersFromQuery.push({ id: 'planType', value: planType });
+      const txnType =
+        String(queryParams.txnType).toUpperCase() === 'CPA'
+          ? 'cpa'
+          : String(queryParams.txnType).toUpperCase() === 'REVSHARE'
+            ? 'revshare'
+            : String(queryParams.txnType).toUpperCase() === 'TRANSFER'
+              ? 'transfer'
+              : undefined;
+      if (txnType) {
+        filtersFromQuery.push({ id: 'txnType', value: txnType });
+      }
     }
     // Map numeric txnStatus from query (0,1,2) to table filter values
     if (typeof queryParams.txnStatus !== 'undefined' && queryParams.txnStatus !== null) {
@@ -101,20 +110,20 @@ export default function AffiliateUsersTransactions() {
     const filterItems = {};
     for (let data of table.getState().columnFilters) {
       if (data.id === 'username') filterItems.keyword = data.value;
-      if (data.id === 'planType') filterItems.planType = data.value; // 'revshare' | 'cpa'
+      if (data.id === 'txnType') filterItems.txnType = data.value; // 'revshare' | 'cpa'
       if (data.id === 'createdAt') filterItems.date = data.value;
       if (data.id === 'currencyID') filterItems.currencyID = data.value;
       if (data.id === 'status')
         filterItems.status = Array.isArray(data.value) ? data.value : [data.value];
     }
 
-    // Map planType to API 'type' param (REVSHARE/CPA)
-    const apiType = filterItems.planType
-      ? filterItems.planType === 'cpa'
+    // Map txnType to API format (REVSHARE/CPA)
+    const apiTxnType = filterItems.txnType
+      ? filterItems.txnType === 'cpa'
         ? 'CPA'
-        : filterItems.planType === 'revshare'
+        : filterItems.txnType === 'revshare'
           ? 'REVSHARE'
-          : filterItems.planType === 'transfer'
+          : filterItems.txnType === 'transfer'
             ? 'TRANSFER'
             : undefined
       : undefined;
@@ -130,7 +139,7 @@ export default function AffiliateUsersTransactions() {
       pageIndex: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
-      ...(apiType && { type: apiType }),
+      ...(apiTxnType && { txnType: apiTxnType }),
       ...(apiTxnStatus && { txnStatus: apiTxnStatus }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
       ...(filterItems.date && { endDate: filterItems.date[1] }),
