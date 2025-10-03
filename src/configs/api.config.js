@@ -1,10 +1,12 @@
+import { PLATFORM_TYPE } from 'constants/app.constant';
+
 export const apiConfig = {
   baseURL: {
     API_BASE_URL: import.meta.env.VITE_API_URL,
     S3_URL: import.meta.env.VITE_S3_URL,
     AI_CHAT_URL: import.meta.env.VITE_AI_CHAT_URL
   },
-  isB2BPlatform: import.meta.env.VITE_PLATFORM_TYPE || 'b2b', // b2b (Business to Business) or b2c(Business to Customer)
+  platformType: import.meta.env.VITE_PLATFORM_TYPE || PLATFORM_TYPE.B2C, // b2b (Business to Business) or b2c(Business to Customer)
   endPoints: {
     AUTH: {
       VALIDATE: '/admin/admin/auth/validate',

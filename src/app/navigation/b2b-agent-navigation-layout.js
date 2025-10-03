@@ -8,7 +8,12 @@ import {
 import DashboardsIcon from 'assets/dualicons/dashboards.svg?react';
 import MonitorIcon from 'assets/nav-icons/monitor.svg?react';
 
-import { NAV_TYPE_ITEM, NAV_TYPE_ROOT, NAV_TYPE_COLLAPSE } from 'constants/app.constant';
+import {
+  NAV_TYPE_ITEM,
+  NAV_TYPE_ROOT,
+  NAV_TYPE_COLLAPSE,
+  PLATFORM_TYPE
+} from 'constants/app.constant';
 
 export const b2bAgentNavigationLayout = {
   id: 'b2b-agent-dashboards',
@@ -17,6 +22,7 @@ export const b2bAgentNavigationLayout = {
   title: 'Dashboards',
   transKey: 'nav.dashboards.dashboards',
   Icon: DashboardsIcon,
+  platformType: PLATFORM_TYPE.B2B, // Only show in B2B platform
   childs: [
     {
       id: 'dashboard',
@@ -24,7 +30,8 @@ export const b2bAgentNavigationLayout = {
       type: NAV_TYPE_ITEM,
       title: 'Dashboard',
       transKey: 'nav.dashboards.dashboard',
-      Icon: MonitorIcon
+      Icon: MonitorIcon,
+      platformType: PLATFORM_TYPE.B2B
     },
     {
       id: 'b2b_agent_tree',
@@ -32,7 +39,8 @@ export const b2bAgentNavigationLayout = {
       type: NAV_TYPE_ITEM,
       title: 'Agent Tree',
       transKey: 'nav.b2b_agent.agent_tree',
-      Icon: AdjustmentsHorizontalIcon
+      Icon: AdjustmentsHorizontalIcon,
+      platformType: PLATFORM_TYPE.B2B
     },
     {
       id: 'b2b_agents',
@@ -40,7 +48,8 @@ export const b2bAgentNavigationLayout = {
       type: NAV_TYPE_ITEM,
       title: 'Agents',
       transKey: 'nav.b2b_agent.agents',
-      Icon: UserCircleIcon
+      Icon: UserCircleIcon,
+      platformType: PLATFORM_TYPE.B2B
     },
     {
       id: 'b2b_agents_players',
@@ -48,7 +57,8 @@ export const b2bAgentNavigationLayout = {
       type: NAV_TYPE_ITEM,
       title: 'Players',
       transKey: 'nav.b2b_agent.players',
-      Icon: UsersIcon
+      Icon: UsersIcon,
+      platformType: PLATFORM_TYPE.B2B
     },
     {
       id: 'b2b_agents_transaction',
@@ -56,7 +66,8 @@ export const b2bAgentNavigationLayout = {
       type: NAV_TYPE_ITEM,
       title: 'Transactions',
       transKey: 'nav.b2b_agent.transactions',
-      Icon: BanknotesIcon
+      Icon: BanknotesIcon,
+      platformType: PLATFORM_TYPE.B2B
     },
     {
       id: 'b2b_agents_withdraws',
@@ -65,6 +76,7 @@ export const b2bAgentNavigationLayout = {
       title: 'Withdraw Requests',
       transKey: 'nav.b2b_agent.withdraw_requests',
       Icon: CurrencyDollarIcon,
+      platformType: PLATFORM_TYPE.B2B,
       childs: [
         {
           id: 'b2b_my_withdrawals',
@@ -72,7 +84,8 @@ export const b2bAgentNavigationLayout = {
           type: NAV_TYPE_ITEM,
           title: 'My Withdrawals',
           transKey: 'nav.b2b_agent.my_withdrawals',
-          Icon: CurrencyDollarIcon
+          Icon: CurrencyDollarIcon,
+          platformType: PLATFORM_TYPE.B2B
         },
         {
           id: 'b2b_agent_withdrawals',
@@ -80,7 +93,8 @@ export const b2bAgentNavigationLayout = {
           type: NAV_TYPE_ITEM,
           title: 'Agent Withdrawals',
           transKey: 'nav.b2b_agent.agent_withdrawals',
-          Icon: CurrencyDollarIcon
+          Icon: CurrencyDollarIcon,
+          platformType: PLATFORM_TYPE.B2B
         },
         {
           id: 'b2b_player_withdrawals',
@@ -88,7 +102,8 @@ export const b2bAgentNavigationLayout = {
           type: NAV_TYPE_ITEM,
           title: 'Player Withdrawals',
           transKey: 'nav.b2b_agent.player_withdrawals',
-          Icon: CurrencyDollarIcon
+          Icon: CurrencyDollarIcon,
+          platformType: PLATFORM_TYPE.B2B
         }
       ]
     }
