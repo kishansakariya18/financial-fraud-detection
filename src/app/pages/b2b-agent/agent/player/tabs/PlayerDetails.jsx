@@ -1,6 +1,6 @@
 import { useParams, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { ViewDetails } from 'components/sections/player-management/ViewDetails';
+import { ViewDetails } from 'components/sections/player-management/PlayerViewDetails';
 
 const PlayerDetails = () => {
   const { t } = useTranslation();

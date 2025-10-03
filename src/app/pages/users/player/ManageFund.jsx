@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next';
 import PlayerService from 'services/player.services';
 import WalletService from 'services/wallet-services';
 import { Listbox } from 'components/shared/form/Listbox';
-import { fundTypeOption, transactionTypeOption } from './helper';
 import TextareaAutosize from 'react-textarea-autosize';
 import { LockClosedIcon } from '@heroicons/react/24/outline';
 import { manageFundSchema } from './schema';
@@ -17,6 +16,10 @@ import { useParams } from 'react-router';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { useDisclosure } from 'hooks';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import {
+  fundTypeOption,
+  transactionTypeOption
+} from 'components/sections/player-management/helper';
 
 const ManageFund = () => {
   const [error, setError] = useState('');

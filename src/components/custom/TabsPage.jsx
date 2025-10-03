@@ -4,17 +4,20 @@ import { Outlet, NavLink, useLocation } from 'react-router';
 // import TabNavigation from "./ShiftLeftAnimation";
 import clsx from 'clsx';
 import { Button, Tab, TabGroup, TabList, TabPanels } from '@headlessui/react';
-// import { useState } from 'react';
+import { useMemo } from 'react';
 import usePermissions from 'app/router/usePermissions';
 
 // ----------------------------------------------------------------------
 
 export default function TabsPage({ tabs }) {
   const location = useLocation();
-  const initialTabIndex = tabs
-    .filter((tab) => (!tab.permission || hasPermission(tab.permission)) && !tab.isHidden)
-    .findIndex((tab) => location.pathname.includes(tab.path));
   const { hasPermission } = usePermissions();
+
+  const initialTabIndex = useMemo(() => {
+    return tabs
+      .filter((tab) => (!tab.permission || hasPermission(tab.permission)) && !tab.isHidden)
+      .findIndex((tab) => location.pathname.includes(tab.path));
+  }, [tabs, hasPermission, location.pathname]);
 
   return (
     <Page>

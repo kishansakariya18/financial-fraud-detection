@@ -4,11 +4,13 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import B2BAgentWalletService from 'services/b2b-agent/b2b-agent-wallet.service';
 import { toast } from 'sonner';
+import { useCurrencyContext } from 'app/contexts/currency/context';
 
 export default function WithdrawRequestDialog({ currentBalance, onSuccess, onCancel }) {
   const { t } = useTranslation();
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
+  const { symbol } = useCurrencyContext();
   //   const [reason, setReason] = useState('');
 
   const handleSubmit = async () => {
@@ -75,6 +77,7 @@ export default function WithdrawRequestDialog({ currentBalance, onSuccess, onCan
               min="0.01"
               max={currentBalance}
               value={amount}
+              prefix={symbol}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="0.00"
               className="w-full"
