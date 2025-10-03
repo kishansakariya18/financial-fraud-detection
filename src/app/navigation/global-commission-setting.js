@@ -12,5 +12,5 @@ export const globalCommissionSetting = {
   transKey: 'nav.commission-setting',
   Icon: GrSettingsOption,
   permission: PERMISSIONS.COMMISSION_SETTING.UPDATE,
-  platformType: [PLATFORM_TYPE.B2B]
+  platformType: [PLATFORM_TYPE.B2C]
 };

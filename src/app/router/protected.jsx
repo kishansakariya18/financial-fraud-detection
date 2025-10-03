@@ -104,14 +104,15 @@ const protectedRoutes = {
                 ...bankRoute,
                 ...registrationFieldsRoute,
                 ...paymentRoute,
-                ...bonusCampaignRoute
+                ...bonusCampaignRoute,
+                ...globalCommissionSettingRoute
               ]
             },
 
             // B2B-only admin routes
             {
               Component: B2BOnlyRouteGuard,
-              children: [...b2bAgentAdminRoutes, ...globalCommissionSettingRoute]
+              children: [...b2bAgentAdminRoutes]
             }
           ]
         },
