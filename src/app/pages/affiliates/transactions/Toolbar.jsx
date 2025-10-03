@@ -103,7 +103,7 @@ function SearchInput({ table, onApplyFilters }) {
       }}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{ input: 'h-8 text-xs ring-primary-500/50 focus:ring', root: 'shrink-0' }}
-      placeholder={t('search_desc')}
+      placeholder={t('search') + ' ' + t('username') + ', ' + t('transaction') + ' ' + t('id')}
     />
   );
 }

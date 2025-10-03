@@ -2,7 +2,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 
 // Local Imports
-import { IdCell, DateCell, BoldCell, BadgeCell, AmountCell } from 'components/custom/table/cell';
+import { IdCell, DateCell, BadgeCell, AmountCell } from 'components/custom/table/cell';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
 import { referredTxnTypeOptions, referredTxnStatusOptions } from './helper';
 import { transactionTypeOption } from './helper';
@@ -30,7 +30,7 @@ export const columns = [
     id: 'username',
     label: 'User Name',
     header: 'User Name',
-    cell: BoldCell,
+    cell: CopyableCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.txnType, {
