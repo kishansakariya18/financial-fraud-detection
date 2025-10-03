@@ -93,6 +93,16 @@ export default function AffiliateUsersTransactions() {
       }
       filtersFromQuery.push({ id: 'status', value: v });
     }
+    if (typeof queryParams.type !== 'undefined' && queryParams.type !== null) {
+      const s = String(queryParams.type);
+      let v = [];
+      if (s.includes(',')) {
+        v = s.split(',').map((x) => (x === '1' ? 'debit' : x === '0' ? 'credit' : ''));
+      } else {
+        v = [s === '1' ? 'debit' : s === '0' ? 'credit' : ''];
+      }
+      filtersFromQuery.push({ id: 'type', value: v });
+    }
     if (queryParams.currencyID) {
       filtersFromQuery.push({ id: 'currencyID', value: String(queryParams.currencyID) });
     }
@@ -115,6 +125,8 @@ export default function AffiliateUsersTransactions() {
       if (data.id === 'currencyID') filterItems.currencyID = data.value;
       if (data.id === 'status')
         filterItems.status = Array.isArray(data.value) ? data.value : [data.value];
+      if (data.id === 'type')
+        filterItems.type = Array.isArray(data.value) ? data.value : [data.value];
     }
 
     // Map txnType to API format (REVSHARE/CPA)
@@ -135,12 +147,19 @@ export default function AffiliateUsersTransactions() {
         ? filterItems.status.map(statusToEnum).join(',')
         : undefined;
 
+    const typeToEnum = (s) => (s === 'debit' ? '1' : s === 'credit' ? '0' : '');
+    const apiType =
+      filterItems.type && filterItems.type.length
+        ? filterItems.type.map(typeToEnum).join(',')
+        : undefined;
+
     setSearchParams({
       pageIndex: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
       ...(apiTxnType && { txnType: apiTxnType }),
       ...(apiTxnStatus && { txnStatus: apiTxnStatus }),
+      ...(apiType && { type: apiType }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
       ...(filterItems.date && { endDate: filterItems.date[1] }),
       ...(filterItems.currencyID && { currencyID: filterItems.currencyID }),

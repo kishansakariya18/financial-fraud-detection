@@ -10,9 +10,10 @@ import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
-import { referredTxnTypeOptions, referredTxnStatusOptions } from './helper';
+import { referredTxnTypeOptions, referredTxnStatusOptions, transactionTypeOption } from './helper';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { HiOutlineCash, HiOutlineTicket } from 'react-icons/hi';
+import { CiFilter } from 'react-icons/ci';
 
 // ----------------------------------------------------------------------
 
@@ -147,6 +148,17 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           column={table.getColumn('status')}
           title={t('status')}
           Icon={MapPinIcon}
+          isMultiple={true}
+          showCheckbox={false}
+        />
+      )}
+
+      {table.getColumn('type') && (
+        <FacedtedFilter
+          options={transactionTypeOption}
+          column={table.getColumn('type')}
+          title={t('type')}
+          Icon={CiFilter}
           isMultiple={true}
           showCheckbox={false}
         />
