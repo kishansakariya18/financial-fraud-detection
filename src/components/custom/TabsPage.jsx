@@ -14,6 +14,7 @@ export default function TabsPage({ tabs }) {
   const { hasPermission } = usePermissions();
 
   const initialTabIndex = useMemo(() => {
+    if (!tabs || tabs.length === 0) return 0;
     return tabs
       .filter((tab) => (!tab.permission || hasPermission(tab.permission)) && !tab.isHidden)
       .findIndex((tab) => location.pathname.includes(tab.path));
