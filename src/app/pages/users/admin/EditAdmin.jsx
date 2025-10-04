@@ -50,6 +50,7 @@ const EditAdmin = () => {
             roles: result.RoleID,
             status: parseAdminStatusToApp(result.AccountStatus) || 'inactive',
             mobile: result.Mobile || '',
+            phoneCode: result.PhoneCode || '',
             isMasterAdmin: result.IsSuperAdmin || false
           };
         }
