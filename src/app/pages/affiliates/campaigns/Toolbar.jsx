@@ -81,9 +81,9 @@ export function Toolbar({
           className="h-8 space-x-2 rounded-md px-3 text-xs rtl:space-x-reverse"
           onClick={handleExport}
           disabled={isExporting || !affiliateId}
-          title={`${t('export') + ' ' + t('report')}`}>
+          title={`${t('export_text') + ' ' + t('report')}`}>
           <TbUpload className="size-4" />
-          <span>{isExporting ? t('exporting') : t('export') + ' ' + t('report')}</span>
+          <span>{isExporting ? t('exporting') : t('export_text') + ' ' + t('report')}</span>
         </Button>
       </div>
 
