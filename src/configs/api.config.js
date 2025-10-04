@@ -524,7 +524,8 @@ export const apiConfig = {
       COMMISSION_SETTINGS: '/affiliates/admin/affiliates/{affiliateId}/commission-settings',
       COMMISSION_SETTINGS_UPDATE: '/affiliates/admin/affiliates/commission-setting/update',
       GLOBAL_COMMISSION_SETTINGS: '/affiliates/admin/affiliates/global/commission-setting',
-      AFFILIATE_TRANSACTIONS: '/affiliates/admin/affiliates/{affiliateId}/transactions'
+      AFFILIATE_TRANSACTIONS: '/affiliates/admin/affiliates/{affiliateId}/transactions',
+      CAMPAIGN_REPORT: '/affiliates/admin/affiliates/campaign-report'
     },
     FAQ: {
       LIST: '/affiliates/admin/faq/list',

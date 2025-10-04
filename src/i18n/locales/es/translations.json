@@ -600,5 +600,7 @@
   "question": "Pregunta",
   "deleteFAQDesc": "¿Estás seguro de que quieres eliminar esta FAQ?",
   "faqDeleteSuccess": "FAQ eliminada exitosamente!",
-  "answer": "Respuesta"
+  "answer": "Respuesta",
+  "export": "Exportar",
+  "exporting": "Exportando..."
 }

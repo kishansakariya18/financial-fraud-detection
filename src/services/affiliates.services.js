@@ -1,6 +1,7 @@
 import apiConfig from 'configs/api.config';
 import { sendRequest } from 'utils/axios';
 import dayjs from 'dayjs';
+import axios from 'axios';
 
 const AffiliatesService = {
   getList: async ({ pagination, filters }) => {
@@ -364,6 +365,33 @@ const AffiliatesService = {
     } catch (error) {
       return { status: 500, error: error?.message || 'Unexpected error' };
     }
+  }
+};
+
+AffiliatesService.exportCampaignReport = async ({ affiliateId }) => {
+  try {
+    if (!affiliateId || String(affiliateId).trim() === '') {
+      return { status: 400, error: 'Invalid affiliateId to export report' };
+    }
+    const endPoint = apiConfig.endPoints.AFFILIATES.CAMPAIGN_REPORT;
+    const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+
+    const res = await axios.request({
+      url: apiURL,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: { userId: String(affiliateId) },
+      responseType: 'blob'
+    });
+
+    return { status: res.status, response: res.data };
+  } catch (error) {
+    const status = error?.response?.status || 500;
+    let errMsg =
+      (typeof error?.response?.data === 'string'
+        ? error.response.data
+        : error?.response?.data?.message) || 'Failed to export report';
+    return { status, error: errMsg || error?.message || 'Unexpected error' };
   }
 };
 
