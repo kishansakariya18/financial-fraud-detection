@@ -581,5 +581,7 @@
   "question": "Question",
   "deleteFAQDesc": "Êtes-vous sûr de vouloir supprimer cette FAQ?",
   "faqDeleteSuccess": "FAQ supprimée avec succès!",
-  "answer": "Answer"
+  "answer": "Answer",
+  "upgrade_user_class":"mettre à niveau la classe de joueur",
+  "select_user_class_to_upgrade":"Selectionner la classe de joueur pour mettre à niveau"
 }

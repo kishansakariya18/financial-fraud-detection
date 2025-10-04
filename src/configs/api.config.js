@@ -55,6 +55,7 @@ export const apiConfig = {
       TDS_SUMMARY_TRANSACTION_LIST: '/users/admin/users/tds-summary-transaction-list',
       TRANSACTION_DETAIL: '/wallet/admin/wallet/transaction-detail',
       CHANGE_STATUS: '/users/admin/users/change-status',
+      UPGRADE_USER_CLASS: '/users/admin/users/upgrade-user-class',
       REST_BANK_COUNT: '/users/admin/users/reset-bank-request-count',
       UPDATE_RISK_MANAGEMENT: '/users/admin/users/update-user-risk-management/:userID',
       ALL_TRANSACTION_LIST: '/users/admin/users/all-transaction-list',

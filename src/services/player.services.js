@@ -283,6 +283,26 @@ const PlayerService = {
       console.log('Error from userStatus', error);
     }
   },
+  upgradeUserClass: async ({ nextClassID, userUID }) => {
+    try {
+      const endPoint = apiConfig.endPoints.USER.UPGRADE_USER_CLASS;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          nextClassID: String(nextClassID),
+          userUID
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from upgradeUserClass', error);
+    }
+  },
   userRestBankCount: async (userID) => {
     try {
       const body = {

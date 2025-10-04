@@ -915,5 +915,7 @@
   "confirm_password": "Confirm Password",
   "my": "My",
   "adjust_commission_balance": "Adjust Commission Balance",
-  "adjust_lineup_balance": "Adjust Lineup Balance"
+  "adjust_lineup_balance": "Adjust Lineup Balance",
+  "upgrade_user_class":"Upgrade Player Class",
+  "select_user_class_to_upgrade":"Select Player Class to Upgrade"
 }
