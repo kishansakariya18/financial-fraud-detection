@@ -95,6 +95,12 @@ const PromoCodeService = {
         }
       }
 
+      if (data.wageringCategories.length) {
+        for (let i = 0; i < data.wageringCategories.length; i++) {
+          formData.append(`WageringCategories[${i}]`, data.wageringCategories[i]);
+        }
+      }
+
       if (file && file.name) {
         formData.append('CampaignImage', file, file.name);
       }
@@ -146,7 +152,7 @@ const PromoCodeService = {
         page: pagination.pageIndex + 1
       };
       const endPoint = replaceText(
-        apiConfig.endPoints.BONUS_CAMPAIGN.HISTORY,
+        apiConfig.endPoints.BONUS_CAMPAIGN.GRANT_LIST,
         ':id',
         bonusCampaignId
       );
@@ -158,7 +164,7 @@ const PromoCodeService = {
       if (apiURL) {
         const response = await sendRequest({
           url: apiURL,
-          method: 'GET',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },

@@ -923,5 +923,18 @@
   "LTV": "(LTV - Life Time Value)",
   "export_text": "Export",
   "exporting": "Exporting...",
-  "referrence": "Referrence"
+  "referrence": "Referrence",
+  "grantStatus": "Grant Status",
+  "txnAmount": "Transaction Amount",
+  "grantBonusAmount": "Bonus Amount",
+  "requiredWR": "Required Wagering",
+  "completedWR": "Completed Wagering",
+  "wageringProgress": "Wagering Progress",
+  "expireOn": "Expires On",
+  "forfeited": "Forfeited",
+  "cashedOut": "Cashed Out",
+  "bonusGrantID": "Bonus Grant ID",
+  "refTxnID": "Reference Transaction ID",
+  "refBonusTxnID": "Reference Bonus Transaction ID",
+  "refBonusCashoutTxnID": "Reference Cashout Transaction ID"
 }

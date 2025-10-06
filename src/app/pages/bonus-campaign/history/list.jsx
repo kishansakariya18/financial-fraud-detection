@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { useParams, useSearchParams } from 'react-router';
-import { useClipboard, useLockScrollbar } from 'hooks';
+import { useLockScrollbar } from 'hooks';
 
 // Local Imports - UI, Services, Helpers, Utils
 import { columns } from './columns';
@@ -14,27 +14,25 @@ import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.const
 
 // import { RiCashFill } from 'react-icons/ri';
 import BonusCampaignService from 'services/bonus-campaign.services';
-import { discountTypeToAPP, bonusGrantResponseMapper, segmentationTypeToAPP } from '../helper';
-import { Button, Card, Skeleton } from 'components/ui';
-import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
-import { Toolbar } from './Toolbar';
+// import { discountTypeToAPP, bonusGrantResponseMapper, segmentationTypeToAPP } from '../helper';
+// import { Button, Card, Skeleton } from 'components/ui';
+// import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
+// import { Toolbar } from './Toolbar';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
-import {
-  // BanknotesIcon,
-  DocumentDuplicateIcon
-  // PresentationChartBarIcon,
-  // UsersIcon
-} from '@heroicons/react/20/solid';
+import {} from // BanknotesIcon,
+// DocumentDuplicateIcon
+// PresentationChartBarIcon,
+// UsersIcon
+'@heroicons/react/20/solid';
+import { bonusGrantResponseMapper } from '../helper';
 // import { Toolbar } from './Toolbar';
 
 export default function BonusGrants() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   // const [cardData, setCardData] = useState();
-  const [loading, setLoading] = useState();
-  const [response, setResponse] = useState();
   const pageTitle = t('bonusGrants');
-  const { copied, copy } = useClipboard({ timeout: 2000 });
+  // const { copied, copy } = useClipboard({ timeout: 2000 });
   const { bonusCampaignId } = useParams();
 
   const breadcrumbs = [
@@ -44,28 +42,17 @@ export default function BonusGrants() {
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
-  const fetchPromocodeDetails = async () => {
-    setLoading(true);
-    const result = await BonusCampaignService.getPromocodeDetail(bonusCampaignId);
-
-    if (result.status === 200) {
-      const apiData = result.response.data;
-      setResponse(apiData);
-    } else {
-      setError(result.error);
-    }
-    setLoading(false);
-  };
-
   const fetchBonusGrants = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
     const result = await BonusCampaignService.getBonusGrants({
       pagination: { pageIndex, pageSize },
-      promocodeId: bonusCampaignId
+      bonusCampaignId: bonusCampaignId
     });
 
-    const apiData = bonusGrantResponseMapper(result.response.data);
+    console.log('result.response.data:', result?.response?.data);
+
+    const apiData = bonusGrantResponseMapper(result?.response?.data || []);
 
     // const recordsCount = parseInt(result.response.totalRecords, 10) || 0;
     // const uniqueUsers = parseInt(result.response.uniqueUsers, 10) || 0;
@@ -96,14 +83,11 @@ export default function BonusGrants() {
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
       tableSettings: { enableFullScreen: false },
-      columnVisibility: { rejectReason: false }
+      columnVisibility: {}
     }
   });
 
-  useEffect(() => {
-    fetchPromocodeDetails();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bonusCampaignId]);
+  useEffect(() => {}, [bonusCampaignId]);
 
   useEffect(() => {
     if (!isLoading && error) {
@@ -168,109 +152,12 @@ export default function BonusGrants() {
         </div>
       </div> */}
 
-      <div className="col-span-12 m-3 sm:col-span-8 lg:col-span-9">
-        {loading ? (
-          [...Array(10)].map((_, i) => (
-            <Skeleton key={i} className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" />
-          ))
-        ) : (
-          <Card className="h-full p-4 sm:p-5">
-            <h6 className="mt-8 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
-              {t('promocode') + ' ' + t('information')}
-            </h6>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('promocode')}
-                </p>
-                <div className="flex space-x-1 rtl:space-x-reverse">
-                  <span> {response?.PromoCode || '-'}</span>
-
-                  <Button
-                    data-tooltip
-                    data-tooltip-content={copied ? 'Copied' : 'Copy'}
-                    onClick={() => copy(response?.PromoCode)}
-                    isIcon
-                    variant="flat"
-                    className="size-5 rounded-full group-hover/td:opacity-100"
-                    aria-label="Copy Button">
-                    <DocumentDuplicateIcon className="size-3.5" />
-                  </Button>
-                </div>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('discount')}
-                </p>
-                <p>{response?.Amount}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('min') + ' ' + t('amount')}
-                </p>
-                <p>{response?.MinAmount}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('max') + ' ' + t('amount')}
-                </p>
-                <p>{response?.MaxAmount}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('expiration') + ' ' + t('startAt')}
-                </p>
-                <p>{getDateInUTCToTimeZone(response?.StartDate)}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('expiration') + ' ' + t('endAt')}
-                </p>
-                <p>{getDateInUTCToTimeZone(response?.EndDate)}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('usageLimit')}
-                </p>
-                <p>{response?.UsageLimit}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('exact') + ' ' + t('amount')}
-                </p>
-                <p>{response?.ExactAmount}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('benefitCap')}
-                </p>
-                <p>{response?.BenefitCap}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('discount') + ' ' + t('type')}
-                </p>
-                <p>{discountTypeToAPP(response?.DiscountType)}</p>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('segmentation') + ' ' + t('type')}
-                </p>
-                <p>{capitalizeFirstLetter(segmentationTypeToAPP(response?.SegmentationType))}</p>
-              </div>
-
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('createdAt')}
-                </p>
-                <p>{getDateInUTCToTimeZone(response?.DateCreated)}</p>
-              </div>
-            </div>
-          </Card>
-        )}
-      </div>
-
-      <Toolbar table={table} title={t('title')} pageTitle={t('user') + ' ' + t('list')} />
+      {/* <Toolbar
+        table={table}
+        pageTitle={t('bonusGrants')}
+        onApplyFilters={handleApplyFilters}
+        onClearFilters={handleClearFilters}
+      /> */}
 
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>

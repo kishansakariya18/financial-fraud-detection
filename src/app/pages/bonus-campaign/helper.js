@@ -1,4 +1,11 @@
-import { CheckBadgeIcon, ClockIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import {
+  CheckBadgeIcon,
+  ClockIcon,
+  XCircleIcon,
+  BanknotesIcon,
+  CheckCircleIcon,
+  XMarkIcon
+} from '@heroicons/react/24/outline';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 // Status related helpers
@@ -12,6 +19,25 @@ export const parseCampaignStatus = (status) => {
       return 'expired';
     default:
       return 'inactive';
+  }
+};
+
+export const parseGrantStatus = (status) => {
+  switch (+status) {
+    case 0:
+      return 'pending';
+    case 1:
+      return 'active';
+    case 2:
+      return 'completed';
+    case 3:
+      return 'expired';
+    case 4:
+      return 'forfeited';
+    case 5:
+      return 'cashedOut';
+    default:
+      return 'pending';
   }
 };
 
@@ -56,6 +82,46 @@ export const campaignStatusOptions = [
     label: 'Expired',
     color: 'warning',
     icon: ClockIcon
+  }
+];
+
+// Grant status options
+export const grantStatusOptions = [
+  {
+    value: 'pending',
+    label: 'Pending',
+    color: 'warning',
+    icon: ClockIcon
+  },
+  {
+    value: 'active',
+    label: 'Active',
+    color: 'info',
+    icon: BanknotesIcon
+  },
+  {
+    value: 'completed',
+    label: 'Completed',
+    color: 'success',
+    icon: CheckCircleIcon
+  },
+  {
+    value: 'expired',
+    label: 'Expired',
+    color: 'error',
+    icon: ClockIcon
+  },
+  {
+    value: 'forfeited',
+    label: 'Forfeited',
+    color: 'error',
+    icon: XMarkIcon
+  },
+  {
+    value: 'cashedOut',
+    label: 'Cashed Out',
+    color: 'success',
+    icon: CheckBadgeIcon
   }
 ];
 
@@ -152,6 +218,8 @@ export const segmentationTypeToAPI = (type) => {
       return 0;
     case 'specific':
       return 1;
+    case 'user-class':
+      return 2;
     default:
       break;
   }
@@ -213,13 +281,42 @@ export const discountTypeToAPP = (value) => {
 };
 
 export const bonusGrantResponseMapper = (apiData) => {
-  const resultData = apiData.map((data) => ({
-    id: data.PromoCodeHistoryID,
-    userName: data?.User?.Username || '',
-    mobile: data?.User?.Mobile || '',
-    depositAmount: data?.DepositAmount || 0,
-    benefitAmount: data?.BenefitAmount || 0,
-    usedAt: getDateInUTCToTimeZone(data.DateCreated)
-  }));
+  if (!apiData || !Array.isArray(apiData)) return [];
+
+  const resultData = apiData.map((data) => {
+    const requiredWR = parseFloat(data.RequiredWR) || 0;
+    const completedWR = parseFloat(data.CompletedWR) || 0;
+    const wageringProgress = requiredWR > 0 ? (completedWR / requiredWR) * 100 : 0;
+
+    return {
+      id: data.BonusGrantID,
+      userName: data?.Username || '',
+      mobile: data?.Mobile || '',
+      txnAmount: parseFloat(data?.TxnAmount) || 0,
+      grantBonusAmount: parseFloat(data?.GrantBonusAmount) || 0,
+      grantStatus: parseGrantStatus(data.GrantStatus),
+      requiredWR: requiredWR,
+      completedWR: completedWR,
+      wageringProgress: wageringProgress,
+      expireOn: data.ExpireOn ? getDateInUTCToTimeZone(data.ExpireOn) : null,
+      dateCreated: getDateInUTCToTimeZone(data.DateCreated),
+      dateUpdated: getDateInUTCToTimeZone(data.DateUpdated),
+      refTxnID: data.RefTxnID,
+      refBonusTxnID: data.RefBonusTxnID,
+      refBonusCashoutTxnID: data.RefBonusCashoutTxnID,
+      grantBonusCurrencyID: data.GrantBonusCurrencyID
+    };
+  });
   return resultData;
+};
+
+export const mapUserClassOptions = (apiData) => {
+  let options = [];
+  if (apiData.length > 0) {
+    options = apiData.map((data) => ({
+      value: data.UserClassID,
+      label: data.ClassName || 'User Class ' + data.UserClassID
+    }));
+  }
+  return options;
 };
