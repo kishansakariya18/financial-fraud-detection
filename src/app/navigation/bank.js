@@ -2,7 +2,7 @@
 import { BanknotesIcon } from '@heroicons/react/24/outline';
 
 // Local Imports
-import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
+import { NAV_TYPE_ITEM, PERMISSIONS, PLATFORM_TYPE } from 'constants/app.constant';
 export const bank = {
   id: 'bank',
   type: NAV_TYPE_ITEM,
@@ -10,5 +10,6 @@ export const bank = {
   title: 'Bank',
   transKey: 'bank',
   Icon: BanknotesIcon,
-  permission: PERMISSIONS.BANK.VIEW
+  permission: PERMISSIONS.BANK.VIEW,
+  platformType: [PLATFORM_TYPE.B2C]
 };

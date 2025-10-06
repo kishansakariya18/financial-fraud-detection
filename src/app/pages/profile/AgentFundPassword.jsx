@@ -3,22 +3,21 @@ import { LockClosedIcon } from '@heroicons/react/24/outline';
 
 // Local Imports
 
-import { Button, Input, Radio } from 'components/ui';
+import { Button, Input } from 'components/ui';
 import { useTranslation } from 'react-i18next';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ProfileService from 'services/profile.services';
 import { toast } from 'sonner';
 import { changePasswordSchema } from './schema';
 
-export default function PlayerFundPassword() {
+export default function AgentFundPassword() {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const [error, setError] = useState('');
-  const [passwordType, setPasswordType] = useState('playerFund');
   const [initialValues] = useState({
     currentPassword: '',
     newPassword: '',
@@ -27,7 +26,6 @@ export default function PlayerFundPassword() {
 
   const handleReset = () => {
     reset(initialValues);
-    setPasswordType('playerFund');
     setError('');
   };
 
@@ -45,46 +43,23 @@ export default function PlayerFundPassword() {
     }
   });
 
-  const onPasswordTypeChange = (e) => {
-    setPasswordType(e.target.name);
-  };
-
-  const changeAffiliateFundPasswordAPI = async (requestObject) => {
+  const changeB2BAgentFundPasswordAPI = async (requestObject) => {
     setLoading(true);
     setError(null);
-
-    const result = await ProfileService.changeAffiliateFundPassword(requestObject);
-    if (result) {
-      if (result.status === 200 || result.status === 201) {
+    await ProfileService.changeB2BAgentFundPassword(requestObject)
+      .then((result) => {
         setResponse(result.response);
-      } else {
-        setError(result.error);
-      }
-    }
-    setLoading(false);
-  };
-
-  const changePlayerFundPasswordAPI = async (requestObject) => {
-    setLoading(true);
-    setError(null);
-
-    const result = await ProfileService.changePlayerFundPassword(requestObject);
-    if (result) {
-      if (result.status === 200 || result.status === 201) {
-        setResponse(result.response);
-      } else {
-        setError(result.error);
-      }
-    }
-    setLoading(false);
+      })
+      .catch((error) => {
+        setError(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const onSubmit = (data) => {
-    if (passwordType === 'playerFund') {
-      changePlayerFundPasswordAPI(data);
-    } else {
-      changeAffiliateFundPasswordAPI(data);
-    }
+    changeB2BAgentFundPasswordAPI(data);
   };
 
   if (!loading && error) {
@@ -94,38 +69,16 @@ export default function PlayerFundPassword() {
   if (!loading && !error && response) {
     toast.success(response.message);
     reset(initialValues);
-    setPasswordType('playerFund');
     setResponse('');
   }
-
-  useEffect(() => {
-    console.log('change password called');
-  }, []);
   return (
     <ContentWrapper pageTitle={t('password')} isTable={false}>
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <div className="w-full max-w-3xl 2xl:max-w-5xl">
           <p className="text-base font-medium text-gray-800 dark:text-dark-100">
-            {t('update') + ' ' + t('transaction') + ' ' + t('password')}
+            {t('update') + ' ' + t('agent') + ' ' + t('fund') + ' ' + t('password')}
           </p>{' '}
           <div className="my-5 h-px bg-gray-200 dark:bg-dark-500" />
-          <div className="flex flex-wrap gap-5">
-            <Radio
-              color="primary"
-              label={t('player') + ' ' + t('fund') + ' ' + t('password')}
-              name="playerFund"
-              defaultChecked
-              onChange={onPasswordTypeChange}
-              checked={passwordType === 'playerFund'}
-            />
-            <Radio
-              color="primary"
-              label={t('affiliate') + ' ' + t('fund') + ' ' + t('password')}
-              name="affiliateFund"
-              onChange={onPasswordTypeChange}
-              checked={passwordType === 'affiliateFund'}
-            />
-          </div>
           <div>
             <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-1 [&_.prefix]:pointer-events-none">
               <Input

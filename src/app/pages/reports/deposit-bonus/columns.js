@@ -3,7 +3,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 
 // Local Imports
 import { IdCell, BoldCell, BadgeCell, DateCell } from '../../../../components/custom/table/cell';
-import { transactionStatusOption } from 'app/pages/users/player/helper';
+import { transactionStatusOption } from 'components/sections/player-management/helper';
 // ----------------------------------------------------------------------
 
 const columnHelper = createColumnHelper();

@@ -1,4 +1,4 @@
-import { PERMISSIONS } from 'constants/app.constant';
+import { PERMISSIONS, PLATFORM_TYPE } from 'constants/app.constant';
 import PrivateRoute from '../private';
 export const userClasseRoute = [
   {
@@ -91,7 +91,9 @@ export const userClasseRoute = [
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.USER_CLASS.ASSIGN_BANK}>
+          <PrivateRoute
+            permission={PERMISSIONS.USER_CLASS.ASSIGN_BANK}
+            allowedPlatforms={[PLATFORM_TYPE.B2C]}>
             <AssignedBanks />
           </PrivateRoute>
         )
@@ -104,7 +106,9 @@ export const userClasseRoute = [
       const { default: BankList } = await import('../../pages/user-class/assigned-banks/BankList');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.USER_CLASS.ASSIGN_BANK}>
+          <PrivateRoute
+            permission={PERMISSIONS.USER_CLASS.ASSIGN_BANK}
+            allowedPlatforms={[PLATFORM_TYPE.B2C]}>
             <BankList />
           </PrivateRoute>
         )

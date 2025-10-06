@@ -45,6 +45,31 @@ export const CurrencyProvider = ({ children }) => {
     }
   }, []);
 
+  const formatCurrency = useCallback(
+    (amount, currencyCode = null) => {
+      // 1. Handle cases where no code is provided or amount is invalid
+      if (!code || isNaN(Number(amount))) {
+        return amount;
+      }
+
+      try {
+        return new Intl.NumberFormat('en-US', {
+          style: 'currency',
+          currency: currencyCode || code, // Use the dynamic code directly
+          minimumFractionDigits: decimalPlaces,
+          maximumFractionDigits: decimalPlaces
+        }).format(amount);
+      } catch (error) {
+        console.warn('Error formatting currency:', error);
+        // if (e instanceof RangeError) {
+        //   return amount; // Return the raw amount if the code is unsupported
+        // }
+        return [symbol, amount].filter(Boolean).join(' ');
+      }
+    },
+    [code, decimalPlaces, symbol]
+  );
+
   // Load on login success and once on mount (if settings already present)
   useEffect(() => {
     if (isLoggedIn) {
@@ -87,9 +112,10 @@ export const CurrencyProvider = ({ children }) => {
       decimalPlaces,
       loading,
       error,
-      refreshBaseCurrency: fetchAndSetCurrency
+      refreshBaseCurrency: fetchAndSetCurrency,
+      formatCurrency
     };
-  }, [code, symbol, decimalPlaces, loading, error, fetchAndSetCurrency]);
+  }, [code, symbol, decimalPlaces, loading, error, fetchAndSetCurrency, formatCurrency]);
 
   return <CurrencyContext value={value}>{children}</CurrencyContext>;
 };

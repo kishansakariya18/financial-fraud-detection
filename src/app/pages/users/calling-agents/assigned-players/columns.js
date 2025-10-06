@@ -4,7 +4,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 // Local Imports
 import { IdCell, DateCell, BoldCell, BadgeCell, SelectCell } from 'components/custom/table/cell';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
-import { playerStatusOptions } from '../../player/helper';
+import { playerStatusOptions } from 'components/sections/player-management/helper';
 
 // ----------------------------------------------------------------------
 

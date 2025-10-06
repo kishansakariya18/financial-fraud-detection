@@ -96,7 +96,7 @@ export const PlayerColumns = ({
     filterFn: 'arrIncludesSome',
     enableSorting: false
   }),
-  ...(listFor === 'agent'
+  ...(listFor !== 'agent'
     ? [
         columnHelper.accessor((row) => row.isBankVerified, {
           id: 'isBankVerified',

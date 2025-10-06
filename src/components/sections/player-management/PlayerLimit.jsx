@@ -3,7 +3,6 @@ import { Box, Button, Input, Skeleton, Switch } from 'components/ui';
 import { Page } from 'components/shared/Page';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { useParams } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
 import PlayerService from 'services/player.services';
@@ -11,30 +10,48 @@ import { ContextualHelp } from 'components/shared/ContextualHelp';
 import { playerLimitSchema } from './schema';
 import { useTranslation } from 'react-i18next';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { useCurrencyContext } from 'app/contexts/currency/context';
+import { isB2BPlatform } from 'utils/platformNavigation';
 
-const PlayerLimit = ({ playerId: initialPlayerId, breadcrumbs }) => {
+const PlayerLimit = ({ playerId, breadcrumbs }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [detailLoading, setDetailLoading] = useState(false);
   const [response, setResponse] = useState(null);
-  const params = useParams();
   const [userId, setUserId] = useState(null); // numeric user ID
   // const [exclusionType, setExclusionType] = useState('');
   const [limitIdMap, setLimitIdMap] = useState({});
   const [limitsData, setLimitsData] = useState([]); // API-driven limits for dynamic UI
   const { t } = useTranslation();
   const pageTitle = t('player') + ' ' + t('limit');
-
-  const playerId = initialPlayerId || params.playerId;
+  const { symbol } = useCurrencyContext();
+  const isB2B = isB2BPlatform();
 
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors }
   } = useForm({
     resolver: yupResolver(playerLimitSchema)
   });
+
+  // Watch all form values to detect changes
+  const watchedValues = watch();
+
+  // Helper function to check if a limit has value but switch is disabled
+  const getValidationMessage = (valueKey, flagKey) => {
+    const hasValue = watchedValues?.[valueKey] && Number(watchedValues[valueKey]) > 0;
+    const isEnabled = watchedValues?.[flagKey];
+
+    if (hasValue && !isEnabled) {
+      return t('enable_switch_to_apply_limit');
+    }
+    return null;
+  };
+
+  console.log('errors: ', errors);
 
   useEffect(() => {
     if (playerId) {
@@ -266,6 +283,7 @@ const PlayerLimit = ({ playerId: initialPlayerId, breadcrumbs }) => {
   }
 
   useEffect(() => {
+    console.log('useEffect 2 called');
     if (!loading && !error && response) {
       toast.success(response.message);
       // setResponse(null);
@@ -274,6 +292,91 @@ const PlayerLimit = ({ playerId: initialPlayerId, breadcrumbs }) => {
   }, [response]);
 
   const handlePlayerLimitUpdate = async (data) => {
+    // Validate that all limits with values have their switches enabled
+    const validationErrors = [];
+
+    const limitConfigs = [
+      {
+        valueKey: 'dailyWagerLimit',
+        flagKey: 'hasDailyWagerLimit',
+        name: 'Daily Wager Limit'
+      },
+      {
+        valueKey: 'weeklyWagerLimit',
+        flagKey: 'hasWeeklyWagerLimit',
+        name: 'Weekly Wager Limit'
+      },
+      {
+        valueKey: 'monthlyWagerLimit',
+        flagKey: 'hasMonthlyWagerLimit',
+        name: 'Monthly Wager Limit'
+      },
+      {
+        valueKey: 'oneTimeWagerLimit',
+        flagKey: 'hasOneTimeWagerLimit',
+        name: 'One Time Wager Limit'
+      },
+      {
+        valueKey: 'dailyDepositLimit',
+        flagKey: 'hasDailyDepositLimit',
+        name: 'Daily Deposit Limit'
+      },
+      {
+        valueKey: 'weeklyDepositLimit',
+        flagKey: 'hasWeeklyDepositLimit',
+        name: 'Weekly Deposit Limit'
+      },
+      {
+        valueKey: 'monthlyDepositLimit',
+        flagKey: 'hasMonthlyDepositLimit',
+        name: 'Monthly Deposit Limit'
+      },
+      {
+        valueKey: 'dailyWithdrawLimit',
+        flagKey: 'hasDailyWithdrawLimit',
+        name: 'Daily Withdraw Limit'
+      },
+      {
+        valueKey: 'weeklyWithdrawLimit',
+        flagKey: 'hasWeeklyWithdrawLimit',
+        name: 'Weekly Withdraw Limit'
+      },
+      {
+        valueKey: 'monthlyWithdrawLimit',
+        flagKey: 'hasMonthlyWithdrawLimit',
+        name: 'Monthly Withdraw Limit'
+      },
+      {
+        valueKey: 'dailyLossLimit',
+        flagKey: 'hasDailyLossLimit',
+        name: 'Daily Loss Limit'
+      },
+      {
+        valueKey: 'weeklyLossLimit',
+        flagKey: 'hasWeeklyLossLimit',
+        name: 'Weekly Loss Limit'
+      },
+      {
+        valueKey: 'monthlyLossLimit',
+        flagKey: 'hasMonthlyLossLimit',
+        name: 'Monthly Loss Limit'
+      }
+    ];
+
+    limitConfigs.forEach(({ valueKey, flagKey, name }) => {
+      const hasValue = data[valueKey] && Number(data[valueKey]) > 0;
+      const isEnabled = data[flagKey];
+
+      if (hasValue && !isEnabled) {
+        validationErrors.push(`${name}: ${t('enable_switch_to_apply_limit')}`);
+      }
+    });
+
+    if (validationErrors.length > 0) {
+      toast.error(validationErrors.join('\n'));
+      return;
+    }
+
     await updatePlayerLimit(data);
   };
 
@@ -281,10 +384,6 @@ const PlayerLimit = ({ playerId: initialPlayerId, breadcrumbs }) => {
   //   field.onChange(val.value);
   //   setExclusionType(val.value);
   // };
-  const breadcrumbItem = breadcrumbs || [
-    { title: t('players'), path: '/users/player' },
-    { title: t('player') + ' ' + t('limit') }
-  ];
 
   return (
     <Page title={pageTitle}>
@@ -297,7 +396,7 @@ const PlayerLimit = ({ playerId: initialPlayerId, breadcrumbs }) => {
             <div className="hidden self-stretch py-1 sm:flex">
               <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
             </div>
-            <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
+            <Breadcrumbs items={breadcrumbs} className="max-sm:hidden" />
           </div>
         </div>
 
@@ -324,87 +423,251 @@ const PlayerLimit = ({ playerId: initialPlayerId, breadcrumbs }) => {
               ))
             ) : (
               <>
-                {
-                  // Helper functions
-                }
-                {(() => {
-                  const typeOrder = ['wager', 'deposit', 'withdraw', 'loss'];
-                  const periodOrder = ['one-time', 'daily', 'weekly', 'monthly'];
-                  const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
-                  const mapTypeToKey = (type) => cap(type); // Wager/Deposit/Withdraw/Loss
+                <>
+                  {
+                    // Helper functions
+                  }
+                  {(() => {
+                    const typeOrder = ['wager', 'deposit', 'withdraw', 'loss'];
+                    const periodOrder = ['one-time', 'daily', 'weekly', 'monthly'];
+                    const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+                    const mapTypeToKey = (type) => cap(type); // Wager/Deposit/Withdraw/Loss
 
-                  const sorted = [...limitsData]
-                    .filter(
-                      (x) => typeOrder.includes(x.limitType) && periodOrder.includes(x.limitPeriod)
-                    )
-                    .sort((a, b) => {
-                      const t = typeOrder.indexOf(a.limitType) - typeOrder.indexOf(b.limitType);
-                      if (t !== 0) return t;
-                      return (
-                        periodOrder.indexOf(a.limitPeriod) - periodOrder.indexOf(b.limitPeriod)
-                      );
-                    });
+                    const sorted = [...limitsData]
+                      .filter(
+                        (x) =>
+                          typeOrder.includes(x.limitType) && periodOrder.includes(x.limitPeriod)
+                      )
+                      .sort((a, b) => {
+                        const t = typeOrder.indexOf(a.limitType) - typeOrder.indexOf(b.limitType);
+                        if (t !== 0) return t;
+                        return (
+                          periodOrder.indexOf(a.limitPeriod) - periodOrder.indexOf(b.limitPeriod)
+                        );
+                      });
 
-                  return sorted.map((item, idx) => {
-                    const TypeKey = mapTypeToKey(item.limitType);
-                    const PeriodKey = cap(item.limitPeriod);
-                    const isOneTimeWager =
-                      item.limitType === 'wager' && item.limitPeriod === 'one-time';
-                    const valueKey = isOneTimeWager
-                      ? 'oneTimeWagerLimit'
-                      : `${item.limitPeriod}${TypeKey}Limit`; // e.g., dailyWagerLimit
-                    const flagKey = isOneTimeWager
-                      ? 'hasOneTimeWagerLimit'
-                      : `has${PeriodKey}${TypeKey}Limit`; // e.g., hasDailyWagerLimit
-                    // Use camelCase translation keys specifically for one-time wager to avoid any i18n separator issues
-                    const titleKey =
-                      item.limitType === 'wager' && item.limitPeriod === 'one-time'
+                    return sorted.map((item, idx) => {
+                      const TypeKey = mapTypeToKey(item.limitType);
+                      const PeriodKey = cap(item.limitPeriod);
+                      const isOneTimeWager =
+                        item.limitType === 'wager' && item.limitPeriod === 'one-time';
+                      const valueKey = isOneTimeWager
                         ? 'oneTimeWagerLimit'
-                        : `${item.limitPeriod}${TypeKey}Limit`; // translation key
-                    const descKey =
-                      item.limitType === 'wager' && item.limitPeriod === 'one-time'
-                        ? 'oneTimeWagerLimitDesc'
-                        : `${titleKey}Desc`;
+                        : `${item.limitPeriod}${TypeKey}Limit`; // e.g., dailyWagerLimit
+                      const flagKey = isOneTimeWager
+                        ? 'hasOneTimeWagerLimit'
+                        : `has${PeriodKey}${TypeKey}Limit`; // e.g., hasDailyWagerLimit
+                      // Use camelCase translation keys specifically for one-time wager to avoid any i18n separator issues
+                      const titleKey =
+                        item.limitType === 'wager' && item.limitPeriod === 'one-time'
+                          ? 'oneTimeWagerLimit'
+                          : `${item.limitPeriod}${TypeKey}Limit`; // translation key
+                      const descKey =
+                        item.limitType === 'wager' && item.limitPeriod === 'one-time'
+                          ? 'oneTimeWagerLimitDesc'
+                          : `${titleKey}Desc`;
 
-                    return (
-                      <Box
-                        key={`${item.limitType}_${item.limitPeriod}_${idx}`}
-                        className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
-                        <div className="mt-1.5 flex items-center justify-between">
-                          <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
-                            {t(titleKey)}
-                          </h2>
-                          <Switch {...register(flagKey)} label="" />
-                        </div>
-                        <div className="pt-2">
-                          <div className="max-w-xl">
-                            <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
-                              <Input
-                                id={valueKey}
-                                {...register(valueKey, { valueAsNumber: true })}
-                                error={errors?.[valueKey]?.message}
-                                placeholder={`Enter ${cap(item.limitPeriod)} ${TypeKey} Limit`}
-                                classNames={{
-                                  root: 'flex-1',
-                                  input: 'relative rounded-none hover:z-1 focus:z-1'
-                                }}
-                                type="number"
-                                step="any"
-                                suffix={
-                                  <ContextualHelp
-                                    title={t(titleKey)}
-                                    anchor={{ to: 'bottom', gap: 8 }}
-                                    content={<p>{t(descKey)}</p>}
-                                  />
-                                }
-                              />
+                      if (isB2B && item.limitType === 'deposit') {
+                        return null;
+                      }
+
+                      return (
+                        <Box
+                          key={`${item.limitType}_${item.limitPeriod}_${idx}`}
+                          className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
+                          <div className="mt-1.5 flex items-center justify-between">
+                            <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
+                              {t(titleKey)}
+                            </h2>
+                            <Switch {...register(flagKey)} label="" />
+                          </div>
+                          <div className="pt-2">
+                            <div className="max-w-xl">
+                              <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
+                                <Input
+                                  id={valueKey}
+                                  {...register(valueKey, { valueAsNumber: true })}
+                                  error={
+                                    errors?.[valueKey]?.message ||
+                                    getValidationMessage(valueKey, flagKey)
+                                  }
+                                  placeholder={`Enter ${cap(item.limitPeriod)} ${TypeKey} Limit`}
+                                  classNames={{
+                                    root: 'flex-1',
+                                    input: 'relative rounded-none hover:z-1 focus:z-1'
+                                  }}
+                                  type="number"
+                                  step="any"
+                                  prefix={symbol}
+                                  suffix={
+                                    <ContextualHelp
+                                      title={t(titleKey)}
+                                      anchor={{ to: 'bottom', gap: 8 }}
+                                      content={<p>{t(descKey)}</p>}
+                                    />
+                                  }
+                                />
+                              </div>
                             </div>
                           </div>
+                        </Box>
+                      );
+                    });
+                  })()}
+                </>
+                {/* <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
+                  <div className="mt-1.5 flex items-center justify-between">
+                    <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
+                      {t('oneTimeBetLimit')}
+                    </h2>
+                    <Switch {...register('hasOneTimeBetLimit')} label="" />
+                  </div>
+                  <div className="pt-2">
+                    <div className="max-w-xl">
+                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
+                        <Input
+                          type="number"
+                          step="any"
+                          {...register('oneTimeBetLimit')}
+                          error={errors?.oneTimeBetLimit?.message}
+                          id="oneTimeBetLimit"
+                          placeholder="Enter One Time Bet Limit"
+                          classNames={{
+                            root: 'flex-1',
+                            input: 'relative rounded-none hover:z-1 focus:z-1'
+                          }}
+                          suffix={
+                            <ContextualHelp
+                              title={t('oneTimeBetLimit')}
+                              anchor={{ to: 'bottom', gap: 8 }}
+                              content={<p>{t('oneTimeBetLimitDesc')}</p>}
+                            />
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </Box>
+                <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
+                  <div className="mt-1.5 flex items-center justify-between">
+                    <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
+                      {t('oneTimeWinLimit')}
+                    </h2>
+                    <Switch {...register('hasOneTimeWinLimit')} label="" />
+                  </div>
+                  <div className="pt-2">
+                    <div className="max-w-xl">
+                      <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
+                        <Input
+                          type="number"
+                          step="any"
+                          {...register('oneTimeWinLimit')}
+                          error={errors?.oneTimeWinLimit?.message}
+                          id="oneTimeWinLimit"
+                          placeholder="Enter One Time Win Limit"
+                          classNames={{
+                            root: 'flex-1',
+                            input: 'relative rounded-none hover:z-1 focus:z-1'
+                          }}
+                          suffix={
+                            <ContextualHelp
+                              title={t('oneTimeWinLimit')}
+                              anchor={{ to: 'bottom', gap: 8 }}
+                              content={<p>{t('oneTimeWinLimitDesc')}</p>}
+                            />
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </Box> */}
+                <div>
+                  {/* <Box className="rounded-lg bg-white px-4 py-4 shadow-soft dark:bg-dark-700 dark:shadow-none sm:px-5">
+                    <div>
+                      <h2 className="line-clamp-1 text-lg font-medium tracking-wide text-gray-800 dark:text-dark-100">
+                        {t('selfExclusionTime')}
+                      </h2>
+                    </div>
+                    <div className="pt-2">
+                      <div className="max-w-xl">
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <Controller
+                            render={({ field }) => (
+                              <Listbox
+                                data={exclusionTimeOptions}
+                                value={
+                                  exclusionTimeOptions.find(
+                                    (exclusionTime) => +exclusionTime.value === +field.value
+                                  ) || null
+                                }
+                                onChange={(val) => handleChangeExclusionType(field, val)}
+                                name={field.name}
+                                placeholder={
+                                  t('select') +
+                                  ' ' +
+                                  t('self') +
+                                  ' ' +
+                                  t('exclusion') +
+                                  ' ' +
+                                  t('type')
+                                }
+                                displayField="label"
+                                error={errors?.selfExclusionType?.message}
+                              />
+                            )}
+                            control={control}
+                            name="selfExclusionType"
+                          />
                         </div>
-                      </Box>
-                    );
-                  });
-                })()}
+
+                        <div>
+                          {+exclusionType === 6 && (
+                            <div className="flex flex-wrap gap-2 pt-1.5">
+                              <Controller
+                                render={({ field: { onChange, value, ...rest } }) => (
+                                  <DatePicker
+                                    onChange={onChange}
+                                    value={value || ''}
+                                    label={t('exclusion') + ' ' + t('startAt')}
+                                    error={errors?.exclusionStartAt?.message}
+                                    options={{
+                                      disableMobile: true,
+                                      enableTime: true,
+                                      time_24hr: true
+                                    }}
+                                    placeholder="Choose date..."
+                                    {...rest}
+                                  />
+                                )}
+                                control={control}
+                                name="exclusionStartAt"
+                              />
+                              <Controller
+                                render={({ field: { onChange, value, ...rest } }) => (
+                                  <DatePicker
+                                    onChange={onChange}
+                                    value={value || ''}
+                                    label={t('exclusion') + ' ' + t('endAt')}
+                                    error={errors?.exclusionEndAt?.message}
+                                    options={{
+                                      disableMobile: true,
+                                      enableTime: true,
+                                      time_24hr: true
+                                    }}
+                                    placeholder="Choose date..."
+                                    {...rest}
+                                  />
+                                )}
+                                control={control}
+                                name="exclusionEndAt"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </Box> */}
+                </div>
               </>
             )}
           </div>

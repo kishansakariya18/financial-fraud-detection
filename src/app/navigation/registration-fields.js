@@ -2,7 +2,7 @@
 import { PiCashRegister } from 'react-icons/pi';
 
 // Local Imports
-import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
+import { NAV_TYPE_ITEM, PERMISSIONS, PLATFORM_TYPE } from 'constants/app.constant';
 export const registrationFields = {
   id: 'registration-fields',
   type: NAV_TYPE_ITEM,
@@ -10,5 +10,6 @@ export const registrationFields = {
   title: 'Registration Fields',
   transKey: 'registration_fields',
   Icon: PiCashRegister,
-  permission: PERMISSIONS.REGISTRATION_FIELDS.VIEW
+  permission: PERMISSIONS.REGISTRATION_FIELDS.VIEW,
+  platformType: PLATFORM_TYPE.B2C
 };

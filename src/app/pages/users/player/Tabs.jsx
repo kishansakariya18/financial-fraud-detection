@@ -11,7 +11,8 @@ import {
 import { randomId } from 'utils/randomId';
 import { useTranslation } from 'react-i18next';
 import TabsPage from 'components/custom/TabsPage';
-import { PERMISSIONS } from 'constants/app.constant';
+import { PERMISSIONS, PLATFORM_TYPE } from 'constants/app.constant';
+import apiConfig from 'configs/api.config';
 
 // ----------------------------------------------------------------------
 
@@ -58,6 +59,7 @@ export default function Tabs() {
       path: `/users/player/${playerId}/${userID}/tab/manage-fund`,
       icon: WalletIcon,
       index: 4,
+      isHidden: apiConfig.platformType === PLATFORM_TYPE.B2B,
       permission: PERMISSIONS.USER.ADD_MONEY
     },
     {
@@ -74,6 +76,7 @@ export default function Tabs() {
       path: `/users/player/${playerId}/${userID}/tab/referrals`,
       icon: UserGroupIcon,
       index: 6,
+      isHidden: apiConfig.platformType === PLATFORM_TYPE.B2B,
       permission: PERMISSIONS.USER.LIST
     },
     {

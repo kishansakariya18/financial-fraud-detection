@@ -7,12 +7,14 @@ import TabsPage from 'components/custom/TabsPage';
 import { TbLockPassword, TbPassword } from 'react-icons/tb';
 import { ADMIN_TYPE } from 'constants/app.constant';
 import { useSelector } from 'react-redux';
+import { isB2BPlatform } from 'utils/platformNavigation';
 
 // ----------------------------------------------------------------------
 
 export default function Tabs() {
   const { t } = useTranslation();
   const { userData } = useSelector((state) => state.auth);
+  const isB2B = isB2BPlatform();
 
   const tabs = [
     {
@@ -34,8 +36,16 @@ export default function Tabs() {
       title: t('change') + ' ' + t('transaction') + ' ' + t('password'),
       path: `/profile/player-fund-password`,
       icon: TbLockPassword,
-      isHidden: userData.AdminType === ADMIN_TYPE.AGENT,
+      isHidden: isB2B || userData.AdminType === ADMIN_TYPE.AGENT,
       index: 2
+    },
+    {
+      id: randomId(),
+      title: t('change') + ' ' + t('agent') + ' ' + t('fund') + ' ' + t('password'),
+      path: `/profile/agent-fund-password`,
+      icon: TbLockPassword,
+      isHidden: !isB2B,
+      index: 3
     }
   ];
 

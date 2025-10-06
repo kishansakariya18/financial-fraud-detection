@@ -15,6 +15,7 @@ import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
 import UserClassService from 'services/user-class.services';
 import { toast } from 'sonner';
+import { isB2CPlatform } from 'utils/platformNavigation';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
@@ -27,6 +28,7 @@ export function RowActions({ row, table }) {
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
   const navigate = useNavigate();
+  const isB2C = isB2CPlatform();
 
   const confirmMessages = {
     pending: {
@@ -184,7 +186,7 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              {hasPermission(PERMISSIONS.USER_CLASS.ASSIGN_BANK) && (
+              {hasPermission(PERMISSIONS.USER_CLASS.ASSIGN_BANK) && isB2C && (
                 <MenuItem>
                   {({ focus }) => (
                     <button

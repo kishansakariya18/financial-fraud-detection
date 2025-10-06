@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { toast } from 'sonner';
-import { CurrencyDollarIcon } from '@heroicons/react/24/outline';
 
 // Local Imports
 import { Button, Input, Select, Textarea } from 'components/ui';
@@ -14,6 +13,7 @@ import b2bAgentWalletService from 'services/b2b-agent/b2b-agent-wallet.service';
 import { ADMIN_TYPE, CREDIT_DEBIT_TYPE } from 'constants/app.constant';
 import { useSelector } from 'react-redux';
 import { CustomModal } from 'components/custom';
+import { useCurrencyContext } from 'app/contexts/currency/context';
 
 // Validation Schema
 const validationSchema = yup.object({
@@ -31,7 +31,7 @@ export function CreditDebitForm({ agentUID, onCancel, isOpen }) {
   const [loading, setLoading] = useState(false);
   const { userData } = useSelector((state) => state.auth);
   const isAdmin = useMemo(() => userData?.AdminType === ADMIN_TYPE.ADMIN, [userData?.AdminType]);
-
+  const { symbol } = useCurrencyContext();
   const {
     register,
     handleSubmit,
@@ -108,7 +108,7 @@ export function CreditDebitForm({ agentUID, onCancel, isOpen }) {
             max="999999.99"
             label={t('amount')}
             placeholder="0.00"
-            prefix={<CurrencyDollarIcon className="h-5 w-5" />}
+            prefix={symbol}
             error={errors.amount?.message}
             className="text-lg font-medium"
           />
