@@ -156,7 +156,7 @@ const EditUserClass = () => {
               <Input
                 {...register('deposit', { valueAsNumber: true })}
                 type="number"
-                label={t('deposit')}
+                label={t('deposit') + ' ' + t('LTV')}
                 step="any"
                 error={errors?.deposit?.message}
                 placeholder={t('enter') + ' ' + t('deposit')}
@@ -165,7 +165,7 @@ const EditUserClass = () => {
               <Input
                 {...register('wager', { valueAsNumber: true })}
                 type="number"
-                label={t('wager')}
+                label={t('wager') + ' ' + t('LTV')}
                 step="any"
                 error={errors?.wager?.message}
                 placeholder={t('enter') + ' ' + t('wager')}

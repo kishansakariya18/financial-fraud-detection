@@ -16,6 +16,7 @@ import PlayerService from 'services/player.services';
 import UserClassService from 'services/user-class.services';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
+import { GrUpgrade } from 'react-icons/gr';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
@@ -30,6 +31,8 @@ export function RowActions({ row, table }) {
   const [upgradeSuccess, setUpgradeSuccess] = useState(false);
   const [upgradeError, setUpgradeError] = useState(false);
   const [classOptions, setClassOptions] = useState([]);
+  // All upgradable target class IDs (as strings)
+  const [allowedUpgradableIds, setAllowedUpgradableIds] = useState([]);
   const [selectedClassId, setSelectedClassId] = useState(null);
   const navigate = useNavigate();
 
@@ -85,45 +88,102 @@ export function RowActions({ row, table }) {
   const state = changeStatusError ? 'error' : changeStatusSuccess ? 'success' : 'pending';
   const upgradeState = upgradeError ? 'error' : upgradeSuccess ? 'success' : 'pending';
 
+  // Derive current user's class id for display in modal
+  const currentClassId = row?.original?.playerClassID || row?.original?.UserClassID;
+
   // Fetch user classes when upgrade modal opens
   useEffect(() => {
     const fetchClasses = async () => {
       const result = await UserClassService.userclassAllList();
       if (result?.status === 200) {
         const dataArr = result?.response?.data || result?.response?.Data || [];
-        const options = Array.isArray(dataArr)
+
+        // Build enriched options with priority for upgrade logic
+        const enriched = Array.isArray(dataArr)
           ? dataArr
-              .map((cls) => ({
-                label:
-                  cls?.ClassName || cls?.title || cls?.Name || `Class ${cls?.UserClassID || ''}`,
-                value: cls?.UserClassID || cls?.id || cls?.UserClassId
-              }))
+              .map((cls) => {
+                const value = cls?.UserClassID || cls?.id || cls?.UserClassId;
+                const rawPriority = cls?.Priority ?? cls?.priority ?? null;
+                const prNum = rawPriority != null ? Number(rawPriority) : null;
+                return {
+                  label: cls?.ClassName || cls?.title || cls?.Name || `Class ${value || ''}`,
+                  value,
+                  priority: Number.isNaN(prNum) ? null : prNum
+                };
+              })
               .filter((i) => i.value != null)
           : [];
-        setClassOptions(options);
+
+        // Determine current player's class priority
+        const currentClassId = row?.original?.playerClassID || row?.original?.UserClassID;
+        const currentClass = enriched.find((c) => c.value === currentClassId);
+        const currPriority = currentClass?.priority ?? null;
+
+        // Compute all higher priority classes (greater Priority value)
+        const higher =
+          currPriority != null
+            ? enriched.filter((c) => c.priority != null && c.priority > currPriority)
+            : [];
+
+        // Set options first to avoid any render race for controlled input
+        setClassOptions(enriched);
+
+        // Track all upgradable targets and auto-select the nearest higher (smallest priority among higher)
+        const upgradableIds = higher.map((c) => String(c.value));
+        setAllowedUpgradableIds(upgradableIds);
+        let defaultSelect = null;
+        if (higher.length) {
+          const nearest = higher.reduce((min, c) => (c.priority < min.priority ? c : min));
+          defaultSelect = String(nearest.value);
+        }
+        // Auto-select nearest higher if available; else select current class
+        setSelectedClassId(
+          defaultSelect ?? (currentClassId != null ? String(currentClassId) : null)
+        );
       } else {
         setClassOptions([]);
+        setAllowedUpgradableIds([]);
+        setSelectedClassId(null);
       }
     };
     if (upgradeModalOpen) {
       fetchClasses();
     }
-  }, [upgradeModalOpen]);
+  }, [upgradeModalOpen, row?.original?.playerClassID, row?.original?.UserClassID]);
+
+  // Keep selection in sync if allowedUpgradableIds change later
+  useEffect(() => {
+    if (upgradeModalOpen) {
+      setSelectedClassId(
+        (prev) =>
+          prev ??
+          (allowedUpgradableIds.length
+            ? allowedUpgradableIds[0]
+            : currentClassId != null
+              ? String(currentClassId)
+              : null)
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allowedUpgradableIds]);
 
   const handleUpgrade = useCallback(async () => {
-    if (!selectedClassId) return;
+    if (!selectedClassId || !allowedUpgradableIds.includes(selectedClassId)) return;
     setUpgradeLoading(true);
+    const nextIdNum = Number(selectedClassId);
+    const payloadId = Number.isNaN(nextIdNum) ? selectedClassId : nextIdNum;
     const result = await PlayerService.upgradeUserClass({
-      nextClassID: selectedClassId,
+      nextClassID: payloadId,
       userUID: row.original.userUID
     });
     if (result?.status === 200) {
       setUpgradeSuccess(true);
       toast.success(result?.response.message);
+      // Refresh table data and summary to reflect new class immediately
+      table.options.meta?.editRow?.();
       table.options.meta?.fetchSummary?.();
-      // setTimeout(() => {
-      //   setUpgradeModalOpen(false);
-      // }, 1500);
+      // Optionally close the modal after showing success (kept commented to follow existing pattern)
+      // setTimeout(() => setUpgradeModalOpen(false), 1500);
     } else {
       toast.error(result?.response.message);
     }
@@ -147,7 +207,7 @@ export function RowActions({ row, table }) {
             leaveTo="opacity-0 translate-y-2">
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
-              className="absolute z-[100] w-[12rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
+              className="absolute z-[100] w-[15rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
               {hasPermission(PERMISSIONS.USER.LIST) && (
                 <MenuItem>
                   {({ focus }) => (
@@ -185,10 +245,10 @@ export function RowActions({ row, table }) {
                     <button
                       onClick={openUpgrade}
                       className={clsx(
-                        'flex h-9 w-full items-center space-x-3 px-1 tracking-wide outline-none transition-colors rtl:space-x-reverse',
-                        focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                        focus && 'bg-this/10 dark:bg-this-light/10'
                       )}>
-                      <TbStatusChange className="size-4.5 stroke-1" />
+                      <GrUpgrade className="size-4.5 stroke-1" />
                       <span>{t('upgrade_user_class') || 'Upgrade User Class'}</span>
                     </button>
                   )}
@@ -216,7 +276,7 @@ export function RowActions({ row, table }) {
             actionText: t('submit')
           },
           success: {
-            title: t('user_class_upgraded') || 'User Class Upgraded',
+            title: t('success') || 'User Class Upgraded',
             description:
               t('user_class_upgraded_successfully') ||
               'The user class has been updated successfully.'
@@ -230,7 +290,7 @@ export function RowActions({ row, table }) {
         }}
         onOk={handleUpgrade}
         confirmLoading={upgradeLoading}
-        confirmDisabled={!selectedClassId}
+        confirmDisabled={!selectedClassId || !allowedUpgradableIds.includes(selectedClassId)}
         state={upgradeState}>
         {upgradeState === 'pending' && (
           <div className="mt-4 grid max-h-64 gap-2 overflow-y-auto text-left">
@@ -240,12 +300,32 @@ export function RowActions({ row, table }) {
                   <input
                     type="radio"
                     name="userClass"
-                    value={opt.value}
-                    checked={selectedClassId === opt.value}
-                    onChange={() => setSelectedClassId(opt.value)}
+                    value={String(opt.value)}
+                    checked={selectedClassId === String(opt.value)}
+                    onChange={() => setSelectedClassId(String(opt.value))}
+                    disabled={
+                      !allowedUpgradableIds.length ||
+                      !allowedUpgradableIds.includes(String(opt.value))
+                    }
                     className="size-4"
                   />
-                  <span>{opt.label}</span>
+                  <span
+                    className={clsx(
+                      'flex items-center gap-2',
+                      !allowedUpgradableIds.includes(String(opt.value)) && 'opacity-50'
+                    )}>
+                    {opt.label}
+                    {String(opt.value) === String(currentClassId) && (
+                      <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-xs text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
+                        {t('current') || 'Current'}
+                      </span>
+                    )}
+                    {/* {allowedUpgradableIds.includes(String(opt.value)) && (
+                      <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-xs text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
+                        {t('upgradable') || 'Upgradable'}
+                      </span>
+                    )} */}
+                  </span>
                 </label>
               ))
             ) : (
@@ -253,6 +333,12 @@ export function RowActions({ row, table }) {
                 {t('no_data') || 'No data'}
               </div>
             )}
+            {/* {allowedNextClassId == null && (
+              <div className="mt-2 text-xs text-amber-600 dark:text-amber-400">
+                {t('no_higher_user_class_available') ||
+                  'No higher user class available for upgrade.'}
+              </div>
+            )} */}
           </div>
         )}
       </ConfirmModal>

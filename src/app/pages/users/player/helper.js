@@ -13,6 +13,8 @@ export const responseMapper = (apiData) => {
       id: item.UserID,
       userID: item.UserID,
       userUID: item.UserUID,
+      // Map current player's class ID for upgrade modal logic
+      playerClassID: item.UserClassID,
       email: item.Email || '-',
       referralCode: item.ReferralCode,
       username: item.Username,

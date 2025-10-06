@@ -602,7 +602,10 @@
   "deleteFAQDesc": "¿Estás seguro de que quieres eliminar esta FAQ?",
   "faqDeleteSuccess": "FAQ eliminada exitosamente!",
   "answer": "Respuesta",  
-  "select_user_class_to_upgrade":"Seleccionar la clase de usuario para mejorar"
+  "select_user_class_to_upgrade":"Seleccionar la clase de usuario para mejorar",
+  "user_class_upgraded":"Usuario clasificado actualizado exitosamente",
+  "user_class_upgraded_successfully":"Usuario clasificado actualizado exitosamente",
+  "LTV":"(LTV - Valor de vida)" 
 
   
 }
