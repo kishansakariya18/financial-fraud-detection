@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { toast } from 'sonner';
 
@@ -18,12 +18,13 @@ export default function DisposableEmailList() {
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t('disposable') + ' ' + t('email');
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
-
+  const [searchValue, setSearchValue] = useState(queryParams.keyword || '');
   const fetchData = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
     const result = await BlacklistService.getDisposableEmailDomainList({
-      pagination: { pageIndex, pageSize }
+      pagination: { pageIndex, pageSize },
+      filters: queryParams
     });
 
     if (result.status === 200) {
@@ -58,10 +59,30 @@ export default function DisposableEmailList() {
   // const fetchNewList = async (isRefetch = false) => {
   //   await table.options.meta?.fetchData(isRefetch);
   // };
+  const handleApplyFilters = () => {
+    setSearchParams({
+      ...queryParams,
+      pageIndex: 0,
+      keyword: searchValue
+    });
+  };
 
+  const handleClearFilters = () => {
+    setSearchValue('');
+    setSearchParams({
+      pageIndex: 0
+    });
+  };
   return (
     <ContentWrapper pageTitle={pageTitle}>
-      <DisposableEmailToolbar table={table} pageTitle={pageTitle} />
+      <DisposableEmailToolbar
+        table={table}
+        pageTitle={pageTitle}
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+        onApplyFilters={handleApplyFilters}
+        onClearFilters={handleClearFilters}
+      />
       <TableCard table={table} loading={isLoading} tableSettings={tableSettings} />
     </ContentWrapper>
   );
