@@ -50,7 +50,7 @@ export function DisposableEmailToolbar({
             prefix={<MagnifyingGlassIcon className="size-4" />}
             className="max-w-xs"
             classNames={{ input: 'h-8 text-xs ring-primary-500/50 focus:ring', root: 'shrink-0' }}
-            placeholder={t('search') + 'emailDomain'}
+            placeholder={t('search') + ' ' + t('emailDomain')}
           />
           <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
             {t('search')}
