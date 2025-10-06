@@ -602,5 +602,6 @@
   "faqDeleteSuccess": "FAQ eliminada exitosamente!",
   "answer": "Respuesta",
   "export_text": "Exportar",
-  "exporting": "Exportando..."
+  "exporting": "Exportando...",
+  "referrence": "Referencia"
 }

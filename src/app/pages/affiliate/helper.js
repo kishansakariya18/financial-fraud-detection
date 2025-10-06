@@ -1,6 +1,5 @@
 import { CheckBadgeIcon, NoSymbolIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
-import { HiXCircle } from 'react-icons/hi';
 import {
   playerStatusToApp,
   transactionStatusToAPP
@@ -131,26 +130,20 @@ export const affiliateStatusToApi = (status) => {
 
 export const affiliateStatusOptions = [
   {
-    value: 'active',
+    value: 'ACTIVE',
     label: 'Active',
     color: 'success',
     icon: CheckBadgeIcon
   },
   {
-    value: 'inactive',
-    label: 'Inactive',
+    value: 'SUSPENDED',
+    label: 'Suspended',
     color: 'warning',
     icon: XCircleIcon
   },
   {
-    value: 'blocked',
-    label: 'Blocked',
-    color: 'error',
-    icon: HiXCircle
-  },
-  {
-    value: 'deactivated',
-    label: 'Deactivated',
+    value: 'CLOSED',
+    label: 'Closed',
     color: 'error',
     icon: NoSymbolIcon
   }

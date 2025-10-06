@@ -917,5 +917,6 @@
   "adjust_commission_balance": "Adjust Commission Balance",
   "adjust_lineup_balance": "Adjust Lineup Balance",
   "export_text": "Export",
-  "exporting": "Exporting..."
+  "exporting": "Exporting...",
+  "referrence": "Referrence"
 }

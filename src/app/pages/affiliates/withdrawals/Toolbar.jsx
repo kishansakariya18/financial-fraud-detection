@@ -120,7 +120,7 @@ function SearchInput({ table, onApplyFilters }) {
         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
         root: 'shrink-0'
       }}
-      placeholder={t('audit_log_search_desc')}
+      placeholder={t('search') + ' ' + t('currency')}
     />
   );
 }

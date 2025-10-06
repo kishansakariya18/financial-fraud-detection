@@ -583,5 +583,6 @@
   "faqDeleteSuccess": "FAQ supprimée avec succès!",
   "answer": "Answer",
   "export_text": "Export",
-  "exporting": "Exporting..."
+  "exporting": "Exporting...",
+  "referrence": "Référence"
 }
