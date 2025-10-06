@@ -1,5 +1,8 @@
 import { getStageAppToApi, mapType } from 'app/pages/reports/helper';
-import { playerStatusToAPI, transactionStatusToAPI } from 'app/pages/users/player/helper';
+import {
+  playerStatusToAPI,
+  transactionStatusToAPI
+} from 'components/sections/player-management/helper';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
 import { sendRequest } from 'utils/axios';

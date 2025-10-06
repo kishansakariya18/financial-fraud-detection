@@ -1,10 +1,12 @@
+import { PLATFORM_TYPE } from 'constants/app.constant';
+
 export const apiConfig = {
   baseURL: {
     API_BASE_URL: import.meta.env.VITE_API_URL,
     S3_URL: import.meta.env.VITE_S3_URL,
     AI_CHAT_URL: import.meta.env.VITE_AI_CHAT_URL
   },
-  isB2BPlatform: import.meta.env.VITE_PLATFORM_TYPE || 'b2b', // b2b (Business to Business) or b2c(Business to Customer)
+  platformType: import.meta.env.VITE_PLATFORM_TYPE || PLATFORM_TYPE.B2C, // b2b (Business to Business) or b2c(Business to Customer)
   endPoints: {
     AUTH: {
       VALIDATE: '/admin/admin/auth/validate',
@@ -55,6 +57,7 @@ export const apiConfig = {
       TDS_SUMMARY_TRANSACTION_LIST: '/users/admin/users/tds-summary-transaction-list',
       TRANSACTION_DETAIL: '/wallet/admin/wallet/transaction-detail',
       CHANGE_STATUS: '/users/admin/users/change-status',
+      UPGRADE_USER_CLASS: '/users/admin/users/upgrade-user-class',
       REST_BANK_COUNT: '/users/admin/users/reset-bank-request-count',
       UPDATE_RISK_MANAGEMENT: '/users/admin/users/update-user-risk-management/:userID',
       ALL_TRANSACTION_LIST: '/users/admin/users/all-transaction-list',
@@ -236,7 +239,7 @@ export const apiConfig = {
       CREATE: '/bonus/admin/v1/bonus-campaign/create',
       UPDATE: '/bonus/admin/v1/bonus-campaign/:id',
       CHANGE_STATUS: '/bonus/admin/v1/bonus-campaign/:id/change-status',
-      HISTORY: '/bonus/admin/v1/bonus-campaign/:id/history',
+      GRANT_LIST: '/bonus/admin/v1/bonus-campaign/:id/grants',
       SUMMARY: '/bonus/admin/v1/bonus-campaign/summary'
     },
     BANNER: {
@@ -523,7 +526,12 @@ export const apiConfig = {
       COMMISSION_SUMMARY: '/affiliates/admin/affiliates/{affiliateId}/commission-summary',
       COMMISSION_SETTINGS: '/affiliates/admin/affiliates/{affiliateId}/commission-settings',
       COMMISSION_SETTINGS_UPDATE: '/affiliates/admin/affiliates/commission-setting/update',
-      GLOBAL_COMMISSION_SETTINGS: '/affiliates/admin/affiliates/global/commission-setting'
+      GLOBAL_COMMISSION_SETTINGS: '/affiliates/admin/affiliates/global/commission-setting',
+      AFFILIATE_TRANSACTIONS: '/affiliates/admin/affiliates/{affiliateId}/transactions',
+      CAMPAIGN_REPORT: '/affiliates/admin/affiliates/campaign-report',
+      COMMISSION_SUMMARY_REPORT:
+        '/affiliates/admin/affiliates/{affiliateId}/export-commission-summary',
+      REFERRED_USERS_REPORT: '/affiliates/admin/affiliates/{affiliateId}/export-referred-users'
     },
     FAQ: {
       LIST: '/affiliates/admin/faq/list',

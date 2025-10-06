@@ -1,6 +1,6 @@
 import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { playerStatusToApp } from 'components/sections/player-management/helper';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
-import { playerStatusToApp } from '../users/player/helper';
 
 export const segmentationResponseMapper = (apiData) => {
   const resultData = apiData.map((data) => ({

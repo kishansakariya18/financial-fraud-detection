@@ -3,7 +3,13 @@ import { createColumnHelper } from '@tanstack/react-table';
 
 // Local Imports
 import { RowActions } from './RowActions';
-import { IdCell, DateCell, AmountCell, BadgeCell } from '../../../../components/custom/table/cell';
+import {
+  IdCell,
+  DateCell,
+  AmountCell,
+  BadgeCell,
+  BoldCell
+} from '../../../../components/custom/table/cell';
 import { CopyableCell } from '../../../../components/shared/table/CopyableCell';
 import { affiliatesWithdrawalsStatusOptions } from '../helper';
 
@@ -23,13 +29,13 @@ export const columns = [
     id: 'username',
     label: 'Username',
     header: 'Username',
-    cell: CopyableCell,
+    cell: BoldCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.currencyCode, {
-    id: 'currencyCode',
-    label: 'Currency Code',
-    header: 'Currency Code',
+    id: 'currency',
+    label: 'Currency',
+    header: 'Currency',
     cell: CopyableCell,
     enableSorting: false
   }),

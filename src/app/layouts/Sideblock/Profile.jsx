@@ -39,6 +39,20 @@ export function Profile() {
   const logoutHandler = (e) => {
     e.preventDefault();
     let res = null;
+    dispatch(AuthAction.logout());
+    localStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN);
+    localStorage.removeItem(LOCAL_STORAGE.USER_DATA);
+    localStorage.removeItem(LOCAL_STORAGE.IS_MASTER_ADMIN);
+    localStorage.removeItem(LOCAL_STORAGE.PERMISSIONS);
+    localStorage.removeItem(LOCAL_STORAGE.AUTH_PASSWORD);
+    localStorage.removeItem(LOCAL_STORAGE.AUTH_EMAIL);
+    localStorage.removeItem(LOCAL_STORAGE.SETTINGS);
+    localStorage.removeItem(LOCAL_STORAGE.TWO_STEP_MODE);
+    toast.success(t('logout_success'));
+
+    setTimeout(() => {
+      navigate(isAgentuser ? '/agent-auth/login' : '/login');
+    }, 0);
     if (isAgentuser) {
       res = AgentAuthService.logout();
     } else {
@@ -46,22 +60,11 @@ export function Profile() {
     }
     res
       .then(() => {
-        dispatch(AuthAction.logout());
-        localStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN);
-        localStorage.removeItem(LOCAL_STORAGE.USER_DATA);
-        localStorage.removeItem(LOCAL_STORAGE.IS_MASTER_ADMIN);
-        localStorage.removeItem(LOCAL_STORAGE.PERMISSIONS);
-        localStorage.removeItem(LOCAL_STORAGE.AUTH_PASSWORD);
-        localStorage.removeItem(LOCAL_STORAGE.AUTH_EMAIL);
-        localStorage.removeItem(LOCAL_STORAGE.SETTINGS);
-        localStorage.removeItem(LOCAL_STORAGE.TWO_STEP_MODE);
-        toast.success(t('logout_success'));
-        setTimeout(() => {
-          navigate(isAgentuser ? '/agent-auth/login' : '/login');
-        }, 0);
+        //no action
       })
       .catch((error) => {
         console.error('Logout Error: ', error);
+        //no action
       });
   };
 

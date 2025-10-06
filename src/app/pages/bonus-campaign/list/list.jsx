@@ -35,10 +35,12 @@ export default function BonusCampaignList() {
 
     if (result.status === 200) {
       const apiData = bonusCampaignListResponseMapper(result.response.data);
+      console.log('result.response.data:', result.response);
+
       return {
         status: 200,
         data: apiData,
-        totalRecords: parseInt(result.response.total_records || 0, 10)
+        totalRecords: parseInt(result.response.totalRecords || 0, 10)
       };
     }
     return { status: result.status, error: result.error };
@@ -52,7 +54,7 @@ export default function BonusCampaignList() {
         return {
           status: 200,
           data: result.response.data,
-          totalRecords: parseInt(result.response.total_records, 10) || 0
+          totalRecords: parseInt(result.response.totalRecords, 10) || 0
         };
       }
       return { status: result.status, error: result.error };

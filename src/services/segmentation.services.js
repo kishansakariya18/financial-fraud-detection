@@ -1,5 +1,5 @@
 import { parseSegmentationStatusToAPI } from 'app/pages/segmentation/helper';
-import { playerStatusToAPI } from 'app/pages/users/player/helper';
+import { playerStatusToAPI } from 'components/sections/player-management/helper';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
 import { sendRequest } from 'utils/axios';

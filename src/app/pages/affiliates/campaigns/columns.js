@@ -18,9 +18,9 @@ export const columns = [
     cell: CopyableCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.CampaignLink, {
-    id: 'CampaignLink',
-    header: 'Campaign Link',
+  columnHelper.accessor((row) => row.CampaignCode, {
+    id: 'CampaignCode',
+    header: 'Campaign Code',
     cell: CopyableCell,
     enableSorting: false
   }),

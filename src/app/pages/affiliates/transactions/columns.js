@@ -2,9 +2,10 @@
 import { createColumnHelper } from '@tanstack/react-table';
 
 // Local Imports
-import { IdCell, DateCell, BoldCell, BadgeCell, AmountCell } from 'components/custom/table/cell';
+import { IdCell, DateCell, BadgeCell, AmountCell } from 'components/custom/table/cell';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
-import { referredTxnPlanTypeOptions, referredTxnStatusOptions } from './helper';
+import { referredTxnTypeOptions, referredTxnStatusOptions } from './helper';
+import { transactionTypeOption } from './helper';
 
 // ----------------------------------------------------------------------
 
@@ -20,8 +21,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row.referenceId, {
     id: 'referenceId',
-    label: 'Referrence ID',
-    header: 'Referrence ID',
+    label: 'Reference ID',
+    header: 'Reference ID',
     cell: CopyableCell,
     enableSorting: false
   }),
@@ -29,15 +30,15 @@ export const columns = [
     id: 'username',
     label: 'User Name',
     header: 'User Name',
-    cell: BoldCell,
+    cell: CopyableCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.planType, {
-    id: 'planType',
-    header: 'Type',
-    label: 'Type',
+  columnHelper.accessor((row) => row.txnType, {
+    id: 'txnType',
+    header: 'Transaction Type',
+    label: 'Transaction Type',
     cell: BadgeCell,
-    meta: { optionData: referredTxnPlanTypeOptions },
+    meta: { optionData: referredTxnTypeOptions },
     enableSorting: false
   }),
   // Currency column: filter by currencyID, display currency code
@@ -64,15 +65,15 @@ export const columns = [
     filterFn: 'arrIncludesSome',
     enableSorting: false
   }),
-  // columnHelper.accessor((row) => row.type, {
-  //   id: 'type',
-  //   label: 'Type',
-  //   header: 'Type',
-  //   cell: BadgeCell,
-  //   meta: { optionData: transactionTypeOption },
-  //   filterFn: 'arrIncludesSome',
-  //   enableSorting: false
-  // }),
+  columnHelper.accessor((row) => row.type, {
+    id: 'type',
+    label: 'Type',
+    header: 'Type',
+    cell: BadgeCell,
+    meta: { optionData: transactionTypeOption },
+    filterFn: 'arrIncludesSome',
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.balanceAfter, {
     id: 'balanceAfter',
     label: 'Balance After',

@@ -20,6 +20,8 @@ import RenderImage from 'components/ui/custom/ImageRender';
 import CurrencyService from 'services/currency.services';
 import { currencyListResponseMapper } from '../casino-management/currencies/helper';
 import CategoryService from 'services/category.services';
+import UserClassService from 'services/user-class.services';
+import { mapUserClassOptions } from './helper';
 const defaultValue = new Delta();
 
 const CreateBonusCampaign = () => {
@@ -33,10 +35,10 @@ const CreateBonusCampaign = () => {
   const [claimSettlement, setClaimSettlement] = useState('AUTO');
   const [isKYCRequired, setIsKYCRequired] = useState('0');
   // const [currencyIds, setCurrencyIds] = useState([]);
-  const [excludedCategoryIds, setExcludedCategoryIds] = useState([]);
   const [currencyOptions, setCurrencyOptions] = useState([]);
   const [categoryOptions, setCategoryOptions] = useState([]);
-
+  const [userClassOptions, setUserClassOptions] = useState([]);
+  userClassOptions;
   const [response, setResponse] = useState(null);
   const { t } = useTranslation();
 
@@ -56,6 +58,15 @@ const CreateBonusCampaign = () => {
       } else {
         toast.error(result.error);
       }
+    }
+  };
+
+  const fetchUserClasses = async () => {
+    const result = await UserClassService.userclassList({
+      pagination: { pageIndex: 0, pageSize: 1000 }
+    });
+    if (result.status === 200) {
+      setUserClassOptions(mapUserClassOptions(result.response.data));
     }
   };
 
@@ -104,6 +115,7 @@ const CreateBonusCampaign = () => {
     fetchSegmentationList();
     fetchCurrencies();
     fetchCategoryList();
+    fetchUserClasses();
   }, []);
 
   const {
@@ -116,13 +128,16 @@ const CreateBonusCampaign = () => {
   } = useForm({
     resolver: yupResolver(createBonusCampaignSchema),
     defaultValues: {
-      eligibleCurrencies: []
+      eligibleCurrencies: [],
+      wageringCategories: []
     }
   });
 
   console.log('wageringRequirement:', watch('wageringRequirement'));
 
   const eligibleCurrencies = watch('eligibleCurrencies');
+  const wageringCategories = watch('wageringCategories');
+  // const segmentationType = watch('segmentationType');
 
   console.log('erro: ', errors);
 
@@ -315,6 +330,25 @@ const CreateBonusCampaign = () => {
                   name="segmentationId"
                 />
               )}
+              {/* {segmentationType === 'user-class' && (
+                <Controller
+                  render={({ field }) => (
+                    <Listbox
+                      key={'userClassIds'}
+                      data={userClassOptions}
+                      value={userClassOptions.find((seg) => seg.value === field.value) || null}
+                      onChange={(val) => field.onChange(val.value)}
+                      name={field.name}
+                      label={t('userClass')}
+                      placeholder={t('select') + ' ' + t('userClass')}
+                      displayField="label"
+                      error={errors?.userClassIds?.message}
+                    />
+                  )}
+                  control={control}
+                  name="userClassIds"
+                />
+              )} */}
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Controller
@@ -386,22 +420,19 @@ const CreateBonusCampaign = () => {
                     multiple={true}
                     value={
                       categoryOptions?.filter((status) =>
-                        excludedCategoryIds?.includes(status.value)
+                        wageringCategories?.includes(status.value)
                       ) || null
                     }
-                    onChange={(val) => {
-                      console.log(val);
-                      setExcludedCategoryIds(val.map((option) => option.value));
-                    }}
+                    onChange={(val) => field.onChange(val.map((option) => option.value))}
                     name={field.name}
-                    label={t('exclude') + ' ' + t('categories')}
+                    label={t('wagering') + ' ' + t('categories')}
                     placeholder={t('select') + ' ' + t('categories')}
                     displayField="label"
-                    error={errors?.currency?.message}
+                    error={errors?.wageringCategories?.message}
                   />
                 )}
                 control={control}
-                name="currencies"
+                name="wageringCategories"
               />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">

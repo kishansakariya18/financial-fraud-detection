@@ -4,15 +4,13 @@ import { getDateInUTCToTimeZone } from 'helpers/functions';
 const statusToApp = (status) => {
   switch ((status || '').toString().toUpperCase()) {
     case 'ACTIVE':
-      return 'active';
-    case 'INACTIVE':
-      return 'inactive';
-    case 'BLOCKED':
-      return 'blocked';
-    case 'DEACTIVATED':
-      return 'deactivated';
+      return 'ACTIVE';
+    case 'SUSPENDED':
+      return 'SUSPENDED';
+    case 'CLOSED':
+      return 'CLOSED';
     default:
-      return 'inactive';
+      return 'SUSPENDED';
   }
 };
 

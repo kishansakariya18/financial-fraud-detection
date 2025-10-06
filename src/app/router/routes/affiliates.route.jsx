@@ -229,6 +229,23 @@ export const affiliatesRoutes = [
             )
           };
         }
+      },
+      {
+        path: 'transactions',
+        lazy: async () => {
+          const { default: AffiliateTransactionsList } = await import(
+            '../../pages/affiliates/transactions/list'
+          );
+          return {
+            Component: () => (
+              <>
+                <PrivateRoute permission={PERMISSIONS.AFFILIATES.TRANSACTIONS_LIST}>
+                  <AffiliateTransactionsList />
+                </PrivateRoute>
+              </>
+            )
+          };
+        }
       }
     ]
   }

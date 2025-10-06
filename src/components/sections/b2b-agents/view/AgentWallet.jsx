@@ -17,6 +17,7 @@ import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useSelector } from 'react-redux';
 import B2BAgentService from 'services/b2b-agent/b2b-agent.services';
 import { AGENT_TIER_TYPE, ADMIN_TYPE } from 'constants/app.constant';
+import { useCurrencyContext } from 'app/contexts/currency/context';
 
 export default function AgentWallet({ agentUID, breadcrumbs }) {
   const { t } = useTranslation();
@@ -27,6 +28,7 @@ export default function AgentWallet({ agentUID, breadcrumbs }) {
   const [showAdjustBalanceModal, setShowAdjustBalanceModal] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const [walletAgent, setWalletAgent] = useState(null);
+  const { formatCurrency } = useCurrencyContext();
 
   const isOwnWallet = useMemo(
     () => userData?.AgentID && userData?.AgentID === walletData?.AgentID,
@@ -178,7 +180,9 @@ export default function AgentWallet({ agentUID, breadcrumbs }) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium">{t('commission_balance')}</p>
-                <p className="mt-2 text-3xl font-bold">{walletData?.Balance || 0}</p>
+                <p className="mt-2 text-3xl font-bold">
+                  {formatCurrency(walletData?.Balance || 0)}
+                </p>
               </div>
               <div className="rounded-full bg-blue-100 p-3 dark:bg-blue-900/40">
                 <WalletIcon className="h-8 w-8" />
@@ -190,7 +194,9 @@ export default function AgentWallet({ agentUID, breadcrumbs }) {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium">{t('lineup_balance')}</p>
-                <p className="mt-2 text-3xl font-bold">{walletData?.LineUpBalance || 0}</p>
+                <p className="mt-2 text-3xl font-bold">
+                  {formatCurrency(walletData?.LineUpBalance || 0)}
+                </p>
               </div>
               <div className="rounded-full bg-purple-100 p-3 dark:bg-purple-900/40">
                 <WalletIcon className="h-8 w-8" />

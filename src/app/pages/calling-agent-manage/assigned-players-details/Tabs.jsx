@@ -3,6 +3,8 @@ import { HomeIcon, ListBulletIcon, UserGroupIcon, WalletIcon } from '@heroicons/
 import { randomId } from 'utils/randomId';
 import { useTranslation } from 'react-i18next';
 import TabsPage from 'components/custom/TabsPage';
+import apiConfig from 'configs/api.config';
+import { PLATFORM_TYPE } from 'constants/app.constant';
 
 // ----------------------------------------------------------------------
 
@@ -51,7 +53,8 @@ export default function AgentPlayerDetailTabs() {
       title: t('referral'),
       path: `/calling-agents/assigned-players-details/${playerId}/tab/referrals`,
       icon: UserGroupIcon,
-      index: 5
+      index: 5,
+      isHidden: apiConfig.platformType === PLATFORM_TYPE.B2B
     },
     {
       id: randomId(),

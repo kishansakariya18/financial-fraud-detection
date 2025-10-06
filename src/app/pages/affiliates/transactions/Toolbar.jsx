@@ -10,10 +10,10 @@ import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
-import { referredTxnPlanTypeOptions, referredTxnStatusOptions } from './helper';
+import { referredTxnTypeOptions, referredTxnStatusOptions, transactionTypeOption } from './helper';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
-import { useParams } from 'react-router';
 import { HiOutlineCash, HiOutlineTicket } from 'react-icons/hi';
+import { CiFilter } from 'react-icons/ci';
 
 // ----------------------------------------------------------------------
 
@@ -25,15 +25,9 @@ export function Toolbar({
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
-  const { affiliateId, campaignID } = useParams();
 
   const breadcrumbItem = [
     { title: t('affiliates'), path: '/affiliates' },
-    { title: t('campaign') + ' ' + t('list'), path: `/affiliates/${affiliateId}/tab/campaigns` },
-    {
-      title: t('referred_users'),
-      path: `/affiliates/${affiliateId}/tab/campaigns/${campaignID}/referred_users`
-    },
     { title: t('transactions') }
   ];
 
@@ -109,7 +103,7 @@ function SearchInput({ table, onApplyFilters }) {
       }}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{ input: 'h-8 text-xs ring-primary-500/50 focus:ring', root: 'shrink-0' }}
-      placeholder={t('search') + ' ' + t('referrence') + ' ' + t('id')}
+      placeholder={t('search') + ' ' + t('username') + ', ' + t('transaction') + ' ' + t('id')}
     />
   );
 }
@@ -137,11 +131,11 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
   };
   return (
     <>
-      {table.getColumn('planType') && (
+      {table.getColumn('txnType') && (
         <FacedtedFilter
-          options={referredTxnPlanTypeOptions}
-          column={table.getColumn('planType')}
-          title={t('type')}
+          options={referredTxnTypeOptions}
+          column={table.getColumn('txnType')}
+          title={t('transaction') + ' ' + t('type')}
           Icon={HiOutlineTicket}
           isMultiple={false}
           showCheckbox={false}
@@ -154,6 +148,17 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           column={table.getColumn('status')}
           title={t('status')}
           Icon={MapPinIcon}
+          isMultiple={true}
+          showCheckbox={false}
+        />
+      )}
+
+      {table.getColumn('type') && (
+        <FacedtedFilter
+          options={transactionTypeOption}
+          column={table.getColumn('type')}
+          title={t('type')}
+          Icon={CiFilter}
           isMultiple={true}
           showCheckbox={false}
         />

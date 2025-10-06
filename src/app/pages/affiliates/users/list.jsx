@@ -70,6 +70,7 @@ export default function AffiliateUsersList() {
         setSearchParams={setSearchParams}
         pageTitle={pageTitle}
         table={table}
+        affiliateId={affiliateId}
       />
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>

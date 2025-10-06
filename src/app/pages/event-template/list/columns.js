@@ -19,7 +19,7 @@ export const columns = [
   columnHelper.accessor((row) => row.title, {
     id: 'title',
     header: 'Title',
-    cell: BoldCell,
+    cell: CopyableCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.slug, {
@@ -31,7 +31,7 @@ export const columns = [
   columnHelper.accessor((row) => row.heading, {
     id: 'heading',
     header: 'Heading',
-    cell: BoldCell,
+    cell: CopyableCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.eventGroup, {

@@ -4,7 +4,7 @@ import {
   UserGroupIcon
 } from '@heroicons/react/24/outline';
 
-import { NAV_TYPE_COLLAPSE, PERMISSIONS } from 'constants/app.constant';
+import { NAV_TYPE_COLLAPSE, PERMISSIONS, PLATFORM_TYPE } from 'constants/app.constant';
 
 export const b2bAgent = {
   id: 'b2b-agent.b2b-agent',
@@ -14,6 +14,7 @@ export const b2bAgent = {
   transKey: 'nav.users.b2b_agents',
   Icon: UserGroupIcon,
   permission: [PERMISSIONS.AGENTS.LIST],
+  platformType: PLATFORM_TYPE.B2B, // Only show in B2B platform
   childs: [
     {
       id: 'b2b-agent.b2b-agent-list',
@@ -21,7 +22,8 @@ export const b2bAgent = {
       title: 'B2B Agents',
       transKey: 'nav.users.b2b_agents',
       Icon: UserGroupIcon,
-      permission: [PERMISSIONS.AGENTS.LIST]
+      permission: [PERMISSIONS.AGENTS.LIST],
+      platformType: PLATFORM_TYPE.B2B
     },
     {
       id: 'b2b-agent.b2b-agent-tree',
@@ -29,7 +31,8 @@ export const b2bAgent = {
       title: 'Agent Tree',
       transKey: 'nav.b2b_agent.agent_tree',
       Icon: AdjustmentsHorizontalIcon,
-      permission: [PERMISSIONS.AGENTS.LIST]
+      permission: [PERMISSIONS.AGENTS.LIST],
+      platformType: PLATFORM_TYPE.B2B
     },
     {
       id: 'b2b-agent.b2b-agent-withdraw-requests',
@@ -37,7 +40,8 @@ export const b2bAgent = {
       title: 'Withdraw Requests',
       transKey: 'nav.users.withdraw_requests',
       Icon: CurrencyDollarIcon,
-      permission: [PERMISSIONS.AGENTS.LIST]
+      permission: [PERMISSIONS.AGENTS.LIST],
+      platformType: PLATFORM_TYPE.B2B
     }
   ]
 };

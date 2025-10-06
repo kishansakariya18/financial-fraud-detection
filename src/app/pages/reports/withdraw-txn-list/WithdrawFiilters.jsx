@@ -12,12 +12,15 @@ import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { useSearchParams } from 'react-router';
 import { ExportCSV } from 'components/custom/export';
-import { transactionStatusOption, transactionStatusToAPI } from 'app/pages/users/player/helper';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS, TRANSACTION } from 'constants/app.constant';
 import apiConfig from 'configs/api.config';
 import { getQueryParams } from 'utils/custom.utilities';
 import dayjs from 'dayjs';
+import {
+  transactionStatusOption,
+  transactionStatusToAPI
+} from 'components/sections/player-management/helper';
 
 // ----------------------------------------------------------------------
 

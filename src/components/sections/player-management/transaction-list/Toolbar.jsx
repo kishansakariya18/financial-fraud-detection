@@ -1,12 +1,12 @@
 // Import Dependencies
-import { FunnelIcon, MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import { FunnelIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 // Local Imports
 import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
-import { Button, Input } from 'components/ui';
+import { Button } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { transactionStatusOption, transactionTypeOption, txnTypeOption } from '../helper';
@@ -52,7 +52,7 @@ export function Toolbar({
               'flex space-x-2 pt-4 rtl:space-x-reverse [&_.input-root]:flex-1',
               isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x]'
             )}>
-            <SearchInput table={table} onApplyFilters={onApplyFilters} />
+            {/* <SearchInput table={table} onApplyFilters={onApplyFilters} /> */}
             <TableConfig table={table} />
           </div>
           <div
@@ -77,7 +77,7 @@ export function Toolbar({
             '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)'
           }}>
           <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
-            <SearchInput table={table} onApplyFilters={onApplyFilters} />
+            {/* <SearchInput table={table} onApplyFilters={onApplyFilters} /> */}
             <Filters
               table={table}
               onApplyFilters={onApplyFilters}
@@ -92,25 +92,25 @@ export function Toolbar({
   );
 }
 
-function SearchInput({ table, onApplyFilters }) {
-  return (
-    <Input
-      value={table?.getColumn('username')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('username').setFilterValue(e.target.value)}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') {
-          onApplyFilters();
-        }
-      }}
-      prefix={<MagnifyingGlassIcon className="size-4" />}
-      classNames={{
-        input: 'h-8 text-xs ring-primary-500/50 focus:ring',
-        root: 'shrink-0'
-      }}
-      placeholder={t('search') + ' ' + t('userName') + ' ' + 'Tra' + '...'}
-    />
-  );
-}
+// function SearchInput({ table, onApplyFilters }) {
+//   return (
+//     <Input
+//       value={table?.getColumn('username')?.getFilterValue() || ''}
+//       onChange={(e) => table.getColumn('username').setFilterValue(e.target.value)}
+//       onKeyDown={(e) => {
+//         if (e.key === 'Enter') {
+//           onApplyFilters();
+//         }
+//       }}
+//       prefix={<MagnifyingGlassIcon className="size-4" />}
+//       classNames={{
+//         input: 'h-8 text-xs ring-primary-500/50 focus:ring',
+//         root: 'shrink-0'
+//       }}
+//       placeholder={t('search') + ' ' + t('userName') + ' ' + 'Tra' + '...'}
+//     />
+//   );
+// }
 
 function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }) {
   const isFiltered = table.getState().columnFilters.length > 0;
@@ -177,10 +177,10 @@ Toolbar.propTypes = {
   table: PropTypes.object
 };
 
-SearchInput.propTypes = {
-  table: PropTypes.object,
-  onApplyFilters: PropTypes.func
-};
+// SearchInput.propTypes = {
+//   table: PropTypes.object,
+//   onApplyFilters: PropTypes.func
+// };
 
 Filters.propTypes = {
   table: PropTypes.object

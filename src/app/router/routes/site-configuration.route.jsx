@@ -1,3 +1,6 @@
+import { PLATFORM_TYPE } from 'constants/app.constant';
+import PrivateRoute from '../private';
+
 export const siteConfigurationRoutes = [
   {
     path: 'site-configuration/app-settings',
@@ -44,7 +47,11 @@ export const siteConfigurationRoutes = [
         '../../pages/payment-provider-config/list/list'
       );
       return {
-        Component: () => <PaymentProvider />
+        Component: () => (
+          <PrivateRoute allowedPlatforms={[PLATFORM_TYPE.B2C]}>
+            <PaymentProvider />
+          </PrivateRoute>
+        )
       };
     }
   },

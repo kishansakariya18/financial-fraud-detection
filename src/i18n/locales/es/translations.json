@@ -596,9 +596,17 @@
   "min_wager_for_cpa": "Apuesta mínima para CPA",
   "min_wager_for_cpa_placeholder": "Ingrese apuesta mínima para CPA",
   "loss_commission_percent": "Porcentaje de comisión de pérdida",
+  "upgrade_user_class": "mejorar la clase de jugador",
   "loss_commission_percent_placeholder": "Ingrese porcentaje de comisión de pérdida",
   "question": "Pregunta",
   "deleteFAQDesc": "¿Estás seguro de que quieres eliminar esta FAQ?",
   "faqDeleteSuccess": "FAQ eliminada exitosamente!",
-  "answer": "Respuesta"
+  "answer": "Respuesta",
+  "select_user_class_to_upgrade": "Seleccionar la clase de usuario para mejorar",
+  "user_class_upgraded": "Usuario clasificado actualizado exitosamente",
+  "user_class_upgraded_successfully": "Usuario clasificado actualizado exitosamente",
+  "LTV": "(LTV - Valor de vida)",
+  "export_text": "Exportar",
+  "exporting": "Exportando...",
+  "referrence": "Referencia"
 }

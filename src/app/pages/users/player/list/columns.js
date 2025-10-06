@@ -143,13 +143,13 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.SegmentationID, {
-    id: 'SegmentationID',
-    label: 'Segmentation ID',
-    header: 'Segmentation ID',
-    cell: BoldCell,
-    enableSorting: false
-  }),
+  // columnHelper.accessor((row) => row.SegmentationID, {
+  //   id: 'SegmentationID',
+  //   label: 'Segmentation ID',
+  //   header: 'Segmentation ID',
+  //   cell: BoldCell,
+  //   enableSorting: false
+  // }),
   // Virtual/display column for Player Class filter support (server-side filtering)
   columnHelper.display({
     id: 'playerClassID',

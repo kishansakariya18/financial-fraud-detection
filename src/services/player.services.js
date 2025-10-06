@@ -7,7 +7,7 @@ import {
   transactionTypeAppToApi,
   txnTypeToAPI,
   playerKycToAPI
-} from 'app/pages/users/player/helper';
+} from 'components/sections/player-management/helper';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
 import apiInstance from 'utils/apiInstance';
@@ -281,6 +281,26 @@ const PlayerService = {
       return response;
     } catch (error) {
       console.log('Error from userStatus', error);
+    }
+  },
+  upgradeUserClass: async ({ nextClassID, userUID }) => {
+    try {
+      const endPoint = apiConfig.endPoints.USER.UPGRADE_USER_CLASS;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          nextClassID: String(nextClassID),
+          userUID
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from upgradeUserClass', error);
     }
   },
   userRestBankCount: async (userID) => {
