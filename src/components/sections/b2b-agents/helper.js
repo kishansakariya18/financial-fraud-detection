@@ -184,15 +184,17 @@ export const creditDebitTypeApiToApp = (type) => {
 };
 
 export const agentTransactionsResponseMapper = (apiData) => {
-  const totalRecords = apiData.totalRecords || 0;
-  const list = apiData?.data?.map((item) => mapTrasanctionMapper(item)) || [];
+  const totalRecords = apiData?.totalRecords || 0;
+  // Ensure data is an array before mapping
+  const dataArray = Array.isArray(apiData?.data) ? apiData.data : [];
+  const list = dataArray.map((item) => mapTrasanctionMapper(item));
 
   return { totalRecords, list };
 };
 
 export const mapTrasanctionMapper = (item) => ({
-  id: item.AgentWalletTransactionID,
-  agentWalletTransactionID: item.AgentWalletTransactionID,
+  id: item?.AgentWalletTransactionID || item?.OperatorWalletTransactionID,
+  agentWalletTransactionID: item?.AgentWalletTransactionID || item?.OperatorWalletTransactionID,
   fromEntityType: item.FromEntityType,
   fromEntityID: item.FromEntityID,
   toEntityType: item.ToEntityType,

@@ -48,7 +48,9 @@ import b2bAgentAdminRoutes from './routes/b2b-agent/b2b-agent-for-admin';
 import affiliatesRoutes from './routes/affiliates.route';
 import globalCommissionSettingRoute from './routes/global-commission-setting.route';
 import faqRoutes from './routes/faq.route';
-import { B2BOnlyRouteGuard, B2COnlyRouteGuard } from './PlatformRouteGuard';
+import { platformGuard } from './PlatformRouteGuard';
+import { Outlet } from 'react-router';
+import { PLATFORM_TYPE } from 'constants/app.constant';
 // ----------------------------------------------------------------------
 
 const protectedRoutes = {
@@ -62,6 +64,7 @@ const protectedRoutes = {
         // Admin routes - centrally protected with AdminRouteGuard
         {
           Component: AdminRouteGuard,
+          element: <Outlet />,
           children: [
             // Routes available for both B2B and B2C platforms
             ...dashboardRoute,
@@ -93,7 +96,8 @@ const protectedRoutes = {
             ...faqRoutes,
             // B2C-only admin routes
             {
-              Component: B2COnlyRouteGuard,
+              loader: platformGuard([PLATFORM_TYPE.B2C]),
+              element: <Outlet />,
               children: [
                 ...supervisorRoute,
                 ...callingAgentsRoute,
@@ -111,7 +115,8 @@ const protectedRoutes = {
 
             // B2B-only admin routes
             {
-              Component: B2BOnlyRouteGuard,
+              loader: platformGuard([PLATFORM_TYPE.B2B]),
+              element: <Outlet />,
               children: [...b2bAgentAdminRoutes]
             }
           ]
@@ -121,7 +126,8 @@ const protectedRoutes = {
           Component: CallingAgentRouteGuard,
           children: [
             {
-              Component: B2COnlyRouteGuard,
+              loader: platformGuard([PLATFORM_TYPE.B2C]),
+              element: <Outlet />,
               children: [...onlyCallingAgentRoutes]
             }
           ]
@@ -132,7 +138,8 @@ const protectedRoutes = {
           Component: B2BAgentRouteGuard,
           children: [
             {
-              Component: B2BOnlyRouteGuard,
+              loader: platformGuard([PLATFORM_TYPE.B2B]),
+              element: <Outlet />,
               children: [...b2bAgentRoutes]
             }
           ]

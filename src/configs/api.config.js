@@ -196,7 +196,9 @@ export const apiConfig = {
         GET_AGENT_WALLET: (agentUID) => `/wallet/agent/${agentUID}/wallet`,
         WITHDRAW_REQUEST_UPDATE_STATUS: (withdrawRequestID) =>
           `/wallet/${withdrawRequestID}/handle-withdraw-request`,
-        AGENT_MANUAL_ADJUSTMENT: `wallet/admin/agent/wallet/manual-adjustment`
+        AGENT_MANUAL_ADJUSTMENT: `wallet/admin/agent/wallet/manual-adjustment`,
+        OPERATOR_WALLET: `/wallet/operator/wallet`,
+        OPERATOR_TRANSACTION_LIST: `/wallet/operator/transaction-list`
       }
     },
     TENANT: {

@@ -9,7 +9,7 @@ export default function B2BAgentRouteGuard() {
   const userData = useSelector((state) => state.auth.userData);
 
   // If user is not an agent, redirect to home
-  if (!userData.AgentUID) {
+  if (!userData?.AgentUID) {
     return <Navigate to="/" replace />;
   }
 

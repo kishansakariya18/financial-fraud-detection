@@ -55,7 +55,7 @@ const B2BAgentWalletService = {
     const { pagination, creditDebitType, transactionType, agentUID, startDate, endDate } = data;
     const body = {
       page: pagination.pageIndex + 1,
-      limit: pagination.pageSize || DEFAULT_PER_PAGE_RECORD,
+      perPage: pagination.pageSize || DEFAULT_PER_PAGE_RECORD,
       creditDebitType: creditDebitType ? parseCreditDebitTypeToApi(creditDebitType) : undefined,
       transactionType: transactionType ? parseTransactionTypeToApi(transactionType) : undefined,
       startDate: startDate ? moment(Number(startDate)).startOf('day').toDate() : undefined,
@@ -108,6 +108,22 @@ const B2BAgentWalletService = {
   },
   manualAdjustment: async (data) => {
     return apiInstance.post(apiConfig.endPoints.B2B_AGENT.WALLET.AGENT_MANUAL_ADJUSTMENT, data);
+  },
+
+  getOperatorWallet: async () => {
+    return apiInstance.post(apiConfig.endPoints.B2B_AGENT.WALLET.OPERATOR_WALLET);
+  },
+  operatorTransactionList: async (data) => {
+    const { pagination, creditDebitType, transactionType, startDate, endDate } = data;
+    const body = {
+      page: pagination.pageIndex + 1,
+      perPage: pagination.pageSize || DEFAULT_PER_PAGE_RECORD,
+      creditDebitType: creditDebitType ? parseCreditDebitTypeToApi(creditDebitType) : undefined,
+      transactionType: transactionType ? parseTransactionTypeToApi(transactionType) : undefined,
+      startDate: startDate ? moment(Number(startDate)).startOf('day').toDate() : undefined,
+      endDate: endDate ? moment(Number(endDate)).endOf('day').toDate() : undefined
+    };
+    return apiInstance.post(apiConfig.endPoints.B2B_AGENT.WALLET.OPERATOR_TRANSACTION_LIST, body);
   }
 };
 
