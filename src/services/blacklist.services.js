@@ -95,19 +95,22 @@ const BlacklistService = {
       console.log('Error deleting blacklist item', err);
     }
   },
-  getDisposableEmailDomainList: async ({ pagination }) => {
+  getDisposableEmailDomainList: async ({ pagination, filters }) => {
     try {
       const apiQueryParams = {
         page: pagination.pageIndex + 1,
-        limit: pagination.pageSize
+        limit: pagination.pageSize,
+        filters: {
+          domain: filters.keyword ? filters.keyword : null
+        }
       };
       const response = await sendRequest({
         url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.BLACKLIST.DISPOSABLE_EMAIL.LIST}`,
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        params: apiQueryParams
+        body: apiQueryParams
       });
       return response;
     } catch (err) {
