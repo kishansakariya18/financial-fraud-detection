@@ -368,6 +368,64 @@ const AffiliatesService = {
   }
 };
 
+// Export Referred Users Report
+AffiliatesService.exportReferredUsersReport = async ({ affiliateId, userID, filters = {} }) => {
+  try {
+    if (!affiliateId || String(affiliateId).trim() === '') {
+      return { status: 400, error: 'Invalid affiliateId to export report' };
+    }
+    const endPoint = apiConfig.endPoints.AFFILIATES.REFERRED_USERS_REPORT.replace(
+      '{affiliateId}',
+      affiliateId
+    );
+    const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+
+    const payload = {
+      ...(typeof userID !== 'undefined' && userID !== null && userID !== ''
+        ? { userID: String(userID) }
+        : {}),
+      filter: {
+        keyword: filters?.keyword ?? '',
+        startDate: filters?.startDate
+          ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
+          : '',
+        endDate: filters?.endDate
+          ? dayjs(+filters.endDate).endOf('day').format('YYYY-MM-DD HH:mm:ss')
+          : '',
+        txnStatus:
+          typeof filters?.txnStatus !== 'undefined' && filters?.txnStatus !== null
+            ? String(filters.txnStatus)
+            : '',
+        type:
+          typeof filters?.type !== 'undefined' && filters?.type !== null
+            ? String(filters.type)
+            : '',
+        currencyID:
+          typeof filters?.currencyID !== 'undefined' && filters?.currencyID !== null
+            ? String(filters.currencyID)
+            : ''
+      }
+    };
+
+    const res = await axios.request({
+      url: apiURL,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: payload,
+      responseType: 'blob'
+    });
+
+    return { status: res.status, response: res.data };
+  } catch (error) {
+    const status = error?.response?.status || 500;
+    let errMsg =
+      (typeof error?.response?.data === 'string'
+        ? error.response.data
+        : error?.response?.data?.message) || 'Failed to export report';
+    return { status, error: errMsg || error?.message || 'Unexpected error' };
+  }
+};
+
 AffiliatesService.exportCampaignReport = async ({ affiliateId }) => {
   try {
     if (!affiliateId || String(affiliateId).trim() === '') {
@@ -381,6 +439,41 @@ AffiliatesService.exportCampaignReport = async ({ affiliateId }) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       data: { userId: String(affiliateId) },
+      responseType: 'blob'
+    });
+
+    return { status: res.status, response: res.data };
+  } catch (error) {
+    const status = error?.response?.status || 500;
+    let errMsg =
+      (typeof error?.response?.data === 'string'
+        ? error.response.data
+        : error?.response?.data?.message) || 'Failed to export report';
+    return { status, error: errMsg || error?.message || 'Unexpected error' };
+  }
+};
+
+// Export Commission Summary Report
+AffiliatesService.exportCommissionSummaryReport = async ({ affiliateId, filters = {} }) => {
+  try {
+    if (!affiliateId || String(affiliateId).trim() === '') {
+      return { status: 400, error: 'Invalid affiliateId to export report' };
+    }
+    const endPoint = apiConfig.endPoints.AFFILIATES.COMMISSION_SUMMARY_REPORT.replace(
+      '{affiliateId}',
+      affiliateId
+    );
+    const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+
+    const res = await axios.request({
+      url: apiURL,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: {
+        filter: {
+          keyword: filters?.keyword ?? ''
+        }
+      },
       responseType: 'blob'
     });
 

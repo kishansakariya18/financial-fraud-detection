@@ -525,7 +525,10 @@ export const apiConfig = {
       COMMISSION_SETTINGS_UPDATE: '/affiliates/admin/affiliates/commission-setting/update',
       GLOBAL_COMMISSION_SETTINGS: '/affiliates/admin/affiliates/global/commission-setting',
       AFFILIATE_TRANSACTIONS: '/affiliates/admin/affiliates/{affiliateId}/transactions',
-      CAMPAIGN_REPORT: '/affiliates/admin/affiliates/campaign-report'
+      CAMPAIGN_REPORT: '/affiliates/admin/affiliates/campaign-report',
+      COMMISSION_SUMMARY_REPORT:
+        '/affiliates/admin/affiliates/{affiliateId}/export-commission-summary',
+      REFERRED_USERS_REPORT: '/affiliates/admin/affiliates/{affiliateId}/export-referred-users'
     },
     FAQ: {
       LIST: '/affiliates/admin/faq/list',
