@@ -7,8 +7,8 @@ export default function B2BAgent() {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const handleFetchAgents = async (data) => {
-    return await B2BAgentService.getAllAgent(data);
+  const handleFetchAgents = (data) => {
+    return B2BAgentService.getAllAgent(data);
   };
 
   const handleChangeAgentStatus = async (agentUID) => {

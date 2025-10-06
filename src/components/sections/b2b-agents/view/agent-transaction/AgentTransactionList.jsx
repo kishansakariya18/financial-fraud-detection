@@ -16,7 +16,11 @@ import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.const
 import { agentTransactionsResponseMapper } from '../../helper';
 import { AgentTransactionColumns } from './columns';
 
-export default function AgentTransactionList({ agentUID: propAgentUID, breadcrumbs = null }) {
+export default function AgentTransactionList({
+  agentUID: propAgentUID,
+  breadcrumbs = null,
+  onFetchTransactions
+}) {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const params = useParams();
@@ -27,28 +31,56 @@ export default function AgentTransactionList({ agentUID: propAgentUID, breadcrum
   const fetchAgentTransactions = useCallback(async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
-    const result = await B2BAgentWalletService.agentTransactionList({
+
+    const requestObject = {
       pagination: { pageIndex, pageSize },
       creditDebitType: queryParams.creditDebitType,
       transactionType: queryParams.transactionType,
       startDate: queryParams.startDate,
       endDate: queryParams.endDate,
-      agentUID
-    });
-
-    if (result.status === 200) {
-      const response = agentTransactionsResponseMapper(result.response);
+      ...(agentUID ? { agentUID } : {})
+    };
+    let result = {};
+    try {
+      if (onFetchTransactions) {
+        result = await onFetchTransactions(requestObject);
+      } else {
+        result = await B2BAgentWalletService.agentTransactionList(requestObject);
+      }
+      const response = agentTransactionsResponseMapper(result?.response || {});
       return {
         status: 200,
-        data: response.list,
+        data: Array.isArray(response.list) ? response.list : [],
         totalRecords: response.totalRecords || 0
       };
+    } catch (error) {
+      console.error('Error fetching agent transactions:', error);
+      return { status: 500, error: error.message };
     }
-    return { status: result.status, error: result.error };
-  }, [queryParams, agentUID]);
+  }, [
+    queryParams.pageIndex,
+    queryParams.pageSize,
+    queryParams.creditDebitType,
+    queryParams.transactionType,
+    queryParams.startDate,
+    queryParams.endDate,
+    onFetchTransactions,
+    agentUID
+  ]);
+
+  // Ensure columns are always an array
+  const columns = useMemo(() => {
+    try {
+      const cols = AgentTransactionColumns();
+      return Array.isArray(cols) ? cols : [];
+    } catch (error) {
+      console.error('Error creating columns:', error);
+      return [];
+    }
+  }, []);
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns: AgentTransactionColumns,
+    columns,
     fetchData: fetchAgentTransactions,
     queryParams,
     setSearchParams,

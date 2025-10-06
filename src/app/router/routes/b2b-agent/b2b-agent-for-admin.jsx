@@ -7,6 +7,21 @@ const b2bAgentAdminRoutes = [
     path: 'agent',
     children: [
       {
+        path: 'transections',
+        lazy: async () => {
+          const { default: OperatorTransection } = await import(
+            '../../../pages/b2b-agent/admin/OperatorTransection'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.AGENTS.VIEW}>
+                <OperatorTransection />
+              </PrivateRoute>
+            )
+          };
+        }
+      },
+      {
         path: 'list',
         lazy: async () => {
           const { B2BAgentList } = await import('../../../pages/b2b-agent/admin');
@@ -26,7 +41,11 @@ const b2bAgentAdminRoutes = [
             '../../../pages/b2b-agent/admin/AdminAgantTree'
           );
           return {
-            Component: AdminAgentTree
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.AGENTS.VIEW}>
+                <AdminAgentTree />
+              </PrivateRoute>
+            )
           };
         }
       },
@@ -37,7 +56,11 @@ const b2bAgentAdminRoutes = [
             '../../../pages/b2b-agent/admin/AdminWithdrawRequest'
           );
           return {
-            Component: AdminWithdrawRequest
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.AGENTS.VIEW}>
+                <AdminWithdrawRequest />
+              </PrivateRoute>
+            )
           };
         }
       },

@@ -83,19 +83,6 @@ export const statusOptions = [
 ];
 
 /**
- * Formats currency amount
- * @param {number} amount - Amount to format
- * @param {string} currency - Currency code (default: USD)
- * @returns {string} - Formatted currency string
- */
-export const formatCurrency = (amount, currency = 'USD') => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: currency
-  }).format(amount || 0);
-};
-
-/**
  * Formats date for display
  * @param {string} dateString - Date string from API
  * @returns {string} - Formatted date string

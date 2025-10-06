@@ -43,20 +43,26 @@ export default function AgentList({
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
 
-    const result = await onFetchAgents({
-      pagination: { pageIndex, pageSize },
-      filters: { ...queryParams }
-    });
-
-    if (result.status === 200) {
-      return {
-        status: 200,
-        data: responseMapper(result.response.data),
-        totalRecords: parseInt(result.response.totalRecord, 10) || 0
-      };
+    let response = {};
+    try {
+      const result = await onFetchAgents({
+        pagination: { pageIndex, pageSize },
+        filters: { ...queryParams }
+      });
+      console.log('result: ', result.response);
+      if (result.status === 200) {
+        response = {
+          status: 200,
+          data: responseMapper(result.response.data),
+          totalRecords: result.response.totalRecords || 0
+        };
+      }
+    } catch (error) {
+      response = { status: 500, error: error.message };
     }
 
-    return { status: result.status, error: result.error };
+    console.log('response: ', response);
+    return response;
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({

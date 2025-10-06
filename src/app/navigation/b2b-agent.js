@@ -1,5 +1,6 @@
 import {
   AdjustmentsHorizontalIcon,
+  BanknotesIcon,
   CurrencyDollarIcon,
   UserGroupIcon
 } from '@heroicons/react/24/outline';
@@ -16,6 +17,15 @@ export const b2bAgent = {
   permission: [PERMISSIONS.AGENTS.LIST],
   platformType: PLATFORM_TYPE.B2B, // Only show in B2B platform
   childs: [
+    {
+      id: 'b2b-agent.b2b-agent-operator-transection',
+      path: '/agent/transections',
+      title: 'Transections',
+      transKey: 'nav.b2b_agent.transactions',
+      Icon: BanknotesIcon,
+      permission: [PERMISSIONS.AGENTS.LIST],
+      platformType: PLATFORM_TYPE.B2B
+    },
     {
       id: 'b2b-agent.b2b-agent-list',
       path: '/agent/list',

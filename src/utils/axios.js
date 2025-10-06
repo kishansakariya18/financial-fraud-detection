@@ -1,8 +1,8 @@
 import axios from 'axios';
-// import store from '../store';
+import store from '../store';
 import { LOCAL_STORAGE } from 'constants/app.constant';
-// import { AuthAction } from 'store/admin-slice/AuthSlice';
-// import { toast } from 'react-toastify';
+import { AuthAction } from 'store/admin-slice/AuthSlice';
+// import { toast } from 'sonner';
 
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem(LOCAL_STORAGE.AUTH_TOKEN);
@@ -44,15 +44,15 @@ export const sendRequest = async (config) => {
     result.error = err.response.data.message || err.message || 'Something went wrong!';
   }
 
-  // if (result.status == 401) {
-  // store.dispatch(AuthAction.logout(result.response.message));
-  // localStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN);
-  // localStorage.removeItem(LOCAL_STORAGE.USER_DATA);
-  // localStorage.removeItem(LOCAL_STORAGE.IS_MASTER_ADMIN);
-  // localStorage.removeItem(LOCAL_STORAGE.PERMISSIONS);
-  // if (isLoggedIn) {
-  //   toast.error(result.response.message, config.TOAST_UI);
-  // }
-  // }
+  if (result.status == 401) {
+    store.dispatch(AuthAction.logout(result.response.message));
+    localStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN);
+    localStorage.removeItem(LOCAL_STORAGE.USER_DATA);
+    localStorage.removeItem(LOCAL_STORAGE.IS_MASTER_ADMIN);
+    localStorage.removeItem(LOCAL_STORAGE.PERMISSIONS);
+    // if (isLoggedIn) {
+    //   toast.error(result.response.message, config.TOAST_UI);
+    // }
+  }
   return result;
 };
