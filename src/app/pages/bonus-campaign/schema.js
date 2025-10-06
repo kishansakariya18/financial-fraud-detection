@@ -88,5 +88,9 @@ export const createBonusCampaignSchema = Yup.object().shape({
       if (value === undefined || value === null) return true;
       return /^\d+(\.\d{1,2})?$/.test(value.toString());
     }),
-  eligibleCurrencies: Yup.array().of(Yup.string()).min(1, 'Select at least one currency').required()
+  eligibleCurrencies: Yup.array()
+    .of(Yup.string())
+    .min(1, 'Select at least one currency')
+    .required(),
+  wageringCategories: Yup.array().of(Yup.number()).min(1, 'Select at least one category').required()
 });

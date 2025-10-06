@@ -189,7 +189,7 @@ export const apiConfig = {
       CREATE: '/bonus/admin/v1/bonus-campaign/create',
       UPDATE: '/bonus/admin/v1/bonus-campaign/:id',
       CHANGE_STATUS: '/bonus/admin/v1/bonus-campaign/:id/change-status',
-      HISTORY: '/bonus/admin/v1/bonus-campaign/:id/history',
+      GRANT_LIST: '/bonus/admin/v1/bonus-campaign/:id/grants',
       SUMMARY: '/bonus/admin/v1/bonus-campaign/summary'
     },
     BANNER: {

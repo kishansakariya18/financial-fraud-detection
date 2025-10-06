@@ -800,5 +800,18 @@
   "max_attempts": "Max Attempts",
   "rate_limit_rule": "Rate Limit Rule",
   "currency_deleted_successfully": "Currency deleted successfully",
-  "enable_switch_to_apply_limit": "Enable switch to apply this limit"
+  "enable_switch_to_apply_limit": "Enable switch to apply this limit",
+  "grantStatus": "Grant Status",
+  "txnAmount": "Transaction Amount",
+  "grantBonusAmount": "Bonus Amount",
+  "requiredWR": "Required Wagering",
+  "completedWR": "Completed Wagering",
+  "wageringProgress": "Wagering Progress",
+  "expireOn": "Expires On",
+  "forfeited": "Forfeited",
+  "cashedOut": "Cashed Out",
+  "bonusGrantID": "Bonus Grant ID",
+  "refTxnID": "Reference Transaction ID",
+  "refBonusTxnID": "Reference Bonus Transaction ID",
+  "refBonusCashoutTxnID": "Reference Cashout Transaction ID"
 }
