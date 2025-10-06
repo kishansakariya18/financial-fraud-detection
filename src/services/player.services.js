@@ -7,7 +7,7 @@ import {
   transactionTypeAppToApi,
   txnTypeToAPI,
   playerKycToAPI
-} from 'app/pages/users/player/helper';
+} from 'components/sections/player-management/helper';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
 import apiInstance from 'utils/apiInstance';

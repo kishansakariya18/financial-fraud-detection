@@ -47,7 +47,7 @@ export const resetPasswordSchema = Yup.object().shape({
 });
 
 // Mapper: Limit Summary -> UI structure
-export const mapLimitSummary = (apiData) => {
+export const mapLimitSummary = (apiData, isB2B) => {
   if (!apiData)
     return { userLimits: [], adminLimits: [], userClassLimits: [], globalPlatformLimits: null };
   const {
@@ -57,20 +57,31 @@ export const mapLimitSummary = (apiData) => {
     GlobalPlatformLimits = null
   } = apiData;
 
-  const normalizeLimitItem = (item) => ({
-    id: item.LimitID,
-    type: item.LimitType,
-    period: item.LimitPeriod,
-    amount: item.LimitAmount,
-    setBy: item.SetBy,
-    createdAt: item.DateCreated,
-    updatedAt: item.DateModified
-  });
+  const normalizeLimitItem = (isB2B) => (item) => {
+    if (isB2B && item.LimitType === 'deposit') {
+      return null;
+    }
+    return {
+      id: item.LimitID,
+      type: item.LimitType,
+      period: item.LimitPeriod,
+      amount: item.LimitAmount,
+      setBy: item.SetBy,
+      createdAt: item.DateCreated,
+      updatedAt: item.DateModified
+    };
+  };
 
   return {
-    userLimits: Array.isArray(UserLimits) ? UserLimits.map(normalizeLimitItem) : [],
-    adminLimits: Array.isArray(AdminLimits) ? AdminLimits.map(normalizeLimitItem) : [],
-    userClassLimits: Array.isArray(UserClassLimits) ? UserClassLimits.map(normalizeLimitItem) : [],
+    userLimits: Array.isArray(UserLimits)
+      ? UserLimits.map(normalizeLimitItem(isB2B)).filter(Boolean)
+      : [],
+    adminLimits: Array.isArray(AdminLimits)
+      ? AdminLimits.map(normalizeLimitItem(isB2B)).filter(Boolean)
+      : [],
+    userClassLimits: Array.isArray(UserClassLimits)
+      ? UserClassLimits.map(normalizeLimitItem(isB2B)).filter(Boolean)
+      : [],
     globalPlatformLimits: GlobalPlatformLimits
       ? {
           maxDepositPerDay: GlobalPlatformLimits.MaxDepositPerDay,

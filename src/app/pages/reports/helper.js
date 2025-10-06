@@ -1,5 +1,8 @@
+import {
+  playerStatusToApp,
+  transactionStatusToAPP
+} from 'components/sections/player-management/helper';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
-import { playerStatusToApp, transactionStatusToAPP } from '../users/player/helper';
 
 export const parseAdminStatusToApp = (status) => (status ? 'active' : 'inactive');
 

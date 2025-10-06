@@ -48,6 +48,7 @@ import b2bAgentAdminRoutes from './routes/b2b-agent/b2b-agent-for-admin';
 import affiliatesRoutes from './routes/affiliates.route';
 import globalCommissionSettingRoute from './routes/global-commission-setting.route';
 import faqRoutes from './routes/faq.route';
+import { B2BOnlyRouteGuard, B2COnlyRouteGuard } from './PlatformRouteGuard';
 // ----------------------------------------------------------------------
 
 const protectedRoutes = {
@@ -62,59 +63,80 @@ const protectedRoutes = {
         {
           Component: AdminRouteGuard,
           children: [
+            // Routes available for both B2B and B2C platforms
             ...dashboardRoute,
             ...adminRoute,
             ...bannerRoute,
             ...playerRoutes,
-            ...supervisorRoute,
-            ...callingAgentsRoute,
             ...roleRoutes,
             ...auditlogsRoutes,
             ...platformRoute,
             ...countryRoutes,
             ...reportsRoutes,
-            ...paymentRoute,
             ...userKycRoute,
             ...casinoRoutes,
-            ...currenciesRoutes,
-            ...affiliateRoutes,
             ...segmentationRoutes,
             ...emailTemplateRoute,
             ...promocodeRoute,
-            ...bonusCampaignRoute,
             ...pagesRoute,
             ...crmRoute,
             ...layoutThemeRoute,
             ...homeCategoryRoute,
             ...tenantRoute,
             ...bonusManagementRoute,
-            ...bankRoute,
-            ...userManualDepositTransactionRoute,
             ...userClass,
             ...rateLimitRulesRoute,
-            ...registrationFieldsRoute,
             ...siteConfigurationRoutes,
             ...blacklistRoutes,
             ...releaseNotesRoutes,
             ...responsibleGamblingRoute,
-            ...b2bAgentAdminRoutes,
-            ...affiliatesRoutes,
-            ...globalCommissionSettingRoute,
-            ...faqRoutes
+            ...faqRoutes,
+            // B2C-only admin routes
+            {
+              Component: B2COnlyRouteGuard,
+              children: [
+                ...supervisorRoute,
+                ...callingAgentsRoute,
+                ...currenciesRoutes,
+                ...affiliateRoutes,
+                ...affiliatesRoutes,
+                ...userManualDepositTransactionRoute,
+                ...bankRoute,
+                ...registrationFieldsRoute,
+                ...paymentRoute,
+                ...bonusCampaignRoute,
+                ...globalCommissionSettingRoute
+              ]
+            },
+
+            // B2B-only admin routes
+            {
+              Component: B2BOnlyRouteGuard,
+              children: [...b2bAgentAdminRoutes]
+            }
           ]
         },
-        // Calling Agent-only routes - centrally protected with CallingAgentRouteGuard
+        // Calling Agent-only routes - centrally protected with CallingAgentRouteGuard (B2B only)
         {
           Component: CallingAgentRouteGuard,
-          children: [...onlyCallingAgentRoutes]
+          children: [
+            {
+              Component: B2COnlyRouteGuard,
+              children: [...onlyCallingAgentRoutes]
+            }
+          ]
         },
 
-        // B2B Agent routes - centrally protected with B2BAgentRouteGuard
+        // B2B Agent routes - centrally protected with B2BAgentRouteGuard (B2B only)
         {
           Component: B2BAgentRouteGuard,
-          children: [...b2bAgentRoutes]
+          children: [
+            {
+              Component: B2BOnlyRouteGuard,
+              children: [...b2bAgentRoutes]
+            }
+          ]
         },
-        // Shared routes accessible by both admin and agent
         ...profileRoute
       ]
     }

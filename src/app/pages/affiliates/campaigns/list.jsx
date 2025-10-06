@@ -71,6 +71,7 @@ export default function AffiliateDetails() {
         searchParams={searchParams}
         setSearchParams={setSearchParams}
         table={table}
+        affiliateId={affiliateId}
       />
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>

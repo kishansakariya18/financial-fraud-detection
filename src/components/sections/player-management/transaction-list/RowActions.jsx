@@ -1,6 +1,6 @@
 // Import Dependencies
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
-import { EllipsisHorizontalIcon, EyeIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { EllipsisHorizontalIcon, EyeIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -66,14 +66,15 @@ export function RowActions({ row }) {
         show={isDialogOpen}
         title={t('transaction') + ' ' + t('details')}
         btnTitle={t('transaction') + ' ' + t('details')}
-        icon={<PencilIcon className="size-4.5 stroke-1" />}
-        btnClassName={clsx(
-          'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
-          focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
-        )}
+        // icon={<PencilIcon className="size-4.5 stroke-1" />}
+        // btnClassName={clsx(
+        //   'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+        //   focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+        // )}
         onClose={onCloseDialogBox}
         onOpen={onOpenDialogBox}
-        onOk={onOkDialogBox}>
+        onOk={onOkDialogBox}
+        panalClassName="max-w-xl">
         <ViewDetails transactionData={row.original} onClose={onCloseDialogBox} />
       </CustomModal>
     </>

@@ -20,8 +20,8 @@ export const columns = [
   }),
   columnHelper.accessor((row) => row.referenceId, {
     id: 'referenceId',
-    label: 'Reference ID',
-    header: 'Reference ID',
+    label: 'Referrence ID',
+    header: 'Referrence ID',
     cell: CopyableCell,
     enableSorting: false
   }),

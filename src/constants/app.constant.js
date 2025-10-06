@@ -28,6 +28,11 @@ export const USER_CLASS_LIMIT_PERIOD = {
   MONTHLY: 'Monthly'
 };
 
+export const PLATFORM_TYPE = {
+  B2B: 'b2b', // Business to Business
+  B2C: 'b2c' // Business to Customer
+};
+
 export const LOCAL_STORAGE = {
   USER_DATA: 'UserData',
   AUTH_TOKEN: 'AuthToken',

@@ -582,9 +582,12 @@
   "deleteFAQDesc": "Êtes-vous sûr de vouloir supprimer cette FAQ?",
   "faqDeleteSuccess": "FAQ supprimée avec succès!",
   "answer": "Answer",
-  "upgrade_user_class":"mettre à niveau la classe de joueur",
-  "select_user_class_to_upgrade":"Selectionner la classe de joueur pour mettre à niveau",
-  "user_class_upgraded":"Utilisateur classé mis à jour avec succès",
-  "user_class_upgraded_successfully":"Utilisateur classé mis à jour avec succès",
-  "LTV":"(LTV - Valeur de vie)"
+  "upgrade_user_class": "mettre à niveau la classe de joueur",
+  "select_user_class_to_upgrade": "Selectionner la classe de joueur pour mettre à niveau",
+  "user_class_upgraded": "Utilisateur classé mis à jour avec succès",
+  "user_class_upgraded_successfully": "Utilisateur classé mis à jour avec succès",
+  "LTV": "(LTV - Valeur de vie)",
+  "export_text": "Export",
+  "exporting": "Exporting...",
+  "referrence": "Référence"
 }

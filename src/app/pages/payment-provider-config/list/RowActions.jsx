@@ -45,11 +45,11 @@ export function RowActions({ row, table }) {
       actionText: t('submit')
     },
     success: {
-      title: t('emailProvider') + ' ' + t('status'),
+      title: t('paymentProvider') + ' ' + t('status'),
       description: t('provider_status_success')
     },
     error: {
-      title: t('emailProvider') + ' ' + t('status'),
+      title: t('paymentProvider') + ' ' + t('status'),
       description: t('something_went_wrong')
     }
   };

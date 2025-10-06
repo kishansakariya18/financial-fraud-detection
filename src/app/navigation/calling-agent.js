@@ -2,7 +2,7 @@ import { ChartBarIcon, UsersIcon, DocumentTextIcon } from '@heroicons/react/24/o
 import DashboardsIcon from 'assets/dualicons/dashboards.svg?react';
 import MonitorIcon from 'assets/nav-icons/monitor.svg?react';
 
-import { NAV_TYPE_ITEM, NAV_TYPE_ROOT } from 'constants/app.constant';
+import { NAV_TYPE_ITEM, NAV_TYPE_ROOT, PLATFORM_TYPE } from 'constants/app.constant';
 
 export const agentNavigation = {
   id: 'agent-dashboards',
@@ -11,6 +11,7 @@ export const agentNavigation = {
   title: 'Dashboards',
   transKey: 'nav.dashboards.dashboards',
   Icon: DashboardsIcon,
+  platformType: PLATFORM_TYPE.B2C,
   childs: [
     {
       id: 'dashboard',
@@ -18,7 +19,8 @@ export const agentNavigation = {
       type: NAV_TYPE_ITEM,
       title: 'Dashboard',
       transKey: 'nav.calling_agent.dashboard',
-      Icon: MonitorIcon
+      Icon: MonitorIcon,
+      platformType: [PLATFORM_TYPE.B2C]
     },
     {
       id: 'calling_agent.targets',
@@ -26,7 +28,8 @@ export const agentNavigation = {
       type: NAV_TYPE_ITEM,
       title: 'Targets',
       transKey: 'nav.calling_agent.targets',
-      Icon: ChartBarIcon
+      Icon: ChartBarIcon,
+      platformType: [PLATFORM_TYPE.B2C]
     },
     {
       id: 'agent.assigned-players',
@@ -34,7 +37,8 @@ export const agentNavigation = {
       type: NAV_TYPE_ITEM,
       title: 'Assigned Players',
       transKey: 'nav.calling_agent.assigned_players',
-      Icon: UsersIcon
+      Icon: UsersIcon,
+      platformType: [PLATFORM_TYPE.B2C]
     },
     {
       id: 'agent.summary',
@@ -42,7 +46,8 @@ export const agentNavigation = {
       type: NAV_TYPE_ITEM,
       title: 'Summary',
       transKey: 'nav.calling_agent.summary',
-      Icon: DocumentTextIcon
+      Icon: DocumentTextIcon,
+      platformType: [PLATFORM_TYPE.B2C]
     }
   ]
 };

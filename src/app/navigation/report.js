@@ -9,7 +9,12 @@ import {
 
 // Local Imports
 // import SettingIcon from 'assets/dualicons/setting.svg?react';
-import { NAV_TYPE_COLLAPSE, NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
+import {
+  NAV_TYPE_COLLAPSE,
+  NAV_TYPE_ITEM,
+  PERMISSIONS,
+  PLATFORM_TYPE
+} from 'constants/app.constant';
 
 export const reports = {
   id: 'report',
@@ -40,7 +45,8 @@ export const reports = {
       title: 'depsositTransaction',
       transKey: 'deposit_transactions',
       Icon: ArrowDownTrayIcon,
-      permission: PERMISSIONS.REPORT.DEPOSIT_REPORT_VIEW
+      permission: PERMISSIONS.REPORT.DEPOSIT_REPORT_VIEW,
+      platformType: [PLATFORM_TYPE.B2C]
     },
     {
       id: 'withdrawTransaction',

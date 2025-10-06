@@ -1,6 +1,6 @@
 // Local Imports
 import { ReceiptPercentIcon } from '@heroicons/react/24/outline';
-import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
+import { NAV_TYPE_ITEM, PERMISSIONS, PLATFORM_TYPE } from 'constants/app.constant';
 
 export const bonusCampaign = {
   id: 'bonusCampaign',
@@ -9,5 +9,6 @@ export const bonusCampaign = {
   title: 'Bonus Campaign',
   transKey: 'bonusCampaign',
   Icon: ReceiptPercentIcon,
-  permission: PERMISSIONS.LIST
+  permission: PERMISSIONS.LIST,
+  platformType: PLATFORM_TYPE.B2C
 };

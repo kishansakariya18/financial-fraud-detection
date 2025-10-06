@@ -12,7 +12,7 @@ import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 // import { useSearchParams } from 'react-router';
 // import { ExportCSV } from 'components/custom/export';
-import { playerStatusOptions } from 'app/pages/users/player/helper';
+import { playerStatusOptions } from 'components/sections/player-management/helper';
 // import { getQueryParams } from 'utils/custom.utilities';
 // import apiConfig from 'configs/api.config';
 // import dayjs from 'dayjs';
