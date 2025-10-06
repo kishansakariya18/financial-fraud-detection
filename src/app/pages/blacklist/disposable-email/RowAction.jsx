@@ -30,7 +30,7 @@ export function RowActions({ row, table }) {
     pending: {
       title: t('deleteDomain'),
       description: t('delete_email_domain_desc'),
-      actionText: t('delete')
+      actionText: t('deleteDomain')
     },
     success: {
       title: t('deleteDomain'),
