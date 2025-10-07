@@ -13,7 +13,7 @@ import { roles } from './roles';
 import { auditlogs } from './auditlogs';
 import { crm } from './crm';
 import { frontend } from './front-end';
-import { tenants } from './tenant';
+// import { tenants } from './tenant';
 import { contentManagement } from './content-management';
 import { siteConfiguration } from './site-configuration';
 import { bonusManagement } from './bonus-management';
@@ -21,10 +21,10 @@ import { userClass } from './user-class';
 import { responsibleGambling } from './responsible-gambling';
 import { blacklist } from './blacklist';
 import { bank } from './bank';
-import { userManualDepositTransaction } from './user-manual-deposit-transaction';
-import { registrationFields } from './registration-fields';
+// import { userManualDepositTransaction } from './user-manual-deposit-transaction';
+// import { registrationFields } from './registration-fields';
 import { releaseNotes } from './release-notes';
-import { supervisor } from './supervisor';
+// import { supervisor } from './supervisor';
 import { b2bAgent } from './b2b-agent';
 import { bonusCampaign } from './bonus-campaign';
 import { faq } from './faq';
@@ -49,7 +49,7 @@ export const dashboards = () => ({
     },
     roles,
     users,
-    supervisor,
+    // supervisor,
     affiliatesNew,
     globalCommissionSetting,
     b2bAgent,
@@ -59,7 +59,7 @@ export const dashboards = () => ({
     bonusManagement,
     frontend,
     reports,
-    tenants,
+    // tenants,
     playerKyc,
     casinoManagement,
     segmentation,
@@ -72,8 +72,8 @@ export const dashboards = () => ({
     responsibleGambling,
     blacklist,
     bank,
-    registrationFields,
-    userManualDepositTransaction,
+    // registrationFields,
+    // userManualDepositTransaction,
     releaseNotes,
     faq
   ]
