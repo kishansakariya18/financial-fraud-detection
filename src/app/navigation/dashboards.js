@@ -20,7 +20,7 @@ import { bonusManagement } from './bonus-management';
 import { userClass } from './user-class';
 import { responsibleGambling } from './responsible-gambling';
 import { blacklist } from './blacklist';
-import { bank } from './bank';
+// import { bank } from './bank';
 // import { userManualDepositTransaction } from './user-manual-deposit-transaction';
 // import { registrationFields } from './registration-fields';
 import { releaseNotes } from './release-notes';
@@ -71,7 +71,7 @@ export const dashboards = () => ({
     userClass,
     responsibleGambling,
     blacklist,
-    bank,
+    // bank,
     // registrationFields,
     // userManualDepositTransaction,
     releaseNotes,
