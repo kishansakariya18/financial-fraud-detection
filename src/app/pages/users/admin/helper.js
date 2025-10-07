@@ -34,16 +34,14 @@ export const responseMapper = (apiData) => {
 };
 
 export const loginHistoryResponseMapper = (apiData) => {
-  return apiData.map((data) => {
-    return {
-      id: data.AdminLoginHistoryID,
-      adminId: data.AdminID,
-      ip: data.IPAddress,
-      userAgent: data.UserAgent,
-      expiredAt: data.ExpiredAt ? getDateInUTCToTimeZone(data.ExpiredAt) : '',
-      loginAt: data.DateCreated ? getDateInUTCToTimeZone(data.DateCreated) : ''
-    };
-  });
+  return apiData.map((data) => ({
+    id: data.AdminLoginHistoryID,
+    adminId: data.AdminID,
+    ip: data.IPAddress,
+    userAgent: data.UserAgent,
+    expiredAt: data.ExpiredAt ? getDateInUTCToTimeZone(data.ExpiredAt) : '',
+    loginAt: data.DateCreated ? getDateInUTCToTimeZone(data.DateCreated) : ''
+  }));
 };
 
 export const adminDetailResponseMapper = (data) => {

@@ -1,5 +1,8 @@
+import {
+  playerStatusToApp,
+  transactionStatusToAPP
+} from 'components/sections/player-management/helper';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
-import { playerStatusToApp, transactionStatusToAPP } from '../users/player/helper';
 
 export const parseAdminStatusToApp = (status) => (status ? 'active' : 'inactive');
 
@@ -67,7 +70,9 @@ export const responseMapper = (apiData) => {
     platformAmount: amountColorBasedOnTypeForPlatform(data.Amount, data.OutcomeType),
     type: getBatdgeForType(data.OutcomeType),
     platformType: getBadgeForPlatform(data.OutcomeType),
-    createdAt: getDateInUTCToTimeZone(data.Date)
+    createdAt: getDateInUTCToTimeZone(data.DateCreated),
+    currencyCode: data.Currency != null ? data.Currency.code : '-',
+    currencySymbol: data.Currency != null ? data.Currency.symbol : '-'
   }));
   return resultData;
 };

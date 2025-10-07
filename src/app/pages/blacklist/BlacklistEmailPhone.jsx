@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Listbox } from 'components/shared/form/Listbox';
 import { Input, Button, Textarea } from 'components/ui';
 import { blacklistEmailPhoneSchema } from './schema';
@@ -41,14 +41,33 @@ const BlacklistEmailPhone = () => {
     handleSubmit,
     control,
     reset,
-    formState: { errors },
-    watch
+    formState: { errors, touchedFields, isSubmitted },
+    watch,
+    clearErrors,
+    trigger,
+    setValue,
+    getValues
   } = useForm({
     resolver: yupResolver(blacklistEmailPhoneSchema),
     defaultValues: { type: '', value: '', reason: '' }
   });
 
   const type = watch('type');
+
+  // Clear stale validation and conditionally re-validate when type changes
+  useEffect(() => {
+    // Clear errors related to fields whose rules depend on type
+    clearErrors(['value', 'country']);
+    // Ensure country isn't held over when switching away from mobile
+    if (type !== 'mobile') {
+      setValue('country', undefined);
+    }
+    // Only re-validate if user has entered a value; avoid showing default error on mount
+    const hasValue = !!getValues('value');
+    if (type && hasValue) {
+      trigger('value');
+    }
+  }, [type, clearErrors, trigger, setValue, getValues]);
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -105,7 +124,7 @@ const BlacklistEmailPhone = () => {
                     label={t('select') + ' ' + t('type')}
                     placeholder={t('select') + ' ' + t('type')}
                     displayField="label"
-                    error={errors?.type?.message}
+                    error={touchedFields?.type || isSubmitted ? errors?.type?.message : undefined}
                   />
                 )}
               />
@@ -124,7 +143,9 @@ const BlacklistEmailPhone = () => {
                       label={t('select') + ' ' + t('country')}
                       placeholder={t('select') + ' ' + t('country')}
                       displayField="displayName"
-                      error={errors?.country?.message}
+                      error={
+                        touchedFields?.country || isSubmitted ? errors?.country?.message : undefined
+                      }
                     />
                   )}
                 />
@@ -132,13 +153,13 @@ const BlacklistEmailPhone = () => {
               <Input
                 {...register('value')}
                 label={t('value')}
-                error={errors?.value?.message}
+                error={touchedFields?.value || isSubmitted ? errors?.value?.message : undefined}
                 placeholder={t('enter') + ' ' + t('value')}
               />
               <Textarea
                 {...register('reason')}
                 label={t('reason')}
-                error={errors?.reason?.message}
+                error={touchedFields?.reason || isSubmitted ? errors?.reason?.message : undefined}
                 placeholder={t('enter') + ' ' + t('reason')}
                 rows={1}
                 className="sm:col-span-2"

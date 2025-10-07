@@ -64,6 +64,13 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.currencyCode, {
+    id: 'currencyCode',
+    label: 'Currency',
+    header: 'Currency',
+    cell: BoldCell,
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.betAmount, {
     id: 'betAmount',
     label: 'Bet Amount',

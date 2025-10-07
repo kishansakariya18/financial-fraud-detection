@@ -3,7 +3,12 @@ import { createColumnHelper } from '@tanstack/react-table';
 
 // Local Imports
 import { RowActions } from './RowActions';
-import { IdCell, DateCell, BoldCell } from '../../../../../components/custom/table/cell';
+import {
+  IdCell,
+  DateCell,
+  BoldCell,
+  BaseCurrencyAmountCell
+} from '../../../../../components/custom/table/cell';
 
 const columnHelper = createColumnHelper();
 
@@ -29,7 +34,7 @@ export const columns = [
   columnHelper.accessor((row) => row.limitAmount, {
     id: 'Limit Amount',
     header: 'Limit Amount',
-    cell: BoldCell,
+    cell: BaseCurrencyAmountCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.createdAt, {

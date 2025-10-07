@@ -43,6 +43,21 @@ export const blacklistRoutes = [
             )
           };
         }
+      },
+      {
+        path: 'tab/disposable-email',
+        lazy: async () => {
+          const { default: DisposableEmailList } = await import(
+            '../../pages/blacklist/disposable-email/list'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.USER.LIST}>
+                <DisposableEmailList />
+              </PrivateRoute>
+            )
+          };
+        }
       }
     ]
   },
@@ -63,6 +78,17 @@ export const blacklistRoutes = [
       );
       return {
         Component: () => <BlacklistEmailPhone />
+      };
+    }
+  },
+  {
+    path: 'blacklist/disposable-email',
+    lazy: async () => {
+      const { default: DisposableEmailList } = await import(
+        '../../pages/blacklist/disposable-email/list'
+      );
+      return {
+        Component: () => <DisposableEmailList />
       };
     }
   }

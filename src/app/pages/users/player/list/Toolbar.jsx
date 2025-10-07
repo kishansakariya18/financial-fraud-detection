@@ -24,7 +24,8 @@ export function Toolbar({
   onApplyFilters = () => {},
   onClearFilters = () => {},
   countries = null,
-  segmentations = null
+  segmentations = null,
+  playerClasses = []
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
@@ -97,6 +98,7 @@ export function Toolbar({
               onClearFilters={onClearFilters}
               country={countries}
               segmentation={segmentations}
+              playerClasses={playerClasses}
             />
           </div>
         </>
@@ -117,6 +119,7 @@ export function Toolbar({
               onClearFilters={onClearFilters}
               country={countries}
               segmentation={segmentations}
+              playerClasses={playerClasses}
             />
           </div>
 
@@ -152,7 +155,8 @@ function Filters({
   onApplyFilters = () => {},
   onClearFilters = () => {},
   country,
-  segmentation
+  segmentation,
+  playerClasses = []
 }) {
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
@@ -197,6 +201,16 @@ function Filters({
           showCheckbox={false}
         />
       )}
+      {table.getColumn('playerClassID') && (
+        <FacedtedFilter
+          options={Array.isArray(playerClasses) ? playerClasses : []}
+          column={table.getColumn('playerClassID')}
+          title={t('userClass') || 'Player Class'}
+          Icon={MapPinIcon}
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
       {table.getColumn('createdAt') && (
         <DateFilter
           column={table.getColumn('createdAt')}
@@ -234,10 +248,12 @@ function Filters({
         <FacedtedFilter
           options={
             segmentation
-              ? segmentation.map((segment) => ({
-                  label: segment.Name,
-                  value: segment.UserSegmentID
-                }))
+              ? segmentation
+                  .filter((segment) => segment?.IsActive === true)
+                  .map((segment) => ({
+                    label: segment.Name,
+                    value: segment.UserSegmentID
+                  }))
               : []
           }
           title={t('segmentation')}
@@ -287,7 +303,8 @@ Toolbar.propTypes = {
   onApplyFilters: PropTypes.func,
   onClearFilters: PropTypes.func,
   countries: PropTypes.array,
-  segmentations: PropTypes.array
+  segmentations: PropTypes.array,
+  playerClasses: PropTypes.array
 };
 
 SearchInput.propTypes = {
@@ -300,5 +317,6 @@ Filters.propTypes = {
   onApplyFilters: PropTypes.func,
   onClearFilters: PropTypes.func,
   countries: PropTypes.array,
-  segmentations: PropTypes.array
+  segmentations: PropTypes.array,
+  playerClasses: PropTypes.array
 };

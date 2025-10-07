@@ -13,7 +13,7 @@ import { responseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
-import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
+import { ADMIN_TYPE, DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 
 export default function Admin() {
   const { t } = useTranslation();
@@ -28,7 +28,7 @@ export default function Admin() {
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
     const result = await AdminService.getAllAdmin({
       pagination: { pageIndex, pageSize },
-      filters: queryParams
+      filters: { ...queryParams, adminType: ADMIN_TYPE.ADMIN }
     });
 
     if (result.status === 200) {
@@ -83,6 +83,8 @@ export default function Admin() {
 
   useEffect(() => {
     const filtersFromQuery = [];
+    console.log('queryParams.statusqueryParams.status:', queryParams);
+
     if (queryParams.keyword) {
       filtersFromQuery.push({ id: 'username', value: queryParams.keyword });
     }

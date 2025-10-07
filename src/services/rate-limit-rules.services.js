@@ -47,6 +47,51 @@ const RateLimitRuleService = {
     } catch (error) {
       console.log('Error from RateLimit Update Status', error);
     }
+  },
+  getRateLimitRuleById: async (rateLimitUID) => {
+    try {
+      const endPoint = replaceText(
+        apiConfig.endPoints.RATE_LIMIT_RULES.DETAIL,
+        ':rateLimitUID',
+        rateLimitUID
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from RateLimit Get Detail', error);
+    }
+  },
+  updateRateLimitRule: async (rateLimitUID, data) => {
+    try {
+      const endPoint = replaceText(
+        apiConfig.endPoints.RATE_LIMIT_RULES.UPDATE,
+        ':rateLimitUID',
+        rateLimitUID
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          maxAttempts: data.maxAttempts,
+          blockMinutes: data.blockMinutes,
+          windowMinutes: data.windowMinutes
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from RateLimit Update', error);
+    }
   }
 };
 

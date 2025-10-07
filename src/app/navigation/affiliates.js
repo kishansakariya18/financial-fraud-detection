@@ -2,14 +2,15 @@
 import { UsersIcon } from '@heroicons/react/20/solid';
 
 // Local Imports
-import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
+import { NAV_TYPE_ITEM, PERMISSIONS, PLATFORM_TYPE } from 'constants/app.constant';
 
 export const affliate = {
   id: 'affiliate',
   type: NAV_TYPE_ITEM,
-  path: '/affiliate',
+  path: '/users/affiliate',
   title: 'Affiliates',
   transKey: 'affiliates',
   Icon: UsersIcon,
-  permission: PERMISSIONS.AFFILIATES.LIST
+  permission: PERMISSIONS.AFFILIATES.LIST,
+  platformType: [PLATFORM_TYPE.B2C]
 };

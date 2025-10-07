@@ -9,15 +9,17 @@ import { useTranslation } from 'react-i18next';
 import PlayerService from 'services/player.services';
 import WalletService from 'services/wallet-services';
 import { Listbox } from 'components/shared/form/Listbox';
-import { fundTypeOption, transactionTypeOption } from './helper';
-import { TbCoinRupeeFilled } from 'react-icons/tb';
 import TextareaAutosize from 'react-textarea-autosize';
 import { LockClosedIcon } from '@heroicons/react/24/outline';
-import { manageFundSchema } from './schema';
 import { useParams } from 'react-router';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { useDisclosure } from 'hooks';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import {
+  fundTypeOption,
+  transactionTypeOption
+} from 'components/sections/player-management/helper';
+import { manageFundSchema } from 'components/sections/player-management/schema';
 
 const ManageFund = () => {
   const [error, setError] = useState('');
@@ -27,7 +29,7 @@ const ManageFund = () => {
   const [walletOptions, setWalletOptions] = useState([]);
   const [isLoadingWallets, setIsLoadingWallets] = useState(false);
 
-  const { playerId, userID } = useParams();
+  const { playerId } = useParams();
   const { t } = useTranslation();
 
   const {
@@ -76,7 +78,7 @@ const ManageFund = () => {
       const result = await WalletService.getWalletList({
         pageIndex: 0,
         pageSize: 100,
-        userID
+        userUID: playerId
       });
 
       console.log(result.response.data);
@@ -233,14 +235,36 @@ const ManageFund = () => {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <Input
-                {...register('amount')}
-                prefix={<TbCoinRupeeFilled className="size-5" />}
-                label={t('amount')}
-                type="number"
-                error={errors?.amount?.message}
-                placeholder={t('enter') + ' ' + t('amount')}
-                step="any"
+              <Controller
+                name="amount"
+                control={control}
+                render={({ field }) => {
+                  const selectedCurrency = walletOptions
+                    .find((w) => w.value === watch('currency'))
+                    ?.label?.split(' ')[0];
+
+                  return (
+                    <Input
+                      {...field}
+                      prefix={
+                        selectedCurrency && (
+                          <span className="m-8 flex items-center text-sm font-medium">
+                            {selectedCurrency}
+                          </span>
+                        )
+                      }
+                      label={t('amount')}
+                      type="number"
+                      error={errors?.amount?.message}
+                      placeholder={t('enter') + ' ' + t('amount')}
+                      step="any"
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        field.onChange(value);
+                      }}
+                    />
+                  );
+                }}
               />
               <Textarea
                 {...register('fundMessage')}

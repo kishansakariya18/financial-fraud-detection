@@ -127,7 +127,7 @@ const ViewDetails = () => {
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('new') + ' ' + t('value')}:
+                  {t('new_key') + ' ' + t('value')}:
                 </p>
                 <pre className="overflow-auto rounded bg-gray-100 p-4 text-sm">
                   {JSON.stringify(response?.NewValues, null, 2)}

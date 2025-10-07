@@ -142,15 +142,17 @@ export default function BankList() {
 
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
 
-      <div className="mt-4 flex justify-center">
-        <Button
-          type="button"
-          color="primary"
-          disabled={!checked.length || submitLoading}
-          onClick={handleAssign}>
-          {submitLoading ? <Circlebar size={6} /> : t('assign')}
-        </Button>
-      </div>
+      {table.getRowModel().rows.length > 0 && (
+        <div className="mt-4 flex justify-center">
+          <Button
+            type="button"
+            color="primary"
+            disabled={!checked.length || submitLoading}
+            onClick={handleAssign}>
+            {submitLoading ? <Circlebar size={6} /> : t('assign')}
+          </Button>
+        </div>
+      )}
     </ContentWrapper>
   );
 }

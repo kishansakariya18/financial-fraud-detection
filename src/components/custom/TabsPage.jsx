@@ -4,15 +4,21 @@ import { Outlet, NavLink, useLocation } from 'react-router';
 // import TabNavigation from "./ShiftLeftAnimation";
 import clsx from 'clsx';
 import { Button, Tab, TabGroup, TabList, TabPanels } from '@headlessui/react';
-// import { useState } from 'react';
+import { useMemo } from 'react';
 import usePermissions from 'app/router/usePermissions';
 
 // ----------------------------------------------------------------------
 
 export default function TabsPage({ tabs }) {
   const location = useLocation();
-  const initialTabIndex = tabs.findIndex((tab) => location.pathname.includes(tab.path));
   const { hasPermission } = usePermissions();
+
+  const initialTabIndex = useMemo(() => {
+    if (!tabs || tabs.length === 0) return 0;
+    return tabs
+      .filter((tab) => (!tab.permission || hasPermission(tab.permission)) && !tab.isHidden)
+      .findIndex((tab) => location.pathname.includes(tab.path));
+  }, [tabs, hasPermission, location.pathname]);
 
   return (
     <Page>
@@ -22,7 +28,7 @@ export default function TabsPage({ tabs }) {
             <TabList className="-mb-0.5 flex">
               {tabs.map((tab) => (
                 <div key={tab.id}>
-                  {hasPermission(tab.permission) && (
+                  {(!tab.permission || hasPermission(tab.permission)) && !tab.isHidden && (
                     <NavLink to={tab.path}>
                       <Tab
                         key={tab.id}

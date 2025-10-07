@@ -6,6 +6,8 @@ import { Button, Input, Radio } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import CrmService from 'services/crm.services';
 import { crmSchema } from './schema';
 import { TextEditor } from 'components/shared/form/TextEditor';
@@ -25,6 +27,12 @@ const Send = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  const breadcrumbItems = [
+    { title: t('crm_notifications'), path: '/crm/notifications' },
+    { title: t('create') }
+  ];
 
   const SendTimeType = [
     { value: 1, label: t('immediate') },
@@ -132,10 +140,21 @@ const Send = () => {
   return (
     <Page title={t('create') + ' ' + t('crm')}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
-        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
-          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
-            {t('crm')}
-          </h2>
+        <div className="flex items-center justify-between py-5 lg:py-6">
+          <div className="flex items-center space-x-4 rtl:space-x-reverse">
+            <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
+              {t('crm')}
+            </h2>
+            <div className="hidden self-stretch py-1 sm:flex">
+              <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+            </div>
+            <Breadcrumbs items={breadcrumbItems} className="max-sm:hidden" />
+          </div>
+          <div className="flex items-center">
+            <Button variant="outlined" onClick={() => navigate('/crm')}>
+              {t('back')}
+            </Button>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">

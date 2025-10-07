@@ -31,7 +31,9 @@ export default function UserManualDepositTransaction() {
     const result = await UserManualDepositTransactionService.getUserManualDepositTransactionList({
       pagination: { pageIndex, pageSize },
       keyword: queryParams.keyword,
-      status: parsePayoutStatusToAPI(queryParams.status)
+      status: parsePayoutStatusToAPI(queryParams.status),
+      startDate: queryParams.startDate,
+      endDate: queryParams.endDate
     });
 
     if (result.status === 200) {
@@ -75,7 +77,14 @@ export default function UserManualDepositTransaction() {
       filtersFromQuery.push({ id: 'amount', value: queryParams.keyword });
     }
     if (queryParams.status) {
-      filtersFromQuery.push({ id: 'status', value: queryParams.status });
+      filtersFromQuery.push({ id: 'depositStatus', value: queryParams.status });
+    }
+    // Initialize date range filter from URL params (startDate/endDate)
+    if (queryParams.startDate && queryParams.endDate) {
+      filtersFromQuery.push({
+        id: 'dateCreated',
+        value: [+queryParams.startDate, +queryParams.endDate]
+      });
     }
 
     setColumnFilters(filtersFromQuery);
@@ -95,9 +104,11 @@ export default function UserManualDepositTransaction() {
       if (data.id === 'amount') {
         filterItems.keyword = data.value;
       }
-
       if (data.id === 'depositStatus') {
         filterItems.depositStatus = data.value;
+      }
+      if (data.id === 'dateCreated') {
+        filterItems.date = data.value;
       }
     }
 
@@ -106,7 +117,9 @@ export default function UserManualDepositTransaction() {
       pageIndex: 0,
       pageSize: 10,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
-      ...(filterItems.depositStatus && { status: filterItems.depositStatus })
+      ...(filterItems.depositStatus && { status: filterItems.depositStatus }),
+      ...(filterItems.date && { startDate: filterItems.date[0] }),
+      ...(filterItems.date && { endDate: filterItems.date[1] })
     });
   };
 

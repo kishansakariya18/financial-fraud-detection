@@ -20,7 +20,7 @@ const UserKycServices = {
           ? dayjs(+filters.endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
           : undefined,
         status: filters?.status ? parseUserKycStatusToAPI(filters?.status) : undefined,
-        type: filters.type ? (filters.type === 'bank' ? 2 : 1) : undefined
+        type: filters.type ? (filters.type === '3' ? 3 : filters.type === '2' ? 2 : 1) : undefined
       };
       const reqQuery = {
         page: pagination.pageIndex + 1,

@@ -3,27 +3,33 @@ import MonitorIcon from 'assets/nav-icons/monitor.svg?react';
 import { NAV_TYPE_ITEM, NAV_TYPE_ROOT } from 'constants/app.constant';
 import { users } from './users';
 import { platform } from './platoform';
-// import { reports } from './report';
-// import { playerKyc } from './player-kyc';
+import { reports } from './report';
+import { playerKyc } from './player-kyc';
 import { casinoManagement } from './casino-management';
 import { segmentation } from './segmentation';
-// import { emailTemplate } from './email-template';
+import { emailTemplate } from './event-template';
 // import { peomocode } from './promocode';
-// import { roles } from './roles';
-// import { auditlogs } from './auditlogs';
+import { roles } from './roles';
+import { auditlogs } from './auditlogs';
 import { crm } from './crm';
 import { frontend } from './front-end';
-// import { tenants } from './tenant';
+import { tenants } from './tenant';
 import { contentManagement } from './content-management';
 import { siteConfiguration } from './site-configuration';
-// import { bonusManagement } from './bonus-management';
-// import { paymentProvider } from './payment-provider';
-// import { userClass } from './user-class';
-// import { blacklist } from './blacklist';
-// import { bank } from './bank';
-// import { userManualDepositTransaction } from './user-manual-deposit-transaction';
-// import { registrationFields } from './registration-fields';
-// import { releaseNotes } from './release-notes';
+import { bonusManagement } from './bonus-management';
+import { userClass } from './user-class';
+import { responsibleGambling } from './responsible-gambling';
+import { blacklist } from './blacklist';
+import { bank } from './bank';
+import { userManualDepositTransaction } from './user-manual-deposit-transaction';
+import { registrationFields } from './registration-fields';
+import { releaseNotes } from './release-notes';
+import { supervisor } from './supervisor';
+import { b2bAgent } from './b2b-agent';
+import { bonusCampaign } from './bonus-campaign';
+import { faq } from './faq';
+import { affiliatesNew } from './affiliates-new';
+import { globalCommissionSetting } from './global-commission-setting';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -41,33 +47,34 @@ export const dashboards = () => ({
       transKey: 'nav.dashboards.dashboard',
       Icon: MonitorIcon
     },
-    // roles,
+    roles,
     users,
+    supervisor,
+    affiliatesNew,
+    globalCommissionSetting,
+    b2bAgent,
     platform,
-    // country,
-    // banner,
     contentManagement,
     siteConfiguration,
-    // bonusManagement,
-    // pages,
+    bonusManagement,
     frontend,
-    // payment,
-    // reports,
-    // tenants,
-    // playerKyc,
-    // affliate,
+    reports,
+    tenants,
+    playerKyc,
     casinoManagement,
     segmentation,
-    // emailTemplate,
+    ...emailTemplate,
     // peomocode,
-    // auditlogs,
-    crm
-    // paymentProvider,
-    // userClass,
-    // blacklist,
-    // bank,
-    // registrationFields,
-    // userManualDepositTransaction,
-    // releaseNotes
+    bonusCampaign,
+    auditlogs,
+    crm,
+    userClass,
+    responsibleGambling,
+    blacklist,
+    bank,
+    registrationFields,
+    userManualDepositTransaction,
+    releaseNotes,
+    faq
   ]
 });

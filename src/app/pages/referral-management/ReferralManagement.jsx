@@ -122,7 +122,7 @@ const ReferralManagement = () => {
 
   const handleReset = () => {
     getReferralData();
-    toast.info(t('form_reset')); // Assuming 'form_reset' is a translation key
+    // toast.info(t('form_reset')); // Assuming 'form_reset' is a translation key
   };
 
   return (

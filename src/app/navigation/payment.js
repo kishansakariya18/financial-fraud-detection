@@ -1,5 +1,5 @@
 // Local Imports
-import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
+import { NAV_TYPE_ITEM, PERMISSIONS, PLATFORM_TYPE } from 'constants/app.constant';
 import { TbPackage } from 'react-icons/tb';
 
 export const payment = {
@@ -9,5 +9,6 @@ export const payment = {
   title: 'Payment',
   transKey: 'payment',
   Icon: TbPackage,
-  permission: PERMISSIONS.PAYMENT.VIEW
+  permission: PERMISSIONS.PAYMENT.VIEW,
+  platformType: [PLATFORM_TYPE.B2C]
 };

@@ -9,6 +9,7 @@ import { protectedRoutes } from './protected';
 // import { ghostRoutes } from "./ghost";
 import { publicRoutes } from './public';
 import authRoute from './authRoute';
+import agentAuthRoute from './routes/b2b-agent/agentAuthRoute';
 
 // ----------------------------------------------------------------------
 
@@ -18,7 +19,7 @@ const router = createBrowserRouter([
     Component: Root,
     hydrateFallbackElement: <SplashScreen />,
     ErrorBoundary: RootErrorBoundary,
-    children: [...authRoute, protectedRoutes, publicRoutes]
+    children: [...authRoute, ...agentAuthRoute, protectedRoutes, publicRoutes]
   }
 ]);
 

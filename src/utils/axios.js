@@ -2,7 +2,7 @@ import axios from 'axios';
 import store from '../store';
 import { LOCAL_STORAGE } from 'constants/app.constant';
 import { AuthAction } from 'store/admin-slice/AuthSlice';
-// import { toast } from 'react-toastify';
+// import { toast } from 'sonner';
 
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem(LOCAL_STORAGE.AUTH_TOKEN);

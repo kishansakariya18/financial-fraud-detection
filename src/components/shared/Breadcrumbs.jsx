@@ -14,10 +14,11 @@ function Breadcrumbs({ items = [], className, ...rest }) {
 
   const SeparatorIcon = isRtl ? ChevronLeftIcon : ChevronRightIcon;
 
+  console.log('items', items);
   return (
     <ul className={clsx('flex flex-wrap items-center gap-1.5', className)} {...rest}>
       {items.map((item, i) => (
-        <li key={i} className="flex items-center gap-1.5">
+        <li key={item.path || i} className="flex items-center gap-1.5">
           {item.path ? (
             <>
               <NavLink

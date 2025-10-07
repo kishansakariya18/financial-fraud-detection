@@ -13,6 +13,8 @@ import { Listbox } from 'components/shared/form/Listbox';
 import SegmentationService from 'services/segmentation.services';
 import { genderOptions, kycOptions } from './helper';
 import { createSegmentationSchema } from './schema';
+import { useCurrencyContext } from 'app/contexts/currency/context';
+import { isB2BPlatform } from 'utils/platformNavigation';
 
 const EditSegmentation = () => {
   const [error, setError] = useState('');
@@ -21,6 +23,8 @@ const EditSegmentation = () => {
 
   const [response, setResponse] = useState(null);
   const { t } = useTranslation();
+  const { symbol } = useCurrencyContext();
+  const isB2B = isB2BPlatform();
 
   const breadcrumbItem = [
     { title: t('segmentation'), path: '/segmentation' },
@@ -203,12 +207,21 @@ const EditSegmentation = () => {
               Number(result?.Filters?.MaxMonLoss) >= 0 ? Number(result?.Filters?.MaxMonLoss) : null
           };
 
+          if (isB2B) {
+            mappedData.referral = false;
+            mappedData.moneyDeposit = false;
+            mappedData.minReferral = null;
+            mappedData.maxReferral = null;
+            mappedData.minDeposit = null;
+            mappedData.maxDeposit = null;
+          }
+
           reset(mappedData);
         }
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [segmentationUID]);
+  }, [segmentationUID, isB2B]);
 
   console.log('seg id: ', segmentationUID);
 
@@ -411,56 +424,65 @@ const EditSegmentation = () => {
                 </>
               }
             </div>
-            <div className="grid gap-4 lg:grid-cols-3">
-              <div>
-                <Checkbox label={t('referral')} {...register('referral')} />
-              </div>
-              {
-                <>
-                  <Input
-                    {...register('minReferral')}
-                    error={errors?.minReferral?.message}
-                    placeholder={t('minimum') + ' ' + t('referral') + ' ' + t('count')}
-                    type="number"
-                    step="any"
-                    disabled={!referral}
-                  />
-                  <Input
-                    disabled={!referral}
-                    {...register('maxReferral')}
-                    error={errors?.maxReferral?.message}
-                    placeholder={t('maximum') + ' ' + t('referral') + ' ' + t('count')}
-                    type="number"
-                    step="any"
-                  />
-                </>
-              }
-            </div>
-            <div className="grid gap-4 lg:grid-cols-3">
-              <div>
-                <Checkbox label={t('money') + ' ' + t('deposit')} {...register('moneyDeposit')} />
-              </div>
-              {
-                <>
-                  <Input
-                    {...register('minDeposit')}
-                    error={errors?.minDeposit?.message}
-                    placeholder={t('minimum') + ' ' + t('deposit')}
-                    type="number"
-                    step="any"
-                    disabled={!moneyDeposit}
-                  />
-                  <Input
-                    {...register('maxDeposit')}
-                    error={errors?.maxDeposit?.message}
-                    placeholder={t('maximum') + ' ' + t('deposit')}
-                    type="number"
-                    step="any"
-                    disabled={!moneyDeposit}
-                  />
-                </>
-              }
-            </div>
+            {!isB2B && (
+              <>
+                <div className="grid gap-4 lg:grid-cols-3">
+                  <div>
+                    <Checkbox label={t('referral')} {...register('referral')} />
+                  </div>
+                  {
+                    <>
+                      <Input
+                        {...register('minReferral')}
+                        error={errors?.minReferral?.message}
+                        placeholder={t('minimum') + ' ' + t('referral') + ' ' + t('count')}
+                        type="number"
+                        step="any"
+                        disabled={!referral}
+                      />
+                      <Input
+                        disabled={!referral}
+                        {...register('maxReferral')}
+                        error={errors?.maxReferral?.message}
+                        placeholder={t('maximum') + ' ' + t('referral') + ' ' + t('count')}
+                        type="number"
+                        step="any"
+                      />
+                    </>
+                  }
+                </div>
+                <div className="grid gap-4 lg:grid-cols-3">
+                  <div>
+                    <Checkbox
+                      label={t('money') + ' ' + t('deposit')}
+                      {...register('moneyDeposit')}
+                    />
+                  </div>
+                  {
+                    <>
+                      <Input
+                        {...register('minDeposit')}
+                        error={errors?.minDeposit?.message}
+                        placeholder={t('minimum') + ' ' + t('deposit')}
+                        type="number"
+                        step="any"
+                        prefix={moneyDeposit && symbol}
+                        disabled={!moneyDeposit}
+                      />
+                      <Input
+                        {...register('maxDeposit')}
+                        error={errors?.maxDeposit?.message}
+                        placeholder={t('maximum') + ' ' + t('deposit')}
+                        type="number"
+                        step="any"
+                        prefix={moneyDeposit && symbol}
+                        disabled={!moneyDeposit}
+                      />
+                    </>
+                  }
+                </div>
+              </>
+            )}
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
                 <Checkbox label={t('money') + ' ' + t('won')} {...register('moneyWon')} />
@@ -474,6 +496,7 @@ const EditSegmentation = () => {
                     type="number"
                     step="any"
                     disabled={!moneyWon}
+                    prefix={moneyWon && symbol}
                   />
                   <Input
                     {...register('maxWon')}
@@ -482,6 +505,7 @@ const EditSegmentation = () => {
                     type="number"
                     step="any"
                     disabled={!moneyWon}
+                    prefix={moneyWon && symbol}
                   />
                 </>
               }
@@ -494,6 +518,7 @@ const EditSegmentation = () => {
                 <>
                   <Input
                     disabled={!moneyLoss}
+                    prefix={moneyLoss && symbol}
                     {...register('minLoss')}
                     error={errors?.minLoss?.message}
                     placeholder={t('minimum') + ' ' + t('loss')}
@@ -502,6 +527,7 @@ const EditSegmentation = () => {
                   />
                   <Input
                     disabled={!moneyLoss}
+                    prefix={moneyLoss && symbol}
                     {...register('maxLoss')}
                     error={errors?.maxLoss?.message}
                     placeholder={t('maximum') + ' ' + t('loss')}

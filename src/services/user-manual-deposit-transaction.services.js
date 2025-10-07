@@ -1,9 +1,16 @@
 import apiConfig from '../configs/api.config';
 import { sendRequest } from '../utils/axios';
 import { replaceText } from 'utils/custom.utilities';
+import dayjs from 'dayjs';
 
 const UserManualDepositTransactionService = {
-  getUserManualDepositTransactionList: async ({ pagination, keyword, status }) => {
+  getUserManualDepositTransactionList: async ({
+    pagination,
+    keyword,
+    status,
+    startDate,
+    endDate
+  }) => {
     try {
       const endPoint = apiConfig.endPoints.USER_MANUAL_DEPOSIT_TRANSACTION.LIST;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
@@ -17,7 +24,13 @@ const UserManualDepositTransactionService = {
           limit: pagination.pageSize,
           page: pagination.pageIndex + 1,
           keyword: keyword,
-          status: status
+          status: status,
+          ...(startDate && endDate
+            ? {
+                startDate: `${dayjs(Number(startDate)).format('YYYY-MM-DD')} 00:00:00`,
+                endDate: `${dayjs(Number(endDate)).format('YYYY-MM-DD')} 23:59:59`
+              }
+            : {})
         }
       });
       return response;

@@ -47,14 +47,14 @@ export const globallyBlockedStatusOptions = [
   {
     value: 'blocked',
     label: 'Blocked',
-    color: 'error',
-    icon: FaXmark
+    color: 'success',
+    icon: FaCheck
   },
   {
     value: 'not_blocked',
-    label: 'Active',
-    color: 'success',
-    icon: FaCheck
+    label: 'Not Blocked',
+    color: 'error',
+    icon: FaXmark
   }
 ];
 
@@ -62,14 +62,14 @@ export const blockedProviderStatusOptions = [
   {
     value: 'blocked',
     label: 'Blocked',
-    color: 'error',
-    icon: FaXmark
+    color: 'success',
+    icon: FaCheck
   },
   {
     value: 'active',
-    label: 'Active',
-    color: 'success',
-    icon: FaCheck
+    label: 'Not Blocked',
+    color: 'error',
+    icon: FaXmark
   }
 ];
 
@@ -77,13 +77,13 @@ export const blockedModuleStatusOptions = [
   {
     value: 'blocked',
     label: 'Blocked',
-    color: 'error',
-    icon: FaXmark
+    color: 'success',
+    icon: FaCheck
   },
   {
     value: 'active',
-    label: 'Active',
-    color: 'success',
-    icon: FaCheck
+    label: 'Not Blocked',
+    color: 'error',
+    icon: FaXmark
   }
 ];

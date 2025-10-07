@@ -8,7 +8,7 @@ const WalletService = {
         page: data.pageIndex + 1,
         per_page: data.pageSize
       };
-      const endPoint = replaceText(apiConfig.endPoints.WALLET.LIST, ':userId', data.userID);
+      const endPoint = replaceText(apiConfig.endPoints.WALLET.LIST, ':userUID', data.userUID);
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,

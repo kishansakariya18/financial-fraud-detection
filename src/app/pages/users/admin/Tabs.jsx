@@ -1,27 +1,23 @@
 import { useParams } from 'react-router';
 import { HomeIcon } from '@heroicons/react/24/outline';
-import { randomId } from 'utils/randomId';
-import { useTranslation } from 'react-i18next';
-import TabsPage from 'components/custom/TabsPage';
 import { ListBulletIcon } from '@heroicons/react/20/solid';
+import AdminTabsPage from 'components/sections/admins/AdminTabsPage';
 
 export default function Tabs() {
   const { adminId } = useParams();
-  const { t } = useTranslation();
-  const tabs = [
+
+  const tabsConfig = [
     {
-      id: randomId(),
-      title: t('details'),
-      path: `/users/admin/${adminId}/tab/details`,
+      titleKey: 'details',
+      path: 'details',
       icon: HomeIcon
     },
     {
-      id: randomId(),
-      title: t('login') + ' ' + t('history'),
-      path: `/users/admin/${adminId}/tab/login-history`,
+      titleKeys: ['login', 'history'],
+      path: 'login-history',
       icon: ListBulletIcon
     }
   ];
 
-  return <TabsPage tabs={tabs} />;
+  return <AdminTabsPage userUID={adminId} basePath="/users/admin" tabsConfig={tabsConfig} />;
 }

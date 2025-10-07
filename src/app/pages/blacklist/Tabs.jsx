@@ -20,6 +20,13 @@ export default function Tabs() {
       path: `/blacklist/tab/email-phone`,
       icon: EnvelopeIcon,
       index: 1
+    },
+    {
+      id: randomId(),
+      title: t('disposable') + ' ' + t('email'),
+      path: `/blacklist/tab/disposable-email`,
+      icon: EnvelopeIcon,
+      index: 1
     }
   ];
 

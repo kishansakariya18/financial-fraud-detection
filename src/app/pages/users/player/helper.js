@@ -13,6 +13,8 @@ export const responseMapper = (apiData) => {
       id: item.UserID,
       userID: item.UserID,
       userUID: item.UserUID,
+      // Map current player's class ID for upgrade modal logic
+      playerClassID: item.UserClassID,
       email: item.Email || '-',
       referralCode: item.ReferralCode,
       username: item.Username,
@@ -178,26 +180,30 @@ export const panVerifiedOptions = [
 ];
 export const playerTransactionsResponseMapper = (apiData) => {
   const totalRecords = apiData.totalRecords;
-  const userData = { username: apiData?.data?.userData?.Username };
+  const userData = apiData?.data?.userData?.[0] || {};
   const list = apiData?.data?.transactionList?.map((item) => {
+    const currencySymbol = item.Currency?.Symbol || '';
+    const currencyName = item.Currency?.Name || '';
+
     return {
       id: item.TransactionID,
       transactionUID: item.TransactionUID,
-      username: userData.username,
+      username: userData.Username,
       type: transactionTypeApiToApp(item.CreditDebitType),
-      customMessage: item.CustomMessage,
-      realCash: item.RealCash,
+      customMessage: '',
+      realCash: item.TransactionAmount,
       bonus: item.Bonus,
-      realCashAmount: item.RealCashAmount,
-      transactionType: transactionTypeInWords(item.TransactionType),
-      transactionMesg: transactionTypeInWords(item.TransactionType),
-      winning:
-        parseFloat(item.Winning) > 0
-          ? item.Winning
-          : item?.TransactionData?.Merchandise_Product_name
-            ? item.TransactionData['Merchandise_Product_name']
-            : 0,
-      coin: item.Coin,
+      realCashAmount: item.TransactionAmount,
+      transactionType: item.transactionType?.Name || 'Unknown',
+      transactionMesg: item.transactionType?.Name || 'Unknown',
+      winning: 0, // Not present in the new response
+      coin: 0, // Not present in the new response
+      currency: {
+        symbol: currencySymbol,
+        name: currencyName
+      },
+      baseCurrencyRate: item.BaseCurrencyRate,
+      baseCurrencyValue: item.BaseCurrencyValue,
       createdAt: getDateInUTCToTimeZone(item.DateCreated),
       status: transactionStatusToAPP(item.TransactionStatus),
       transactionData: item.TransactionData,
@@ -414,8 +420,8 @@ export const loginHistoryResponseMapper = (apiData) => {
       userId: data.UserID,
       ip: data.IPAddress,
       userAgent: data.UserAgent,
-      expiredAt: data.ExpiredAt,
-      loginAt: data.DateCreated
+      expiredAt: data.ExpiredAt ? getDateInUTCToTimeZone(data.ExpiredAt) : '',
+      loginAt: data.DateCreated ? getDateInUTCToTimeZone(data.DateCreated) : ''
     };
   });
 };

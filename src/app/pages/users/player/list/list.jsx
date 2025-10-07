@@ -10,6 +10,7 @@ import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 
 import PlayerService from 'services/player.services';
+import UserClassService from 'services/user-class.services';
 import { responseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
@@ -23,6 +24,7 @@ export default function Player() {
   const [summary, setSummary] = useState(null);
   const [countries, setCountries] = useState(null);
   const [segmentations, setSegmentations] = useState(null);
+  const [playerClasses, setPlayerClasses] = useState([]);
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
   const filtersInitializedRef = useRef(false);
 
@@ -57,6 +59,20 @@ export default function Player() {
     }
     return { status: result.status, error: result.error };
   };
+  const fetchPlayerClasses = async () => {
+    const result = await UserClassService.userclassAllList();
+    if (result?.status === 200) {
+      const dataArr = result?.response?.data || result?.response?.Data || [];
+      const options = Array.isArray(dataArr)
+        ? dataArr.map((cls) => ({
+            label: cls?.ClassName || cls?.title || cls?.Name || `Class ${cls?.UserClassID || ''}`,
+            value: cls?.UserClassID || cls?.id || cls?.UserClassId
+          }))
+        : [];
+      setPlayerClasses(options.filter((i) => i.value != null));
+    }
+    return { status: result?.status, error: result?.error };
+  };
   const fetchSummary = async () => {
     // setError(null);
 
@@ -77,6 +93,7 @@ export default function Player() {
     fetchSummary();
     fetchCountryList();
     fetchSegmentationList();
+    fetchPlayerClasses();
   }, []);
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
@@ -92,7 +109,8 @@ export default function Player() {
         CountryID: false,
         isKYCVerified: false,
         isBankVerified: false,
-        segmentationID: false
+        segmentationID: false,
+        playerClassID: false
       }
     }
   });
@@ -143,6 +161,9 @@ export default function Player() {
       if (queryParams.gender) {
         filtersFromQuery.push({ id: 'gender', value: queryParams.gender });
       }
+      if (queryParams.playerClassID) {
+        filtersFromQuery.push({ id: 'playerClassID', value: queryParams.playerClassID });
+      }
       if (queryParams.startDate && queryParams.endDate) {
         filtersFromQuery.push({
           id: 'createdAt',
@@ -182,6 +203,9 @@ export default function Player() {
       if (data.id === 'gender') {
         filterItems.gender = data.value;
       }
+      if (data.id === 'playerClassID') {
+        filterItems.playerClassID = data.value;
+      }
     }
 
     const countryIds = filterItems.CountryID
@@ -206,7 +230,8 @@ export default function Player() {
       ...(segmentationIds.length && { SegmentationID: segmentationIds.join(',') }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
       ...(filterItems.date && { endDate: filterItems?.date[1] }),
-      ...(filterItems.gender && { gender: filterItems.gender })
+      ...(filterItems.gender && { gender: filterItems.gender }),
+      ...(filterItems.playerClassID && { playerClassID: filterItems.playerClassID })
     });
     // Do NOT reset filtersInitializedRef here, so UI state is preserved
   };
@@ -228,6 +253,7 @@ export default function Player() {
         summary={summary}
         countries={countries}
         segmentations={segmentations}
+        playerClasses={playerClasses}
         pageTitle={pageTitle}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}

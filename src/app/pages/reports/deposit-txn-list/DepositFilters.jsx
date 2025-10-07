@@ -12,7 +12,10 @@ import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { useSearchParams } from 'react-router';
 import { ExportCSV } from 'components/custom/export';
-import { transactionStatusOption, transactionStatusToAPI } from 'app/pages/users/player/helper';
+import {
+  transactionStatusOption,
+  transactionStatusToAPI
+} from 'components/sections/player-management/helper';
 import { getQueryParams } from 'utils/custom.utilities';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';

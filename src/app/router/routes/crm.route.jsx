@@ -28,6 +28,32 @@ export const pagesRoute = [
         )
       };
     }
+  },
+  {
+    path: 'crm/notifications',
+    lazy: async () => {
+      const { default: NotificationList } = await import('../../pages/crm/notifications/list/list');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.CRM.VIEW}>
+            <NotificationList />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'crm/notifications/view/:notificationId',
+    lazy: async () => {
+      const { default: NotificationView } = await import('../../pages/crm/notifications/view/View');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.CRM.VIEW}>
+            <NotificationView />
+          </PrivateRoute>
+        )
+      };
+    }
   }
   // {
   //   path: 'pages/:id/tab',

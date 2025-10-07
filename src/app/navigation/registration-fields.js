@@ -1,14 +1,15 @@
 // Import Dependencies
-import { BanknotesIcon } from '@heroicons/react/24/outline';
+import { PiCashRegister } from 'react-icons/pi';
 
 // Local Imports
-import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
+import { NAV_TYPE_ITEM, PERMISSIONS, PLATFORM_TYPE } from 'constants/app.constant';
 export const registrationFields = {
   id: 'registration-fields',
   type: NAV_TYPE_ITEM,
   path: '/registration-fields',
   title: 'Registration Fields',
   transKey: 'registration_fields',
-  Icon: BanknotesIcon,
-  permission: PERMISSIONS.REGISTRATION_FIELDS.VIEW
+  Icon: PiCashRegister,
+  permission: PERMISSIONS.REGISTRATION_FIELDS.VIEW,
+  platformType: PLATFORM_TYPE.B2C
 };
