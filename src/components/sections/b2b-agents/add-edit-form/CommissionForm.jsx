@@ -26,6 +26,8 @@ const CommissionForm = ({ control, register, errors, watch }) => {
     const usedTypes = watchedCommissions?.map((c) => c.commissionType) || [];
     const availableType = commissionTypes.find((type) => !usedTypes.includes(type.value));
 
+    console.log(usedTypes, availableType, commissionTypes);
+
     if (availableType) {
       append(getDefaultCommission(availableType.value));
     }
@@ -45,13 +47,13 @@ const CommissionForm = ({ control, register, errors, watch }) => {
     remove(index);
   };
 
-  const renderCommissionFields = (commission, index) => {
+  const renderCommissionFields = (field, commission, index) => {
     const commissionType = commission?.commissionType || 'turnover';
     const config = commissionFieldConfig[commissionType];
     const cpaTrigger = commission?.cpaTrigger || 'deposit';
 
     return (
-      <div key={`commission-${index}`} className="space-y-4">
+      <div key={field.id} className="space-y-4">
         <div className="space-y-4 rounded-lg border border-gray-200 bg-gray-50/30 p-4 dark:border-dark-500 dark:bg-dark-800/30">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -72,7 +74,7 @@ const CommissionForm = ({ control, register, errors, watch }) => {
             </Button>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-3 sm:grid-cols-1 md:grid-cols-3">
             {/* Commission Type */}
             <Controller
               name={`commissions.${index}.commissionType`}
@@ -114,7 +116,7 @@ const CommissionForm = ({ control, register, errors, watch }) => {
                 max="100"
                 prefix={<PercentBadgeIcon className="size-4" />}
                 label={t('turnover') + ' ' + t('percent') + ' (%)'}
-                placeholder="0.00"
+                placeholder={`${t('enter')} ${t('turnover')} ${t('percent')}`}
                 error={errors?.commissions?.[index]?.turnoverPercent?.message}
                 size="sm"
               />
@@ -129,30 +131,14 @@ const CommissionForm = ({ control, register, errors, watch }) => {
                 min="1"
                 prefix={<CurrencyDollarIcon className="size-4" />}
                 label={t('target') + ' ' + t('amount')}
-                placeholder="1000.00"
+                placeholder={`${t('enter')} ${t('target')} ${t('amount')}`}
                 error={errors?.commissions?.[index]?.turnoverTargetAmount?.message}
                 size="sm"
               />
             )}
-          </div>
 
-          {/* CPA Specific Fields */}
-          {commissionType === 'cpa' && (
-            <div className="space-y-4">
-              {/* Primary CPA Fields */}
-              <div className="grid gap-3 sm:grid-cols-2">
-                <Input
-                  {...register(`commissions.${index}.cpaPayoutAmount`)}
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  prefix={<CurrencyDollarIcon className="size-4" />}
-                  label="CPA Amount"
-                  placeholder="0.00"
-                  error={errors?.commissions?.[index]?.cpaPayoutAmount?.message}
-                  size="sm"
-                />
-
+            {commissionType === 'cpa' && (
+              <>
                 <Controller
                   name={`commissions.${index}.cpaTrigger`}
                   control={control}
@@ -164,49 +150,59 @@ const CommissionForm = ({ control, register, errors, watch }) => {
                       }
                       onChange={(val) => field.onChange(val.value)}
                       name={field.name}
-                      label="Trigger Type"
-                      placeholder="Select Trigger Type"
+                      label={t('trigger_type')}
+                      placeholder={t('select') + ' ' + t('trigger_type')}
                       displayField="label"
                       error={errors?.commissions?.[index]?.cpaTrigger?.message}
                       size="sm"
                     />
                   )}
                 />
-              </div>
 
-              {/* Conditional Minimum Requirements */}
-              {(cpaTrigger === 'deposit' || cpaTrigger === 'bet' || cpaTrigger === 'both') && (
-                <div className="space-y-3">
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {(cpaTrigger === 'deposit' || cpaTrigger === 'both') && (
-                      <Input
-                        {...register(`commissions.${index}.cpaDepositMinAmount`)}
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        prefix={<CurrencyDollarIcon className="size-4" />}
-                        label="Min Deposit Amount"
-                        placeholder="0.00"
-                        error={errors?.commissions?.[index]?.cpaDepositMinAmount?.message}
-                        size="sm"
-                      />
-                    )}
+                <Input
+                  {...register(`commissions.${index}.cpaPayoutAmount`)}
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  prefix={<CurrencyDollarIcon className="size-4" />}
+                  label={`CPA ${t('amount')}`}
+                  placeholder={`${t('enter')} CPA ${t('amount')}`}
+                  error={errors?.commissions?.[index]?.cpaPayoutAmount?.message}
+                  size="sm"
+                />
+              </>
+            )}
+          </div>
 
-                    {(cpaTrigger === 'bet' || cpaTrigger === 'both') && (
-                      <Input
-                        {...register(`commissions.${index}.cpaBetMinAmount`)}
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        prefix={<CurrencyDollarIcon className="size-4" />}
-                        label="Min Bet Amount"
-                        placeholder="0.00"
-                        error={errors?.commissions?.[index]?.cpaBetMinAmount?.message}
-                        size="sm"
-                      />
-                    )}
-                  </div>
-                </div>
+          {/* CPA Specific Fields */}
+          {commissionType === 'cpa' && (
+            <div className="grid gap-3 sm:grid-cols-1 md:grid-cols-2">
+              {(cpaTrigger === 'deposit' || cpaTrigger === 'both') && (
+                <Input
+                  {...register(`commissions.${index}.cpaDepositMinAmount`)}
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  prefix={<CurrencyDollarIcon className="size-4" />}
+                  label={`${t('min_deposit')} ${t('amount')}`}
+                  placeholder={`${t('min_deposit')} ${t('amount')}`}
+                  error={errors?.commissions?.[index]?.cpaDepositMinAmount?.message}
+                  size="sm"
+                />
+              )}
+
+              {(cpaTrigger === 'bet' || cpaTrigger === 'both') && (
+                <Input
+                  {...register(`commissions.${index}.cpaBetMinAmount`)}
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  prefix={<CurrencyDollarIcon className="size-4" />}
+                  label={`${t('min_bet')} ${t('amount')}`}
+                  placeholder={`${t('min_bet')} ${t('amount')}`}
+                  error={errors?.commissions?.[index]?.cpaBetMinAmount?.message}
+                  size="sm"
+                />
               )}
             </div>
           )}
@@ -255,7 +251,7 @@ const CommissionForm = ({ control, register, errors, watch }) => {
           </div>
         ) : (
           fields.map((field, index) =>
-            renderCommissionFields(watchedCommissions?.[index] || field, index)
+            renderCommissionFields(field, watchedCommissions?.[index] || field, index)
           )
         )}
       </div>

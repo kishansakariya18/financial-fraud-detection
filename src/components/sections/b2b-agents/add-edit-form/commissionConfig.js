@@ -40,7 +40,7 @@ export const getCpaFieldsByTrigger = (trigger) => {
 // Default values for new commission
 export const getDefaultCommission = (type) => {
   const base = {
-    CommissionType: type
+    commissionType: type
   };
 
   switch (type) {

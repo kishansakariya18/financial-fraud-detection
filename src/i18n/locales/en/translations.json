@@ -936,5 +936,6 @@
   "bonusGrantID": "Bonus Grant ID",
   "refTxnID": "Reference Transaction ID",
   "refBonusTxnID": "Reference Bonus Transaction ID",
-  "refBonusCashoutTxnID": "Reference Cashout Transaction ID"
+  "refBonusCashoutTxnID": "Reference Cashout Transaction ID",
+  "trigger_type": "Trigger Type"
 }

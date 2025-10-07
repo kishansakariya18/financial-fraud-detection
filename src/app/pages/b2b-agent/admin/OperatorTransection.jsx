@@ -10,13 +10,13 @@ export default function OperatorTransection() {
   const { t } = useTranslation();
   const { formatCurrency } = useCurrencyContext();
   const [isLoading, setIsLoading] = useState(false);
-  const [walletData, setWalletData] = useState(null);
+  const [walletBalance, setWalletBalance] = useState(null);
 
   const fetchWalletData = useCallback(() => {
     setIsLoading(true);
     B2BAgentWalletService.getOperatorWallet()
-      .then((response) => {
-        setWalletData(response.data);
+      .then(({ response }) => {
+        setWalletBalance(response.data?.Balance || 0);
       })
       .catch((error) => {
         console.error('Error fetching wallet data:', error);
@@ -25,6 +25,8 @@ export default function OperatorTransection() {
         setIsLoading(false);
       });
   }, []);
+
+  console.log('walletBalance', walletBalance);
 
   const fetchOperatorTransactions = useCallback((requestObject) => {
     return B2BAgentWalletService.operatorTransactionList(requestObject);
@@ -51,9 +53,7 @@ export default function OperatorTransection() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium">{t('commission_balance')}</p>
-                <p className="mt-2 text-3xl font-bold">
-                  {formatCurrency(walletData?.Balance || 0)}
-                </p>
+                <p className="mt-2 text-3xl font-bold">{formatCurrency(walletBalance || 0)}</p>
               </div>
               <div className="rounded-full bg-blue-100 p-3 dark:bg-blue-900/40">
                 <WalletIcon className="h-8 w-8" />
@@ -61,7 +61,7 @@ export default function OperatorTransection() {
             </div>
           </div>
 
-          <div className="rounded-lg border border-gray-200 p-6">
+          {/* <div className="rounded-lg border border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium">{t('lineup_balance')}</p>
@@ -73,7 +73,7 @@ export default function OperatorTransection() {
                 <WalletIcon className="h-8 w-8" />
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 

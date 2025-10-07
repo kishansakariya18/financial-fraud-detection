@@ -72,9 +72,6 @@ const AgentDashboard = () => {
           console.log('err: ', err);
         });
 
-      console.log('agentsResult: ', agentsResult);
-      console.log('playersResult: ', playersResult);
-
       // Process agent counts
       const agentCounts = {
         totalActiveAgents: agentCountsResult?.totalActive || 0,
