@@ -52,7 +52,7 @@ export function WithdrawFilters({
         {hasPermission(PERMISSIONS.REPORT.WITHDRAW_EXPORT_REPORT) && (
           <ExportCSV
             filters={Object.fromEntries([...searchParams])}
-            url={`${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.REPORTS.TRANSACTIONS_EXPORT}?startDate=${filters.startDate ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&endDate=${
+            url={`${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.REPORTS.WITHDRAW_TRANSACTIONS_EXPORT}?startDate=${filters.startDate ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&endDate=${
               filters.endDate
                 ? String(
                     dayjs(+filters.endDate)
