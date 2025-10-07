@@ -23,7 +23,7 @@ export default function AgentPlayerList() {
   };
 
   const handleViewPlayer = (player) => {
-    navigate(`/users/${player.userUID}/tab/details`);
+    navigate(`/users/player/${player.userUID}/${player.userID}/tab/details`);
   };
 
   // const handleChangePlayerStatus = async (player) => {

@@ -26,8 +26,6 @@ export default function OperatorTransection() {
       });
   }, []);
 
-  console.log('walletBalance', walletBalance);
-
   const fetchOperatorTransactions = useCallback((requestObject) => {
     return B2BAgentWalletService.operatorTransactionList(requestObject);
   }, []);
@@ -52,7 +50,7 @@ export default function OperatorTransection() {
           <div className="rounded-lg border border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium">{t('commission_balance')}</p>
+                <p className="text-sm font-medium">{t('balance')}</p>
                 <p className="mt-2 text-3xl font-bold">{formatCurrency(walletBalance || 0)}</p>
               </div>
               <div className="rounded-full bg-blue-100 p-3 dark:bg-blue-900/40">

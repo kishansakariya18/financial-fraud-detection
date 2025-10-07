@@ -11,6 +11,7 @@ import { DocumentDuplicateIcon } from '@heroicons/react/24/outline';
 import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
 import { parseAgentStatusToApp, parseAgentTypeToApp } from 'components/sections/b2b-agents/helper';
 import PropTypes from 'prop-types';
+import { useCurrencyContext } from 'app/contexts/currency/context';
 
 const AgentView = ({
   onFetchAgentDetails,
@@ -24,6 +25,7 @@ const AgentView = ({
   const [loading, setLoading] = useState(false);
   const { copied, copy } = useClipboard({ timeout: 2000 });
   const [error, setError] = useState('');
+  const { formatCurrency } = useCurrencyContext();
 
   const getAgentDetails = () => {
     if (!onFetchAgentDetails) {
@@ -157,7 +159,7 @@ const AgentView = ({
         {agentDetails?.CommissionPercent !== undefined && (
           <div>
             <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-              {t('commission')} %:
+              {t('commission')}:
             </p>
             <p>{agentDetails?.CommissionPercent}%</p>
           </div>
@@ -195,7 +197,9 @@ const AgentView = ({
                         <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                           {t('target')} {t('amount')}:
                         </p>
-                        <p className="font-medium">{commission.TurnoverTargetAmount || 0}</p>
+                        <p className="font-medium">
+                          {formatCurrency(commission.TurnoverTargetAmount || 0)}
+                        </p>
                       </div>
                     </>
                   )}
@@ -206,7 +210,9 @@ const AgentView = ({
                         <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                           CPA {t('amount')}:
                         </p>
-                        <p className="font-medium">{commission.CpaPayoutAmount || 0}</p>
+                        <p className="font-medium">
+                          {formatCurrency(commission.CpaPayoutAmount || 0)}
+                        </p>
                       </div>
                       <div>
                         <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
@@ -214,20 +220,24 @@ const AgentView = ({
                         </p>
                         <p className="font-medium capitalize">{commission.CpaTrigger}</p>
                       </div>
-                      {commission.CpaDepositMinAmount && (
+                      {Number(commission.CpaDepositMinAmount) > 0 && (
                         <div>
                           <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                             Min {t('deposit')}:
                           </p>
-                          <p className="font-medium">{commission.CpaDepositMinAmount}</p>
+                          <p className="font-medium">
+                            {formatCurrency(commission.CpaDepositMinAmount || 0)}
+                          </p>
                         </div>
                       )}
-                      {commission.CpaBetMinAmount && (
+                      {Number(commission.CpaBetMinAmount) > 0 && (
                         <div>
                           <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                             Min {t('bet')}:
                           </p>
-                          <p className="font-medium">{commission.CpaBetMinAmount}</p>
+                          <p className="font-medium">
+                            {formatCurrency(commission.CpaBetMinAmount || 0)}
+                          </p>
                         </div>
                       )}
                     </>

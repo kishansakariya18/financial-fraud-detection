@@ -37,7 +37,7 @@ const validationSchema = yup.object({
 export function ManualAdjustmentForm({ agentUID, onClose, isOpen }) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
-  const { symbol } = useCurrencyContext();
+  const { symbol, formatCurrency } = useCurrencyContext();
   const {
     register,
     handleSubmit,
@@ -127,7 +127,7 @@ export function ManualAdjustmentForm({ agentUID, onClose, isOpen }) {
               {isCredit ? t('amount_to_credit') : t('amount_to_debit')}:
               <span
                 className={`ml-1 font-semibold ${isCredit ? 'text-green-600' : 'text-red-600'}`}>
-                ${parseFloat(watchedAmount || 0).toFixed(2)}
+                {formatCurrency(watchedAmount || 0)}
               </span>
             </p>
           )}
