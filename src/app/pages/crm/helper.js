@@ -104,3 +104,83 @@ export const sendOptions = [
     icon: CheckBadgeIcon
   }
 ];
+export const parseNotificationStatusToApp = (status) => {
+  switch (+status) {
+    case 1:
+      return 'success';
+    case 2:
+      return 'failure';
+    case 0:
+      return 'pending';
+    default:
+      break;
+  }
+};
+export const parseNotificationStatusToApi = (status) => {
+  switch (status) {
+    case 'success':
+      return 1;
+    case 'failure':
+      return 2;
+    case 'pending':
+      return 0;
+    default:
+      return -1; // or null, depending on how you want to handle invalid input
+  }
+};
+//(1=Normal, 2=Scheduled)
+export const parseTypeToApp = (status) => {
+  switch (status) {
+    case 1:
+      return 'normal';
+    case 2:
+      return 'scheduled';
+    default:
+      return -1; // or null, depending on how you want to handle invalid input
+  }
+};
+export const parseTypeToApi = (status) => {
+  switch (status) {
+    case 'normal':
+      return 1;
+    case 'scheduled':
+      return 2;
+    default:
+      return -1; // or null, depending on how you want to handle invalid input
+  }
+};
+
+// Options for Type filter (Normal / Scheduled)
+export const typeOptions = [
+  {
+    key: 'normal',
+    value: 'normal',
+    label: 'Normal',
+    color: 'success',
+    icon: CheckBadgeIcon
+  },
+  {
+    key: 'scheduled',
+    value: 'scheduled',
+    label: 'Scheduled',
+    color: 'success',
+    icon: CheckBadgeIcon
+  }
+];
+export const statusOptions = [
+  {
+    value: 'pending',
+    label: 'Pending',
+    color: 'warning'
+  },
+  {
+    value: 'success',
+    label: 'Success',
+    color: 'success'
+  },
+  {
+    value: 'failure',
+    label: 'Failure',
+    color: 'error'
+  }
+];

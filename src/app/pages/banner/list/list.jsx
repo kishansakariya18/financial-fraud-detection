@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
 
-// Local Imports - UI,Services,Helper,Utils
+// Local Imports - UI,Services,Helper,Utils.....
 // import { CategoryFilters } from './categoryFilters';
 import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';

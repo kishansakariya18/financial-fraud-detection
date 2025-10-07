@@ -3,7 +3,13 @@ import { UserCircleIcon } from '@heroicons/react/20/solid';
 import { UserGroupIcon, UsersIcon } from '@heroicons/react/24/outline';
 
 // Local Imports
-import { NAV_TYPE_COLLAPSE, NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
+import {
+  NAV_TYPE_COLLAPSE,
+  NAV_TYPE_ITEM,
+  PERMISSIONS
+  // PLATFORM_TYPE
+} from 'constants/app.constant';
+// import { affliate } from './affiliates';
 
 export const users = {
   id: 'users.users',
@@ -12,7 +18,12 @@ export const users = {
   title: 'Users',
   transKey: 'nav.users.users',
   Icon: UsersIcon,
-  permission: [PERMISSIONS.USER.LIST, PERMISSIONS.ADMIN.LIST, PERMISSIONS.AFFILIATES.LIST],
+  permission: [
+    PERMISSIONS.USER.LIST,
+    PERMISSIONS.ADMIN.LIST,
+    PERMISSIONS.AFFILIATES.LIST,
+    PERMISSIONS.SUPERVISOR.LIST
+  ],
   childs: [
     {
       id: 'users.admin',
@@ -32,15 +43,16 @@ export const users = {
       Icon: UserGroupIcon,
       permission: PERMISSIONS.USER.LIST
     }
-    // ,
     // {
-    //   id: 'affiliate',
+    //   id: 'users.supervisors',
+    //   path: '/users/supervisor',
     //   type: NAV_TYPE_ITEM,
-    //   path: '/users/affiliate',
-    //   title: 'Affiliates',
-    //   transKey: 'affiliates',
-    //   Icon: UsersIcon,
-    //   permission: PERMISSIONS.AFFILIATES.LIST
-    // }
+    //   title: 'Supervisors',
+    //   transKey: 'nav.users.supervisors',
+    //   Icon: UserGroupIcon,
+    //   permission: PERMISSIONS.SUPERVISOR.LIST,
+    //   platformType: [PLATFORM_TYPE.B2C]
+    // },
+    // affliate
   ]
 };

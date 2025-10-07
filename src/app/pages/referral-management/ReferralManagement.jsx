@@ -122,7 +122,7 @@ const ReferralManagement = () => {
 
   const handleReset = () => {
     getReferralData();
-    toast.info(t('form_reset')); // Assuming 'form_reset' is a translation key
+    // toast.info(t('form_reset')); // Assuming 'form_reset' is a translation key
   };
 
   return (
@@ -154,13 +154,13 @@ const ReferralManagement = () => {
                   </th>
                   <th
                     scope="colgroup"
-                    colSpan="2"
+                    colSpan="1"
                     className="border-l border-r border-gray-200 px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500 dark:border-gray-700 dark:text-gray-300">
                     {t('referred') + ' ' + t('by')}
                   </th>
                   <th
                     scope="colgroup"
-                    colSpan="2"
+                    colSpan="1"
                     className="border-l border-r border-gray-200 px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500 dark:border-gray-700 dark:text-gray-300">
                     {t('referred') + ' ' + t('to')}
                   </th>
@@ -176,15 +176,15 @@ const ReferralManagement = () => {
                   <th className="border-l border-gray-200 px-4 py-2 text-center text-xs font-medium uppercase tracking-wider text-gray-500 dark:border-gray-700 dark:text-gray-300">
                     {t('user') + ' ' + t('realCash')}
                   </th>
-                  <th className="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
+                  {/* <th className="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                     {t('user') + ' ' + t('bonus')}
-                  </th>
+                  </th> */}
                   <th className="border-l border-gray-200 px-4 py-2 text-center text-xs font-medium uppercase tracking-wider text-gray-500 dark:border-gray-700 dark:text-gray-300">
                     {t('friend') + ' ' + t('realCash')}
                   </th>
-                  <th className="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
+                  {/* <th className="px-4 py-2 text-center text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                     {t('friend') + ' ' + t('bonus')}
-                  </th>
+                  </th> */}
                   <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300"></th>
                 </tr>
               </thead>
@@ -208,7 +208,7 @@ const ReferralManagement = () => {
                         placeholder="0"
                       />
                     </td>
-                    <td className="px-2 py-2">
+                    {/* <td className="px-2 py-2">
                       <TableInput
                         type="number"
                         step="any"
@@ -218,7 +218,7 @@ const ReferralManagement = () => {
                         }
                         placeholder="0"
                       />
-                    </td>
+                    </td> */}
                     {!offer.withoutReferral ? (
                       <>
                         <td className="border-l border-gray-200 px-2 py-2 dark:border-gray-700">
@@ -236,7 +236,7 @@ const ReferralManagement = () => {
                             placeholder="0"
                           />
                         </td>
-                        <td className="px-2 py-2">
+                        {/* <td className="px-2 py-2">
                           <TableInput
                             type="number"
                             step="any"
@@ -250,11 +250,11 @@ const ReferralManagement = () => {
                             }
                             placeholder="0"
                           />
-                        </td>
+                        </td> */}
                       </>
                     ) : (
                       <>
-                        <td className="px-2 py-2"></td>
+                        {/* <td className="px-2 py-2"></td> */}
                         <td className="px-2 py-2"></td>
                       </>
                     )}

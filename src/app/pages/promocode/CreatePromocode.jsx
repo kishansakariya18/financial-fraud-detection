@@ -426,13 +426,13 @@ const CreatePromocode = () => {
                 <p className="mb-1">{t('claimSettlement')}</p>
                 <div className="flex flex-wrap gap-2">
                   <Radio
-                    label={t('manulaCredit')}
+                    label={t('manualCredit')}
                     value="2"
                     checked={claimSettlement === '2'}
                     onChange={(e) => setClaimSettlement(e.target.value)}
                   />
                   <Radio
-                    label={t('audoCredit')}
+                    label={t('autoCredit')}
                     value="1"
                     checked={claimSettlement === '1'}
                     onChange={(e) => setClaimSettlement(e.target.value)}

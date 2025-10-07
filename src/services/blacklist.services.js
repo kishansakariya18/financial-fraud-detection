@@ -94,6 +94,62 @@ const BlacklistService = {
     } catch (err) {
       console.log('Error deleting blacklist item', err);
     }
+  },
+  getDisposableEmailDomainList: async ({ pagination, filters }) => {
+    try {
+      const apiQueryParams = {
+        page: pagination.pageIndex + 1,
+        limit: pagination.pageSize,
+        filters: {
+          domain: filters.keyword ? filters.keyword : null
+        }
+      };
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.BLACKLIST.DISPOSABLE_EMAIL.LIST}`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: apiQueryParams
+      });
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
+  addDisposableEmailDomain: async (data) => {
+    try {
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.BLACKLIST.DISPOSABLE_EMAIL.CREATE}`,
+        method: 'POST',
+        body: { domain: data.emailDomain },
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
+  deleteDisposableEmailDomain: async (id) => {
+    try {
+      const endPoint = replaceText(
+        apiConfig.endPoints.BLACKLIST.DISPOSABLE_EMAIL.DELETE,
+        ':restrictedDomainID',
+        id
+      );
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${endPoint}`,
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
   }
 };
 

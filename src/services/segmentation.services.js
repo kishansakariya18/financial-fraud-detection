@@ -1,5 +1,5 @@
 import { parseSegmentationStatusToAPI } from 'app/pages/segmentation/helper';
-import { playerStatusToAPI } from 'app/pages/users/player/helper';
+import { playerStatusToAPI } from 'components/sections/player-management/helper';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
 import { sendRequest } from 'utils/axios';
@@ -26,6 +26,11 @@ const SegmentationService = {
         ...(!pagination && { pagination: false })
       };
 
+      const apiQueryParams = {
+        per_page: pagination ? pagination.pageSize : undefined,
+        page: pagination ? pagination.pageIndex + 1 : undefined
+      };
+
       let apiURL = `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.SEGMENTATION.LIST}`;
 
       if (apiURL) {
@@ -35,7 +40,8 @@ const SegmentationService = {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: apiRequestParams
+          body: apiRequestParams,
+          params: apiQueryParams
         });
 
         return response;

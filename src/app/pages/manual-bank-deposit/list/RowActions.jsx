@@ -13,6 +13,7 @@ import { TbStatusChange } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import BankService from 'services/bank.services';
+import { toast } from 'sonner';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
@@ -48,6 +49,7 @@ export function RowActions({ row, table }) {
     const result = await BankService.changeStatus(row.original.id);
     if (result.response.status === 200) {
       table.options.meta?.fetchNewList();
+      toast.success(result.response.message);
       setStatusSuccess(true);
     } else {
       setStatusError(true);

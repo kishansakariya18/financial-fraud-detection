@@ -3,7 +3,13 @@ import { createColumnHelper } from '@tanstack/react-table';
 
 // Local Imports
 import { RowActions } from './RowActions';
-import { IdCell, BoldCell, BadgeCell, DateCell } from '../../../../../components/custom/table/cell';
+import {
+  IdCell,
+  BoldCell,
+  ImageWithPreviewCell,
+  BadgeCell,
+  DateCell
+} from '../../../../../components/custom/table/cell';
 import { statusOptions } from '../helper';
 
 // ----------------------------------------------------------------------
@@ -23,6 +29,13 @@ export const columns = [
     label: 'Name',
     header: 'Name',
     cell: BoldCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.image, {
+    id: 'image',
+    label: 'Image',
+    header: 'Image',
+    cell: (row) => ImageWithPreviewCell({ info: row }),
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.status, {

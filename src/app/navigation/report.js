@@ -3,13 +3,18 @@ import {
   DocumentChartBarIcon,
   DocumentTextIcon,
   ArrowDownTrayIcon,
-  ArrowUpTrayIcon,
-  BanknotesIcon
+  ArrowUpTrayIcon
+  // BanknotesIcon
 } from '@heroicons/react/24/outline';
 
 // Local Imports
 // import SettingIcon from 'assets/dualicons/setting.svg?react';
-import { NAV_TYPE_COLLAPSE, NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
+import {
+  NAV_TYPE_COLLAPSE,
+  NAV_TYPE_ITEM,
+  PERMISSIONS,
+  PLATFORM_TYPE
+} from 'constants/app.constant';
 
 export const reports = {
   id: 'report',
@@ -40,7 +45,8 @@ export const reports = {
       title: 'depsositTransaction',
       transKey: 'deposit_transactions',
       Icon: ArrowDownTrayIcon,
-      permission: PERMISSIONS.REPORT.DEPOSIT_REPORT_VIEW
+      permission: PERMISSIONS.REPORT.DEPOSIT_REPORT_VIEW,
+      platformType: [PLATFORM_TYPE.B2C]
     },
     {
       id: 'withdrawTransaction',
@@ -50,16 +56,16 @@ export const reports = {
       transKey: 'withdraw_transactions',
       Icon: ArrowUpTrayIcon,
       permission: PERMISSIONS.REPORT.WITHDRAW_REPORT_VIEW
-    },
-    {
-      id: 'playerBalance',
-      type: NAV_TYPE_ITEM,
-      path: '/report/player-balance/list',
-      title: 'playerBalance',
-      transKey: 'playerBalance',
-      Icon: BanknotesIcon,
-      permission: PERMISSIONS.REPORT.PLAYER_BALANCE_REPORT_VIEW
     }
+    // {
+    //   id: 'playerBalance',
+    //   type: NAV_TYPE_ITEM,
+    //   path: '/report/player-balance/list',
+    //   title: 'playerBalance',
+    //   transKey: 'playerBalance',
+    //   Icon: BanknotesIcon,
+    //   permission: PERMISSIONS.REPORT.PLAYER_BALANCE_REPORT_VIEW
+    // }
     // {
     //   id: 'depositBalance',
     //   type: NAV_TYPE_ITEM,

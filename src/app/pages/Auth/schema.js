@@ -6,6 +6,7 @@ export const loginSchema = Yup.object().shape({
     .required('Mobile Is Required')
     .matches(/^(\+\d{1,3}[- ]?)?\d{10}$/, 'Invalid Mobile Number')
     .length(10, 'Mobile Length Must Be 10'),
+  phoneCode: Yup.string().trim().required('Country Code Is Required'),
   password: Yup.string().trim().required('Password Is Required')
   // password: Yup.string()
   //   .required('Password is required')
@@ -44,3 +45,50 @@ export const resetPasswordSchema = Yup.object().shape({
     .required('Confirm Password Is Required')
     .oneOf([Yup.ref('password'), null], 'Passwords Must Match With New Password')
 });
+
+// Mapper: Limit Summary -> UI structure
+export const mapLimitSummary = (apiData, isB2B) => {
+  if (!apiData)
+    return { userLimits: [], adminLimits: [], userClassLimits: [], globalPlatformLimits: null };
+  const {
+    UserLimits = [],
+    AdminLimits = [],
+    UserClassLimits = [],
+    GlobalPlatformLimits = null
+  } = apiData;
+
+  const normalizeLimitItem = (isB2B) => (item) => {
+    if (isB2B && item.LimitType === 'deposit') {
+      return null;
+    }
+    return {
+      id: item.LimitID,
+      type: item.LimitType,
+      period: item.LimitPeriod,
+      amount: item.LimitAmount,
+      setBy: item.SetBy,
+      createdAt: item.DateCreated,
+      updatedAt: item.DateModified
+    };
+  };
+
+  return {
+    userLimits: Array.isArray(UserLimits)
+      ? UserLimits.map(normalizeLimitItem(isB2B)).filter(Boolean)
+      : [],
+    adminLimits: Array.isArray(AdminLimits)
+      ? AdminLimits.map(normalizeLimitItem(isB2B)).filter(Boolean)
+      : [],
+    userClassLimits: Array.isArray(UserClassLimits)
+      ? UserClassLimits.map(normalizeLimitItem(isB2B)).filter(Boolean)
+      : [],
+    globalPlatformLimits: GlobalPlatformLimits
+      ? {
+          maxDepositPerDay: GlobalPlatformLimits.MaxDepositPerDay,
+          maxWithdrawPerDay: GlobalPlatformLimits.MaxWithdrawPerDay,
+          betLimit: GlobalPlatformLimits.BetLimit,
+          winLimit: GlobalPlatformLimits.WinLimit
+        }
+      : null
+  };
+};

@@ -12,6 +12,7 @@ import UserClassService from 'services/user-class.services';
 import { createUserClassLimitSchema } from './schema';
 import { USER_CLASS_LIMIT_TYPE, USER_CLASS_LIMIT_PERIOD } from 'constants/app.constant';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { useCurrencyContext } from 'app/contexts/currency/context';
 
 const CreateUserClassLimit = () => {
   const [error, setError] = useState('');
@@ -20,6 +21,7 @@ const CreateUserClassLimit = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { userClassUID } = useParams();
+  const { symbol } = useCurrencyContext();
   const breadcrumbItems = [
     { title: t('userClass'), path: '/user-class' },
     { title: t('limits'), path: `/user-class/${userClassUID}/limits` },
@@ -211,6 +213,7 @@ const CreateUserClassLimit = () => {
                 {...register('limitAmount')}
                 error={errors.limitAmount?.message}
                 placeholder={t('enter') + ' ' + t('limitAmount')}
+                prefix={symbol}
               />
             </div>
 

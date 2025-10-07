@@ -13,7 +13,7 @@ import { EyeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import { manageFundSchema } from './schema';
 import { useParams } from 'react-router';
 import AffiliateService from 'services/affiliate.services';
-import { transactionTypeOption } from '../users/player/helper';
+import { transactionTypeOption } from 'components/sections/player-management/helper';
 import { EyeSlashIcon } from '@heroicons/react/20/solid';
 import { useDisclosure } from 'hooks';
 import { FaMoneyBill1Wave } from 'react-icons/fa6';

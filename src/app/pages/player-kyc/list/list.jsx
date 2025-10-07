@@ -51,7 +51,7 @@ export default function UserKYC() {
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
       tableSettings: {},
-      columnVisibility: { username: false }
+      columnVisibility: {}
     }
   });
 

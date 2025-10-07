@@ -1,4 +1,6 @@
+import { PLATFORM_TYPE } from 'constants/app.constant';
 import { Navigate } from 'react-router';
+import PrivateRoute from '../private';
 // import PrivateRoute from '../private';
 // import { PERMISSIONS } from 'constants/app.constant';
 
@@ -38,7 +40,11 @@ export const profileRoute = [
             '../../pages/profile/PlayerFundPassword'
           );
           return {
-            Component: () => <PlayerFundPassword />
+            Component: () => (
+              <PrivateRoute allowedPlatforms={[PLATFORM_TYPE.B2C]}>
+                <PlayerFundPassword />
+              </PrivateRoute>
+            )
           };
         }
       },
@@ -49,7 +55,26 @@ export const profileRoute = [
             '../../pages/profile/AffiliateFundPassword'
           );
           return {
-            Component: () => <AffiliateFundPassword />
+            Component: () => (
+              <PrivateRoute allowedPlatforms={[PLATFORM_TYPE.B2C]}>
+                <AffiliateFundPassword />
+              </PrivateRoute>
+            )
+          };
+        }
+      },
+      {
+        path: 'agent-fund-password',
+        lazy: async () => {
+          const { default: AgentFundPassword } = await import(
+            '../../pages/profile/AgentFundPassword'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute allowedPlatforms={[PLATFORM_TYPE.B2B]}>
+                <AgentFundPassword />
+              </PrivateRoute>
+            )
           };
         }
       }

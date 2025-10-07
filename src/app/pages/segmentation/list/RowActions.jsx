@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 // Local Imports
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
-import { TbList, TbStatusChange, TbTicketOff } from 'react-icons/tb';
+import { TbList, TbStatusChange } from 'react-icons/tb';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import usePermissions from 'app/router/usePermissions';
@@ -180,7 +180,7 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              {hasPermission(PERMISSIONS.SEGMENTATION.LIMIT) && (
+              {/* {hasPermission(PERMISSIONS.SEGMENTATION.LIMIT) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -194,7 +194,7 @@ export function RowActions({ row, table }) {
                     </button>
                   )}
                 </MenuItem>
-              )}
+              )} */}
             </MenuItems>
           </Transition>
         </Menu>

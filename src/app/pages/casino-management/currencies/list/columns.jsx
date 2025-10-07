@@ -33,7 +33,7 @@ export const columns = [
           <span className="font-medium text-gray-800 dark:text-dark-100">
             <Highlight query={[globalQuery, columnQuery]}>{name || 'not-found'}</Highlight>
           </span>
-          {isDefault && <Badge color="primary">Base</Badge>}
+          {isDefault && <Badge color="primary">Platform Base</Badge>}
         </div>
       );
     },

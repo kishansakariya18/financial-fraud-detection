@@ -6,14 +6,20 @@ import {
   HashtagIcon
 } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
-import { Button, Input } from 'components/ui';
+import { Controller, useForm } from 'react-hook-form';
+import { Button, Input, Upload } from 'components/ui';
 import { CiMobile1 } from 'react-icons/ci';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { useNavigate, useParams } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
+import { Listbox } from 'components/shared/form/Listbox';
+import CurrencyService from 'services/currency.services';
+import { currencyListResponseMapper } from '../casino-management/currencies/helper';
+import RenderImage from 'components/ui/custom/ImageRender';
+import { CloudArrowUpIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import apiConfig from 'configs/api.config';
 
 import { createBankDepositSchema } from './schema';
 import BankService from 'services/bank.services';
@@ -25,6 +31,10 @@ const EditBankDeposit = () => {
   const [response, setResponse] = useState(null);
   const { t } = useTranslation();
   const [bankDetail, setBankDetail] = useState(null);
+  const [currencyOptions, setCurrencyOptions] = useState([]);
+  const [file, setFile] = useState();
+  const [preview, setPreview] = useState();
+  const uploadRef = useRef();
 
   const breadcrumbItem = [{ title: t('bank_deposit'), path: '/bank' }, { title: t('edit') }];
 
@@ -32,6 +42,7 @@ const EditBankDeposit = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     reset
   } = useForm({
@@ -39,6 +50,29 @@ const EditBankDeposit = () => {
   });
 
   useEffect(() => {
+    // Load active currencies for dropdown
+    const fetchCurrencies = async () => {
+      try {
+        const result = await CurrencyService.getCurrencyList({
+          filters: { status: 'active' },
+          pagination: { pageIndex: 0, pageSize: 1000 }
+        });
+        if (result.status === 200) {
+          const mapped = currencyListResponseMapper(result.response);
+          const options = (mapped.list || []).map((c) => ({
+            value: c.id,
+            label: `${c.name} (${c.code})${c.symbol ? ` - ${c.symbol}` : ''}`
+          }));
+          setCurrencyOptions(options);
+        } else {
+          toast.error(result.error || 'Failed to load currencies');
+        }
+      } catch (e) {
+        console.error('Failed to load currencies:', e);
+      }
+    };
+    fetchCurrencies();
+
     if (id) {
       console.log(id);
       setLoading(true);
@@ -52,7 +86,10 @@ const EditBankDeposit = () => {
             accountNumber: bankData.AccountNumber,
             bankCode: bankData.BankCode,
             upiID: bankData.UPIID,
-            additionalInfo: bankData.AdditionalInfo
+            additionalInfo: bankData.AdditionalInfo,
+            // Best-effort mapping if API provides currency details
+            currencyID: bankData.CurrencyID,
+            qrCode: bankData.QRCode
           };
           setBankDetail(mappedData);
           reset(mappedData);
@@ -95,15 +132,22 @@ const EditBankDeposit = () => {
   }
 
   const onSubmit = async (data) => {
-    const requestObject = {
-      id: id,
-      bankName: data.bankName,
-      accountHolderName: data.accountHolderName,
-      accountNumber: data.accountNumber,
-      bankCode: data.bankCode,
-      upiID: data.upiID,
-      additionalInfo: {}
-    };
+    // Build multipart form data for update
+    const formData = new FormData();
+    formData.append('id', id);
+    formData.append('bankName', data.bankName);
+    formData.append('accountHolderName', data.accountHolderName);
+    formData.append('accountNumber', data.accountNumber);
+    formData.append('bankCode', data.bankCode);
+    formData.append('upiID', data.upiID);
+    if (data.currencyID) {
+      formData.append('currencyID', data.currencyID);
+    }
+    if (file) {
+      formData.append('media', file);
+    }
+
+    const requestObject = formData;
     await updateBankAPI(requestObject);
   };
 
@@ -157,6 +201,23 @@ const EditBankDeposit = () => {
               </div>
 
               <div className="grid gap-4 lg:grid-cols-2">
+                <Controller
+                  render={({ field }) => (
+                    <Listbox
+                      data={currencyOptions}
+                      prefix={<CurrencyDollarIcon className="size-5" />}
+                      value={currencyOptions.find((opt) => opt.value === field.value) || null}
+                      onChange={(val) => field.onChange(val.value)}
+                      name={field.name}
+                      label={t('currency')}
+                      placeholder={t('select') + ' ' + t('currency')}
+                      displayField="label"
+                      error={errors?.currencyID?.message}
+                    />
+                  )}
+                  control={control}
+                  name="currencyID"
+                />
                 <Input
                   {...register('upiID')}
                   prefix={<CiMobile1 className="size-5" />}
@@ -164,6 +225,48 @@ const EditBankDeposit = () => {
                   error={errors?.upiID?.message}
                   placeholder={t('enter') + ' ' + t('upiID')}
                 />
+              </div>
+
+              {/* QR Code Upload (optional) */}
+              <div className="mt-5 w-40 space-y-4">
+                <div className="grid gap-4 sm:grid-cols-1">
+                  {(preview || bankDetail?.qrCode) && (
+                    <RenderImage
+                      preview={preview}
+                      id={'qrCodeImage'}
+                      label="QR Code :"
+                      value={`${apiConfig.baseURL.S3_URL}/deposit-bank/${bankDetail.qrCode}`}
+                      maxWidth="300px"
+                      maxHeight="300px"
+                    />
+                  )}
+                  <Upload
+                    onChange={setFile}
+                    ref={uploadRef}
+                    setPreview={setPreview}
+                    accept={'.png, .jpg, .jpeg'}>
+                    {({ ...props }) => (
+                      <Button color="primary" {...props} className="space-x-2">
+                        <CloudArrowUpIcon className="size-5" />
+                        <span>Choose File</span>
+                      </Button>
+                    )}
+                  </Upload>
+                  <Button
+                    disabled={!file}
+                    onClick={() => {
+                      if (uploadRef.current) uploadRef.current.value = '';
+                      setFile();
+                      setPreview();
+                    }}>
+                    {t('reset')}
+                  </Button>
+                  {file && (
+                    <div>
+                      File name : <span className="font-medium">{file.name}</span>
+                    </div>
+                  )}
+                </div>
               </div>
               {/* <div className="grid gap-4 lg:grid-cols-2">
                 <Input

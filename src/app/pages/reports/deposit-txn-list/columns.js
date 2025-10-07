@@ -9,7 +9,7 @@ import {
   DateCell,
   AmountCell
 } from '../../../../components/custom/table/cell';
-import { transactionStatusOption } from 'app/pages/users/player/helper';
+import { transactionStatusOption } from 'components/sections/player-management/helper';
 // ----------------------------------------------------------------------
 
 const columnHelper = createColumnHelper();

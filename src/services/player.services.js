@@ -7,9 +7,10 @@ import {
   transactionTypeAppToApi,
   txnTypeToAPI,
   playerKycToAPI
-} from 'app/pages/users/player/helper';
+} from 'components/sections/player-management/helper';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
+import apiInstance from 'utils/apiInstance';
 import { sendRequest } from 'utils/axios';
 import { ConvertDateIntoUTC, replaceText } from 'utils/custom.utilities';
 
@@ -19,11 +20,13 @@ const PlayerService = {
       const { pagination, filters } = data;
       console.log('filters: ', filters);
       const apiRequestParams = {
+        ...(data.agentUID && { agentUID: data.agentUID }),
         keyword: filters.keyword ? filters.keyword : undefined,
         status: filters.status ? playerStatusToAPI(filters.status) : undefined,
         isKYCVerified: filters.isKYCVerified ? playerKycToAPI(filters.isKYCVerified) : undefined,
         isBankVerified: filters.isBankVerified ? playerKycToAPI(filters.isBankVerified) : undefined,
         gender: filters.gender ? filters.gender : undefined,
+        playerClassID: filters.playerClassID ? filters.playerClassID : undefined,
         countries: filters.CountryID ? filters.CountryID.split(',') : [],
         segments: filters.SegmentationID ? filters.SegmentationID.split(',') : [],
         startDate: filters.startDate
@@ -280,6 +283,26 @@ const PlayerService = {
       console.log('Error from userStatus', error);
     }
   },
+  upgradeUserClass: async ({ nextClassID, userUID }) => {
+    try {
+      const endPoint = apiConfig.endPoints.USER.UPGRADE_USER_CLASS;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          nextClassID: String(nextClassID),
+          userUID
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from upgradeUserClass', error);
+    }
+  },
   userRestBankCount: async (userID) => {
     try {
       const body = {
@@ -349,6 +372,26 @@ const PlayerService = {
       return response;
     } catch (error) {
       console.log('Error from user specific summary', error);
+    }
+  },
+  getUserOverAllSummary: async (userID) => {
+    try {
+      const endPoint = replaceText(
+        apiConfig.endPoints.USER.USER_OVER_ALL_SUMMARY,
+        ':userId',
+        userID
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from user overall summary', error);
     }
   },
   playerTransactionDetail: async (data) => {
@@ -428,6 +471,65 @@ const PlayerService = {
       return response;
     } catch (error) {
       console.log('Error from User Level Limit Update', error);
+    }
+  },
+  // Responsible Gaming Limits
+  getUserAllLimits: async (userId) => {
+    try {
+      const endPoint = replaceText(
+        apiConfig.endPoints.RESPONSIBLE_GAMING_LIMITS.USER_ALL_LIMITS,
+        ':userId',
+        userId
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from getUserAllLimits', error);
+    }
+  },
+  getLimitSummary: async (userId, agentUID = null) => {
+    try {
+      const endPoint = replaceText(apiConfig.endPoints.USER.LIMIT_SUMMARY, ':userId', userId);
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        params: agentUID ? { agentUID } : {}
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from getLimitSummary', error);
+    }
+  },
+  bulkUpdateUserLimits: async (userId, limits) => {
+    try {
+      const endPoint = replaceText(
+        apiConfig.endPoints.RESPONSIBLE_GAMING_LIMITS.USER_BULK_UPDATE,
+        ':userId',
+        userId
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: { limits }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from bulkUpdateUserLimits', error);
     }
   },
   getAllUserTransactionList: async (reqBody) => {
@@ -595,6 +697,16 @@ const PlayerService = {
     } catch (error) {
       console.log('Error from AddComment', error);
     }
+  },
+
+  getPlayerDashboardCounts: async () => {
+    return apiInstance.get(apiConfig.endPoints.B2B_AGENT.PLAYER_DASHBOARD_COUNTS);
+  },
+
+  resetPasswordAgentPlayer: async (userUID, password) => {
+    return apiInstance.patch(apiConfig.endPoints.B2B_AGENT.PLAYER_RESET_PASSWORD(userUID), {
+      password
+    });
   }
 };
 

@@ -9,13 +9,16 @@ import PlatformLimitService from 'services/platform.services';
 import { updatePlatformLimitSchema } from './schema';
 import { useTranslation } from 'react-i18next';
 import { ContextualHelp } from 'components/shared/ContextualHelp';
+import { useCurrencyContext } from 'app/contexts/currency/context';
+import { isB2BPlatform } from 'utils/platformNavigation';
 
 const PlatformLimit = () => {
   const { t } = useTranslation();
+  const { symbol } = useCurrencyContext();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
   const [response, setResponse] = useState(null);
+  const isB2B = isB2BPlatform();
 
   const pageTitle = t('platform') + ' ' + t('limit');
 
@@ -35,7 +38,7 @@ const PlatformLimit = () => {
         reset({
           oneTimeBetLimit: result?.BetLimit?.Value || '',
           oneTimeWinLimit: result?.WinLimit?.Value || '',
-          dailyDepositLimit: result?.MaxDepositPerDay?.Value || '',
+          dailyDepositLimit: isB2B ? result?.MaxDepositPerDay?.Value || '' : '',
           dailyWithdrawLimit: result?.MaxWithdrawPerDay?.Value || '',
           isCheckCaladerTime: +result?.CheckCalanderTime?.Value
         });
@@ -43,7 +46,7 @@ const PlatformLimit = () => {
     };
 
     loadData();
-  }, [reset]);
+  }, [reset, isB2B]);
 
   const updatePlatformLimit = async (requestObject) => {
     setLoading(true);
@@ -96,31 +99,61 @@ const PlatformLimit = () => {
           </h2>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+        <form onSubmit={handleSubmit(onSubmit)} noValidate autoComplete="off">
           <div className="mt-6 space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
-              <Input
-                {...register('dailyDepositLimit')}
-                label={t('dailyDepositLimitPlatform')}
-                type="number"
-                step="any"
-                error={errors?.dailyDepositLimit?.message}
-                placeholder="Enter Daily Deposit Limit"
-                suffix={
-                  <ContextualHelp
-                    title={t('dailyDepositLimitPlatform')}
-                    anchor={{ to: 'bottom', gap: 8 }}
-                    content={<p>{t('dailyDepositLimitPlatformDesc')}</p>}
-                  />
-                }
-              />
+              {!isB2B && (
+                <Input
+                  {...register('dailyDepositLimit')}
+                  label={t('dailyDepositLimitPlatform')}
+                  type="number"
+                  step="any"
+                  minLength={1}
+                  maxLength={10}
+                  error={errors?.dailyDepositLimit?.message}
+                  placeholder="Enter Daily Deposit Limit"
+                  prefix={symbol}
+                  onKeyDown={(e) => {
+                    if (
+                      e.key === 'e' ||
+                      e.key === 'E' ||
+                      e.key === '+' ||
+                      e.key === '-' ||
+                      e.key === ' '
+                    ) {
+                      e.preventDefault();
+                    }
+                  }}
+                  suffix={
+                    <ContextualHelp
+                      title={t('dailyDepositLimitPlatform')}
+                      anchor={{ to: 'bottom', gap: 8 }}
+                      content={<p>{t('dailyDepositLimitPlatformDesc')}</p>}
+                    />
+                  }
+                />
+              )}
               <Input
                 {...register('dailyWithdrawLimit')}
                 label={t('dailyWithdrawLimitPlatform')}
                 type="number"
                 step="any"
+                minLength={1}
+                maxLength={10}
                 error={errors?.dailyWithdrawLimit?.message}
                 placeholder="Enter Daily Withdraw Limit"
+                prefix={symbol}
+                onKeyDown={(e) => {
+                  if (
+                    e.key === 'e' ||
+                    e.key === 'E' ||
+                    e.key === '+' ||
+                    e.key === '-' ||
+                    e.key === ' '
+                  ) {
+                    e.preventDefault();
+                  }
+                }}
                 suffix={
                   <ContextualHelp
                     title={t('dailyWithdrawLimitPlatform')}
@@ -136,8 +169,22 @@ const PlatformLimit = () => {
                 label={t('oneTimeBetLimitPlatform')}
                 type="number"
                 step="any"
+                minLength={1}
+                maxLength={10}
                 error={errors?.oneTimeBetLimit?.message}
                 placeholder="Enter Bet Limit"
+                prefix={symbol}
+                onKeyDown={(e) => {
+                  if (
+                    e.key === 'e' ||
+                    e.key === 'E' ||
+                    e.key === '+' ||
+                    e.key === '-' ||
+                    e.key === ' '
+                  ) {
+                    e.preventDefault();
+                  }
+                }}
                 suffix={
                   <ContextualHelp
                     title={t('oneTimeBetLimitPlatform')}
@@ -151,8 +198,22 @@ const PlatformLimit = () => {
                 label={t('oneTimeWinLimitPlatform')}
                 type="number"
                 step="any"
+                minLength={1}
+                maxLength={10}
                 error={errors?.oneTimeWinLimit?.message}
                 placeholder="Enter Win Limit"
+                prefix={symbol}
+                onKeyDown={(e) => {
+                  if (
+                    e.key === 'e' ||
+                    e.key === 'E' ||
+                    e.key === '+' ||
+                    e.key === '-' ||
+                    e.key === ' '
+                  ) {
+                    e.preventDefault();
+                  }
+                }}
                 suffix={
                   <ContextualHelp
                     title={t('oneTimeWinLimitPlatform')}

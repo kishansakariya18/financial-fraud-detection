@@ -54,18 +54,21 @@ export function RowActions({ row, table }) {
 
   const handleChangeStatusRows = useCallback(async () => {
     setConfirmStatusLoading(true);
-    const result = await GameService.changeGameStatus(row.original.id);
-    if (result.status === 200) {
-      table.options.meta?.fetchSummary();
-      table.options.meta?.deleteRow(row);
-      setStatusSuccess(true);
-    } else {
+    try {
+      const result = await GameService.changeGameStatus(row?.original?.id);
+      if (result?.status === 200) {
+        table?.options?.meta?.fetchSummary?.();
+        table?.options?.meta?.deleteRow?.(row);
+        setStatusSuccess(true);
+      } else {
+        setStatusError(true);
+      }
+    } catch {
       setStatusError(true);
+    } finally {
+      setConfirmStatusLoading(false);
     }
-
-    setConfirmStatusLoading(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [row]);
+  }, [row, table]);
 
   const onOpenDialogBox = () => {
     setIsDialogOpen(true);
@@ -96,7 +99,7 @@ export function RowActions({ row, table }) {
             leaveTo="opacity-0 translate-y-2">
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
-              className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
+              className="absolute z-[100] w-[15rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
               {hasPermission(PERMISSIONS.GAME.CHANGE_STATUS) && (
                 <MenuItem>
                   {({ focus }) => (

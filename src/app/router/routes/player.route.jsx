@@ -2,7 +2,7 @@
 
 import { Navigate } from 'react-router';
 import PrivateRoute from '../private';
-import { PERMISSIONS } from 'constants/app.constant';
+import { PERMISSIONS, PLATFORM_TYPE } from 'constants/app.constant';
 
 export const playerRoutes = [
   {
@@ -34,19 +34,11 @@ export const playerRoutes = [
           const { ViewDetails: PlayerDetails } = await import(
             '../../pages/users/player/ViewDetails'
           );
-          // const { default: PlayerLimit } = await import(
-          //   '../../pages/users/player/ViewOnlyPlayerLimit'
-          // );
           return {
             Component: () => (
-              <>
-                <PrivateRoute permission={PERMISSIONS.USER.LIST}>
-                  <PlayerDetails />
-                </PrivateRoute>
-                {/* <PrivateRoute permission={PERMISSIONS.USER.USER_LEVEL_LIMITS}>
-                  <PlayerLimit />
-                </PrivateRoute> */}
-              </>
+              <PrivateRoute permission={PERMISSIONS.USER.LIST}>
+                <PlayerDetails />
+              </PrivateRoute>
             )
           };
         }
@@ -100,7 +92,10 @@ export const playerRoutes = [
           const { default: ManageFund } = await import('../../pages/users/player/ManageFund');
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.USER.ADD_MONEY}>
+              <PrivateRoute
+                permission={PERMISSIONS.USER.ADD_MONEY}
+                allowedPlatforms={[PLATFORM_TYPE.B2C]}
+                fallbackPath="/users/player">
                 <ManageFund />
               </PrivateRoute>
             )
@@ -130,7 +125,10 @@ export const playerRoutes = [
           );
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.USER.COMMENT_VIEW}>
+              <PrivateRoute
+                permission={PERMISSIONS.USER.COMMENT_VIEW}
+                allowedPlatforms={[PLATFORM_TYPE.B2C]}
+                fallbackPath="/users/player">
                 <ReferralList />
               </PrivateRoute>
             )

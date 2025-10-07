@@ -31,23 +31,47 @@ const UserClassService = {
       console.log('Error from User Class List', error);
     }
   },
-  createUserClass: async (data, file) => {
+  userclassAllList: async () => {
     try {
-      const formData = new FormData();
-      formData.append('className', data.className);
-      formData.append('classCode', data.classCode);
-
-      if (file && file.name) {
-        formData.append('avatarURL', file, file.name);
-      }
-
+      const endPoint = apiConfig.endPoints.USER_CLASS.LIST;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          isPagination: false,
+          page: '',
+          per_page: '',
+          filters: {
+            keyword: '',
+            status: ''
+          }
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from User Class All List', error);
+    }
+  },
+  createUserClass: async (data) => {
+    try {
+      const reqBody = {
+        className: data.className,
+        classCode: data.classCode,
+        rules: {
+          deposit: data.deposit,
+          wager: data.wager
+        }
+      };
       const response = await sendRequest({
         url: apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.USER_CLASS.CREATE,
         method: 'POST',
-        body: formData,
-        contentType: 'form-data',
+        body: reqBody,
         headers: {
-          'Content-Type': "multipart/form-data'"
+          'Content-Type': 'application/json'
         }
       });
 
@@ -68,22 +92,23 @@ const UserClassService = {
       console.log('Error', err);
     }
   },
-  userClassUpdate: async (data, file) => {
+  userClassUpdate: async (data) => {
     try {
-      const formData = new FormData();
-      formData.append('className', data.className);
-      formData.append('classCode', data.classCode);
-      formData.append('classUID', data.classUID);
-      if (file && file.name) {
-        formData.append('avatarURL', file, file.name);
-      }
+      const reqBody = {
+        classUID: data.classUID,
+        className: data.className,
+        classCode: data.classCode,
+        rules: {
+          deposit: data.deposit,
+          wager: data.wager
+        }
+      };
       const response = await sendRequest({
         url: apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.USER_CLASS.UPDATE,
         method: 'PUT',
-        body: formData,
-        contentType: 'form-data',
+        body: reqBody,
         headers: {
-          'Content-Type': "multipart/form-data'"
+          'Content-Type': 'application/json'
         }
       });
       return response;

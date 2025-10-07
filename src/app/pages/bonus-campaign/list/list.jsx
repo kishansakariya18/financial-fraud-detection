@@ -1,0 +1,155 @@
+import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
+import { useSearchParams } from 'react-router';
+// Local Imports - UI, Services, Helpers, Utils
+import { Toolbar } from './Toolbar';
+import { columns } from './columns';
+import TableCard from 'components/ui/custom/TableCard';
+import ContentWrapper from 'components/ui/custom/ContentWrapper';
+import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
+import { useTranslation } from 'react-i18next';
+import useTable from 'components/ui/useTable';
+import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
+import BonusCampaignService from 'services/bonus-campaign.services';
+import { bonusCampaignListResponseMapper } from '../helper';
+
+export default function BonusCampaignList() {
+  const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pageTitle = t('bonusCampaign') + ' ' + t('list');
+  const [summary, setSummary] = useState(null);
+  const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+
+  const fetchBonusCampaigns = async () => {
+    const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
+    const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
+    const result = await BonusCampaignService.getBonusCampaigns({
+      pagination: { pageIndex, pageSize },
+      filters: {
+        status: queryParams.status,
+        keyword: queryParams.keyword,
+        startDate: queryParams.startDate,
+        endDate: queryParams.endDate
+      }
+    });
+
+    if (result.status === 200) {
+      const apiData = bonusCampaignListResponseMapper(result.response.data);
+      console.log('result.response.data:', result.response);
+
+      return {
+        status: 200,
+        data: apiData,
+        totalRecords: parseInt(result.response.totalRecords || 0, 10)
+      };
+    }
+    return { status: result.status, error: result.error };
+  };
+
+  const fetchSummary = async () => {
+    try {
+      const result = await BonusCampaignService.getBonusCampaignSummary();
+      if (result.status === 200) {
+        setSummary(result.response.data);
+        return {
+          status: 200,
+          data: result.response.data,
+          totalRecords: parseInt(result.response.totalRecords, 10) || 0
+        };
+      }
+      return { status: result.status, error: result.error };
+    } catch (error) {
+      console.error('Error fetching bonus campaign summary:', error);
+      return { status: 500, error: 'Failed to load summary' };
+    }
+  };
+
+  useEffect(() => {
+    fetchSummary();
+  }, []);
+
+  const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
+    columns,
+    fetchData: fetchBonusCampaigns,
+    queryParams,
+    fetchSummary,
+    setSearchParams,
+    initialSettings: {
+      columnPinning: { left: ['id'], right: ['actions'] },
+      tableSettings: { enableFullScreen: false },
+      columnVisibility: {}
+    }
+  });
+
+  useEffect(() => {
+    if (!isLoading && error) {
+      toast.error(error);
+      setError('');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error]);
+
+  useEffect(() => {
+    const filtersFromQuery = [];
+    if (queryParams.keyword) {
+      filtersFromQuery.push({ id: 'campaignName', value: queryParams.keyword });
+    }
+    if (queryParams.status) {
+      filtersFromQuery.push({ id: 'status', value: queryParams.status });
+    }
+    if (queryParams.startDate && queryParams.endDate) {
+      filtersFromQuery.push({
+        id: 'dateCreated',
+        value: [+queryParams.startDate, +queryParams.endDate]
+      });
+    }
+
+    setColumnFilters(filtersFromQuery);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queryParams]);
+
+  const applyFilterHandler = () => {
+    const filterItems = {};
+    for (let data of table.getState().columnFilters) {
+      if (data.id === 'campaignName') {
+        filterItems.keyword = data.value;
+      }
+      if (data.id === 'status') {
+        filterItems.status = data.value;
+      }
+      if (data.id === 'dateCreated') {
+        filterItems.startDate = data.value[0];
+        filterItems.endDate = data.value[1];
+      }
+    }
+
+    setSearchParams({
+      pageIndex: DEFAULT_PAGE_INDEX,
+      pageSize: DEFAULT_PER_PAGE_RECORD,
+      ...(filterItems.keyword && { keyword: filterItems.keyword }),
+      ...(filterItems.status && { status: filterItems.status }),
+      ...(filterItems.startDate && { startDate: filterItems.startDate }),
+      ...(filterItems.endDate && { endDate: filterItems.endDate })
+    });
+  };
+
+  const clearFilterHandler = () => {
+    if (!isEmptyObject(queryParams)) {
+      setSearchParams({ pageIndex: DEFAULT_PAGE_INDEX, pageSize: DEFAULT_PER_PAGE_RECORD });
+    }
+    table.resetColumnFilters();
+  };
+
+  return (
+    <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
+      <Toolbar
+        summary={summary}
+        table={table}
+        pageTitle={pageTitle}
+        onApplyFilters={applyFilterHandler}
+        onClearFilters={clearFilterHandler}
+      />
+      <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
+    </ContentWrapper>
+  );
+}

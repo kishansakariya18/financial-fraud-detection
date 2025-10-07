@@ -12,7 +12,10 @@ import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { useSearchParams } from 'react-router';
 import { ExportCSV } from 'components/custom/export';
-import { transactionStatusOption, transactionStatusToAPI } from 'app/pages/users/player/helper';
+import {
+  transactionStatusOption,
+  transactionStatusToAPI
+} from 'components/sections/player-management/helper';
 import { getQueryParams } from 'utils/custom.utilities';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
@@ -47,7 +50,7 @@ export function DepositFilters({
         {hasPermission(PERMISSIONS.REPORT.DEPOSIT_EXPORT_REPORT) && (
           <ExportCSV
             filters={Object.fromEntries([...searchParams])}
-            url={`${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.REPORTS.TRANSACTIONS_EXPORT}?startDate=${filters.startDate ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&endDate=${
+            url={`${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.REPORTS.DEPOSIT_TRANSACTIONS_EXPORT}?startDate=${filters.startDate ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&endDate=${
               filters.endDate
                 ? String(
                     dayjs(+filters.endDate)

@@ -133,8 +133,8 @@ export function RowActions({ row, table }) {
       </div>
       <CustomModal
         show={isDialogOpen}
-        title={t('casino_category') + ' ' + t('details')}
-        btnTitle={t('casino_category') + ' ' + t('details')}
+        title={t('casino_category') + ' ' + t('edit')}
+        btnTitle={t('casino_category') + ' ' + t('edit')}
         icon={<PencilIcon className="size-4.5 stroke-1" />}
         btnClassName={clsx(
           'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
@@ -146,6 +146,7 @@ export function RowActions({ row, table }) {
         <EditCategory
           categoryId={row.original.id}
           value={row.original.name}
+          image={row.original.image}
           closeModal={onOkDialogBox}
         />
       </CustomModal>

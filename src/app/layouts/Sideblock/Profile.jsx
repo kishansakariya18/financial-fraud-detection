@@ -2,6 +2,7 @@
 import { Popover, PopoverButton, PopoverPanel, Transition } from '@headlessui/react';
 import { ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/outline';
 import { Link, useNavigate } from 'react-router';
+import { useMemo } from 'react';
 
 // Local Imports
 import { Avatar, AvatarDot, Button } from 'components/ui';
@@ -12,6 +13,9 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { TbUser } from 'react-icons/tb';
 import apiConfig from 'configs/api.config';
+import AuthService from 'services/auth.services';
+
+import AgentAuthService from 'services/b2b-agent/agent-auth.services';
 
 const links = [
   {
@@ -27,11 +31,14 @@ const links = [
 export function Profile() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userData = useSelector((state) => state.auth.userData);
+
+  const isAgentuser = useMemo(() => !!userData?.AgentID, [userData?.AgentID]);
 
   const { t } = useTranslation();
   const logoutHandler = (e) => {
     e.preventDefault();
-    toast.success(t('logout_success'));
+    let res = null;
     dispatch(AuthAction.logout());
     localStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN);
     localStorage.removeItem(LOCAL_STORAGE.USER_DATA);
@@ -41,12 +48,25 @@ export function Profile() {
     localStorage.removeItem(LOCAL_STORAGE.AUTH_EMAIL);
     localStorage.removeItem(LOCAL_STORAGE.SETTINGS);
     localStorage.removeItem(LOCAL_STORAGE.TWO_STEP_MODE);
-    setTimeout(() => {
-      navigate('/login');
-    }, 0);
-  };
+    toast.success(t('logout_success'));
 
-  const userData = useSelector((data) => data.auth.userData);
+    setTimeout(() => {
+      navigate(isAgentuser ? '/agent-auth/login' : '/login');
+    }, 0);
+    if (isAgentuser) {
+      res = AgentAuthService.logout();
+    } else {
+      res = AuthService.logout();
+    }
+    res
+      .then(() => {
+        //no action
+      })
+      .catch((error) => {
+        console.error('Logout Error: ', error);
+        //no action
+      });
+  };
 
   return (
     <Popover className="relative flex">

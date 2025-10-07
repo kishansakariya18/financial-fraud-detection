@@ -28,6 +28,11 @@ export const USER_CLASS_LIMIT_PERIOD = {
   MONTHLY: 'Monthly'
 };
 
+export const PLATFORM_TYPE = {
+  B2B: 'b2b', // Business to Business
+  B2C: 'b2c' // Business to Customer
+};
+
 export const LOCAL_STORAGE = {
   USER_DATA: 'UserData',
   AUTH_TOKEN: 'AuthToken',
@@ -38,7 +43,8 @@ export const LOCAL_STORAGE = {
   AUTH_PASSWORD: 'authPassword',
   TWO_STEP_MODE: 'twoStepMode',
   AUTH_EMAIL: 'authEmail',
-  LANGUAGE: 'language'
+  LANGUAGE: 'language',
+  IS_AGENT_USER: 'IsAgentUser'
 };
 
 export const HOME_CATEGORY_STATUS = {
@@ -54,6 +60,13 @@ export const PAYOUT_STATUS = {
   PENDING: 0,
   APPROVED: 1,
   REJECTED: 2
+};
+export const AGENT_TRANSACTION_TYPE = {
+  ALLOCATION: 19,
+  DEALLOCATION: 20,
+  COMMISSION_CREDIT: 21,
+  COMMISSION_DEBIT: 22,
+  MANUAL_ADJUSTMENT: 23
 };
 
 export const TRANSACTION = {
@@ -76,7 +89,9 @@ export const TRANSACTION = {
     REFERRAL_BANK_VERIFICATION: 15,
     WITHOUT_REFERRAL_PAN_VERIFICATION: 16,
     WITHOUT_REFERRAL_BANK_VERIFICATION: 17,
-    ROLLBACK: 18
+    ROLLBACK: 18,
+    // agent transaction type
+    ...AGENT_TRANSACTION_TYPE
   }
 };
 
@@ -123,6 +138,15 @@ export const PERMISSIONS = {
     ALL_TRANSACTION: 'all-transaction',
     USER_LEVEL_LIMITS: 'user-level-risk-mangement',
     VIEW_LOGIN_HISTORY: 'user-login-history-view'
+  },
+  SUPERVISOR: {
+    LIST: 'supervisor-view'
+  },
+  CALLING_AGENT: {
+    LIST: 'calling-agent-view',
+    Add: 'calling-agent-add',
+    DELETE: 'calling-agent-delete',
+    EDIT: 'calling-agent-edit'
   },
   REPORT: {
     BETSLIP_REPORT_VIEW: 'betslip-report-view',
@@ -188,10 +212,26 @@ export const PERMISSIONS = {
     DELETE: 'deposit-promo-code-delete',
     SEGMENTATION: 'deposit-promo-code-segmentation'
   },
+  BONUS_CAMPAIGN: {
+    LIST: 'bonus-campaign-view',
+    ADD: 'bonus-campaign-add',
+    USER_LIST: 'bonus-campaign-users-list',
+    CHANGE_STATUS: 'bonus-campaign-change-status',
+    DELETE: 'bonus-campaign-delete',
+    SEGMENTATION: 'bonus-campaign-segmentation'
+  },
   EMAIL_TEMPLATE: {
     LIST: 'setting-email-template-view',
     ADD: 'setting-email-template-add',
     EDIT: 'setting-email-template-edit'
+  },
+  EVENT_TEMPLATE: {
+    VIEW: 'event-template-view',
+    ADD: 'event-template-add',
+    EDIT: 'event-template-edit',
+    CHANGE_STATUS: 'event-template-status',
+    DELETE: 'event-template-delete',
+    ASSIGN: 'event-template-assign'
   },
   REFERRAL_OFFERS: {
     VIEW: 'setting-referral-amount-view'
@@ -214,7 +254,11 @@ export const PERMISSIONS = {
     USER_SIGNUP_LIST: 'affiliate-user-signup-list',
     PAYOUT: 'affiliate-payout',
     UPDATE_PAYTOUT: 'affiliate-payout-update',
-    VIEW_LOGIN_HISTORY: 'affiliate-login-history-view'
+    VIEW_LOGIN_HISTORY: 'affiliate-login-history-view',
+    WITHDRAWALS_LIST: 'affiliate-withdrawals-list',
+    COMMISSION: 'affiliate-commission',
+    CAMPAIGNS: 'affiliate-campaigns',
+    TRANSACTIONS_LIST: 'affiliate-transactions-list'
   },
   PAYMENT: {
     VIEW: 'payment-view'
@@ -250,6 +294,30 @@ export const PERMISSIONS = {
   CRM: {
     VIEW: 'crm-view'
   },
+  EMAIL_PROVIDER: {
+    LIST: 'email-provider-view',
+    DELETE: 'email-provider-delete',
+    CHANGE_STATUS: 'email-provider-status',
+    EDIT: 'email-provider-edit'
+  },
+  KYC_PROVIDER: {
+    LIST: 'kyc-provider-view',
+    DELETE: 'kyc-provider-delete',
+    CHANGE_STATUS: 'kyc-provider-status',
+    EDIT: 'kyc-provider-edit'
+  },
+  SMS_PROVIDER: {
+    LIST: 'sms-provider-view',
+    DELETE: 'sms-provider-delete',
+    CHANGE_STATUS: 'sms-provider-status',
+    EDIT: 'sms-provider-edit'
+  },
+  PAYMENT_PROVIDER: {
+    LIST: 'payment-provider-view',
+    DELETE: 'payment-provider-delete',
+    CHANGE_STATUS: 'payment-provider-status',
+    EDIT: 'payment-provider-edit'
+  },
   FRONTEND: {
     VIEW: 'frontend-home-category-list',
     ADD_HOME_CATEGORY: 'frontend-home-add-category',
@@ -263,7 +331,13 @@ export const PERMISSIONS = {
     DELETE_HOME_GAME: 'frontend-delete-home-game',
     APPEARANCE_VIEW: 'frontend-view-appearance',
     ADD_APPEARANCE: 'frontend-add-appearance',
-    CHANGE_APPEARANCE_STATUS: 'frontend-change-appearance-status'
+    CHANGE_APPEARANCE_STATUS: 'frontend-change-appearance-status',
+    LAYOUT_THEME: {
+      VIEW: 'layout-theme-view',
+      ADD: 'layout-theme-add',
+      EDIT: 'layout-theme-edit',
+      STATUS: 'layout-theme-status'
+    }
   },
   BUX_AI: {
     VIEW: 'bux-ai-view'
@@ -275,10 +349,6 @@ export const PERMISSIONS = {
   },
   REFERRAL_MANAGEMENT: {
     VIEW: 'referral-management-view'
-  },
-  PAYMENT_PROVIDER: {
-    VIEW: 'payment-provider-view',
-    STATUS: 'payment-provider-status'
   },
   USER_CLASS: {
     LIST: 'player-class-list',
@@ -298,6 +368,13 @@ export const PERMISSIONS = {
   },
   RATE_LIMIT_RULES: {
     LIST: 'rate-limit-rules-view'
+  },
+  RESPONSIBLE_GAMBLING: {
+    LIST: 'responsible-gambling-list',
+    CREATE: 'responsible-gambling-create',
+    EDIT: 'responsible-gambling-edit',
+    CHANGE_STATUS: 'responsible-gambling-change-status',
+    DELETE: 'responsible-gambling-delete'
   },
   BANK: {
     VIEW: 'bank-view',
@@ -325,6 +402,18 @@ export const PERMISSIONS = {
   },
   RELEASE_NOTES: {
     VIEW: 'release-notes-view'
+  },
+  FAQ: {
+    VIEW: 'faq-view'
+  },
+  COMMISSION_SETTING: {
+    UPDATE: 'commission-setting-update'
+  },
+  AGENTS: {
+    ADD: 'b2b-agent-add',
+    EDIT: 'b2b-agent-edit',
+    VIEW: 'b2b-agent-view',
+    CHANGE_STATUS: 'b2b-agent-change-status'
   }
 };
 
@@ -335,6 +424,13 @@ export const PROMOCODE = {
   TYPE: {
     EXACT_DEPOSIT: 0,
     DEPOSIT_IN_RANGE: 1
+  }
+};
+
+export const BONUS_CAMPAIGN = {
+  BONUS_TYPE: {
+    FIXED: 0,
+    PERCENTAGE: 1
   }
 };
 
@@ -352,4 +448,20 @@ export const BANNER = {
 export const GENERAL_STATUS = {
   ACTIVE: 1,
   INACTIVE: 0
+};
+
+export const ADMIN_TYPE = {
+  ADMIN: 0,
+  AGENT: 1
+};
+
+export const AGENT_TIER_TYPE = {
+  TIER_1: 0,
+  TIER_2: 1,
+  TIER_3: 2
+};
+
+export const CREDIT_DEBIT_TYPE = {
+  CREDIT: 0,
+  DEBIT: 1
 };

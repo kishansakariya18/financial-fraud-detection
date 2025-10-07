@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { LOCAL_STORAGE } from 'constants/app.constant';
+import { ADMIN_TYPE, LOCAL_STORAGE } from 'constants/app.constant';
 
 const userToken = localStorage.getItem(LOCAL_STORAGE.AUTH_TOKEN)
   ? localStorage.getItem(LOCAL_STORAGE.AUTH_TOKEN)
@@ -17,11 +17,18 @@ const permissions = localStorage.getItem(LOCAL_STORAGE.PERMISSIONS)
   ? JSON.parse(localStorage.getItem(LOCAL_STORAGE.PERMISSIONS))
   : [];
 
+const isAgentUser = localStorage.getItem(LOCAL_STORAGE.IS_AGENT_USER)
+  ? localStorage.getItem(LOCAL_STORAGE.IS_AGENT_USER) === 'true'
+  : false;
+
 const initialState = {
   isLoggedIn: userToken ? true : false,
   userData: userData,
   isMasterAdmin: isMasterAdmin,
-  permissions: permissions
+  permissions: permissions,
+  adminType: ADMIN_TYPE.ADMIN,
+  agentType: null,
+  isAgentUser
 };
 
 const AuthSlice = createSlice({
@@ -30,9 +37,12 @@ const AuthSlice = createSlice({
   reducers: {
     login(state, action) {
       state.isLoggedIn = true;
-      state.userData = action.payload.adminData;
+      state.userData = action.payload.adminData || action.payload.agentData;
       state.isMasterAdmin = action.payload.isMasterAdmin;
       state.permissions = action.payload.permissions;
+      state.adminType = action.payload.adminType || null;
+      state.agentType = action.payload.agentType || null;
+      state.isAgentUser = action.payload.isAgentUser || false;
     },
     logout(state, message) {
       console.log('message: ', message);
@@ -42,6 +52,8 @@ const AuthSlice = createSlice({
       }
       state.isLoggedIn = false;
       state.userData = null;
+      state.agentType = null;
+      state.isAgentUser = false;
       state.permissions = [];
     },
     sendLoginOtp(state, action) {
