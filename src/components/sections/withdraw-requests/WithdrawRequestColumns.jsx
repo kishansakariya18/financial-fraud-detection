@@ -39,13 +39,13 @@ export function WithdrawRequestColumns({ onUpdateStatus, showActions = true, lis
         accessorKey: 'amount',
         header: t('amount')
       },
-      {
-        id: 'toEntityType',
-        accessorKey: 'toEntityType',
-        header: t('entity_type'),
-        cell: BadgeCell,
-        meta: { optionData: entityTypeOptions }
-      },
+      // {
+      //   id: 'toEntityType',
+      //   accessorKey: 'toEntityType',
+      //   header: t('entity_type'),
+      //   cell: BadgeCell,
+      //   meta: { optionData: entityTypeOptions }
+      // },
       {
         id: 'status',
         accessorKey: 'status',
