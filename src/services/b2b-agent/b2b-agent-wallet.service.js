@@ -82,6 +82,7 @@ const B2BAgentWalletService = {
       ...(data.toAgentUID ? { toAgentUID: data.toAgentUID } : {}),
       status: filters.status || undefined,
       entityType: filters.entityType || undefined,
+      formType: filters.formType || undefined,
       limit: pagination?.pageSize || 10,
       page: pagination.pageIndex + 1
     };
