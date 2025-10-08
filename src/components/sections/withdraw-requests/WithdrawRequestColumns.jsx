@@ -5,10 +5,15 @@ import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/r
 import { Fragment } from 'react';
 import clsx from 'clsx';
 import { t } from 'i18next';
-import { statusOptions } from './helper';
+import { entityTypeOptions, statusOptions } from './helper';
 import { BadgeCell, DateCell } from 'components/custom/table/cell';
 
-export function WithdrawRequestColumns({ onUpdateStatus, showActions = true, listFor }) {
+export function WithdrawRequestColumns({
+  onUpdateStatus,
+  showFormEntityType = false,
+  showActions = true,
+  listFor
+}) {
   return useMemo(() => {
     const columns = [
       {
@@ -46,6 +51,17 @@ export function WithdrawRequestColumns({ onUpdateStatus, showActions = true, lis
       //   cell: BadgeCell,
       //   meta: { optionData: entityTypeOptions }
       // },
+      ...(showFormEntityType
+        ? [
+            {
+              id: 'fromEntityType',
+              accessorKey: 'fromEntityType',
+              header: t('entity_type'),
+              cell: BadgeCell,
+              meta: { optionData: entityTypeOptions }
+            }
+          ]
+        : []),
       {
         id: 'status',
         accessorKey: 'status',

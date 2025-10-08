@@ -23,6 +23,7 @@ export default function WithdrawRequestList({
   pageTitle,
   listFor = 'admin',
   getWithdrawRequestList,
+  showFormEntityType = false,
   breadcrumbs = null,
   showActions = true
 }) {
@@ -87,7 +88,12 @@ export default function WithdrawRequestList({
   };
 
   const { table, isLoading, tableSettings, setColumnFilters } = useTable({
-    columns: WithdrawRequestColumns({ listFor, onUpdateStatus: handleUpdateStatus, showActions }),
+    columns: WithdrawRequestColumns({
+      listFor,
+      onUpdateStatus: handleUpdateStatus,
+      showActions,
+      showFormEntityType
+    }),
     fetchData: fetchRequests,
     queryParams,
     setSearchParams,
@@ -107,6 +113,9 @@ export default function WithdrawRequestList({
       if (queryParams.entityType) {
         filtersFromQuery.push({ id: 'entityType', value: queryParams.entityType });
       }
+      if (queryParams.formType) {
+        filtersFromQuery.push({ id: 'formType', value: queryParams.formType });
+      }
       setColumnFilters(filtersFromQuery);
       filtersInitializedRef.current = true;
     }
@@ -116,11 +125,15 @@ export default function WithdrawRequestList({
   const applyFilterHandler = () => {
     const filterItems = {};
     for (let data of table.getState().columnFilters) {
+      console.log('data', data);
       if (data.id === 'status') {
         filterItems.status = data.value;
       }
       if (data.id === 'toEntityType') {
         filterItems.entityType = data.value;
+      }
+      if (data.id === 'fromEntityType') {
+        filterItems.formType = data.value;
       }
     }
 
@@ -128,7 +141,8 @@ export default function WithdrawRequestList({
       pageIndex: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.status && { status: filterItems.status }),
-      ...(filterItems.entityType && { entityType: filterItems.entityType })
+      ...(filterItems.entityType && { entityType: filterItems.entityType }),
+      ...(filterItems.formType && { formType: filterItems.formType })
     });
   };
 
@@ -139,8 +153,6 @@ export default function WithdrawRequestList({
     table.resetColumnFilters();
     filtersInitializedRef.current = false;
   };
-
-  console.log('statusDialog', statusDialog);
 
   useLockScrollbar(tableSettings.enableFullScreen);
 
