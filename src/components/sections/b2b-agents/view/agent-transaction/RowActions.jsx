@@ -66,7 +66,7 @@ export function RowActions({ row }) {
         show={isDialogOpen}
         title={t('transaction') + ' ' + t('details')}
         btnTitle={t('transaction') + ' ' + t('details')}
-        panalClassName="max-w-6xl"
+        panalClassName="max-w-4xl"
         // icon={<PencilIcon className="size-4.5 stroke-1" />}
         // btnClassName={clsx(
         //   'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',

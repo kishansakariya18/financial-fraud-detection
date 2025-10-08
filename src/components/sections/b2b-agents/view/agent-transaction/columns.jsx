@@ -2,7 +2,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 
 import { RowActions } from './RowActions';
 import { IdCell, DateCell, BoldCell, BadgeCell } from 'components/custom/table/cell';
-import { agentTransactionTypeOptions, creditDebitTypeOptions } from '../../helper';
+import { agentTransactionTypeOptions, creditDebitTypeOptions, getEntityLabel } from '../../helper';
 import { useCurrencyContext } from 'app/contexts/currency/context';
 
 const columnHelper = createColumnHelper();
@@ -31,6 +31,36 @@ export const AgentTransactionColumns = () => {
       cell: BadgeCell,
       meta: { optionData: agentTransactionTypeOptions },
       filterFn: 'equals',
+      enableSorting: false
+    }),
+    columnHelper.accessor((row) => row.fromEntityType, {
+      id: 'fromEntity',
+      label: 'From',
+      header: 'From',
+      cell: ({ row }) => {
+        const fromEntityType = row.original.fromEntityType;
+        const fromData = row.original.from;
+        const label = getEntityLabel(fromEntityType, fromData);
+
+        return <div className="text-sm font-medium">{label}</div>;
+      },
+      enableSorting: false
+    }),
+    columnHelper.accessor((row) => row.toEntityType, {
+      id: 'toEntity',
+      label: 'To',
+      header: 'To',
+      cell: ({ row }) => {
+        const toEntityType = row.original.toEntityType;
+        const toData = row.original.to;
+        const label = getEntityLabel(toEntityType, toData);
+
+        return (
+          <div className="space-y-1">
+            <div className="text-sm font-medium">{label}</div>
+          </div>
+        );
+      },
       enableSorting: false
     }),
     columnHelper.accessor((row) => row.amount, {
