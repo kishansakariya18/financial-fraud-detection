@@ -5,7 +5,7 @@ import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/r
 import { Fragment } from 'react';
 import clsx from 'clsx';
 import { t } from 'i18next';
-import { entityTypeOptions, statusOptions } from './helper';
+import { statusOptions } from './helper';
 import { BadgeCell, DateCell } from 'components/custom/table/cell';
 
 export function WithdrawRequestColumns({ onUpdateStatus, showActions = true, listFor }) {
