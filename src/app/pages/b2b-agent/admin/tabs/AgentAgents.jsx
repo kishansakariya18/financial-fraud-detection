@@ -30,9 +30,6 @@ const AgentAgents = () => {
       pageTitle={t('agents')}
       showAgentTypeFilter={false}
       showStatusFilter={true}
-      columnVisibility={{
-        agentType: false
-      }}
       breadcrumbs={breadcrumbs}
     />
   );

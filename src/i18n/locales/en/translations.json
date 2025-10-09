@@ -937,5 +937,8 @@
   "refTxnID": "Reference Transaction ID",
   "refBonusTxnID": "Reference Bonus Transaction ID",
   "refBonusCashoutTxnID": "Reference Cashout Transaction ID",
-  "trigger_type": "Trigger Type"
+  "trigger_type": "Trigger Type",
+  "first": "First",
+  "parent": "Parent",
+  "withdraw_requests_for_this_agent": "Withdraw Requests for this Agent"
 }

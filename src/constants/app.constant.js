@@ -410,10 +410,10 @@ export const PERMISSIONS = {
     UPDATE: 'commission-setting-update'
   },
   AGENTS: {
-    ADD: 'b2b-agent-add',
-    EDIT: 'b2b-agent-edit',
-    VIEW: 'b2b-agent-view',
-    CHANGE_STATUS: 'b2b-agent-change-status'
+    ADD: 'agent-add',
+    EDIT: 'agent-edit',
+    VIEW: 'agent-view',
+    CHANGE_STATUS: 'agent-change-status'
   }
 };
 

@@ -56,9 +56,25 @@ export function WithdrawRequestColumns({
             {
               id: 'fromEntityType',
               accessorKey: 'fromEntityType',
-              header: t('entity_type'),
+              header: t('form'),
               cell: BadgeCell,
               meta: { optionData: entityTypeOptions }
+            },
+            {
+              id: 'form_name',
+              header: t('form') + ' ' + t('name'),
+              enableSorting: false,
+              cell: ({ row }) => {
+                let formName = '';
+                if (row.original.fromEntityType === 'b2b_agent') {
+                  formName = row.original.agentName;
+                }
+                if (row.original.fromEntityType === 'player') {
+                  formName = row.original.playerName;
+                }
+                return <div className="text-sm font-medium">{formName}</div>;
+              },
+              sortable: false
             }
           ]
         : []),
@@ -152,5 +168,5 @@ export function WithdrawRequestColumns({
     }
 
     return columns;
-  }, [onUpdateStatus, showActions, listFor]);
+  }, [listFor, showFormEntityType, showActions, onUpdateStatus]);
 }

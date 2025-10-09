@@ -106,8 +106,22 @@ const AgentView = ({
           </div>
         )}
         <div>
-          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('createdBy')}:</p>
-          <p>{agentDetails?.CreatedByAdmin}</p>
+          {agentDetails?.CreatedByAdmin && (
+            <div>
+              <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                {t('createdBy')}:
+              </p>
+              <p>{agentDetails?.CreatedByAdmin}</p>
+            </div>
+          )}
+          {agentDetails?.ParentAgent && (
+            <div>
+              <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                {t('parent') + ' ' + t('agent')}:
+              </p>
+              <p>{agentDetails?.ParentAgent?.Username || '-'}</p>
+            </div>
+          )}
         </div>
         <div>
           <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('email')}</p>
@@ -192,14 +206,6 @@ const AgentView = ({
                           {t('percentage')}:
                         </p>
                         <p className="font-medium">{commission.TurnoverPercent || 0}%</p>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                          {t('target')} {t('amount')}:
-                        </p>
-                        <p className="font-medium">
-                          {formatCurrency(commission.TurnoverTargetAmount || 0)}
-                        </p>
                       </div>
                     </>
                   )}

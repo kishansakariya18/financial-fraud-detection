@@ -38,6 +38,7 @@ export default function AgentWithdrawRequest() {
           pageTitle={pageTitle}
           getWithdrawRequestList={fetchWithdrawRequests}
           breadcrumbs={null}
+          showActions={false}
           // showActions={!isAgent} // Only show actions for admin, not for agents
         />
       </Page>

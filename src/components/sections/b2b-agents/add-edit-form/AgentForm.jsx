@@ -1,7 +1,7 @@
 // Import Dependencies
 import { Page } from 'components/shared/Page';
 import { UserIcon } from '@heroicons/react/20/solid';
-import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
+import { EnvelopeIcon, EyeIcon, EyeSlashIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import { Listbox } from 'components/shared/form/Listbox';
@@ -39,6 +39,7 @@ const AgentForm = ({
   const { agentUID } = useParams();
   const [loading, setLoading] = useState(false);
   const isEdit = mode === 'edit';
+  const [showPassword, setShowPassword] = useState(false);
 
   const defaultValues = useMemo(
     () => ({
@@ -237,18 +238,29 @@ const AgentForm = ({
                 control={control}
                 name="status"
               />
-
               <Input
                 {...register('password')}
-                type="password"
                 prefix={
                   <LockClosedIcon
                     className="size-5 transition-colors duration-200"
                     strokeWidth="1"
                   />
                 }
-                label={t('password') || 'Password'}
+                label={t('password')}
                 error={errors?.password?.message}
+                suffix={
+                  <Button
+                    variant="flat"
+                    className="pointer-events-auto size-6 shrink-0 rounded-full p-0"
+                    onClick={() => setShowPassword(!showPassword)}>
+                    {showPassword ? (
+                      <EyeSlashIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
+                    ) : (
+                      <EyeIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
+                    )}
+                  </Button>
+                }
+                type={showPassword ? 'text' : 'password'}
                 placeholder={
                   isEdit
                     ? `${t('enter') || 'Enter'} ${t('password') || 'password'} ${t('optional') || '(optional)'}`
@@ -257,25 +269,6 @@ const AgentForm = ({
               />
             </div>
 
-            {/* Commission Percentage */}
-            <div className="rounded-lg bg-gray-50 p-4">
-              <h6 className="mb-3 text-sm font-medium text-blue-800 dark:text-blue-200">
-                {t('credit_lineup')}
-              </h6>
-              <Input
-                {...register('commissionPercent')}
-                type="number"
-                step="0.01"
-                min="0"
-                max="100"
-                prefix={<span className="text-sm">%</span>}
-                label={
-                  t('commission') + ' ' + t('percentage') + ' (%)' || 'Commission Percentage (%)'
-                }
-                error={errors?.commissionPercent?.message}
-                placeholder="0.00"
-              />
-            </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Controller
                 render={({ field }) => (
@@ -312,6 +305,26 @@ const AgentForm = ({
                 label={t('mobile') || 'Mobile'}
                 error={errors?.mobile?.message}
                 placeholder={`${t('enter') || 'Enter'} ${t('mobile') || 'mobile'} ${t('number') || 'number'}`}
+              />
+            </div>
+
+            {/* Commission Percentage */}
+            <div className="rounded-lg bg-gray-50 p-4 dark:bg-dark-500">
+              <h6 className="mb-3 text-sm font-medium text-blue-800 dark:text-blue-200">
+                {t('credit_lineup')}
+              </h6>
+              <Input
+                {...register('commissionPercent')}
+                type="number"
+                step="0.01"
+                min="0"
+                max="100"
+                prefix={<span className="text-sm">%</span>}
+                label={
+                  t('commission') + ' ' + t('percentage') + ' (%)' || 'Commission Percentage (%)'
+                }
+                error={errors?.commissionPercent?.message}
+                placeholder="0.00"
               />
             </div>
 

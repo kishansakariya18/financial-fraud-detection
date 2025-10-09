@@ -44,7 +44,7 @@ export default function Tabs() {
       title: t('change') + ' ' + t('agent') + ' ' + t('fund') + ' ' + t('password'),
       path: `/profile/agent-fund-password`,
       icon: TbLockPassword,
-      isHidden: !isB2B,
+      isHidden: !isB2B || !!userData?.AgentID,
       index: 3
     }
   ];

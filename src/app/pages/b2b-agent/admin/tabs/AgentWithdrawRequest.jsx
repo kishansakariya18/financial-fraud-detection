@@ -11,8 +11,7 @@ export default function AgentWithdrawRequest() {
     return await B2BAgentWalletService.withdrawRequestList({
       ...requestObject,
       filters: {
-        ...requestObject.filters,
-        formType: 'b2b_agent'
+        ...requestObject.filters
       },
       toAgentUID: agentUID
     });
@@ -28,6 +27,8 @@ export default function AgentWithdrawRequest() {
         pageTitle={pageTitle}
         getWithdrawRequestList={fetchWithdrawRequests}
         breadcrumbs={breadcrumbs}
+        showActions={false}
+        showFormEntityType
       />
     </>
   );

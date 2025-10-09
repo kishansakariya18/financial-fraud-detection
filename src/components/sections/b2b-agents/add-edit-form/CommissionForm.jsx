@@ -3,7 +3,7 @@ import { Controller, useFieldArray } from 'react-hook-form';
 import { Button, Input } from 'components/ui';
 import { Listbox } from 'components/shared/form/Listbox';
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { PercentBadgeIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import { PercentBadgeIcon } from '@heroicons/react/24/outline';
 import PropTypes from 'prop-types';
 import {
   commissionTypes,
@@ -11,9 +11,11 @@ import {
   commissionFieldConfig,
   getDefaultCommission
 } from './commissionConfig';
+import { useCurrencyContext } from 'app/contexts/currency/context';
 
 const CommissionForm = ({ control, register, errors, watch }) => {
   const { t } = useTranslation();
+  const { symbol } = useCurrencyContext();
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'commissions'
@@ -148,7 +150,7 @@ const CommissionForm = ({ control, register, errors, watch }) => {
                   type="number"
                   step="0.01"
                   min="0"
-                  prefix={<CurrencyDollarIcon className="size-4" />}
+                  prefix={symbol || null}
                   label={`CPA ${t('amount')}`}
                   placeholder={`${t('enter')} CPA ${t('amount')}`}
                   error={errors?.commissions?.[index]?.cpaPayoutAmount?.message}
@@ -167,9 +169,9 @@ const CommissionForm = ({ control, register, errors, watch }) => {
                   type="number"
                   step="0.01"
                   min="0"
-                  prefix={<CurrencyDollarIcon className="size-4" />}
-                  label={`${t('min_deposit')} ${t('amount')}`}
-                  placeholder={`${t('min_deposit')} ${t('amount')}`}
+                  prefix={symbol || null}
+                  label={`${t('first')} ${t('deposit')} ${t('amount')}`}
+                  placeholder={`${t('enter')} ${t('deposit')} ${t('amount')}`}
                   error={errors?.commissions?.[index]?.cpaDepositMinAmount?.message}
                   size="sm"
                 />
@@ -181,7 +183,7 @@ const CommissionForm = ({ control, register, errors, watch }) => {
                   type="number"
                   step="0.01"
                   min="0"
-                  prefix={<CurrencyDollarIcon className="size-4" />}
+                  prefix={symbol || null}
                   label={`${t('min_bet')} ${t('amount')}`}
                   placeholder={`${t('min_bet')} ${t('amount')}`}
                   error={errors?.commissions?.[index]?.cpaBetMinAmount?.message}
