@@ -113,26 +113,10 @@ const CommissionForm = ({ control, register, errors, watch }) => {
                 type="number"
                 step="0.01"
                 min="0"
-                max="100"
                 prefix={<PercentBadgeIcon className="size-4" />}
                 label={t('turnover') + ' ' + t('percent') + ' (%)'}
                 placeholder={`${t('enter')} ${t('turnover')} ${t('percent')}`}
                 error={errors?.commissions?.[index]?.turnoverPercent?.message}
-                size="sm"
-              />
-            )}
-
-            {/* Turnover Target Amount */}
-            {config.fields.includes('turnoverTargetAmount') && (
-              <Input
-                {...register(`commissions.${index}.turnoverTargetAmount`)}
-                type="number"
-                step="0.01"
-                min="1"
-                prefix={<CurrencyDollarIcon className="size-4" />}
-                label={t('target') + ' ' + t('amount')}
-                placeholder={`${t('enter')} ${t('target')} ${t('amount')}`}
-                error={errors?.commissions?.[index]?.turnoverTargetAmount?.message}
                 size="sm"
               />
             )}

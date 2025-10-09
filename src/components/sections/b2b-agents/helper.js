@@ -92,7 +92,6 @@ export const mapCommissions = (commissions) => {
     agentID: commission.AgentID,
     commissionType: commission.CommissionType,
     turnoverPercent: commission.TurnoverPercent,
-    turnoverTargetAmount: commission.TurnoverTargetAmount,
     cpaPayoutAmount: commission.CpaPayoutAmount,
     cpaDepositMinAmount: commission.CpaDepositMinAmount,
     cpaBetMinAmount: commission.CpaBetMinAmount,
@@ -127,8 +126,7 @@ export const mapCommissionsToApi = (commissions) => {
       case 'turnover':
         return {
           ...baseCommission,
-          turnoverPercent: parseFloat(commission.turnoverPercent) || 0,
-          turnoverTargetAmount: parseFloat(commission.turnoverTargetAmount) || 1000
+          turnoverPercent: parseFloat(commission.turnoverPercent) || 0
         };
       case 'cpa': {
         const cpaCommission = {
