@@ -4,7 +4,7 @@ import { Navigate } from 'react-router';
 
 export const affiliatesRoutes = [
   {
-    path: 'affiliates',
+    path: 'affiliates/users',
     lazy: async () => {
       const { default: AffiliatesList } = await import('../../pages/affiliates/list');
       return {

@@ -28,7 +28,7 @@ export function Toolbar({
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
 
   const breadcrumbItem = [
-    { title: t('affiliates'), path: '/affiliates' },
+    { title: t('affiliates'), path: '/affiliates/users' },
     { title: t('withdrawals') }
   ];
 

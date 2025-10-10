@@ -52,7 +52,7 @@ export default function AffiliateDetails() {
 
   const pageTitle = `${t('affiliates')} ${t('details')}`;
   const breadcrumbItem = [
-    { title: t('affiliates'), path: '/affiliates' },
+    { title: t('affiliates'), path: '/affiliates/users' },
     { title: t('affiliate') + ' ' + t('details') }
   ];
 

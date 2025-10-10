@@ -29,7 +29,7 @@ import { b2bAgent } from './b2b-agent';
 import { bonusCampaign } from './bonus-campaign';
 import { faq } from './faq';
 import { affiliatesNew } from './affiliates-new';
-import { globalCommissionSetting } from './global-commission-setting';
+// import { globalCommissionSetting } from './global-commission-setting';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -51,7 +51,7 @@ export const dashboards = () => ({
     users,
     supervisor,
     affiliatesNew,
-    globalCommissionSetting,
+    // globalCommissionSetting,
     b2bAgent,
     platform,
     contentManagement,
