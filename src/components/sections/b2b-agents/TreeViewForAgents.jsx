@@ -39,7 +39,7 @@ const transformDataToTree = (agents, userData) => {
     attributes: {
       isVirtualRoot: true
     },
-    children: agents.map(transformAgent)
+    children: agents.map((agent) => transformAgent(agent, false))
   };
 };
 
@@ -63,7 +63,7 @@ const transformAgent = (agent, isMain = false) => {
     name = [agent.FirstName, agent.LastName].filter(Boolean).join(' ');
   }
   const node = {
-    name: name + 'FJHGDF JHGDS JFHGD SJHKF GDJHFGDSJKHFGJ',
+    name: name,
     attributes: {
       isVirtualRoot: !!isMain,
       agentUID: agent.AgentUID,

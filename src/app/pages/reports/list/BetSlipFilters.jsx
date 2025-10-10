@@ -18,9 +18,10 @@ import { useSearchParams } from 'react-router';
 import { ExportCSV } from 'components/custom/export';
 import { getQueryParams } from 'utils/custom.utilities';
 import apiConfig from 'configs/api.config';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
+import { useMemo } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -37,6 +38,29 @@ export function BetSlipFilters({
 
   const filters = getQueryParams(searchParams);
 
+  const exportFilters = useMemo(() => {
+    const params = {};
+
+    if (filters.startDate) {
+      params.startDate = moment(+filters.startDate).startOf('day').toDate();
+    }
+    if (filters.endDate) {
+      params.endDate = moment(+filters.endDate).endOf('day').toDate();
+    }
+    if (filters.keyword) {
+      params.keyword = filters.keyword;
+    }
+    if (filters.stage) {
+      params.stage = getStageAppToApi(filters.stage);
+    }
+    if (filters.type) {
+      params.type = mapType(filters.type);
+    }
+    return params;
+  }, [filters]);
+
+  console.log('exportFilters:', exportFilters);
+
   return (
     <div className="table-toolbar">
       <div
@@ -51,18 +75,9 @@ export function BetSlipFilters({
         </div>
         {hasPermission(PERMISSIONS.REPORT.BETSLIP_EXPORT_REPORT) && (
           <ExportCSV
-            filters={Object.fromEntries([...searchParams])}
-            url={`${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.REPORTS.BETSLIP_EXPORT}?startDate=${filters.startDate ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&endDate=${
-              filters.endDate
-                ? String(
-                    dayjs(+filters.endDate)
-                      .hour(23)
-                      .minute(59)
-                      .second(59)
-                      .format('YYYY-MM-DD HH:mm:ss')
-                  )
-                : ''
-            }&keyword=${filters.keyword || ''}&stage=${filters.stage ? getStageAppToApi(filters.stage) : ''}&type=${filters.type ? mapType(filters.type) : ''}`}
+            filters={{ startDate: filters.startDate, endDate: filters.endDate }}
+            requestFilters={{ filters: exportFilters }}
+            apiEndpoint={apiConfig.endPoints.REPORTS.BETSLIP_EXPORT}
           />
         )}
       </div>

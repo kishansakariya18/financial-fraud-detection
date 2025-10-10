@@ -31,7 +31,7 @@ import RenderImage from 'components/ui/custom/ImageRender';
 import apiConfig from 'configs/api.config';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useCurrencyContext } from 'app/contexts/currency/context';
-import { isB2BPlatform } from 'utils/platformNavigation';
+import { isB2BPlatform, isB2CPlatform } from 'utils/platformNavigation';
 
 export function PlayerViewDetails({
   isAgent = false,
@@ -63,6 +63,7 @@ export function PlayerViewDetails({
   const { copied, copy } = useClipboard({ timeout: 2000 });
   const { formatCurrency } = useCurrencyContext();
   const isB2B = isB2BPlatform();
+  const isB2C = isB2CPlatform();
 
   // Use props or URL params
   const playerId = initialPlayerId || params.playerId;
@@ -88,7 +89,7 @@ export function PlayerViewDetails({
       const result = await PlayerService.getLimitSummary(userID, agentUID);
       if (result?.status === 200) {
         const payload = result?.response?.data;
-        const mapped = mapLimitSummary(payload?.data || payload?.Data || payload);
+        const mapped = mapLimitSummary(payload?.data || payload?.Data || payload, isB2B);
         setLimitSummary(mapped);
       }
     } catch (e) {
@@ -562,71 +563,75 @@ export function PlayerViewDetails({
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">DOB:</p>
                     <p>{response?.DOB || '-'}</p>
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {t('address')}
-                    </p>
-                    <div className="flex space-x-1 rtl:space-x-reverse">
-                      <span>{response?.Address || '-'}</span>
-                      {response.Address && (
-                        <Button
-                          data-tooltip
-                          data-tooltip-content={copied ? 'Copied' : 'Copy'}
-                          onClick={() => copy(response?.Address)}
-                          isIcon
-                          variant="flat"
-                          className="size-5 rounded-full group-hover/td:opacity-100"
-                          aria-label="Copy Button">
-                          <DocumentDuplicateIcon className="size-3.5" />
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {t('referralCode')}
-                    </p>
-
-                    <div className="flex space-x-1 rtl:space-x-reverse">
-                      <span>{response?.ReferralCode}</span>
-
-                      <Button
-                        data-tooltip
-                        data-tooltip-content={copied ? 'Copied' : 'Copy'}
-                        onClick={() => copy(response?.ReferralCode)}
-                        isIcon
-                        variant="flat"
-                        className="size-5 rounded-full group-hover/td:opacity-100"
-                        aria-label="Copy Button">
-                        <DocumentDuplicateIcon className="size-3.5" />
-                      </Button>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {t('signupIpAddress')}
-                    </p>
-
-                    {response?.SignupIPAddress ? (
-                      <div className="flex space-x-1 rtl:space-x-reverse">
-                        <span>{response?.SignupIPAddress}</span>
-
-                        <Button
-                          data-tooltip
-                          data-tooltip-content={copied ? 'Copied' : 'Copy'}
-                          onClick={() => copy(response?.SignupIPAddress)}
-                          isIcon
-                          variant="flat"
-                          className="size-5 rounded-full group-hover/td:opacity-100"
-                          aria-label="Copy Button">
-                          <DocumentDuplicateIcon className="size-3.5" />
-                        </Button>
+                  {isB2C && (
+                    <>
+                      <div>
+                        <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                          {t('address')}
+                        </p>
+                        <div className="flex space-x-1 rtl:space-x-reverse">
+                          <span>{response?.Address || '-'}</span>
+                          {response.Address && (
+                            <Button
+                              data-tooltip
+                              data-tooltip-content={copied ? 'Copied' : 'Copy'}
+                              onClick={() => copy(response?.Address)}
+                              isIcon
+                              variant="flat"
+                              className="size-5 rounded-full group-hover/td:opacity-100"
+                              aria-label="Copy Button">
+                              <DocumentDuplicateIcon className="size-3.5" />
+                            </Button>
+                          )}
+                        </div>
                       </div>
-                    ) : (
-                      '-'
-                    )}
-                  </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                          {t('referralCode')}
+                        </p>
 
+                        <div className="flex space-x-1 rtl:space-x-reverse">
+                          <span>{response?.ReferralCode}</span>
+
+                          <Button
+                            data-tooltip
+                            data-tooltip-content={copied ? 'Copied' : 'Copy'}
+                            onClick={() => copy(response?.ReferralCode)}
+                            isIcon
+                            variant="flat"
+                            className="size-5 rounded-full group-hover/td:opacity-100"
+                            aria-label="Copy Button">
+                            <DocumentDuplicateIcon className="size-3.5" />
+                          </Button>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                          {t('signupIpAddress')}
+                        </p>
+
+                        {response?.SignupIPAddress ? (
+                          <div className="flex space-x-1 rtl:space-x-reverse">
+                            <span>{response?.SignupIPAddress}</span>
+
+                            <Button
+                              data-tooltip
+                              data-tooltip-content={copied ? 'Copied' : 'Copy'}
+                              onClick={() => copy(response?.SignupIPAddress)}
+                              isIcon
+                              variant="flat"
+                              className="size-5 rounded-full group-hover/td:opacity-100"
+                              aria-label="Copy Button">
+                              <DocumentDuplicateIcon className="size-3.5" />
+                            </Button>
+                          </div>
+                        ) : (
+                          '-'
+                        )}
+                      </div>
+                    </>
+                  )}
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {t('createdAt')}:
@@ -644,21 +649,23 @@ export function PlayerViewDetails({
                         : '-'}
                     </p>
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {t('image') + ' ' + t('preview')}
-                    </p>
-                    <div className="mt-2">
-                      {/* {response?.ImageName && showImage('user', response?.ImageName)} */}
-                      {response?.ImageName && (
-                        <RenderImage
-                          value={`${apiConfig.baseURL.S3_URL}/user/${response?.ImageName}`}
-                          id={'gameImage'}
-                        />
-                      )}
-                      {response?.ImageName}
+                  {isB2C && (
+                    <div>
+                      <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                        {t('image') + ' ' + t('preview')}
+                      </p>
+                      <div className="mt-2">
+                        {/* {response?.ImageName && showImage('user', response?.ImageName)} */}
+                        {response?.ImageName && (
+                          <RenderImage
+                            value={`${apiConfig.baseURL.S3_URL}/user/${response?.ImageName}`}
+                            id={'gameImage'}
+                          />
+                        )}
+                        {response?.ImageName}
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {t('last_login_ip')}
@@ -706,20 +713,22 @@ export function PlayerViewDetails({
                     </p>
                   </div> */}
 
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {t('affiliate')}
-                    </p>
-                    {response?.affiliate ? (
-                      <Link
-                        to={`/users/affiliate/${response?.affiliate?.AffiliatesUID}/tab/details`}
-                        className="tracking-wide text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500">
-                        <p className="text-center">{response?.affiliate?.Username || '-'}</p>
-                      </Link>
-                    ) : (
-                      '-'
-                    )}
-                  </div>
+                  {isB2C && (
+                    <div>
+                      <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                        {t('affiliate')}
+                      </p>
+                      {response?.affiliate ? (
+                        <Link
+                          to={`/users/affiliate/${response?.affiliate?.AffiliatesUID}/tab/details`}
+                          className="tracking-wide text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500">
+                          <p className="text-center">{response?.affiliate?.Username || '-'}</p>
+                        </Link>
+                      ) : (
+                        '-'
+                      )}
+                    </div>
+                  )}
                 </div>
               </Card>
 
@@ -895,46 +904,48 @@ export function PlayerViewDetails({
               </Card>
 
               {/* User Class Limits Card */}
-              <Card className="mt-6 p-4 sm:p-5">
-                <button
-                  type="button"
-                  className="flex w-full items-center justify-between pb-2 text-left text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200"
-                  onClick={() => setSectionsOpen((s) => ({ ...s, userClass: !s.userClass }))}>
-                  <span>{t('player_class_limit')}</span>
-                  {sectionsOpen.userClass ? (
-                    <ChevronUpIcon className="size-7" />
-                  ) : (
-                    <ChevronDownIcon className="size-7" />
-                  )}
-                </button>
-                {sectionsOpen.userClass && (
-                  <div className="mt-2 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    {limitSummary.userClassLimits.length === 0 ? (
-                      <p className="col-span-3 text-sm text-gray-600">{t('noData')}</p>
+              {isB2C && (
+                <Card className="mt-6 p-4 sm:p-5">
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between pb-2 text-left text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200"
+                    onClick={() => setSectionsOpen((s) => ({ ...s, userClass: !s.userClass }))}>
+                    <span>{t('player_class_limit')}</span>
+                    {sectionsOpen.userClass ? (
+                      <ChevronUpIcon className="size-7" />
                     ) : (
-                      limitSummary.userClassLimits.reduce((acc, l) => {
-                        // acc.push(
-                        //   // <div key={`uc-${l.id}-limit`}>
-                        //   //   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                        //   //     {`${capitalizeFirstLetter(l.type)} ${capitalizeFirstLetter(l.period)} ${t('limit')}`}
-                        //   //   </p>
-                        //   //   <p>{(Number(l.amount) || 0) > 0 ? t('yes') : t('no')}</p>
-                        //   // </div>
-                        // );
-                        acc.push(
-                          <div key={`uc-${l.id}-value`}>
-                            <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                              {`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
-                            </p>
-                            <p>{l.amount > 0 ? formatCurrency(l.amount) : '-'}</p>
-                          </div>
-                        );
-                        return acc;
-                      }, [])
+                      <ChevronDownIcon className="size-7" />
                     )}
-                  </div>
-                )}
-              </Card>
+                  </button>
+                  {sectionsOpen.userClass && (
+                    <div className="mt-2 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                      {limitSummary.userClassLimits.length === 0 ? (
+                        <p className="col-span-3 text-sm text-gray-600">{t('noData')}</p>
+                      ) : (
+                        limitSummary.userClassLimits.reduce((acc, l) => {
+                          // acc.push(
+                          //   // <div key={`uc-${l.id}-limit`}>
+                          //   //   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                          //   //     {`${capitalizeFirstLetter(l.type)} ${capitalizeFirstLetter(l.period)} ${t('limit')}`}
+                          //   //   </p>
+                          //   //   <p>{(Number(l.amount) || 0) > 0 ? t('yes') : t('no')}</p>
+                          //   // </div>
+                          // );
+                          acc.push(
+                            <div key={`uc-${l.id}-value`}>
+                              <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                                {`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
+                              </p>
+                              <p>{l.amount > 0 ? formatCurrency(l.amount) : '-'}</p>
+                            </div>
+                          );
+                          return acc;
+                        }, [])
+                      )}
+                    </div>
+                  )}
+                </Card>
+              )}
 
               {/* Global Platform Limits Card */}
               <Card className="mt-6 p-4 sm:p-5">
