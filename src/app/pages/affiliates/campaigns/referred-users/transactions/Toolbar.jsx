@@ -29,10 +29,13 @@ export function Toolbar({
 
   const breadcrumbItem = [
     { title: t('affiliates'), path: '/affiliates/users' },
-    { title: t('campaign') + ' ' + t('list'), path: `/affiliates/${affiliateId}/tab/campaigns` },
+    {
+      title: t('campaign') + ' ' + t('list'),
+      path: `/affiliates/users/${affiliateId}/tab/campaigns`
+    },
     {
       title: t('referred_users'),
-      path: `/affiliates/${affiliateId}/tab/campaigns/${campaignID}/referred_users`
+      path: `/affiliates/users/${affiliateId}/tab/campaigns/${campaignID}/referred_users`
     },
     { title: t('transactions') }
   ];
