@@ -38,7 +38,6 @@ export const getNavigation = () => {
 
     // Filter admin navigation based on platform
     const filteredAdminNav = filterNavigationByPlatform([adminNav]);
-    console.log('filteredAdminNav', filteredAdminNav);
     return filteredAdminNav;
   }
 };

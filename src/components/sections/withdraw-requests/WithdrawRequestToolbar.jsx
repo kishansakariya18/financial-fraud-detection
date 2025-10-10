@@ -10,7 +10,7 @@ import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
-import { statusOptions } from './helper';
+import { entityTypeOptions, statusOptions } from './helper';
 
 // ----------------------------------------------------------------------
 
@@ -119,9 +119,11 @@ export function WithdrawRequestToolbar({
 
 function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }) {
   const isFiltered = table.getState().columnFilters.length > 0;
+  const allColumnIds = table.getAllColumns().map((col) => col.id);
+  console.log('allColumnIds', allColumnIds);
   return (
     <>
-      {table.getColumn('status') && (
+      {allColumnIds.includes('status') && (
         <FacedtedFilter
           options={statusOptions}
           column={table.getColumn('status')}
@@ -132,16 +134,16 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
         />
       )}
 
-      {/* {table.getColumn('toEntityType') && (listFor !== 'b2b_agent' || listFor !== 'player') && (
+      {allColumnIds.includes('fromEntityType') && (
         <FacedtedFilter
-          options={entityTypeOptions}
-          column={table.getColumn('toEntityType')}
+          options={entityTypeOptions.filter((option) => option.value !== 'admin')}
+          column={table.getColumn('fromEntityType')}
           title={t('entity_type')}
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}
         />
-      )} */}
+      )}
 
       <div>
         <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">

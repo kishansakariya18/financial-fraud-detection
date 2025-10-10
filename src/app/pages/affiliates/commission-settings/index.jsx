@@ -175,7 +175,7 @@ const CommissionSettings = () => {
   }, [isLossPctRequired]);
 
   const breadcrumbItem = [
-    { title: t('affiliates'), path: '/affiliates' },
+    { title: t('affiliates'), path: '/affiliates/users' },
     { title: t('commission') + ' ' + t('setting') }
   ];
 

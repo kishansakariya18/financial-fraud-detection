@@ -12,8 +12,8 @@ export const cpaTriggerOptions = [
 // Configuration for each commission type fields
 export const commissionFieldConfig = {
   turnover: {
-    fields: ['turnoverPercent', 'turnoverTargetAmount'],
-    requiredFields: ['turnoverPercent', 'turnoverTargetAmount']
+    fields: ['turnoverPercent'],
+    requiredFields: ['turnoverPercent']
   },
   cpa: {
     fields: ['cpaPayoutAmount', 'cpaTrigger'],
@@ -40,15 +40,14 @@ export const getCpaFieldsByTrigger = (trigger) => {
 // Default values for new commission
 export const getDefaultCommission = (type) => {
   const base = {
-    CommissionType: type
+    commissionType: type
   };
 
   switch (type) {
     case 'turnover':
       return {
         ...base,
-        turnoverPercent: null,
-        turnoverTargetAmount: null
+        turnoverPercent: null
       };
     case 'cpa':
       return {

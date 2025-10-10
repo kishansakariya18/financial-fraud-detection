@@ -4,7 +4,7 @@ import { Navigate } from 'react-router';
 
 export const affiliatesRoutes = [
   {
-    path: 'affiliates',
+    path: 'affiliates/users',
     lazy: async () => {
       const { default: AffiliatesList } = await import('../../pages/affiliates/list');
       return {
@@ -17,7 +17,7 @@ export const affiliatesRoutes = [
     }
   },
   {
-    path: 'affiliates/:affiliateId/detail',
+    path: 'affiliates/users/:affiliateId/detail',
     lazy: async () => {
       const { default: AffiliateDetails } = await import('../../pages/affiliates/details');
       return {
@@ -30,7 +30,7 @@ export const affiliatesRoutes = [
     }
   },
   {
-    path: 'affiliates/:affiliateId/commission-summary',
+    path: 'affiliates/users/:affiliateId/commission-summary',
     lazy: async () => {
       const { default: CommissionSummary } = await import('../../pages/affiliates/commission/list');
       return {
@@ -43,7 +43,7 @@ export const affiliatesRoutes = [
     }
   },
   {
-    path: 'affiliates/:affiliateId/users',
+    path: 'affiliates/users/:affiliateId/users',
     lazy: async () => {
       const { default: AffiliateUsersList } = await import('../../pages/affiliates/users/list');
       return {
@@ -56,7 +56,7 @@ export const affiliatesRoutes = [
     }
   },
   {
-    path: 'affiliates/:affiliateId/withdrawals',
+    path: 'affiliates/users/:affiliateId/withdrawals',
     lazy: async () => {
       const { default: AffiliateWithdrawalsList } = await import(
         '../../pages/affiliates/withdrawals/list'
@@ -71,7 +71,7 @@ export const affiliatesRoutes = [
     }
   },
   {
-    path: 'affiliates/:affiliateId/tab',
+    path: 'affiliates/users/:affiliateId/tab',
     lazy: async () => ({
       Component: (await import('../../pages/affiliates/Tabs')).default
     }),

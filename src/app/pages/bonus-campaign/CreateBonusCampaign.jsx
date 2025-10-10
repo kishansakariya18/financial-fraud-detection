@@ -124,12 +124,14 @@ const CreateBonusCampaign = () => {
     formState: { errors },
     control,
     reset,
-    watch
+    watch,
+    setValue
   } = useForm({
     resolver: yupResolver(createBonusCampaignSchema),
     defaultValues: {
       eligibleCurrencies: [],
-      wageringCategories: []
+      wageringCategories: [],
+      discountType: 'fixed'
     }
   });
 
@@ -137,7 +139,15 @@ const CreateBonusCampaign = () => {
 
   const eligibleCurrencies = watch('eligibleCurrencies');
   const wageringCategories = watch('wageringCategories');
+  const watchedDiscountType = watch('discountType');
   // const segmentationType = watch('segmentationType');
+
+  // Sync discountType state with form value
+  useEffect(() => {
+    if (watchedDiscountType !== discountType) {
+      setDiscountType(watchedDiscountType);
+    }
+  }, [watchedDiscountType, discountType]);
 
   console.log('erro: ', errors);
 
@@ -479,13 +489,19 @@ const CreateBonusCampaign = () => {
                     label={t('fixed')}
                     value="fixed"
                     checked={discountType === 'fixed'}
-                    onChange={(e) => setDiscountType(e.target.value)}
+                    onChange={(e) => {
+                      setDiscountType(e.target.value);
+                      setValue('discountType', e.target.value);
+                    }}
                   />
                   <Radio
                     label={t('percentage')}
                     value="percentage"
                     checked={discountType === 'percentage'}
-                    onChange={(e) => setDiscountType(e.target.value)}
+                    onChange={(e) => {
+                      setDiscountType(e.target.value);
+                      setValue('discountType', e.target.value);
+                    }}
                   />
                 </div>
               </div>
@@ -508,15 +524,6 @@ const CreateBonusCampaign = () => {
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
-                key={'maxBonusAmount'}
-                {...register('maxBonusAmount')}
-                label={`${t('maximum')} ${t('bonus')} ${t('amount')}`}
-                error={errors?.maxBonusAmount?.message}
-                placeholder={t('enter') + ' ' + t('amount')}
-                step="any"
-                type="number"
-              />
-              <Input
                 key={'minDepositAmount'}
                 {...register('minDepositAmount')}
                 label={`${t('minimum')} ${t('deposit')} ${t('amount')}`}
@@ -525,6 +532,17 @@ const CreateBonusCampaign = () => {
                 step="any"
                 type="number"
               />
+              {discountType === 'percentage' && (
+                <Input
+                  key={'maxBonusAmount'}
+                  {...register('maxBonusAmount')}
+                  label={`${t('maximum')} ${t('bonus')} ${t('amount')}`}
+                  error={errors?.maxBonusAmount?.message}
+                  placeholder={t('enter') + ' ' + t('amount')}
+                  step="any"
+                  type="number"
+                />
+              )}
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Input

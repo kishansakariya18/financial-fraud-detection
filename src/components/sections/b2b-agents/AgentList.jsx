@@ -49,7 +49,6 @@ export default function AgentList({
         pagination: { pageIndex, pageSize },
         filters: { ...queryParams }
       });
-      console.log('result: ', result.response);
       if (result.status === 200) {
         response = {
           status: 200,

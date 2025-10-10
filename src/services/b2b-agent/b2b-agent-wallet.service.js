@@ -82,7 +82,8 @@ const B2BAgentWalletService = {
       ...(data.toAgentUID ? { toAgentUID: data.toAgentUID } : {}),
       status: filters.status || undefined,
       entityType: filters.entityType || undefined,
-      limit: pagination?.pageSize || 10,
+      formType: filters.formType || undefined,
+      perPage: pagination?.pageSize || 10,
       page: pagination.pageIndex + 1
     };
     return apiInstance.get(apiConfig.endPoints.B2B_AGENT.WALLET.WITHDRAW_REQUEST_LIST, {

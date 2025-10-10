@@ -9,7 +9,7 @@ import {
   PERMISSIONS,
   PLATFORM_TYPE
 } from 'constants/app.constant';
-import { affliate } from './affiliates';
+// import { affliate } from './affiliates';
 
 export const users = {
   id: 'users.users',
@@ -52,7 +52,7 @@ export const users = {
       Icon: UserGroupIcon,
       permission: PERMISSIONS.SUPERVISOR.LIST,
       platformType: [PLATFORM_TYPE.B2C]
-    },
-    affliate
+    }
+    // affliate
   ]
 };

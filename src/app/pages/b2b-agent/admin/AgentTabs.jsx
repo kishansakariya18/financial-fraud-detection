@@ -56,7 +56,7 @@ export default function AgentTabs() {
     },
     {
       id: randomId(),
-      title: t('withdraw_requests'),
+      title: t('withdraw_requests_for_this_agent'),
       path: `/agent/${agentUID}/tab/withdraw-requests`,
       icon: ChartBarIcon,
       index: 5

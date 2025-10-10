@@ -133,7 +133,6 @@ export default function AssignedPlayersList({
     const targetAgentUID = userData?.AdminType ? userData?.id || userData?.agentUID : agentUID;
     AgentService.unassignPlayersFromAgent(targetAgentUID, checked)
       .then((result) => {
-        console.log('Unassign players result:', result.response);
         toast.success(result.response.message);
         setChecked([]);
         table.options.meta?.fetchNewList(true);

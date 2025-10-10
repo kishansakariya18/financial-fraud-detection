@@ -72,7 +72,7 @@ export function ViewDetails() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [affiliateId]);
   const breadcrumbItem = [
-    { title: t('affiliates'), path: '/affiliates' },
+    { title: t('affiliates'), path: '/affiliates/userss' },
     { title: t('campaign') + ' ' + t('list'), path: `/affiliates/${affiliateId}/tab/campaigns` },
     { title: t('campaign') + ' ' + t('details') }
   ];

@@ -83,9 +83,8 @@ const CustomNode = ({ nodeDatum, toggleNode }) => {
       <g>
         <circle
           r="25"
-          fill="#6366f1"
           onClick={toggleNode}
-          className="cursor-pointer transition-all hover:opacity-80"
+          className="cursor-pointer fill-indigo-500 transition-all hover:opacity-80 dark:fill-indigo-400"
         />
         <text
           fill="currentColor"
@@ -93,7 +92,7 @@ const CustomNode = ({ nodeDatum, toggleNode }) => {
           x="0"
           y="50"
           textAnchor="middle"
-          className="pointer-events-none font-medium"
+          className="pointer-events-none fill-gray-700 font-medium dark:fill-dark-200"
           style={{ fontSize: '22px', fontWeight: '600' }}>
           {nodeDatum.name}
         </text>
@@ -106,11 +105,12 @@ const CustomNode = ({ nodeDatum, toggleNode }) => {
       {/* Node Circle */}
       <circle
         r="20"
-        fill="#10b981"
-        stroke="#059669"
         strokeWidth="2"
         onClick={toggleNode}
-        className={clsx('transition-all', hasChildren ? 'cursor-pointer hover:opacity-80' : '')}
+        className={clsx(
+          'fill-emerald-500 stroke-emerald-600 transition-all dark:fill-emerald-400 dark:stroke-emerald-500',
+          hasChildren ? 'cursor-pointer hover:opacity-80' : ''
+        )}
       />
 
       {/* Plus/Minus icon for nodes with children */}
@@ -325,7 +325,7 @@ export default function TreeViewForAgents() {
           renderCustomNodeElement={(rd3tProps) => (
             <CustomNode {...rd3tProps} toggleNode={rd3tProps.toggleNode} />
           )}
-          pathClassFunc={() => 'stroke-gray-300 dark:stroke-dark-600 stroke-2'}
+          pathClassFunc={() => 'stroke-gray-400 dark:stroke-dark-400 stroke-2'}
           enableLegacyTransitions={true}
           transitionDuration={300}
           collapsible={true}

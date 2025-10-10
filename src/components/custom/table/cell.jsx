@@ -80,9 +80,6 @@ export function BoldCell({ getValue, column, table }) {
 export function BadgeCell({ getValue, column }) {
   const val = getValue();
 
-  console.log('val: ', val);
-  console.log('optionData: ', column.columnDef.meta?.optionData);
-
   const optionData = column.columnDef.meta?.optionData || [];
   const option = optionData.find((item) => item.value === val);
 

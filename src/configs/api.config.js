@@ -192,7 +192,7 @@ export const apiConfig = {
           `/wallet/agent/${agentUID}/player/${userUID}/credit`,
         AGENT_TRANSACTION_LIST: (agentUID) => `/wallet/agent/${agentUID}/transaction/list`,
         WITHDRAW_REQUEST_LIST: `/wallet/agent-player/withdraw-requests`,
-        CREATE_WITHDRAW_REQUEST: `/wallet/agent-player/wallet/withdraw-request`,
+        CREATE_WITHDRAW_REQUEST: `/wallet/agent/wallet/withdraw-request`,
         GET_AGENT_WALLET: (agentUID) => `/wallet/agent/${agentUID}/wallet`,
         WITHDRAW_REQUEST_UPDATE_STATUS: (withdrawRequestID) =>
           `/wallet/${withdrawRequestID}/handle-withdraw-request`,

@@ -92,7 +92,6 @@ export const mapCommissions = (commissions) => {
     agentID: commission.AgentID,
     commissionType: commission.CommissionType,
     turnoverPercent: commission.TurnoverPercent,
-    turnoverTargetAmount: commission.TurnoverTargetAmount,
     cpaPayoutAmount: commission.CpaPayoutAmount,
     cpaDepositMinAmount: commission.CpaDepositMinAmount,
     cpaBetMinAmount: commission.CpaBetMinAmount,
@@ -127,8 +126,7 @@ export const mapCommissionsToApi = (commissions) => {
       case 'turnover':
         return {
           ...baseCommission,
-          turnoverPercent: parseFloat(commission.turnoverPercent) || 0,
-          turnoverTargetAmount: parseFloat(commission.turnoverTargetAmount) || 1000
+          turnoverPercent: parseFloat(commission.turnoverPercent) || 0
         };
       case 'cpa': {
         const cpaCommission = {
@@ -199,6 +197,8 @@ export const mapTrasanctionMapper = (item) => ({
   fromEntityID: item.FromEntityID,
   toEntityType: item.ToEntityType,
   toEntityID: item.ToEntityID,
+  from: item.From || null,
+  to: item.To || null,
   amount: item.Amount,
   creditDebitType: creditDebitTypeApiToApp(item.CreditDebitType),
   transactionType: agentTransactionTypeApiToApp(item.TransactionType),
@@ -281,3 +281,58 @@ export const agentTransactionStatusOptions = [
   { label: 'Pending', value: 'pending', icon: XCircleIcon },
   { label: 'Failed', value: 'failed', icon: XCircleIcon }
 ];
+
+export const TRANSACTION_ENTITY = {
+  SYSTEM: 0,
+  ADMIN: 1,
+  AGENT_TIER_1: 2,
+  AGENT_TIER_2: 3,
+  AGENT_TIER_3: 4,
+  PLAYER: 5
+};
+
+// Helper function to get entity label
+export const getEntityLabel = (entityType, entityData) => {
+  if (!entityData && entityType === TRANSACTION_ENTITY.ADMIN) {
+    return 'Admin/Operator';
+  }
+  if (!entityData && entityType === TRANSACTION_ENTITY.SYSTEM) {
+    return 'System';
+  }
+  if (!entityData) {
+    return 'N/A';
+  }
+
+  switch (entityType) {
+    case TRANSACTION_ENTITY.ADMIN:
+      return `Admin: ${entityData.Username || 'N/A'}`;
+    case TRANSACTION_ENTITY.AGENT_TIER_1:
+    case TRANSACTION_ENTITY.AGENT_TIER_2:
+    case TRANSACTION_ENTITY.AGENT_TIER_3:
+      return `Agent: ${entityData.Username || 'N/A'}`;
+    case TRANSACTION_ENTITY.PLAYER:
+      return `Player: ${entityData.Username || 'N/A'}`;
+    case TRANSACTION_ENTITY.SYSTEM:
+      return 'System';
+    default:
+      return 'Unknown';
+  }
+};
+
+// Helper function to get entity type badge color
+export const getEntityTypeBadge = (entityType) => {
+  switch (entityType) {
+    case TRANSACTION_ENTITY.SYSTEM:
+      return 'System';
+    case TRANSACTION_ENTITY.ADMIN:
+      return 'Admin';
+    case TRANSACTION_ENTITY.AGENT_TIER_1:
+    case TRANSACTION_ENTITY.AGENT_TIER_2:
+    case TRANSACTION_ENTITY.AGENT_TIER_3:
+      return 'Agent';
+    case TRANSACTION_ENTITY.PLAYER:
+      return 'Player';
+    default:
+      return 'Unknown';
+  }
+};

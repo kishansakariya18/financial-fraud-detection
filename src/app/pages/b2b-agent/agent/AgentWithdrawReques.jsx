@@ -14,7 +14,7 @@ export default function AgentWithdrawRequest() {
       ...requestObject,
       filters: {
         ...requestObject.filters,
-        entityType: 'b2b_agent'
+        formType: 'b2b_agent'
       },
       toAgentUID: userData.AgentUID
     });
@@ -38,6 +38,7 @@ export default function AgentWithdrawRequest() {
           pageTitle={pageTitle}
           getWithdrawRequestList={fetchWithdrawRequests}
           breadcrumbs={null}
+          showActions={false}
           // showActions={!isAgent} // Only show actions for admin, not for agents
         />
       </Page>
