@@ -28,7 +28,7 @@ export function Toolbar({
   const { affiliateId } = useParams();
 
   const breadcrumbItem = [
-    { title: t('affiliates'), path: '/affiliates' },
+    { title: t('affiliates'), path: '/affiliates/users' },
     { title: t('referred_users'), path: `/affiliates/${affiliateId}/tab/referred_users` },
     { title: t('transactions') }
   ];

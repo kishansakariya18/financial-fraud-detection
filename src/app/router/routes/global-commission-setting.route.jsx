@@ -1,6 +1,6 @@
 export const globalCommissionSettingRoute = [
   {
-    path: 'commission-setting',
+    path: 'affiliates/commission-setting',
     lazy: async () => ({
       Component: (await import('../../pages/global-commission-settings/index')).default
     })
