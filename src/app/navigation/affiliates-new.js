@@ -14,7 +14,12 @@
 
 import { UsersIcon } from '@heroicons/react/20/solid';
 
-import { NAV_TYPE_COLLAPSE, NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
+import {
+  NAV_TYPE_COLLAPSE,
+  NAV_TYPE_ITEM,
+  PERMISSIONS,
+  PLATFORM_TYPE
+} from 'constants/app.constant';
 import { GrSettingsOption } from 'react-icons/gr';
 import { TbAffiliate } from 'react-icons/tb';
 // import { affliate } from './affiliates';
@@ -27,6 +32,7 @@ export const affiliatesNew = {
   transKey: 'affiliate',
   Icon: TbAffiliate,
   permission: [PERMISSIONS.AFFILIATES.LIST, PERMISSIONS.COMMISSION_SETTING],
+  platformType: [PLATFORM_TYPE.B2C],
   childs: [
     {
       id: 'affiliates.list',
@@ -35,7 +41,8 @@ export const affiliatesNew = {
       title: 'Affiliates',
       transKey: 'affiliates',
       Icon: UsersIcon,
-      permission: PERMISSIONS.AFFILIATES.LIST
+      permission: PERMISSIONS.AFFILIATES.LIST,
+      platformType: [PLATFORM_TYPE.B2C]
     },
     {
       id: 'affiliates.commission',
@@ -44,7 +51,8 @@ export const affiliatesNew = {
       title: 'Commission',
       transKey: 'nav.commission-setting',
       Icon: GrSettingsOption,
-      permission: PERMISSIONS.COMMISSION_SETTING
+      permission: PERMISSIONS.COMMISSION_SETTING,
+      platformType: [PLATFORM_TYPE.B2C]
     }
   ]
 };

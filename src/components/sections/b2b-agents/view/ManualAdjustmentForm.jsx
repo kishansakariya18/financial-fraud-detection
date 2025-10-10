@@ -89,8 +89,6 @@ export function ManualAdjustmentForm({ agentUID, onClose, isOpen }) {
   const isCredit = watchedType === 'credit';
   const buttonColor = isCredit ? 'success' : 'error';
 
-  console.log('isCredit', watchedType);
-
   useEffect(() => {
     reset(defaultValues);
     // eslint-disable-next-line react-hooks/exhaustive-deps
