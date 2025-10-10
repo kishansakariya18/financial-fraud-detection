@@ -51,6 +51,7 @@ import faqRoutes from './routes/faq.route';
 import { platformGuard } from './PlatformRouteGuard';
 import { Outlet } from 'react-router';
 import { PLATFORM_TYPE } from 'constants/app.constant';
+import { userManualWithdrawTransactionRoute } from './routes/user-manual-withdraw-transaction.route';
 // ----------------------------------------------------------------------
 
 const protectedRoutes = {
@@ -106,6 +107,7 @@ const protectedRoutes = {
                 ...affiliatesRoutes,
                 ...userManualDepositTransactionRoute,
                 ...bankRoute,
+                ...userManualWithdrawTransactionRoute,
                 ...registrationFieldsRoute,
                 ...paymentRoute,
                 ...bonusCampaignRoute,
