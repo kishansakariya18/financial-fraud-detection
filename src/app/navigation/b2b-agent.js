@@ -1,8 +1,8 @@
 import {
   AdjustmentsHorizontalIcon,
   BanknotesIcon,
-  CurrencyDollarIcon,
-  UserGroupIcon
+  UserGroupIcon,
+  ArrowDownOnSquareIcon
 } from '@heroicons/react/24/outline';
 
 import { NAV_TYPE_COLLAPSE, PERMISSIONS, PLATFORM_TYPE } from 'constants/app.constant';
@@ -49,7 +49,7 @@ export const b2bAgent = {
       path: '/agent/withdraw-requests',
       title: 'Withdraw Requests',
       transKey: 'nav.users.withdraw_requests',
-      Icon: CurrencyDollarIcon,
+      Icon: ArrowDownOnSquareIcon,
       permission: [PERMISSIONS.AGENTS.LIST],
       platformType: PLATFORM_TYPE.B2B
     }
