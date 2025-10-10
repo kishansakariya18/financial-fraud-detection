@@ -21,7 +21,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('details'),
-      path: `/affiliates/${affiliateId}/tab/details`,
+      path: `/affiliates/users/${affiliateId}/tab/details`,
       icon: HomeIcon,
       index: 0,
       permission: PERMISSIONS.AFFILIATES.LIST
@@ -29,7 +29,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('campaign') + ' ' + t('list'),
-      path: `/affiliates/${affiliateId}/tab/campaigns`,
+      path: `/affiliates/users/${affiliateId}/tab/campaigns`,
       icon: HiOutlineSpeakerphone,
       index: 1,
       permission: PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST
@@ -37,7 +37,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('referred_users'),
-      path: `/affiliates/${affiliateId}/tab/referred_users`,
+      path: `/affiliates/users/${affiliateId}/tab/referred_users`,
       icon: TbUsersPlus,
       index: 1,
       permission: PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST
@@ -45,7 +45,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('withdrawals') + ' ' + t('list'),
-      path: `/affiliates/${affiliateId}/tab/withdrawals`,
+      path: `/affiliates/users/${affiliateId}/tab/withdrawals`,
       icon: CiViewList,
       index: 1,
       permission: PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST
@@ -53,7 +53,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('commission') + ' ' + t('setting'),
-      path: `/affiliates/${affiliateId}/tab/commission-settings`,
+      path: `/affiliates/users/${affiliateId}/tab/commission-settings`,
       icon: GrSettingsOption,
       index: 1,
       permission: PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST
@@ -61,7 +61,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('commission'),
-      path: `/affiliates/${affiliateId}/tab/commission`,
+      path: `/affiliates/users/${affiliateId}/tab/commission`,
       icon: HiOutlineCash,
       index: 1,
       permission: PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST
@@ -69,7 +69,7 @@ export default function Tabs() {
     {
       id: randomId(),
       title: t('transactions'),
-      path: `/affiliates/${affiliateId}/tab/transactions`,
+      path: `/affiliates/users/${affiliateId}/tab/transactions`,
       icon: ListBulletIcon,
       index: 1,
       permission: PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST

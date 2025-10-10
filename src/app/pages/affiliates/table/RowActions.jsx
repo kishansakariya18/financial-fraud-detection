@@ -24,11 +24,8 @@ export function RowActions({ row }) {
   const affiliateUID = row?.original?.affiliateUID;
   const { t } = useTranslation();
 
-  // const goToUsers = () => {
-  //   navigate(`/affiliates/${affiliateUID}/users`);
-  // };
   const handleView = () => {
-    navigate(`/affiliates/${affiliateUID}/tab`);
+    navigate(`/affiliates/users/${affiliateUID}/tab`);
   };
   // const goToWithdrawals = () => {
   //   navigate(`/affiliates/${affiliateUID}/withdrawals`);
