@@ -27,7 +27,11 @@ export const siteConfigurationRoutes = [
     lazy: async () => {
       const { default: KYCProvider } = await import('../../pages/kyc-provider/list/list');
       return {
-        Component: () => <KYCProvider />
+        Component: () => (
+          <PrivateRoute allowedPlatforms={PLATFORM_TYPE.B2C}>
+            <KYCProvider />
+          </PrivateRoute>
+        )
       };
     }
   },

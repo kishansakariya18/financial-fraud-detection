@@ -3,12 +3,10 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { RowActions } from './RowActions';
 import { IdCell, DateCell, BoldCell, BadgeCell } from 'components/custom/table/cell';
 import { agentTransactionTypeOptions, creditDebitTypeOptions, getEntityLabel } from '../../helper';
-import { useCurrencyContext } from 'app/contexts/currency/context';
 
 const columnHelper = createColumnHelper();
 
-export const AgentTransactionColumns = () => {
-  const { formatCurrency } = useCurrencyContext();
+export const AgentTransactionColumns = (formatCurrency) => {
   return [
     columnHelper.accessor((row) => row.id, {
       id: 'id',

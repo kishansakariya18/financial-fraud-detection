@@ -15,6 +15,7 @@ import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import { agentTransactionsResponseMapper } from '../../helper';
 import { AgentTransactionColumns } from './columns';
+import { useCurrencyContext } from 'app/contexts/currency/context';
 
 export default function AgentTransactionList({
   agentUID: propAgentUID,
@@ -22,6 +23,7 @@ export default function AgentTransactionList({
   onFetchTransactions
 }) {
   const { t } = useTranslation();
+  const { formatCurrency } = useCurrencyContext();
   const [searchParams, setSearchParams] = useSearchParams();
   const params = useParams();
   const agentUID = propAgentUID || params.agentUID;
@@ -71,13 +73,13 @@ export default function AgentTransactionList({
   // Ensure columns are always an array
   const columns = useMemo(() => {
     try {
-      const cols = AgentTransactionColumns();
+      const cols = AgentTransactionColumns(formatCurrency);
       return Array.isArray(cols) ? cols : [];
     } catch (error) {
       console.error('Error creating columns:', error);
       return [];
     }
-  }, []);
+  }, [formatCurrency]);
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,

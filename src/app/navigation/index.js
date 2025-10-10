@@ -19,9 +19,24 @@ export const getNavigation = () => {
 
     const isTyre3Agent = userData?.AgentType === AGENT_TIER_TYPE.TIER_3;
     if (isTyre3Agent) {
-      b2bAgentNavigationLayout.childs = b2bAgentNavigationLayout.childs.filter(
-        (child) => !['b2b_agents', 'b2b_agent_tree'].includes(child.id)
-      );
+      // b2bAgentNavigationLayout.childs = b2bAgentNavigationLayout.childs.filter(
+      //   (child) => !['b2b_agents', 'b2b_agent_tree'].includes(child.id)
+      // );
+      // Hide Routes for Tier 3 Agent
+      b2bAgentNavigationLayout.childs = b2bAgentNavigationLayout.childs
+        .map((child) => {
+          if (['b2b_agents', 'b2b_agent_tree'].includes(child.id)) {
+            return null;
+          }
+          if (child?.childs?.length > 0) {
+            child.childs = child.childs.filter(
+              (deChild) => !['b2b_agent_withdrawals'].includes(deChild.id)
+            );
+          }
+
+          return child;
+        })
+        .filter(Boolean);
     }
     // Filter B2B agent navigation based on platform
     const filteredB2BAgentNav = filterNavigationByPlatform([b2bAgentNavigationLayout]);
