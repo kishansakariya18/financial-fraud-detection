@@ -29,6 +29,7 @@ export const createBonusCampaignSchema = Yup.object().shape({
     .required('End date is required')
     .min(Yup.ref('startDate'), 'End date must be after start date'),
   segmentationId: Yup.number(),
+  discountType: Yup.string().oneOf(['fixed', 'percentage']),
   wageringRequirement: Yup.string().required('Wagering Requirement is required'),
   wageringMultiplier: Yup.number()
     .transform((val) => (isNaN(val) ? undefined : val))
@@ -62,8 +63,15 @@ export const createBonusCampaignSchema = Yup.object().shape({
 
   maxBonusAmount: Yup.number()
     .transform((val) => (isNaN(val) ? undefined : val))
-    .required('Maximum bonus amount is required')
     .nullable()
+    .when('discountType', {
+      is: 'percentage',
+      then: (schema) =>
+        schema
+          .required('Maximum bonus amount is required for percentage discount')
+          .positive('Must be positive'),
+      otherwise: (schema) => schema.notRequired()
+    })
     .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
       if (value === undefined || value === null) return true;
       return /^\d+(\.\d{1,2})?$/.test(value.toString());

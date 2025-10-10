@@ -135,14 +135,16 @@ export function ViewDetails() {
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('discount') + ' ' + t('amount')}
                   </p>
-                  <p>{response?.BonusValue}</p>
+                  <p>{`${response?.BonusValue} ${response?.BonusType === 1 ? '%' : ''}`}</p>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {`${t('maximum')} ${t('bonus')} ${t('amount')}`}
-                  </p>
-                  <p>{response?.MaxBonusAmount}</p>
-                </div>
+                {response?.BonusType === 1 && (
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('maximum')} ${t('bonus')} ${t('amount')}`}
+                    </p>
+                    <p>{response?.MaxBonusAmount}</p>
+                  </div>
+                )}
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('bonusCampaign') + ' ' + t('quantity')}
