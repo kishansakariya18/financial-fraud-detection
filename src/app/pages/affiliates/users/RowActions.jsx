@@ -30,7 +30,7 @@ export function RowActions({ row }) {
   //   navigate(`/affiliates/${affiliateUID}/users`);
   // };
   const handleView = () => {
-    navigate(`/affiliates/${affiliateId}/tab/referred_users/${userID}/transactions`);
+    navigate(`/affiliates/users/${affiliateId}/tab/referred_users/${userID}/transactions`);
   };
   // const goToWithdrawals = () => {
   //   navigate(`/affiliates/${affiliateUID}/withdrawals`);
