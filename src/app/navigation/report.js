@@ -3,7 +3,8 @@ import {
   DocumentChartBarIcon,
   DocumentTextIcon,
   ArrowDownTrayIcon,
-  ArrowUpTrayIcon
+  ArrowUpTrayIcon,
+  BanknotesIcon
   // BanknotesIcon
 } from '@heroicons/react/24/outline';
 
@@ -56,7 +57,7 @@ export const reports = {
       transKey: 'withdraw_transactions',
       Icon: ArrowUpTrayIcon,
       permission: PERMISSIONS.REPORT.WITHDRAW_REPORT_VIEW
-    }
+    },
     // {
     //   id: 'playerBalance',
     //   type: NAV_TYPE_ITEM,
@@ -75,5 +76,25 @@ export const reports = {
     //   Icon: QueueListIcon,
     //   permission: PERMISSIONS.REPORT.PLAYER_BALANCE_REPORT_VIEW
     // }
+    {
+      id: 'agentCommission',
+      type: NAV_TYPE_ITEM,
+      path: '/report/agent-commission',
+      title: 'agentCommission',
+      transKey: 'agent_commission',
+      Icon: BanknotesIcon,
+      platformType: PLATFORM_TYPE.B2B,
+      permission: PERMISSIONS.REPORT.AGENT_COMMISSION_REPORT
+    },
+    {
+      id: 'agentWalletreport',
+      type: NAV_TYPE_ITEM,
+      path: '/report/agent-wallet',
+      title: 'agentWalletreport',
+      transKey: 'agent_wallet',
+      Icon: BanknotesIcon,
+      platformType: PLATFORM_TYPE.B2B,
+      permission: PERMISSIONS.REPORT.AGENT_WALLET_REPORT
+    }
   ]
 };

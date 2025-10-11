@@ -15,7 +15,7 @@ import apiInstance from 'utils/apiInstance';
 const MAX_EXPORT_DAYS = 365;
 
 export const ExportCSV = ({
-  filters = {},
+  validateFilters = null,
   requestFilters = {},
   maxDays = MAX_EXPORT_DAYS,
   disabled = false,
@@ -27,14 +27,14 @@ export const ExportCSV = ({
 
   const validateExport = () => {
     // Check if required date filters are present
-    if (!filters?.startDate || !filters?.endDate) {
+    if (!validateFilters?.startDate || !validateFilters?.endDate) {
       toast.error('Please select a Start Date and End Date to export the report.');
       return false;
     }
 
     // Validate date range
-    const startDate = moment(Number(filters.startDate));
-    const endDate = moment(Number(filters.endDate));
+    const startDate = moment(Number(validateFilters.startDate));
+    const endDate = moment(Number(validateFilters.endDate));
 
     if (!startDate.isValid() || !endDate.isValid()) {
       toast.error('Invalid date format. Please select valid dates.');
@@ -69,7 +69,7 @@ export const ExportCSV = ({
   };
 
   const handleApiExport = async () => {
-    if (!validateExport()) return;
+    if (validateFilters && !validateExport()) return;
     if (!apiEndpoint) {
       toast.error('Export API endpoint not configured.');
       return;

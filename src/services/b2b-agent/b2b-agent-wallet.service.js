@@ -125,6 +125,20 @@ const B2BAgentWalletService = {
       endDate: endDate ? moment(Number(endDate)).endOf('day').toDate() : undefined
     };
     return apiInstance.post(apiConfig.endPoints.B2B_AGENT.WALLET.OPERATOR_TRANSACTION_LIST, body);
+  },
+  updateOperatorWallet: async (data) => {
+    return apiInstance.post(apiConfig.endPoints.B2B_AGENT.WALLET.OPERATOR_WALLET_UPDATE, data);
+  },
+
+  getAgentCommissionReport: (data) => {
+    return apiInstance.get(apiConfig.endPoints.B2B_AGENT.WALLET.AGENT_COMMISSION_REPORT, {
+      params: data
+    });
+  },
+  getAgentWalletReport: (data) => {
+    return apiInstance.get(apiConfig.endPoints.B2B_AGENT.WALLET.AGENT_WALLET_REPORT, {
+      params: data
+    });
   }
 };
 

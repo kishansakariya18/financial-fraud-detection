@@ -1,5 +1,5 @@
 // Import Dependencies
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
@@ -10,13 +10,13 @@ import { toast } from 'sonner';
 // Local Imports
 import { Button, Input, Select, Textarea } from 'components/ui';
 import b2bAgentWalletService from 'services/b2b-agent/b2b-agent-wallet.service';
-import { ADMIN_TYPE, CREDIT_DEBIT_TYPE } from 'constants/app.constant';
-import { useSelector } from 'react-redux';
+import { CREDIT_DEBIT_TYPE } from 'constants/app.constant';
 import { CustomModal } from 'components/custom';
 import { useCurrencyContext } from 'app/contexts/currency/context';
 
 // Validation Schema
 const validationSchema = yup.object({
+  creditDebitType: yup.string().required('Transaction type is required'),
   amount: yup
     .number()
     .required('Amount is required')
@@ -26,66 +26,65 @@ const validationSchema = yup.object({
   reason: yup.string().optional().max(500, 'Reason cannot exceed 500 characters')
 });
 
-export function CreditDebitForm({ agentUID, onCancel, isOpen }) {
+export function OperatorWalletManageDialog({ isOpen, onClose, onSuccess }) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
-  const { userData } = useSelector((state) => state.auth);
-  const isAdmin = useMemo(() => userData?.AdminType === ADMIN_TYPE.ADMIN, [userData?.AdminType]);
   const { symbol, formatCurrency } = useCurrencyContext();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-    watch
+    watch,
+    reset
   } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
+      creditDebitType: 'credit',
       amount: '',
       reason: ''
     }
   });
 
   const watchedAmount = watch('amount');
+  const watchedType = watch('creditDebitType');
+
+  const handleClose = () => {
+    reset();
+    onClose();
+  };
 
   const onSubmit = async (data) => {
     setLoading(true);
+
     const creditDebitType =
       data.creditDebitType === 'credit' ? CREDIT_DEBIT_TYPE.CREDIT : CREDIT_DEBIT_TYPE.DEBIT;
 
-    let res = null;
-    if (isAdmin) {
-      res = b2bAgentWalletService.adminAddCreditDebit({
-        agentUID,
-        amount: parseFloat(data.amount),
-        creditDebitType
-      });
-    } else {
-      res = b2bAgentWalletService.agentAddCreditDebit({
-        agentUID,
-        amount: parseFloat(data.amount),
-        creditDebitType
-      });
-    }
+    const payload = {
+      amount: parseFloat(data.amount),
+      creditDebitType,
+      reason: data.reason || ''
+    };
 
-    await res
-      .then(({ response }) => {
-        toast.success(response.message);
-        onCancel({ isRefresh: true });
-      })
-      .catch((error) => {
-        console.error('Transaction error:', error);
-        toast.error(error || `Failed to ${data.creditDebitType} amount. Please try again.`);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    try {
+      const { response } = await b2bAgentWalletService.updateOperatorWallet(payload);
+      toast.success(response.message || t('wallet_updated_successfully'));
+      reset();
+      if (onSuccess) onSuccess();
+      onClose();
+    } catch (error) {
+      console.error('Operator wallet update error:', error);
+      toast.error(error || `Failed to ${data.creditDebitType} amount. Please try again.`);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const isCredit = watch('creditDebitType') === 'credit';
+  const isCredit = watchedType === 'credit';
   const buttonColor = isCredit ? 'success' : 'error';
 
   return (
-    <CustomModal show={isOpen} onClose={onCancel} title={t('adjust_lineup_balance')}>
+    <CustomModal show={isOpen} onClose={handleClose} title={t('wallet')}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-2">
           <Select
@@ -111,30 +110,28 @@ export function CreditDebitForm({ agentUID, onCancel, isOpen }) {
             className="text-lg font-medium"
           />
           {watchedAmount && (
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-dark-300">
               {isCredit ? t('amount_to_credit') : t('amount_to_debit')}:
               <span
-                className={`ml-1 font-semibold ${isCredit ? 'text-green-600' : 'text-red-600'}`}>
+                className={`ml-1 font-semibold ${isCredit ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                 {formatCurrency(watchedAmount || 0)}
               </span>
             </p>
           )}
         </div>
 
-        {/* Reason Input */}
         <div className="space-y-2">
           <Textarea
             {...register('reason')}
-            label={t('reason')}
+            label={t('reason') + ' (' + t('optional') + ')'}
             placeholder={isCredit ? t('enter_reason_for_credit') : t('enter_reason_for_debit')}
             rows={4}
             error={errors.reason?.message}
           />
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center justify-end space-x-3 border-t border-gray-200 pt-4">
-          <Button type="button" variant="outline" onClick={onCancel} disabled={loading}>
+        <div className="flex items-center justify-end space-x-3 border-t border-gray-200 pt-4 dark:border-dark-600">
+          <Button type="button" onClick={handleClose} disabled={loading}>
             {t('cancel')}
           </Button>
           <Button
@@ -156,9 +153,8 @@ export function CreditDebitForm({ agentUID, onCancel, isOpen }) {
   );
 }
 
-CreditDebitForm.propTypes = {
-  agentUID: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(['credit', 'debit']).isRequired,
-  onSuccess: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired
+OperatorWalletManageDialog.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSuccess: PropTypes.func
 };

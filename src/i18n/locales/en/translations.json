@@ -942,5 +942,8 @@
   "parent": "Parent",
   "withdraw_requests_for_this_agent": "Withdraw Requests for this Agent",
   "credting": "Credting",
-  "debiting": "Debiting"
+  "debiting": "Debiting",
+  "agent_commission": "Agent Commission",
+  "operator_balance": "Operator Balance",
+  "manage_funds": "Manage Funds"
 }

@@ -198,7 +198,10 @@ export const apiConfig = {
           `/wallet/${withdrawRequestID}/handle-withdraw-request`,
         AGENT_MANUAL_ADJUSTMENT: `wallet/admin/agent/wallet/manual-adjustment`,
         OPERATOR_WALLET: `/wallet/operator/wallet`,
-        OPERATOR_TRANSACTION_LIST: `/wallet/operator/transaction-list`
+        OPERATOR_TRANSACTION_LIST: `/wallet/operator/transaction-list`,
+        OPERATOR_WALLET_UPDATE: `/wallet/operator/wallet/credit-debit`,
+        AGENT_COMMISSION_REPORT: `/wallet/admin/agent-commission-report`,
+        AGENT_WALLET_REPORT: `/wallet/admin/agent-wallet-report`
       }
     },
     TENANT: {

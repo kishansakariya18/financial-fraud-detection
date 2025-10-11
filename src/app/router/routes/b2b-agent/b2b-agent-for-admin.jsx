@@ -14,7 +14,11 @@ const b2bAgentAdminRoutes = [
           );
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.AGENTS.VIEW}>
+              <PrivateRoute
+                permission={[
+                  PERMISSIONS.OPERATOR.WALLET_VIEW,
+                  PERMISSIONS.OPERATOR.WALLET_TRANSACTION_LIST
+                ]}>
                 <OperatorTransection />
               </PrivateRoute>
             )
@@ -57,7 +61,11 @@ const b2bAgentAdminRoutes = [
           );
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.AGENTS.VIEW}>
+              <PrivateRoute
+                permission={[
+                  PERMISSIONS.OPERATOR.WITHDRAW_REQUESTS_VIEW,
+                  PERMISSIONS.OPERATOR.WITHDRAW_REQUESTS_EDIT
+                ]}>
                 <AdminWithdrawRequest />
               </PrivateRoute>
             )
@@ -134,7 +142,7 @@ const b2bAgentAdminRoutes = [
             path: 'wallet',
             lazy: async () => {
               const { default: AgentWallet } = await import(
-                '../../../pages/b2b-agent/admin/tabs/AgentWallet'
+                '../../../pages/b2b-agent/admin/tabs/AgentWalletTab'
               );
               return {
                 Component: () => (

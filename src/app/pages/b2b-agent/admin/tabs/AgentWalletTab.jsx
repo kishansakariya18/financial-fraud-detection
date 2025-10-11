@@ -2,7 +2,7 @@ import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import AgentWallet from 'components/sections/b2b-agents/view/AgentWallet';
 
-const AdminAgentWallet = () => {
+const AdminAgentWalletTab = () => {
   const { agentUID } = useParams();
   const { t } = useTranslation();
 
@@ -11,6 +11,13 @@ const AdminAgentWallet = () => {
     { title: t('wallet') || 'Wallet' }
   ];
 
-  return <AgentWallet agentUID={agentUID} breadcrumbConfig={breadcrumbConfig} />;
+  return (
+    <AgentWallet
+      manageCommissionFunds={true}
+      manageLineupFunds={true}
+      agentUID={agentUID}
+      breadcrumbConfig={breadcrumbConfig}
+    />
+  );
 };
-export default AdminAgentWallet;
+export default AdminAgentWalletTab;
