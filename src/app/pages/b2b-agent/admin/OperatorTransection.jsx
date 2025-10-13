@@ -58,42 +58,44 @@ export default function OperatorTransection() {
 
   return (
     <Page title={t('transection')}>
-      <div className="space-y-6 px-[--margin-x] pb-4 pt-4">
-        {/* Wallet Balance Section */}
-        {isWalletView && (
-          <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 p-6 shadow-lg">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <h3 className="text-sm font-medium uppercase tracking-wider text-blue-100">
-                  {t('operator_balance')}
-                </h3>
-                <p className="mt-2 text-3xl font-bold text-white">
-                  {formatCurrency(walletBalance || 0)}
-                </p>
-              </div>
+      <div>
+        <div className="space-y-6 px-[--margin-x] pb-4 pt-4">
+          {/* Wallet Balance Section */}
+          {isWalletView && (
+            <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 p-6 shadow-lg">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <h3 className="text-sm font-medium uppercase tracking-wider text-blue-100">
+                    {t('operator_balance')}
+                  </h3>
+                  <p className="mt-2 text-3xl font-bold text-white">
+                    {formatCurrency(walletBalance || 0)}
+                  </p>
+                </div>
 
-              {/* Manage Funds Button */}
-              <div className="flex flex-col items-end gap-2">
-                {isManageFunds ? (
-                  <Button
-                    onClick={() => setIsManageDialogOpen(true)}
-                    className="border border-white/30 bg-white/20 text-white shadow-lg transition-all duration-200 hover:bg-white/20 focus:bg-white/20">
-                    {t('manage_funds')}
-                  </Button>
-                ) : null}
+                {/* Manage Funds Button */}
+                <div className="flex flex-col items-end gap-2">
+                  {isManageFunds ? (
+                    <Button
+                      onClick={() => setIsManageDialogOpen(true)}
+                      className="border border-white/30 bg-white/20 text-white shadow-lg transition-all duration-200 hover:bg-white/20 focus:bg-white/20">
+                      {t('manage_funds')}
+                    </Button>
+                  ) : null}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
+        {isViewTransaction ? (
+          <AgentTransactionList onFetchTransactions={fetchOperatorTransactions} />
+        ) : null}
+        <OperatorWalletManageDialog
+          isOpen={isManageDialogOpen}
+          onClose={() => setIsManageDialogOpen(false)}
+          onSuccess={handleManageSuccess}
+        />
       </div>
-      {isViewTransaction ? (
-        <AgentTransactionList onFetchTransactions={fetchOperatorTransactions} />
-      ) : null}
-      <OperatorWalletManageDialog
-        isOpen={isManageDialogOpen}
-        onClose={() => setIsManageDialogOpen(false)}
-        onSuccess={handleManageSuccess}
-      />
     </Page>
   );
 }

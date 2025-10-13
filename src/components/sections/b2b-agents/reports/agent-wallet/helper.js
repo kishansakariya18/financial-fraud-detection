@@ -12,9 +12,9 @@ export const responseMapper = (apiData) => {
     id: agent.AgentID,
     agentId: agent.AgentID,
     agentName: agent.AgentName || '-',
-    balance: parseFloat(agent.Balance || 0),
+    agentType: agent.AgentType || '-',
+    commissionBalance: parseFloat(agent.CommissionBalance || 0),
     lineUpBalance: parseFloat(agent.LineUpBalance || 0),
-    totalBalance: parseFloat(agent.Balance || 0) + parseFloat(agent.LineUpBalance || 0),
     dateModified: agent.DateModified
   }));
 };

@@ -1,7 +1,7 @@
 // apiInstance.js
 import axios from 'axios';
-// import store from '../store';
-// import { AuthAction } from 'store/admin-slice/AuthSlice';
+import store from '../store';
+import { AuthAction } from 'store/admin-slice/AuthSlice';
 import { LOCAL_STORAGE } from 'constants/app.constant';
 import apiConfig from 'configs/api.config';
 
@@ -34,13 +34,13 @@ apiInstance.interceptors.response.use(
   (error) => {
     const { response } = error;
 
-    // if (response?.status === 401) {
-    //   store.dispatch(AuthAction.logout(response.data?.message));
-    //   localStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN);
-    //   localStorage.removeItem(LOCAL_STORAGE.USER_DATA);
-    //   localStorage.removeItem(LOCAL_STORAGE.IS_MASTER_ADMIN);
-    //   localStorage.removeItem(LOCAL_STORAGE.PERMISSIONS);
-    // }
+    if (response?.status === 401) {
+      store.dispatch(AuthAction.logout(response.data?.message));
+      localStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN);
+      localStorage.removeItem(LOCAL_STORAGE.USER_DATA);
+      localStorage.removeItem(LOCAL_STORAGE.IS_MASTER_ADMIN);
+      localStorage.removeItem(LOCAL_STORAGE.PERMISSIONS);
+    }
 
     return Promise.reject(response?.data?.message || error.message || 'Something went wrong!');
   }

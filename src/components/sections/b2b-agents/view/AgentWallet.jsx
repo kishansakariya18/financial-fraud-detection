@@ -153,7 +153,7 @@ export default function AgentWallet({
               </Button>
             )}
 
-            {isOwanChildAgent && (
+            {isOwanChildAgent && manageLineupFunds && (
               <Button
                 size="sm"
                 color="info"
@@ -164,7 +164,7 @@ export default function AgentWallet({
               </Button>
             )}
 
-            {isOwnWallet && manageLineupFunds && (
+            {isOwnWallet && (
               <Button
                 size="sm"
                 color="warning"

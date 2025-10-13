@@ -2,13 +2,13 @@
 import { createColumnHelper } from '@tanstack/react-table';
 
 // Local Imports
-import { IdCell, BoldCell, DateCell, AmountCell } from '../../../../custom/table/cell';
+import { IdCell, BoldCell, DateCell } from '../../../../custom/table/cell';
 
 // ----------------------------------------------------------------------
 
 const columnHelper = createColumnHelper();
 
-export const agentWalletColumns = [
+export const agentWalletColumns = (formatCurrency) => [
   columnHelper.accessor((row) => row.agentId, {
     id: 'agentId',
     label: 'Agent ID',
@@ -23,25 +23,24 @@ export const agentWalletColumns = [
     cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.balance, {
-    id: 'balance',
-    label: 'Balance',
-    header: 'Balance',
-    cell: AmountCell,
+  columnHelper.accessor((row) => row.agentType, {
+    id: 'agentType',
+    label: 'Agent Type',
+    header: 'Agent Type',
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.commissionBalance, {
+    id: 'commissionBalance',
+    label: 'Commission Balance',
+    header: 'Commission Balance',
+    cell: ({ getValue }) => <span className="font-medium">{formatCurrency(getValue())}</span>,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.lineUpBalance, {
     id: 'lineUpBalance',
     label: 'LineUp Balance',
     header: 'LineUp Balance',
-    cell: AmountCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => row.totalBalance, {
-    id: 'totalBalance',
-    label: 'Total Balance',
-    header: 'Total Balance',
-    cell: AmountCell,
+    cell: ({ getValue }) => <span className="font-medium">{formatCurrency(getValue())}</span>,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.dateModified, {

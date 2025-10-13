@@ -4,7 +4,8 @@ import {
   AGENT_TIER_TYPE,
   GENERAL_STATUS,
   AGENT_TRANSACTION_TYPE,
-  CREDIT_DEBIT_TYPE
+  CREDIT_DEBIT_TYPE,
+  TRANSACTION
 } from 'constants/app.constant';
 
 export const parseAgentStatusToApp = (status) => (status ? 'active' : 'inactive');
@@ -155,15 +156,23 @@ export const mapCommissionsToApi = (commissions) => {
 // Agent Transaction Helper Functions
 export const agentTransactionTypeApiToApp = (type) => {
   switch (Number(type)) {
-    case AGENT_TRANSACTION_TYPE.ALLOCATION:
+    case TRANSACTION.TRANSACTION_TYPE.DEPOSIT:
+      return 'Deposit';
+    case TRANSACTION.TRANSACTION_TYPE.WITHDRAW:
+      return 'Withdraw';
+    case TRANSACTION.TRANSACTION_TYPE.WINNING:
+      return 'Winning';
+    case TRANSACTION.TRANSACTION_TYPE.BETSLIP:
+      return 'Bet Slip';
+    case TRANSACTION.TRANSACTION_TYPE.ALLOCATION:
       return 'Allocation';
-    case AGENT_TRANSACTION_TYPE.DEALLOCATION:
+    case TRANSACTION.TRANSACTION_TYPE.DEALLOCATION:
       return 'Deallocation';
-    case AGENT_TRANSACTION_TYPE.COMMISSION_CREDIT:
+    case TRANSACTION.TRANSACTION_TYPE.COMMISSION_CREDIT:
       return 'Commission Credit';
-    case AGENT_TRANSACTION_TYPE.COMMISSION_DEBIT:
+    case TRANSACTION.TRANSACTION_TYPE.COMMISSION_DEBIT:
       return 'Commission Debit';
-    case AGENT_TRANSACTION_TYPE.MANUAL_ADJUSTMENT:
+    case TRANSACTION.TRANSACTION_TYPE.MANUAL_ADJUSTMENT:
       return 'Manual Adjustment';
     default:
       return 'Unknown';
@@ -242,6 +251,16 @@ export const agentTransactionTypeOptions = [
     value: 'Manual Adjustment',
     label: 'Manual Adjustment'
     // color: 'warning'
+  },
+  {
+    value: 'Withdraw',
+    label: 'Withdraw',
+    color: 'error'
+  },
+  {
+    value: 'Deposit',
+    label: 'Deposit',
+    color: 'success'
   }
 ];
 

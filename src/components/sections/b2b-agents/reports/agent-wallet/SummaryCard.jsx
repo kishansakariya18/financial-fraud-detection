@@ -13,14 +13,8 @@ export function AgentWalletSummaryCard({ summary, loading = false }) {
   if (!summary && !loading) return null;
 
   const summaryCards = {
-    TOTAL_AGENTS: {
-      key: 'Total Agents',
-      value: loading ? '...' : (summary?.totalAgents || 0).toString(),
-      gradientFrom: 'from-sky-400',
-      gradientTo: 'to-blue-600'
-    },
     TOTAL_BALANCE: {
-      key: 'Total Balance',
+      key: 'Total Commission Balance',
       value: loading ? '...' : formatCurrency(summary?.totalBalance || 0),
       gradientFrom: 'from-green-400',
       gradientTo: 'to-emerald-600'
@@ -30,25 +24,11 @@ export function AgentWalletSummaryCard({ summary, loading = false }) {
       value: loading ? '...' : formatCurrency(summary?.totalLineUpBalance || 0),
       gradientFrom: 'from-purple-400',
       gradientTo: 'to-indigo-600'
-    },
-    GRAND_TOTAL: {
-      key: 'Grand Total',
-      value: loading ? '...' : formatCurrency(summary?.grandTotal || 0),
-      gradientFrom: 'from-amber-400',
-      gradientTo: 'to-orange-600'
     }
   };
 
   return (
     <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
-      <DashboardCard
-        label={summaryCards.TOTAL_AGENTS.key}
-        value={summaryCards.TOTAL_AGENTS.value}
-        gradientFrom={summaryCards.TOTAL_AGENTS.gradientFrom}
-        gradientTo={summaryCards.TOTAL_AGENTS.gradientTo}
-        textColor="text-sky-100"
-        maskShape="is-reuleaux-triangle"
-      />
       <DashboardCard
         label={summaryCards.TOTAL_BALANCE.key}
         value={summaryCards.TOTAL_BALANCE.value}
@@ -64,14 +44,6 @@ export function AgentWalletSummaryCard({ summary, loading = false }) {
         gradientTo={summaryCards.TOTAL_LINEUP_BALANCE.gradientTo}
         textColor="text-purple-100"
         maskShape="is-diamond"
-      />
-      <DashboardCard
-        label={summaryCards.GRAND_TOTAL.key}
-        value={summaryCards.GRAND_TOTAL.value}
-        gradientFrom={summaryCards.GRAND_TOTAL.gradientFrom}
-        gradientTo={summaryCards.GRAND_TOTAL.gradientTo}
-        textColor="text-amber-100"
-        maskShape="is-hexagon"
       />
     </div>
   );

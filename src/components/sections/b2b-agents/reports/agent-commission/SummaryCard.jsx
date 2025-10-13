@@ -14,22 +14,10 @@ export function AgentCommissionSummaryCard({ summary, loading = false }) {
 
   const summaryCards = {
     TOTAL_AGENTS: {
-      key: 'Total Agents',
+      key: 'Total Agents Commission Achieved',
       value: loading ? '...' : (summary?.totalAgents || 0).toString(),
       gradientFrom: 'from-sky-400',
       gradientTo: 'to-blue-600'
-    },
-    TOTAL_COMMISSION_SETTINGS: {
-      key: 'Total Commission Settings',
-      value: loading ? '...' : (summary?.totalCommissionSettings || 0).toString(),
-      gradientFrom: 'from-purple-400',
-      gradientTo: 'to-indigo-600'
-    },
-    TOTAL_COMMISSION_ACHIEVED: {
-      key: 'Total Commission Achieved',
-      value: loading ? '...' : (summary?.totalCommissionAchievedCount || 0).toString(),
-      gradientFrom: 'from-green-400',
-      gradientTo: 'to-emerald-600'
     },
     TOTAL_COMMISSION_AMOUNT: {
       key: 'Total Commission Amount',
@@ -48,22 +36,6 @@ export function AgentCommissionSummaryCard({ summary, loading = false }) {
         gradientTo={summaryCards.TOTAL_AGENTS.gradientTo}
         textColor="text-sky-100"
         maskShape="is-reuleaux-triangle"
-      />
-      <DashboardCard
-        label={summaryCards.TOTAL_COMMISSION_SETTINGS.key}
-        value={summaryCards.TOTAL_COMMISSION_SETTINGS.value}
-        gradientFrom={summaryCards.TOTAL_COMMISSION_SETTINGS.gradientFrom}
-        gradientTo={summaryCards.TOTAL_COMMISSION_SETTINGS.gradientTo}
-        textColor="text-purple-100"
-        maskShape="is-hexagon-2"
-      />
-      <DashboardCard
-        label={summaryCards.TOTAL_COMMISSION_ACHIEVED.key}
-        value={summaryCards.TOTAL_COMMISSION_ACHIEVED.value}
-        gradientFrom={summaryCards.TOTAL_COMMISSION_ACHIEVED.gradientFrom}
-        gradientTo={summaryCards.TOTAL_COMMISSION_ACHIEVED.gradientTo}
-        textColor="text-green-100"
-        maskShape="is-diamond"
       />
       <DashboardCard
         label={summaryCards.TOTAL_COMMISSION_AMOUNT.key}

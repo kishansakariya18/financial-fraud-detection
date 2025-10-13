@@ -31,50 +31,40 @@ export default function AgentCommissionList() {
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
   const fetchAgentCommissionReport = async () => {
-    try {
-      const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
-      const pageSize = isNaN(queryParams.pageSize)
-        ? DEFAULT_PER_PAGE_RECORD
-        : +queryParams.pageSize;
+    const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
+    const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
 
-      const params = {
-        page: pageIndex + 1, // API uses 1-based pagination
-        limit: pageSize,
-        ...(queryParams.agentName && { agentName: queryParams.agentName }),
-        ...(queryParams.commissionType && { commissionType: queryParams.commissionType })
-      };
+    const params = {
+      page: pageIndex + 1, // API uses 1-based pagination
+      perPage: pageSize,
+      ...(queryParams.agentName && { agentName: queryParams.agentName }),
+      ...(queryParams.commissionType && { commissionType: queryParams.commissionType })
+    };
 
-      // Add filters
-      if (queryParams.startDate) {
-        params.startDate = moment(Number(queryParams.startDate)).startOf('day').toDate();
-      }
-      if (queryParams.endDate) {
-        params.endDate = moment(Number(queryParams.endDate)).endOf('day').toDate();
-      }
-      if (queryParams.agentName) {
-        params.agentName = queryParams.agentName;
-      }
+    // Add filters
+    if (queryParams.startDate) {
+      params.startDate = moment(Number(queryParams.startDate)).startOf('day').toDate();
+    }
+    if (queryParams.endDate) {
+      params.endDate = moment(Number(queryParams.endDate)).endOf('day').toDate();
+    }
+    if (queryParams.agentName) {
+      params.agentName = queryParams.agentName;
+    }
 
-      const result = await B2BAgentWalletService.getAgentCommissionReport(params);
-
-      if (result.status === 200) {
-        const responseData = result.response;
-
-        // Store summary data
-        setSummary(responseData.summary);
-
+    return B2BAgentWalletService.getAgentCommissionReport(params)
+      .then(({ response }) => {
+        const { data = [], totalRecords = 0, summary = {} } = response;
+        setSummary(summary);
         return {
           status: 200,
-          data: responseMapper(responseData.data || []),
-          totalRecords: parseInt(responseData.totalRecord || 0)
+          data: responseMapper(data || []),
+          totalRecords
         };
-      }
-
-      return { status: result.status, error: result.error || 'Failed to fetch data' };
-    } catch (error) {
-      console.error('Error fetching agent commission report:', error);
-      return { status: 500, error: 'An error occurred while fetching the report' };
-    }
+      })
+      .catch((error) => {
+        return { status: 500, error: error || 'An error occurred while fetching the report' };
+      });
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({

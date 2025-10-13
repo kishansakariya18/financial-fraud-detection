@@ -7,8 +7,6 @@ import { t } from 'i18next';
 
 // Local Imports
 import { Button } from 'components/ui';
-import { TableConfig } from 'components/ui/custom/TableConfig';
-import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { ExportCSV } from 'components/custom/export';
 import { getQueryParams } from 'utils/custom.utilities';
 import apiConfig from 'configs/api.config';
@@ -17,11 +15,10 @@ import apiConfig from 'configs/api.config';
 
 export function AgentWalletFilters({
   table,
-  onApplyFilters = () => {},
-  onClearFilters = () => {},
+  // onApplyFilters = () => {},
+  // onClearFilters = () => {},
   pageTitle = ''
 }) {
-  const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
   const [searchParams] = useSearchParams();
 
@@ -61,14 +58,13 @@ export function AgentWalletFilters({
           apiEndpoint={apiConfig.endPoints.B2B_AGENT.WALLET.AGENT_WALLET_REPORT}
         />
       </div>
-      {isXs ? (
+      {/* {isXs ? (
         <>
           <div
             className={clsx(
               'flex space-x-2 pt-4 rtl:space-x-reverse [&_.input-root]:flex-1',
               isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x]'
             )}>
-            {/* <SearchInput table={table} onApplyFilters={onApplyFilters} /> */}
             <TableConfig table={table} />
           </div>
           <div
@@ -94,7 +90,6 @@ export function AgentWalletFilters({
               '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)'
             }}>
             <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
-              {/* <SearchInput table={table} onApplyFilters={onApplyFilters} /> */}
               <Filters
                 table={table}
                 onApplyFilters={onApplyFilters}
@@ -105,7 +100,7 @@ export function AgentWalletFilters({
             <TableConfig table={table} />
           </div>
         </>
-      )}
+      )} */}
     </div>
   );
 }

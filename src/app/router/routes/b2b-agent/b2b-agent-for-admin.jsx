@@ -63,7 +63,7 @@ const b2bAgentAdminRoutes = [
             Component: () => (
               <PrivateRoute
                 permission={[
-                  PERMISSIONS.OPERATOR.WITHDRAW_REQUESTS_VIEW,
+                  PERMISSIONS.OPERATOR.WITHDRAW_REQUESTS,
                   PERMISSIONS.OPERATOR.WITHDRAW_REQUESTS_EDIT
                 ]}>
                 <AdminWithdrawRequest />

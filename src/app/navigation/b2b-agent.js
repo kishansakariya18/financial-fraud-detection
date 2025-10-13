@@ -57,7 +57,7 @@ export const b2bAgent = {
       transKey: 'nav.users.withdraw_requests',
       Icon: ArrowDownOnSquareIcon,
       permission: [
-        PERMISSIONS.OPERATOR.WITHDRAW_REQUESTS_VIEW,
+        PERMISSIONS.OPERATOR.WITHDRAW_REQUESTS,
         PERMISSIONS.OPERATOR.WITHDRAW_REQUESTS_EDIT
       ],
       platformType: PLATFORM_TYPE.B2B

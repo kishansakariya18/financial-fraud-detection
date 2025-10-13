@@ -19,6 +19,8 @@ export default function B2BAgent() {
     };
   }, [hasPermission]);
 
+  console.log('accessPermission', accessPermission);
+
   const handleFetchAgents = (data) => {
     return B2BAgentService.getAllAgent(data);
   };
@@ -42,7 +44,7 @@ export default function B2BAgent() {
   return (
     <AgentList
       onFetchAgents={handleFetchAgents}
-      onChangeAgentStatus={handleChangeAgentStatus}
+      onChangeAgentStatus={accessPermission.changeStatus ? handleChangeAgentStatus : null}
       onViewAgent={handleViewAgent}
       onEditAgent={accessPermission.isEdit ? handleEditAgent : null}
       onAddAgent={handleAddAgent}
@@ -50,7 +52,7 @@ export default function B2BAgent() {
       showAddButton={accessPermission.isAdd}
       showAgentTypeFilter={true}
       showDateFilter={true}
-      showStatusFilter={accessPermission.changeStatus}
+      showStatusFilter={true}
     />
   );
 }
