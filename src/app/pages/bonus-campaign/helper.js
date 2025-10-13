@@ -147,6 +147,7 @@ export const bonusCampaignListResponseMapper = (apiData) => {
     campaignName: campaign.CampaignName,
     campaignType: campaign.CampaignType,
     status: parseCampaignStatus(campaign.CampaignStatus),
+    actualStatus: parseInt(campaign.CampaignStatus),
     startDate: getDateInUTCToTimeZone(campaign.StartDate),
     endDate: getDateInUTCToTimeZone(campaign.EndDate),
     claimMethod: campaign.ClaimMethod,
