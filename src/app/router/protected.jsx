@@ -81,7 +81,6 @@ const protectedRoutes = {
             ...emailTemplateRoute,
             ...promocodeRoute,
             ...pagesRoute,
-            ...layoutThemeRoute,
             ...homeCategoryRoute,
             ...bonusManagementRoute,
             ...rateLimitRulesRoute,
@@ -109,7 +108,8 @@ const protectedRoutes = {
                 ...tenantRoute,
                 ...userClass,
                 ...faqRoutes,
-                ...userKycRoute
+                ...userKycRoute,
+                ...layoutThemeRoute
               ]
             },
 

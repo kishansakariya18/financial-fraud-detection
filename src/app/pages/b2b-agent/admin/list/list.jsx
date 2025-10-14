@@ -2,10 +2,24 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { AgentList } from 'components/sections/b2b-agents';
 import B2BAgentService from 'services/b2b-agent/b2b-agent.services';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
+import { useMemo } from 'react';
 
 export default function B2BAgent() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { hasPermission } = usePermissions();
+
+  const accessPermission = useMemo(() => {
+    return {
+      isEdit: hasPermission(PERMISSIONS.AGENTS.EDIT),
+      isAdd: hasPermission(PERMISSIONS.AGENTS.ADD),
+      changeStatus: hasPermission(PERMISSIONS.AGENTS.CHANGE_STATUS)
+    };
+  }, [hasPermission]);
+
+  console.log('accessPermission', accessPermission);
 
   const handleFetchAgents = (data) => {
     return B2BAgentService.getAllAgent(data);
@@ -30,12 +44,12 @@ export default function B2BAgent() {
   return (
     <AgentList
       onFetchAgents={handleFetchAgents}
-      onChangeAgentStatus={handleChangeAgentStatus}
+      onChangeAgentStatus={accessPermission.changeStatus ? handleChangeAgentStatus : null}
       onViewAgent={handleViewAgent}
-      onEditAgent={handleEditAgent}
+      onEditAgent={accessPermission.isEdit ? handleEditAgent : null}
       onAddAgent={handleAddAgent}
       pageTitle={t('b2b_agents') || 'B2B Agents'}
-      showAddButton={true}
+      showAddButton={accessPermission.isAdd}
       showAgentTypeFilter={true}
       showDateFilter={true}
       showStatusFilter={true}

@@ -156,7 +156,9 @@ export const PERMISSIONS = {
     DEPOSIT_EXPORT_REPORT: 'deposit-export-report',
     WITHDRAW_EXPORT_REPORT: 'withdraw-export-report',
     PLAYER_BALANCE_REPORT_VIEW: 'player-balance-report-view',
-    PLAYER_BALANCE_EXPORT_REPORT: 'player-balance-export-report'
+    PLAYER_BALANCE_EXPORT_REPORT: 'player-balance-export-report',
+    AGENT_COMMISSION_REPORT: 'agent-commission-report',
+    AGENT_WALLET_REPORT: 'agent-wallet-report'
   },
   USER_LIMIT_SETTING: {
     VIEW: 'limit-setting-view',
@@ -409,11 +411,19 @@ export const PERMISSIONS = {
   COMMISSION_SETTING: {
     UPDATE: 'commission-setting-update'
   },
+  OPERATOR: {
+    WALLET_VIEW: 'operator-wallet-view',
+    WALLET_TRANSACTION_LIST: 'transaction-list',
+    MENAGE_FUNDS: 'deposit-withdraw-fund',
+    WITHDRAW_REQUESTS: 'operator-withdraw-requests-view',
+    WITHDRAW_REQUESTS_EDIT: 'operator-withdraw-requests-edit'
+  },
   AGENTS: {
     ADD: 'agent-add',
     EDIT: 'agent-edit',
     VIEW: 'agent-view',
-    CHANGE_STATUS: 'agent-change-status'
+    CHANGE_STATUS: 'agent-change-status',
+    WALLET_MANAGE: 'agent-wallet-manage'
   }
 };
 

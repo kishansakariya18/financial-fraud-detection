@@ -112,19 +112,21 @@ export function AgentRowActions({ row, table, onViewAgent, onEditAgent, onChange
                   )}
                 </MenuItem>
               )}
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    onClick={openModal}
-                    className={clsx(
-                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
-                      focus && 'bg-this/10 dark:bg-this-light/10'
-                    )}>
-                    <TbStatusChange className="size-4.5 stroke-1" />
-                    <span>{t('change') + ' ' + t('status')}</span>
-                  </button>
-                )}
-              </MenuItem>
+              {onChangeAgentStatus && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={openModal}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                        focus && 'bg-this/10 dark:bg-this-light/10'
+                      )}>
+                      <TbStatusChange className="size-4.5 stroke-1" />
+                      <span>{t('change') + ' ' + t('status')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
             </MenuItems>
           </Transition>
         </Menu>

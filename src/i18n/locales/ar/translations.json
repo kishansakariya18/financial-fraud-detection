@@ -10,6 +10,15 @@
       "appearance": "المظهر"
     }
   },
-  "public_text": "عام",
-  "private_text": "خاص"
+  "bonusTransfer": "نقل المكافأة",
+  "bonusTransferConfirmationMessage": "هل أنت متأكد من أنك تريد معالجة نقل هذه المكافأة؟ لا يمكن التراجع عن هذا الإجراء.",
+  "bonusTransferActionPrompt": "يرجى اختيار ما إذا كنت تريد تأكيد أو رفض طلب نقل المكافأة هذا.",
+  "bonusTransferConfirmed": "تم تأكيد نقل المكافأة بنجاح",
+  "bonusTransferRejected": "تم رفض نقل المكافأة بنجاح",
+  "failedToConfirmBonusTransfer": "فشل في تأكيد نقل المكافأة",
+  "failedToRejectBonusTransfer": "فشل في رفض نقل المكافأة",
+  "confirming": "جاري التأكيد...",
+  "rejecting": "جاري الرفض...",
+  "grantID": "معرف المنحة",
+  "bonusAmount": "مبلغ المكافأة"
 }

@@ -608,5 +608,16 @@
   "LTV": "(LTV - Valor de vida)",
   "export_text": "Exportar",
   "exporting": "Exportando...",
-  "referrence": "Referencia"
+  "referrence": "Referencia",
+  "bonusTransfer": "Transferencia de Bono",
+  "bonusTransferConfirmationMessage": "¿Estás seguro de que quieres procesar esta transferencia de bono? Esta acción no se puede deshacer.",
+  "bonusTransferActionPrompt": "Por favor, elige si quieres confirmar o rechazar esta solicitud de transferencia de bono.",
+  "bonusTransferConfirmed": "Transferencia de bono confirmada exitosamente",
+  "bonusTransferRejected": "Transferencia de bono rechazada exitosamente",
+  "failedToConfirmBonusTransfer": "Error al confirmar transferencia de bono",
+  "failedToRejectBonusTransfer": "Error al rechazar transferencia de bono",
+  "confirming": "Confirmando...",
+  "rejecting": "Rechazando...",
+  "grantID": "ID de Subvención",
+  "bonusAmount": "Cantidad de Bono"
 }

@@ -60,7 +60,13 @@ const CreateBanner = () => {
     // watch,
     control
   } = useForm({
-    resolver: yupResolver(createBannerSchema)
+    resolver: yupResolver(createBannerSchema),
+    defaultValues: {
+      segmentationType: 0,
+      segmentIds: [],
+      startDate: null,
+      endDate: null
+    }
   });
 
   console.log('errors: ', errors);

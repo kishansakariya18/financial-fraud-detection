@@ -14,25 +14,22 @@ export const b2bAgent = {
   title: 'B2B Agents',
   transKey: 'nav.users.b2b_agents',
   Icon: UserGroupIcon,
-  permission: [PERMISSIONS.AGENTS.LIST],
+  permission: [
+    PERMISSIONS.AGENTS.LIST,
+    PERMISSIONS.OPERATOR.WALLET_VIEW,
+    PERMISSIONS.OPERATOR.WALLET_TRANSACTION_LIST,
+    PERMISSIONS.OPERATOR.WITHDRAW_REQUESTS_VIEW,
+    PERMISSIONS.OPERATOR.WITHDRAW_REQUESTS_EDIT
+  ],
   platformType: PLATFORM_TYPE.B2B, // Only show in B2B platform
   childs: [
-    {
-      id: 'b2b-agent.b2b-agent-operator-transection',
-      path: '/agent/transections',
-      title: 'Transections',
-      transKey: 'nav.b2b_agent.transactions',
-      Icon: BanknotesIcon,
-      permission: [PERMISSIONS.AGENTS.LIST],
-      platformType: PLATFORM_TYPE.B2B
-    },
     {
       id: 'b2b-agent.b2b-agent-list',
       path: '/agent/list',
       title: 'B2B Agents',
       transKey: 'nav.users.b2b_agents',
       Icon: UserGroupIcon,
-      permission: [PERMISSIONS.AGENTS.LIST],
+      permission: [PERMISSIONS.AGENTS.VIEW],
       platformType: PLATFORM_TYPE.B2B
     },
     {
@@ -41,7 +38,16 @@ export const b2bAgent = {
       title: 'Agent Tree',
       transKey: 'nav.b2b_agent.agent_tree',
       Icon: AdjustmentsHorizontalIcon,
-      permission: [PERMISSIONS.AGENTS.LIST],
+      permission: [PERMISSIONS.AGENTS.VIEW],
+      platformType: PLATFORM_TYPE.B2B
+    },
+    {
+      id: 'b2b-agent.b2b-agent-operator-transection',
+      path: '/agent/transections',
+      title: 'Transections',
+      transKey: 'nav.b2b_agent.transactions',
+      Icon: BanknotesIcon,
+      permission: [PERMISSIONS.OPERATOR.WALLET_VIEW, PERMISSIONS.OPERATOR.WALLET_TRANSACTION_LIST],
       platformType: PLATFORM_TYPE.B2B
     },
     {
@@ -50,7 +56,10 @@ export const b2bAgent = {
       title: 'Withdraw Requests',
       transKey: 'nav.users.withdraw_requests',
       Icon: ArrowDownOnSquareIcon,
-      permission: [PERMISSIONS.AGENTS.LIST],
+      permission: [
+        PERMISSIONS.OPERATOR.WITHDRAW_REQUESTS,
+        PERMISSIONS.OPERATOR.WITHDRAW_REQUESTS_EDIT
+      ],
       platformType: PLATFORM_TYPE.B2B
     }
   ]
