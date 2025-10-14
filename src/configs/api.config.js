@@ -245,7 +245,9 @@ export const apiConfig = {
       UPDATE: '/bonus/admin/v1/bonus-campaign/:id',
       CHANGE_STATUS: '/bonus/admin/v1/bonus-campaign/:id/change-status',
       GRANT_LIST: '/bonus/admin/v1/bonus-campaign/:id/grants',
-      SUMMARY: '/bonus/admin/v1/bonus-campaign/summary'
+      WAGERING_CONTRIBUTIONS: '/bonus/admin/v1/bonus-campaign/grant/:grantId/wagering',
+      SUMMARY: '/bonus/admin/v1/bonus-campaign/summary',
+      PROCESS_BONUS_TRANSFER: '/bonus/admin/v1/bonus-campaign/grant/:bonusGrantID/manage'
     },
     BANNER: {
       BANNER_LIST: '/content/admin/banner/list',
