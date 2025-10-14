@@ -7,7 +7,7 @@ import { useLockScrollbar } from 'hooks';
 import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
-import { getQueryParams } from 'utils/custom.utilities';
+import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
@@ -17,7 +17,7 @@ import BonusCampaignService from 'services/bonus-campaign.services';
 // import { discountTypeToAPP, bonusGrantResponseMapper, segmentationTypeToAPP } from '../helper';
 // import { Button, Card, Skeleton } from 'components/ui';
 // import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
-// import { Toolbar } from './Toolbar';
+import { Toolbar } from './Toolbar';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import {} from // BanknotesIcon,
 // DocumentDuplicateIcon
@@ -25,7 +25,6 @@ import {} from // BanknotesIcon,
 // UsersIcon
 '@heroicons/react/20/solid';
 import { bonusGrantResponseMapper } from '../helper';
-// import { Toolbar } from './Toolbar';
 
 export default function BonusGrants() {
   const { t } = useTranslation();
@@ -45,9 +44,18 @@ export default function BonusGrants() {
   const fetchBonusGrants = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
+
+    const filters = {
+      ...(queryParams.grantStatus && { grantStatus: queryParams.grantStatus })
+    };
+
+    console.log('fetchBonusGrants called with filters:', filters);
+    console.log('queryParams:', queryParams);
+
     const result = await BonusCampaignService.getBonusGrants({
       pagination: { pageIndex, pageSize },
-      bonusCampaignId: bonusCampaignId
+      bonusCampaignId: bonusCampaignId,
+      filters: filters
     });
 
     console.log('result.response.data:', result?.response?.data);
@@ -75,7 +83,7 @@ export default function BonusGrants() {
     return { status: result.status, error: result.error };
   };
 
-  const { table, isLoading, error, setError, tableSettings } = useTable({
+  const { table, isLoading, error, setError, tableSettings, setColumnFilters, refetch } = useTable({
     columns,
     fetchData: fetchBonusGrants,
     queryParams,
@@ -83,7 +91,12 @@ export default function BonusGrants() {
     initialSettings: {
       columnPinning: { left: ['id'], right: ['actions'] },
       tableSettings: { enableFullScreen: false },
-      columnVisibility: {}
+      columnVisibility: {},
+      meta: {
+        onRefresh: () => {
+          refetch();
+        }
+      }
     }
   });
 
@@ -96,6 +109,38 @@ export default function BonusGrants() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
+
+  useEffect(() => {
+    const filtersFromQuery = [];
+    if (queryParams.grantStatus) {
+      filtersFromQuery.push({ id: 'grantStatus', value: queryParams.grantStatus });
+    }
+
+    setColumnFilters(filtersFromQuery);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queryParams]);
+
+  const applyFilterHandler = () => {
+    const filterItems = {};
+    for (let data of table.getState().columnFilters) {
+      if (data.id === 'grantStatus') {
+        filterItems.grantStatus = data.value;
+      }
+    }
+
+    setSearchParams({
+      pageIndex: DEFAULT_PAGE_INDEX,
+      pageSize: DEFAULT_PER_PAGE_RECORD,
+      ...(filterItems.grantStatus && { grantStatus: filterItems.grantStatus })
+    });
+  };
+
+  const clearFilterHandler = () => {
+    if (!isEmptyObject(queryParams)) {
+      setSearchParams({ pageIndex: DEFAULT_PAGE_INDEX, pageSize: DEFAULT_PER_PAGE_RECORD });
+    }
+    table.resetColumnFilters();
+  };
 
   useLockScrollbar(tableSettings.enableFullScreen);
 
@@ -152,12 +197,11 @@ export default function BonusGrants() {
         </div>
       </div> */}
 
-      {/* <Toolbar
+      <Toolbar
         table={table}
-        pageTitle={t('bonusGrants')}
-        onApplyFilters={handleApplyFilters}
-        onClearFilters={handleClearFilters}
-      /> */}
+        onApplyFilters={applyFilterHandler}
+        onClearFilters={clearFilterHandler}
+      />
 
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>

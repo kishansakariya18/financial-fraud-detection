@@ -54,6 +54,25 @@ export const parseCampaignStatusToApi = (status) => {
   }
 };
 
+export const parseGrantStatusToApi = (status) => {
+  switch (status) {
+    case 'pending':
+      return 0;
+    case 'active':
+      return 1;
+    case 'completed':
+      return 2;
+    case 'expired':
+      return 3;
+    case 'forfeited':
+      return 4;
+    case 'cashedOut':
+      return 5;
+    default:
+      return 0;
+  }
+};
+
 // Campaign type options
 export const campaignTypeOptions = [{ value: 'DEPOSIT_BONUS', label: 'Deposit Bonus' }];
 
@@ -296,6 +315,7 @@ export const bonusGrantResponseMapper = (apiData) => {
       txnAmount: parseFloat(data?.TxnAmount) || 0,
       grantBonusAmount: parseFloat(data?.GrantBonusAmount) || 0,
       grantStatus: parseGrantStatus(data.GrantStatus),
+      claimMethod: data?.bonusCampaign?.ClaimMethod,
       requiredWR: requiredWR,
       completedWR: completedWR,
       wageringProgress: wageringProgress,

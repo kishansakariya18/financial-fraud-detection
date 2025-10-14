@@ -1,4 +1,4 @@
-import { parseCampaignStatusToApi } from 'app/pages/bonus-campaign/helper';
+import { parseCampaignStatusToApi, parseGrantStatusToApi } from 'app/pages/bonus-campaign/helper';
 import { discountTypeToAPI, segmentationTypeToAPI } from 'app/pages/promocode/helper';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
@@ -145,12 +145,17 @@ const PromoCodeService = {
   },
   getBonusGrants: async (body) => {
     try {
-      const { bonusCampaignId, pagination } = body;
+      const { bonusCampaignId, pagination, filters = {} } = body;
 
       const apiQueryParams = {
         per_page: pagination.pageSize,
         page: pagination.pageIndex + 1
       };
+
+      const apiRequestParams = {
+        ...(filters.grantStatus && { status: parseGrantStatusToApi(filters.grantStatus) })
+      };
+
       const endPoint = replaceText(
         apiConfig.endPoints.BONUS_CAMPAIGN.GRANT_LIST,
         ':id',
@@ -168,7 +173,8 @@ const PromoCodeService = {
           headers: {
             'Content-Type': 'application/json'
           },
-          params: apiQueryParams
+          params: apiQueryParams,
+          body: { filters: apiRequestParams }
         });
 
         return response;
@@ -189,6 +195,80 @@ const PromoCodeService = {
     } catch (error) {
       console.error('Error fetching bonus campaign summary:', error);
       throw error;
+    }
+  },
+  getWageringContributions: async (body) => {
+    try {
+      const { grantId, pagination } = body;
+
+      const apiQueryParams = {
+        per_page: pagination.pageSize,
+        page: pagination.pageIndex + 1
+      };
+
+      const endPoint = replaceText(
+        apiConfig.endPoints.BONUS_CAMPAIGN.WAGERING_CONTRIBUTIONS,
+        ':grantId',
+        grantId
+      );
+
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        params: apiQueryParams
+      });
+
+      return response;
+    } catch (err) {
+      console.error('Error fetching wagering contributions:', err);
+      return {
+        status: err?.response?.status || 500,
+        error: err?.message || 'Failed to fetch wagering contributions'
+      };
+    }
+  },
+  processBonusTransfer: async (body) => {
+    try {
+      const { grantId, action } = body; // action: 0 = reject, 1 = confirm
+
+      const endPoint = replaceText(
+        apiConfig.endPoints.BONUS_CAMPAIGN.PROCESS_BONUS_TRANSFER,
+        ':bonusGrantID',
+        grantId
+      );
+
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+
+      console.log('Processing bonus transfer:', { apiURL, grantId, action });
+
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: { action }
+      });
+
+      console.log('Transfer response:', response);
+
+      return response;
+    } catch (err) {
+      console.error('Error processing bonus transfer:', err);
+      console.error('Error details:', {
+        status: err?.response?.status,
+        message: err?.message,
+        data: err?.response?.data
+      });
+      return {
+        status: err?.response?.status || 500,
+        error: err?.response?.data?.message || err?.message || 'Failed to process bonus transfer'
+      };
     }
   }
 };
