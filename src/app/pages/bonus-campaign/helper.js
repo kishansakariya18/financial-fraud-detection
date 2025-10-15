@@ -36,6 +36,8 @@ export const parseGrantStatus = (status) => {
       return 'forfeited';
     case 5:
       return 'cashedOut';
+    case 6:
+      return 'failed';
     default:
       return 'pending';
   }
@@ -68,6 +70,8 @@ export const parseGrantStatusToApi = (status) => {
       return 4;
     case 'cashedOut':
       return 5;
+    case 'failed':
+      return 6;
     default:
       return 0;
   }
@@ -141,6 +145,12 @@ export const grantStatusOptions = [
     label: 'Cashed Out',
     color: 'success',
     icon: CheckBadgeIcon
+  },
+  {
+    value: 'failed',
+    label: 'Failed',
+    color: 'error',
+    icon: XMarkIcon
   }
 ];
 

@@ -13,6 +13,7 @@ import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import BonusCampaignService from 'services/bonus-campaign.services';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { getDateInUTCToTimeZone } from 'helpers/functions.js';
 
 export default function WageringContributions() {
   const { t } = useTranslation();
@@ -45,6 +46,10 @@ export default function WageringContributions() {
       if (result.status === 200) {
         const apiData = result?.response?.data || [];
         const totalRecords = parseInt(result.response?.totalRecords) || 0;
+
+        for (let data of apiData) {
+          data.DateCreated = getDateInUTCToTimeZone(data.DateCreated);
+        }
 
         return {
           status: 200,
