@@ -601,8 +601,7 @@
   "confirming": "Confirmation en cours...",
   "rejecting": "Rejet en cours...",
   "grantID": "ID de Subvention",
-  "bonusAmount": "Montant du Bonus"
-  "referrence": "Référence",
+  "bonusAmount": "Montant du Bonus",
   "search_user_withdraw": "Rechercher le retrait de l'utilisateur...",
   "areYouSureYouWantToAcceptThisTransaction": "Êtes-vous sûr de vouloir accepter cette transaction?",
   "areYouSureYouWantToRejectThisTransaction": "Êtes-vous sûr de vouloir rejeter cette transaction?"
