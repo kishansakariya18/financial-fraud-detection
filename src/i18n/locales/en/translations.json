@@ -942,6 +942,8 @@
   "first": "First",
   "parent": "Parent",
   "withdraw_requests_for_this_agent": "Withdraw Requests for this Agent",
-  "search_user_withdraw": "Search User Withdraw..."
+  "search_user_withdraw": "Search User Withdraw...",
+  "areYouSureYouWantToAcceptThisTransaction": "Are you sure you want to accept this transaction?",
+  "areYouSureYouWantToRejectThisTransaction": "Are you sure you want to reject this transaction?"
   
 }

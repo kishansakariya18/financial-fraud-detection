@@ -19,7 +19,7 @@ import { parsePayoutStatusToAPI } from '../helper';
 export default function UserManualWithdrawTransaction() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('withdraw');
+  const pageTitle = t('user_manual_withdraw_transaction_view');
   const [refetch, setRefetch] = useState(false);
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);

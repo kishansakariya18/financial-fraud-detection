@@ -5,7 +5,7 @@ export const userManualWithdrawTransaction = {
   type: NAV_TYPE_ITEM,
   path: '/user-manual-withdraw-transaction',
   title: 'Withdraw Requests',
-  transKey: 'user_manual_deposit_transaction_view',
+  transKey: 'user_manual_withdraw_transaction_view',
   Icon: PiHandDepositThin,
   permission: PERMISSIONS.USER_MANUAL_DEPOSIT_TRANSACTION.VIEW,
   platformType: [PLATFORM_TYPE.B2C]

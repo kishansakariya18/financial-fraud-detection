@@ -610,5 +610,7 @@
   "export_text": "Exportar",
   "exporting": "Exportando...",
   "referrence": "Referencia",
-  "search_user_withdraw": "Buscar retiro del usuario..."
+  "search_user_withdraw": "Buscar retiro del usuario...",
+  "areYouSureYouWantToAcceptThisTransaction": "¿Estás seguro de que quieres aceptar esta transacción?",
+  "areYouSureYouWantToRejectThisTransaction": "¿Estás seguro de que quieres rechazar esta transacción?"
 }
