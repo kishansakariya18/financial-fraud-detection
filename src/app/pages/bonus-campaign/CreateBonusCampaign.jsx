@@ -50,7 +50,7 @@ const CreateBonusCampaign = () => {
   const navigate = useNavigate();
 
   const fetchSegmentationList = async () => {
-    const result = await SegmentationService.getSegmentationList({ pagination: false });
+    const result = await SegmentationService.getAllSegmentationList();
 
     if (result) {
       if (result.status === 200) {
@@ -93,8 +93,7 @@ const CreateBonusCampaign = () => {
 
   const fetchCategoryList = async () => {
     const result = await CategoryService.getAllActiveCategories({
-      isPaginationRequired: true,
-      pagination: { perpage: 500 }
+      isPaginationRequired: false
     });
     if (result) {
       if (result.status === 200) {
@@ -330,7 +329,7 @@ const CreateBonusCampaign = () => {
                       value={segmentationOptions.find((seg) => seg.value === field.value) || null}
                       onChange={(val) => field.onChange(val.value)}
                       name={field.name}
-                      label={t('banner') + ' ' + t('segmentation')}
+                      label={t('segmentation')}
                       placeholder={t('select') + ' ' + t('segmentation')}
                       displayField="label"
                       error={errors?.segmentationId?.message}
@@ -646,7 +645,7 @@ const CreateBonusCampaign = () => {
                     onChange={setFile}
                     ref={uploadRef}
                     setPreview={setPreview}
-                    accept={'.png'}>
+                    accept={'.png, .jpg, .jpeg'}>
                     {({ ...props }) => (
                       <Button color="primary" {...props} className="space-x-2">
                         <CloudArrowUpIcon className="size-5" />
