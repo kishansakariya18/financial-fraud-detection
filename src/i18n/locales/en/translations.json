@@ -589,6 +589,7 @@
   "bank_status_suceess": "Bank Status has been changed successfully",
   "provider_status_success": "Provider status has been changed successfully",
   "user_manual_deposit_transaction_view": "User Manual Deposit Transaction View",
+  "user_manual_withdraw_transaction_view": "Withdraw Requests",
   "user_manual_deposit_transaction": "User Manual Deposit Transaction",
   "assign_bank": "Assign Bank",
   "search_transaction": "Search Transaction",
@@ -956,5 +957,9 @@
   "debiting": "Debiting",
   "agent_commission": "Agent Commission",
   "operator_balance": "Operator Balance",
-  "manage_funds": "Manage Funds"
+  "manage_funds": "Manage Funds",
+  "search_user_withdraw": "Search User Withdraw...",
+  "areYouSureYouWantToAcceptThisTransaction": "Are you sure you want to accept this transaction?",
+  "areYouSureYouWantToRejectThisTransaction": "Are you sure you want to reject this transaction?"
+  
 }

@@ -21,6 +21,7 @@ import { userClass } from './user-class';
 import { responsibleGambling } from './responsible-gambling';
 import { blacklist } from './blacklist';
 import { bank } from './bank';
+import { userManualWithdrawTransaction } from './user-manual-withdraw-transaction';
 import { userManualDepositTransaction } from './user-manual-deposit-transaction';
 import { registrationFields } from './registration-fields';
 import { releaseNotes } from './release-notes';
@@ -72,6 +73,7 @@ export const dashboards = () => ({
     responsibleGambling,
     blacklist,
     bank,
+    userManualWithdrawTransaction,
     registrationFields,
     userManualDepositTransaction,
     releaseNotes,

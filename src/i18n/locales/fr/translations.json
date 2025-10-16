@@ -493,6 +493,7 @@
   "bank_status_desc": "Êtes-vous sûr de vouloir mettre à jour le statut de ce compte bancaire ?",
   "bank_status_suceess": "Le statut du compte bancaire a été modifié avec succès",
   "user_manual_deposit_transaction_view": "Voir la transaction de dépôt manuelle de l'utilisateur",
+  "user_manual_withdraw_transaction_view": "Solicitudes de retiro",
   "user_manual_deposit_transaction": "Transaction de dépôt manuelle de l'utilisateur",
   "search_transaction": "Rechercher transaction",
   "search_by_bank_name": "Rechercher par nom du banque",
@@ -600,5 +601,8 @@
   "confirming": "Confirmation en cours...",
   "rejecting": "Rejet en cours...",
   "grantID": "ID de Subvention",
-  "bonusAmount": "Montant du Bonus"
+  "bonusAmount": "Montant du Bonus",
+  "search_user_withdraw": "Rechercher le retrait de l'utilisateur...",
+  "areYouSureYouWantToAcceptThisTransaction": "Êtes-vous sûr de vouloir accepter cette transaction?",
+  "areYouSureYouWantToRejectThisTransaction": "Êtes-vous sûr de vouloir rejeter cette transaction?"
 }
