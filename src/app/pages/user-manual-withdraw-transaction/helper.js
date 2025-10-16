@@ -1,29 +1,40 @@
 import { PAYOUT_STATUS } from 'constants/app.constant';
 
 export const payoutStatusOptions = [
-  { value: 'pending', label: 'Pending', color: 'warning' },
-  { value: 'approved', label: 'Approved', color: 'success' },
-  { value: 'rejected', label: 'Rejected', color: 'error' }
+  { value: 0, label: 'Pending', color: 'warning' },
+  { value: 1, label: 'Approved', color: 'success' },
+  { value: 2, label: 'Rejected', color: 'error' }
+];
+export const withdrawStatusOptions = [
+  { value: 'PENDING', label: 'Pending', color: 'warning' },
+  { value: 'APPROVED', label: 'Approved', color: 'success' },
+  { value: 'REJECTED', label: 'Rejected', color: 'error' }
 ];
 
 export const parsePayoutStatusToAPI = (status) => {
-  if (status === 'pending') return PAYOUT_STATUS.PENDING;
-  if (status === 'approved') return PAYOUT_STATUS.APPROVED;
-  if (status === 'rejected') return PAYOUT_STATUS.REJECTED;
+  if (status === undefined || status === null) return undefined;
+  if (typeof status === 'number') return status; // already 0/1/2
+  const str = String(status).trim();
+  if (/^\d+$/.test(str)) return Number(str);
+  const s = str.toUpperCase();
+  if (s === 'PENDING') return PAYOUT_STATUS.PENDING;
+  if (s === 'APPROVED') return PAYOUT_STATUS.APPROVED;
+  if (s === 'REJECTED') return PAYOUT_STATUS.REJECTED;
   return undefined;
 };
 
 export const responseMapper = (apiData) => {
   if (!apiData) return [];
   return apiData.map((data) => ({
-    id: data.UserBankDepositUID,
+    id: data.TransactionID,
+    userName: data.UserName,
     userID: data.UserID,
     depositBankAccountID: data.DepositBankAccountID,
-    currencyCode: data.CurrencyCode,
-    amount: data.Amount,
+    currencyCode: data.Currency,
+    amount: data.TransactionAmount,
     depositTime: data.DepositTime,
     screenshotURL: data.ScreenshotURL,
-    depositStatus: statusToAPP(data.DepositStatus),
+    depositStatus: parsePayoutStatusToAPI(data.Status),
     verifiedByAdminID: data.VerifiedByAdminID,
     rejectionReason: data.RejectionReason,
     remarks: data.Remarks,
@@ -31,11 +42,4 @@ export const responseMapper = (apiData) => {
     dateCreated: data.DateCreated,
     dateModified: data.DateModified
   }));
-};
-
-export const statusToAPP = (status) => {
-  if (status == 0) return 'pending';
-  if (status == 1) return 'approved';
-  if (status == 2) return 'rejected';
-  return 'pending';
 };

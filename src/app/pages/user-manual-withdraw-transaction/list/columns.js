@@ -13,6 +13,13 @@ export const columns = [
     cell: IdCell,
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.userName, {
+    id: 'userName',
+    label: 'User Name',
+    header: 'User Name',
+    cell: BoldCell,
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.currencyCode, {
     id: 'currency',
     label: 'Currency',
@@ -27,24 +34,24 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.depositTime, {
-    id: 'depositTime',
-    label: 'Deposit Time',
-    header: 'Deposit Time',
-    cell: DateCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => row.bankTransactionID, {
-    id: 'bankTransactionID',
-    label: 'Bank Transaction ID',
-    header: 'Bank Transaction ID',
-    cell: BoldCell,
-    enableSorting: false
-  }),
+  // columnHelper.accessor((row) => row.depositTime, {
+  //   id: 'depositTime',
+  //   label: 'Deposit Time',
+  //   header: 'Deposit Time',
+  //   cell: DateCell,
+  //   enableSorting: false
+  // }),
+  // columnHelper.accessor((row) => row.bankTransactionID, {
+  //   id: 'bankTransactionID',
+  //   label: 'Bank Transaction ID',
+  //   header: 'Bank Transaction ID',
+  //   cell: BoldCell,
+  //   enableSorting: false
+  // }),
   columnHelper.accessor((row) => row.depositStatus, {
     id: 'depositStatus',
     label: 'Deposit Status',
-    header: 'Deposit Status',
+    header: 'Withdraw Status',
     cell: BadgeCell,
     meta: { optionData: payoutStatusOptions },
     filterFn: 'arrIncludesSome',

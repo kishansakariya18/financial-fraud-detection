@@ -5,7 +5,7 @@ import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
-import { payoutStatusOptions } from '../helper';
+import { withdrawStatusOptions } from '../helper';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { MapPinIcon } from '@heroicons/react/24/outline';
 import { DateFilter } from 'components/shared/table/DateFilter';
@@ -85,7 +85,7 @@ function SearchInput({ table }) {
       onChange={(e) => table.getColumn('amount').setFilterValue(e.target.value)}
       prefix={<MagnifyingGlassIcon className="size-4" />}
       classNames={{ input: 'h-8 text-xs ring-primary-500/50 focus:ring', root: 'shrink-0' }}
-      placeholder={t('search') + ' ' + t('user_manual_deposit_transaction') + '...'}
+      placeholder={t('search_user_withdraw')}
     />
   );
 }
@@ -96,7 +96,7 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
     <>
       {table.getColumn('depositStatus') && (
         <FacedtedFilter
-          options={payoutStatusOptions}
+          options={withdrawStatusOptions}
           column={table.getColumn('depositStatus')}
           title={t('status')}
           Icon={MapPinIcon}

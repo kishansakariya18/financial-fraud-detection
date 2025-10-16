@@ -540,6 +540,13 @@ export const apiConfig = {
       CREATE: '/affiliates/admin/faq/create',
       UPDATE: '/affiliates/admin/faq/update',
       DELETE: '/affiliates/admin/faq/delete/{faqUID}'
+    },
+    USER_WITHDRAW: {
+      LIST: '/wallet/admin/payment/withdraw-request/list',
+      MANUAL_VERIFY: '/wallet/admin/payment/withdraw-request/update-status',
+      DETAIL: '/wallet/admin/payment/withdraw-request/:withdrawId/manual-withdraw/details',
+      EDIT: '/wallet/admin/payment/withdraw-request/:withdrawId/edit',
+      DELETE: '/wallet/admin/payment/withdraw-request/:withdrawId/delete'
     }
   }
 };

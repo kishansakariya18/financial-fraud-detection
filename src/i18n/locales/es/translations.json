@@ -495,6 +495,7 @@
   "bank_status_desc": "¿Estás seguro de querer actualizar el estado de este banco?",
   "bank_status_suceess": "Estado del banco cambiado exitosamente",
   "user_manual_deposit_transaction_view": "Ver transacción de depósito manual del usuario",
+  "user_manual_withdraw_transaction_view": "Solicitudes de retiro",
   "user_manual_deposit_transaction": "Transacción de depósito manual del usuario",
   "assign_bank": "Asignar banco",
   "search_transaction": "Buscar transacción",
@@ -608,5 +609,6 @@
   "LTV": "(LTV - Valor de vida)",
   "export_text": "Exportar",
   "exporting": "Exportando...",
-  "referrence": "Referencia"
+  "referrence": "Referencia",
+  "search_user_withdraw": "Buscar retiro del usuario..."
 }

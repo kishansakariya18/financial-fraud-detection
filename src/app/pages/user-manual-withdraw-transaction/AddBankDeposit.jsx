@@ -40,24 +40,24 @@ const AddBankDeposit = () => {
 
   useEffect(() => {
     const fetchCurrencies = async () => {
-      try {
-        const result = await CurrencyService.getCurrencyList({
-          filters: { status: 'active' },
-          pagination: { pageIndex: 0, pageSize: 1000 }
-        });
-        if (result.status === 200) {
-          const mapped = currencyListResponseMapper(result.response);
-          const options = (mapped.list || []).map((c) => ({
-            value: c.id,
-            label: `${c.name} (${c.code})${c.symbol ? ` - ${c.symbol}` : ''}`
-          }));
-          setCurrencyOptions(options);
-        } else {
-          toast.error(result.error || 'Failed to load currencies');
-        }
-      } catch (e) {
-        // ignore
+      //try {
+      const result = await CurrencyService.getCurrencyList({
+        filters: { status: 'active' },
+        pagination: { pageIndex: 0, pageSize: 1000 }
+      });
+      if (result.status === 200) {
+        const mapped = currencyListResponseMapper(result.response);
+        const options = (mapped.list || []).map((c) => ({
+          value: c.id,
+          label: `${c.name} (${c.code})${c.symbol ? ` - ${c.symbol}` : ''}`
+        }));
+        setCurrencyOptions(options);
+      } else {
+        toast.error(result.error || 'Failed to load currencies');
       }
+      // } catch () {
+      // ignore
+      // }
     };
     fetchCurrencies();
   }, []);

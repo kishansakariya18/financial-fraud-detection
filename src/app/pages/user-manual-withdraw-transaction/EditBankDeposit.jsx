@@ -35,20 +35,20 @@ const EditBankDeposit = () => {
 
   useEffect(() => {
     const fetchCurrencies = async () => {
-      try {
-        const result = await CurrencyService.getCurrencyList({
-          filters: { status: 'active' },
-          pagination: { pageIndex: 0, pageSize: 1000 }
-        });
-        if (result.status === 200) {
-          const mapped = currencyListResponseMapper(result.response);
-          const options = (mapped.list || []).map((c) => ({
-            value: c.id,
-            label: `${c.name} (${c.code})${c.symbol ? ` - ${c.symbol}` : ''}`
-          }));
-          setCurrencyOptions(options);
-        }
-      } catch (_) {}
+      //  try {
+      const result = await CurrencyService.getCurrencyList({
+        filters: { status: 'active' },
+        pagination: { pageIndex: 0, pageSize: 1000 }
+      });
+      if (result.status === 200) {
+        const mapped = currencyListResponseMapper(result.response);
+        const options = (mapped.list || []).map((c) => ({
+          value: c.id,
+          label: `${c.name} (${c.code})${c.symbol ? ` - ${c.symbol}` : ''}`
+        }));
+        setCurrencyOptions(options);
+      }
+      // }
     };
 
     // Preload existing transaction by id (best effort using list until detail API is available)
@@ -152,7 +152,11 @@ const EditBankDeposit = () => {
             </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-            <Button type="button" className="min-w-[7rem]" onClick={() => reset()} disabled={loading}>
+            <Button
+              type="button"
+              className="min-w-[7rem]"
+              onClick={() => reset()}
+              disabled={loading}>
               {t('reset')}
             </Button>
             <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>

@@ -19,7 +19,7 @@ import { parsePayoutStatusToAPI } from '../helper';
 export default function UserManualWithdrawTransaction() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('user_manual_deposit_transaction');
+  const pageTitle = t('withdraw');
   const [refetch, setRefetch] = useState(false);
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
@@ -27,7 +27,7 @@ export default function UserManualWithdrawTransaction() {
   const fetchUserManualWithdrawTransaction = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
-    const result = await UserManualDepositTransactionService.getUserManualDepositTransactionList({
+    const result = await UserManualDepositTransactionService.getUserManualWithdrawTransactionList({
       pagination: { pageIndex, pageSize },
       keyword: queryParams.keyword,
       status: parsePayoutStatusToAPI(queryParams.status),

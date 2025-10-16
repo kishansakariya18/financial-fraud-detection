@@ -49,7 +49,7 @@ export default function ViewWithdraw() {
         {!txn ? (
           <div className="p-4">Loading...</div>
         ) : (
-          <div className="p-4 space-y-2">
+          <div className="space-y-2 p-4">
             <div>
               <strong>{t('user_id')}:</strong> {txn.UserID}
             </div>
