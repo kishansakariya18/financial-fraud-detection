@@ -44,7 +44,7 @@ export default function PlayerList({
       filters: queryParams
     });
 
-    if (result.status === 'success') {
+    if (result.status === 'success' || result.status === 200) {
       return {
         status: 200,
         data: responseMapper(result.data),

@@ -1,6 +1,6 @@
 // import { Navigate } from "react-router";
 
-import { PLATFORM_TYPE } from 'constants/app.constant';
+import { PERMISSIONS, PLATFORM_TYPE } from 'constants/app.constant';
 import PrivateRoute from '../private';
 
 export const reportsRoutes = [
@@ -40,6 +40,40 @@ export const reportsRoutes = [
     lazy: async () => ({
       Component: (await import('../../pages/reports/player-balance/list')).default
     })
+  },
+  {
+    path: 'report/agent-commission',
+    lazy: async () => {
+      const { default: AgentCommission } = await import(
+        '../../pages/b2b-agent/admin/report/AgentCommission'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute
+            permission={PERMISSIONS.REPORT.AGENT_COMMISSION_REPORT}
+            allowedPlatforms={[PLATFORM_TYPE.B2B]}>
+            <AgentCommission />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'report/agent-wallet',
+    lazy: async () => {
+      const { default: AgentWallet } = await import(
+        '../../pages/b2b-agent/admin/report/AgentWallet'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute
+            permission={PERMISSIONS.REPORT.AGENT_WALLET_REPORT}
+            allowedPlatforms={[PLATFORM_TYPE.B2B]}>
+            <AgentWallet />
+          </PrivateRoute>
+        )
+      };
+    }
   }
 ];
 

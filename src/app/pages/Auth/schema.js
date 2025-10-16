@@ -74,13 +74,13 @@ export const mapLimitSummary = (apiData, isB2B) => {
 
   return {
     userLimits: Array.isArray(UserLimits)
-      ? UserLimits.map(normalizeLimitItem(isB2B)).filter(Boolean)
+      ? UserLimits.map((item) => normalizeLimitItem(isB2B)(item)).filter(Boolean)
       : [],
     adminLimits: Array.isArray(AdminLimits)
-      ? AdminLimits.map(normalizeLimitItem(isB2B)).filter(Boolean)
+      ? AdminLimits.map((item) => normalizeLimitItem(isB2B)(item)).filter(Boolean)
       : [],
     userClassLimits: Array.isArray(UserClassLimits)
-      ? UserClassLimits.map(normalizeLimitItem(isB2B)).filter(Boolean)
+      ? UserClassLimits.map((item) => normalizeLimitItem(isB2B)(item)).filter(Boolean)
       : [],
     globalPlatformLimits: GlobalPlatformLimits
       ? {

@@ -18,8 +18,14 @@ import { useSelector } from 'react-redux';
 import B2BAgentService from 'services/b2b-agent/b2b-agent.services';
 import { AGENT_TIER_TYPE, ADMIN_TYPE } from 'constants/app.constant';
 import { useCurrencyContext } from 'app/contexts/currency/context';
+import { DashboardCard } from 'components/custom/DashboardCard';
 
-export default function AgentWallet({ agentUID, breadcrumbs }) {
+export default function AgentWallet({
+  agentUID,
+  breadcrumbs,
+  manageCommissionFunds = true,
+  manageLineupFunds = true
+}) {
   const { t } = useTranslation();
   const { userData } = useSelector((state) => state.auth);
   const [walletData, setWalletData] = useState(null);
@@ -108,7 +114,7 @@ export default function AgentWallet({ agentUID, breadcrumbs }) {
 
   return (
     <div>
-      <div className="space-y-4 px-[--margin-x] pb-8">
+      <div className="space-y-4 px-[--margin-x] pb-2">
         {/* Header with Actions */}
         <div className="flex items-center justify-between pt-4">
           {breadcrumbs ? (
@@ -127,82 +133,68 @@ export default function AgentWallet({ agentUID, breadcrumbs }) {
             <div></div>
           )}
 
-          {(isOwanChildAgent || isOwnWallet || isAdmin) && (
-            <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2">
+            <Button
+              size="sm"
+              onClick={handleRefresh}
+              disabled={refreshing}
+              className="flex items-center space-x-1">
+              <ArrowPathIcon className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+              <span>{t('refresh')}</span>
+            </Button>
+            {isAdmin && manageCommissionFunds && (
               <Button
                 size="sm"
-                onClick={handleRefresh}
-                disabled={refreshing}
+                color="warning"
+                onClick={() => setShowAdjustBalanceModal('commission')}
                 className="flex items-center space-x-1">
-                <ArrowPathIcon className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-                <span>{t('refresh')}</span>
+                <BanknotesIcon className="h-4 w-4" />
+                <span>{t('adjust_commission_balance')}</span>
               </Button>
+            )}
 
-              {isOwanChildAgent && (
-                <Button
-                  size="sm"
-                  color="info"
-                  onClick={() => setShowAdjustBalanceModal('lineup')}
-                  className="flex items-center space-x-1">
-                  <WalletIcon className="h-4 w-4" />
-                  <span>{t('adjust_lineup_balance')}</span>
-                </Button>
-              )}
+            {isOwanChildAgent && manageLineupFunds && (
+              <Button
+                size="sm"
+                color="info"
+                onClick={() => setShowAdjustBalanceModal('lineup')}
+                className="flex items-center space-x-1">
+                <WalletIcon className="h-4 w-4" />
+                <span>{t('adjust_lineup_balance')}</span>
+              </Button>
+            )}
 
-              {isAdmin && (
-                <Button
-                  size="sm"
-                  color="warning"
-                  onClick={() => setShowAdjustBalanceModal('commission')}
-                  className="flex items-center space-x-1">
-                  <BanknotesIcon className="h-4 w-4" />
-                  <span>{t('adjust_commission_balance')}</span>
-                </Button>
-              )}
-
-              {isOwnWallet && (
-                <Button
-                  size="sm"
-                  color="warning"
-                  onClick={() => setShowWithdrawRequestModal(true)}
-                  className="flex items-center space-x-1">
-                  <BanknotesIcon className="h-4 w-4" />
-                  <span>{t('withdraw_request')}</span>
-                </Button>
-              )}
-            </div>
-          )}
+            {isOwnWallet && (
+              <Button
+                size="sm"
+                color="warning"
+                onClick={() => setShowWithdrawRequestModal(true)}
+                className="flex items-center space-x-1">
+                <BanknotesIcon className="h-4 w-4" />
+                <span>{t('withdraw_request')}</span>
+              </Button>
+            )}
+          </div>
         </div>
 
         {/* Wallet Balance Summary */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2">
-          <div className="rounded-lg border border-gray-200 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium">{t('commission_balance')}</p>
-                <p className="mt-2 text-3xl font-bold">
-                  {formatCurrency(walletData?.Balance || 0)}
-                </p>
-              </div>
-              <div className="rounded-full bg-blue-100 p-3 dark:bg-blue-900/40">
-                <WalletIcon className="h-8 w-8" />
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded-lg border border-gray-200 p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium">{t('lineup_balance')}</p>
-                <p className="mt-2 text-3xl font-bold">
-                  {formatCurrency(walletData?.LineUpBalance || 0)}
-                </p>
-              </div>
-              <div className="rounded-full bg-purple-100 p-3 dark:bg-purple-900/40">
-                <WalletIcon className="h-8 w-8" />
-              </div>
-            </div>
-          </div>
+          <DashboardCard
+            label={t('commission_balance')}
+            value={formatCurrency(walletData?.Balance || 0)}
+            gradientFrom="from-orange-400"
+            gradientTo="to-orange-500"
+            textColor="text-orange-100"
+            maskShape="is-diamond"
+          />
+          <DashboardCard
+            label={t('lineup_balance')}
+            value={formatCurrency(walletData?.LineUpBalance || 0)}
+            gradientFrom="from-blue-400"
+            gradientTo="to-blue-500"
+            textColor="text-blue-100"
+            maskShape="is-diamond"
+          />
         </div>
       </div>
       <AgentTransactionList agentUID={agentUID} />

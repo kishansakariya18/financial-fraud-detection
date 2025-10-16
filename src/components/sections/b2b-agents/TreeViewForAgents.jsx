@@ -24,19 +24,22 @@ const transformDataToTree = (agents, userData) => {
       attributes: {}
     };
   }
-
   // If there's only one root agent, use it directly
   if (agents.length === 1) {
-    return transformAgent(agents[0]);
+    return transformAgent(agents[0], true);
   }
 
   // If multiple root agents, create a virtual root
+  let name = userData?.Username;
+  if (userData?.FirstName || userData?.LastName) {
+    name = [userData.FirstName, userData.LastName].filter(Boolean).join(' ');
+  }
   return {
-    name: userData?.Username || 'Agent Network',
+    name: name || 'Agent Network',
     attributes: {
       isVirtualRoot: true
     },
-    children: agents.map(transformAgent)
+    children: agents.map((agent) => transformAgent(agent, false))
   };
 };
 
@@ -54,10 +57,15 @@ const countLeaves = (n) => {
   return kids.map(countLeaves).reduce((a, b) => a + b, 0);
 };
 
-const transformAgent = (agent) => {
+const transformAgent = (agent, isMain = false) => {
+  let name = agent.Username;
+  if (isMain && agent?.FirstName && agent?.LastName) {
+    name = [agent.FirstName, agent.LastName].filter(Boolean).join(' ');
+  }
   const node = {
-    name: agent.Username,
+    name: name,
     attributes: {
+      isVirtualRoot: !!isMain,
       agentUID: agent.AgentUID,
       agentID: agent.AgentID,
       firstName: agent.FirstName,
@@ -67,16 +75,45 @@ const transformAgent = (agent) => {
   };
 
   if (agent.ChildAgents && agent.ChildAgents.length > 0) {
-    node.children = agent.ChildAgents.map(transformAgent);
+    node.children = agent.ChildAgents.map((child) => transformAgent(child, false));
   }
 
   return node;
+};
+
+// Helper function to truncate text
+const truncateText = (text, maxLength = 15) => {
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength) + '...';
+};
+
+// Helper function to wrap text
+const wrapText = (text, maxLength = 20) => {
+  if (text.length <= maxLength) return [text];
+
+  const words = text.split(' ');
+  const lines = [];
+  let currentLine = '';
+
+  for (const word of words) {
+    if ((currentLine + word).length <= maxLength) {
+      currentLine += (currentLine ? ' ' : '') + word;
+    } else {
+      if (currentLine) lines.push(currentLine);
+      currentLine = word;
+    }
+  }
+  if (currentLine) lines.push(currentLine);
+
+  return lines.slice(0, 2); // Max 2 lines
 };
 
 // Custom node component
 const CustomNode = ({ nodeDatum, toggleNode }) => {
   const isVirtualRoot = nodeDatum.attributes?.isVirtualRoot;
   const hasChildren = nodeDatum.children && nodeDatum.children.length > 0;
+  const displayName = nodeDatum.name;
+  const wrappedText = wrapText(displayName, 18);
 
   if (isVirtualRoot) {
     return (
@@ -94,7 +131,7 @@ const CustomNode = ({ nodeDatum, toggleNode }) => {
           textAnchor="middle"
           className="pointer-events-none fill-gray-700 font-medium dark:fill-dark-200"
           style={{ fontSize: '22px', fontWeight: '600' }}>
-          {nodeDatum.name}
+          {truncateText(nodeDatum.name, 15)}
         </text>
       </g>
     );
@@ -126,29 +163,20 @@ const CustomNode = ({ nodeDatum, toggleNode }) => {
         </text>
       )}
 
-      {/* Username */}
-      <text
-        fill="currentColor"
-        className="fill-gray-700 dark:fill-dark-200"
-        strokeWidth="0"
-        x="-20"
-        y="36"
-        textAnchor="start"
-        style={{ fontSize: '18px', fontWeight: '600' }}>
-        {nodeDatum.name}
-      </text>
-
-      {/* Full Name */}
-      {/* <text
-        fill="currentColor"
-        className="fill-gray-500 dark:fill-dark-400"
-        strokeWidth="0"
-        x="-20"
-        y="50"
-        textAnchor="start"
-        style={{ fontSize: '12px' }}>
-        {nodeDatum.attributes?.fullName}
-      </text> */}
+      {/* Username - Multi-line support */}
+      {wrappedText.map((line, index) => (
+        <text
+          key={index}
+          fill="currentColor"
+          className="fill-gray-700 dark:fill-dark-200"
+          strokeWidth="0"
+          x="0"
+          y={36 + index * 16}
+          textAnchor="middle"
+          style={{ fontSize: '16px', fontWeight: '600' }}>
+          {line}
+        </text>
+      ))}
     </g>
   );
 };
@@ -164,8 +192,8 @@ export default function TreeViewForAgents() {
   const [loading, setLoading] = useState(false);
   const [treeData, setTreeData] = useState(null);
   const { userData } = useSelector((state) => state.auth);
-  const [nodeSize, setNodeSize] = useState({ x: 200, y: 120 });
-  const [separation, setSeparation] = useState({ siblings: 1.2, nonSiblings: 1.4 });
+  const [nodeSize, setNodeSize] = useState({ x: 250, y: 150 });
+  const [separation, setSeparation] = useState({ siblings: 1.5, nonSiblings: 1.8 });
   const [zoom, setZoom] = useState(0.8);
   const [orientation, setOrientation] = useState('horizontal');
   const [isAllExpanded, setIsAllExpanded] = useState(true);
@@ -200,13 +228,13 @@ export default function TreeViewForAgents() {
 
     if (orientation === 'horizontal') {
       // Horizontal: tree grows left to right
-      nx = 180; // horizontal spacing between levels
-      ny = 100; // vertical spacing between siblings
+      nx = 220; // horizontal spacing between levels
+      ny = 120; // vertical spacing between siblings
       setNodeSize({ x: nx, y: ny });
 
       // Calculate separation based on number of nodes
-      const sibSep = leaves > 20 ? 1 : leaves > 10 ? 1.1 : 1.2;
-      const nonSibSep = sibSep + 0.2;
+      const sibSep = leaves > 20 ? 1.2 : leaves > 10 ? 1.4 : 1.6;
+      const nonSibSep = sibSep + 0.3;
       setSeparation({ siblings: sibSep, nonSiblings: nonSibSep });
 
       // Estimate dimensions: depth affects width, leaves affect height
@@ -224,13 +252,13 @@ export default function TreeViewForAgents() {
       setTranslate({ x: 100, y: height / 2 });
     } else {
       // Vertical: tree grows top to bottom
-      nx = 180; // horizontal spacing between siblings
-      ny = 140; // vertical spacing between levels
+      nx = 200; // horizontal spacing between siblings
+      ny = 160; // vertical spacing between levels
       setNodeSize({ x: nx, y: ny });
 
       // Calculate separation
-      const sibSep = leaves > 20 ? 0.8 : leaves > 10 ? 1 : 1.2;
-      const nonSibSep = sibSep + 0.2;
+      const sibSep = leaves > 20 ? 1 : leaves > 10 ? 1.2 : 1.4;
+      const nonSibSep = sibSep + 0.3;
       setSeparation({ siblings: sibSep, nonSiblings: nonSibSep });
 
       // Estimate dimensions: leaves affect width, depth affects height

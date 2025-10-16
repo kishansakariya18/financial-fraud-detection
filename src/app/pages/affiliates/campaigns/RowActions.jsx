@@ -22,11 +22,11 @@ export function RowActions({ row }) {
   const { t } = useTranslation();
 
   const goToDetails = () => {
-    navigate(`/affiliates/${affiliateUID}/tab/campaigns/${campaignUID}/detail`);
+    navigate(`/affiliates/users/${affiliateUID}/tab/campaigns/${campaignUID}/detail`);
   };
 
   const goToReferredUsers = () => {
-    navigate(`/affiliates/${affiliateUID}/tab/campaigns/${campaignID}/referred_users`);
+    navigate(`/affiliates/users/${affiliateUID}/tab/campaigns/${campaignID}/referred_users`);
   };
 
   return (

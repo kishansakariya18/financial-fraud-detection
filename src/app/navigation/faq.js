@@ -2,7 +2,7 @@
 import { TbMessage2Question } from 'react-icons/tb';
 
 // Local Imports
-import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
+import { NAV_TYPE_ITEM, PERMISSIONS, PLATFORM_TYPE } from 'constants/app.constant';
 
 export const faq = {
   id: 'faq',
@@ -11,5 +11,6 @@ export const faq = {
   title: 'FAQ',
   transKey: 'faq',
   Icon: TbMessage2Question,
-  permission: [PERMISSIONS.FAQ.VIEW]
+  permission: [PERMISSIONS.FAQ.VIEW],
+  platformType: [PLATFORM_TYPE.B2C]
 };

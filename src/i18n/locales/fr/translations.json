@@ -591,6 +591,18 @@
   "export_text": "Export",
   "exporting": "Exporting...",
   "referrence": "Référence",
+  "bonusTransfer": "Transfert de Bonus",
+  "bonusTransferConfirmationMessage": "Êtes-vous sûr de vouloir traiter ce transfert de bonus ? Cette action ne peut pas être annulée.",
+  "bonusTransferActionPrompt": "Veuillez choisir si vous voulez confirmer ou rejeter cette demande de transfert de bonus.",
+  "bonusTransferConfirmed": "Transfert de bonus confirmé avec succès",
+  "bonusTransferRejected": "Transfert de bonus rejeté avec succès",
+  "failedToConfirmBonusTransfer": "Échec de la confirmation du transfert de bonus",
+  "failedToRejectBonusTransfer": "Échec du rejet du transfert de bonus",
+  "confirming": "Confirmation en cours...",
+  "rejecting": "Rejet en cours...",
+  "grantID": "ID de Subvention",
+  "bonusAmount": "Montant du Bonus"
+  "referrence": "Référence",
   "search_user_withdraw": "Rechercher le retrait de l'utilisateur...",
   "areYouSureYouWantToAcceptThisTransaction": "Êtes-vous sûr de vouloir accepter cette transaction?",
   "areYouSureYouWantToRejectThisTransaction": "Êtes-vous sûr de vouloir rejeter cette transaction?"

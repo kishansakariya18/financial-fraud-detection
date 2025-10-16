@@ -77,24 +77,18 @@ const protectedRoutes = {
             ...platformRoute,
             ...countryRoutes,
             ...reportsRoutes,
-            ...userKycRoute,
             ...casinoRoutes,
             ...segmentationRoutes,
             ...emailTemplateRoute,
             ...promocodeRoute,
             ...pagesRoute,
-            ...crmRoute,
-            ...layoutThemeRoute,
             ...homeCategoryRoute,
-            ...tenantRoute,
             ...bonusManagementRoute,
-            ...userClass,
             ...rateLimitRulesRoute,
             ...siteConfigurationRoutes,
             ...blacklistRoutes,
             ...releaseNotesRoutes,
             ...responsibleGamblingRoute,
-            ...faqRoutes,
             // B2C-only admin routes
             {
               loader: platformGuard([PLATFORM_TYPE.B2C]),
@@ -111,7 +105,13 @@ const protectedRoutes = {
                 ...registrationFieldsRoute,
                 ...paymentRoute,
                 ...bonusCampaignRoute,
-                ...globalCommissionSettingRoute
+                ...globalCommissionSettingRoute,
+                ...crmRoute,
+                ...tenantRoute,
+                ...userClass,
+                ...faqRoutes,
+                ...userKycRoute,
+                ...layoutThemeRoute
               ]
             },
 

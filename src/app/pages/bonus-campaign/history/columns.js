@@ -5,6 +5,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { IdCell, DateCell, AmountCell, BadgeCell } from '../../../../components/custom/table/cell';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
 import { grantStatusOptions } from '../helper';
+import { RowActions } from './RowActions';
 
 // ----------------------------------------------------------------------
 
@@ -73,7 +74,8 @@ export const columns = [
       getOptionLabel: (value) =>
         grantStatusOptions.find((opt) => opt.value === value)?.label || value
     },
-    enableSorting: false
+    enableSorting: false,
+    enableColumnFilter: true
   }),
   columnHelper.accessor((row) => row.requiredWR, {
     id: 'requiredWR',
@@ -109,5 +111,13 @@ export const columns = [
     header: 'Created On',
     cell: DateCell,
     enableSorting: false
+  }),
+  columnHelper.display({
+    id: 'actions',
+    label: 'Actions',
+    header: 'Actions',
+    cell: RowActions,
+    enableSorting: false,
+    size: 80
   })
 ];
