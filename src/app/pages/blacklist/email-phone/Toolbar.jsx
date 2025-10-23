@@ -18,7 +18,7 @@ export default function Toolbar({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const pageTitle = t('blacklisted') + ' ' + t('email') + '/' + t('phone_number');
-  const buttonTitle = t('blacklist') + ' ' + t('email') + '/' + t('phone_number');
+  const buttonTitle = t('add') + ' ' + t('blacklist') + ' ' + t('email') + '/' + t('phone_number');
 
   const handleReset = () => {
     setSearchValue('');
