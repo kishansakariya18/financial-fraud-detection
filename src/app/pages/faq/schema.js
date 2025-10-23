@@ -1,8 +1,16 @@
 import * as Yup from 'yup';
 
 export const createFaqSchema = Yup.object().shape({
-  question: Yup.string().trim().required('Question is required'),
-  answer: Yup.string().trim().required('Answer is required'),
+  question: Yup.string()
+    .trim()
+    .min(10, 'Question must be at least 10 characters')
+    .max(500, 'Question must be at most 500 characters')
+    .required('Question is required'),
+  answer: Yup.string()
+    .trim()
+    .min(2, 'Answer must be at least 2 characters')
+    .max(2000, 'Answer must be at most 2000 characters')
+    .required('Answer is required'),
   module: Yup.string().required('Module is required'),
   sortOrder: Yup.number()
     .typeError('Sort order must be a number')
@@ -13,8 +21,16 @@ export const createFaqSchema = Yup.object().shape({
 });
 
 export const editFaqSchema = Yup.object().shape({
-  question: Yup.string().trim().required('Question is required'),
-  answer: Yup.string().trim().required('Answer is required'),
+  question: Yup.string()
+    .trim()
+    .min(10, 'Question must be at least 10 characters')
+    .max(500, 'Question must be at most 500 characters')
+    .required('Question is required'),
+  answer: Yup.string()
+    .trim()
+    .min(2, 'Answer must be at least 2 characters')
+    .max(2000, 'Answer must be at most 2000 characters')
+    .required('Answer is required'),
   module: Yup.string().oneOf(['GLOBAL', 'AFFILIATE', 'EARNINGS']).required('Module is required'),
   status: Yup.mixed()
     .oneOf(['0', '1', 0, 1])
