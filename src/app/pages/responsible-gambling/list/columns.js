@@ -21,6 +21,12 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.userName, {
+    id: 'UserName',
+    header: 'User Name',
+    cell: BoldCell,
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.firstName, {
     id: 'First Name',
     header: 'First Name',

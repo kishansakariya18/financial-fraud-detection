@@ -529,6 +529,7 @@ export const apiConfig = {
       WITHDRAWAL_REJECT: '/affiliates/admin/commission/withdraw/reject',
       AFFILIATE_DETAIL: '/affiliates/admin/affiliates/{affiliateId}/details',
       CAMPAIGNS_LIST: '/affiliates/admin/affiliates/{affiliateId}/campaign-list',
+      CAMPAIGN_CHANGE_STATUS: '/affiliates/admin/affiliates/campaign/{campaignUID}/changes-status',
       CAMPAIGN_DETAILS: '/affiliates/admin/affiliates/campaign/{campaignUID}/details',
       COMMISSION_SUMMARY: '/affiliates/admin/affiliates/{affiliateId}/commission-summary',
       COMMISSION_SETTINGS: '/affiliates/admin/affiliates/{affiliateId}/commission-settings',

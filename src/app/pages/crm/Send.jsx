@@ -6,7 +6,7 @@ import { Button, Input, Radio } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
+// import { useNavigate } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import CrmService from 'services/crm.services';
 import { crmSchema } from './schema';
@@ -27,7 +27,7 @@ const Send = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const breadcrumbItems = [
     { title: t('crm_notifications'), path: '/crm/notifications' },
@@ -150,11 +150,11 @@ const Send = () => {
             </div>
             <Breadcrumbs items={breadcrumbItems} className="max-sm:hidden" />
           </div>
-          <div className="flex items-center">
-            <Button variant="outlined" onClick={() => navigate('/crm')}>
+          {/* <div className="flex items-center">
+            <Button variant="outlined" onClick={() => navigate(-1)}>
               {t('back')}
             </Button>
-          </div>
+          </div> */}
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">

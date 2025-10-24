@@ -844,6 +844,7 @@
   "enable_switch_to_apply_limit": "Enable switch to apply this limit",
   "campaign_name": "Campaign Name",
   "campaign_link": "Campaign Link",
+  "campaign_status_desc": "Are you sure you want to change this campaign's status?",
   "acceptWithdrawalDesc": "Are you sure you want to accept this withdrawal request?",
   "acceptWithdrawalSuccess": "Withdrawal request accepted successfully!",
   "rejectWithdrawalDesc": "Are you sure you want to reject this withdrawal request?",
@@ -960,6 +961,6 @@
   "manage_funds": "Manage Funds",
   "search_user_withdraw": "Search User Withdraw...",
   "areYouSureYouWantToAcceptThisTransaction": "Are you sure you want to accept this transaction?",
-  "areYouSureYouWantToRejectThisTransaction": "Are you sure you want to reject this transaction?"
-  
+  "areYouSureYouWantToRejectThisTransaction": "Are you sure you want to reject this transaction?",
+  "blacklist_ip_address": "Add Blacklist IP Address"
 }
