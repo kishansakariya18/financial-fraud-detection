@@ -10,6 +10,7 @@ import useTable from 'components/ui/useTable';
 import AffiliatesService from 'services/affiliates.services';
 import { columns } from './columns';
 import { Toolbar as CampaignsToolbar } from './Toolbar';
+import { campaignsResponseMapper } from './helper';
 
 export default function AffiliateDetails() {
   const { t } = useTranslation();
@@ -24,11 +25,8 @@ export default function AffiliateDetails() {
       filters: { keyword: q || '' }
     });
     if (res.status === 200) {
-      const apiData = res.response?.data || {};
-      // Handle both shapes: data at root or nested under data
-      const payload = apiData?.data ? apiData.data : apiData;
-      const campaigns = Array.isArray(payload?.Camapgns) ? payload.Camapgns : [];
-      const totalRecords = apiData?.totalRecords ?? res.response?.totalRecords ?? campaigns.length;
+      const fullResponse = res.response || {};
+      const { list: campaigns, totalRecords } = campaignsResponseMapper(fullResponse);
       return { status: 200, data: campaigns, totalRecords };
     }
     return { status: res.status, error: res.error };
