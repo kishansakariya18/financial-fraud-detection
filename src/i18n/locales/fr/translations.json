@@ -557,6 +557,7 @@
   "recipients": "Recipients",
   "campaign_name": "Nom de la campagne",
   "campaign_link": "Lien de la campagne",
+  "campaign_status_desc": "Êtes-vous sûr de vouloir changer le statut de cette campagne ?",
   "event_template_status_success": "Plantilla de correo electrónico El estado se ha cambiado correctamente",
   "acceptWithdrawalDesc": "Êtes-vous sûr de vouloir accepter cette demande de retrait ?",
   "acceptWithdrawalSuccess": "Demande de retrait acceptée avec succès !",
