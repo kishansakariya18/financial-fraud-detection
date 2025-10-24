@@ -576,6 +576,7 @@
   "recipients": "Recipients",
   "campaign_name": "Nombre de la campaña",
   "campaign_link": "Enlace de la campaña",
+  "campaign_status_desc": "¿Estás seguro de que quieres cambiar el estado de esta campaña?",
   "event_template_status_success": "Plantilla de correo electrónico El estado se ha cambiado correctamente",
   "acceptWithdrawalDesc": "¿Estás seguro de que quieres aceptar esta solicitud de retiro?",
   "acceptWithdrawalSuccess": "Solicitud de retiro aceptada exitosamente!",
@@ -623,5 +624,6 @@
   "bonusAmount": "Cantidad de Bono",
   "search_user_withdraw": "Buscar retiro del usuario...",
   "areYouSureYouWantToAcceptThisTransaction": "¿Estás seguro de que quieres aceptar esta transacción?",
-  "areYouSureYouWantToRejectThisTransaction": "¿Estás seguro de que quieres rechazar esta transacción?"
+  "areYouSureYouWantToRejectThisTransaction": "¿Estás seguro de que quieres rechazar esta transacción?",
+  "blacklist_ip_address": "Agregar dirección IP a la lista negra"
 }

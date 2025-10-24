@@ -255,6 +255,25 @@ const AffiliatesService = {
     }
   },
 
+  changeCampaignStatus: async (campaignUID) => {
+    try {
+      const endPoint = apiConfig.endPoints.AFFILIATES.CAMPAIGN_CHANGE_STATUS.replace(
+        '{campaignUID}',
+        campaignUID
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: {}
+      });
+      return response;
+    } catch (error) {
+      return { status: 500, error: error?.message || 'Unexpected error' };
+    }
+  },
+
   getCommissionSummary: async ({ affiliateId, pagination, filters }) => {
     try {
       const endPoint = apiConfig.endPoints.AFFILIATES.COMMISSION_SUMMARY.replace(

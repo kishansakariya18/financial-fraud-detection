@@ -10,6 +10,7 @@ export const listResponseMapper = (apiResponse) => {
     firstName: item?.user?.FirstName ?? item?.user?.first_name ?? '-',
     lastName: item?.user?.LastName ?? item?.user?.last_name ?? '-',
     email: item?.user?.Email ?? item?.user?.email ?? '-',
+    userName: item?.user?.Username ?? item?.user?.username ?? '-',
     status: statusToAPP(item?.Status),
     createdAt: item?.DateCreated ? getDateInUTCToTimeZone(item?.DateCreated) : undefined,
     updatedAt: item?.DateModified ? getDateInUTCToTimeZone(item?.DateModified) : undefined,
