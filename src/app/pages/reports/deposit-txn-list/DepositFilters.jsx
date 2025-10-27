@@ -12,15 +12,12 @@ import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { useSearchParams } from 'react-router';
 import { ExportCSV } from 'components/custom/export';
-import {
-  transactionStatusOption,
-  transactionStatusToAPI
-} from 'components/sections/player-management/helper';
+import { transactionStatusOption } from 'components/sections/player-management/helper';
 import { getQueryParams } from 'utils/custom.utilities';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
 import usePermissions from 'app/router/usePermissions';
-import { PERMISSIONS, TRANSACTION } from 'constants/app.constant';
+import { PERMISSIONS } from 'constants/app.constant';
 // ----------------------------------------------------------------------
 
 export function DepositFilters({
@@ -49,9 +46,16 @@ export function DepositFilters({
         </div>
         {hasPermission(PERMISSIONS.REPORT.DEPOSIT_EXPORT_REPORT) && (
           <ExportCSV
-            filters={Object.fromEntries([...searchParams])}
-            url={`${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.REPORTS.TRANSACTIONS_EXPORT}?startDate=${filters.startDate ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&endDate=${
-              filters.endDate
+            validateFilters={{
+              startDate: filters.startDate,
+              endDate: filters.endDate
+            }}
+            apiEndpoint={apiConfig.endPoints.REPORTS.DEPOSIT_TRANSACTIONS_EXPORT}
+            requestFilters={{
+              startDate: filters.startDate
+                ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss'))
+                : '',
+              endDate: filters.endDate
                 ? String(
                     dayjs(+filters.endDate)
                       .hour(23)
@@ -59,8 +63,9 @@ export function DepositFilters({
                       .second(59)
                       .format('YYYY-MM-DD HH:mm:ss')
                   )
-                : ''
-            }&keyword=${filters.keyword || ''}&status=${filters?.status ? transactionStatusToAPI(filters.status) : ''}&&transactionType=${TRANSACTION.TRANSACTION_TYPE.DEPOSIT}`}
+                : '',
+              keyword: filters.keyword || ''
+            }}
           />
         )}
       </div>
