@@ -17,7 +17,7 @@ export const pagesRoute = [
   //   }
   // },
   {
-    path: 'crm',
+    path: 'crm/notifications/send',
     lazy: async () => {
       const { default: Send } = await import('../../pages/crm/Send');
       return {
