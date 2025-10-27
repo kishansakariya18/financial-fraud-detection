@@ -141,7 +141,7 @@ export function RowActions({ row, table }) {
                       )}
                       onClick={() =>
                         navigate(
-                          `/casino/provider/restricted-countries/${row.original.providerUID}/list`
+                          `/casino/provider/list/restricted-countries/${row.original.providerUID}/list`
                         )
                       }>
                       <FlagIcon className="size-4.5 stroke-1" />

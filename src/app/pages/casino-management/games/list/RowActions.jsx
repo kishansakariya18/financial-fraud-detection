@@ -120,7 +120,7 @@ export function RowActions({ row, table }) {
                   <MenuItem>
                     {({ focus }) => (
                       <button
-                        onClick={() => navigate(`/casino/games/${row.original.gameUID}/edit`)}
+                        onClick={() => navigate(`/casino/games/list/${row.original.gameUID}/edit`)}
                         className={clsx(
                           'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
                           focus && 'bg-this/10 dark:bg-this-light/10'
