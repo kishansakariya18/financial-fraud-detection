@@ -39,7 +39,6 @@ function responseMapper(apiData) {
       createdAt: item?.DateCreated ? new Date(item.DateCreated).getTime() : null,
       Channel: item?.Channel
     })) || [];
-  console.log(list[0].Status);
   return list;
 }
 
