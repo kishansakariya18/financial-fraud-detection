@@ -51,10 +51,10 @@ export function ViewDetails({ transactionData }) {
           <div>
             <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('currency')}</p>
             <p className="">
-              {transactionData?.currency?.Name || 'N/A'}
-              {transactionData?.currency?.Symbol && (
+              {transactionData?.currency?.name || 'N/A'}
+              {transactionData?.currency?.symbol && (
                 <span className="ml-1 text-xs text-gray-500">
-                  ({transactionData.currency.Symbol})
+                  ({transactionData.currency.symbol})
                 </span>
               )}
             </p>

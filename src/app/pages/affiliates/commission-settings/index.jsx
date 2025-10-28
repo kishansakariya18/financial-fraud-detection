@@ -11,11 +11,12 @@ import { useTranslation } from 'react-i18next';
 import AffiliatesService from 'services/affiliates.services';
 import { commissionSettingsSchema } from './schema';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { useCurrencyContext } from 'app/contexts/currency/context';
 
 const CommissionSettings = () => {
   const { affiliateId } = useParams();
   const { t } = useTranslation();
-
+  const { symbol } = useCurrencyContext();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
@@ -224,6 +225,7 @@ const CommissionSettings = () => {
                   step="any"
                   minLength={1}
                   maxLength={10}
+                  prefix={symbol}
                   error={errors?.CPAAmount?.message}
                   placeholder={t('cpa_amount_placeholder', { defaultValue: 'Enter CPA Amount' })}
                   onKeyDown={(e) => {
@@ -237,6 +239,7 @@ const CommissionSettings = () => {
                   step="any"
                   minLength={1}
                   maxLength={10}
+                  prefix={symbol}
                   error={errors?.MinDepositForCPA?.message}
                   placeholder={t('min_deposit_for_cpa_placeholder', {
                     defaultValue: 'Enter Min Deposit For CPA'
@@ -252,6 +255,7 @@ const CommissionSettings = () => {
                   step="any"
                   minLength={1}
                   maxLength={10}
+                  prefix={symbol}
                   error={errors?.MinWagerForCPA?.message}
                   placeholder={t('min_wager_for_cpa_placeholder', {
                     defaultValue: 'Enter Min Wager For CPA'
@@ -273,6 +277,7 @@ const CommissionSettings = () => {
                   step="any"
                   minLength={1}
                   maxLength={5}
+                  prefix={'%'}
                   error={errors?.LossCommissionPercent?.message}
                   placeholder={t('loss_commission_percent_placeholder', {
                     defaultValue: 'Enter Loss Commission %'
