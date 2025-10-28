@@ -16,7 +16,7 @@ export const rateLimitRulesRoute = [
     }
   },
   {
-    path: 'rate-limit-rules/edit/:rateLimitUID',
+    path: 'site-configuration/rate-limit-rules/edit/:rateLimitUID',
     lazy: async () => {
       const { default: EditRulesLimit } = await import(
         '../../pages/rate-limit-rules/EditRulesLimit'

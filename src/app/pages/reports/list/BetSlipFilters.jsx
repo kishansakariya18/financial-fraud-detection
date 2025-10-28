@@ -22,6 +22,7 @@ import moment from 'moment';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
 import { useMemo } from 'react';
+import dayjs from 'dayjs';
 
 // ----------------------------------------------------------------------
 
@@ -75,9 +76,26 @@ export function BetSlipFilters({
         </div>
         {hasPermission(PERMISSIONS.REPORT.BETSLIP_EXPORT_REPORT) && (
           <ExportCSV
-            filters={{ startDate: filters.startDate, endDate: filters.endDate }}
-            requestFilters={{ filters: exportFilters }}
+            validateFilters={{
+              startDate: filters.startDate,
+              endDate: filters.endDate
+            }}
             apiEndpoint={apiConfig.endPoints.REPORTS.BETSLIP_EXPORT}
+            requestFilters={{
+              startDate: filters.startDate
+                ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss'))
+                : '',
+              endDate: filters.endDate
+                ? String(
+                    dayjs(+filters.endDate)
+                      .hour(23)
+                      .minute(59)
+                      .second(59)
+                      .format('YYYY-MM-DD HH:mm:ss')
+                  )
+                : '',
+              keyword: filters.keyword || ''
+            }}
           />
         )}
       </div>

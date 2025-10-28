@@ -65,7 +65,7 @@ export function RestrictedCountryFilters({
           <Button
             className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
             color="primary"
-            onClick={() => navigate(`/casino/provider/select-countries/${providerId}/list`)}>
+            onClick={() => navigate(`/casino/provider/list/select-countries/${providerId}/list`)}>
             <PlusIcon className="size-5" />
             <span>{t('add') + ' ' + t('restricted_country')}</span>
           </Button>
