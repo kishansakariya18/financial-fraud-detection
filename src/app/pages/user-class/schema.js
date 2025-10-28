@@ -1,5 +1,7 @@
 import * as Yup from 'yup';
 
+const AMOUNT_REGEX = /^\d{1,10}(\.\d{1,2})?$/;
+
 export const createUserClassSchema = (isB2C) => {
   const schema = Yup.object().shape({
     // Personal Information
@@ -13,21 +15,32 @@ export const createUserClassSchema = (isB2C) => {
       .min(3, 'Class Code must be at least 3 characters')
       .max(20, 'Class Code must be at most 20 characters')
       .required('Class Code Required'),
-    deposit: Yup.number()
-      .typeError('Deposit must be a number')
-      .nullable()
-      .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
-        if (value === undefined || value === null) return true;
-        return /^\d+(\.\d{1,2})?$/.test(value.toString());
-      }),
-    wager: Yup.number()
-      .typeError('Wager must be a number')
-      .min(0, 'Wager cannot be negative')
-      .required('Wager is required')
-      .test('max-2-decimals', 'Only up to 2 decimal places are allowed', (value) => {
-        if (value === undefined || value === null) return true;
-        return /^\d+(\.\d{1,2})?$/.test(value.toString());
-      })
+    deposit: Yup.number('Deposit Amount must be a number')
+      .transform((val) => (isNaN(val) ? null : val))
+      .positive('Deposit Amount must be positive')
+      .required('Deposit Amount is required')
+      .test(
+        'amount-format',
+        'Enter minimum 1 to maximum 10 digits with up to 2 decimals (e.g., 1234567890.12)',
+        function () {
+          const original = this?.originalValue;
+          if (original === undefined || original === null || original === '') return true;
+          return AMOUNT_REGEX.test(String(original).trim());
+        }
+      ),
+    wager: Yup.number('Wager Amount must be a number')
+      .transform((val) => (isNaN(val) ? null : val))
+      .positive('Wager Amount must be positive')
+      .required('Wager Amount is required')
+      .test(
+        'amount-format',
+        'Enter minimum 1 to maximum 10 digits with up to 2 decimals (e.g., 1234567890.12)',
+        function () {
+          const original = this?.originalValue;
+          if (original === undefined || original === null || original === '') return true;
+          return AMOUNT_REGEX.test(String(original).trim());
+        }
+      )
   });
 
   if (isB2C) {

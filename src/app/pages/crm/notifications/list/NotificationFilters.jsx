@@ -39,7 +39,7 @@ export function NotificationFilters({
         <Button
           className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
           color="primary"
-          onClick={() => navigate('/crm')}>
+          onClick={() => navigate('/crm/notifications/send')}>
           <PlusIcon className="size-5" />
           <span>{t('add') + ' ' + t('notification')}</span>
         </Button>

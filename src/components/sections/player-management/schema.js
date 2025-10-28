@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 export const playerLimitSchema = Yup.object().shape({
   // Wager Limits
   oneTimeWagerLimit: Yup.number()
-    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .transform((val, originalVal) => (originalVal === '' || Number.isNaN(val) ? undefined : val))
     .when('hasOneTimeWagerLimit', {
       is: true,
       then: (schema) =>
@@ -24,7 +24,7 @@ export const playerLimitSchema = Yup.object().shape({
       return /^\d+(\.\d{1,2})?$/.test(value.toString());
     }),
   dailyWagerLimit: Yup.number()
-    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .transform((val, originalVal) => (originalVal === '' || Number.isNaN(val) ? undefined : val))
     .when('hasDailyWagerLimit', {
       is: true,
       then: (schema) =>
@@ -45,7 +45,7 @@ export const playerLimitSchema = Yup.object().shape({
       return /^\d+(\.\d{1,2})?$/.test(value.toString());
     }),
   weeklyWagerLimit: Yup.number()
-    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .transform((val, originalVal) => (originalVal === '' || Number.isNaN(val) ? undefined : val))
     .when('hasWeeklyWagerLimit', {
       is: true,
       then: (schema) =>
@@ -66,7 +66,7 @@ export const playerLimitSchema = Yup.object().shape({
       return /^\d+(\.\d{1,2})?$/.test(value.toString());
     }),
   monthlyWagerLimit: Yup.number()
-    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .transform((val, originalVal) => (originalVal === '' || Number.isNaN(val) ? undefined : val))
     .when('hasMonthlyWagerLimit', {
       is: true,
       then: (schema) =>
@@ -89,7 +89,7 @@ export const playerLimitSchema = Yup.object().shape({
 
   // Deposit Limits
   dailyDepositLimit: Yup.number()
-    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .transform((val, originalVal) => (originalVal === '' || Number.isNaN(val) ? undefined : val))
     .when('hasDailyDepositLimit', {
       is: true,
       then: (schema) =>
@@ -110,7 +110,7 @@ export const playerLimitSchema = Yup.object().shape({
       return /^\d+(\.\d{1,2})?$/.test(value.toString());
     }),
   weeklyDepositLimit: Yup.number()
-    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .transform((val, originalVal) => (originalVal === '' || Number.isNaN(val) ? undefined : val))
     .when('hasWeeklyDepositLimit', {
       is: true,
       then: (schema) =>
@@ -131,7 +131,7 @@ export const playerLimitSchema = Yup.object().shape({
       return /^\d+(\.\d{1,2})?$/.test(value.toString());
     }),
   monthlyDepositLimit: Yup.number()
-    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .transform((val, originalVal) => (originalVal === '' || Number.isNaN(val) ? undefined : val))
     .when('hasMonthlyDepositLimit', {
       is: true,
       then: (schema) =>
@@ -154,7 +154,7 @@ export const playerLimitSchema = Yup.object().shape({
 
   // Withdraw Limits
   dailyWithdrawLimit: Yup.number()
-    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .transform((val, originalVal) => (originalVal === '' || Number.isNaN(val) ? undefined : val))
     .when('hasDailyWithdrawLimit', {
       is: true,
       then: (schema) =>
@@ -175,7 +175,7 @@ export const playerLimitSchema = Yup.object().shape({
       return /^\d+(\.\d{1,2})?$/.test(value.toString());
     }),
   weeklyWithdrawLimit: Yup.number()
-    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .transform((val, originalVal) => (originalVal === '' || Number.isNaN(val) ? undefined : val))
     .when('hasWeeklyWithdrawLimit', {
       is: true,
       then: (schema) =>
@@ -196,7 +196,7 @@ export const playerLimitSchema = Yup.object().shape({
       return /^\d+(\.\d{1,2})?$/.test(value.toString());
     }),
   monthlyWithdrawLimit: Yup.number()
-    .transform((val, originalVal) => (originalVal === '' ? 0 : val))
+    .transform((val, originalVal) => (originalVal === '' || Number.isNaN(val) ? undefined : val))
     .when('hasMonthlyWithdrawLimit', {
       is: true,
       then: (schema) =>
