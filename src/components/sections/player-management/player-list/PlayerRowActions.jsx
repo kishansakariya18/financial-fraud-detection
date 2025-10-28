@@ -138,14 +138,25 @@ export function PlayerRowActions({
                 const value = cls?.UserClassID || cls?.id || cls?.UserClassId;
                 const rawPriority = cls?.Priority ?? cls?.priority ?? null;
                 const prNum = rawPriority != null ? Number(rawPriority) : null;
+                const rawActive = cls?.isActive ?? cls?.IsActive ?? cls?.active ?? null;
+                const activeNum = rawActive != null ? Number(rawActive) : null;
                 return {
                   label: cls?.ClassName || cls?.title || cls?.Name || `Class ${value || ''}`,
                   value,
-                  priority: Number.isNaN(prNum) ? null : prNum
+                  priority: Number.isNaN(prNum) ? null : prNum,
+                  isActive:
+                    rawActive === true ||
+                    rawActive === 'true' ||
+                    activeNum === 1 ||
+                    rawActive === 1 ||
+                    rawActive === '1'
                 };
               })
               .filter((i) => i.value != null)
           : [];
+
+        // Only show active classes in the modal
+        const activeEnriched = enriched.filter((c) => c.isActive);
 
         // Determine current player's class priority
         const currentClassId = row?.original?.playerClassID || row?.original?.UserClassID;
@@ -157,19 +168,19 @@ export function PlayerRowActions({
         console.log('currPriority: ', currPriority);
         console.log('currentClass: ', currentClass);
 
-        // Compute all higher priority classes (greater Priority value)
+        // Compute all higher priority classes (greater Priority value) among ACTIVE classes only
         const higher =
           currPriority != null
-            ? enriched.filter((c) => c.priority != null && c.priority > currPriority)
+            ? activeEnriched.filter((c) => c.priority != null && c.priority > currPriority)
             : [];
 
-        // Set options first to avoid any render race for controlled input
-        setClassOptions(enriched);
+        // Set options first to avoid any render race for controlled input (only active ones)
+        setClassOptions(activeEnriched);
 
         // Track all upgradable targets and auto-select the nearest higher (smallest priority among higher)
         const upgradableIds = higher.map((c) => String(c.value));
         console.log('upgradableIds: ', upgradableIds);
-        setAllowedUpgradableIds(upgradableIds, higher);
+        setAllowedUpgradableIds(upgradableIds);
         let defaultSelect = null;
         if (higher.length) {
           const nearest = higher.reduce((min, c) => (c.priority < min.priority ? c : min));

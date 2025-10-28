@@ -38,7 +38,7 @@ const PlatformLimit = () => {
         reset({
           oneTimeBetLimit: result?.BetLimit?.Value || '',
           oneTimeWinLimit: result?.WinLimit?.Value || '',
-          dailyDepositLimit: isB2B ? result?.MaxDepositPerDay?.Value || '' : '',
+          dailyDepositLimit: !isB2B ? result?.MaxDepositPerDay?.Value || '' : '',
           dailyWithdrawLimit: result?.MaxWithdrawPerDay?.Value || '',
           isCheckCaladerTime: +result?.CheckCalanderTime?.Value
         });
