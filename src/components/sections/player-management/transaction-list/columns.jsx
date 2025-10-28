@@ -4,7 +4,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 // Local Imports
 import { RowActions } from './RowActions';
 import { transactionStatusOption, transactionTypeOption } from '../helper';
-import { IdCell, DateCell, BoldCell, BadgeCell, AmountCell } from 'components/custom/table/cell';
+import { IdCell, DateCell, BoldCell, BadgeCell } from 'components/custom/table/cell';
 // import { transactionStatusOption } from "../helper";
 // import { CopyableCell } from "../../../../../components/shared/table/CopyableCell";
 // import { playerStatusOptions } from "../helper";
@@ -44,8 +44,8 @@ export const columns = [
       const currency = row.original.currency;
       return (
         <div className="font-medium">
-          {currency?.Symbol && (
-            <span className="mr-1 text-xs text-gray-500">{currency.Symbol}</span>
+          {currency?.symbol && (
+            <span className="mr-1 text-xs text-gray-500">{currency.symbol}</span>
           )}
           {amount || '0'}
         </div>
@@ -57,21 +57,54 @@ export const columns = [
     id: 'bonus',
     header: 'Bonus',
     label: 'Bonus',
-    cell: AmountCell,
+    cell: ({ row }) => {
+      const amount = row.original.bonus;
+      const currency = row.original.currency;
+      return (
+        <div className="font-medium">
+          {currency?.symbol && (
+            <span className="mr-1 text-xs text-gray-500">{currency.symbol}</span>
+          )}
+          {amount || '0'}
+        </div>
+      );
+    },
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.openingBalance, {
     id: 'openingBalance',
     header: 'Opening Balance',
     label: 'Opening Balance',
-    cell: AmountCell,
+    cell: ({ row }) => {
+      const amount = row.original.openingBalance;
+      const currency = row.original.currency;
+      return (
+        <div className="font-medium">
+          {currency?.symbol && (
+            <span className="mr-1 text-xs text-gray-500">{currency.symbol}</span>
+          )}
+          {amount || '0'}
+        </div>
+      );
+    },
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.closingBalance, {
     id: 'closingBalance',
     header: 'Closing Balance',
     label: 'Closing Balance',
-    cell: AmountCell,
+    cell: ({ row }) => {
+      const amount = row.original.closingBalance;
+      const currency = row.original.currency;
+      return (
+        <div className="font-medium">
+          {currency?.symbol && (
+            <span className="mr-1 text-xs text-gray-500">{currency.symbol}</span>
+          )}
+          {amount || '0'}
+        </div>
+      );
+    },
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.status, {
