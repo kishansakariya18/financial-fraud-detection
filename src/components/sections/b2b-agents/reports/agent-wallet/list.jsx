@@ -16,6 +16,8 @@ import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.const
 import B2BAgentWalletService from 'services/b2b-agent/b2b-agent-wallet.service';
 import { useCurrencyContext } from 'app/contexts/currency/context';
 import { agentWalletColumns, AgentWalletFilters } from '.';
+import { parseAgentStatusToApi, parseAgentTypeToApi } from 'components/sections/b2b-agents/helper';
+import moment from 'moment-timezone';
 
 // ----------------------------------------------------------------------
 
@@ -39,12 +41,21 @@ export default function AgentWalletList() {
 
     // Add filters
     if (queryParams.agentName) {
-      params.agentName = queryParams.agentName;
+      params.keyword = queryParams.agentName;
     }
     if (queryParams.agentID) {
       params.agentID = queryParams.agentID;
     }
-
+    if (queryParams.status) {
+      params.status = parseAgentStatusToApi(queryParams.status);
+    }
+    if (queryParams.agentType) {
+      params.agentType = parseAgentTypeToApi(queryParams.agentType);
+    }
+    if (queryParams.startDate && queryParams.endDate) {
+      params.startDate = moment(+queryParams.startDate).startOf('day').toDate();
+      params.endDate = moment(+queryParams.endDate).endOf('day').toDate();
+    }
     return B2BAgentWalletService.getAgentWalletReport(params)
       .then(({ response }) => {
         const { data = [], totalRecords = 0, summary = {} } = response;
@@ -85,35 +96,58 @@ export default function AgentWalletList() {
     if (queryParams.agentName) {
       filtersFromQuery.push({ id: 'agentName', value: queryParams.agentName });
     }
+    if (queryParams.status) {
+      filtersFromQuery.push({ id: 'status', value: queryParams.status });
+    }
+    if (queryParams.agentType) {
+      filtersFromQuery.push({ id: 'agentType', value: queryParams.agentType });
+    }
+    if (queryParams.startDate && queryParams.endDate) {
+      filtersFromQuery.push({
+        id: 'createdAt',
+        value: [+queryParams.startDate, +queryParams.endDate]
+      });
+    }
 
     setColumnFilters(filtersFromQuery);
   }, [queryParams, setColumnFilters]);
 
-  // const applyFilterHandler = () => {
-  //   const filterItems = {};
+  const applyFilterHandler = () => {
+    const filterItems = {};
 
-  //   for (let data of table.getState().columnFilters) {
-  //     if (data.id === 'agentName') {
-  //       filterItems.agentName = data.value;
-  //     }
-  //   }
+    for (let data of table.getState().columnFilters) {
+      if (data.id === 'agentName') {
+        filterItems.agentName = data.value;
+      }
+      if (data.id === 'status') {
+        filterItems.status = data.value;
+      }
+      if (data.id === 'agentType') {
+        filterItems.agentType = data.value;
+      }
+      if (data.id === 'createdAt') {
+        filterItems.date = data.value;
+      }
+    }
 
-  //   setSearchParams({
-  //     pageIndex: DEFAULT_PAGE_INDEX,
-  //     pageSize: DEFAULT_PER_PAGE_RECORD,
-  //     ...(filterItems.agentName && { agentName: filterItems.agentName })
-  //   });
-  // };
+    setSearchParams({
+      pageIndex: DEFAULT_PAGE_INDEX,
+      pageSize: DEFAULT_PER_PAGE_RECORD,
+      ...(filterItems.agentName && { agentName: filterItems.agentName }),
+      ...(filterItems.status && { status: filterItems.status }),
+      ...(filterItems.agentType && { agentType: filterItems.agentType }),
+      ...(filterItems.date && { startDate: filterItems.date[0] }),
+      ...(filterItems.date && { endDate: filterItems.date[1] })
+    });
+  };
 
-  // const clearFilterHandler = () => {
-  //   if (!isEmptyObject(queryParams)) {
-  //     setSearchParams({
-  //       pageIndex: DEFAULT_PAGE_INDEX,
-  //       pageSize: DEFAULT_PER_PAGE_RECORD
-  //     });
-  //   }
-  //   table.resetColumnFilters();
-  // };
+  const clearFilterHandler = () => {
+    setSearchParams({
+      pageIndex: DEFAULT_PAGE_INDEX,
+      pageSize: DEFAULT_PER_PAGE_RECORD
+    });
+    table.resetColumnFilters();
+  };
 
   useLockScrollbar(tableSettings.enableFullScreen);
 
@@ -123,8 +157,8 @@ export default function AgentWalletList() {
       <AgentWalletFilters
         pageTitle={pageTitle}
         table={table}
-        // onApplyFilters={applyFilterHandler}
-        // onClearFilters={clearFilterHandler}
+        onApplyFilters={applyFilterHandler}
+        onClearFilters={clearFilterHandler}
       />
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
     </ContentWrapper>
