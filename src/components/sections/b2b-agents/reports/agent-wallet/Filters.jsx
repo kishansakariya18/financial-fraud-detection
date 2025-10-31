@@ -39,7 +39,7 @@ export function AgentWalletFilters({
     const params = {};
 
     if (filters.agentName) {
-      params.agentName = filters.agentName;
+      params.keyword = filters.agentName;
     }
     if (filters.agentID) {
       params.agentID = filters.agentID;
@@ -51,8 +51,8 @@ export function AgentWalletFilters({
       params.agentType = parseAgentTypeToApi(filters.agentType);
     }
     if (filters.startDate && filters.endDate) {
-      params.startDate = moment(filters.startDate).startOf('day').toDate();
-      params.endDate = moment(filters.endDate).endOf('day').toDate();
+      params.startDate = moment(Number(filters.startDate)).startOf('day').toDate();
+      params.endDate = moment(Number(filters.endDate)).endOf('day').toDate();
     }
 
     params.export = true;

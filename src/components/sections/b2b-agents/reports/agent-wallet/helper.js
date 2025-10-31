@@ -4,12 +4,13 @@ import { GENERAL_STATUS } from 'constants/app.constant';
 
 export const mapStatusToApp = (status) => {
   switch (status) {
-    case 'active':
-      return GENERAL_STATUS.ACTIVE;
-    case 'inactive':
-      return GENERAL_STATUS.INACTIVE;
+    case GENERAL_STATUS.ACTIVE:
+      return 'Active';
+    case GENERAL_STATUS.INACTIVE:
+      return 'Inactive';
+    default:
+      return '-';
   }
-  return status;
 };
 /**
  * Maps API response to table data

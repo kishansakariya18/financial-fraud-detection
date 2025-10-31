@@ -66,7 +66,6 @@ const AgentService = {
       per_page: pagination?.pageSize || DEFAULT_PER_PAGE_RECORD,
       page: pagination.pageIndex + 1
     };
-    // TODO: Update this endpoint when API is ready
     return apiInstance.get(apiConfig.endPoints.AGENT.UNASSIGNED_PLAYERS, {
       params: apiRequestParams
     });
@@ -77,7 +76,6 @@ const AgentService = {
       agentUID,
       playerIds
     };
-    // TODO: Update this endpoint when API is ready
     return apiInstance.post(apiConfig.endPoints.AGENT.ASSIGN_PLAYERS, requestObject);
   },
 
@@ -86,7 +84,6 @@ const AgentService = {
       agentUID,
       playerIds
     };
-    // TODO: Update this endpoint when API is ready
     return apiInstance.post(apiConfig.endPoints.AGENT.UNASSIGN_PLAYERS, requestObject);
   },
 
