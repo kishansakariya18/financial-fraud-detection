@@ -75,7 +75,7 @@ export function RowActions({ row }) {
         onOpen={onOpenDialogBox}
         onOk={onOkDialogBox}
         sizeClass="max-w-xl">
-        <ViewDetails transactionData={row.original} onClose={onCloseDialogBox} />
+        <ViewDetails transaction={row.original} onClose={onCloseDialogBox} />
       </CustomModal>
     </>
   );
