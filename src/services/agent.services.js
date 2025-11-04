@@ -4,6 +4,7 @@ import { replaceText } from 'utils/custom.utilities';
 import { DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import apiInstance from 'utils/apiInstance';
 import dayjs from 'dayjs';
+import moment from 'moment';
 
 const AgentService = {
   getDashboard: async (data) => {
@@ -170,9 +171,9 @@ const AgentService = {
       keyword: filters?.keyword || undefined,
       status: filters?.status || undefined,
       startDate: filters?.startDate
-        ? new Date(filters.startDate).toISOString().split('T')[0]
+        ? moment(+filters.startDate).startOf('day').toDate()
         : undefined,
-      endDate: filters?.endDate ? new Date(filters.endDate).toISOString().split('T')[0] : undefined,
+      endDate: filters?.endDate ? moment(+filters.endDate).endOf('day').toDate() : undefined,
       page: (pagination?.pageIndex || 0) + 1,
       perPage: pagination?.pageSize || DEFAULT_PER_PAGE_RECORD
     };
