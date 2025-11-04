@@ -511,6 +511,35 @@ const PlayerService = {
       console.log('Error from getLimitSummary', error);
     }
   },
+  getLimitHistory: async (userUID, filters = {}) => {
+    return apiInstance.post(apiConfig.endPoints.RESPONSIBLE_GAMING_LIMITS.HISTORY, {
+      page: filters.page || 1,
+      per_page: filters.per_page || 100,
+      filters: {
+        userUID,
+        ...(filters.setBy && { setBy: filters.setBy }),
+        ...(filters.limitType && { limitType: filters.limitType }),
+        ...(filters.limitPeriod && { limitPeriod: filters.limitPeriod }),
+        ...(filters.startDate && { startDate: filters.startDate }),
+        ...(filters.endDate && { endDate: filters.endDate }),
+        ...(filters.groupBy && { groupBy: filters.groupBy })
+      }
+    });
+  },
+  getUserClassLimitHistory: async (userClassUID, filters = {}) => {
+    return apiInstance.post(apiConfig.endPoints.USER_CLASS_LIMITS.HISTORY, {
+      page: filters.page || 1,
+      per_page: filters.per_page || 100,
+      filters: {
+        userClassUID: userClassUID,
+        ...(filters.limitType && { limitType: filters.limitType }),
+        ...(filters.limitPeriod && { limitPeriod: filters.limitPeriod }),
+        ...(filters.startDate && { startDate: filters.startDate }),
+        ...(filters.endDate && { endDate: filters.endDate }),
+        ...(filters.groupBy && { groupBy: filters.groupBy })
+      }
+    });
+  },
   bulkUpdateUserLimits: async (userId, limits) => {
     try {
       const endPoint = replaceText(

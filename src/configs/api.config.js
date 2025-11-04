@@ -508,7 +508,11 @@ export const apiConfig = {
     },
     RESPONSIBLE_GAMING_LIMITS: {
       USER_ALL_LIMITS: '/users/admin/responsible-gaming-limits/users/:userId/all-limits',
-      USER_BULK_UPDATE: '/users/admin/responsible-gaming-limits/users/:userId/bulk-update'
+      USER_BULK_UPDATE: '/users/admin/responsible-gaming-limits/users/:userId/bulk-update',
+      HISTORY: '/users/admin/responsible-gaming-limits/history'
+    },
+    USER_CLASS_LIMITS: {
+      HISTORY: '/users/admin/user-class-limits/history'
     },
     RESPONSIBLE_GAMBLING_RESTRICTIONS: {
       LIST: '/users/admin/responsible-gaming-restrictions/self-exclusion/list',
