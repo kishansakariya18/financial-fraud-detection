@@ -515,3 +515,58 @@ export const playerReferralResponseMapper = (apiData) => {
   });
   return { totalRecords, list, userData };
 };
+
+export const mapLimitSummary = (apiData, isB2B) => {
+  if (!apiData)
+    return { userLimits: [], adminLimits: [], userClassLimits: [], globalPlatformLimits: null };
+  const {
+    UserLimits = [],
+    AdminLimits = [],
+    UserClassLimits = [],
+    GlobalPlatformLimits = null
+  } = apiData;
+
+  const normalizeLimitItem = (isB2B) => (item, index) => {
+    if (isB2B && item.LimitType === 'deposit') {
+      return null;
+    }
+    return {
+      id: item.LimitID || item.UserClassLimitID || item.ResponsibleGamingLimitID || index,
+      type: item.LimitType,
+      period: item.LimitPeriod,
+      amount: item.LimitAmount,
+      setBy: item.SetBy,
+      createdAt: item.DateCreated,
+      updatedAt: item.DateModified,
+      userClassLimitUID: item.UserClassLimitUID,
+      userClass: item.userClass
+        ? {
+            classCode: item.userClass.ClassCode,
+            userClassUID: item.userClass.UserClassUID,
+            className: item.userClass.ClassName,
+            userClassID: item.userClass.UserClassID
+          }
+        : null
+    };
+  };
+
+  return {
+    userLimits: Array.isArray(UserLimits)
+      ? UserLimits.map((item) => normalizeLimitItem(isB2B)(item)).filter(Boolean)
+      : [],
+    adminLimits: Array.isArray(AdminLimits)
+      ? AdminLimits.map((item) => normalizeLimitItem(isB2B)(item)).filter(Boolean)
+      : [],
+    userClassLimits: Array.isArray(UserClassLimits)
+      ? UserClassLimits.map((item) => normalizeLimitItem(isB2B)(item)).filter(Boolean)
+      : [],
+    globalPlatformLimits: GlobalPlatformLimits
+      ? {
+          maxDepositPerDay: GlobalPlatformLimits.MaxDepositPerDay,
+          maxWithdrawPerDay: GlobalPlatformLimits.MaxWithdrawPerDay,
+          betLimit: GlobalPlatformLimits.BetLimit,
+          winLimit: GlobalPlatformLimits.WinLimit
+        }
+      : null
+  };
+};

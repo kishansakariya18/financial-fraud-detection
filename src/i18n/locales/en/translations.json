@@ -975,5 +975,6 @@
   "search_user_withdraw": "Search User Withdraw...",
   "areYouSureYouWantToAcceptThisTransaction": "Are you sure you want to accept this transaction?",
   "areYouSureYouWantToRejectThisTransaction": "Are you sure you want to reject this transaction?",
-  "blacklist_ip_address": "Add Blacklist IP Address"
+  "blacklist_ip_address": "Add Blacklist IP Address",
+  "view_history": "View History"
 }
