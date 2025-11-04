@@ -49,10 +49,27 @@ const EditProvider = () => {
       setProviderDetails(details);
       const paymentGatewayConfig = details.PaymentGatewayConfig[0]?.Config;
       const defaultData = {};
+
+      // Set default KYC level if no prerequisites exist
+      if (
+        details?.PaymentGatewaysPrereqisites?.length === 0 ||
+        !details?.PaymentGatewaysPrereqisites
+      ) {
+        defaultData.KYCLevel = '0';
+      } else {
+        const value =
+          details.PaymentGatewaysPrereqisites.find((item) => item.ConfigKey === 'KYCLevel') || {};
+        console.log('value:::::', value);
+
+        defaultData.KYCLevel = value.ConfigValue;
+      }
+
       if (paymentGatewayConfig) {
+        // Add all payment gateway config values to defaultData
         for (const key in paymentGatewayConfig) {
           defaultData[paymentGatewayConfig[key].key] = paymentGatewayConfig[key].value;
         }
+
         console.log('defaultData::', defaultData);
         console.log('PaymentGatewayConfig::', paymentGatewayConfig);
         reset(defaultData);
@@ -110,10 +127,18 @@ const EditProvider = () => {
     console.log('existingConfig:', existingConfig);
     await editPaymentProviderApi({
       providerUID: providerUID,
-      providerConfig: existingConfig
+      providerConfig: existingConfig,
+      kycLevel: data.KYCLevel || '0'
     });
   };
   const boolOptions = getBoolOptions();
+  const KYCLevelOptions = [
+    { label: 'No KYC Required', value: '0' },
+    { label: 'KYC Level 1', value: '1' },
+    { label: 'KYC Level 2', value: '2' },
+    { label: 'KYC Level 3', value: '3' },
+    { label: 'KYC Level 4', value: '4' }
+  ];
   return (
     <Page title={pageTitle}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
@@ -168,47 +193,73 @@ const EditProvider = () => {
                   <Skeleton className="grid gap-4 sm:grid-cols-2" key={i} />
                 ))}
               {!loading && (
-                <div className="mt-6 space-y-4">
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    {Object.values(providerDetails?.PaymentGatewayConfig[0]?.Config || {}).map(
-                      (item) => {
-                        const tagType = providerConfigTypeMapper(item.type);
-                        if (tagType === 'select') {
-                          return (
-                            <Controller
-                              render={({ field }) => (
-                                <Listbox
-                                  data={boolOptions}
-                                  value={
-                                    boolOptions.find((opt) => opt.value === field.value) || null
-                                  }
-                                  onChange={(val) => field.onChange(val.value)}
-                                  name={field.name}
-                                  label={item.label}
-                                  placeholder={t('select') + ' ' + item.label + ' ' + t('option')}
-                                  displayField="label"
-                                  error={errors[item.key]?.message}
-                                />
-                              )}
-                              key={item.id}
-                              control={control}
-                              name={item.key}
-                            />
-                          );
-                        } else {
-                          return (
-                            <Input
-                              key={item.id}
-                              type={tagType}
-                              {...register(item.key)}
-                              label={item.label}
-                              error={errors[item.key]?.message}
-                              placeholder={t('enter') + ' ' + item.label}
-                            />
-                          );
+                <div className="mt-6 space-y-6">
+                  {/* Prerequisites Section */}
+                  <div>
+                    <h3 className="mb-4 text-lg font-medium">{t('prerequisites')}</h3>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <Controller
+                        render={({ field }) => (
+                          <Listbox
+                            data={KYCLevelOptions}
+                            value={KYCLevelOptions.find((opt) => opt.value === field.value) || null}
+                            onChange={(val) => field.onChange(val.value)}
+                            name={field.name}
+                            label={'KYC level'}
+                            placeholder={t('select') + ' ' + 'KYC level' + ' ' + t('option')}
+                            displayField="label"
+                            error={errors['KYCLevel']?.message}
+                          />
+                        )}
+                        control={control}
+                        name="KYCLevel"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="border-t border-gray-200 pt-6">
+                    <h3 className="mb-4 text-lg font-medium">{t('configuration')}</h3>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      {Object.values(providerDetails?.PaymentGatewayConfig[0]?.Config || {}).map(
+                        (item) => {
+                          const tagType = providerConfigTypeMapper(item.type);
+                          if (tagType === 'select') {
+                            return (
+                              <Controller
+                                render={({ field }) => (
+                                  <Listbox
+                                    data={boolOptions}
+                                    value={
+                                      boolOptions.find((opt) => opt.value === field.value) || null
+                                    }
+                                    onChange={(val) => field.onChange(val.value)}
+                                    name={field.name}
+                                    label={item.label}
+                                    placeholder={t('select') + ' ' + item.label + ' ' + t('option')}
+                                    displayField="label"
+                                    error={errors[item.key]?.message}
+                                  />
+                                )}
+                                key={item.id}
+                                control={control}
+                                name={item.key}
+                              />
+                            );
+                          } else {
+                            return (
+                              <Input
+                                key={item.id}
+                                type={tagType}
+                                {...register(item.key)}
+                                label={item.label}
+                                error={errors[item.key]?.message}
+                                placeholder={t('enter') + ' ' + item.label}
+                              />
+                            );
+                          }
                         }
-                      }
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
