@@ -13,6 +13,7 @@ import { commissionSettingsSchema } from './schema';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useCurrencyContext } from 'app/contexts/currency/context';
 import { RiUserSettingsFill } from 'react-icons/ri';
+import { ContextualHelp } from 'components/shared/ContextualHelp';
 
 const CommissionSettings = () => {
   const { affiliateId } = useParams();
@@ -216,8 +217,37 @@ const CommissionSettings = () => {
             {/* CPA inputs - visible only when required */}
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
+                {...register('CPAAmount')}
+                label={t('commission') + ' ' + t('amount')}
+                type="number"
+                step="any"
+                minLength={1}
+                maxLength={10}
+                prefix={symbol}
+                error={errors?.CPAAmount?.message}
+                placeholder={t('cpa_amount_placeholder', {
+                  defaultValue: 'Enter Commission Amount'
+                })}
+                onKeyDown={(e) => {
+                  if (['e', 'E', '+', '-', ' '].includes(e.key)) e.preventDefault();
+                }}
+                disabled={!isCPARequired}
+                suffix={
+                  <ContextualHelp
+                    title={t('commission') + ' ' + t('amount')}
+                    anchor={{ to: 'bottom', gap: 8 }}
+                    content={<p>{t('commission_amount_help_text')}</p>}
+                  />
+                }
+              />
+            </div>
+            <h4 className="text-md py truncate font-bold text-gray-800 dark:text-dark-50">
+              {t('requirement')}
+            </h4>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Input
                 {...register('MinDepositForCPA')}
-                label={t('min_deposit_for_cpa', { defaultValue: 'Min Deposit Amount' })}
+                label={t('min_deposit_for_cpa', { defaultValue: 'Min First Time Deposit Amount' })}
                 type="number"
                 step="any"
                 minLength={1}
@@ -231,6 +261,13 @@ const CommissionSettings = () => {
                   if (['e', 'E', '+', '-', ' '].includes(e.key)) e.preventDefault();
                 }}
                 disabled={!isCPARequired}
+                suffix={
+                  <ContextualHelp
+                    title={t('min_deposit_for_cpa')}
+                    anchor={{ to: 'bottom', gap: 8 }}
+                    content={<p>{t('min_deposit_for_cpa_help_text')}</p>}
+                  />
+                }
               />
               <Input
                 {...register('MinWagerForCPA')}
@@ -248,23 +285,13 @@ const CommissionSettings = () => {
                   if (['e', 'E', '+', '-', ' '].includes(e.key)) e.preventDefault();
                 }}
                 disabled={!isCPARequired}
-              />
-              <Input
-                {...register('CPAAmount')}
-                label={t('commission') + ' ' + t('amount')}
-                type="number"
-                step="any"
-                minLength={1}
-                maxLength={10}
-                prefix={symbol}
-                error={errors?.CPAAmount?.message}
-                placeholder={t('cpa_amount_placeholder', {
-                  defaultValue: 'Enter Commission Amount'
-                })}
-                onKeyDown={(e) => {
-                  if (['e', 'E', '+', '-', ' '].includes(e.key)) e.preventDefault();
-                }}
-                disabled={!isCPARequired}
+                suffix={
+                  <ContextualHelp
+                    title={t('min_wager_for_cpa')}
+                    anchor={{ to: 'bottom', gap: 8 }}
+                    content={<p>{t('min_wager_for_cpa_help_text')}</p>}
+                  />
+                }
               />
             </div>
             <div className="flex items-center gap-2">
@@ -302,6 +329,13 @@ const CommissionSettings = () => {
                   if (['e', 'E', '+', '-', ' '].includes(e.key)) e.preventDefault();
                 }}
                 disabled={!isLossPctRequired}
+                suffix={
+                  <ContextualHelp
+                    title={t('loss_commission_percent')}
+                    anchor={{ to: 'bottom', gap: 8 }}
+                    content={<p>{t('loss_commission_percent_help_text')}</p>}
+                  />
+                }
               />
             </div>
           </div>

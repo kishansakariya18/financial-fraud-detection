@@ -873,8 +873,8 @@
   "enable_loss_commission": "Enable Loss Commission",
   "cpa_amount": "CPA Amount",
   "cpa_amount_placeholder": "Enter Commission Amount",
-  "min_deposit_for_cpa": "Min Deposit Amount",
-  "min_deposit_for_cpa_placeholder": "Enter Min Deposit Amount",
+  "min_deposit_for_cpa": "Min First Time Deposit Amount",
+  "min_deposit_for_cpa_placeholder": "Enter Min First Time Deposit Amount",
   "min_wager_for_cpa": "Min Wager Amount",
   "min_wager_for_cpa_placeholder": "Enter Min Wager Amount",
   "loss_commission_percent": "Loss Commission Percentage",
@@ -978,5 +978,9 @@
   "blacklist_ip_address": "Add Blacklist IP Address",
   "view_history": "View History",
   "cpa_commission_setting": "CPA (Cost Per Acquisition) Commission Settings",
-  "loss_commission_setting": "Loss Commission Settings"
+  "loss_commission_setting": "Loss Commission Settings",
+  "commission_amount_help_text": "Amount paid to the affiliate when conditions are met.",
+  "min_deposit_for_cpa_help_text": "Amount of the first deposit required to qualify for CPA.",
+  "min_wager_for_cpa_help_text": "Total amount wagered by the end user to qualify for CPA.",
+  "loss_commission_percent_help_text": "Percentage of the loss amount to be paid to the affiliate."
 }
