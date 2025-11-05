@@ -33,6 +33,49 @@ import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useCurrencyContext } from 'app/contexts/currency/context';
 import { isB2BPlatform, isB2CPlatform } from 'utils/platformNavigation';
 import LimitHistoryDialog from './LimitHistoryDialog';
+import PropTypes from 'prop-types';
+
+const LimitItem = ({
+  title,
+  value,
+  onHistoryClick,
+  formatValue = (val) => val,
+  showHistory = true
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <div className="col-span-3 sm:col-span-1">
+      <div className="flex items-start justify-between">
+        <div className="flex-1">
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{title}</p>
+            {showHistory && onHistoryClick && (
+              <Button
+                variant="flat"
+                isIcon
+                onClick={onHistoryClick}
+                className="size-6 rounded-full text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400"
+                data-tooltip
+                data-tooltip-content={t('view_history')}>
+                <MdHistory className="size-4" />
+              </Button>
+            )}
+          </div>
+          <p>{formatValue(value)}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+LimitItem.propTypes = {
+  title: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  onHistoryClick: PropTypes.func,
+  formatValue: PropTypes.func,
+  showHistory: PropTypes.bool
+};
 
 export function PlayerViewDetails({
   isAgent = false,
@@ -57,7 +100,8 @@ export function PlayerViewDetails({
     setBy: null,
     limitType: null,
     limitPeriod: null,
-    userClassUID: null
+    userClassUID: null,
+    isPlatformLimit: false
   });
   const [sectionsOpen, setSectionsOpen] = useState({
     user: true,
@@ -105,13 +149,20 @@ export function PlayerViewDetails({
     }
   };
 
-  const openHistoryDialog = (setBy, limitType, limitPeriod, userClassUID = null) => {
+  const openHistoryDialog = (
+    setBy,
+    limitType,
+    limitPeriod,
+    userClassUID = null,
+    isPlatformLimit = false
+  ) => {
     setHistoryDialog({
       isOpen: true,
       setBy,
       limitType,
       limitPeriod,
-      userClassUID
+      userClassUID,
+      isPlatformLimit
     });
   };
 
@@ -121,7 +172,8 @@ export function PlayerViewDetails({
       setBy: null,
       limitType: null,
       limitPeriod: null,
-      userClassUID: null
+      userClassUID: null,
+      isPlatformLimit: false
     });
   };
 
@@ -865,34 +917,18 @@ export function PlayerViewDetails({
                     {limitSummary.userLimits.length === 0 ? (
                       <p className="col-span-3 text-sm text-gray-600">{t('noData')}</p>
                     ) : (
-                      limitSummary.userLimits.reduce((acc, l) => {
-                        acc.push(
-                          <div key={`u-${l.id}-value`} className="col-span-3 sm:col-span-1">
-                            <div className="flex items-start justify-between">
-                              <div className="flex-1">
-                                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                                  {`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
-                                </p>
-                                <p>
-                                  {l.amount > 0 && l.type !== 'session'
-                                    ? formatCurrency(l.amount)
-                                    : l.amount || '-'}
-                                </p>
-                              </div>
-                              <Button
-                                variant="flat"
-                                isIcon
-                                onClick={() => openHistoryDialog('user', l.type, l.period)}
-                                className="ml-2 size-7 rounded-full text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400"
-                                data-tooltip
-                                data-tooltip-content={t('view_history')}>
-                                <MdHistory className="size-4.5" />
-                              </Button>
-                            </div>
-                          </div>
-                        );
-                        return acc;
-                      }, [])
+                      limitSummary.userLimits.map((l) => (
+                        <LimitItem
+                          key={`u-${l.id}-value`}
+                          title={`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
+                          value={l.amount}
+                          onHistoryClick={() => openHistoryDialog('user', l.type, l.period)}
+                          formatValue={(amount) => {
+                            if (amount > 0 && l.type !== 'session') return formatCurrency(amount);
+                            return amount || '-';
+                          }}
+                        />
+                      ))
                     )}
                   </div>
                 )}
@@ -916,34 +952,18 @@ export function PlayerViewDetails({
                     {limitSummary.adminLimits.length === 0 ? (
                       <p className="col-span-3 text-sm text-gray-600">{t('noData')}</p>
                     ) : (
-                      limitSummary.adminLimits.reduce((acc, l) => {
-                        acc.push(
-                          <div key={`a-${l.id}-value`} className="col-span-3 sm:col-span-1">
-                            <div className="flex items-start justify-between">
-                              <div className="flex-1">
-                                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                                  {`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
-                                </p>
-                                <p>
-                                  {l.amount > 0 && l.type !== 'session'
-                                    ? formatCurrency(l.amount)
-                                    : l.amount || '-'}
-                                </p>
-                              </div>
-                              <Button
-                                variant="flat"
-                                isIcon
-                                onClick={() => openHistoryDialog('admin', l.type, l.period)}
-                                className="ml-2 size-7 rounded-full text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400"
-                                data-tooltip
-                                data-tooltip-content={t('view_history')}>
-                                <MdHistory className="size-4.5" />
-                              </Button>
-                            </div>
-                          </div>
-                        );
-                        return acc;
-                      }, [])
+                      limitSummary.adminLimits.map((l) => (
+                        <LimitItem
+                          key={`a-${l.id}-value`}
+                          title={`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
+                          value={l.amount}
+                          onHistoryClick={() => openHistoryDialog('admin', l.type, l.period)}
+                          formatValue={(amount) => {
+                            if (amount > 0 && l.type !== 'session') return formatCurrency(amount);
+                            return amount || '-';
+                          }}
+                        />
+                      ))
                     )}
                   </div>
                 )}
@@ -968,46 +988,20 @@ export function PlayerViewDetails({
                       {limitSummary.userClassLimits.length === 0 ? (
                         <p className="col-span-3 text-sm text-gray-600">{t('noData')}</p>
                       ) : (
-                        limitSummary.userClassLimits.reduce((acc, l) => {
-                          // acc.push(
-                          //   // <div key={`uc-${l.id}-limit`}>
-                          //   //   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                          //   //     {`${capitalizeFirstLetter(l.type)} ${capitalizeFirstLetter(l.period)} ${t('limit')}`}
-                          //   //   </p>
-                          //   //   <p>{(Number(l.amount) || 0) > 0 ? t('yes') : t('no')}</p>
-                          //   // </div>
-                          // );
-                          acc.push(
-                            <div key={`uc-${l.id}-value`} className="col-span-3 sm:col-span-1">
-                              <div className="flex items-start justify-between">
-                                <div className="flex-1">
-                                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                                    {`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
-                                  </p>
-                                  <p>{l.amount > 0 ? formatCurrency(l.amount) : '-'}</p>
-                                </div>
-                                <Button
-                                  variant="flat"
-                                  isIcon
-                                  onClick={() => {
-                                    console.log(l);
-                                    openHistoryDialog(
-                                      null,
-                                      l.type,
-                                      l.period,
-                                      l?.userClass?.userClassUID
-                                    );
-                                  }}
-                                  className="ml-2 size-7 rounded-full text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400"
-                                  data-tooltip
-                                  data-tooltip-content={t('view_history')}>
-                                  <MdHistory className="size-4.5" />
-                                </Button>
-                              </div>
-                            </div>
-                          );
-                          return acc;
-                        }, [])
+                        limitSummary.userClassLimits.map((l) => (
+                          <LimitItem
+                            key={`uc-${l.id}-value`}
+                            title={`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
+                            value={l.amount}
+                            onHistoryClick={() =>
+                              openHistoryDialog(null, l.type, l.period, l?.userClass?.userClassUID)
+                            }
+                            formatValue={(amount) => {
+                              if (amount > 0 && l.type !== 'session') return formatCurrency(amount);
+                              return amount || '-';
+                            }}
+                          />
+                        ))
                       )}
                     </div>
                   )}
@@ -1034,47 +1028,39 @@ export function PlayerViewDetails({
                     ) : (
                       <>
                         {!isB2B && (
-                          <div>
-                            <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                              {`${t('dailyDepositValue')}`}
-                            </p>
-                            <p>
-                              {limitSummary.globalPlatformLimits.maxDepositPerDay > 0
-                                ? formatCurrency(limitSummary.globalPlatformLimits.maxDepositPerDay)
-                                : '-'}
-                            </p>
-                          </div>
+                          <LimitItem
+                            title={t('dailyDepositValue')}
+                            value={limitSummary.globalPlatformLimits.maxDepositPerDay}
+                            onHistoryClick={() =>
+                              openHistoryDialog(null, 'deposit', 'daily', null, true)
+                            }
+                            formatValue={(val) => (val > 0 ? formatCurrency(val) : '-')}
+                          />
                         )}
-                        <div>
-                          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                            {`${t('dailyWithdrawValue')}`}
-                          </p>
-                          <p>
-                            {limitSummary.globalPlatformLimits.maxWithdrawPerDay > 0
-                              ? formatCurrency(limitSummary.globalPlatformLimits.maxWithdrawPerDay)
-                              : '-'}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                            {`${t('oneTimeBetValue')}`}
-                          </p>
-                          <p>
-                            {limitSummary.globalPlatformLimits.betLimit > 0
-                              ? formatCurrency(limitSummary.globalPlatformLimits.betLimit)
-                              : '-'}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                            {`${t('oneTimeWinValue')}`}
-                          </p>
-                          <p>
-                            {limitSummary.globalPlatformLimits.winLimit > 0
-                              ? formatCurrency(limitSummary.globalPlatformLimits.winLimit)
-                              : '-'}
-                          </p>
-                        </div>
+                        <LimitItem
+                          title={t('dailyWithdrawValue')}
+                          value={limitSummary.globalPlatformLimits.maxWithdrawPerDay}
+                          onHistoryClick={() =>
+                            openHistoryDialog(null, 'withdraw', 'daily', null, true)
+                          }
+                          formatValue={(val) => (val > 0 ? formatCurrency(val) : '-')}
+                        />
+                        <LimitItem
+                          title={t('oneTimeBetValue')}
+                          value={limitSummary.globalPlatformLimits.betLimit}
+                          onHistoryClick={() =>
+                            openHistoryDialog(null, 'wager', 'one-time', null, true)
+                          }
+                          formatValue={(val) => (val > 0 ? formatCurrency(val) : '-')}
+                        />
+                        <LimitItem
+                          title={t('oneTimeWinValue')}
+                          value={limitSummary.globalPlatformLimits.winLimit}
+                          onHistoryClick={() =>
+                            openHistoryDialog(null, 'win', 'one-time', null, true)
+                          }
+                          formatValue={(val) => (val > 0 ? formatCurrency(val) : '-')}
+                        />
                       </>
                     )}
                   </div>
@@ -1099,6 +1085,7 @@ export function PlayerViewDetails({
         setBy={historyDialog.setBy}
         limitType={historyDialog.limitType}
         limitPeriod={historyDialog.limitPeriod}
+        isPlatformLimit={historyDialog.isPlatformLimit}
       />
     </Page>
   );

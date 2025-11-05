@@ -9,9 +9,16 @@ import { createColumnHelper } from '@tanstack/react-table';
 import useTable from 'components/ui/useTable';
 import TableCard from 'components/ui/custom/TableCard';
 import PlayerService from 'services/player.services';
+import PlatformLimitService from 'services/platform.services';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 
 const columnHelper = createColumnHelper();
+
+const LIMIT_TYPE = {
+  PLATFORM: 'platform',
+  USER_CLASS: 'userClass',
+  USER: 'user'
+};
 
 const LimitHistoryDialog = ({
   isOpen,
@@ -20,7 +27,8 @@ const LimitHistoryDialog = ({
   userClassUID = null,
   setBy = null,
   limitType = null,
-  limitPeriod = null
+  limitPeriod = null,
+  isPlatformLimit = false
 }) => {
   const { t } = useTranslation();
   const { formatCurrency } = useCurrencyContext();
@@ -29,186 +37,193 @@ const LimitHistoryDialog = ({
     pageSize: DEFAULT_PER_PAGE_RECORD
   });
 
-  // Get dialog title
-  const getDialogTitle = () => {
+  const getLimitType = useMemo(() => {
+    if (isPlatformLimit) return LIMIT_TYPE.PLATFORM;
+    if (userClassUID) return LIMIT_TYPE.USER_CLASS;
+    return LIMIT_TYPE.USER;
+  }, [isPlatformLimit, userClassUID]);
+
+  const hasRequiredParams = useMemo(() => {
+    const baseParams = limitType && limitPeriod;
+    if (getLimitType === LIMIT_TYPE.PLATFORM) return baseParams;
+    if (getLimitType === LIMIT_TYPE.USER_CLASS) return baseParams && userClassUID;
+    return baseParams && userUID && setBy;
+  }, [getLimitType, limitType, limitPeriod, userClassUID, userUID, setBy]);
+
+  const getDialogTitle = useMemo(() => {
     if (!limitType || !limitPeriod) {
-      return t('limit') + ' ' + t('history');
+      return `${t('limit')} ${t('history')}`;
     }
 
-    if (userClassUID) {
-      // User class limit history
-      return `${t('player_class_limit')} - ${capitalizeFirstLetter(limitPeriod)} ${capitalizeFirstLetter(limitType)} ${t('history')}`;
+    const periodType = `${capitalizeFirstLetter(limitPeriod)} ${capitalizeFirstLetter(limitType)}`;
+    const historyLabel = t('history');
+
+    const titleMap = {
+      [LIMIT_TYPE.PLATFORM]: `${t('platform_limit')} - ${periodType} ${historyLabel}`,
+      [LIMIT_TYPE.USER_CLASS]: `${t('player_class_limit')} - ${periodType} ${historyLabel}`,
+      [LIMIT_TYPE.USER]: `${setBy === 'user' ? t('responsible_gambling_limit') : t('player_account_limit')} - ${periodType} ${historyLabel}`
+    };
+
+    return titleMap[getLimitType] || `${t('limit')} ${historyLabel}`;
+  }, [limitType, limitPeriod, getLimitType, setBy, t]);
+
+  const getRowValue = (row, keys) => {
+    for (const key of keys) {
+      if (row[key] !== undefined && row[key] !== null) return row[key];
     }
-
-    const setByLabel =
-      setBy === 'user' ? t('responsible_gambling_limit') : t('player_account_limit');
-
-    return `${setByLabel} - ${capitalizeFirstLetter(limitPeriod)} ${capitalizeFirstLetter(limitType)} ${t('history')}`;
+    return null;
   };
 
-  // Create columns
+  const formatLimitAmount = useCallback(
+    (row) => {
+      const limitAmount = getRowValue(row, [
+        'limitAmount',
+        'LimitAmount',
+        'displayLimitAmount',
+        'DisplayLimitAmount'
+      ]);
+      if (!limitAmount) return '-';
+      if (limitAmount > 0 && row?.LimitType !== 'session') {
+        return formatCurrency(limitAmount);
+      }
+      return limitAmount;
+    },
+    [formatCurrency]
+  );
+
+  const formatDate = useCallback((date) => (date ? getDateInUTCToTimeZone(date) : '-'), []);
+
+  const formatStatus = useCallback(
+    (row) => {
+      const isActive = getRowValue(row, ['isActive', 'IsActive']);
+      return isActive === 1 || isActive === true ? t('active') : t('inactive');
+    },
+    [t]
+  );
+
   const columns = useMemo(
     () => [
+      columnHelper.accessor(formatLimitAmount, {
+        id: 'limitAmount',
+        header: `${t('limit')} ${t('amount')}`,
+        cell: (info) => (
+          <span className="font-medium text-gray-900 dark:text-white">{info.getValue()}</span>
+        ),
+        enableSorting: false
+      }),
       columnHelper.accessor(
-        (row) => {
-          const limitAmount =
-            row.limitAmount || row.LimitAmount || row.displayLimitAmount || row.DisplayLimitAmount;
-          return limitAmount > 0 && row?.LimitType !== 'session'
-            ? formatCurrency(limitAmount)
-            : limitAmount || '-';
-        },
-        {
-          id: 'limitAmount',
-          header: `${t('limit')} ${t('amount')}`,
-          cell: (info) => (
-            <span className="font-medium text-gray-900 dark:text-white">{info.getValue()}</span>
-          ),
-          enableSorting: false
-        }
-      ),
-      columnHelper.accessor(
-        (row) => {
-          const effectiveFrom = row.effectiveFrom || row.EffectiveFrom;
-          return effectiveFrom ? getDateInUTCToTimeZone(effectiveFrom) : '-';
-        },
+        (row) => formatDate(getRowValue(row, ['effectiveFrom', 'EffectiveFrom'])),
         {
           id: 'effectiveFrom',
-          header: t('effectiveFrom'),
+          header: t('effective_from'),
           cell: (info) => (
             <span className="text-gray-700 dark:text-dark-200">{info.getValue()}</span>
           ),
           enableSorting: false
         }
       ),
-      columnHelper.accessor(
-        (row) => {
-          const effectiveTo = row.effectiveTo || row.EffectiveTo;
-          return effectiveTo ? getDateInUTCToTimeZone(effectiveTo) : '-';
-        },
-        {
-          id: 'effectiveTo',
-          header: t('effectiveTo'),
-          cell: (info) => (
-            <span className="text-gray-700 dark:text-dark-200">{info.getValue()}</span>
-          ),
-          enableSorting: false
-        }
-      ),
-      columnHelper.accessor(
-        (row) => {
-          const isActive = row.isActive !== undefined ? row.isActive : row.IsActive;
-          return isActive === 1 || isActive === true ? t('active') : t('inactive');
-        },
-        {
-          id: 'status',
-          header: t('status'),
-          cell: (info) => (
-            <span className="text-gray-700 dark:text-dark-200">{info.getValue()}</span>
-          ),
-          enableSorting: false
-        }
-      ),
-      columnHelper.accessor(
-        (row) => {
-          const dateCreated = row.dateCreated || row.DateCreated;
-          return dateCreated ? getDateInUTCToTimeZone(dateCreated) : '-';
-        },
-        {
-          id: 'dateCreated',
-          header: t('createdAt'),
-          cell: (info) => (
-            <span className="text-gray-700 dark:text-dark-200">{info.getValue()}</span>
-          ),
-          enableSorting: false
-        }
-      )
+      columnHelper.accessor((row) => formatDate(getRowValue(row, ['effectiveTo', 'EffectiveTo'])), {
+        id: 'effectiveTo',
+        header: t('effective_to'),
+        cell: (info) => <span className="text-gray-700 dark:text-dark-200">{info.getValue()}</span>,
+        enableSorting: false
+      }),
+      columnHelper.accessor(formatStatus, {
+        id: 'status',
+        header: t('status'),
+        cell: (info) => <span className="text-gray-700 dark:text-dark-200">{info.getValue()}</span>,
+        enableSorting: false
+      }),
+      columnHelper.accessor((row) => formatDate(getRowValue(row, ['dateCreated', 'DateCreated'])), {
+        id: 'dateCreated',
+        header: t('createdAt'),
+        cell: (info) => <span className="text-gray-700 dark:text-dark-200">{info.getValue()}</span>,
+        enableSorting: false
+      })
     ],
-    [t, formatCurrency]
+    [t, formatLimitAmount, formatDate, formatStatus]
   );
 
-  // Fetch history data - using useCallback like the reference implementation
+  const getPaginationParams = useCallback(
+    (params) => {
+      const getNumericValue = (value, defaultValue) => {
+        const num = typeof value === 'number' ? value : +value;
+        return isNaN(num) ? defaultValue : num;
+      };
+
+      return {
+        pageIndex: getNumericValue(params?.pageIndex, queryParams.pageIndex || DEFAULT_PAGE_INDEX),
+        pageSize: getNumericValue(params?.pageSize, queryParams.pageSize || DEFAULT_PER_PAGE_RECORD)
+      };
+    },
+    [queryParams]
+  );
+
+  const buildApiParams = useCallback(
+    (pageIndex, pageSize) => ({
+      limitType,
+      limitPeriod,
+      page: pageIndex + 1,
+      per_page: pageSize
+    }),
+    [limitType, limitPeriod]
+  );
+
+  const fetchApiCall = useCallback(
+    (pageIndex, pageSize) => {
+      const apiParams = buildApiParams(pageIndex, pageSize);
+
+      const apiCallMap = {
+        [LIMIT_TYPE.PLATFORM]: () => PlatformLimitService.getPlatformLimitHistory(apiParams),
+        [LIMIT_TYPE.USER_CLASS]: () =>
+          PlayerService.getUserClassLimitHistory(userClassUID, apiParams),
+        [LIMIT_TYPE.USER]: () => PlayerService.getLimitHistory(userUID, { ...apiParams, setBy })
+      };
+
+      return apiCallMap[getLimitType]();
+    },
+    [buildApiParams, getLimitType, userClassUID, userUID, setBy]
+  );
+
+  const parseApiResponse = (response) => {
+    const responseData = response?.data || response?.Data || [];
+    const totalRecords = response?.totalRecords || response?.total_record || 0;
+    return {
+      data: Array.isArray(responseData) ? responseData : [],
+      totalRecords: parseInt(totalRecords, 10) || 0
+    };
+  };
+
   const fetchHistoryData = useCallback(
     async (params) => {
-      // Check required parameters based on type
-      if (userClassUID) {
-        // User class limit history
-        if (!userClassUID || !limitType || !limitPeriod) {
-          return { status: 400, data: [], totalRecords: 0 };
-        }
-      } else {
-        // Regular limit history
-        if (!userUID || !setBy || !limitType || !limitPeriod) {
-          return { status: 400, data: [], totalRecords: 0 };
-        }
+      if (!hasRequiredParams) {
+        return { status: 400, data: [], totalRecords: 0 };
       }
 
-      // Use params from useTable if provided, otherwise fall back to queryParams
-      const pageIndex = isNaN(params?.pageIndex)
-        ? isNaN(queryParams.pageIndex)
-          ? DEFAULT_PAGE_INDEX
-          : +queryParams.pageIndex
-        : +params.pageIndex;
-      const pageSize = isNaN(params?.pageSize)
-        ? isNaN(queryParams.pageSize)
-          ? DEFAULT_PER_PAGE_RECORD
-          : +queryParams.pageSize
-        : +params.pageSize;
+      const { pageIndex, pageSize } = getPaginationParams(params);
 
-      // Call appropriate service based on type
-      const apiCall = userClassUID
-        ? PlayerService.getUserClassLimitHistory(userClassUID, {
-            limitType,
-            limitPeriod,
-            page: pageIndex + 1,
-            per_page: pageSize
-          })
-        : PlayerService.getLimitHistory(userUID, {
-            setBy,
-            limitType,
-            limitPeriod,
-            page: pageIndex + 1,
-            per_page: pageSize
-          });
-
-      return apiCall
-        .then(({ response }) => {
-          const responseData = response?.data || response?.Data || [];
-          const totalRecords = response?.totalRecords || response?.total_record || 0;
-
-          // Handle both array and grouped data
-          const data = Array.isArray(responseData) ? responseData : [];
-
-          return {
-            status: 200,
-            data,
-            totalRecords: parseInt(totalRecords, 10) || data.length || 0
-          };
-        })
-        .catch((error) => {
-          console.error('Error fetching limit history:', error);
-          toast.error(error?.message || 'Failed to fetch history');
-          return { status: 500, data: [], totalRecords: 0 };
-        });
+      try {
+        const { response } = await fetchApiCall(pageIndex, pageSize);
+        const { data, totalRecords } = parseApiResponse(response);
+        return { status: 200, data, totalRecords };
+      } catch (error) {
+        console.error('Error fetching limit history:', error);
+        toast.error(error?.message || 'Failed to fetch history');
+        return { status: 500, data: [], totalRecords: 0 };
+      }
     },
-    [queryParams, userUID, userClassUID, setBy, limitType, limitPeriod]
+    [hasRequiredParams, getPaginationParams, fetchApiCall]
   );
 
-  // Create setSearchParams function that updates queryParams state
-  // This is needed for useTable to manage pagination properly
-  // useTable passes a function that expects URLSearchParams-like interface
   const handleSetSearchParams = useMemo(
-    // eslint-disable-next-line no-unused-vars
-    () => (updater, options) => {
+    () => (updater) => {
       if (typeof updater === 'function') {
         setQueryParams((prev) => {
-          // Create a mock URLSearchParams-like object for Object.fromEntries
           const mockParams = new Map([
             ['pageIndex', String(prev.pageIndex)],
             ['pageSize', String(prev.pageSize)]
           ]);
-          // Call the updater function with the mock params
           const newParams = updater(mockParams);
-          // Extract the values from the result
           return {
             pageIndex: newParams.pageIndex !== undefined ? +newParams.pageIndex : prev.pageIndex,
             pageSize: newParams.pageSize !== undefined ? +newParams.pageSize : prev.pageSize
@@ -237,44 +252,25 @@ const LimitHistoryDialog = ({
     paginationEnabled: true
   });
 
-  // Reset pagination when dialog opens or filters change
   useEffect(() => {
-    const hasRequiredParams = userClassUID
-      ? isOpen && userClassUID && limitType && limitPeriod
-      : isOpen && userUID && setBy && limitType && limitPeriod;
-
-    if (hasRequiredParams) {
+    if (isOpen && hasRequiredParams) {
       setQueryParams({
         pageIndex: DEFAULT_PAGE_INDEX,
         pageSize: DEFAULT_PER_PAGE_RECORD
       });
-      if (setPagination) {
-        setPagination({
-          pageIndex: DEFAULT_PAGE_INDEX,
-          pageSize: DEFAULT_PER_PAGE_RECORD,
-          totalCount: 0
-        });
-      }
+      setPagination?.({
+        pageIndex: DEFAULT_PAGE_INDEX,
+        pageSize: DEFAULT_PER_PAGE_RECORD,
+        totalCount: 0
+      });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, userUID, userClassUID, setBy, limitType, limitPeriod]);
+  }, [isOpen, hasRequiredParams, setPagination]);
 
-  // Trigger data fetch when dialog opens
   useEffect(() => {
-    const hasRequiredParams = userClassUID
-      ? isOpen && userClassUID && limitType && limitPeriod && table?.options?.meta?.fetchNewList
-      : isOpen &&
-        userUID &&
-        setBy &&
-        limitType &&
-        limitPeriod &&
-        table?.options?.meta?.fetchNewList;
-
-    if (hasRequiredParams) {
+    if (isOpen && hasRequiredParams && table?.options?.meta?.fetchNewList) {
       table.options.meta.fetchNewList(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, userUID, userClassUID, setBy, limitType, limitPeriod]);
+  }, [isOpen, hasRequiredParams, table]);
 
   useEffect(() => {
     if (!isLoading && error) {
@@ -285,7 +281,7 @@ const LimitHistoryDialog = ({
   }, [error]);
 
   return (
-    <CustomModal show={isOpen} onClose={onClose} title={getDialogTitle()} sizeClass="max-w-5xl">
+    <CustomModal show={isOpen} onClose={onClose} title={getDialogTitle} sizeClass="max-w-5xl">
       <div className="min-h-[400px]">
         <TableCard
           tableSettings={tableSettings}
@@ -293,7 +289,7 @@ const LimitHistoryDialog = ({
           loading={isLoading}
           paginationEnabled={true}
           disableDefaultPadding={true}
-          loadingRows={5}
+          loadingRows={3}
         />
       </div>
     </CustomModal>
@@ -307,7 +303,8 @@ LimitHistoryDialog.propTypes = {
   userClassUID: PropTypes.string,
   setBy: PropTypes.string,
   limitType: PropTypes.string,
-  limitPeriod: PropTypes.string
+  limitPeriod: PropTypes.string,
+  isPlatformLimit: PropTypes.bool
 };
 
 export default LimitHistoryDialog;

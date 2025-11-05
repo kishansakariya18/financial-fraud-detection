@@ -963,5 +963,8 @@
   "areYouSureYouWantToAcceptThisTransaction": "Are you sure you want to accept this transaction?",
   "areYouSureYouWantToRejectThisTransaction": "Are you sure you want to reject this transaction?",
   "blacklist_ip_address": "Add Blacklist IP Address",
-  "view_history": "View History"
+  "view_history": "View History",
+  "cpa_commission_setting": "CPA (Cost Per Acquisition) Commission Settings",
+  "loss_commission_setting": "Loss Commission Settings",
+  "platform_limit": "Platform Limit"
 }

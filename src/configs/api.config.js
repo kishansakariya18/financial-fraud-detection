@@ -315,7 +315,8 @@ export const apiConfig = {
     },
     RISK_MANAGEMENT: {
       LIST: '/config/admin/risk-management/list',
-      UPDATE: '/config/admin/risk-management/update-risk-management'
+      UPDATE: '/config/admin/risk-management/update-risk-management',
+      HISTORY: '/config/admin/risk-management/history'
     },
     CATEGORY: {
       LIST: '/games/admin/casino-management/category/list',
