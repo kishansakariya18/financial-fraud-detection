@@ -543,7 +543,9 @@ export const apiConfig = {
       CAMPAIGN_REPORT: '/affiliates/admin/affiliates/campaign-report',
       COMMISSION_SUMMARY_REPORT:
         '/affiliates/admin/affiliates/{affiliateId}/export-commission-summary',
-      REFERRED_USERS_REPORT: '/affiliates/admin/affiliates/{affiliateId}/export-referred-users'
+      REFERRED_USERS_REPORT: '/affiliates/admin/affiliates/{affiliateId}/export-referred-users',
+      CREATE: '/users/admin/users/create-affiliate-user',
+      EDIT: '/users/admin/users/edit-affiliate-user'
     },
     FAQ: {
       LIST: '/affiliates/admin/faq/list',
