@@ -982,5 +982,6 @@
   "commission_amount_help_text": "Amount paid to the affiliate when conditions are met.",
   "min_deposit_for_cpa_help_text": "Amount of the first deposit required to qualify for CPA.",
   "min_wager_for_cpa_help_text": "Total amount wagered by the end user to qualify for CPA.",
-  "loss_commission_percent_help_text": "Percentage of the loss amount to be paid to the affiliate."
+  "loss_commission_percent_help_text": "Percentage of the loss amount to be paid to the affiliate.",
+  "platform_limit": "Platform Limit"
 }

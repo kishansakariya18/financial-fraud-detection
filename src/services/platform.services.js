@@ -1,5 +1,6 @@
 import apiConfig from 'configs/api.config';
 import { sendRequest } from 'utils/axios';
+import apiInstance from 'utils/apiInstance';
 
 const PlatformLimitService = {
   getPlatoformLimit: async () => {
@@ -42,6 +43,18 @@ const PlatformLimitService = {
     } catch (error) {
       console.log('Error from Risk management Update', error);
     }
+  },
+  getPlatformLimitHistory: async (filters = {}) => {
+    return apiInstance.post(apiConfig.endPoints.RISK_MANAGEMENT.HISTORY, {
+      page: filters.page || 1,
+      per_page: filters.per_page || 100,
+      filters: {
+        ...(filters.limitType && { limitType: filters.limitType }),
+        ...(filters.limitPeriod && { limitPeriod: filters.limitPeriod }),
+        ...(filters.startDate && { startDate: filters.startDate }),
+        ...(filters.endDate && { endDate: filters.endDate })
+      }
+    });
   }
 };
 
