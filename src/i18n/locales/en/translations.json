@@ -978,5 +978,6 @@
   "blacklist_ip_address": "Add Blacklist IP Address",
   "view_history": "View History",
   "cpa_commission_setting": "CPA (Cost Per Acquisition) Commission Settings",
-  "loss_commission_setting": "Loss Commission Settings"
+  "loss_commission_setting": "Loss Commission Settings",
+  "platform_limit": "Platform Limit"
 }
