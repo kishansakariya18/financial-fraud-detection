@@ -27,7 +27,8 @@ export const affiliatesListResponseMapper = (payload) => {
       username: user?.Username || '-',
       mobile: user?.Mobile || '-',
       status: statusToApp(item?.Status),
-      createdAt: item?.DateCreated ? getDateInUTCToTimeZone(item.DateCreated) : '-'
+      createdAt: item?.DateCreated ? getDateInUTCToTimeZone(item.DateCreated) : '-',
+      refferedUsers: item?.RefferedUsers || '0'
     };
   });
   const totalPages = Array.isArray(payload) ? 0 : payload?.totalPages || 0;

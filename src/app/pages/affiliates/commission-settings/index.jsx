@@ -12,6 +12,7 @@ import AffiliatesService from 'services/affiliates.services';
 import { commissionSettingsSchema } from './schema';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useCurrencyContext } from 'app/contexts/currency/context';
+import { RiUserSettingsFill } from 'react-icons/ri';
 
 const CommissionSettings = () => {
   const { affiliateId } = useParams();
@@ -157,23 +158,23 @@ const CommissionSettings = () => {
   const isCPARequired = watch('IsCPAAmountRequired');
   const isLossPctRequired = watch('IsLossCommissionPercentageRequired');
 
-  // When CPA switch is disabled, zero all CPA-related fields
-  useEffect(() => {
-    if (!isCPARequired) {
-      setValue('CPAAmount', 0);
-      setValue('MinDepositForCPA', 0);
-      setValue('MinWagerForCPA', 0);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isCPARequired]);
+  // // When CPA switch is disabled, zero all CPA-related fields
+  // useEffect(() => {
+  //   if (!isCPARequired) {
+  //     setValue('CPAAmount', 0);
+  //     setValue('MinDepositForCPA', 0);
+  //     setValue('MinWagerForCPA', 0);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isCPARequired]);
 
-  // When Loss % switch is disabled, zero the field
-  useEffect(() => {
-    if (!isLossPctRequired) {
-      setValue('LossCommissionPercent', 0);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLossPctRequired]);
+  // // When Loss % switch is disabled, zero the field
+  // useEffect(() => {
+  //   if (!isLossPctRequired) {
+  //     setValue('LossCommissionPercent', 0);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isLossPctRequired]);
 
   const breadcrumbItem = [
     { title: t('affiliates'), path: '/affiliates/users' },
@@ -197,97 +198,112 @@ const CommissionSettings = () => {
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate autoComplete="off">
           <div className="mt-6 space-y-4">
-            {/* Switches row */}
+            <div className="flex items-center gap-2">
+              <RiUserSettingsFill className="text-xl" />
+              <h4 className="text-md truncate py-4 font-bold text-gray-800 dark:text-dark-50">
+                {t('cpa_commission_setting')}
+              </h4>
+            </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="flex items-center gap-2">
                 <Switch
                   {...register('IsCPAAmountRequired')}
-                  label={t('is_cpa_required', { defaultValue: 'CPA Required' })}
-                />
-              </div>
-              <div className="flex items-center gap-2">
-                <Switch
-                  {...register('IsLossCommissionPercentageRequired')}
-                  label={t('is_loss_commission_percentage_required', {
-                    defaultValue: 'Loss Commission % Required'
-                  })}
+                  label={t('enable_cpa_commission', { defaultValue: 'Enable CPA Commission' })}
                 />
               </div>
             </div>
 
             {/* CPA inputs - visible only when required */}
-            {isCPARequired && (
-              <div className="grid gap-4 sm:grid-cols-2">
-                <Input
-                  {...register('CPAAmount')}
-                  label={t('cpa_amount', { defaultValue: 'CPA Amount' })}
-                  type="number"
-                  step="any"
-                  minLength={1}
-                  maxLength={10}
-                  prefix={symbol}
-                  error={errors?.CPAAmount?.message}
-                  placeholder={t('cpa_amount_placeholder', { defaultValue: 'Enter CPA Amount' })}
-                  onKeyDown={(e) => {
-                    if (['e', 'E', '+', '-', ' '].includes(e.key)) e.preventDefault();
-                  }}
-                />
-                <Input
-                  {...register('MinDepositForCPA')}
-                  label={t('min_deposit_for_cpa', { defaultValue: 'Min Deposit For CPA' })}
-                  type="number"
-                  step="any"
-                  minLength={1}
-                  maxLength={10}
-                  prefix={symbol}
-                  error={errors?.MinDepositForCPA?.message}
-                  placeholder={t('min_deposit_for_cpa_placeholder', {
-                    defaultValue: 'Enter Min Deposit For CPA'
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Input
+                {...register('MinDepositForCPA')}
+                label={t('min_deposit_for_cpa', { defaultValue: 'Min Deposit Amount' })}
+                type="number"
+                step="any"
+                minLength={1}
+                maxLength={10}
+                prefix={symbol}
+                error={errors?.MinDepositForCPA?.message}
+                placeholder={t('min_deposit_for_cpa_placeholder', {
+                  defaultValue: 'Enter Min Deposit For CPA'
+                })}
+                onKeyDown={(e) => {
+                  if (['e', 'E', '+', '-', ' '].includes(e.key)) e.preventDefault();
+                }}
+                disabled={!isCPARequired}
+              />
+              <Input
+                {...register('MinWagerForCPA')}
+                label={t('min_wager_for_cpa', { defaultValue: 'Min Wager Amount' })}
+                type="number"
+                step="any"
+                minLength={1}
+                maxLength={10}
+                prefix={symbol}
+                error={errors?.MinWagerForCPA?.message}
+                placeholder={t('min_wager_for_cpa_placeholder', {
+                  defaultValue: 'Enter Min Wager For CPA'
+                })}
+                onKeyDown={(e) => {
+                  if (['e', 'E', '+', '-', ' '].includes(e.key)) e.preventDefault();
+                }}
+                disabled={!isCPARequired}
+              />
+              <Input
+                {...register('CPAAmount')}
+                label={t('commission') + ' ' + t('amount')}
+                type="number"
+                step="any"
+                minLength={1}
+                maxLength={10}
+                prefix={symbol}
+                error={errors?.CPAAmount?.message}
+                placeholder={t('cpa_amount_placeholder', {
+                  defaultValue: 'Enter Commission Amount'
+                })}
+                onKeyDown={(e) => {
+                  if (['e', 'E', '+', '-', ' '].includes(e.key)) e.preventDefault();
+                }}
+                disabled={!isCPARequired}
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <RiUserSettingsFill className="text-xl" />
+              <h3 className="text-md truncate py-4 font-medium text-gray-800 dark:text-dark-50">
+                {t('loss_commission_setting')}
+              </h3>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="flex items-center gap-2">
+                <Switch
+                  {...register('IsLossCommissionPercentageRequired')}
+                  label={t('enable_loss_commission', {
+                    defaultValue: 'Enable Loss Commission'
                   })}
-                  onKeyDown={(e) => {
-                    if (['e', 'E', '+', '-', ' '].includes(e.key)) e.preventDefault();
-                  }}
-                />
-                <Input
-                  {...register('MinWagerForCPA')}
-                  label={t('min_wager_for_cpa', { defaultValue: 'Min Wager For CPA' })}
-                  type="number"
-                  step="any"
-                  minLength={1}
-                  maxLength={10}
-                  prefix={symbol}
-                  error={errors?.MinWagerForCPA?.message}
-                  placeholder={t('min_wager_for_cpa_placeholder', {
-                    defaultValue: 'Enter Min Wager For CPA'
-                  })}
-                  onKeyDown={(e) => {
-                    if (['e', 'E', '+', '-', ' '].includes(e.key)) e.preventDefault();
-                  }}
                 />
               </div>
-            )}
+            </div>
 
             {/* Loss % input - visible only when required */}
-            {isLossPctRequired && (
-              <div className="grid gap-4 sm:grid-cols-2">
-                <Input
-                  {...register('LossCommissionPercent')}
-                  label={t('loss_commission_percent', { defaultValue: 'Loss Commission %' })}
-                  type="number"
-                  step="any"
-                  minLength={1}
-                  maxLength={5}
-                  prefix={'%'}
-                  error={errors?.LossCommissionPercent?.message}
-                  placeholder={t('loss_commission_percent_placeholder', {
-                    defaultValue: 'Enter Loss Commission %'
-                  })}
-                  onKeyDown={(e) => {
-                    if (['e', 'E', '+', '-', ' '].includes(e.key)) e.preventDefault();
-                  }}
-                />
-              </div>
-            )}
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Input
+                {...register('LossCommissionPercent')}
+                label={t('loss_commission_percent', { defaultValue: 'Loss Commission Percentage' })}
+                type="number"
+                step="any"
+                minLength={1}
+                maxLength={5}
+                prefix={'%'}
+                error={errors?.LossCommissionPercent?.message}
+                placeholder={t('loss_commission_percent_placeholder', {
+                  defaultValue: 'Enter Loss Commission Percentage'
+                })}
+                onKeyDown={(e) => {
+                  if (['e', 'E', '+', '-', ' '].includes(e.key)) e.preventDefault();
+                }}
+                disabled={!isLossPctRequired}
+              />
+            </div>
           </div>
 
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
