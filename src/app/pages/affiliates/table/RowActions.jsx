@@ -3,7 +3,8 @@ import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/r
 import {
   EllipsisHorizontalIcon,
   // UsersIcon,
-  EyeIcon
+  EyeIcon,
+  PencilIcon
   // ListBulletIcon
 } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
@@ -62,6 +63,22 @@ export function RowActions({ row }) {
                     onClick={handleView}>
                     <EyeIcon className="size-4.5 stroke-1" />
                     <span>{t('view')}</span>
+                  </button>
+                )}
+              </MenuItem>
+            )}
+
+            {hasPermission(PERMISSIONS.AFFILIATES.EDIT) && (
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    className={clsx(
+                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                      focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                    )}
+                    onClick={() => navigate(`/affiliates/users/${affiliateUID}/edit`)}>
+                    <PencilIcon className="size-4.5 stroke-1" />
+                    <span>{t('edit')}</span>
                   </button>
                 )}
               </MenuItem>

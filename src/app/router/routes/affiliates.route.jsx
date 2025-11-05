@@ -17,6 +17,19 @@ export const affiliatesRoutes = [
     }
   },
   {
+    path: 'affiliates/users/create',
+    lazy: async () => {
+      const { default: CreateAffiliate } = await import('../../pages/affiliates/CreateAffiliate');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.AFFILIATES.CREATE}>
+            <CreateAffiliate />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
     path: 'affiliates/users/:affiliateId/detail',
     lazy: async () => {
       const { default: AffiliateDetails } = await import('../../pages/affiliates/details');
@@ -24,6 +37,19 @@ export const affiliatesRoutes = [
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.AFFILIATES.LIST}>
             <AffiliateDetails />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'affiliates/users/:affiliateId/edit',
+    lazy: async () => {
+      const { default: EditAffiliate } = await import('../../pages/affiliates/EditAffiliates');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.AFFILIATES.EDIT}>
+            <EditAffiliate />
           </PrivateRoute>
         )
       };
