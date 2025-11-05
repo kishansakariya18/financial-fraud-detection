@@ -106,7 +106,7 @@ export function PlayerViewDetails({
   const [sectionsOpen, setSectionsOpen] = useState({
     user: true,
     admin: true,
-    userClass: false,
+    userClass: true,
     global: true
   });
   const [error, setError] = useState('');
