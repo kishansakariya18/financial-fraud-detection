@@ -13,7 +13,6 @@ import { t } from 'i18next';
 
 // Status options for the filter
 const statusOptions = [
-  { value: '', label: 'All Status' },
   { value: 'pending', label: 'Pending' },
   { value: 'approved', label: 'Approved' },
   { value: 'settled', label: 'Settled' },

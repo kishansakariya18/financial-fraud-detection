@@ -1,5 +1,17 @@
 // Helper functions for Agent Wallet Report
+import { parseAgentTypeToApp } from 'components/sections/b2b-agents/helper';
+import { GENERAL_STATUS } from 'constants/app.constant';
 
+export const mapStatusToApp = (status) => {
+  switch (status) {
+    case GENERAL_STATUS.ACTIVE:
+      return 'Active';
+    case GENERAL_STATUS.INACTIVE:
+      return 'Inactive';
+    default:
+      return '-';
+  }
+};
 /**
  * Maps API response to table data
  * @param {Array} apiData - Raw API response data
@@ -12,9 +24,11 @@ export const responseMapper = (apiData) => {
     id: agent.AgentID,
     agentId: agent.AgentID,
     agentName: agent.AgentName || '-',
-    agentType: agent.AgentType || '-',
+    agentType: parseAgentTypeToApp?.(agent.AgentType) || agent.AgentType || '-',
     commissionBalance: parseFloat(agent.CommissionBalance || 0),
     lineUpBalance: parseFloat(agent.LineUpBalance || 0),
+    status: mapStatusToApp?.(agent.AccountStatus),
+    createdAt: agent.DateCreated,
     dateModified: agent.DateModified
   }));
 };

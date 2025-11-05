@@ -136,6 +136,10 @@ const B2BAgentWalletService = {
     });
   },
   getAgentWalletReport: (data) => {
+    if (data.limit) {
+      data.perPage = data.limit || DEFAULT_PER_PAGE_RECORD;
+      delete data.limit;
+    }
     return apiInstance.get(apiConfig.endPoints.B2B_AGENT.WALLET.AGENT_WALLET_REPORT, {
       params: data
     });

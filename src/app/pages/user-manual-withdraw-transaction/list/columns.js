@@ -27,6 +27,13 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.currencyType, {
+    id: 'currencyType',
+    label: 'Currency Type',
+    header: 'Currency Type',
+    cell: BoldCell,
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.amount, {
     id: 'amount',
     label: 'Amount',

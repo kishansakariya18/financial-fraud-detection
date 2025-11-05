@@ -14,7 +14,8 @@ const TableCard = (props) => {
     table,
     loading,
     paginationEnabled = true,
-    disableDefaultPadding = false
+    disableDefaultPadding = false,
+    loadingRows = 10
   } = props;
 
   return (
@@ -72,7 +73,7 @@ const TableCard = (props) => {
 
             <TBody>
               {loading ? (
-                [...Array(10)].map((_, i) => (
+                [...Array(loadingRows)].map((_, i) => (
                   <Tr key={i} className="animate-pulse border-b border-gray-200">
                     {table.getAllColumns().map((column, index) => (
                       <Td key={index} className="p-4">
