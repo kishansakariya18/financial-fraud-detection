@@ -13,7 +13,7 @@ import { roles } from './roles';
 import { auditlogs } from './auditlogs';
 import { crm } from './crm';
 import { frontend } from './front-end';
-import { tenants } from './tenant';
+// import { tenants } from './tenant';
 import { contentManagement } from './content-management';
 import { siteConfiguration } from './site-configuration';
 import { bonusManagement } from './bonus-management';
@@ -23,7 +23,7 @@ import { blacklist } from './blacklist';
 import { bank } from './bank';
 import { userManualWithdrawTransaction } from './user-manual-withdraw-transaction';
 // import { userManualDepositTransaction } from './user-manual-deposit-transaction';
-import { registrationFields } from './registration-fields';
+// import { registrationFields } from './registration-fields';
 import { releaseNotes } from './release-notes';
 import { supervisor } from './supervisor';
 import { b2bAgent } from './b2b-agent';
@@ -60,7 +60,7 @@ export const dashboards = () => ({
     bonusManagement,
     frontend,
     reports,
-    tenants,
+    // tenants,
     playerKyc,
     casinoManagement,
     segmentation,
@@ -74,7 +74,7 @@ export const dashboards = () => ({
     blacklist,
     bank,
     userManualWithdrawTransaction,
-    registrationFields,
+    // registrationFields,
     // userManualDepositTransaction,
     releaseNotes,
     faq
