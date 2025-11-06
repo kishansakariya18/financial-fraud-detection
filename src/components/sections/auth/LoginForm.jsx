@@ -8,12 +8,13 @@ import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
-import { CiMobile1 } from 'react-icons/ci';
+// import { CiMobile1 } from 'react-icons/ci';
 
 // Local Imports
-import { Button, Card, Checkbox, Input } from 'components/ui';
+import { Button, Card, Checkbox, Input, InputErrorMsg } from 'components/ui';
 import { useDisclosure } from 'hooks';
 import AdminService from 'services/admin.services';
+import { PhoneDialCode } from 'components/custom/PhoneDialCode';
 
 // ----------------------------------------------------------------------
 
@@ -51,7 +52,14 @@ export default function LoginForm({
     try {
       const result = await AdminService.fetchCountryList();
       if (result.status === 200 || result.status === 201) {
-        setCountries(result.response.data);
+        const countries = result.response.data.map((c) => {
+          return {
+            phoneCode: c.PhoneCode,
+            name: c.CountryName,
+            code: c.CountryCode
+          };
+        });
+        setCountries(countries);
       }
     } catch (error) {
       console.error('Error fetching countries:', error);
@@ -87,7 +95,7 @@ export default function LoginForm({
       <Card className="mt-5 rounded-lg p-5 lg:p-7">
         <form onSubmit={handleSubmit(submitHandler)} autoComplete="off">
           <div className="space-y-4">
-            <div>
+            {/* <div>
               <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-dark-100">
                 {t('mobile')}
               </label>
@@ -126,6 +134,37 @@ export default function LoginForm({
                   {errors?.mobile?.message || errors?.phoneCode?.message}
                 </p>
               )}
+            </div> */}
+
+            <div className="flex flex-col">
+              <span>{t('mobile')}</span>
+              <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
+                <Controller
+                  render={({ field: { onChange, value, name } }) => (
+                    <PhoneDialCode
+                      onChange={onChange}
+                      value={value}
+                      name={name}
+                      error={Boolean(errors?.phoneCode)}
+                      countries={countries}
+                    />
+                  )}
+                  control={control}
+                  name="phoneCode"
+                />
+                <Input
+                  {...register('mobile')}
+                  classNames={{
+                    root: 'flex-1',
+                    input: 'hover:z-1 focus:z-1 ltr:rounded-l-none rtl:rounded-r-none'
+                  }}
+                  error={Boolean(errors?.mobile)}
+                  placeholder={t('enter') + ' ' + t('mobile')}
+                />
+              </div>
+              <InputErrorMsg when={errors?.phoneCode || errors?.mobile}>
+                {errors?.phoneCode?.message ?? errors?.mobile?.message}
+              </InputErrorMsg>
             </div>
             <Input
               label={t('password')}

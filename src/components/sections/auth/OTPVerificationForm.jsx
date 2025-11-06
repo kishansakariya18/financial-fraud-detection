@@ -54,6 +54,7 @@ export default function OTPVerificationForm({
     await authService
       .otpVerification({
         ...data,
+        phoneCode: queryParams.phoneCode,
         token: queryParams.token,
         password: queryParams.password,
         mobile: queryParams.mobile
@@ -73,7 +74,8 @@ export default function OTPVerificationForm({
     await authService
       .resedOtp({
         token: queryParams.token,
-        mobile: queryParams.mobile
+        mobile: queryParams.mobile,
+        phoneCode: queryParams.phoneCode
       })
       .then((result) => {
         setSeconds(30);
