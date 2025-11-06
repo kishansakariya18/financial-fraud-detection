@@ -437,6 +437,32 @@ const AffiliatesService = {
     } catch (err) {
       console.log('Error', err);
     }
+  },
+  changeAffiliateStatus: async (affiliateId, status) => {
+    try {
+      const requestObject = {
+        newStatus: status
+      };
+
+      const endPoint = apiConfig.endPoints.AFFILIATES.CHANGE_STATUS.replace(
+        '{affiliateUID}',
+        affiliateId
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: requestObject
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
   }
 };
 

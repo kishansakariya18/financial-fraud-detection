@@ -14,6 +14,12 @@ const statusToApp = (status) => {
   }
 };
 
+export const AFFILIATE_STATUS = {
+  ACTIVE: 'ACTIVE',
+  SUSPENDED: 'SUSPENDED',
+  CLOSED: 'CLOSED'
+};
+
 export const affiliatesListResponseMapper = (payload) => {
   const data = Array.isArray(payload) ? payload : Array.isArray(payload?.data) ? payload.data : [];
   const list = data.map((item) => {

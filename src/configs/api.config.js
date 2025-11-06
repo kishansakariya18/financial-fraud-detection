@@ -541,7 +541,8 @@ export const apiConfig = {
         '/affiliates/admin/affiliates/{affiliateId}/export-commission-summary',
       REFERRED_USERS_REPORT: '/affiliates/admin/affiliates/{affiliateId}/export-referred-users',
       CREATE: '/users/admin/users/create-affiliate-user',
-      EDIT: '/users/admin/users/edit-affiliate-user'
+      EDIT: '/users/admin/users/edit-affiliate-user',
+      CHANGE_STATUS: '/affiliates/admin/affiliates/{affiliateUID}/change-status'
     },
     FAQ: {
       LIST: '/affiliates/admin/faq/list',
