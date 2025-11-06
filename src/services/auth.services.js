@@ -42,7 +42,8 @@ const AuthService = {
     const requestObject = {
       mobile: String(body.mobile),
       token: String(body.token),
-      phoneCode: String(body.phoneCode)
+      phoneCode: String(body.phoneCode),
+      type: String(body.type)
     };
     return apiInstance.post(apiConfig.endPoints.AUTH.RESENDOTP, requestObject);
   },
