@@ -24,7 +24,7 @@ const EditProvider = () => {
   const { t } = useTranslation();
   const { providerUID } = useParams();
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [detailsLoading, setDetailsLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const [providerDetails, setProviderDetails] = useState(null);
   const uploadRef = useRef();
@@ -42,13 +42,14 @@ const EditProvider = () => {
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     reset
   } = useForm();
+  const [submitLoading, setSubmitLoading] = useState(false);
   console.log('errors:', errors);
 
   const fetchPaymentProviderDetails = async () => {
-    setLoading(true);
+    setDetailsLoading(true);
     const result = await PaymentProviderService.getProviderDetails(providerUID);
     if (result.status === 200) {
       const details = result.response.data;
@@ -83,11 +84,11 @@ const EditProvider = () => {
     } else {
       setError(result.error);
     }
-    setLoading(false);
+    setDetailsLoading(false);
   };
 
   const editPaymentProviderApi = async (requestObject) => {
-    setLoading(true);
+    setSubmitLoading(true);
     setError(null);
 
     const result = await PaymentProviderService.updateProvider(providerUID, requestObject);
@@ -98,7 +99,7 @@ const EditProvider = () => {
         setError(result.error);
       }
     }
-    setLoading(false);
+    setSubmitLoading(false);
   };
 
   useEffect(() => {
@@ -108,12 +109,12 @@ const EditProvider = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [providerUID]);
 
-  if (!loading && error) {
+  if (!detailsLoading && !submitLoading && error) {
     toast.error(error);
     setError('');
   }
 
-  if (!loading && !error && response) {
+  if (!detailsLoading && !submitLoading && !error && response) {
     toast.success(response.message);
     setTimeout(() => {
       navigate('/site-configuration/payment-provider-config');
@@ -208,11 +209,11 @@ const EditProvider = () => {
           )}
           <Card className="p-4">
             <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-              {loading &&
+              {detailsLoading &&
                 [...Array(10)].map((_, i) => (
                   <Skeleton className="grid gap-4 sm:grid-cols-2" key={i} />
                 ))}
-              {!loading && (
+              {!detailsLoading && (
                 <div className="mt-6 space-y-6">
                   {/* Prerequisites Section */}
                   <div>
@@ -229,6 +230,7 @@ const EditProvider = () => {
                             placeholder={t('select') + ' ' + 'KYC level' + ' ' + t('option')}
                             displayField="label"
                             error={errors['KYCLevel']?.message}
+                            disabled={submitLoading || detailsLoading}
                           />
                         )}
                         control={control}
@@ -258,6 +260,7 @@ const EditProvider = () => {
                                     placeholder={t('select') + ' ' + item.label + ' ' + t('option')}
                                     displayField="label"
                                     error={errors[item.key]?.message}
+                                    disabled={submitLoading || detailsLoading}
                                   />
                                 )}
                                 key={item.id}
@@ -274,6 +277,7 @@ const EditProvider = () => {
                                 label={item.label}
                                 error={errors[item.key]?.message}
                                 placeholder={t('enter') + ' ' + item.label}
+                                disabled={submitLoading || detailsLoading}
                               />
                             );
                           }
@@ -303,14 +307,14 @@ const EditProvider = () => {
                             color="primary"
                             {...props}
                             className="h-9 w-fit space-x-2 px-3 text-sm"
-                            disabled={loading}>
+                            disabled={submitLoading || detailsLoading}>
                             <CloudArrowUpIcon className="size-5" />
                             <span>Choose File</span>
                           </Button>
                         )}
                       </Upload>
                       <Button
-                        disabled={!file}
+                        disabled={!file || submitLoading || detailsLoading}
                         onClick={() => {
                           if (uploadRef.current) uploadRef.current.value = '';
                           setFile();
@@ -333,7 +337,8 @@ const EditProvider = () => {
                   type="submit"
                   className="min-w-[7rem]"
                   color="primary"
-                  disabled={isSubmitting || loading}>
+                  disabled={submitLoading || detailsLoading}
+                  loading={submitLoading}>
                   {t('update')}
                 </Button>
               </div>
