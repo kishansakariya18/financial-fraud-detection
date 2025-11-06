@@ -1,22 +1,22 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import { AmountCell, OneLineDateCell } from 'components/custom/table/cell';
+import { BaseCurrencyAmountCell, OneLineDateCell } from 'components/custom/table/cell';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
 
 const columnHelper = createColumnHelper();
 
 export const columns = [
-  columnHelper.accessor((row) => row.user.Username, {
+  columnHelper.accessor((row) => row.Username, {
     id: 'username',
     label: ' Username',
     header: 'username',
     cell: CopyableCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.RealCash, {
+  columnHelper.accessor((row) => row.TransactionAmount, {
     id: 'amount',
     label: 'Amount',
     header: 'Amount',
-    cell: AmountCell,
+    cell: BaseCurrencyAmountCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.DateCreated, {

@@ -58,7 +58,7 @@ const AuthService = {
     return apiInstance.get(apiConfig.endPoints.ADMIN_USER.ADMIN_PERMISSION);
   },
   getCountries: async () => {
-    return apiInstance.get(apiConfig.endPoints.ADMIN_USER.ADMIN_COUNTRY_LIST);
+    return apiInstance.get(apiConfig.endPoints.ADMIN_USER.COUNTRY_LIST);
   },
   logout: () => {
     return apiInstance.get(apiConfig.endPoints.AUTH.LOGOUT);

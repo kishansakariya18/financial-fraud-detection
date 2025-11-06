@@ -19,10 +19,58 @@ const DashboardService = {
     }
   },
 
-  getCards: async () => {
+  getCardsFromUser: async () => {
     try {
       const response = await sendRequest({
-        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.DASHBOARD.CARDS}`,
+        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.DASHBOARD.USER_CARDS}`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error getCardsFromUser: ', err);
+    }
+  },
+
+  getCardsFromGame: async () => {
+    try {
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.DASHBOARD.GAME_CARDS}`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error getCardsFromGame: ', err);
+    }
+  },
+
+  getCardsFromWallet: async () => {
+    try {
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.DASHBOARD.WALLET_CARDS}`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error getCardsFromWallet: ', err);
+    }
+  },
+
+  getCardsFromBet: async () => {
+    try {
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.DASHBOARD.BET_CARDS}`,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
