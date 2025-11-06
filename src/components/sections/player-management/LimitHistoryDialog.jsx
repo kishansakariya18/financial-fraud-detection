@@ -282,7 +282,7 @@ const LimitHistoryDialog = ({
 
   return (
     <CustomModal show={isOpen} onClose={onClose} title={getDialogTitle} sizeClass="max-w-5xl">
-      <div className="min-h-[400px]">
+      <div className="min-h-[200px]">
         <TableCard
           tableSettings={tableSettings}
           table={table}

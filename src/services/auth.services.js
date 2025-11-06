@@ -5,7 +5,8 @@ const AuthService = {
   login: async (body) => {
     const requestObject = {
       mobile: String(body.mobile),
-      password: String(body.password)
+      password: String(body.password),
+      phoneCode: String(body.phoneCode)
     };
     return apiInstance.post(apiConfig.endPoints.AUTH.VALIDATE, requestObject);
   },
@@ -14,7 +15,8 @@ const AuthService = {
       mobile: String(body.mobile),
       password: String(body.password),
       token: String(body.token),
-      otp: String(body.otp)
+      otp: String(body.otp),
+      phoneCode: String(body.phoneCode)
     };
     return apiInstance.post(apiConfig.endPoints.AUTH.VERIFYOTP, requestObject);
   },
@@ -39,7 +41,8 @@ const AuthService = {
   resedOtp: async (body) => {
     const requestObject = {
       mobile: String(body.mobile),
-      token: String(body.token)
+      token: String(body.token),
+      phoneCode: String(body.phoneCode)
     };
     return apiInstance.post(apiConfig.endPoints.AUTH.RESENDOTP, requestObject);
   },
@@ -58,7 +61,7 @@ const AuthService = {
     return apiInstance.get(apiConfig.endPoints.ADMIN_USER.ADMIN_PERMISSION);
   },
   getCountries: async () => {
-    return apiInstance.get(apiConfig.endPoints.ADMIN_USER.ADMIN_COUNTRY_LIST);
+    return apiInstance.get(apiConfig.endPoints.ADMIN_USER.COUNTRY_LIST);
   },
   logout: () => {
     return apiInstance.get(apiConfig.endPoints.AUTH.LOGOUT);

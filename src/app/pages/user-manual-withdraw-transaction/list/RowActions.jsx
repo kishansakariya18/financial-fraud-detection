@@ -131,7 +131,7 @@ export function RowActions({ row, table }) {
 
       <CustomModal
         show={isDialogOpen}
-        title={t('user_manual_withdraw_transaction') + ' ' + t('view')}
+        title={t('user_manual_withdraw_transaction') + ' ' + t('details')}
         btnTitle={t('view_details') || t('view')}
         onClose={onCloseDialogBox}
         onOpen={onOpenDialogBox}

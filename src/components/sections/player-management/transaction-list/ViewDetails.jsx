@@ -3,10 +3,11 @@ import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions
 import { useTranslation } from 'react-i18next';
 import { transactionStatusToAPP } from '../helper';
 
-export function ViewDetails({ transactionData }) {
+export function ViewDetails({ transaction }) {
   const { t } = useTranslation();
 
-  const response = transactionData?._originalData || transactionData;
+  const response = transaction?._originalData || transaction;
+  console.log('responsee::', response);
 
   const headers = [t('currency'), t('opening'), t('current'), t('closing')]; // Define headers
 
@@ -33,17 +34,15 @@ export function ViewDetails({ transactionData }) {
             <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
               {t('transaction') + ' ' + t('type')}
             </p>
-            <p className="">{transactionData?.transactionType || 'N/A'}</p>
+            <p className="">{transaction?.transactionType || 'N/A'}</p>
           </div>
           <div>
             <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
               {t('transaction') + ' Amount'}
             </p>
             <p className="">
-              {transactionData?.currency?.Symbol && (
-                <span className="mr-1 text-xs text-gray-500">
-                  {transactionData.currency.Symbol}
-                </span>
+              {transaction?.currency?.Symbol && (
+                <span className="mr-1 text-xs text-gray-500">{transaction.currency.Symbol}</span>
               )}
               {response?.TransactionAmount || '0'}
             </p>
@@ -51,14 +50,13 @@ export function ViewDetails({ transactionData }) {
           <div>
             <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('currency')}</p>
             <p className="">
-              {transactionData?.currency?.name || 'N/A'}
-              {transactionData?.currency?.symbol && (
-                <span className="ml-1 text-xs text-gray-500">
-                  ({transactionData.currency.symbol})
-                </span>
+              {transaction?.currency?.name || 'N/A'}
+              {transaction?.currency?.symbol && (
+                <span className="ml-1 text-xs text-gray-500">({transaction.currency.symbol})</span>
               )}
             </p>
           </div>
+
           <div>
             <p className="text-sm font-medium text-gray-800 dark:text-dark-100">Reference ID</p>
             <p className="">{response?.ReferenceID || 'N/A'}</p>
@@ -80,8 +78,79 @@ export function ViewDetails({ transactionData }) {
             <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('createdAt')}</p>
             <p className="">{getDateInUTCToTimeZone(response?.DateCreated)}</p>
           </div>
+          {response?.TransactionType === 2 && (
+            <>
+              <div>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                  {t('comissionAmount')}:
+                </p>
+                <p>{response?.TransactionData?.WithdrawCommissionAmount ?? '-'}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                  {t('actualWithdrawAmount')}:
+                </p>
+                <p>{response?.TransactionData?.ActualWithdrawAmount ?? '-'}</p>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                  {t('comissionPercentage')}:
+                </p>
+                <p>{response?.TransactionData?.WithdrawCommissionPercent + ' %'}</p>
+              </div>
+            </>
+          )}
+          {response?.TransactionType === 2 &&
+            (response?.TransactionData?.CurrencyType === 1 ? (
+              <>
+                <h6 className="mt-2 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200 sm:col-span-2 lg:col-span-3">
+                  {t('crypto_wallet_information')}
+                </h6>
+                <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('network')}:
+                    </p>
+                    <p>{response?.TransactionData?.WithdrawData?.network || '-'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('wallet_address')}:
+                    </p>
+                    <p>{response?.TransactionData?.WithdrawData?.walletAddress || '-'}</p>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                {/* <h6 className="mt-4 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
+                {t('card_information')}:
+              </h6> */}
+                <h6 className="mt-2 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200 sm:col-span-2 lg:col-span-3">
+                  {t('card_information')}
+                </h6>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('card_number')}:
+                  </p>
+                  <p>{response?.TransactionData?.WithdrawData?.cardNumber || '-'}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('expiry')}:
+                  </p>
+                  <p>{response?.TransactionData?.WithdrawData?.cardExpiry || '-'}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('cardholder_name')}:
+                  </p>
+                  <p>{response?.TransactionData?.WithdrawData?.cardholderName || '-'}</p>
+                </div>
+              </>
+            ))}
         </div>
-        <div className="mt-4">
+        <div className="mt-8">
           <Table hoverable className="w-full text-left rtl:text-right">
             <THead>
               <Tr>
@@ -99,10 +168,10 @@ export function ViewDetails({ transactionData }) {
               {/* Currency Balance Row */}
               <Tr className="bg-gray-100 font-semibold text-gray-900 dark:bg-dark-700 dark:text-white">
                 <Td key={0}>
-                  {transactionData?.currency?.Name || 'Currency'} Balance
-                  {transactionData?.currency?.Symbol && (
+                  {response?.currency?.Name || 'Currency'} Balance
+                  {response?.currency?.Symbol && (
                     <span className="ml-1 text-xs text-gray-500">
-                      ({transactionData.currency.Symbol})
+                      ({transaction.currency.Symbol})
                     </span>
                   )}
                 </Td>

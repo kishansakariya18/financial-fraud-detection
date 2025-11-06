@@ -83,12 +83,25 @@ export default function Home() {
   const fetchCards = async () => {
     try {
       setIsCardLoading(true);
-      const result = await DashboardService.getCards();
+      const userCards = await DashboardService.getCardsFromUser();
+      const gameCards = await DashboardService.getCardsFromGame();
+      const walletCards = await DashboardService.getCardsFromWallet();
+      const betCards = await DashboardService.getCardsFromBet();
 
-      if (result.status === 200) {
-        setCardResponse(result.response.data);
+      if (
+        userCards.status === 200 &&
+        gameCards.status == 200 &&
+        walletCards.status == 200 &&
+        betCards.status == 200
+      ) {
+        setCardResponse({
+          ...userCards.response.data,
+          ...gameCards.response.data,
+          ...walletCards.response.data,
+          ...betCards.response.data
+        });
       } else {
-        setCardError(result.error);
+        setCardError('Something went wrong while fetching card data');
       }
     } catch (error) {
       console.log('errr fetchCards: ', error);
@@ -779,18 +792,19 @@ export default function Home() {
   }
 
   console.log('demographicResponse:', demographicResponse);
+  console.log('cards:', cardResponse);
 
   useEffect(() => {
     //TODO: uncomment when implemented
     // fetchDashboard();
-    // fetchCards();
-    // fetchDepositStats();
-    // fetchGGRReport();
-    // fetchLoggedInPlayers();
-    // fetchActivePlayers();
-    // fetchDemographicReport();
-    // fetchCountryList();
-    // fetchCasinoStats();
+    fetchCards();
+    fetchDepositStats();
+    fetchGGRReport();
+    fetchLoggedInPlayers();
+    fetchActivePlayers();
+    fetchDemographicReport();
+    fetchCountryList();
+    fetchCasinoStats();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dateFilterApplied]);
 
@@ -810,7 +824,7 @@ export default function Home() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
             <DashboardCard
               label={`${t('total')}  ${t('deposits')}`}
-              value="526,412"
+              value={cardResponse.totalDeposits || '-'}
               gradientFrom="from-info"
               gradientTo="to-info-darker"
               textColor="text-sky-100"
@@ -818,7 +832,7 @@ export default function Home() {
             />
             <DashboardCard
               label={`${t('total')}  ${t('withdrawals')}`}
-              value="258,954"
+              value={cardResponse.totalWithdrawals || '-'}
               gradientFrom="from-amber-400"
               gradientTo="to-orange-600"
               textColor="text-amber-50"
@@ -826,47 +840,39 @@ export default function Home() {
             />
             <DashboardCard
               label={`${t('ggr')}`}
-              value="367,357"
+              value={cardResponse.ggr || '-'}
               gradientFrom="from-pink-500"
               gradientTo="to-rose-500"
               textColor="text-pink-100"
               maskShape="is-hexagon-2"
             />
             <DashboardCard
-              label={`${t('net')} ${t('profit')}`}
-              value="118,229"
-              gradientFrom="from-amber-400"
-              gradientTo="to-orange-600"
-              textColor="text-amber-50"
-              maskShape="is-reuleaux-triangle"
-            />
-            <DashboardCard
               label={`${t('today')} ${t('registrations')}`}
-              value="646"
-              gradientFrom="from-pink-500"
-              gradientTo="to-rose-500"
+              value={cardResponse.todayRegistrations || '-'}
+              gradientFrom="from-info"
+              gradientTo="to-info-darker"
               textColor="text-pink-100"
               maskShape="is-diamond"
             />
             <DashboardCard
               label={`${t('total')} ${t('players')}`}
-              value="4,394"
-              gradientFrom="from-info"
-              gradientTo="to-info-darker"
+              value={cardResponse.totalPlayers || '-'}
+              gradientFrom="from-amber-400"
+              gradientTo="to-orange-600"
               textColor="text-sky-100"
               maskShape="is-hexagon-2"
             />
             <DashboardCard
-              label={`${t('total')} ${t('players')} ${t('balance')}`}
-              value="120,645"
-              gradientFrom="from-amber-400"
-              gradientTo="to-orange-600"
-              textColor="text-amber-50"
-              maskShape="is-reuleaux-triangle"
+              label={`${t('total')} ${t('providers')}`}
+              value={cardResponse.totalProviders || '-'}
+              gradientFrom="from-pink-500"
+              gradientTo="to-rose-500"
+              textColor="text-sky-100"
+              maskShape="is-diamond"
             />
             <DashboardCard
-              label={`${t('total')} ${t('providers')}`}
-              value="14"
+              label={`${t('total')} ${t('games')}`}
+              value={cardResponse.totalGames || '-'}
               gradientFrom="from-info"
               gradientTo="to-info-darker"
               textColor="text-sky-100"

@@ -106,7 +106,7 @@ export function PlayerViewDetails({
   const [sectionsOpen, setSectionsOpen] = useState({
     user: true,
     admin: true,
-    userClass: false,
+    userClass: true,
     global: true
   });
   const [error, setError] = useState('');
@@ -770,28 +770,42 @@ export function PlayerViewDetails({
                     </p>
                     <p>{response?.country?.CountryName}</p>
                   </div>
-                  {/* <div>
+                  <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {t('pan') + ' ' + t('status')}
+                      {t('kyc') + ' ' + t('status')}
                     </p>
                     <p>
-                      {response?.PanDetail !== null &&
-                      (response?.IsKYCVerified === 1 || response?.IsKYCVerified === true)
-                        ? `${response.PanDetail} (Verified)`
+                      {response?.IsKYCVerified === 1 || response?.IsKYCVerified === true
+                        ? `Verified`
                         : `Pending`}
                     </p>
-                  </div> */}
-                  {/* <div>
+                  </div>
+                  <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {t('bank') + ' ' + t('status')}
                     </p>
                     <p>
-                      {response?.BankDetail !== null &&
-                      (response?.IsBankVerified === 1 || response?.IsBankVerified === true)
-                        ? `${response.BankDetail} (Verified)`
+                      {response?.IsBankVerified === 1 || response?.IsBankVerified === true
+                        ? `Verified`
                         : `Pending`}
                     </p>
-                  </div> */}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('email') + ' ' + t('status')}
+                    </p>
+                    <p>
+                      {response?.IsBankVerified === 1 || response?.IsBankVerified === true
+                        ? `Verified`
+                        : `Pending`}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('kyc') + ' ' + t('level')}
+                    </p>
+                    <p>{response?.UserKYCLevel >= 1 ? response?.UserKYCLevel : `Not Initiated`}</p>
+                  </div>
 
                   {isB2C && (
                     <div>
