@@ -1,9 +1,9 @@
 // Import Dependencies
 import { Page } from 'components/shared/Page';
 import { Controller, useForm } from 'react-hook-form';
-import { Button, Input, Skeleton, Card } from 'components/ui';
+import { Button, Input, Skeleton, Card, Upload } from 'components/ui';
 import PaymentProviderService from 'services/payment-provider-config.services';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { useNavigate, useParams } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
@@ -16,6 +16,9 @@ import {
   getBoolOptions
 } from 'helpers/functions';
 import { Listbox } from 'components/shared/form/Listbox';
+import RenderImage from 'components/ui/custom/ImageRender';
+import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
+import { getImageURL } from 'utils/showImage';
 
 const EditProvider = () => {
   const { t } = useTranslation();
@@ -24,6 +27,9 @@ const EditProvider = () => {
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const [providerDetails, setProviderDetails] = useState(null);
+  const uploadRef = useRef();
+  const [file, setFile] = useState();
+  const [preview, setPreview] = useState();
 
   const pageTitle = t('edit') + ' ' + t('paymentProvider');
   const breadcrumbItem = [
@@ -46,8 +52,9 @@ const EditProvider = () => {
     const result = await PaymentProviderService.getProviderDetails(providerUID);
     if (result.status === 200) {
       const details = result.response.data;
+      details.Logo = details.Logo ? getImageURL('payment', details.Logo) : null;
       setProviderDetails(details);
-      const paymentGatewayConfig = details.PaymentGatewayConfig[0]?.Config;
+      const paymentGatewayConfig = details.PaymentGatewayConfig?.Config;
       const defaultData = {};
 
       // Set default KYC level if no prerequisites exist
@@ -59,7 +66,6 @@ const EditProvider = () => {
       } else {
         const value =
           details.PaymentGatewaysPrereqisites.find((item) => item.ConfigKey === 'KYCLevel') || {};
-        console.log('value:::::', value);
 
         defaultData.KYCLevel = value.ConfigValue;
       }
@@ -83,6 +89,7 @@ const EditProvider = () => {
   const editPaymentProviderApi = async (requestObject) => {
     setLoading(true);
     setError(null);
+
     const result = await PaymentProviderService.updateProvider(providerUID, requestObject);
     if (result) {
       if (result.status === 200 || result.status === 201) {
@@ -117,7 +124,7 @@ const EditProvider = () => {
   const onSubmit = async (data) => {
     console.log('data:', data);
     const existingConfig = JSON.parse(
-      JSON.stringify(providerDetails?.PaymentGatewayConfig[0]?.Config)
+      JSON.stringify(providerDetails?.PaymentGatewayConfig?.Config)
     );
     for (const configKey in data) {
       if (existingConfig[configKey]) {
@@ -128,7 +135,8 @@ const EditProvider = () => {
     await editPaymentProviderApi({
       providerUID: providerUID,
       providerConfig: existingConfig,
-      kycLevel: data.KYCLevel || '0'
+      kycLevel: data.KYCLevel || '0',
+      file
     });
   };
   const boolOptions = getBoolOptions();
@@ -141,7 +149,7 @@ const EditProvider = () => {
   ];
   return (
     <Page title={pageTitle}>
-      <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
+      <div className="transition-content w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
         <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
             {pageTitle + ' ' + t('form')}
@@ -155,7 +163,7 @@ const EditProvider = () => {
         <div className="col-span-12 sm:col-span-8 lg:col-span-9">
           {providerDetails && (
             <Card className="mb-6 h-20 p-4">
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('provider') + ' ' + t('name')}
@@ -179,9 +187,21 @@ const EditProvider = () => {
                     {t('createdAt')}
                   </p>
                   <p>
-                    {getDateInUTCToTimeZone(providerDetails.PaymentGatewayConfig[0]?.DateCreated) ||
+                    {getDateInUTCToTimeZone(providerDetails.PaymentGatewayConfig?.DateCreated) ||
                       '-'}
                   </p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">Logo</p>
+                  <img
+                    src={providerDetails.Logo || '/images/no-image.png'}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = '/images/no-image.png';
+                    }}
+                    className="h-10 w-10 rounded bg-white object-contain"
+                    alt="Provider Logo"
+                  />
                 </div>
               </div>
             </Card>
@@ -220,7 +240,7 @@ const EditProvider = () => {
                   <div className="border-t border-gray-200 pt-6">
                     <h3 className="mb-4 text-lg font-medium">{t('configuration')}</h3>
                     <div className="grid gap-4 sm:grid-cols-2">
-                      {Object.values(providerDetails?.PaymentGatewayConfig[0]?.Config || {}).map(
+                      {Object.values(providerDetails?.PaymentGatewayConfig?.Config || {}).map(
                         (item) => {
                           const tagType = providerConfigTypeMapper(item.type);
                           if (tagType === 'select') {
@@ -258,6 +278,51 @@ const EditProvider = () => {
                             );
                           }
                         }
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="mb-4 text-lg font-medium">{t('logo') || 'Logo'}</h3>
+                    <div className="grid gap-4 sm:grid-cols-1">
+                      {(providerDetails?.Logo || preview) && (
+                        <RenderImage
+                          preview={preview}
+                          value={providerDetails?.Logo || ''}
+                          id={'providerLogo'}
+                        />
+                      )}
+                      <Upload
+                        onChange={(f) => {
+                          setFile(f);
+                        }}
+                        ref={uploadRef}
+                        setPreview={setPreview}
+                        accept={'image/*'}>
+                        {({ ...props }) => (
+                          <Button
+                            color="primary"
+                            {...props}
+                            className="h-9 w-fit space-x-2 px-3 text-sm"
+                            disabled={loading}>
+                            <CloudArrowUpIcon className="size-5" />
+                            <span>Choose File</span>
+                          </Button>
+                        )}
+                      </Upload>
+                      <Button
+                        disabled={!file}
+                        onClick={() => {
+                          if (uploadRef.current) uploadRef.current.value = '';
+                          setFile();
+                          setPreview();
+                        }}
+                        className="h-9 w-fit px-3 text-sm">
+                        Reset
+                      </Button>
+                      {file && (
+                        <div>
+                          File name : <span className="font-medium">{file.name}</span>
+                        </div>
                       )}
                     </div>
                   </div>
