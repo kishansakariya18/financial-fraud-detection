@@ -965,6 +965,7 @@
   "refBonusCashoutTxnID": "Reference Cashout Transaction ID",
   "trigger_type": "Trigger Type",
   "first": "First",
+  "level": "Level",
   "parent": "Parent",
   "withdraw_requests_for_this_agent": "Withdraw Requests for this Agent",
   "credting": "Credting",
