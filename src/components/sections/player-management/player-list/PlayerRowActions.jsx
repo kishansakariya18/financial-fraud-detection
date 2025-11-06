@@ -14,7 +14,7 @@ import { toast } from 'sonner';
 // Local Imports
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
-import { TbStatusChange } from 'react-icons/tb';
+import { CgUnblock, CgBlock } from 'react-icons/cg';
 import { GrUpgrade } from 'react-icons/gr';
 import { useTranslation } from 'react-i18next';
 import UserClassService from 'services/user-class.services';
@@ -265,7 +265,7 @@ export function PlayerRowActions({
                   )}
                 </MenuItem>
               )}
-              {onChangeStatus && row?.original?.status != 'inactive' && (
+              {onChangeStatus && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -274,8 +274,16 @@ export function PlayerRowActions({
                         'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
                         focus && 'bg-this/10 dark:bg-this-light/10'
                       )}>
-                      <TbStatusChange className="size-4.5 stroke-1" />
-                      <span>{t('change') + ' ' + t('status')}</span>
+                      {row?.original?.status === 'inactive' ? (
+                        <CgUnblock className="size-4.5 stroke-1" />
+                      ) : (
+                        <CgBlock className="size-4.5 stroke-1" />
+                      )}
+                      <span>
+                        {row?.original?.status === 'inactive'
+                          ? t('unblock') || 'Unblock'
+                          : t('block') || 'Block'}
+                      </span>
                     </button>
                   )}
                 </MenuItem>
