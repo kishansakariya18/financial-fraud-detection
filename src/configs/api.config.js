@@ -330,6 +330,9 @@ export const apiConfig = {
       CHANGE_STATUS: '/games/admin/casino-management/category/:categoryId/change-status',
       ALL_ACTIVE_LIST: '/games/admin/casino-management/category/all'
     },
+    TOOLS: {
+      DETAIL: '/games/admin/ip-lookup/details'
+    },
     PROVIDER: {
       ALL_LIST: '/games/admin/casino-management/provider/all',
       LIST: '/games/admin/casino-management/provider/list',

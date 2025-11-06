@@ -38,6 +38,7 @@ import { userManualDepositTransactionRoute } from './routes/user-manual-deposit-
 import { releaseNotesRoutes } from './routes/release-notes.route';
 import { supervisorRoute } from './routes/supervisor.route';
 import responsibleGamblingRoute from './routes/responsible-gambling.route.jsx';
+import toolsRoutes from './routes/tools.route';
 
 import onlyCallingAgentRoutes from './routes/calling-agents.route';
 import { callingAgentsRoute } from './routes/supervisor.route';
@@ -88,6 +89,7 @@ const protectedRoutes = {
             ...siteConfigurationRoutes,
             ...blacklistRoutes,
             ...releaseNotesRoutes,
+            ...toolsRoutes,
             ...responsibleGamblingRoute,
             // B2C-only admin routes
             {

@@ -92,6 +92,14 @@ const PaymentProviderService = {
   },
   updateProvider: async (providerUID, data) => {
     try {
+      const formData = new FormData();
+
+      if (data.file && data?.file.name) {
+        formData.append('image', data.file, data.file.name);
+      }
+      formData.append('providerConfig', JSON.stringify(data.providerConfig));
+      formData.append('kycLevel', data.kycLevel);
+      formData.append('providerUID', providerUID);
       const endPoint = replaceText(
         apiConfig.endPoints.PAYMENT_PROVIDER_CONFIG.EDIT,
         ':providerUID',
@@ -101,10 +109,9 @@ const PaymentProviderService = {
       const response = await sendRequest({
         url: apiURL,
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: data
+        contentType: 'form-data',
+        headers: { 'Content-Type': 'multipart/form-data' },
+        body: formData
       });
       return response;
     } catch (error) {

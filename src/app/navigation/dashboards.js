@@ -25,6 +25,7 @@ import { userManualWithdrawTransaction } from './user-manual-withdraw-transactio
 // import { userManualDepositTransaction } from './user-manual-deposit-transaction';
 // import { registrationFields } from './registration-fields';
 import { releaseNotes } from './release-notes';
+import { toolsNavigation } from './tools';
 import { supervisor } from './supervisor';
 import { b2bAgent } from './b2b-agent';
 import { bonusCampaign } from './bonus-campaign';
@@ -77,6 +78,7 @@ export const dashboards = () => ({
     // registrationFields,
     // userManualDepositTransaction,
     releaseNotes,
+    toolsNavigation,
     faq
   ]
 });
