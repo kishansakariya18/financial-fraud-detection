@@ -29,6 +29,12 @@ export const agentWalletColumns = (formatCurrency) => [
     header: 'Agent Type',
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.status, {
+    id: 'status',
+    label: 'Status',
+    header: 'Status',
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.commissionBalance, {
     id: 'commissionBalance',
     label: 'Commission Balance',
@@ -41,6 +47,13 @@ export const agentWalletColumns = (formatCurrency) => [
     label: 'LineUp Balance',
     header: 'LineUp Balance',
     cell: ({ getValue }) => <span className="font-medium">{formatCurrency(getValue())}</span>,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.createdAt, {
+    id: 'createdAt',
+    label: 'Created At',
+    header: 'Created At',
+    cell: DateCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.dateModified, {

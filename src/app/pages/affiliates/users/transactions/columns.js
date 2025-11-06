@@ -73,13 +73,13 @@ export const columns = [
   //   filterFn: 'arrIncludesSome',
   //   enableSorting: false
   // }),
-  columnHelper.accessor((row) => row.balanceAfter, {
-    id: 'balanceAfter',
-    label: 'Balance After',
-    header: 'Balance After',
-    cell: AmountCell,
-    enableSorting: false
-  }),
+  // columnHelper.accessor((row) => row.balanceAfter, {
+  //   id: 'balanceAfter',
+  //   label: 'Balance After',
+  //   header: 'Balance After',
+  //   cell: AmountCell,
+  //   enableSorting: false
+  // }),
   columnHelper.accessor((row) => row.createdAt, {
     id: 'createdAt',
     label: 'Date',

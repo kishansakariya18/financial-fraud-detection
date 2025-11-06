@@ -1,4 +1,5 @@
 import { PAYOUT_STATUS } from 'constants/app.constant';
+import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 export const payoutStatusOptions = [
   { value: 0, label: 'Pending', color: 'warning' },
@@ -22,6 +23,12 @@ export const parsePayoutStatusToAPI = (status) => {
   if (s === 'REJECTED') return PAYOUT_STATUS.REJECTED;
   return undefined;
 };
+export const parsePayoutStatusToApp = (status) => {
+  if (+status === PAYOUT_STATUS.PENDING) return 'PENDING';
+  if (+status === PAYOUT_STATUS.APPROVED) return 'APPROVED';
+  if (+status === PAYOUT_STATUS.REJECTED) return 'REJECTED';
+  return undefined;
+};
 
 export const responseMapper = (apiData) => {
   if (!apiData) return [];
@@ -31,6 +38,7 @@ export const responseMapper = (apiData) => {
     userID: data.UserID,
     depositBankAccountID: data.DepositBankAccountID,
     currencyCode: data.Currency,
+    currencyType: data.CurrencyType === '0' ? 'FIAT' : 'CRYPTO',
     amount: data.TransactionAmount,
     depositTime: data.DepositTime,
     screenshotURL: data.ScreenshotURL,
@@ -38,8 +46,23 @@ export const responseMapper = (apiData) => {
     verifiedByAdminID: data.VerifiedByAdminID,
     rejectionReason: data.RejectionReason,
     remarks: data.Remarks,
+    network: data.TransactionData?.WithdrawalMethodData?.network,
+    walletAddress: data.TransactionData?.WithdrawalMethodData?.walletAddress,
+    cardNumber: data.TransactionData?.WithdrawalMethodData?.cardNumber,
+    cardExpitry: data.TransactionData?.WithdrawalMethodData?.cardExpiry,
+    cardholderName: data.TransactionData?.WithdrawalMethodData?.cardholderName,
     bankTransactionID: data.BankTransactionID,
-    dateCreated: data.DateCreated,
-    dateModified: data.DateModified
+    dateCreated: getDateInUTCToTimeZone(data.DateCreated),
+    dateModified: data.DateModified,
+    actualWithdrawAmount: data.TransactionData?.ActualWithdrawAmount,
+    withdrawCommissionPercent: data.TransactionData?.WithdrawCommissionPercent,
+    withdrawCommissionAmount: data.TransactionData?.WithdrawCommissionAmount
   }));
+};
+
+export const maskCardNumber = (cardNumber) => {
+  if (!cardNumber || typeof cardNumber !== 'string') return '';
+  const last4 = cardNumber.slice(-4);
+  if (!last4) return '-';
+  return `**** **** **** ${last4}`;
 };

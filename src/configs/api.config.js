@@ -211,20 +211,23 @@ export const apiConfig = {
     },
     DASHBOARD: {
       LIST: '/admin/dashboard',
-      CARDS: '/admin/dashboard/cards',
-      DEPOSIT_STATS: '/admin/dashboard/deposit-stats',
-      WITHDRAW_STATS: '/admin/dashboard/withdraw-stats',
-      GGR_REPORT: '/admin/dashboard/ggr-report',
-      LOGGED_IN_PLAYERS: '/admin/dashboard/logged-in-players',
-      ACTIVE_PLAYERS: '/admin/dashboard/active-players',
-      DEMOGRAPHIC_REPORT: '/admin/dashboard/demographic-report',
-      KPI_SUMMARY: '/admin/dashboard/kpi-summary',
-      CASINO_STATS: '/admin/dashboard/casino-stats',
-      TOP_PLAYERS: '/admin/dashboard/top-players',
-      TOP_GAMES: '/admin/dashboard/top-games',
-      LAST_DEPOSITOR: '/admin/dashboard/last-depositor',
-      LAST_WITHDRAWAL: '/admin/dashboard/last-withdrawer',
-      LAST_SIGNUP: '/admin/dashboard/last-signup'
+      USER_CARDS: '/users/admin/dashboard/get-cards',
+      WALLET_CARDS: '/wallet/admin/dashboard/get-cards',
+      BET_CARDS: '/bets/admin/dashboard/get-cards',
+      GAME_CARDS: '/games/admin/dashboard/get-cards',
+      DEPOSIT_STATS: '/wallet/admin/dashboard/deposit-stats',
+      WITHDRAW_STATS: '/wallet/admin/dashboard/withdraw-stats',
+      GGR_REPORT: '/bets/admin/dashboard/ggr-report',
+      LOGGED_IN_PLAYERS: '/users/admin/dashboard/logged-in-players',
+      ACTIVE_PLAYERS: '/bets/admin/dashboard/active-players',
+      DEMOGRAPHIC_REPORT: '/users/admin/dashboard/demographic-report',
+      KPI_SUMMARY: '/bets/admin/dashboard/kpi-summary',
+      CASINO_STATS: '/bets/admin/dashboard/casino-stats',
+      TOP_PLAYERS: '/bets/admin/dashboard/top-players',
+      TOP_GAMES: '/bets/admin/dashboard/top-games',
+      LAST_DEPOSITOR: '/wallet/admin/dashboard/last-depositor',
+      LAST_WITHDRAWAL: '/wallet/admin/dashboard/last-withdrawer',
+      LAST_SIGNUP: '/users/admin/dashboard/last-signup'
     },
     DEPOSIT_PROMOCODE: {
       PROMOCODE_LIST: '/bonus/admin/v1/deposit-promocode/list',
@@ -326,6 +329,9 @@ export const apiConfig = {
       DELETE: '/games/admin/casino-management/category/:categoryId/delete',
       CHANGE_STATUS: '/games/admin/casino-management/category/:categoryId/change-status',
       ALL_ACTIVE_LIST: '/games/admin/casino-management/category/all'
+    },
+    TOOLS: {
+      DETAIL: '/games/admin/ip-lookup/details'
     },
     PROVIDER: {
       ALL_LIST: '/games/admin/casino-management/provider/all',
@@ -544,7 +550,10 @@ export const apiConfig = {
       CAMPAIGN_REPORT: '/affiliates/admin/affiliates/campaign-report',
       COMMISSION_SUMMARY_REPORT:
         '/affiliates/admin/affiliates/{affiliateId}/export-commission-summary',
-      REFERRED_USERS_REPORT: '/affiliates/admin/affiliates/{affiliateId}/export-referred-users'
+      REFERRED_USERS_REPORT: '/affiliates/admin/affiliates/{affiliateId}/export-referred-users',
+      CREATE: '/users/admin/users/create-affiliate-user',
+      EDIT: '/users/admin/users/edit-affiliate-user',
+      CHANGE_STATUS: '/affiliates/admin/affiliates/{affiliateUID}/change-status'
     },
     FAQ: {
       LIST: '/affiliates/admin/faq/list',

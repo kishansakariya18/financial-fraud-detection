@@ -260,7 +260,8 @@ export const PERMISSIONS = {
     WITHDRAWALS_LIST: 'affiliate-withdrawals-list',
     COMMISSION: 'affiliate-commission',
     CAMPAIGNS: 'affiliate-campaigns',
-    TRANSACTIONS_LIST: 'affiliate-transactions-list'
+    TRANSACTIONS_LIST: 'affiliate-transactions-list',
+    CREATE: 'affiliate-create'
   },
   PAYMENT: {
     VIEW: 'payment-view'
@@ -474,4 +475,9 @@ export const AGENT_TIER_TYPE = {
 export const CREDIT_DEBIT_TYPE = {
   CREDIT: 0,
   DEBIT: 1
+};
+
+export const RESEND_OTP_TYPE = {
+  EMAIL_VERIFICATION: 'EMAIL_VERIFICATION',
+  RESET_PASSWORD: 'RESET_PASSWORD'
 };

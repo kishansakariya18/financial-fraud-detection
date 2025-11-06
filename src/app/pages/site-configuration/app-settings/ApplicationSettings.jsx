@@ -134,8 +134,11 @@ export default function ApplicationSettings() {
         }
       }
       const next = { ...(base || {}), [field]: newVal };
-      // sync back to Value string
-      setFormValues((fv) => ({ ...fv, [rowKey]: JSON.stringify(next) }));
+      // sync back preserving original format: object stays object, string stays string
+      const originalRaw = formValues[rowKey];
+      const shouldKeepObject =
+        originalRaw !== null && typeof originalRaw === 'object' && !Array.isArray(originalRaw);
+      setFormValues((fv) => ({ ...fv, [rowKey]: shouldKeepObject ? next : JSON.stringify(next) }));
       return { ...prev, [rowKey]: next };
     });
   };
@@ -361,21 +364,48 @@ export default function ApplicationSettings() {
 
   const handleUpdate = async (row) => {
     try {
-      // Validate current value before update (non-negative, up to 2 decimals)
       const currentVal = formValues[row.key];
-      const err = validateNumberValue(currentVal, {
-        positive: true,
-        allowZero: true,
-        maxDecimals: 2
-      });
-      if (err) {
-        setErrors((prev) => ({ ...prev, [row.key]: err }));
-        return;
+      const valueTypeLower = String(row?.valueType || '').toLowerCase();
+      const isJsonField =
+        valueTypeLower === 'json' ||
+        typeof currentVal === 'object' ||
+        (typeof currentVal === 'string' && /^\s*[{[]/.test(currentVal));
+
+      // Validate only for numeric types/values
+      const shouldValidateNumber =
+        !isJsonField && (valueTypeLower === 'number' || isNumeric(currentVal));
+      if (shouldValidateNumber) {
+        const err = validateNumberValue(currentVal, {
+          positive: true,
+          allowZero: true,
+          maxDecimals: 2
+        });
+        if (err) {
+          setErrors((prev) => ({ ...prev, [row.key]: err }));
+          return;
+        }
       }
       setLoadingIds((prev) => ({ ...prev, [row.id]: true }));
+      // Prepare payload value preserving JSON as pure object/array
+      let valueForPayload = currentVal;
+      if (isJsonField && typeof currentVal === 'string') {
+        try {
+          let parsed = JSON.parse(currentVal);
+          if (typeof parsed === 'string' && /^\s*[{[]/.test(parsed)) {
+            try {
+              parsed = JSON.parse(parsed);
+            } catch {
+              // keep single-parse result
+            }
+          }
+          valueForPayload = parsed;
+        } catch {
+          // if parse fails, fall back to currentVal
+        }
+      }
       const payload = {
         id: row.id,
-        value: formValues[row.key],
+        value: valueForPayload,
         valueType: row.valueType
       };
       const res = await AppSettingsService.updateAppSettings(payload);
