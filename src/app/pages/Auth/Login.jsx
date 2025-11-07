@@ -104,13 +104,18 @@ export default function Login() {
       }
 
       toast.success(response.message);
-      const validateResponse = { ...response.data, userPassword: inputData.password };
+      const validateResponse = {
+        ...response.data,
+        userPassword: inputData.password,
+        phoneCode: inputData.phoneCode
+      };
+
       let isMfaEnabled = !!validateResponse?.mfaEnabled;
       let redirectTo =
         response.data.adminData?.adminType === ADMIN_TYPE.AGENT ? '/calling-agents/dashboard' : '/';
 
       if (isMfaEnabled) {
-        redirectTo = `/otp-verification?token=${validateResponse.token}&&mobile=${validateResponse.mobile}&&UserToken=${validateResponse.AdminSessionToken}&&password=${validateResponse.userPassword}`;
+        redirectTo = `/otp-verification?token=${validateResponse.token}&&mobile=${validateResponse.mobile}&&UserToken=${validateResponse.AdminSessionToken}&&password=${validateResponse.userPassword}&&phoneCode=${encodeURIComponent(validateResponse.phoneCode)}`;
       }
 
       await Promise.resolve((resolve) => {

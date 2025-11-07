@@ -153,7 +153,7 @@ const CategoryService = {
         headers: {
           'Content-Type': 'application/json'
         },
-        params: apiQueryParams
+        params: isPaginationRequired ? apiQueryParams : {}
       });
 
       return response;

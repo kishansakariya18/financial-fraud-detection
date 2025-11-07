@@ -6,9 +6,14 @@ export const addReleaseNoteSchema = Yup.object().shape({
     .required('Version is required'),
   title: Yup.string()
     .trim()
+    .min(10, 'Title must be at least 10 characters')
     .max(100, 'Title must be 100 characters or less')
     .required('Title is required'),
-  description: Yup.string().trim().required('Description is required'),
+  description: Yup.string()
+    .trim()
+    .min(10, 'Description must be at least 10 characters')
+    .max(1000, 'Description must be 1000 characters or less')
+    .required('Description is required'),
   releaseDate: Yup.date()
     .nullable()
     .transform((value, originalValue) => {

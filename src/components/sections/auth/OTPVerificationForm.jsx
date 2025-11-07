@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Button, Card, Input } from 'components/ui';
 import { getQueryParams } from 'utils/custom.utilities';
+import { RESEND_OTP_TYPE } from 'constants/app.constant';
 
 // ----------------------------------------------------------------------
 
@@ -54,6 +55,7 @@ export default function OTPVerificationForm({
     await authService
       .otpVerification({
         ...data,
+        phoneCode: queryParams.phoneCode,
         token: queryParams.token,
         password: queryParams.password,
         mobile: queryParams.mobile
@@ -73,7 +75,9 @@ export default function OTPVerificationForm({
     await authService
       .resedOtp({
         token: queryParams.token,
-        mobile: queryParams.mobile
+        mobile: queryParams.mobile,
+        phoneCode: queryParams.phoneCode,
+        type: RESEND_OTP_TYPE.EMAIL_VERIFICATION
       })
       .then((result) => {
         setSeconds(30);

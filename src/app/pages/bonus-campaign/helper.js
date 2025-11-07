@@ -36,6 +36,8 @@ export const parseGrantStatus = (status) => {
       return 'forfeited';
     case 5:
       return 'cashedOut';
+    case 6:
+      return 'failed';
     default:
       return 'pending';
   }
@@ -49,6 +51,27 @@ export const parseCampaignStatusToApi = (status) => {
       return 1;
     case 'expired':
       return 2;
+    default:
+      return 0;
+  }
+};
+
+export const parseGrantStatusToApi = (status) => {
+  switch (status) {
+    case 'pending':
+      return 0;
+    case 'active':
+      return 1;
+    case 'completed':
+      return 2;
+    case 'expired':
+      return 3;
+    case 'forfeited':
+      return 4;
+    case 'cashedOut':
+      return 5;
+    case 'failed':
+      return 6;
     default:
       return 0;
   }
@@ -122,6 +145,12 @@ export const grantStatusOptions = [
     label: 'Cashed Out',
     color: 'success',
     icon: CheckBadgeIcon
+  },
+  {
+    value: 'failed',
+    label: 'Failed',
+    color: 'error',
+    icon: XMarkIcon
   }
 ];
 
@@ -147,6 +176,7 @@ export const bonusCampaignListResponseMapper = (apiData) => {
     campaignName: campaign.CampaignName,
     campaignType: campaign.CampaignType,
     status: parseCampaignStatus(campaign.CampaignStatus),
+    actualStatus: parseInt(campaign.CampaignStatus),
     startDate: getDateInUTCToTimeZone(campaign.StartDate),
     endDate: getDateInUTCToTimeZone(campaign.EndDate),
     claimMethod: campaign.ClaimMethod,
@@ -295,6 +325,7 @@ export const bonusGrantResponseMapper = (apiData) => {
       txnAmount: parseFloat(data?.TxnAmount) || 0,
       grantBonusAmount: parseFloat(data?.GrantBonusAmount) || 0,
       grantStatus: parseGrantStatus(data.GrantStatus),
+      claimMethod: data?.bonusCampaign?.ClaimMethod,
       requiredWR: requiredWR,
       completedWR: completedWR,
       wageringProgress: wageringProgress,

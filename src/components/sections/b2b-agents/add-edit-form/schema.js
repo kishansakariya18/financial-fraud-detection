@@ -12,12 +12,7 @@ const turnoverCommissionSchema = baseCommissionSchema.shape({
     .typeError('Turnover percent is required')
     .required('Turnover percent is required')
     .min(0, 'Percent must be at least 0')
-    .max(100, 'Percent cannot exceed 100'),
-  turnoverTargetAmount: yup
-    .number()
-    .typeError('Target amount is required')
-    .required('Target amount is required')
-    .min(0, 'Target amount must be at least 1')
+    .max(100, 'Percent cannot exceed 100')
 });
 
 // CPA commission schema with conditional validation

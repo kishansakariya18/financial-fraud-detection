@@ -156,7 +156,9 @@ export const PERMISSIONS = {
     DEPOSIT_EXPORT_REPORT: 'deposit-export-report',
     WITHDRAW_EXPORT_REPORT: 'withdraw-export-report',
     PLAYER_BALANCE_REPORT_VIEW: 'player-balance-report-view',
-    PLAYER_BALANCE_EXPORT_REPORT: 'player-balance-export-report'
+    PLAYER_BALANCE_EXPORT_REPORT: 'player-balance-export-report',
+    AGENT_COMMISSION_REPORT: 'agent-commission-report',
+    AGENT_WALLET_REPORT: 'agent-wallet-report'
   },
   USER_LIMIT_SETTING: {
     VIEW: 'limit-setting-view',
@@ -200,6 +202,20 @@ export const PERMISSIONS = {
     CHANGE_STATUS: 'banner-change-status',
     UPLOAD_SEGMENTATION_CSV: 'banner-upload-segmentation-csv',
     SEGMENTATION: 'banner-upload-segmentation-csv'
+  },
+  BLOG: {
+    LIST: 'blogs-view',
+    CREATE: 'blogs-create',
+    EDIT: 'blogs-edit',
+    DELETE: 'blogs-delete',
+    CHANGE_STATUS: 'blogs-change-status'
+  },
+  BLOG_CATEGORY: {
+    LIST: 'blog-categories-view',
+    CREATE: 'blog-categories-create',
+    EDIT: 'blog-categories-edit',
+    DELETE: 'blog-categories-delete',
+    CHANGE_STATUS: 'blog-categories-change-status'
   },
   APP_SETTING: {
     LIST: 'app-setting-view'
@@ -258,7 +274,8 @@ export const PERMISSIONS = {
     WITHDRAWALS_LIST: 'affiliate-withdrawals-list',
     COMMISSION: 'affiliate-commission',
     CAMPAIGNS: 'affiliate-campaigns',
-    TRANSACTIONS_LIST: 'affiliate-transactions-list'
+    TRANSACTIONS_LIST: 'affiliate-transactions-list',
+    CREATE: 'affiliate-create'
   },
   PAYMENT: {
     VIEW: 'payment-view'
@@ -409,11 +426,19 @@ export const PERMISSIONS = {
   COMMISSION_SETTING: {
     UPDATE: 'commission-setting-update'
   },
+  OPERATOR: {
+    WALLET_VIEW: 'operator-wallet-view',
+    WALLET_TRANSACTION_LIST: 'transaction-list',
+    MENAGE_FUNDS: 'deposit-withdraw-fund',
+    WITHDRAW_REQUESTS: 'operator-withdraw-requests-view',
+    WITHDRAW_REQUESTS_EDIT: 'operator-withdraw-requests-edit'
+  },
   AGENTS: {
-    ADD: 'b2b-agent-add',
-    EDIT: 'b2b-agent-edit',
-    VIEW: 'b2b-agent-view',
-    CHANGE_STATUS: 'b2b-agent-change-status'
+    ADD: 'agent-add',
+    EDIT: 'agent-edit',
+    VIEW: 'agent-view',
+    CHANGE_STATUS: 'agent-change-status',
+    WALLET_MANAGE: 'agent-wallet-manage'
   }
 };
 
@@ -464,4 +489,9 @@ export const AGENT_TIER_TYPE = {
 export const CREDIT_DEBIT_TYPE = {
   CREDIT: 0,
   DEBIT: 1
+};
+
+export const RESEND_OTP_TYPE = {
+  EMAIL_VERIFICATION: 'EMAIL_VERIFICATION',
+  RESET_PASSWORD: 'RESET_PASSWORD'
 };

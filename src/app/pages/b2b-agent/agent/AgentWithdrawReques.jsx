@@ -14,7 +14,7 @@ export default function AgentWithdrawRequest() {
       ...requestObject,
       filters: {
         ...requestObject.filters,
-        entityType: 'b2b_agent'
+        formType: 'b2b_agent'
       },
       toAgentUID: userData.AgentUID
     });

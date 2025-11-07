@@ -21,7 +21,7 @@ const validationSchema = yup.object({
     .number()
     .required('Amount is required')
     .positive('Amount must be positive')
-    .min(0.01, 'Minimum amount is $0.01')
+    .min(0.01, 'Minimum amount is 0.01')
     .max(9999999, 'Maximum amount is reached'),
   reason: yup.string().optional().max(500, 'Reason cannot exceed 500 characters')
 });
@@ -31,7 +31,7 @@ export function CreditDebitForm({ agentUID, onCancel, isOpen }) {
   const [loading, setLoading] = useState(false);
   const { userData } = useSelector((state) => state.auth);
   const isAdmin = useMemo(() => userData?.AdminType === ADMIN_TYPE.ADMIN, [userData?.AdminType]);
-  const { symbol } = useCurrencyContext();
+  const { symbol, formatCurrency } = useCurrencyContext();
   const {
     register,
     handleSubmit,
@@ -104,8 +104,6 @@ export function CreditDebitForm({ agentUID, onCancel, isOpen }) {
             {...register('amount')}
             type="number"
             step="0.01"
-            min="0.01"
-            max="999999.99"
             label={t('amount')}
             placeholder="0.00"
             prefix={symbol}
@@ -117,7 +115,7 @@ export function CreditDebitForm({ agentUID, onCancel, isOpen }) {
               {isCredit ? t('amount_to_credit') : t('amount_to_debit')}:
               <span
                 className={`ml-1 font-semibold ${isCredit ? 'text-green-600' : 'text-red-600'}`}>
-                ${parseFloat(watchedAmount || 0).toFixed(2)}
+                {formatCurrency(watchedAmount || 0)}
               </span>
             </p>
           )}

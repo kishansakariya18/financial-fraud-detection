@@ -77,10 +77,10 @@ export const segmentationStatusOptions = [
 ];
 
 export const kycOptions = [
-  { value: 1, label: 'Only Document' },
-  { value: 2, label: 'Only Bank' },
-  { value: 3, label: 'Both Verified' },
-  { value: 4, label: 'Both Not Verified' }
+  { value: 1, label: 'Level 1' },
+  { value: 2, label: 'Level 2' },
+  { value: 3, label: 'Level 3' },
+  { value: 4, label: 'Level 4' }
 ];
 
 export const genderOptions = [

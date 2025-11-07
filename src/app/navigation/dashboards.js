@@ -20,16 +20,18 @@ import { bonusManagement } from './bonus-management';
 import { userClass } from './user-class';
 import { responsibleGambling } from './responsible-gambling';
 import { blacklist } from './blacklist';
-// import { bank } from './bank';
+import { bank } from './bank';
+import { userManualWithdrawTransaction } from './user-manual-withdraw-transaction';
 // import { userManualDepositTransaction } from './user-manual-deposit-transaction';
 // import { registrationFields } from './registration-fields';
 import { releaseNotes } from './release-notes';
+import { toolsNavigation } from './tools';
 // import { supervisor } from './supervisor';
 import { b2bAgent } from './b2b-agent';
 import { bonusCampaign } from './bonus-campaign';
 import { faq } from './faq';
 import { affiliatesNew } from './affiliates-new';
-import { globalCommissionSetting } from './global-commission-setting';
+// import { globalCommissionSetting } from './global-commission-setting';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -51,7 +53,7 @@ export const dashboards = () => ({
     users,
     // supervisor,
     affiliatesNew,
-    globalCommissionSetting,
+    // globalCommissionSetting,
     b2bAgent,
     platform,
     contentManagement,
@@ -71,10 +73,12 @@ export const dashboards = () => ({
     userClass,
     responsibleGambling,
     blacklist,
-    // bank,
+    bank,
+    userManualWithdrawTransaction,
     // registrationFields,
     // userManualDepositTransaction,
     releaseNotes,
+    toolsNavigation,
     faq
   ]
 });

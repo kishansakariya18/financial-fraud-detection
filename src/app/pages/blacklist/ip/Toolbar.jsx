@@ -18,7 +18,7 @@ export default function Toolbar({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const pageTitle = t('blacklisted') + ' IP ' + t('address');
-  const buttonTitle = t('blacklist') + ' IP ' + t('address');
+  const buttonTitle = t('blacklist_ip_address');
 
   const handleReset = () => {
     setSearchValue('');

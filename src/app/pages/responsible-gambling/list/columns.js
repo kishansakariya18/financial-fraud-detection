@@ -21,6 +21,12 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.userName, {
+    id: 'UserName',
+    header: 'User Name',
+    cell: BoldCell,
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.firstName, {
     id: 'First Name',
     header: 'First Name',
@@ -70,6 +76,13 @@ export const columns = [
   columnHelper.accessor((row) => row.approvedAt, {
     id: 'Approved At',
     header: 'Approved At',
+    cell: DateCell,
+    filterFn: 'inNumberRange',
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.expireAt, {
+    id: 'ExpiresAt',
+    header: 'Expires At',
     cell: DateCell,
     filterFn: 'inNumberRange',
     enableSorting: false

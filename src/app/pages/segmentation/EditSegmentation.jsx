@@ -214,6 +214,8 @@ const EditSegmentation = () => {
             mappedData.maxReferral = null;
             mappedData.minDeposit = null;
             mappedData.maxDeposit = null;
+            mappedData.kyc = false;
+            mappedData.kycType = null;
           }
 
           reset(mappedData);
@@ -288,36 +290,38 @@ const EditSegmentation = () => {
             {t('segmentation') + ' ' + t('setting')}
           </h6>
           <div className="mt-6 space-y-4">
-            <div className="grid gap-4 lg:grid-cols-3">
-              <div>
-                <Checkbox label={t('kyc')} {...register('kyc')} />
-              </div>
+            {!isB2B && (
+              <div className="grid gap-4 lg:grid-cols-3">
+                <div>
+                  <Checkbox label={t('kyc')} {...register('kyc')} />
+                </div>
 
-              {
-                <>
-                  <div>
-                    <Controller
-                      render={({ field }) => (
-                        <Listbox
-                          data={kycOptions}
-                          value={
-                            (kyc && kycOptions.find((opt) => opt.value === field.value)) || null
-                          }
-                          onChange={(val) => field.onChange(val.value)}
-                          name={field.name}
-                          disabled={!kyc}
-                          placeholder={t('select') + ' ' + t('kyc') + ' ' + t('option')}
-                          displayField="label"
-                          error={errors?.playerLossCommissionType?.message}
-                        />
-                      )}
-                      control={control}
-                      name="kycType"
-                    />
-                  </div>
-                </>
-              }
-            </div>
+                {
+                  <>
+                    <div>
+                      <Controller
+                        render={({ field }) => (
+                          <Listbox
+                            data={kycOptions}
+                            value={
+                              (kyc && kycOptions.find((opt) => opt.value === field.value)) || null
+                            }
+                            onChange={(val) => field.onChange(val.value)}
+                            name={field.name}
+                            disabled={!kyc}
+                            placeholder={t('select') + ' ' + t('kyc') + ' ' + t('option')}
+                            displayField="label"
+                            error={errors?.playerLossCommissionType?.message}
+                          />
+                        )}
+                        control={control}
+                        name="kycType"
+                      />
+                    </div>
+                  </>
+                }
+              </div>
+            )}
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
                 <Checkbox label={t('countries')} {...register('countryCheck')} />

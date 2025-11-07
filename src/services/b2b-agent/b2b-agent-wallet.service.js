@@ -82,7 +82,8 @@ const B2BAgentWalletService = {
       ...(data.toAgentUID ? { toAgentUID: data.toAgentUID } : {}),
       status: filters.status || undefined,
       entityType: filters.entityType || undefined,
-      limit: pagination?.pageSize || 10,
+      formType: filters.formType || undefined,
+      perPage: pagination?.pageSize || 10,
       page: pagination.pageIndex + 1
     };
     return apiInstance.get(apiConfig.endPoints.B2B_AGENT.WALLET.WITHDRAW_REQUEST_LIST, {
@@ -124,6 +125,24 @@ const B2BAgentWalletService = {
       endDate: endDate ? moment(Number(endDate)).endOf('day').toDate() : undefined
     };
     return apiInstance.post(apiConfig.endPoints.B2B_AGENT.WALLET.OPERATOR_TRANSACTION_LIST, body);
+  },
+  updateOperatorWallet: async (data) => {
+    return apiInstance.post(apiConfig.endPoints.B2B_AGENT.WALLET.OPERATOR_WALLET_UPDATE, data);
+  },
+
+  getAgentCommissionReport: (data) => {
+    return apiInstance.get(apiConfig.endPoints.B2B_AGENT.WALLET.AGENT_COMMISSION_REPORT, {
+      params: data
+    });
+  },
+  getAgentWalletReport: (data) => {
+    if (data.limit) {
+      data.perPage = data.limit || DEFAULT_PER_PAGE_RECORD;
+      delete data.limit;
+    }
+    return apiInstance.get(apiConfig.endPoints.B2B_AGENT.WALLET.AGENT_WALLET_REPORT, {
+      params: data
+    });
   }
 };
 

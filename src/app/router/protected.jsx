@@ -28,6 +28,8 @@ import profileRoute from './routes/profile.route';
 import bonusManagementRoute from './routes/bonus-management.route';
 
 import bannerRoute from './routes/banner.route';
+import { blogRoute } from './routes/blog.route';
+import { blogCategoryRoute } from './routes/blog-category.route';
 import userClass from './routes/user-class.route';
 import rateLimitRulesRoute from './routes/rate-limit-rules.route';
 import registrationFieldsRoute from './routes/registration-fields.route.jsx';
@@ -38,6 +40,7 @@ import { userManualDepositTransactionRoute } from './routes/user-manual-deposit-
 import { releaseNotesRoutes } from './routes/release-notes.route';
 import { supervisorRoute } from './routes/supervisor.route';
 import responsibleGamblingRoute from './routes/responsible-gambling.route.jsx';
+import toolsRoutes from './routes/tools.route';
 
 import onlyCallingAgentRoutes from './routes/calling-agents.route';
 import { callingAgentsRoute } from './routes/supervisor.route';
@@ -51,6 +54,7 @@ import faqRoutes from './routes/faq.route';
 import { platformGuard } from './PlatformRouteGuard';
 import { Outlet } from 'react-router';
 import { PLATFORM_TYPE } from 'constants/app.constant';
+import { userManualWithdrawTransactionRoute } from './routes/user-manual-withdraw-transaction.route';
 // ----------------------------------------------------------------------
 
 const protectedRoutes = {
@@ -70,30 +74,27 @@ const protectedRoutes = {
             ...dashboardRoute,
             ...adminRoute,
             ...bannerRoute,
+            ...blogCategoryRoute,
+            ...blogRoute,
             ...playerRoutes,
             ...roleRoutes,
             ...auditlogsRoutes,
             ...platformRoute,
             ...countryRoutes,
             ...reportsRoutes,
-            ...userKycRoute,
             ...casinoRoutes,
             ...segmentationRoutes,
             ...emailTemplateRoute,
             ...promocodeRoute,
             ...pagesRoute,
-            ...crmRoute,
-            ...layoutThemeRoute,
             ...homeCategoryRoute,
-            ...tenantRoute,
             ...bonusManagementRoute,
-            ...userClass,
             ...rateLimitRulesRoute,
             ...siteConfigurationRoutes,
             ...blacklistRoutes,
             ...releaseNotesRoutes,
+            ...toolsRoutes,
             ...responsibleGamblingRoute,
-            ...faqRoutes,
             // B2C-only admin routes
             {
               loader: platformGuard([PLATFORM_TYPE.B2C]),
@@ -106,10 +107,17 @@ const protectedRoutes = {
                 ...affiliatesRoutes,
                 ...userManualDepositTransactionRoute,
                 ...bankRoute,
+                ...userManualWithdrawTransactionRoute,
                 ...registrationFieldsRoute,
                 ...paymentRoute,
                 ...bonusCampaignRoute,
-                ...globalCommissionSettingRoute
+                ...globalCommissionSettingRoute,
+                ...crmRoute,
+                ...tenantRoute,
+                ...userClass,
+                ...faqRoutes,
+                ...userKycRoute,
+                ...layoutThemeRoute
               ]
             },
 

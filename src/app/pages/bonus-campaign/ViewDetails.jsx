@@ -135,14 +135,16 @@ export function ViewDetails() {
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('discount') + ' ' + t('amount')}
                   </p>
-                  <p>{response?.BonusValue}</p>
+                  <p>{`${response?.BonusValue} ${response?.BonusType === 1 ? '%' : ''}`}</p>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {`${t('maximum')} ${t('bonus')} ${t('amount')}`}
-                  </p>
-                  <p>{response?.MaxBonusAmount}</p>
-                </div>
+                {response?.BonusType === 1 && (
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {`${t('maximum')} ${t('bonus')} ${t('amount')}`}
+                    </p>
+                    <p>{response?.MaxBonusAmount}</p>
+                  </div>
+                )}
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('bonusCampaign') + ' ' + t('quantity')}
@@ -175,6 +177,12 @@ export function ViewDetails() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('segmentation')}
+                  </p>
+                  <p>{response?.segmentation ? response?.segmentation?.Name : '-'}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('bonusCampaign') + ' ' + t('startAt')}
                   </p>
                   <p>{getDateInUTCToTimeZone(response?.StartDate)}</p>
@@ -185,12 +193,6 @@ export function ViewDetails() {
                   </p>
                   <p>{getDateInUTCToTimeZone(response?.EndDate)}</p>
                 </div>
-                {/* <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                    {t('segmentation')}
-                  </p>
-                  <p>{response?.segmentations?.map((seg) => seg.Name).join(', ') || '-'}</p>
-                </div> */}
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('createdAt')}
@@ -205,6 +207,19 @@ export function ViewDetails() {
                 {t('Wagering') + ' ' + t('information')}
               </h6>
               <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {`${t('wagering')} ${t('categories')}`}
+                  </p>
+                  <div className="flex space-x-1 rtl:space-x-reverse">
+                    <span>
+                      {' '}
+                      {response?.WageringCategories && response?.WageringCategories?.length
+                        ? `${response.WageringCategories.map((category) => category.Name).join(', ')}`
+                        : '-'}
+                    </span>
+                  </div>
+                </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {`${t('wagering')} ${t('multiplier')}`}

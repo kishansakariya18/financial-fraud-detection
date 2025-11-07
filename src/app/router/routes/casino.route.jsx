@@ -14,7 +14,7 @@ export const casinoRoutes = [
     })
   },
   {
-    path: '/casino/provider/select-countries/:providerId/list',
+    path: '/casino/provider/list/select-countries/:providerId/list',
     lazy: async () => ({
       Component: (
         await import('../../pages/casino-management/provider/restricted-countries-list/countryList')
@@ -22,7 +22,7 @@ export const casinoRoutes = [
     })
   },
   {
-    path: '/casino/provider/restricted-countries/:providerId/list',
+    path: '/casino/provider/list/restricted-countries/:providerId/list',
     lazy: async () => ({
       Component: (
         await import(
@@ -38,7 +38,7 @@ export const casinoRoutes = [
     })
   },
   {
-    path: '/casino/games/:gameUID/edit',
+    path: '/casino/games/list/:gameUID/edit',
     lazy: async () => ({
       Component: (await import('../../pages/casino-management/games/EditGame')).default
     })

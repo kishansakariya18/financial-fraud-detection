@@ -38,6 +38,40 @@ const UserManualDepositTransactionService = {
       console.log('Error from User Manual Deposit Transaction List', error);
     }
   },
+  getUserManualWithdrawTransactionList: async ({
+    pagination,
+    keyword,
+    status,
+    startDate,
+    endDate
+  }) => {
+    try {
+      const endPoint = apiConfig.endPoints.USER_WITHDRAW.LIST;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          limit: pagination.pageSize,
+          page: pagination.pageIndex + 1,
+          keyword: keyword,
+          status: status,
+          ...(startDate && endDate
+            ? {
+                startDate: `${dayjs(Number(startDate)).format('YYYY-MM-DD')} 00:00:00`,
+                endDate: `${dayjs(Number(endDate)).format('YYYY-MM-DD')} 23:59:59`
+              }
+            : {})
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from User Manual Deposit Transaction List', error);
+    }
+  },
   updateUserManualDepositTransaction: async (data) => {
     try {
       const endPoint = replaceText(
@@ -122,6 +156,26 @@ const UserManualDepositTransactionService = {
       return response;
     } catch (error) {
       console.log('Error from User Manual Deposit Transaction Verify', error);
+    }
+  },
+  manualWithdrawVerify: async (data) => {
+    try {
+      const endPoint = apiConfig.endPoints.USER_WITHDRAW.MANUAL_VERIFY;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          withdrawStatus: data.status,
+          transactionUID: data.id
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from User Manual Withdraw Verify', error);
     }
   }
 };

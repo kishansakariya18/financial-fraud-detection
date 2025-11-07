@@ -2,8 +2,8 @@ import {
   UsersIcon,
   UserCircleIcon,
   BanknotesIcon,
-  CurrencyDollarIcon,
-  AdjustmentsHorizontalIcon
+  AdjustmentsHorizontalIcon,
+  ArrowDownOnSquareIcon
 } from '@heroicons/react/24/outline';
 import DashboardsIcon from 'assets/dualicons/dashboards.svg?react';
 import MonitorIcon from 'assets/nav-icons/monitor.svg?react';
@@ -75,7 +75,7 @@ export const b2bAgentNavigationLayout = {
       type: NAV_TYPE_COLLAPSE,
       title: 'Withdraw Requests',
       transKey: 'nav.b2b_agent.withdraw_requests',
-      Icon: CurrencyDollarIcon,
+      Icon: ArrowDownOnSquareIcon,
       platformType: PLATFORM_TYPE.B2B,
       childs: [
         {
@@ -84,7 +84,7 @@ export const b2bAgentNavigationLayout = {
           type: NAV_TYPE_ITEM,
           title: 'My Withdrawals',
           transKey: 'nav.b2b_agent.my_withdrawals',
-          Icon: CurrencyDollarIcon,
+          Icon: ArrowDownOnSquareIcon,
           platformType: PLATFORM_TYPE.B2B
         },
         {
@@ -93,7 +93,7 @@ export const b2bAgentNavigationLayout = {
           type: NAV_TYPE_ITEM,
           title: 'Agent Withdrawals',
           transKey: 'nav.b2b_agent.agent_withdrawals',
-          Icon: CurrencyDollarIcon,
+          Icon: ArrowDownOnSquareIcon,
           platformType: PLATFORM_TYPE.B2B
         },
         {
@@ -102,7 +102,7 @@ export const b2bAgentNavigationLayout = {
           type: NAV_TYPE_ITEM,
           title: 'Player Withdrawals',
           transKey: 'nav.b2b_agent.player_withdrawals',
-          Icon: CurrencyDollarIcon,
+          Icon: ArrowDownOnSquareIcon,
           platformType: PLATFORM_TYPE.B2B
         }
       ]

@@ -86,6 +86,13 @@ export const columns = [
     cell: (info) => `${info.getValue()} / ${info.row.original.totalMaxRedemptions || '∞'}`,
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.minDepositAmount, {
+    id: 'minDepositAmount',
+    label: 'minDepositAmount',
+    header: 'Minimum Deposit Amount',
+    cell: (info) => `${info.getValue()}`,
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.bonusValue, {
     id: 'bonusValue',
     label: 'Bonus Value',
@@ -93,7 +100,7 @@ export const columns = [
     cell: (info) => {
       const value = info.getValue();
       const row = info.row.original;
-      return row.bonusType === 1 ? `${value}% (Min. ${row.minDepositAmount})` : value;
+      return row.bonusType === 1 ? `${value}% (Max. ${row.maxBonusAmount})` : value;
     },
     enableSorting: false
   }),

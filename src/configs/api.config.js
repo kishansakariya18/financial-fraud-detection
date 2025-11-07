@@ -192,13 +192,16 @@ export const apiConfig = {
           `/wallet/agent/${agentUID}/player/${userUID}/credit`,
         AGENT_TRANSACTION_LIST: (agentUID) => `/wallet/agent/${agentUID}/transaction/list`,
         WITHDRAW_REQUEST_LIST: `/wallet/agent-player/withdraw-requests`,
-        CREATE_WITHDRAW_REQUEST: `/wallet/agent-player/wallet/withdraw-request`,
+        CREATE_WITHDRAW_REQUEST: `/wallet/agent/wallet/withdraw-request`,
         GET_AGENT_WALLET: (agentUID) => `/wallet/agent/${agentUID}/wallet`,
         WITHDRAW_REQUEST_UPDATE_STATUS: (withdrawRequestID) =>
           `/wallet/${withdrawRequestID}/handle-withdraw-request`,
         AGENT_MANUAL_ADJUSTMENT: `wallet/admin/agent/wallet/manual-adjustment`,
         OPERATOR_WALLET: `/wallet/operator/wallet`,
-        OPERATOR_TRANSACTION_LIST: `/wallet/operator/transaction-list`
+        OPERATOR_TRANSACTION_LIST: `/wallet/operator/transaction-list`,
+        OPERATOR_WALLET_UPDATE: `/wallet/operator/wallet/credit-debit`,
+        AGENT_COMMISSION_REPORT: `/wallet/admin/agent-commission-report`,
+        AGENT_WALLET_REPORT: `/wallet/admin/agent-wallet-report`
       }
     },
     TENANT: {
@@ -208,20 +211,23 @@ export const apiConfig = {
     },
     DASHBOARD: {
       LIST: '/admin/dashboard',
-      CARDS: '/admin/dashboard/cards',
-      DEPOSIT_STATS: '/admin/dashboard/deposit-stats',
-      WITHDRAW_STATS: '/admin/dashboard/withdraw-stats',
-      GGR_REPORT: '/admin/dashboard/ggr-report',
-      LOGGED_IN_PLAYERS: '/admin/dashboard/logged-in-players',
-      ACTIVE_PLAYERS: '/admin/dashboard/active-players',
-      DEMOGRAPHIC_REPORT: '/admin/dashboard/demographic-report',
-      KPI_SUMMARY: '/admin/dashboard/kpi-summary',
-      CASINO_STATS: '/admin/dashboard/casino-stats',
-      TOP_PLAYERS: '/admin/dashboard/top-players',
-      TOP_GAMES: '/admin/dashboard/top-games',
-      LAST_DEPOSITOR: '/admin/dashboard/last-depositor',
-      LAST_WITHDRAWAL: '/admin/dashboard/last-withdrawer',
-      LAST_SIGNUP: '/admin/dashboard/last-signup'
+      USER_CARDS: '/users/admin/dashboard/get-cards',
+      WALLET_CARDS: '/wallet/admin/dashboard/get-cards',
+      BET_CARDS: '/bets/admin/dashboard/get-cards',
+      GAME_CARDS: '/games/admin/dashboard/get-cards',
+      DEPOSIT_STATS: '/wallet/admin/dashboard/deposit-stats',
+      WITHDRAW_STATS: '/wallet/admin/dashboard/withdraw-stats',
+      GGR_REPORT: '/bets/admin/dashboard/ggr-report',
+      LOGGED_IN_PLAYERS: '/users/admin/dashboard/logged-in-players',
+      ACTIVE_PLAYERS: '/bets/admin/dashboard/active-players',
+      DEMOGRAPHIC_REPORT: '/users/admin/dashboard/demographic-report',
+      KPI_SUMMARY: '/bets/admin/dashboard/kpi-summary',
+      CASINO_STATS: '/bets/admin/dashboard/casino-stats',
+      TOP_PLAYERS: '/bets/admin/dashboard/top-players',
+      TOP_GAMES: '/bets/admin/dashboard/top-games',
+      LAST_DEPOSITOR: '/wallet/admin/dashboard/last-depositor',
+      LAST_WITHDRAWAL: '/wallet/admin/dashboard/last-withdrawer',
+      LAST_SIGNUP: '/users/admin/dashboard/last-signup'
     },
     DEPOSIT_PROMOCODE: {
       PROMOCODE_LIST: '/bonus/admin/v1/deposit-promocode/list',
@@ -242,7 +248,9 @@ export const apiConfig = {
       UPDATE: '/bonus/admin/v1/bonus-campaign/:id',
       CHANGE_STATUS: '/bonus/admin/v1/bonus-campaign/:id/change-status',
       GRANT_LIST: '/bonus/admin/v1/bonus-campaign/:id/grants',
-      SUMMARY: '/bonus/admin/v1/bonus-campaign/summary'
+      WAGERING_CONTRIBUTIONS: '/bonus/admin/v1/bonus-campaign/grant/:grantId/wagering',
+      SUMMARY: '/bonus/admin/v1/bonus-campaign/summary',
+      PROCESS_BONUS_TRANSFER: '/bonus/admin/v1/bonus-campaign/grant/:bonusGrantID/manage'
     },
     BANNER: {
       BANNER_LIST: '/content/admin/banner/list',
@@ -310,7 +318,8 @@ export const apiConfig = {
     },
     RISK_MANAGEMENT: {
       LIST: '/config/admin/risk-management/list',
-      UPDATE: '/config/admin/risk-management/update-risk-management'
+      UPDATE: '/config/admin/risk-management/update-risk-management',
+      HISTORY: '/config/admin/risk-management/history'
     },
     CATEGORY: {
       LIST: '/games/admin/casino-management/category/list',
@@ -320,6 +329,9 @@ export const apiConfig = {
       DELETE: '/games/admin/casino-management/category/:categoryId/delete',
       CHANGE_STATUS: '/games/admin/casino-management/category/:categoryId/change-status',
       ALL_ACTIVE_LIST: '/games/admin/casino-management/category/all'
+    },
+    TOOLS: {
+      DETAIL: '/games/admin/ip-lookup/details'
     },
     PROVIDER: {
       ALL_LIST: '/games/admin/casino-management/provider/all',
@@ -503,7 +515,11 @@ export const apiConfig = {
     },
     RESPONSIBLE_GAMING_LIMITS: {
       USER_ALL_LIMITS: '/users/admin/responsible-gaming-limits/users/:userId/all-limits',
-      USER_BULK_UPDATE: '/users/admin/responsible-gaming-limits/users/:userId/bulk-update'
+      USER_BULK_UPDATE: '/users/admin/responsible-gaming-limits/users/:userId/bulk-update',
+      HISTORY: '/users/admin/responsible-gaming-limits/history'
+    },
+    USER_CLASS_LIMITS: {
+      HISTORY: '/users/admin/user-class-limits/history'
     },
     RESPONSIBLE_GAMBLING_RESTRICTIONS: {
       LIST: '/users/admin/responsible-gaming-restrictions/self-exclusion/list',
@@ -524,6 +540,7 @@ export const apiConfig = {
       WITHDRAWAL_REJECT: '/affiliates/admin/commission/withdraw/reject',
       AFFILIATE_DETAIL: '/affiliates/admin/affiliates/{affiliateId}/details',
       CAMPAIGNS_LIST: '/affiliates/admin/affiliates/{affiliateId}/campaign-list',
+      CAMPAIGN_CHANGE_STATUS: '/affiliates/admin/affiliates/campaign/{campaignUID}/changes-status',
       CAMPAIGN_DETAILS: '/affiliates/admin/affiliates/campaign/{campaignUID}/details',
       COMMISSION_SUMMARY: '/affiliates/admin/affiliates/{affiliateId}/commission-summary',
       COMMISSION_SETTINGS: '/affiliates/admin/affiliates/{affiliateId}/commission-settings',
@@ -533,13 +550,39 @@ export const apiConfig = {
       CAMPAIGN_REPORT: '/affiliates/admin/affiliates/campaign-report',
       COMMISSION_SUMMARY_REPORT:
         '/affiliates/admin/affiliates/{affiliateId}/export-commission-summary',
-      REFERRED_USERS_REPORT: '/affiliates/admin/affiliates/{affiliateId}/export-referred-users'
+      REFERRED_USERS_REPORT: '/affiliates/admin/affiliates/{affiliateId}/export-referred-users',
+      CREATE: '/users/admin/users/create-affiliate-user',
+      EDIT: '/users/admin/users/edit-affiliate-user',
+      CHANGE_STATUS: '/affiliates/admin/affiliates/{affiliateUID}/change-status'
     },
     FAQ: {
       LIST: '/affiliates/admin/faq/list',
       CREATE: '/affiliates/admin/faq/create',
       UPDATE: '/affiliates/admin/faq/update',
       DELETE: '/affiliates/admin/faq/delete/{faqUID}'
+    },
+    USER_WITHDRAW: {
+      LIST: '/wallet/admin/payment/withdraw-request/list',
+      MANUAL_VERIFY: '/wallet/admin/payment/withdraw-request/update-status',
+      DETAIL: '/wallet/admin/payment/withdraw-request/:withdrawId/manual-withdraw/details',
+      EDIT: '/wallet/admin/payment/withdraw-request/:withdrawId/edit',
+      DELETE: '/wallet/admin/payment/withdraw-request/:withdrawId/delete'
+    },
+    BLOG_CATEGORY: {
+      LIST: '/content/admin/blog-category/list',
+      CREATE: '/content/admin/blog-category/create',
+      EDIT: '/content/admin/blog-category/:categoryId/edit',
+      DELETE: '/content/admin/blog-category/:categoryId/delete',
+      DETAIL: '/content/admin/blog-category/:categoryId/details',
+      CHANGE_STATUS: '/content/admin/blog-category/:categoryId/change-status'
+    },
+    BLOG: {
+      LIST: '/content/admin/blogs/list',
+      CREATE: '/content/admin/blogs/create',
+      EDIT: '/content/admin/blogs/:blogId/edit',
+      DELETE: '/content/admin/blogs/:blogId/delete',
+      DETAIL: '/content/admin/blogs/:slug/details',
+      CHANGE_STATUS: '/content/admin/blogs/:blogId/change-status'
     }
   }
 };

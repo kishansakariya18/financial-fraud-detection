@@ -1,8 +1,9 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import { BoldCell, DateCell, IdCell } from 'components/custom/table/cell';
+import { BoldCell, DateCell, IdCell, BadgeCell } from 'components/custom/table/cell';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 import { RowActions } from './RowActions';
+import { campaignStatusOptions, campaignStatusToApp } from './helper';
 
 const columnHelper = createColumnHelper();
 export const columns = [
@@ -22,6 +23,14 @@ export const columns = [
     id: 'CampaignCode',
     header: 'Campaign Code',
     cell: CopyableCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => campaignStatusToApp(row.CampaignStatus), {
+    id: 'CampaignStatus',
+    header: 'Status',
+    cell: BadgeCell,
+    meta: { optionData: campaignStatusOptions },
+    filterFn: 'arrIncludesSome',
     enableSorting: false
   }),
   columnHelper.accessor((row) => getDateInUTCToTimeZone(row.DateCreated), {

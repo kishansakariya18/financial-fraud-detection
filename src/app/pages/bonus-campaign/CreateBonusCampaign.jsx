@@ -50,7 +50,7 @@ const CreateBonusCampaign = () => {
   const navigate = useNavigate();
 
   const fetchSegmentationList = async () => {
-    const result = await SegmentationService.getSegmentationList({ pagination: false });
+    const result = await SegmentationService.getAllSegmentationList();
 
     if (result) {
       if (result.status === 200) {
@@ -93,8 +93,7 @@ const CreateBonusCampaign = () => {
 
   const fetchCategoryList = async () => {
     const result = await CategoryService.getAllActiveCategories({
-      isPaginationRequired: true,
-      pagination: { perpage: 500 }
+      isPaginationRequired: false
     });
     if (result) {
       if (result.status === 200) {
@@ -124,12 +123,14 @@ const CreateBonusCampaign = () => {
     formState: { errors },
     control,
     reset,
-    watch
+    watch,
+    setValue
   } = useForm({
     resolver: yupResolver(createBonusCampaignSchema),
     defaultValues: {
       eligibleCurrencies: [],
-      wageringCategories: []
+      wageringCategories: [],
+      discountType: 'fixed'
     }
   });
 
@@ -137,7 +138,15 @@ const CreateBonusCampaign = () => {
 
   const eligibleCurrencies = watch('eligibleCurrencies');
   const wageringCategories = watch('wageringCategories');
+  const watchedDiscountType = watch('discountType');
   // const segmentationType = watch('segmentationType');
+
+  // Sync discountType state with form value
+  useEffect(() => {
+    if (watchedDiscountType !== discountType) {
+      setDiscountType(watchedDiscountType);
+    }
+  }, [watchedDiscountType, discountType]);
 
   console.log('erro: ', errors);
 
@@ -320,7 +329,7 @@ const CreateBonusCampaign = () => {
                       value={segmentationOptions.find((seg) => seg.value === field.value) || null}
                       onChange={(val) => field.onChange(val.value)}
                       name={field.name}
-                      label={t('banner') + ' ' + t('segmentation')}
+                      label={t('segmentation')}
                       placeholder={t('select') + ' ' + t('segmentation')}
                       displayField="label"
                       error={errors?.segmentationId?.message}
@@ -479,13 +488,19 @@ const CreateBonusCampaign = () => {
                     label={t('fixed')}
                     value="fixed"
                     checked={discountType === 'fixed'}
-                    onChange={(e) => setDiscountType(e.target.value)}
+                    onChange={(e) => {
+                      setDiscountType(e.target.value);
+                      setValue('discountType', e.target.value);
+                    }}
                   />
                   <Radio
                     label={t('percentage')}
                     value="percentage"
                     checked={discountType === 'percentage'}
-                    onChange={(e) => setDiscountType(e.target.value)}
+                    onChange={(e) => {
+                      setDiscountType(e.target.value);
+                      setValue('discountType', e.target.value);
+                    }}
                   />
                 </div>
               </div>
@@ -508,15 +523,6 @@ const CreateBonusCampaign = () => {
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
-                key={'maxBonusAmount'}
-                {...register('maxBonusAmount')}
-                label={`${t('maximum')} ${t('bonus')} ${t('amount')}`}
-                error={errors?.maxBonusAmount?.message}
-                placeholder={t('enter') + ' ' + t('amount')}
-                step="any"
-                type="number"
-              />
-              <Input
                 key={'minDepositAmount'}
                 {...register('minDepositAmount')}
                 label={`${t('minimum')} ${t('deposit')} ${t('amount')}`}
@@ -525,6 +531,17 @@ const CreateBonusCampaign = () => {
                 step="any"
                 type="number"
               />
+              {discountType === 'percentage' && (
+                <Input
+                  key={'maxBonusAmount'}
+                  {...register('maxBonusAmount')}
+                  label={`${t('maximum')} ${t('bonus')} ${t('amount')}`}
+                  error={errors?.maxBonusAmount?.message}
+                  placeholder={t('enter') + ' ' + t('amount')}
+                  step="any"
+                  type="number"
+                />
+              )}
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
@@ -628,7 +645,7 @@ const CreateBonusCampaign = () => {
                     onChange={setFile}
                     ref={uploadRef}
                     setPreview={setPreview}
-                    accept={'.png'}>
+                    accept={'.png, .jpg, .jpeg'}>
                     {({ ...props }) => (
                       <Button color="primary" {...props} className="space-x-2">
                         <CloudArrowUpIcon className="size-5" />

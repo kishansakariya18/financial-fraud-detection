@@ -1,18 +1,19 @@
 import { useTranslation } from 'react-i18next';
 import { WithdrawRequestList } from 'components/sections/withdraw-requests';
 import B2BAgentWalletService from 'services/b2b-agent/b2b-agent-wallet.service';
+import { useParams } from 'react-router';
 export default function AgentWithdrawRequest() {
   const { t } = useTranslation();
-
+  const { agentUID } = useParams();
   const pageTitle = t('agent') + ' ' + t('withdraw_requests');
 
   const fetchWithdrawRequests = async (requestObject) => {
     return await B2BAgentWalletService.withdrawRequestList({
       ...requestObject,
       filters: {
-        ...requestObject.filters,
-        entityType: 'b2b_agent'
-      }
+        ...requestObject.filters
+      },
+      toAgentUID: agentUID
     });
   };
 
@@ -26,6 +27,8 @@ export default function AgentWithdrawRequest() {
         pageTitle={pageTitle}
         getWithdrawRequestList={fetchWithdrawRequests}
         breadcrumbs={breadcrumbs}
+        showActions={false}
+        showFormEntityType
       />
     </>
   );

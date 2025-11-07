@@ -10,8 +10,6 @@ const AdminService = {
     try {
       const { pagination, filters } = data;
 
-      console.log('data: ', data);
-
       const apiRequestParams = {
         filters: {
           keyword: filters.keyword ? filters.keyword : undefined,
@@ -26,8 +24,6 @@ const AdminService = {
         per_page: pagination?.pageSize || DEFAULT_PER_PAGE_RECORD,
         page: pagination.pageIndex + 1
       };
-
-      console.log('apiRequestParams: ', apiRequestParams);
 
       const response = await sendRequest({
         url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.ADMIN_USER.ADMIN_LIST}`,

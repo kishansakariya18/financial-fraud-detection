@@ -132,9 +132,9 @@ export const parseNotificationStatusToApi = (status) => {
 export const parseTypeToApp = (status) => {
   switch (status) {
     case 1:
-      return 'normal';
+      return 'Normal';
     case 2:
-      return 'scheduled';
+      return 'Scheduled';
     default:
       return -1; // or null, depending on how you want to handle invalid input
   }

@@ -5,13 +5,13 @@ import PropTypes from 'prop-types';
 import B2BAgentWalletService from 'services/b2b-agent/b2b-agent-wallet.service';
 import { toast } from 'sonner';
 import { useCurrencyContext } from 'app/contexts/currency/context';
-
 export default function WithdrawRequestDialog({ currentBalance, onSuccess, onCancel }) {
   const { t } = useTranslation();
   const [amount, setAmount] = useState('');
   const [loading, setLoading] = useState(false);
   const { symbol } = useCurrencyContext();
   //   const [reason, setReason] = useState('');
+  const { formatCurrency } = useCurrencyContext();
 
   const handleSubmit = async () => {
     if (!amount || parseFloat(amount) <= 0) {
@@ -57,10 +57,7 @@ export default function WithdrawRequestDialog({ currentBalance, onSuccess, onCan
                 {t('commission_balance')}:
               </span>
               <span className="ml-2 font-medium text-gray-900 dark:text-white">
-                {new Intl.NumberFormat('en-US', {
-                  style: 'currency',
-                  currency: 'USD'
-                }).format(currentBalance || 0)}
+                {formatCurrency(currentBalance || 0)}
               </span>
             </div>
           </div>
@@ -74,7 +71,6 @@ export default function WithdrawRequestDialog({ currentBalance, onSuccess, onCan
             <Input
               type="number"
               step="0.01"
-              min="0.01"
               max={currentBalance}
               value={amount}
               prefix={symbol}

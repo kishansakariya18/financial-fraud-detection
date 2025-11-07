@@ -11,7 +11,7 @@ export const loginSchema = Yup.object().shape({
 });
 
 export const otpVerificationSchema = Yup.object().shape({
-  otp: Yup.string().trim().required('OTP Is Required').length(6, 'OTP Length Must be 6')
+  // otp: Yup.string().trim().required('OTP Is Required').length(6, 'OTP Length Must be 6')
 });
 
 export const forgotPasswordSchema = Yup.object().shape({

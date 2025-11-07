@@ -13,6 +13,8 @@ export const responseMapper = (apiData) => {
       id: item.UserID,
       userID: item.UserID,
       userUID: item.UserUID,
+      // Map current player's class ID for upgrade modal logic
+      playerClassID: item.UserClassID,
       email: item.Email || '-',
       referralCode: item.ReferralCode,
       username: item.Username,
@@ -32,7 +34,8 @@ export const responseMapper = (apiData) => {
       gender: item.Gender,
       country: item.CountryID,
       SegmentationID: '0',
-      blockedAt: item?.UserBlockedAt ? getDateInUTCToTimeZone(item.UserBlockedAt) : ''
+      blockedAt: item?.UserBlockedAt ? getDateInUTCToTimeZone(item.UserBlockedAt) : '',
+      agentName: item?.Agent?.Username
     };
   });
 
@@ -178,25 +181,30 @@ export const panVerifiedOptions = [
 ];
 export const playerTransactionsResponseMapper = (apiData) => {
   const totalRecords = apiData.totalRecords;
-  const userData = { username: apiData?.data?.userData?.Username };
+  const userData = apiData?.data?.userData?.[0] || {};
   const list = apiData?.data?.transactionList?.map((item) => {
+    const currencySymbol = item.Currency?.Symbol || '';
+    const currencyName = item.Currency?.Name || '';
+
     return {
       id: item.TransactionID,
       transactionUID: item.TransactionUID,
-      username: userData.username,
+      username: userData.Username,
       type: transactionTypeApiToApp(item.CreditDebitType),
-      customMessage: item.CustomMessage,
-      transactionAmount: item.TransactionAmount,
+      realCash: item.TransactionAmount,
       bonus: item.Bonus,
-      realCashAmount: item.RealCashAmount, // Keep for backward compatibility
-      transactionType: item.transactionType?.Name || transactionTypeInWords(item.TransactionType),
-      transactionTypeCode: item.transactionType?.TransactionCode,
+      realCashAmount: item.TransactionAmount,
+      transactionMesg: item.transactionType?.Name || 'Unknown',
       currency: {
-        Name: item.Currency?.Name,
-        Symbol: item.Currency?.Symbol
+        symbol: currencySymbol,
+        name: currencyName
       },
-      baseCurrencyValue: item.BaseCurrencyValue,
       baseCurrencyRate: item.BaseCurrencyRate,
+      baseCurrencyValue: item.BaseCurrencyValue,
+      createdAt: getDateInUTCToTimeZone(item.DateCreated),
+      status: transactionStatusToAPP(item.TransactionStatus),
+      transactionData: item.TransactionData,
+      admin: item.admin,
       openingBalance: item.OpeningCurrencyBalance,
       closingBalance: item.ClosingCurrencyBalance,
       openingBonus: item.OpeningBonus,
@@ -210,12 +218,10 @@ export const playerTransactionsResponseMapper = (apiData) => {
             ? item.TransactionData['Merchandise_Product_name']
             : 0,
       coin: item.Coin,
-      createdAt: getDateInUTCToTimeZone(item.DateCreated),
-      status: transactionStatusToAPP(item.TransactionStatus),
-      transactionData: item.TransactionData,
-      admin: item.admin,
-      // Store complete item for details view
-      _originalData: item
+      _originalData: item,
+      transactionType: item.transactionType?.Name || transactionTypeInWords(item.TransactionType),
+      customMessage: item.CustomMessage,
+      transactionAmount: item.TransactionAmount
     };
   });
   return { totalRecords, list, userData };
@@ -468,6 +474,7 @@ export const playerNotesResponseMapper = (apiData) => {
 
 export const selfExclusionMapper = (ExclusionType) => {
   //0 - none, 1- 1Day, 2 - 7Days, 3 - 1Month, 4-6month, 5-12month, 6- Custom, 7-Permanent
+  console.log('hrererereree >>>.', ExclusionType);
   switch (ExclusionType) {
     case 0:
       return 'None';
@@ -507,4 +514,59 @@ export const playerReferralResponseMapper = (apiData) => {
     };
   });
   return { totalRecords, list, userData };
+};
+
+export const mapLimitSummary = (apiData, isB2B) => {
+  if (!apiData)
+    return { userLimits: [], adminLimits: [], userClassLimits: [], globalPlatformLimits: null };
+  const {
+    UserLimits = [],
+    AdminLimits = [],
+    UserClassLimits = [],
+    GlobalPlatformLimits = null
+  } = apiData;
+
+  const normalizeLimitItem = (isB2B) => (item, index) => {
+    if (isB2B && item.LimitType === 'deposit') {
+      return null;
+    }
+    return {
+      id: item.LimitID || item.UserClassLimitID || item.ResponsibleGamingLimitID || index,
+      type: item.LimitType,
+      period: item.LimitPeriod,
+      amount: item.LimitAmount,
+      setBy: item.SetBy,
+      createdAt: item.DateCreated,
+      updatedAt: item.DateModified,
+      userClassLimitUID: item.UserClassLimitUID,
+      userClass: item.userClass
+        ? {
+            classCode: item.userClass.ClassCode,
+            userClassUID: item.userClass.UserClassUID,
+            className: item.userClass.ClassName,
+            userClassID: item.userClass.UserClassID
+          }
+        : null
+    };
+  };
+
+  return {
+    userLimits: Array.isArray(UserLimits)
+      ? UserLimits.map((item) => normalizeLimitItem(isB2B)(item)).filter(Boolean)
+      : [],
+    adminLimits: Array.isArray(AdminLimits)
+      ? AdminLimits.map((item) => normalizeLimitItem(isB2B)(item)).filter(Boolean)
+      : [],
+    userClassLimits: Array.isArray(UserClassLimits)
+      ? UserClassLimits.map((item) => normalizeLimitItem(isB2B)(item)).filter(Boolean)
+      : [],
+    globalPlatformLimits: GlobalPlatformLimits
+      ? {
+          maxDepositPerDay: GlobalPlatformLimits.MaxDepositPerDay,
+          maxWithdrawPerDay: GlobalPlatformLimits.MaxWithdrawPerDay,
+          betLimit: GlobalPlatformLimits.BetLimit,
+          winLimit: GlobalPlatformLimits.WinLimit
+        }
+      : null
+  };
 };

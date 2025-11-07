@@ -15,6 +15,7 @@ import { UserIcon, EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outl
 import { CiMobile1 } from 'react-icons/ci';
 import B2BAgentService from 'services/b2b-agent/b2b-agent.services';
 import AdminService from 'services/admin.services';
+import moment from 'moment-timezone';
 
 const CreatePlayer = () => {
   const { t } = useTranslation();
@@ -60,7 +61,14 @@ const CreatePlayer = () => {
       .length(10, 'Mobile Number Must Contain 10 Digits')
       .matches(/^[0-9\-s]+$/, 'Enter Correct Mobile Number'),
     phoneCode: Yup.string().trim().required('Select Country Code'),
-    dateOfBirth: Yup.date().nullable(),
+    dateOfBirth: Yup.date()
+      .transform((value) => {
+        if (value && moment(value).isValid()) {
+          return value;
+        }
+        return null;
+      })
+      .nullable(),
     gender: Yup.number().oneOf([0, 1], t('invalidGender') || 'Invalid gender selection')
   });
 
@@ -72,12 +80,11 @@ const CreatePlayer = () => {
   } = useForm({
     resolver: yupResolver(validationSchema),
     defaultValues: {
-      phoneCode: '+91',
+      dateOfBirth: null,
+      phoneCode: null,
       gender: 0
     }
   });
-
-  console.log('errors', errors);
 
   const fetchCountryList = async () => {
     const result = await AdminService.fetchCountryList();

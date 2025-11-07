@@ -12,7 +12,7 @@ const ChildAgentWallet = () => {
   const fetchWithdrawRequests = async (requestObject) => {
     return await B2BAgentWalletService.withdrawRequestList({
       ...requestObject,
-      ...(agentUID && { formAgentUID: agentUID })
+      ...(agentUID && { toAgentUID: agentUID })
     });
   };
 
@@ -26,6 +26,7 @@ const ChildAgentWallet = () => {
         getWithdrawRequestList={fetchWithdrawRequests}
         breadcrumbs={breadcrumbs}
         showActions={false}
+        showFormEntityType
       />
     </Page>
   );
