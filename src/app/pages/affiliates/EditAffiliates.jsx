@@ -161,15 +161,12 @@ const EditAffiliate = () => {
                   control={control}
                   name="gender"
                 />
-
-                <div className="col-span-2">
-                  <Input
-                    {...register('dateOfBirth')}
-                    type="date"
-                    label={'Date of Birth'}
-                    error={errors?.dateOfBirth?.message}
-                  />
-                </div>
+                <Input
+                  {...register('dateOfBirth')}
+                  type="date"
+                  label={'Date of Birth'}
+                  error={errors?.dateOfBirth?.message}
+                />
               </div>
             </div>
           )}
