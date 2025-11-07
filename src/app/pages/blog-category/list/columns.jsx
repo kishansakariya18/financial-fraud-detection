@@ -18,6 +18,22 @@ export const columns = [
     cell: IdCell,
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.imageUrl, {
+    id: 'image',
+    label: 'Image',
+    header: 'Image',
+    cell: (info) =>
+      info?.getValue() ? (
+        <div className="size-16 rounded">
+          <img
+            src={info?.getValue()}
+            alt={info?.row?.original?.name || 'Category Image'}
+            className="size-12 rounded object-cover"
+          />
+        </div>
+      ) : null,
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.name, {
     id: 'name',
     label: 'Name',
