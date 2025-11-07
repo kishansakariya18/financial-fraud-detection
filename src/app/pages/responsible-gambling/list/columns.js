@@ -80,6 +80,13 @@ export const columns = [
     filterFn: 'inNumberRange',
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.expireAt, {
+    id: 'ExpiresAt',
+    header: 'Expires At',
+    cell: DateCell,
+    filterFn: 'inNumberRange',
+    enableSorting: false
+  }),
   columnHelper.display({
     id: 'action',
     header: 'Action',
