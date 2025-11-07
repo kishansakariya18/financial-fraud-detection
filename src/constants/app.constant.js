@@ -203,6 +203,20 @@ export const PERMISSIONS = {
     UPLOAD_SEGMENTATION_CSV: 'banner-upload-segmentation-csv',
     SEGMENTATION: 'banner-upload-segmentation-csv'
   },
+  BLOG: {
+    LIST: 'blogs-view',
+    CREATE: 'blogs-create',
+    EDIT: 'blogs-edit',
+    DELETE: 'blogs-delete',
+    CHANGE_STATUS: 'blogs-change-status'
+  },
+  BLOG_CATEGORY: {
+    LIST: 'blog-categories-view',
+    CREATE: 'blog-categories-create',
+    EDIT: 'blog-categories-edit',
+    DELETE: 'blog-categories-delete',
+    CHANGE_STATUS: 'blog-categories-change-status'
+  },
   APP_SETTING: {
     LIST: 'app-setting-view'
   },

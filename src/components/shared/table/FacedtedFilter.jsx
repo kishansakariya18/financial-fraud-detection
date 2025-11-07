@@ -1,6 +1,7 @@
 // Import Dependencies
 import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
@@ -10,6 +11,7 @@ import { Badge, Button, Checkbox, Input } from 'components/ui';
 import { useFuse } from 'hooks';
 import { ResponsiveFilter } from './ResponsiveFilter';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
+import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
@@ -27,10 +29,45 @@ export function FacedtedFilter({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => () => column?.setFilterValue(undefined), []);
 
-  const selectedValues = column?.getFilterValue() || [];
+  const selectedValues = column?.getFilterValue();
+
+  const normalizedSelectedValues = isMultiple
+    ? Array.isArray(selectedValues)
+      ? selectedValues
+      : []
+    : selectedValues;
 
   const selectedItems = options?.filter((o) =>
-    isMultiple ? selectedValues.includes(o[valueField]) : o[valueField] === selectedValues
+    isMultiple
+      ? normalizedSelectedValues.includes(o[valueField])
+      : o[valueField] === normalizedSelectedValues
+  );
+
+  const { t } = useTranslation();
+
+  const handleRemoveValue = (event, value) => {
+    event?.preventDefault();
+    event?.stopPropagation();
+
+    if (isMultiple) {
+      const nextValues = normalizedSelectedValues.filter((item) => item !== value);
+      column?.setFilterValue(nextValues.length > 0 ? nextValues : undefined);
+    } else {
+      column?.setFilterValue(undefined);
+    }
+  };
+
+  const renderSelectedBadge = (item) => (
+    <Badge key={String(item[valueField])} className="text-xxs flex items-center gap-1">
+      {item.icon && <item.icon className="size-4 stroke-1" />}
+      <span className="truncate">{item[labelField]}</span>
+      <button
+        type="button"
+        onClick={(event) => handleRemoveValue(event, item[valueField])}
+        className="grid size-4 place-content-center rounded-full bg-black/10 text-gray-700 transition hover:bg-black/20 dark:bg-white/10 dark:text-dark-50 dark:hover:bg-white/20">
+        <XMarkIcon className="size-3" />
+      </button>
+    </Badge>
   );
 
   return (
@@ -44,18 +81,26 @@ export function FacedtedFilter({
           {selectedItems?.length > 0 && (
             <>
               <div className="h-full w-px bg-gray-300 dark:bg-dark-450" />
-              <Badge className="lg:hidden">{selectedItems.length}</Badge>
 
               {selectedItems.length > 2 ? (
-                <Badge className="max-lg:hidden">{selectedItems.length} selected</Badge>
+                <Badge className="text-xxs flex items-center gap-1">
+                  <span className="truncate">
+                    {selectedItems.length} {t('selected')}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      column?.setFilterValue(undefined);
+                    }}
+                    className="grid size-4 place-content-center rounded-full bg-black/10 text-gray-700 transition hover:bg-black/20 dark:bg-white/10 dark:text-dark-50 dark:hover:bg-white/20">
+                    <XMarkIcon className="size-3" />
+                  </button>
+                </Badge>
               ) : (
-                <div className="hidden gap-1 lg:flex">
-                  {selectedItems.map((val) => (
-                    <Badge key={val[valueField]} className="gap-1">
-                      {val.icon && <val.icon className="size-4 stroke-1" />}
-                      <span>{val[labelField]}</span>
-                    </Badge>
-                  ))}
+                <div className="flex flex-wrap items-center gap-1">
+                  {selectedItems.map((val) => renderSelectedBadge(val))}
                 </div>
               )}
             </>
@@ -101,7 +146,16 @@ function ComboboxFilter({
 
   const { smAndUp } = useBreakpointsContext();
   const facets = column?.getFacetedUniqueValues();
-  const selectedValues = column?.getFilterValue() || [];
+  const selectedValues = column?.getFilterValue();
+  const normalizedSelectedValues = isMultiple
+    ? Array.isArray(selectedValues)
+      ? selectedValues
+      : []
+    : selectedValues;
+
+  const comboboxValue = isMultiple
+    ? options?.filter((o) => normalizedSelectedValues.includes(o[valueField]))
+    : (options?.find((o) => o[valueField] === normalizedSelectedValues) ?? null);
 
   useEffect(() => {
     smAndUp && inputRef.current.focus();
@@ -110,13 +164,13 @@ function ComboboxFilter({
 
   return (
     <Combobox
-      value={
-        isMultiple ? options?.filter((o) => selectedValues.includes(o[valueField])) : selectedValues
-      }
+      value={comboboxValue}
       onChange={(list) => {
-        isMultiple
-          ? column?.setFilterValue(list.map((item) => item[valueField]))
-          : column?.setFilterValue(list[valueField]);
+        if (isMultiple) {
+          column?.setFilterValue(list.map((item) => item[valueField]));
+        } else {
+          column?.setFilterValue(list ? list[valueField] : undefined);
+        }
       }}
       multiple={isMultiple}
       className="h-[366px] sm:h-auto sm:max-h-80 sm:w-56">
@@ -128,7 +182,7 @@ function ComboboxFilter({
             ref={inputRef}
             autoComplete="new"
             placeholder={title}
-            displayValue={({ name }) => name}
+            displayValue={(item) => (item ? item[labelField] : '')}
             onChange={(event) => setQuery(event.target.value)}
             prefix={<MagnifyingGlassIcon className="size-4" />}
           />
@@ -165,7 +219,7 @@ function ComboboxFilter({
             ))
           )}
         </ComboboxOptions>
-        {selectedValues?.length > 0 && (
+        {(isMultiple ? normalizedSelectedValues.length > 0 : comboboxValue !== null) && (
           <Button
             onClick={() => column?.setFilterValue(undefined)}
             className="w-full shrink-0 rounded-none">

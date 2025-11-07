@@ -989,5 +989,27 @@
   "min_deposit_for_cpa_help_text": "Amount of the first deposit required to qualify for CPA.",
   "min_wager_for_cpa_help_text": "Total amount wagered by the end user to qualify for CPA.",
   "loss_commission_percent_help_text": "Percentage of the loss amount to be paid to the affiliate.",
-  "platform_limit": "Platform Limit"
+  "platform_limit": "Platform Limit",
+  "blogs": "Blogs",
+  "blog": "Blog",
+  "blog_categories": "Blog Categories",
+  "blog_category": "Blog Category",
+  "blog_deleted_successfully": "Blog deleted successfully",
+  "blog_status_changed_successfully": "Blog status changed successfully",
+  "failed_to_change_blog_status": "Failed to change blog status",
+  "are_you_sure_you_want_to_delete_this_blog": "Are you sure you want to delete this blog?",
+  "are_you_sure_you_want_to_change_blog_status": "Are you sure you want to change this blog's status?",
+  "blog_category_deleted_successfully": "Blog category deleted successfully",
+  "blog_category_status_changed_successfully": "Blog category status changed successfully",
+  "are_you_sure_you_want_to_delete_this_blog_category": "Are you sure you want to delete this blog category?",
+  "are_you_sure_you_want_to_change_blog_category_status": "Are you sure you want to change this blog category's status?",
+  "featured": "Featured",
+  "author": "Author",
+  "meta": "Meta",
+  "choose_file": "Choose File",
+  "slug_auto_generate_info": "Enter slug (optional)",
+  "enter_tags_info": "Enter tag and press Enter...",
+  "tags": "Tags",
+  "slug_auto_generate_info_description":"Enter slug or leave empty to auto-generate slug from title"
+
 }

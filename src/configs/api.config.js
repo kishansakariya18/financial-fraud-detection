@@ -567,6 +567,22 @@ export const apiConfig = {
       DETAIL: '/wallet/admin/payment/withdraw-request/:withdrawId/manual-withdraw/details',
       EDIT: '/wallet/admin/payment/withdraw-request/:withdrawId/edit',
       DELETE: '/wallet/admin/payment/withdraw-request/:withdrawId/delete'
+    },
+    BLOG_CATEGORY: {
+      LIST: '/content/admin/blog-category/list',
+      CREATE: '/content/admin/blog-category/create',
+      EDIT: '/content/admin/blog-category/:categoryId/edit',
+      DELETE: '/content/admin/blog-category/:categoryId/delete',
+      DETAIL: '/content/admin/blog-category/:categoryId/details',
+      CHANGE_STATUS: '/content/admin/blog-category/:categoryId/change-status'
+    },
+    BLOG: {
+      LIST: '/content/admin/blogs/list',
+      CREATE: '/content/admin/blogs/create',
+      EDIT: '/content/admin/blogs/:blogId/edit',
+      DELETE: '/content/admin/blogs/:blogId/delete',
+      DETAIL: '/content/admin/blogs/:slug/details',
+      CHANGE_STATUS: '/content/admin/blogs/:blogId/change-status'
     }
   }
 };
