@@ -597,7 +597,7 @@ export function PlayerViewDetails({
 
                     <div className="flex space-x-1 rtl:space-x-reverse">
                       <span>
-                        {response?.dialCode || '+91'} {response?.Mobile}
+                        {response?.PhoneCode || ''} {response?.Mobile}
                       </span>
                       <Button
                         data-tooltip
