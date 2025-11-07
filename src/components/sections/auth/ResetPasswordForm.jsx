@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Button, Card, Input } from 'components/ui';
 import { getQueryParams } from 'utils/custom.utilities';
+import { RESEND_OTP_TYPE } from 'constants/app.constant';
 
 // ----------------------------------------------------------------------
 
@@ -98,7 +99,8 @@ export default function ResetPasswordForm({
     await authService
       .resedOtp({
         token: queryParams.token,
-        mobile: queryParams.mobile
+        mobile: queryParams.mobile,
+        type: RESEND_OTP_TYPE.RESET_PASSWORD
       })
       .then((result) => {
         setSearchParams({ ...queryParams, token: result.response.data.token });
