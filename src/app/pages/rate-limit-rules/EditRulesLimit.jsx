@@ -16,6 +16,9 @@ const rateLimitRuleSchema = yup.object().shape({
   label: yup.string().required('Action is required'),
   blockMinutes: yup
     .number()
+    .transform((value, originalValue) => {
+      return originalValue === '' || Number.isNaN(value) ? undefined : value;
+    })
     .required('Block minutes is required')
     .min(1, 'Block minutes must be at least 1')
     .test(
@@ -28,6 +31,9 @@ const rateLimitRuleSchema = yup.object().shape({
     ),
   windowMinutes: yup
     .number()
+    .transform((value, originalValue) => {
+      return originalValue === '' || Number.isNaN(value) ? undefined : value;
+    })
     .required('Window minutes is required')
     .min(1, 'Window minutes must be at least 1')
     .test(
@@ -41,6 +47,9 @@ const rateLimitRuleSchema = yup.object().shape({
     ),
   maxAttempts: yup
     .number()
+    .transform((value, originalValue) => {
+      return originalValue === '' || Number.isNaN(value) ? undefined : value;
+    })
     .required('Max attempts is required')
     .min(1, 'Max attempts must be at least 1')
     .test(
