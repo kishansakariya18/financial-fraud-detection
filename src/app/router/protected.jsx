@@ -28,6 +28,8 @@ import profileRoute from './routes/profile.route';
 import bonusManagementRoute from './routes/bonus-management.route';
 
 import bannerRoute from './routes/banner.route';
+import { blogRoute } from './routes/blog.route';
+import { blogCategoryRoute } from './routes/blog-category.route';
 import userClass from './routes/user-class.route';
 import rateLimitRulesRoute from './routes/rate-limit-rules.route';
 import registrationFieldsRoute from './routes/registration-fields.route.jsx';
@@ -72,6 +74,8 @@ const protectedRoutes = {
             ...dashboardRoute,
             ...adminRoute,
             ...bannerRoute,
+            ...blogCategoryRoute,
+            ...blogRoute,
             ...playerRoutes,
             ...roleRoutes,
             ...auditlogsRoutes,
