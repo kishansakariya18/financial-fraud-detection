@@ -7,6 +7,7 @@ import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
 import BlogCategoryService from '../../../services/blog-category.services';
 import { Button, Skeleton } from 'components/ui';
+import apiConfig from '../../../configs/api.config';
 
 const ViewBlogCategoryDetails = () => {
   const { t } = useTranslation();
@@ -76,15 +77,15 @@ const ViewBlogCategoryDetails = () => {
               </Button>
             </div>
 
-            {/* {category.ImageName && (
+            {category.ImageName && (
               <div>
                 <img
                   src={`${apiConfig.baseURL.S3_URL}/upload/blog-category/${category.ImageName}`}
                   alt={category.Name}
-                  className="max-w-md rounded-lg"
+                  className="max-w-xs rounded-lg object-cover"
                 />
               </div>
-            )} */}
+            )}
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>

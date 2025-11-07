@@ -1,37 +1,31 @@
-// Import Dependencies
 import { createColumnHelper } from '@tanstack/react-table';
 
-// Local Imports
-import { RowActions } from './RowActions';
-import { IdCell, DateCell, BoldCell, BadgeCell } from '../../../../components/custom/table/cell';
-import { statusOptions } from '../helper';
+import {
+  BadgeCell,
+  BoldCell,
+  DateCell,
+  IdCell,
+  ImageWithPreviewCell
+} from 'components/custom/table/cell';
 
-// ----------------------------------------------------------------------
+import { statusOptions } from '../helper';
+import { RowActions } from './RowActions';
 
 const columnHelper = createColumnHelper();
 
 export const columns = [
   columnHelper.accessor((row) => row.id, {
     id: 'id',
-    label: 'Category ID',
-    header: 'Category ID',
+    label: 'ID',
+    header: 'ID',
     cell: IdCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.imageUrl, {
+  columnHelper.accessor((row) => row.image, {
     id: 'image',
-    label: 'Image',
-    header: 'Image',
-    cell: (info) =>
-      info?.getValue() ? (
-        <div className="size-16 rounded">
-          <img
-            src={info?.getValue()}
-            alt={info?.row?.original?.name || 'Category Image'}
-            className="size-12 rounded object-cover"
-          />
-        </div>
-      ) : null,
+    label: 'Logo',
+    header: 'Logo',
+    cell: ImageWithPreviewCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.name, {
@@ -47,15 +41,20 @@ export const columns = [
     header: 'Status',
     cell: BadgeCell,
     meta: { optionData: statusOptions },
-    filterFn: 'arrIncludesSome',
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.createdAt, {
     id: 'createdAt',
-    label: 'Created At',
-    header: 'Created At',
+    label: 'Created Date',
+    header: 'Created Date',
     cell: DateCell,
-    filterFn: 'inNumberRange',
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.updatedAt, {
+    id: 'updatedAt',
+    label: 'Updated Date',
+    header: 'Updated Date',
+    cell: DateCell,
     enableSorting: false
   }),
   columnHelper.display({

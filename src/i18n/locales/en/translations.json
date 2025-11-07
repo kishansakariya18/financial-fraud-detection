@@ -54,6 +54,7 @@
   "aiChat": "AI Chat",
   "remove": "Remove",
   "casino_provider": "Provider",
+  "casino_aggregator": "Aggregator",
   "casino_games": "Games",
   "games": "Games",
   "casino_category": "Category",
@@ -423,6 +424,12 @@
   "referredPlayers": "Referred Players",
   "provider_status_desc": "Are you sure you want to update this Provider's status ?",
   "provider_status_suceess": "Provider Status has been changed successfully",
+  "aggregator_fetch_games_action": "Fetch Games",
+  "aggregator_fetch_games_success": "{{name}} games fetch request submitted successfully.",
+  "aggregator_fetch_games_error": "Unable to trigger game fetch for {{name}}.",
+  "aggregator_fetch_all_games_action": "Fetch All Games",
+  "aggregator_fetch_all_games_success": "All aggregator games fetch request submitted successfully.",
+  "aggregator_fetch_all_games_error": "Unable to trigger all games fetch.",
   "game_status_desc": "Are you sure you want to update this Game's status ?",
   "game_status_suceess": "Game Status has been changed successfully",
   "configuration": "Configuration",
@@ -1010,6 +1017,9 @@
   "slug_auto_generate_info": "Enter slug (optional)",
   "enter_tags_info": "Enter tag and press Enter...",
   "tags": "Tags",
-  "slug_auto_generate_info_description":"Enter slug or leave empty to auto-generate slug from title"
+  "slug_auto_generate_info_description":"Enter slug or leave empty to auto-generate slug from title",
+  "unsaved_changes_notice": "You have unsaved changes. Remember to save before leaving this page.",
+  "drag_to_reorder_hint": "Drag and drop providers, then save your changes.",
+  "help": "Help"
 
 }

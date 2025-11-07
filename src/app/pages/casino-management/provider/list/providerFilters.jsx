@@ -1,5 +1,9 @@
 // Import Dependencies
-import { MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowPathRoundedSquareIcon,
+  MagnifyingGlassIcon,
+  MapPinIcon
+} from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 // import { TbCurrencyDollar } from "react-icons/tb";
 import PropTypes from 'prop-types';
@@ -16,6 +20,9 @@ import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { statusOptions } from '../helper';
 import { DashboardCard } from 'components/custom/DashboardCard';
 import { dummyCards } from 'helpers/functions';
+import { useNavigate } from 'react-router';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 // import { useSearchParams } from 'react-router';
 // import { CreateCategory } from '../CreateCategory';
 
@@ -30,6 +37,8 @@ export function ProviderFilters({
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const navigate = useNavigate();
+  const { hasPermission } = usePermissions();
   // const [searchParams] = useSearchParams();
   // console.log('table.getState().columnFilters: inside', Object.fromEntries([...searchParams]));
 
@@ -44,6 +53,17 @@ export function ProviderFilters({
           <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
             {pageTitle}
           </h2>
+        </div>
+        <div className="flex items-center justify-end space-x-2 rtl:space-x-reverse">
+          {hasPermission(PERMISSIONS.PROVIDER.EDIT) && (
+            <Button
+              className="h-8 space-x-1.5 rounded-md px-3 text-xs"
+              color="primary"
+              onClick={() => navigate('/casino/provider/reorder')}>
+              <ArrowPathRoundedSquareIcon className="size-5" />
+              <span>{t('reorder') + ' ' + t('casino_provider')}</span>
+            </Button>
+          )}
         </div>
         {/* <CreateCategory tableFetch={table.options.meta?.fetchNewList(false)} /> */}
       </div>
