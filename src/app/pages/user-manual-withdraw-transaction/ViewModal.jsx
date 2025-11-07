@@ -54,7 +54,7 @@ export default function ViewModal({ row }) {
             <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
               {t('comissionPercentage')}:
             </p>
-            <p>{row?.withdrawCommissionPercent + ' %'}</p>
+            <p>{row?.withdrawCommissionPercent ? row?.withdrawCommissionPercent + ' %' : '-'}</p>
           </div>
           <div>
             <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('currency')}:</p>
