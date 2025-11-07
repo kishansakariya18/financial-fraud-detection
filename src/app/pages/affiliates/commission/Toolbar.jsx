@@ -23,7 +23,7 @@ export function Toolbar({
   const isFullScreenEnabled = table?.getState?.().tableSettings?.enableFullScreen ?? false;
   const [isExporting, setIsExporting] = useState(false);
   const breadcrumbItem = [
-    { title: t('affiliates'), path: '/affiliates' },
+    { title: t('affiliates'), path: '/affiliates/users' },
     { title: t('commission') + ' ' + t('summary') }
   ];
 

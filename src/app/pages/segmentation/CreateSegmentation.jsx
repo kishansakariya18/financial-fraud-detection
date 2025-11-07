@@ -175,35 +175,38 @@ const CreateSegmentation = () => {
           <h6 className="mt-8 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
             {t('segmentation') + ' ' + t('setting')}
           </h6>
-          <div className="mt-6 space-y-4">
-            <div className="grid gap-4 lg:grid-cols-3">
-              <div>
-                <Checkbox label={t('kyc')} {...register('kyc')} />
-              </div>
 
-              {
-                <>
-                  <div>
-                    <Controller
-                      render={({ field }) => (
-                        <Listbox
-                          data={kycOptions}
-                          value={kycOptions.find((opt) => opt.value === field.value) || null}
-                          onChange={(val) => field.onChange(val.value)}
-                          name={field.name}
-                          disabled={!kyc}
-                          placeholder={t('select') + ' ' + t('kyc') + ' ' + t('option')}
-                          displayField="label"
-                          error={errors?.kycType?.message}
-                        />
-                      )}
-                      control={control}
-                      name="kycType"
-                    />
-                  </div>
-                </>
-              }
-            </div>
+          <div className="mt-6 space-y-4">
+            {!isB2B && (
+              <div className="grid gap-4 lg:grid-cols-3">
+                <div>
+                  <Checkbox label={t('kyc')} {...register('kyc')} />
+                </div>
+
+                {
+                  <>
+                    <div>
+                      <Controller
+                        render={({ field }) => (
+                          <Listbox
+                            data={kycOptions}
+                            value={kycOptions.find((opt) => opt.value === field.value) || null}
+                            onChange={(val) => field.onChange(val.value)}
+                            name={field.name}
+                            disabled={!kyc}
+                            placeholder={t('select') + ' ' + t('kyc') + ' ' + t('option')}
+                            displayField="label"
+                            error={errors?.kycType?.message}
+                          />
+                        )}
+                        control={control}
+                        name="kycType"
+                      />
+                    </div>
+                  </>
+                }
+              </div>
+            )}
             <div className="grid gap-4 lg:grid-cols-3">
               <div>
                 <Checkbox label={t('countries')} {...register('countryCheck')} />

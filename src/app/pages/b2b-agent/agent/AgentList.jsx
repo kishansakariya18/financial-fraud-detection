@@ -40,9 +40,6 @@ const ChildAgentList = () => {
       pageTitle={t('agents') || 'Agents'}
       showAgentTypeFilter={false}
       showStatusFilter={true}
-      columnVisibility={{
-        agentType: false
-      }}
     />
   );
 };

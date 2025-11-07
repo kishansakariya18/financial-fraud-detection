@@ -79,7 +79,7 @@ const CreateUserClass = () => {
           </div>
           <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
-        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+        <form onSubmit={handleSubmit(onSubmit)} noValidate autoComplete="off">
           <div className="mt-6 space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <Input
@@ -103,6 +103,17 @@ const CreateUserClass = () => {
                   error={errors?.deposit?.message}
                   placeholder={t('enter') + ' ' + t('deposit')}
                   prefix={symbol}
+                  onKeyDown={(e) => {
+                    if (
+                      e.key === 'e' ||
+                      e.key === 'E' ||
+                      e.key === '+' ||
+                      e.key === '-' ||
+                      e.key === ' '
+                    ) {
+                      e.preventDefault();
+                    }
+                  }}
                 />
               )}
               <Input
@@ -113,6 +124,17 @@ const CreateUserClass = () => {
                 error={errors?.wager?.message}
                 placeholder={t('enter') + ' ' + t('wager')}
                 prefix={symbol}
+                onKeyDown={(e) => {
+                  if (
+                    e.key === 'e' ||
+                    e.key === 'E' ||
+                    e.key === '+' ||
+                    e.key === '-' ||
+                    e.key === ' '
+                  ) {
+                    e.preventDefault();
+                  }
+                }}
               />
             </div>
           </div>

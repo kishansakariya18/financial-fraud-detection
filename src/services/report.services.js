@@ -5,6 +5,7 @@ import {
 } from 'components/sections/player-management/helper';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
+import moment from 'moment-timezone';
 import { sendRequest } from 'utils/axios';
 
 const ReportService = {
@@ -93,8 +94,8 @@ const ReportService = {
 
       const apiRequestParams = {
         keyword: keyword || undefined,
-        startDate: startDate ? dayjs(+startDate).format('YYYY-MM-DD HH:mm:ss') : undefined,
-        endDate: endDate ? dayjs(+endDate).format('YYYY-MM-DD HH:mm:ss') : undefined,
+        startDate: startDate ? moment(+startDate).startOf('day').toDate() : undefined,
+        endDate: endDate ? moment(+endDate).endOf('day').toDate() : undefined,
         status: status ? transactionStatusToAPI(status) : undefined
       };
 

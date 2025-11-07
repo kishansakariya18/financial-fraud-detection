@@ -31,7 +31,7 @@ export function RowActions({ row }) {
   // };
   const handleView = () => {
     navigate(
-      `/affiliates/${affiliateId}/tab/campaigns/${row?.original?.CampaignID}/referred_users/${userID}/transactions`
+      `/affiliates/users/${affiliateId}/tab/campaigns/${row?.original?.CampaignID}/referred_users/${userID}/transactions`
     );
   };
   // const goToWithdrawals = () => {

@@ -18,20 +18,64 @@ import {
 import { Chart } from 'components/custom/Chart';
 import { Link, useNavigate, useParams } from 'react-router';
 import { Page } from 'components/shared/Page';
-import { playerStatusToApp } from './helper';
-import { mapLimitSummary } from 'app/pages/Auth/schema';
+import { mapLimitSummary, playerStatusToApp } from './helper';
 import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
 import PlayerService from 'services/player.services';
 // import { showImage } from 'utils/showImage';
 import { useTranslation } from 'react-i18next';
 import { useClipboard } from 'hooks';
 import { DocumentDuplicateIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
+import { MdHistory } from 'react-icons/md';
 import { toast } from 'sonner';
 import RenderImage from 'components/ui/custom/ImageRender';
 import apiConfig from 'configs/api.config';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useCurrencyContext } from 'app/contexts/currency/context';
-import { isB2BPlatform } from 'utils/platformNavigation';
+import { isB2BPlatform, isB2CPlatform } from 'utils/platformNavigation';
+import LimitHistoryDialog from './LimitHistoryDialog';
+import PropTypes from 'prop-types';
+
+const LimitItem = ({
+  title,
+  value,
+  onHistoryClick,
+  formatValue = (val) => val,
+  showHistory = true
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <div className="col-span-3 sm:col-span-1">
+      <div className="flex items-start justify-between">
+        <div className="flex-1">
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{title}</p>
+            {showHistory && onHistoryClick && (
+              <Button
+                variant="flat"
+                isIcon
+                onClick={onHistoryClick}
+                className="size-6 rounded-full text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400"
+                data-tooltip
+                data-tooltip-content={t('view_history')}>
+                <MdHistory className="size-4" />
+              </Button>
+            )}
+          </div>
+          <p>{formatValue(value)}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+LimitItem.propTypes = {
+  title: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  onHistoryClick: PropTypes.func,
+  formatValue: PropTypes.func,
+  showHistory: PropTypes.bool
+};
 
 export function PlayerViewDetails({
   isAgent = false,
@@ -51,10 +95,18 @@ export function PlayerViewDetails({
     userClassLimits: [],
     globalPlatformLimits: null
   });
+  const [historyDialog, setHistoryDialog] = useState({
+    isOpen: false,
+    setBy: null,
+    limitType: null,
+    limitPeriod: null,
+    userClassUID: null,
+    isPlatformLimit: false
+  });
   const [sectionsOpen, setSectionsOpen] = useState({
     user: true,
     admin: true,
-    userClass: false,
+    userClass: true,
     global: true
   });
   const [error, setError] = useState('');
@@ -63,6 +115,7 @@ export function PlayerViewDetails({
   const { copied, copy } = useClipboard({ timeout: 2000 });
   const { formatCurrency } = useCurrencyContext();
   const isB2B = isB2BPlatform();
+  const isB2C = isB2CPlatform();
 
   // Use props or URL params
   const playerId = initialPlayerId || params.playerId;
@@ -88,12 +141,40 @@ export function PlayerViewDetails({
       const result = await PlayerService.getLimitSummary(userID, agentUID);
       if (result?.status === 200) {
         const payload = result?.response?.data;
-        const mapped = mapLimitSummary(payload?.data || payload?.Data || payload);
+        const mapped = mapLimitSummary(payload?.data || payload?.Data || payload, isB2B);
         setLimitSummary(mapped);
       }
     } catch (e) {
       console.error('Error fetching limit summary:', e);
     }
+  };
+
+  const openHistoryDialog = (
+    setBy,
+    limitType,
+    limitPeriod,
+    userClassUID = null,
+    isPlatformLimit = false
+  ) => {
+    setHistoryDialog({
+      isOpen: true,
+      setBy,
+      limitType,
+      limitPeriod,
+      userClassUID,
+      isPlatformLimit
+    });
+  };
+
+  const closeHistoryDialog = () => {
+    setHistoryDialog({
+      isOpen: false,
+      setBy: null,
+      limitType: null,
+      limitPeriod: null,
+      userClassUID: null,
+      isPlatformLimit: false
+    });
   };
 
   const fetchUserSummary = async (userID) => {
@@ -516,7 +597,7 @@ export function PlayerViewDetails({
 
                     <div className="flex space-x-1 rtl:space-x-reverse">
                       <span>
-                        {response?.dialCode || '+91'} {response?.Mobile}
+                        {response?.PhoneCode || ''} {response?.Mobile}
                       </span>
                       <Button
                         data-tooltip
@@ -562,71 +643,75 @@ export function PlayerViewDetails({
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">DOB:</p>
                     <p>{response?.DOB || '-'}</p>
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {t('address')}
-                    </p>
-                    <div className="flex space-x-1 rtl:space-x-reverse">
-                      <span>{response?.Address || '-'}</span>
-                      {response.Address && (
-                        <Button
-                          data-tooltip
-                          data-tooltip-content={copied ? 'Copied' : 'Copy'}
-                          onClick={() => copy(response?.Address)}
-                          isIcon
-                          variant="flat"
-                          className="size-5 rounded-full group-hover/td:opacity-100"
-                          aria-label="Copy Button">
-                          <DocumentDuplicateIcon className="size-3.5" />
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {t('referralCode')}
-                    </p>
-
-                    <div className="flex space-x-1 rtl:space-x-reverse">
-                      <span>{response?.ReferralCode}</span>
-
-                      <Button
-                        data-tooltip
-                        data-tooltip-content={copied ? 'Copied' : 'Copy'}
-                        onClick={() => copy(response?.ReferralCode)}
-                        isIcon
-                        variant="flat"
-                        className="size-5 rounded-full group-hover/td:opacity-100"
-                        aria-label="Copy Button">
-                        <DocumentDuplicateIcon className="size-3.5" />
-                      </Button>
-                    </div>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {t('signupIpAddress')}
-                    </p>
-
-                    {response?.SignupIPAddress ? (
-                      <div className="flex space-x-1 rtl:space-x-reverse">
-                        <span>{response?.SignupIPAddress}</span>
-
-                        <Button
-                          data-tooltip
-                          data-tooltip-content={copied ? 'Copied' : 'Copy'}
-                          onClick={() => copy(response?.SignupIPAddress)}
-                          isIcon
-                          variant="flat"
-                          className="size-5 rounded-full group-hover/td:opacity-100"
-                          aria-label="Copy Button">
-                          <DocumentDuplicateIcon className="size-3.5" />
-                        </Button>
+                  {isB2C && (
+                    <>
+                      <div>
+                        <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                          {t('address')}
+                        </p>
+                        <div className="flex space-x-1 rtl:space-x-reverse">
+                          <span>{response?.Address || '-'}</span>
+                          {response.Address && (
+                            <Button
+                              data-tooltip
+                              data-tooltip-content={copied ? 'Copied' : 'Copy'}
+                              onClick={() => copy(response?.Address)}
+                              isIcon
+                              variant="flat"
+                              className="size-5 rounded-full group-hover/td:opacity-100"
+                              aria-label="Copy Button">
+                              <DocumentDuplicateIcon className="size-3.5" />
+                            </Button>
+                          )}
+                        </div>
                       </div>
-                    ) : (
-                      '-'
-                    )}
-                  </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                          {t('referralCode')}
+                        </p>
 
+                        <div className="flex space-x-1 rtl:space-x-reverse">
+                          <span>{response?.ReferralCode}</span>
+
+                          <Button
+                            data-tooltip
+                            data-tooltip-content={copied ? 'Copied' : 'Copy'}
+                            onClick={() => copy(response?.ReferralCode)}
+                            isIcon
+                            variant="flat"
+                            className="size-5 rounded-full group-hover/td:opacity-100"
+                            aria-label="Copy Button">
+                            <DocumentDuplicateIcon className="size-3.5" />
+                          </Button>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                          {t('signupIpAddress')}
+                        </p>
+
+                        {response?.SignupIPAddress ? (
+                          <div className="flex space-x-1 rtl:space-x-reverse">
+                            <span>{response?.SignupIPAddress}</span>
+
+                            <Button
+                              data-tooltip
+                              data-tooltip-content={copied ? 'Copied' : 'Copy'}
+                              onClick={() => copy(response?.SignupIPAddress)}
+                              isIcon
+                              variant="flat"
+                              className="size-5 rounded-full group-hover/td:opacity-100"
+                              aria-label="Copy Button">
+                              <DocumentDuplicateIcon className="size-3.5" />
+                            </Button>
+                          </div>
+                        ) : (
+                          '-'
+                        )}
+                      </div>
+                    </>
+                  )}
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {t('createdAt')}:
@@ -644,21 +729,23 @@ export function PlayerViewDetails({
                         : '-'}
                     </p>
                   </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {t('image') + ' ' + t('preview')}
-                    </p>
-                    <div className="mt-2">
-                      {/* {response?.ImageName && showImage('user', response?.ImageName)} */}
-                      {response?.ImageName && (
-                        <RenderImage
-                          value={`${apiConfig.baseURL.S3_URL}/user/${response?.ImageName}`}
-                          id={'gameImage'}
-                        />
-                      )}
-                      {response?.ImageName}
+                  {isB2C && (
+                    <div>
+                      <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                        {t('image') + ' ' + t('preview')}
+                      </p>
+                      <div className="mt-2">
+                        {/* {response?.ImageName && showImage('user', response?.ImageName)} */}
+                        {response?.ImageName && (
+                          <RenderImage
+                            value={`${apiConfig.baseURL.S3_URL}/user/${response?.ImageName}`}
+                            id={'gameImage'}
+                          />
+                        )}
+                        {response?.ImageName}
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {t('last_login_ip')}
@@ -683,43 +770,59 @@ export function PlayerViewDetails({
                     </p>
                     <p>{response?.country?.CountryName}</p>
                   </div>
-                  {/* <div>
+                  <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {t('pan') + ' ' + t('status')}
+                      {t('kyc') + ' ' + t('status')}
                     </p>
                     <p>
-                      {response?.PanDetail !== null &&
-                      (response?.IsKYCVerified === 1 || response?.IsKYCVerified === true)
-                        ? `${response.PanDetail} (Verified)`
+                      {response?.IsKYCVerified === 1 || response?.IsKYCVerified === true
+                        ? `Verified`
                         : `Pending`}
                     </p>
-                  </div> */}
-                  {/* <div>
+                  </div>
+                  <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {t('bank') + ' ' + t('status')}
                     </p>
                     <p>
-                      {response?.BankDetail !== null &&
-                      (response?.IsBankVerified === 1 || response?.IsBankVerified === true)
-                        ? `${response.BankDetail} (Verified)`
+                      {response?.IsBankVerified === 1 || response?.IsBankVerified === true
+                        ? `Verified`
                         : `Pending`}
                     </p>
-                  </div> */}
-
+                  </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {t('affiliate')}
+                      {t('email') + ' ' + t('status')}
                     </p>
-                    {response?.affiliate ? (
-                      <Link
-                        to={`/users/affiliate/${response?.affiliate?.AffiliatesUID}/tab/details`}
-                        className="tracking-wide text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500">
-                        <p className="text-center">{response?.affiliate?.Username || '-'}</p>
-                      </Link>
-                    ) : (
-                      '-'
-                    )}
+                    <p>
+                      {response?.IsBankVerified === 1 || response?.IsBankVerified === true
+                        ? `Verified`
+                        : `Pending`}
+                    </p>
                   </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('kyc') + ' ' + t('level')}
+                    </p>
+                    <p>{response?.UserKYCLevel >= 1 ? response?.UserKYCLevel : `Not Initiated`}</p>
+                  </div>
+
+                  {isB2C && (
+                    <div>
+                      <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                        {t('affiliate')}
+                      </p>
+                      {response?.affiliate ? (
+                        <Link
+                          to={`/users/affiliate/${response?.affiliate?.AffiliatesUID}/tab/details`}
+                          className="tracking-wide text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500">
+                          <p className="text-center">{response?.affiliate?.Username || '-'}</p>
+                        </Link>
+                      ) : (
+                        '-'
+                      )}
+                    </div>
+                  )}
                 </div>
               </Card>
 
@@ -828,25 +931,18 @@ export function PlayerViewDetails({
                     {limitSummary.userLimits.length === 0 ? (
                       <p className="col-span-3 text-sm text-gray-600">{t('noData')}</p>
                     ) : (
-                      limitSummary.userLimits.reduce((acc, l) => {
-                        // acc.push(
-                        //   <div key={`u-${l.id}-limit`}>
-                        //     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                        //       {`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
-                        //     </p>
-                        //     <p>{(Number(l.amount) || 0) > 0 ? t('yes') : t('no')}</p>
-                        //   </div>
-                        // );
-                        acc.push(
-                          <div key={`u-${l.id}-value`}>
-                            <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                              {`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
-                            </p>
-                            <p>{l.amount > 0 ? formatCurrency(l.amount) : '-'}</p>
-                          </div>
-                        );
-                        return acc;
-                      }, [])
+                      limitSummary.userLimits.map((l) => (
+                        <LimitItem
+                          key={`u-${l.id}-value`}
+                          title={`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
+                          value={l.amount}
+                          onHistoryClick={() => openHistoryDialog('user', l.type, l.period)}
+                          formatValue={(amount) => {
+                            if (amount > 0 && l.type !== 'session') return formatCurrency(amount);
+                            return amount || '-';
+                          }}
+                        />
+                      ))
                     )}
                   </div>
                 )}
@@ -870,71 +966,61 @@ export function PlayerViewDetails({
                     {limitSummary.adminLimits.length === 0 ? (
                       <p className="col-span-3 text-sm text-gray-600">{t('noData')}</p>
                     ) : (
-                      limitSummary.adminLimits.reduce((acc, l) => {
-                        // acc.push(
-                        //   <div key={`a-${l.id}-limit`}>
-                        //     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                        //       {`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
-                        //     </p>
-                        //     <p>{(Number(l.amount) || 0) > 0 ? t('yes') : t('no')}</p>
-                        //   </div>
-                        // );
-                        acc.push(
-                          <div key={`a-${l.id}-value`}>
-                            <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                              {` ${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
-                            </p>
-                            <p>{l.amount > 0 ? formatCurrency(l.amount) : '-'}</p>
-                          </div>
-                        );
-                        return acc;
-                      }, [])
+                      limitSummary.adminLimits.map((l) => (
+                        <LimitItem
+                          key={`a-${l.id}-value`}
+                          title={`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
+                          value={l.amount}
+                          onHistoryClick={() => openHistoryDialog('admin', l.type, l.period)}
+                          formatValue={(amount) => {
+                            if (amount > 0 && l.type !== 'session') return formatCurrency(amount);
+                            return amount || '-';
+                          }}
+                        />
+                      ))
                     )}
                   </div>
                 )}
               </Card>
 
               {/* User Class Limits Card */}
-              <Card className="mt-6 p-4 sm:p-5">
-                <button
-                  type="button"
-                  className="flex w-full items-center justify-between pb-2 text-left text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200"
-                  onClick={() => setSectionsOpen((s) => ({ ...s, userClass: !s.userClass }))}>
-                  <span>{t('player_class_limit')}</span>
-                  {sectionsOpen.userClass ? (
-                    <ChevronUpIcon className="size-7" />
-                  ) : (
-                    <ChevronDownIcon className="size-7" />
-                  )}
-                </button>
-                {sectionsOpen.userClass && (
-                  <div className="mt-2 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    {limitSummary.userClassLimits.length === 0 ? (
-                      <p className="col-span-3 text-sm text-gray-600">{t('noData')}</p>
+              {isB2C && (
+                <Card className="mt-6 p-4 sm:p-5">
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between pb-2 text-left text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200"
+                    onClick={() => setSectionsOpen((s) => ({ ...s, userClass: !s.userClass }))}>
+                    <span>{t('player_class_limit')}</span>
+                    {sectionsOpen.userClass ? (
+                      <ChevronUpIcon className="size-7" />
                     ) : (
-                      limitSummary.userClassLimits.reduce((acc, l) => {
-                        // acc.push(
-                        //   // <div key={`uc-${l.id}-limit`}>
-                        //   //   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                        //   //     {`${capitalizeFirstLetter(l.type)} ${capitalizeFirstLetter(l.period)} ${t('limit')}`}
-                        //   //   </p>
-                        //   //   <p>{(Number(l.amount) || 0) > 0 ? t('yes') : t('no')}</p>
-                        //   // </div>
-                        // );
-                        acc.push(
-                          <div key={`uc-${l.id}-value`}>
-                            <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                              {`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
-                            </p>
-                            <p>{l.amount > 0 ? formatCurrency(l.amount) : '-'}</p>
-                          </div>
-                        );
-                        return acc;
-                      }, [])
+                      <ChevronDownIcon className="size-7" />
                     )}
-                  </div>
-                )}
-              </Card>
+                  </button>
+                  {sectionsOpen.userClass && (
+                    <div className="mt-2 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                      {limitSummary.userClassLimits.length === 0 ? (
+                        <p className="col-span-3 text-sm text-gray-600">{t('noData')}</p>
+                      ) : (
+                        limitSummary.userClassLimits.map((l) => (
+                          <LimitItem
+                            key={`uc-${l.id}-value`}
+                            title={`${capitalizeFirstLetter(l.period)} ${capitalizeFirstLetter(l.type)} ${t('limit')}`}
+                            value={l.amount}
+                            onHistoryClick={() =>
+                              openHistoryDialog(null, l.type, l.period, l?.userClass?.userClassUID)
+                            }
+                            formatValue={(amount) => {
+                              if (amount > 0 && l.type !== 'session') return formatCurrency(amount);
+                              return amount || '-';
+                            }}
+                          />
+                        ))
+                      )}
+                    </div>
+                  )}
+                </Card>
+              )}
 
               {/* Global Platform Limits Card */}
               <Card className="mt-6 p-4 sm:p-5">
@@ -955,94 +1041,40 @@ export function PlayerViewDetails({
                       <p className="col-span-3 text-sm text-gray-600">{t('noData')}</p>
                     ) : (
                       <>
-                        {/* Daily Deposit */}
-                        {/* <div>
-                          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                            {`${t('dailyDepositLimit')}`}
-                          </p>
-                          <p>
-                            {(Number(limitSummary.globalPlatformLimits.maxDepositPerDay) || 0) > 0
-                              ? t('yes')
-                              : t('no')}
-                          </p>
-                        </div> */}
                         {!isB2B && (
-                          <div>
-                            <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                              {`${t('dailyDepositValue')}`}
-                            </p>
-                            <p>
-                              {limitSummary.globalPlatformLimits.maxDepositPerDay > 0
-                                ? formatCurrency(limitSummary.globalPlatformLimits.maxDepositPerDay)
-                                : '-'}
-                            </p>
-                          </div>
+                          <LimitItem
+                            title={t('dailyDepositValue')}
+                            value={limitSummary.globalPlatformLimits.maxDepositPerDay}
+                            onHistoryClick={() =>
+                              openHistoryDialog(null, 'deposit', 'daily', null, true)
+                            }
+                            formatValue={(val) => (val > 0 ? formatCurrency(val) : '-')}
+                          />
                         )}
-                        {/* Daily Withdraw */}
-                        {/* <div>
-                          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                            {`${t('dailyWithdrawLimit')}`}
-                          </p>
-                          <p>
-                            {(Number(limitSummary.globalPlatformLimits.maxWithdrawPerDay) || 0) > 0
-                              ? t('yes')
-                              : t('no')}
-                          </p>
-                        </div> */}
-                        <div>
-                          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                            {`${t('dailyWithdrawValue')}`}
-                          </p>
-                          <p>
-                            {limitSummary.globalPlatformLimits.maxWithdrawPerDay > 0
-                              ? formatCurrency(limitSummary.globalPlatformLimits.maxWithdrawPerDay)
-                              : '-'}
-                          </p>
-                        </div>
-
-                        {/* One Time Bet */}
-                        {/* <div>
-                          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                            {`${t('oneTimeBetLimit')}`}
-                          </p>
-                          <p>
-                            {(Number(limitSummary.globalPlatformLimits.betLimit) || 0) > 0
-                              ? t('yes')
-                              : t('no')}
-                          </p>
-                        </div> */}
-                        <div>
-                          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                            {`${t('oneTimeBetValue')}`}
-                          </p>
-                          <p>
-                            {limitSummary.globalPlatformLimits.betLimit > 0
-                              ? formatCurrency(limitSummary.globalPlatformLimits.betLimit)
-                              : '-'}
-                          </p>
-                        </div>
-
-                        {/* One Time Win */}
-                        {/* <div>
-                          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                            {`${t('oneTimeWinLimit')}`}
-                          </p>
-                          <p>
-                            {(Number(limitSummary.globalPlatformLimits.winLimit) || 0) > 0
-                              ? t('yes')
-                              : t('no')}
-                          </p>
-                        </div> */}
-                        <div>
-                          <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                            {`${t('oneTimeWinValue')}`}
-                          </p>
-                          <p>
-                            {limitSummary.globalPlatformLimits.winLimit > 0
-                              ? formatCurrency(limitSummary.globalPlatformLimits.winLimit)
-                              : '-'}
-                          </p>
-                        </div>
+                        <LimitItem
+                          title={t('dailyWithdrawValue')}
+                          value={limitSummary.globalPlatformLimits.maxWithdrawPerDay}
+                          onHistoryClick={() =>
+                            openHistoryDialog(null, 'withdraw', 'daily', null, true)
+                          }
+                          formatValue={(val) => (val > 0 ? formatCurrency(val) : '-')}
+                        />
+                        <LimitItem
+                          title={t('oneTimeBetValue')}
+                          value={limitSummary.globalPlatformLimits.betLimit}
+                          onHistoryClick={() =>
+                            openHistoryDialog(null, 'wager', 'one-time', null, true)
+                          }
+                          formatValue={(val) => (val > 0 ? formatCurrency(val) : '-')}
+                        />
+                        <LimitItem
+                          title={t('oneTimeWinValue')}
+                          value={limitSummary.globalPlatformLimits.winLimit}
+                          onHistoryClick={() =>
+                            openHistoryDialog(null, 'win', 'one-time', null, true)
+                          }
+                          formatValue={(val) => (val > 0 ? formatCurrency(val) : '-')}
+                        />
                       </>
                     )}
                   </div>
@@ -1057,6 +1089,18 @@ export function PlayerViewDetails({
           )}
         </div>
       </div>
+
+      {/* Limit History Dialog */}
+      <LimitHistoryDialog
+        isOpen={historyDialog.isOpen}
+        onClose={closeHistoryDialog}
+        userUID={historyDialog.userClassUID ? null : response?.UserUID}
+        userClassUID={historyDialog.userClassUID}
+        setBy={historyDialog.setBy}
+        limitType={historyDialog.limitType}
+        limitPeriod={historyDialog.limitPeriod}
+        isPlatformLimit={historyDialog.isPlatformLimit}
+      />
     </Page>
   );
 }

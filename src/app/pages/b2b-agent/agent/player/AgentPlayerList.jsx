@@ -13,7 +13,6 @@ import PlayerList from 'components/sections/player-management/player-list/Player
 import PlayerService from 'services/player.services';
 import { useSelector } from 'react-redux';
 import { CustomModal } from 'components/custom/CustomModal';
-import ResetPasswordDialog from 'components/sections/player-management/ResetPasswordDialog';
 
 const AgentPlayerList = () => {
   const { t } = useTranslation();
@@ -25,7 +24,6 @@ const AgentPlayerList = () => {
     playerData: null,
     loading: false
   });
-  const [resetPasswordPlayerData, setResetPasswordPlayerData] = useState(null);
 
   const fetchPlayers = (requestObject) => {
     return PlayerService.playerList(requestObject)
@@ -50,10 +48,6 @@ const AgentPlayerList = () => {
 
   const handleChangePlayerStatus = async (player) => {
     return await B2BAgentService.changePlayerStatus(player.userUID);
-  };
-
-  const handleResetPasswordModal = async (player) => {
-    setResetPasswordPlayerData(player);
   };
 
   const handleCreditAmount = (player) => {
@@ -88,7 +82,6 @@ const AgentPlayerList = () => {
       <Page title={pageTitle}>
         <PlayerList
           pageTitle={pageTitle}
-          onResetPassword={handleResetPasswordModal}
           onView={handleViewPlayer}
           onChangeStatus={handleChangePlayerStatus}
           onCreditAmount={handleCreditAmount}
@@ -114,13 +107,6 @@ const AgentPlayerList = () => {
           loading={creditDialog.loading}
         />
       </CustomModal>
-
-      <ResetPasswordDialog
-        isOpen={!!resetPasswordPlayerData}
-        onClose={() => setResetPasswordPlayerData(null)}
-        playerData={resetPasswordPlayerData}
-        onSuccess={() => setResetPasswordPlayerData(null)}
-      />
     </>
   );
 };

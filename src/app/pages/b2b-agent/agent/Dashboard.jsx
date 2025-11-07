@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 import { Page } from 'components/shared/Page';
@@ -12,11 +12,19 @@ import B2BAgentService from 'services/b2b-agent/b2b-agent.services';
 import PlayerService from 'services/player.services';
 import { responseMapper as agentResponseMapper } from 'components/sections/b2b-agents/helper';
 import { responseMapper as playerResponseMapper } from 'components/sections/player-management/helper';
+import { useSelector } from 'react-redux';
+import { AGENT_TIER_TYPE } from 'constants/app.constant';
+import { useMemo } from 'react';
 
 const AgentDashboard = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const pageTitle = t('agent_dashboard');
+  const { userData } = useSelector((state) => state.auth);
+  const isType3Agent = useMemo(
+    () => userData?.AgentType === AGENT_TIER_TYPE.TIER_3,
+    [userData?.AgentType]
+  );
 
   // State for dashboard data
   const [dashboardData, setDashboardData] = useState({
@@ -32,7 +40,7 @@ const AgentDashboard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -48,17 +56,20 @@ const AgentDashboard = () => {
           console.log('err: ', err);
         });
 
-      const agentsResult = await B2BAgentService.getAllChildAgent({
-        pagination: { pageIndex: 0, pageSize: 10 },
-        filters: {}
-      })
-        .then((res) => {
-          console.log('res: ', res.response);
-          return res.response.data;
+      let agentsResult = [];
+      if (!isType3Agent) {
+        agentsResult = await B2BAgentService.getAllChildAgent({
+          pagination: { pageIndex: 0, pageSize: 10 },
+          filters: {}
         })
-        .catch((err) => {
-          console.log('err: ', err);
-        });
+          .then((res) => {
+            console.log('res: ', res.response);
+            return res.response.data;
+          })
+          .catch((err) => {
+            console.log('err: ', err);
+          });
+      }
 
       const playersResult = await PlayerService.playerList({
         pagination: { pageIndex: 0, pageSize: 10 },
@@ -71,9 +82,6 @@ const AgentDashboard = () => {
         .catch((err) => {
           console.log('err: ', err);
         });
-
-      console.log('agentsResult: ', agentsResult);
-      console.log('playersResult: ', playersResult);
 
       // Process agent counts
       const agentCounts = {
@@ -107,7 +115,7 @@ const AgentDashboard = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [isType3Agent]);
 
   const handleViewAllAgents = () => {
     navigate('/agents');
@@ -119,14 +127,13 @@ const AgentDashboard = () => {
 
   useEffect(() => {
     fetchDashboardData();
-  }, []);
+  }, [fetchDashboardData]);
 
   useEffect(() => {
     if (error) {
       toast.error(error);
     }
   }, [error]);
-  console.log('dashboardData: ', dashboardData);
 
   return (
     <Page title={pageTitle}>
@@ -140,13 +147,16 @@ const AgentDashboard = () => {
           {/* Tables Section */}
           <div className="grid grid-cols-1 gap-6">
             {/* Last Agents Table */}
-            <div>
-              <LastAgentsTable
-                data={dashboardData.lastAgents}
-                loading={isLoading}
-                onViewAgent={handleViewAllAgents}
-              />
-            </div>
+
+            {!isType3Agent && (
+              <div>
+                <LastAgentsTable
+                  data={dashboardData.lastAgents}
+                  loading={isLoading}
+                  onViewAgent={handleViewAllAgents}
+                />
+              </div>
+            )}
 
             {/* Last Players Table */}
             <div>

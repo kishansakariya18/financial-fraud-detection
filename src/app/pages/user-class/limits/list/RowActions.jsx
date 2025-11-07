@@ -57,7 +57,8 @@ export function RowActions({ row, table }) {
     setTimeout(() => {
       table.options.meta?.deleteRow(row);
       setDeleteSuccess(true);
-      toast.success(result.response.messages, {
+      // console.log('delete res', result);
+      toast.success(result.response.message, {
         invert: true
       });
       setConfirmDeleteLoading(false);

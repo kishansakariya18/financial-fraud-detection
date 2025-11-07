@@ -1,5 +1,6 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { IdCell, BadgeCell, AmountCell, OneLineDateCell } from 'components/custom/table/cell';
+import { CopyableCell } from 'components/shared/table/CopyableCell';
 
 const columnHelper = createColumnHelper();
 
@@ -31,6 +32,26 @@ export const columns = [
     header: 'Event Amount',
     label: 'Event Amount',
     cell: AmountCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.player?.userUID, {
+    id: 'playerUserUID',
+    header: 'Player Id',
+    label: 'Player Id',
+    cell: CopyableCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.player?.username, {
+    id: 'playerUsername',
+    header: 'Player Username',
+    label: 'Player Username',
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.player?.mobile, {
+    id: 'playerMobile',
+    header: 'Player Mobile',
+    label: 'Player Mobile',
+    cell: CopyableCell,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.eventDate, {

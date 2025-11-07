@@ -255,6 +255,25 @@ const AffiliatesService = {
     }
   },
 
+  changeCampaignStatus: async (campaignUID) => {
+    try {
+      const endPoint = apiConfig.endPoints.AFFILIATES.CAMPAIGN_CHANGE_STATUS.replace(
+        '{campaignUID}',
+        campaignUID
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: {}
+      });
+      return response;
+    } catch (error) {
+      return { status: 500, error: error?.message || 'Unexpected error' };
+    }
+  },
+
   getCommissionSummary: async ({ affiliateId, pagination, filters }) => {
     try {
       const endPoint = apiConfig.endPoints.AFFILIATES.COMMISSION_SUMMARY.replace(
@@ -364,6 +383,85 @@ const AffiliatesService = {
       return response;
     } catch (error) {
       return { status: 500, error: error?.message || 'Unexpected error' };
+    }
+  },
+
+  createAffiliate: async (data) => {
+    try {
+      const requestObject = {
+        email: data.email,
+        username: data.userName,
+        mobile: data.mobile,
+        dateOfBirth: data.dateOfBirth,
+        password: data.password,
+        phoneCode: data.phoneCode,
+        gender: data.gender === 'male' ? 0 : 1,
+        firstname: data.firstName,
+        lastname: data.lastName
+      };
+
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.AFFILIATES.CREATE,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: requestObject
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
+  editAffiliate: async (data) => {
+    try {
+      const requestObject = {
+        affiliateUID: data?.affiliateUID,
+        dateOfBirth: data.dateOfBirth,
+        gender: data.gender === 'male' ? 0 : 1,
+        firstname: data.firstName,
+        lastname: data.lastName
+      };
+
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.AFFILIATES.EDIT,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: requestObject
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
+  changeAffiliateStatus: async (affiliateId, status) => {
+    try {
+      const requestObject = {
+        newStatus: status
+      };
+
+      const endPoint = apiConfig.endPoints.AFFILIATES.CHANGE_STATUS.replace(
+        '{affiliateUID}',
+        affiliateId
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: requestObject
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error', err);
     }
   }
 };

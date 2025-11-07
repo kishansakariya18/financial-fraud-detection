@@ -51,9 +51,16 @@ export function WithdrawFilters({
         </div>
         {hasPermission(PERMISSIONS.REPORT.WITHDRAW_EXPORT_REPORT) && (
           <ExportCSV
-            filters={Object.fromEntries([...searchParams])}
-            url={`${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.REPORTS.WITHDRAW_TRANSACTIONS_EXPORT}?startDate=${filters.startDate ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')) : ''}&endDate=${
-              filters.endDate
+            validateFilters={{
+              startDate: filters.startDate,
+              endDate: filters.endDate
+            }}
+            apiEndpoint={apiConfig.endPoints.REPORTS.WITHDRAW_TRANSACTIONS_EXPORT}
+            requestFilters={{
+              startDate: filters.startDate
+                ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss'))
+                : '',
+              endDate: filters.endDate
                 ? String(
                     dayjs(+filters.endDate)
                       .hour(23)
@@ -61,8 +68,11 @@ export function WithdrawFilters({
                       .second(59)
                       .format('YYYY-MM-DD HH:mm:ss')
                   )
-                : ''
-            }&keyword=${filters.keyword || ''}&status=${filters?.status ? transactionStatusToAPI(filters.status) : ''}&&transactionType=${TRANSACTION.TRANSACTION_TYPE.WITHDRAW}`}
+                : '',
+              keyword: filters.keyword || '',
+              status: filters?.status ? transactionStatusToAPI(filters.status) : '',
+              transactionType: TRANSACTION.TRANSACTION_TYPE.WITHDRAW
+            }}
           />
         )}
       </div>

@@ -16,7 +16,16 @@ const usePermissions = () => {
       result = true;
     }
 
-    if (permissions?.includes(permission) || +isMasterAdmin === 1) {
+    if (+isMasterAdmin === 1) {
+      result = true;
+    }
+
+    if (
+      (permission &&
+        Array.isArray(permission) &&
+        permission?.some((p) => permissions.includes(p))) ||
+      permissions?.includes(permission)
+    ) {
       result = true;
     }
 

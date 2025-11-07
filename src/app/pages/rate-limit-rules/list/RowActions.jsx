@@ -57,7 +57,7 @@ export function RowActions({ row, table }) {
   }, [row]);
 
   const handleEditRule = () => {
-    navigate(`/rate-limit-rules/edit/${row.original.rateLimitUID}`);
+    navigate(`edit/${row.original.rateLimitUID}`);
   };
 
   const state = statusError ? 'error' : statusSuccess ? 'success' : 'pending';

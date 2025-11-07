@@ -15,6 +15,7 @@ export const eventNameOptions = [
 export const commissionEventsResponseMapper = (apiData) => {
   const totalRecords = apiData.total_records || apiData.totalRecords;
   const list = apiData?.data?.map((item) => {
+    const player = item.Player;
     return {
       id: item.CallingAgentCommissionEventID,
       playerId: item.PlayerID,
@@ -22,6 +23,18 @@ export const commissionEventsResponseMapper = (apiData) => {
       eventName: item.EventName.toLowerCase(),
       eventAmount: item.EventAmount,
       eventDate: getDateInUTCToTimeZone(item.EventDate),
+      player: player
+        ? {
+            id: player.UserID,
+            userID: player.UserID,
+            userUID: player.UserUID,
+            username: player.Username,
+            mobile: player.Mobile,
+            email: player.Email,
+            firstName: player.FirstName,
+            lastName: player.LastName
+          }
+        : null,
       _originalData: item
     };
   });

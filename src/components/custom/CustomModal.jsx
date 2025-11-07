@@ -6,6 +6,7 @@ import { Fragment, useRef } from 'react';
 
 // Local Imports
 import { Button } from 'components/ui';
+import PropTypes from 'prop-types';
 
 export const CustomModal = ({
   description = '',
@@ -19,7 +20,7 @@ export const CustomModal = ({
   onOpen = () => {},
   onClose = () => {},
   isShowBtn = false,
-  panalClassName = ''
+  sizeClass = ''
 }) => {
   const saveRef = useRef(null);
 
@@ -59,8 +60,8 @@ export const CustomModal = ({
             leaveTo="opacity-0 scale-95">
             <DialogPanel
               className={clsx(
-                'relative flex w-full max-w-lg origin-top flex-col overflow-hidden rounded-lg bg-white transition-all duration-300 dark:bg-dark-700',
-                panalClassName
+                'relative flex w-full origin-top flex-col overflow-hidden rounded-lg bg-white transition-all duration-300 dark:bg-dark-700',
+                sizeClass || 'max-w-lg'
               )}>
               <div className="flex items-center justify-between rounded-t-lg bg-gray-200 px-4 py-3 dark:bg-dark-800 sm:px-5">
                 <DialogTitle
@@ -87,4 +88,32 @@ export const CustomModal = ({
       </Transition>
     </>
   );
+};
+
+CustomModal.propTypes = {
+  description: PropTypes.string,
+  title: PropTypes.string,
+  btnTitle: PropTypes.string,
+  children: PropTypes.node,
+  btnColor: PropTypes.string,
+  icon: PropTypes.node,
+  btnClassName: PropTypes.string,
+  show: PropTypes.bool,
+  onOpen: PropTypes.func,
+  onClose: PropTypes.func,
+  isShowBtn: PropTypes.bool,
+  panalClassName: PropTypes.string,
+  sizeClass: PropTypes.oneOf([
+    'max-w-lg',
+    'max-w-xl',
+    'max-w-2xl',
+    'max-w-3xl',
+    'max-w-4xl',
+    'max-w-5xl',
+    'max-w-6xl',
+    'max-w-7xl',
+    'max-w-8xl',
+    'max-w-9xl',
+    'max-w-10xl'
+  ])
 };

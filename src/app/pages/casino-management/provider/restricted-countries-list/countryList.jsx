@@ -134,7 +134,7 @@ export default function RestrictedCountry() {
     { title: t('casino_provider'), path: '/casino/provider/list' },
     {
       title: t('restricted_country'),
-      path: `/casino/provider/restricted-countries/${providerId}/list`
+      path: `/casino/provider/list/restricted-countries/${providerId}/list`
     },
     { title: t('country') + ' ' + t('list') }
   ];

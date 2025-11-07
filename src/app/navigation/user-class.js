@@ -1,6 +1,6 @@
 // Local Imports
 import { ArchiveBoxArrowDownIcon } from '@heroicons/react/24/outline';
-import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
+import { NAV_TYPE_ITEM, PERMISSIONS, PLATFORM_TYPE } from 'constants/app.constant';
 
 export const userClass = {
   id: 'user-class',
@@ -9,5 +9,6 @@ export const userClass = {
   title: 'Player Class',
   transKey: 'Player Class',
   Icon: ArchiveBoxArrowDownIcon,
-  permission: PERMISSIONS.USER_CLASS.LIST
+  permission: PERMISSIONS.USER_CLASS.LIST,
+  platformType: [PLATFORM_TYPE.B2C]
 };

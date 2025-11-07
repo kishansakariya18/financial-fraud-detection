@@ -13,7 +13,7 @@ import { columns } from './columns';
 import CRMService from 'services/crm.services';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { parseNotificationStatusToApp, parseTypeToApp } from 'app/pages/crm/helper';
-import { getDateInUTCToTimeZone } from 'helpers/functions';
+import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
 
 function responseMapper(apiData) {
   const list =
@@ -22,7 +22,7 @@ function responseMapper(apiData) {
       NotificationLogID: item?.NotificationLogID || '-',
       Title: item?.Title || '-',
       MsgBody: item?.MsgBody || '-',
-      RecipientGroupType: item?.RecipientGroupType || '-',
+      RecipientGroupType: capitalizeFirstLetter(item?.RecipientGroupType) || '-',
       Status: parseNotificationStatusToApp(item?.Status),
       DateCreated: getDateInUTCToTimeZone(
         item?.DateCreated || '-',
@@ -37,9 +37,8 @@ function responseMapper(apiData) {
       Type: parseTypeToApp(item?.Type),
       // numeric timestamp for filtering (hidden column)
       createdAt: item?.DateCreated ? new Date(item.DateCreated).getTime() : null,
-      Channel: item?.Channel
+      Channel: capitalizeFirstLetter(item?.Channel)
     })) || [];
-  console.log(list[0].Status);
   return list;
 }
 

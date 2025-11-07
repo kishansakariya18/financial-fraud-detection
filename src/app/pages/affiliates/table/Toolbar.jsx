@@ -1,4 +1,4 @@
-import { MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, MapPinIcon, PlusIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { t } from 'i18next';
@@ -9,10 +9,15 @@ import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { affiliateStatusOptions } from 'app/pages/affiliate/helper';
+import { useNavigate } from 'react-router';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export function Toolbar({ table, pageTitle, onApplyFilters, onClearFilters }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const navigate = useNavigate();
+  const { hasPermission } = usePermissions();
 
   return (
     <div className="table-toolbar">
@@ -26,6 +31,15 @@ export function Toolbar({ table, pageTitle, onApplyFilters, onClearFilters }) {
             {pageTitle}
           </h2>
         </div>
+        {hasPermission(PERMISSIONS.AFFILIATES.CREATE) && (
+          <Button
+            className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
+            color="primary"
+            onClick={() => navigate('/affiliates/users/create')}>
+            <PlusIcon className="size-5" />
+            <span>{t('create') + ' ' + t('affiliate')}</span>
+          </Button>
+        )}
       </div>
 
       {isXs ? (

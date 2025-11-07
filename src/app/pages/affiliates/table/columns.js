@@ -31,6 +31,13 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.refferedUsers, {
+    id: 'refferedUsers',
+    label: 'Reffered Users',
+    header: 'Reffered Users',
+    cell: BoldCell,
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.firstName, {
     id: 'firstName',
     label: 'First Name',

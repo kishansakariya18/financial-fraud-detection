@@ -14,6 +14,12 @@ const statusToApp = (status) => {
   }
 };
 
+export const AFFILIATE_STATUS = {
+  ACTIVE: 'ACTIVE',
+  SUSPENDED: 'SUSPENDED',
+  CLOSED: 'CLOSED'
+};
+
 export const affiliatesListResponseMapper = (payload) => {
   const data = Array.isArray(payload) ? payload : Array.isArray(payload?.data) ? payload.data : [];
   const list = data.map((item) => {
@@ -27,7 +33,8 @@ export const affiliatesListResponseMapper = (payload) => {
       username: user?.Username || '-',
       mobile: user?.Mobile || '-',
       status: statusToApp(item?.Status),
-      createdAt: item?.DateCreated ? getDateInUTCToTimeZone(item.DateCreated) : '-'
+      createdAt: item?.DateCreated ? getDateInUTCToTimeZone(item.DateCreated) : '-',
+      refferedUsers: item?.RefferedUsers || '0'
     };
   });
   const totalPages = Array.isArray(payload) ? 0 : payload?.totalPages || 0;

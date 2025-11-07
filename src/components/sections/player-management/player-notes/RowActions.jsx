@@ -74,8 +74,14 @@ export function RowActions({ row, table }) {
   const state = deleteError ? 'error' : deleteSuccess ? 'success' : 'pending';
 
   if (
-    !hasPermission(PERMISSIONS.USER.COMMENT_EDIT) &&
-    !hasPermission(PERMISSIONS.USER.COMMENT_DELETE)
+    !hasPermission(PERMISSIONS.USER.COMMENT_EDIT, {
+      isAllowCallingAgent: true,
+      isAllowB2BAgent: true
+    }) &&
+    !hasPermission(PERMISSIONS.USER.COMMENT_DELETE, {
+      isAllowCallingAgent: true,
+      isAllowB2BAgent: true
+    })
   ) {
     return null;
   }

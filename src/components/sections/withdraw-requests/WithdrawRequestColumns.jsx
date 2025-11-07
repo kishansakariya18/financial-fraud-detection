@@ -8,7 +8,12 @@ import { t } from 'i18next';
 import { entityTypeOptions, statusOptions } from './helper';
 import { BadgeCell, DateCell } from 'components/custom/table/cell';
 
-export function WithdrawRequestColumns({ onUpdateStatus, showActions = true, listFor }) {
+export function WithdrawRequestColumns({
+  onUpdateStatus,
+  showFormEntityType = false,
+  showActions = true,
+  listFor
+}) {
   return useMemo(() => {
     const columns = [
       {
@@ -39,13 +44,40 @@ export function WithdrawRequestColumns({ onUpdateStatus, showActions = true, lis
         accessorKey: 'amount',
         header: t('amount')
       },
-      {
-        id: 'toEntityType',
-        accessorKey: 'toEntityType',
-        header: t('entity_type'),
-        cell: BadgeCell,
-        meta: { optionData: entityTypeOptions }
-      },
+      // {
+      //   id: 'toEntityType',
+      //   accessorKey: 'toEntityType',
+      //   header: t('entity_type'),
+      //   cell: BadgeCell,
+      //   meta: { optionData: entityTypeOptions }
+      // },
+      ...(showFormEntityType
+        ? [
+            {
+              id: 'fromEntityType',
+              accessorKey: 'fromEntityType',
+              header: t('form'),
+              cell: BadgeCell,
+              meta: { optionData: entityTypeOptions }
+            },
+            {
+              id: 'form_name',
+              header: t('form') + ' ' + t('name'),
+              enableSorting: false,
+              cell: ({ row }) => {
+                let formName = '';
+                if (row.original.fromEntityType === 'b2b_agent') {
+                  formName = row.original.agentName;
+                }
+                if (row.original.fromEntityType === 'player') {
+                  formName = row.original.playerName;
+                }
+                return <div className="text-sm font-medium">{formName}</div>;
+              },
+              sortable: false
+            }
+          ]
+        : []),
       {
         id: 'status',
         accessorKey: 'status',
@@ -136,5 +168,5 @@ export function WithdrawRequestColumns({ onUpdateStatus, showActions = true, lis
     }
 
     return columns;
-  }, [onUpdateStatus, showActions, listFor]);
+  }, [listFor, showFormEntityType, showActions, onUpdateStatus]);
 }
