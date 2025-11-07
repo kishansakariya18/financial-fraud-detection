@@ -341,6 +341,7 @@ export const apiConfig = {
       EDIT: '/games/admin/casino-management/provider/:providerId/edit',
       DELETE: '/games/admin/casino-management/provider/:providerId/delete',
       CHANGE_STATUS: '/games/admin/casino-management/provider/:providerId/change-status',
+      REORDER: '/games/admin/casino-management/provider/reorder',
       RESTRICTED_COUNTRY_LIST:
         '/games/admin/casino-management/provider/:providerId/restricted-country/list',
       COUNTRY_LIST: '/games/admin/casino-management/provider/:providerId/country/list',
@@ -348,6 +349,11 @@ export const apiConfig = {
         '/games/admin/casino-management/provider/:providerId/restricted-country/add',
       REMOVE_RESTRICTED_COUNTRY:
         '/games/admin/casino-management/provider/:providerId/restricted-country/delete'
+    },
+    AGGREGATOR: {
+      LIST: '/games/admin/casino-management/aggregators/all',
+      FETCH_QT_GAMES: '/games/qt/feed-games',
+      FETCH_SOFTSWISS_GAMES: '/games/softswiss/feed-games'
     },
     CURRENCY: {
       DEFAULT: '/wallet/admin/default-currency',
