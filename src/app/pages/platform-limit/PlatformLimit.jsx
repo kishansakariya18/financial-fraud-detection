@@ -8,9 +8,10 @@ import { toast } from 'sonner';
 import PlatformLimitService from 'services/platform.services';
 import { updatePlatformLimitSchema } from './schema';
 import { useTranslation } from 'react-i18next';
-import { ContextualHelp } from 'components/shared/ContextualHelp';
 import { useCurrencyContext } from 'app/contexts/currency/context';
 import { isB2BPlatform } from 'utils/platformNavigation';
+import { PageHelpTrigger } from 'components/template/RightSidebar/PageHelpDrawer';
+import { PAGE_HELP_KEYS } from 'app/constants/pageHelpConfig';
 
 const PlatformLimit = () => {
   const { t } = useTranslation();
@@ -93,10 +94,11 @@ const PlatformLimit = () => {
   return (
     <Page title={pageTitle}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
-        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+        <div className="flex flex-wrap items-center gap-3 py-5 lg:py-6">
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
             {pageTitle}
           </h2>
+          <PageHelpTrigger pageKey={PAGE_HELP_KEYS.PLATFORM_LIMIT} />
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate autoComplete="off">
@@ -124,13 +126,6 @@ const PlatformLimit = () => {
                       e.preventDefault();
                     }
                   }}
-                  suffix={
-                    <ContextualHelp
-                      title={t('dailyDepositLimitPlatform')}
-                      anchor={{ to: 'bottom', gap: 8 }}
-                      content={<p>{t('dailyDepositLimitPlatformDesc')}</p>}
-                    />
-                  }
                 />
               )}
               <Input
@@ -154,13 +149,6 @@ const PlatformLimit = () => {
                     e.preventDefault();
                   }
                 }}
-                suffix={
-                  <ContextualHelp
-                    title={t('dailyWithdrawLimitPlatform')}
-                    anchor={{ to: 'bottom', gap: 8 }}
-                    content={<p>{t('dailyWithdrawLimitPlatformDesc')}</p>}
-                  />
-                }
               />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -185,13 +173,6 @@ const PlatformLimit = () => {
                     e.preventDefault();
                   }
                 }}
-                suffix={
-                  <ContextualHelp
-                    title={t('oneTimeBetLimitPlatform')}
-                    anchor={{ to: 'bottom', gap: 8 }}
-                    content={<p>{t('oneTimeBetLimitPlatformDesc')}</p>}
-                  />
-                }
               />
               <Input
                 {...register('oneTimeWinLimit')}
@@ -214,22 +195,10 @@ const PlatformLimit = () => {
                     e.preventDefault();
                   }
                 }}
-                suffix={
-                  <ContextualHelp
-                    title={t('oneTimeWinLimitPlatform')}
-                    anchor={{ to: 'bottom', gap: 8 }}
-                    content={<p>{t('oneTimeWinLimitPlatformDesc')}</p>}
-                  />
-                }
               />
             </div>
             <div className="flex items-center gap-2">
               <Checkbox label={t('checkCalenderTime')} {...register('isCheckCaladerTime')} />
-              <ContextualHelp
-                title={t('checkCalenderTime')}
-                anchor={{ to: 'bottom', gap: 8 }}
-                content={<p>{t('checkCalenderTimeDesc')}</p>}
-              />
             </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">

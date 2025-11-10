@@ -222,14 +222,14 @@ export function StatusIconCell({ getValue, column }) {
   );
 }
 export function ImageCell({ info }) {
-  const imageUrl = info.getValue();
+  const imageUrl = info?.getValue();
   return imageUrl ? (
     <img src={imageUrl} alt="Category Icon" className="size-16 rounded object-cover" />
   ) : null;
 }
 
 export function ImageWithPreviewCell({ info }) {
-  const imageUrl = info.getValue();
+  const imageUrl = info?.getValue();
   return imageUrl ? <ImagePreview src={imageUrl} /> : null;
 }
 

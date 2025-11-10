@@ -232,6 +232,24 @@ const ProviderService = {
     } catch (error) {
       console.log('error', error);
     }
+  },
+  reorderProviders: async (providerOrderList) => {
+    try {
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.PROVIDER.REORDER}`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          providerOrderList
+        }
+      });
+
+      return response;
+    } catch (error) {
+      console.log('error', error);
+    }
   }
 };
 

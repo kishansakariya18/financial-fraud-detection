@@ -300,6 +300,10 @@ export const PERMISSIONS = {
     VIEW_RESTRICTED_COUNTRY: 'provider-view-restricted-country',
     GAMES: 'provider-games'
   },
+  AGGREGATOR: {
+    VIEW: 'aggregators-view',
+    FEED_GAMES: 'aggregator-feed-games'
+  },
   GAME: {
     VIEW: 'game-view',
     CREATE: 'game-create',

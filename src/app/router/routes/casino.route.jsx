@@ -14,6 +14,18 @@ export const casinoRoutes = [
     })
   },
   {
+    path: '/casino/aggregator/list',
+    lazy: async () => ({
+      Component: (await import('../../pages/casino-management/aggregator/list/list')).default
+    })
+  },
+  {
+    path: '/casino/provider/reorder',
+    lazy: async () => ({
+      Component: (await import('../../pages/casino-management/provider/ReorderProvider')).default
+    })
+  },
+  {
     path: '/casino/provider/list/select-countries/:providerId/list',
     lazy: async () => ({
       Component: (
