@@ -27,14 +27,43 @@ const BlogCategoryService = {
     });
   },
 
-  createBlogCategory: (data) => {
-    return apiInstance.post(apiConfig.endPoints.BLOG_CATEGORY.CREATE, data);
+  createBlogCategory: (data, file) => {
+    const formData = new FormData();
+    if (data.name) {
+      formData.append('name', data.name);
+    }
+    if (data.isActive !== undefined) {
+      formData.append('isActive', data.isActive);
+    }
+    if (file && file.name) {
+      formData.append('image', file, file.name);
+    }
+
+    return apiInstance.post(apiConfig.endPoints.BLOG_CATEGORY.CREATE, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
   },
 
-  editBlogCategory: (categoryId, data) => {
+  editBlogCategory: (categoryId, data, file) => {
     const endPoint = replaceText(apiConfig.endPoints.BLOG_CATEGORY.EDIT, ':categoryId', categoryId);
 
-    return apiInstance.put(endPoint, data);
+    const formData = new FormData();
+    if (data.name !== undefined) {
+      formData.append('name', data.name);
+    }
+    if (data.isActive !== undefined) {
+      formData.append('isActive', data.isActive);
+    }
+    if (file && file.name) {
+      formData.append('image', file, file.name);
+    }
+    return apiInstance.put(endPoint, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
   },
 
   deleteBlogCategory: (categoryId) => {

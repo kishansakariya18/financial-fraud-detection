@@ -22,24 +22,26 @@ const BlogForm = ({ form, categories = [], isEdit = false, initialImageUrl = nul
   const [preview, setPreview] = useState(initialImageUrl);
   const [content, setContent] = useState(new Delta([{ insert: '' }]));
   const [htmlContent, setHtmlContent] = useState('');
+  const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
+
   const uploadRef = useRef();
 
   const titleValue = watch('title');
-  const slugValue = watch('slug');
 
   // Auto-generate slug from title (only in create mode and when slug is empty)
   useEffect(() => {
-    if (!isEdit && titleValue && !slugValue) {
+    if (!isEdit && titleValue && !isSlugManuallyEdited) {
       const generatedSlug = stringToSlug(titleValue);
       setValue('slug', generatedSlug, { shouldValidate: false });
     }
-  }, [titleValue, slugValue, isEdit, setValue]);
+  }, [titleValue, isEdit, isSlugManuallyEdited, setValue]);
 
   const handleChange = (val) => {
     setContent(val);
     const quill = new Quill(document.createElement('div'));
     quill.setContents(val);
     setHtmlContent(quill.root.innerHTML);
+    setValue('content', quill.root.innerHTML);
   };
 
   // Initialize content for edit mode
@@ -113,7 +115,11 @@ const BlogForm = ({ form, categories = [], isEdit = false, initialImageUrl = nul
             error={errors?.slug?.message}
             placeholder={t('slug_auto_generate_info')}
             description={t('slug_auto_generate_info_description')}
-          />
+            onChange={(e) => {
+              setIsSlugManuallyEdited(true);
+              setValue('slug', e.target.value, { shouldValidate: true });
+            }}
+          />{' '}
         </div>
 
         <div className="lg:col-span-6">
@@ -187,17 +193,23 @@ const BlogForm = ({ form, categories = [], isEdit = false, initialImageUrl = nul
             rows={3}
           />
         </div>
-
         <div className="lg:col-span-12">
-          <TextEditor
-            value={content}
-            label={t('content')}
-            onChange={handleChange}
-            placeholder={
-              t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
-            }
-            className="[&_.ql-editor]:max-h-96 [&_.ql-editor]:min-h-[12rem]"
-            error={errors?.content?.message}
+          <Controller
+            control={control}
+            name="content"
+            rules={{ required: t('content') + ' ' + t('is_required') }}
+            render={() => (
+              <TextEditor
+                value={content}
+                label={t('content')}
+                onChange={(val) => {
+                  handleChange(val);
+                }}
+                placeholder={`${t('enter')} ${t('your')} ${t('content')} ${t('here')}...`}
+                className="[&_.ql-editor]:max-h-96 [&_.ql-editor]:min-h-[12rem]"
+                error={errors?.content?.message}
+              />
+            )}
           />
         </div>
 
