@@ -40,7 +40,7 @@ const AggregatorService = {
     try {
       const response = await sendRequest({
         url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.AGGREGATOR.FETCH_QT_GAMES}`,
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json'
         }
@@ -60,7 +60,7 @@ const AggregatorService = {
     try {
       const response = await sendRequest({
         url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.AGGREGATOR.FETCH_SOFTSWISS_GAMES}`,
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json'
         }

@@ -1,12 +1,6 @@
 import { createColumnHelper } from '@tanstack/react-table';
 
-import {
-  BadgeCell,
-  BoldCell,
-  DateCell,
-  IdCell,
-  ImageWithPreviewCell
-} from 'components/custom/table/cell';
+import { BadgeCell, BoldCell, DateCell, IdCell } from 'components/custom/table/cell';
 
 import { statusOptions } from '../helper';
 import { RowActions } from './RowActions';
@@ -21,13 +15,13 @@ export const columns = [
     cell: IdCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.image, {
-    id: 'image',
-    label: 'Logo',
-    header: 'Logo',
-    cell: ImageWithPreviewCell,
-    enableSorting: false
-  }),
+  // columnHelper.accessor((row) => row.image, {
+  //   id: 'image',
+  //   label: 'Logo',
+  //   header: 'Logo',
+  //   cell: ImageWithPreviewCell,
+  //   enableSorting: false
+  // }),
   columnHelper.accessor((row) => row.name, {
     id: 'name',
     label: 'Name',
