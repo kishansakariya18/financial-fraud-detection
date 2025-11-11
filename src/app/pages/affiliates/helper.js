@@ -5,18 +5,15 @@ const statusToApp = (status) => {
   switch ((status || '').toString().toUpperCase()) {
     case 'ACTIVE':
       return 'ACTIVE';
-    case 'SUSPENDED':
-      return 'SUSPENDED';
     case 'CLOSED':
       return 'CLOSED';
     default:
-      return 'SUSPENDED';
+      return 'CLOSED';
   }
 };
 
 export const AFFILIATE_STATUS = {
   ACTIVE: 'ACTIVE',
-  SUSPENDED: 'SUSPENDED',
   CLOSED: 'CLOSED'
 };
 
