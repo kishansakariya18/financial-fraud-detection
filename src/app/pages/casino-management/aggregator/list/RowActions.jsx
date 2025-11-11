@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { toast } from 'sonner';
@@ -9,19 +8,37 @@ import { useTranslation } from 'react-i18next';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
 import AggregatorService from 'services/aggregator.services';
+import {
+  completeAggregatorSync,
+  startAggregatorSync,
+  useAggregatorSyncStore
+} from './useAggregatorSyncStore';
 
 export function RowActions({ row }) {
   const { t } = useTranslation();
   const { hasPermission } = usePermissions();
-  const [isLoading, setIsLoading] = useState(false);
+  const { isSyncing, activeAggregator } = useAggregatorSyncStore();
+  const aggregatorName = row?.original?.name;
+  const isCurrentAggregator = isSyncing && activeAggregator === aggregatorName;
 
   if (!hasPermission(PERMISSIONS.AGGREGATOR.FETCH_GAMES)) {
     return null;
   }
 
   const handleFetchGames = async (type) => {
+    const displayName = aggregatorName || type || t('casino_aggregator');
+
+    if (isSyncing) {
+      toast.info(
+        t('aggregator_fetch_games_in_progress_notice', {
+          name: activeAggregator || displayName
+        })
+      );
+      return;
+    }
+
     try {
-      setIsLoading(true);
+      startAggregatorSync(displayName);
       let result = null;
       if (type === 'QTech') {
         result = await AggregatorService.fetchQtGames();
@@ -29,16 +46,41 @@ export function RowActions({ row }) {
         result = await AggregatorService.fetchSoftswissGames();
       }
 
-      if (result.status === 200) {
-        const message =
-          result.response?.message ||
-          t('aggregator_fetch_games_success', { name: row.original.name });
-        toast.success(message);
-      } else {
-        toast.error(result.error || t('aggregator_fetch_games_error', { name: row.original.name }));
+      if (!result) {
+        const errorMessage = t('aggregator_fetch_games_error', { name: displayName });
+        completeAggregatorSync({
+          status: 'error',
+          message: errorMessage,
+          aggregatorName: displayName
+        });
+        return;
       }
-    } finally {
-      setIsLoading(false);
+
+      if (result.status === 200) {
+        const message = result.response?.message;
+        if (message) {
+          toast.success(message);
+        } else {
+          toast.success(t('success'));
+        }
+        completeAggregatorSync();
+      } else {
+        const errorMessage =
+          result.error || t('aggregator_fetch_games_error', { name: displayName });
+        completeAggregatorSync({
+          status: 'error',
+          message: errorMessage,
+          aggregatorName: displayName
+        });
+      }
+    } catch (error) {
+      const errorMessage =
+        error?.message || t('aggregator_fetch_games_error', { name: displayName });
+      completeAggregatorSync({
+        status: 'error',
+        message: errorMessage,
+        aggregatorName: displayName
+      });
     }
   };
 
@@ -47,10 +89,14 @@ export function RowActions({ row }) {
       <Button
         className="h-8 space-x-1.5 rounded-md px-3 text-xs"
         color="primary"
-        onClick={() => handleFetchGames(row.original.name)}
-        disabled={isLoading}>
-        <ArrowPathIcon className={clsx('size-4', isLoading && 'animate-spin')} />
-        <span>{t('aggregator_fetch_games_action')}</span>
+        onClick={() => handleFetchGames(aggregatorName)}
+        disabled={isSyncing}>
+        <ArrowPathIcon className={clsx('size-4', isCurrentAggregator && 'animate-spin')} />
+        <span>
+          {isCurrentAggregator
+            ? t('aggregator_fetch_games_in_progress_action')
+            : t('aggregator_fetch_games_action')}
+        </span>
       </Button>
     </div>
   );
