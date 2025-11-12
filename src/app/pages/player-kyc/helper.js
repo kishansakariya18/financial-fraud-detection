@@ -100,10 +100,10 @@ export const documentTypeOption = [
   },
   {
     value: '2',
-    label: 'Source of fund'
+    label: 'Address'
   },
   {
     value: '3',
-    label: 'Address'
+    label: 'Source of fund'
   }
 ];

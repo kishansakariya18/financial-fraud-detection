@@ -265,7 +265,7 @@ export function PlayerRowActions({
                   )}
                 </MenuItem>
               )}
-              {onChangeStatus && (
+              {onChangeStatus && row?.original?.status !== 'inactive' && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -280,7 +280,7 @@ export function PlayerRowActions({
                         <CgBlock className="size-4.5 stroke-1" />
                       )}
                       <span>
-                        {row?.original?.status === 'inactive'
+                        {row?.original?.status === 'blocked'
                           ? t('unblock') || 'Unblock'
                           : t('block') || 'Block'}
                       </span>
