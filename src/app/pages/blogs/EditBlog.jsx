@@ -59,7 +59,6 @@ const EditBlog = () => {
           setInitialImageUrl(
             result.ImageName ? `${apiConfig.baseURL.S3_URL}/upload/blogs/${result.ImageName}` : null
           );
-          console.log(result);
           return {
             title: result.Title || '',
             slug: result.Slug || '',

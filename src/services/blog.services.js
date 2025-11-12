@@ -37,7 +37,7 @@ const BlogService = {
 
     const apiQueryParams = {
       keyword: filters?.keyword || undefined,
-      categoryId: parseNumber(filters?.blogCategoryId),
+      categoryIds: filters?.blogCategoryId ? [parseNumber(filters?.blogCategoryId)] : undefined,
       isFeatured: parseNumber(filters?.isFeatured),
       authorName: filters?.authorName || undefined,
       isActive: parseNumber(filters?.isActive),

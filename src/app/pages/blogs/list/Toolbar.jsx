@@ -167,10 +167,10 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {}, 
         />
       )}
 
-      {table.getColumn('categoryName') && (
+      {table.getColumn('categoryNames') && (
         <FacedtedFilter
           options={categoryOptions}
-          column={table.getColumn('categoryName')}
+          column={table.getColumn('categoryNames')}
           title={t('category')}
           Icon={TagIcon}
           isMultiple={false}

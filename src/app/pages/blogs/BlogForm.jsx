@@ -33,7 +33,6 @@ const BlogForm = ({ form, categories = [], isEdit = false, initialImageUrl = nul
 
   // Initialize content for edit mode
   useEffect(() => {
-    console.log(form.formState.defaultValues);
     if (isEdit && form.formState.defaultValues?.content) {
       const delta = htmlToDelta(form.formState.defaultValues.content);
       setContent(delta);
