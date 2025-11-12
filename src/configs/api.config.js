@@ -91,9 +91,8 @@ export const apiConfig = {
       ADMIN_PERMISSION: '/admin/admin/admin/permissions',
       ADMIN_EDIT: '/admin/admin/admin/edit',
       UPDATE_PROFILE: '/admin/admin/update-profile',
-      ADMIN_COUNTRY_LIST: '/admin/admin/countries',
       ADMIN_SUMMARY: '/admin/admin/admin/summary',
-      COUNTRY_LIST: '/config/country/list'
+      COUNTRY_LIST: '/config/admin/config/countries'
     },
     EMAIL_PROVIDER: {
       VIEW: '/notifications/admin/email-provider/list',

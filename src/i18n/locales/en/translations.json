@@ -1017,9 +1017,10 @@
   "slug_auto_generate_info": "Enter slug (optional)",
   "enter_tags_info": "Enter tag and press Enter...",
   "tags": "Tags",
-  "slug_auto_generate_info_description":"Enter slug or leave empty to auto-generate slug from title",
+  "slug_auto_generate_info_description": "Enter slug or leave empty to auto-generate slug from title",
   "unsaved_changes_notice": "You have unsaved changes. Remember to save before leaving this page.",
   "drag_to_reorder_hint": "Drag and drop providers, then save your changes.",
-  "help": "Help"
-
+  "help": "Help",
+  "source_of_fund": "Source of Fund",
+  "identity": "Identity"
 }
