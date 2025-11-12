@@ -129,9 +129,11 @@ const ViewBlogDetails = () => {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                      {t('category')}:
+                      {t('categories')}:
                     </p>
-                    <p className="text-gray-900 dark:text-gray-100">{blog.category?.Name}</p>
+                    <p className="text-gray-900 dark:text-gray-100">
+                      {blog.categories?.map((category) => category.Name).join(', ')}
+                    </p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
