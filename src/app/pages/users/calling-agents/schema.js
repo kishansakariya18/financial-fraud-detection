@@ -13,7 +13,10 @@ export const createCallingAgentSchema = Yup.object().shape({
   userName: Yup.string()
     .trim()
     .required('User Name Required')
-    .max(40, 'Maximum 40 Characters Allowed'),
+    .matches(
+      /^(?!.*__)[a-zA-Z][a-zA-Z0-9_]{1,28}[a-zA-Z0-9]$/,
+      'Username must start with a letter, contain only letters, numbers, or underscores, cannot have consecutive or ending underscores, and must be 3–30 characters long.'
+    ),
   password: Yup.string()
     .trim()
     .required('Password Required')
@@ -21,7 +24,13 @@ export const createCallingAgentSchema = Yup.object().shape({
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
       'Minimum 8 Character Required, Atleast One Letter and One Number and One Special Character'
     ),
-  email: Yup.string().trim().required('Email Required').email('Invalid Email'),
+  email: Yup.string()
+    .trim()
+    .required('Email Required')
+    .matches(
+      /^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+      'Enter a valid email address without the "+" symbol'
+    ),
   mobile: Yup.string()
     .trim()
     .required('Enter Your Mobile Number')
@@ -54,7 +63,13 @@ export const editCallingAgentSchema = Yup.object().shape({
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
       'Minimum 8 Character Required, Atleast One Letter and One Number and One Special Character'
     ),
-  email: Yup.string().trim().required('Email Required').email('Invalid Email'),
+  email: Yup.string()
+    .trim()
+    .required('Email Required')
+    .matches(
+      /^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+      'Enter a valid email address without the "+" symbol'
+    ),
   mobile: Yup.string()
     .trim()
     .required('Enter Your Mobile Number')
