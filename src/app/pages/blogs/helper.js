@@ -35,7 +35,7 @@ export const responseMapper = (apiData) => {
       content: data.Content,
       imageName: data.ImageName,
       blogCategoryId: data.BlogCategoryID,
-      categoryName: data.category?.Name || '',
+      categoryNames: data.categories?.map((cat) => cat.Name).join(', ') || '',
       metaTitle: data.MetaTitle,
       metaDescription: data.MetaDescription,
       authorName: data.AuthorName,

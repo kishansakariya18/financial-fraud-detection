@@ -1,132 +1,126 @@
-// Import Dependencies
-import { useState, useEffect } from 'react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
+import { useState, useRef, useEffect } from 'react';
 
-// Local Imports
-import { InputErrorMsg } from 'components/ui';
-
-// ----------------------------------------------------------------------
-
-function TagsInput({
+export default function TagInput({
+  label = '',
+  placeholder = '',
   value = [],
   onChange,
-  label = 'Tags',
-  placeholder = 'Enter tag and press Enter...',
-  error = '',
-  disabled = false,
-  classNames
+  separators = [',', 'Enter'], // add on comma or Enter
+  maxTags, // optional
+  allowDuplicates = false, // default: unique
+  className = '',
+  errorText // optional validation text
 }) {
-  const [tags, setTags] = useState(value || []);
-  const [inputValue, setInputValue] = useState('');
+  const [tags, setTags] = useState(value);
+  const [input, setInput] = useState('');
+  const inputRef = useRef(null);
 
   useEffect(() => {
     setTags(value || []);
   }, [value]);
 
-  const addTag = (tag) => {
-    const trimmedTag = tag.trim();
-    if (!trimmedTag) {
-      return;
-    }
+  const commit = (raw) => {
+    const text = (raw || '').trim();
+    if (!text) return;
 
-    if (tags.includes(trimmedTag)) {
-      return;
-    }
+    const next = allowDuplicates ? [...tags, text] : tags.includes(text) ? tags : [...tags, text];
 
-    const newTags = [...tags, trimmedTag];
-    setTags(newTags);
-    setInputValue('');
-    onChange?.(newTags);
+    if (maxTags && next.length > maxTags) return;
+
+    setTags(next);
+    onChange && onChange(next);
+    setInput('');
   };
 
-  const removeTag = (tagToRemove) => {
-    const newTags = tags.filter((tag) => tag !== tagToRemove);
-    setTags(newTags);
-    onChange?.(newTags);
+  const remove = (idx) => {
+    const next = tags.filter((_, i) => i !== idx);
+    setTags(next);
+    onChange && onChange(next);
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' || e.key === ',') {
+  const onKeyDown = (e) => {
+    // add on separators
+    if (separators.includes(e.key)) {
       e.preventDefault();
-      addTag(inputValue);
-    } else if (e.key === 'Backspace' && !inputValue && tags.length > 0) {
-      removeTag(tags[tags.length - 1]);
+      commit(input);
+      return;
+    }
+    // remove last tag when input empty + backspace
+    if (e.key === 'Backspace' && input === '' && tags.length) {
+      e.preventDefault();
+      remove(tags.length - 1);
     }
   };
 
-  const handleBlur = () => {
-    if (inputValue) {
-      addTag(inputValue);
-    }
+  const onPaste = (e) => {
+    // paste split by comma/newline -> add many
+    const text = e.clipboardData.getData('text');
+    if (!text) return;
+
+    const parts = text
+      .split(/[\n,]/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    if (!parts.length) return;
+
+    e.preventDefault();
+    parts.forEach(commit);
   };
 
   return (
-    <div className={clsx('flex flex-col', classNames?.root)}>
-      {label && (
-        <label className="input-label">
-          <span>{label}</span>
-        </label>
-      )}
+    <div className={`flex flex-col ${className}`}>
+      {label && <label className="input-label">{label}</label>}
       <div
-        className={clsx(
-          'form-input-base form-input',
-          error
-            ? 'border-error dark:border-error-lighter'
-            : disabled
-              ? 'cursor-not-allowed border-gray-300 bg-gray-150 opacity-60 dark:border-dark-500 dark:bg-dark-600'
-              : 'peer border-gray-300 focus-within:border-primary-600 focus-within:ring-primary-500/50 dark:border-dark-450 dark:focus-within:border-primary-500 dark:hover:border-dark-400',
-          label && 'mt-1.5',
-          classNames?.input
-        )}>
-        {/* Tags */}
-        <div className={`${tags.length === 0 ? 'mb-0' : 'mb-2'} flex flex-wrap gap-2`}>
-          {tags.map((tag, index) => (
-            <span
-              key={index}
-              className="inline-flex items-center gap-1 rounded-md bg-primary-100 px-2 py-1 text-sm text-primary-800 dark:bg-primary-900 dark:text-primary-200">
+        className={[
+          'form-input-base form-input peer relative mt-1.5 border-gray-300 hover:border-gray-400 focus:border-primary-600 dark:border-dark-450 dark:hover:border-dark-400 dark:focus:border-primary-500'
+        ].join(' ')}
+        onClick={() => inputRef.current?.focus()}>
+        <ul className="flex flex-wrap items-center gap-1.5">
+          {(!tags || tags.length === 0) && input.length === 0 && (
+            <span className="select-none text-gray-400">{placeholder}</span>
+          )}
+
+          {tags.map((tag, i) => (
+            <li
+              key={`${tag}-${i}`}
+              className="flex items-center gap-1 rounded-md bg-gray-100 px-2 py-0.5 text-xs text-gray-800 dark:bg-gray-800 dark:text-gray-100">
               {tag}
-              {!disabled && (
-                <button
-                  type="button"
-                  onClick={() => removeTag(tag)}
-                  className="ml-1 text-primary-600 hover:text-primary-800 focus:outline-none dark:text-primary-400 dark:hover:text-primary-300">
-                  <XMarkIcon className="h-3 w-3" />
-                </button>
-              )}
-            </span>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  remove(i);
+                }}
+                className="opacity-70 hover:opacity-100"
+                aria-label={`Remove ${tag}`}>
+                ×
+              </button>
+            </li>
           ))}
-        </div>
 
-        {/* Input Field */}
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          onKeyDown={handleKeyDown}
-          onBlur={handleBlur}
-          disabled={disabled}
-          placeholder={tags.length === 0 ? placeholder : ''}
-          className="w-full border-0 bg-transparent p-0 outline-none focus:ring-0"
-        />
+          {/* the real input lives inline with the chips */}
+          <li className="min-w-[120px] flex-1">
+            <input
+              ref={inputRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={onKeyDown}
+              onPaste={onPaste}
+              className="w-full border-none bg-transparent text-sm text-gray-900 placeholder-gray-400 outline-none dark:text-gray-100"
+              placeholder={tags.length ? '' : ''}
+              // optional accessibility
+              role="combobox"
+              aria-expanded="false"
+              aria-autocomplete="list"
+              aria-haspopup="listbox"
+              autoComplete="off"
+              type="text"
+            />
+          </li>
+        </ul>
       </div>
-
-      <InputErrorMsg when={error && typeof error !== 'boolean'} className={classNames?.error}>
-        {error}
-      </InputErrorMsg>
+      {errorText ? <p className="mt-1 text-xs text-red-500">{errorText}</p> : null}
     </div>
   );
 }
-
-TagsInput.propTypes = {
-  value: PropTypes.array,
-  onChange: PropTypes.func,
-  label: PropTypes.string,
-  placeholder: PropTypes.string,
-  error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
-  disabled: PropTypes.bool,
-  classNames: PropTypes.object
-};
-
-export { TagsInput };

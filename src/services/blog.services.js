@@ -71,8 +71,14 @@ const BlogService = {
     if (data.content) {
       formData.append('content', data.content);
     }
-    if (data.blogCategoryId !== undefined && data.blogCategoryId !== null) {
-      formData.append('blogCategoryId', data.blogCategoryId);
+    if (
+      data.blogCategoryIds &&
+      Array.isArray(data.blogCategoryIds) &&
+      data.blogCategoryIds.length > 0
+    ) {
+      data.blogCategoryIds.forEach((categoryId, index) => {
+        formData.append(`blogCategoryIds[${index}]`, categoryId);
+      });
     }
     if (data.shortDescription) {
       formData.append('shortDescription', data.shortDescription);
@@ -120,8 +126,14 @@ const BlogService = {
     if (data.content !== undefined) {
       formData.append('content', data.content);
     }
-    if (data.blogCategoryId !== undefined) {
-      formData.append('blogCategoryId', data.blogCategoryId);
+    if (
+      data.blogCategoryIds &&
+      Array.isArray(data.blogCategoryIds) &&
+      data.blogCategoryIds.length > 0
+    ) {
+      data.blogCategoryIds.forEach((categoryId, index) => {
+        formData.append(`blogCategoryIds[${index}]`, categoryId);
+      });
     }
     if (data.shortDescription !== undefined) {
       formData.append('shortDescription', data.shortDescription);
