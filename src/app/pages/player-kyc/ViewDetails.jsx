@@ -221,7 +221,13 @@ export function ViewDetails() {
                     Document Type:
                   </p>
                   <p>
-                    {+response?.DocumentType === DOCUMENT_TYPE.DOCUMENT ? t('document') : t('bank')}
+                    {+response?.DocumentType === DOCUMENT_TYPE.IDENTITY
+                      ? t('identity')
+                      : +response?.DocumentType === DOCUMENT_TYPE.ADDRESS
+                        ? t('address')
+                        : +response?.DocumentType === DOCUMENT_TYPE.SOURCE_OF_FUND
+                          ? t('source_of_fund')
+                          : '-'}
                   </p>
                 </div>
                 <div className="mt-4 flex flex-col gap-4 sm:flex-row">
