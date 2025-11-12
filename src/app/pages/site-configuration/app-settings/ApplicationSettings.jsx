@@ -151,7 +151,11 @@ export default function ApplicationSettings() {
       'IsMFAEnabled',
       'CheckCalanderTime',
       'DefaultOTP',
-      'IsGeoRestricted'
+      'IsGeoRestricted',
+      'IsEmailVerificationRequiredAtSignup',
+      'AffiliateTransferApprovalRequired',
+      'IsUserMFAEnabled',
+      'SendEmailOnDefaultOtpEnabled'
     ]);
     const forceBooleanRadio = FORCE_RADIO_KEYS.has(row.key);
     // Decide early if this should be treated as a number field

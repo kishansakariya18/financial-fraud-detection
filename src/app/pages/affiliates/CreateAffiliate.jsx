@@ -15,9 +15,7 @@ import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
 import AffiliatesService from 'services/affiliates.services';
 import { genderOptions } from 'components/sections/player-management/helper';
-
-import { affiliateStatusOptions } from '../affiliate/helper';
-import { createAffiliateSchema } from './schema';
+import { affiliateStatusOptions, createAffiliateSchema } from './schema';
 
 const CreateAdmin = () => {
   const [countries, setCountries] = useState([]);
