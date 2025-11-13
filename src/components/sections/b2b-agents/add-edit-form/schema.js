@@ -74,7 +74,10 @@ export const createAgentFormSchema = yup.object({
     .string()
     .trim()
     .required('User Name Required')
-    .max(40, 'Maximum 40 Characters Allowed'),
+    .matches(
+      /^(?!.*__)[a-zA-Z][a-zA-Z0-9_]{1,28}[a-zA-Z0-9]$/,
+      'Username must start with a letter, contain only letters, numbers, or underscores, cannot have consecutive or ending underscores, and must be 3–30 characters long.'
+    ),
   firstname: yup
     .string()
     .trim()
@@ -85,7 +88,14 @@ export const createAgentFormSchema = yup.object({
     .trim()
     .required('Last Name Required')
     .max(40, 'Maximum 40 Characters Allowed'),
-  email: yup.string().trim().required('Email Required').email('Invalid Email'),
+  email: yup
+    .string()
+    .trim()
+    .required('Email Required')
+    .matches(
+      /^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+      'Enter a valid email address without the "+" symbol'
+    ),
   mobile: yup
     .string()
     .trim()
@@ -118,7 +128,10 @@ export const editAgentFormSchema = yup.object({
     .string()
     .trim()
     .required('User Name Required')
-    .max(40, 'Maximum 40 Characters Allowed'),
+    .matches(
+      /^(?!.*__)[a-zA-Z][a-zA-Z0-9_]{1,28}[a-zA-Z0-9]$/,
+      'Username must start with a letter, contain only letters, numbers, or underscores, cannot have consecutive or ending underscores, and must be 3–30 characters long.'
+    ),
   firstname: yup
     .string()
     .trim()
@@ -129,7 +142,14 @@ export const editAgentFormSchema = yup.object({
     .trim()
     .required('Last Name Required')
     .max(40, 'Maximum 40 Characters Allowed'),
-  email: yup.string().trim().required('Email Required').email('Invalid Email'),
+  email: yup
+    .string()
+    .trim()
+    .required('Email Required')
+    .matches(
+      /^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+      'Enter a valid email address without the "+" symbol'
+    ),
   mobile: yup
     .string()
     .trim()

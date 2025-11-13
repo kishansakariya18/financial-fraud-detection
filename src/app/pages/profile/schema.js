@@ -8,7 +8,13 @@ export const editProfileSchema = Yup.object().shape({
     .required('Last Name is required')
     .min(2, 'Last Name must be at least 2 characters')
     .max(50, 'Last Name must be at most 50 characters'),
-  email: Yup.string().trim().required('Email is required').email('Invalid Email Address'),
+  email: Yup.string()
+    .trim()
+    .required('Email Required')
+    .matches(
+      /^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+      'Enter a valid email address without the "+" symbol'
+    ),
   mobile: Yup.string()
     .trim()
     .required('Enter Your Mobile Number')

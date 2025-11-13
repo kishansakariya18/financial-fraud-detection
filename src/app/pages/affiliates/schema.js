@@ -35,8 +35,10 @@ export const createAffiliateSchema = Yup.object().shape({
   email: Yup.string()
     .trim()
     .required('Email Required')
-    .email('Invalid Email')
-    .matches(/^[^+]+$/, 'Email with "+" symbol is not allowed'),
+    .matches(
+      /^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+      'Enter a valid email address without the "+" symbol'
+    ),
   mobile: Yup.string()
     .trim()
     .required('Enter Your Mobile Number')

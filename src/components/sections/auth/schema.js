@@ -22,8 +22,11 @@ export const forgotPasswordSchema = Yup.object().shape({
     .length(10, 'Mobile Length Must Be 10'),
   email: Yup.string()
     .trim()
-    .required('Email Is Required')
-    .matches(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Invalid Email Address')
+    .required('Email Required')
+    .matches(
+      /^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+      'Enter a valid email address without the "+" symbol'
+    )
 });
 
 export const resetPasswordSchema = Yup.object().shape({
