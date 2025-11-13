@@ -14,7 +14,7 @@ export const bonusManagement = {
   title: 'Bonus Management',
   transKey: 'bonus_management',
   Icon: CircleStackIcon,
-  permission: [PERMISSIONS.REFERRAL_MANAGEMENT.VIEW],
+  permission: [PERMISSIONS.REFERRAL_MANAGEMENT.EDIT],
   platformType: PLATFORM_TYPE.B2C,
   childs: [
     {
@@ -24,7 +24,7 @@ export const bonusManagement = {
       title: 'Referral Management',
       transKey: 'referral_management',
       Icon: ShareIcon,
-      permission: PERMISSIONS.REFERRAL_MANAGEMENT.VIEW,
+      permission: PERMISSIONS.REFERRAL_MANAGEMENT.EDIT,
       platformType: PLATFORM_TYPE.B2C
     }
   ]

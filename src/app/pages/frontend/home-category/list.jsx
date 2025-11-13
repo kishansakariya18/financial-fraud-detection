@@ -14,6 +14,8 @@ import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import { homeCategoryResponse } from '../helper';
 import HomePageService from 'services/home-page.services';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export default function HomeCategory() {
   const { t } = useTranslation();
@@ -21,6 +23,11 @@ export default function HomeCategory() {
   const pageTitle = t('homeCategory') + ' ' + t('list');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { hasPermission } = usePermissions();
+  const canShowActions =
+    hasPermission(PERMISSIONS.FRONTEND.CHANGE_HOME_CATEGORY_STATUS) ||
+    hasPermission(PERMISSIONS.FRONTEND.EDIT_HOME_CATEGORY) ||
+    hasPermission(PERMISSIONS.FRONTEND.VIEW_HOME_GAMES);
 
   const fetchHomeCategoryList = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
@@ -43,12 +50,12 @@ export default function HomeCategory() {
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchData: fetchHomeCategoryList,
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'], right: canShowActions ? ['actions'] : [] },
       tableSettings: { enableFullScreen: false },
       columnVisibility: { firstName: false, lastName: false }
     }

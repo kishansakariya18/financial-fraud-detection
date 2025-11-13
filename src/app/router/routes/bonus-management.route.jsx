@@ -10,7 +10,7 @@ export const bonusManagementRoute = [
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.REFERRAL_MANAGEMENT.VIEW}>
+          <PrivateRoute permission={PERMISSIONS.REFERRAL_MANAGEMENT.EDIT}>
             <ReferralManagement />
           </PrivateRoute>
         )

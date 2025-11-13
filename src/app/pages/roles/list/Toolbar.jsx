@@ -12,6 +12,8 @@ import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { useNavigate } from 'react-router';
 import { t } from 'i18next';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 // import { statusOptions } from '../helper';
 
 // ----------------------------------------------------------------------
@@ -25,6 +27,7 @@ export function Toolbar({
   const { isXs } = useBreakpointsContext();
   const navigate = useNavigate();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const { hasPermission } = usePermissions();
 
   return (
     <div className="table-toolbar">
@@ -39,13 +42,15 @@ export function Toolbar({
           </h2>
         </div>
 
-        <Button
-          className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
-          color="primary"
-          onClick={() => navigate('/roles/add')}>
-          <PlusIcon className="size-5" />
-          <span>{t('add') + ' ' + t('role')}</span>
-        </Button>
+        {hasPermission(PERMISSIONS.ROLES.ADD) && (
+          <Button
+            className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
+            color="primary"
+            onClick={() => navigate('/roles/add')}>
+            <PlusIcon className="size-5" />
+            <span>{t('add') + ' ' + t('role')}</span>
+          </Button>
+        )}
       </div>
 
       {isXs ? (

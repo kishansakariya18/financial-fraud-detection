@@ -9,7 +9,7 @@ export const auditlogsRoute = [
       const { default: AuditLogsList } = await import('../../pages/auditlogs/list/list');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.AUDIT_LOG.VIEW}>
+          <PrivateRoute permission={PERMISSIONS.AUDIT_LOGS.VIEW}>
             <AuditLogsList />
           </PrivateRoute>
         )
@@ -22,7 +22,7 @@ export const auditlogsRoute = [
       const { default: ViewPage } = await import('../../pages/auditlogs/ViewDetails');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.EVENT_TEMPLATE.LIST}>
+          <PrivateRoute permission={PERMISSIONS.AUDIT_LOGS.VIEW}>
             <ViewPage />
           </PrivateRoute>
         )

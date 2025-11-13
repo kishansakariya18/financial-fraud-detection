@@ -11,6 +11,8 @@ import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { statusOptions } from '../helper';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 // ----------------------------------------------------------------------
 
@@ -23,6 +25,7 @@ export function Toolbar({
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const { hasPermission } = usePermissions();
 
   return (
     <div className="table-toolbar">
@@ -37,13 +40,15 @@ export function Toolbar({
           </h2>
         </div>
 
-        <Button
-          className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
-          color="primary"
-          onClick={onCreateClick}>
-          <PlusIcon className="size-5" />
-          <span>{t('create') + ' ' + t('blog_category')}</span>
-        </Button>
+        {hasPermission(PERMISSIONS.BLOG_CATEGORY.CREATE) && (
+          <Button
+            className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
+            color="primary"
+            onClick={onCreateClick}>
+            <PlusIcon className="size-5" />
+            <span>{t('create') + ' ' + t('blog_category')}</span>
+          </Button>
+        )}
       </div>
       {isXs ? (
         <>

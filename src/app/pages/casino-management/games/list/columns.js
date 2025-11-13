@@ -14,7 +14,7 @@ import { statusOptions } from '../helper';
 
 const columnHelper = createColumnHelper();
 
-export const columns = [
+export const columns = ({ canShowActions } = {}) => [
   columnHelper.accessor((row) => row.id, {
     id: 'id',
     label: 'ID',
@@ -83,11 +83,15 @@ export const columns = [
     enableSorting: false
   }),
 
-  columnHelper.display({
-    id: 'actions',
-    label: 'Row Actions',
-    header: 'Actions',
-    cell: RowActions,
-    enableSorting: false
-  })
+  ...(canShowActions
+    ? [
+        columnHelper.display({
+          id: 'actions',
+          label: 'Row Actions',
+          header: 'Actions',
+          cell: RowActions,
+          enableSorting: false
+        })
+      ]
+    : [])
 ];

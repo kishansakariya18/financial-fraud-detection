@@ -77,7 +77,7 @@ export default function Tabs() {
       icon: UserGroupIcon,
       index: 6,
       isHidden: apiConfig.platformType === PLATFORM_TYPE.B2B,
-      permission: PERMISSIONS.USER.LIST
+      permission: PERMISSIONS.USER.VIEW_REFERRAL
     },
     {
       id: randomId(),
@@ -85,7 +85,7 @@ export default function Tabs() {
       path: `/users/player/${playerId}/${userID}/tab/wallets`,
       icon: WalletIcon,
       index: 7,
-      permission: PERMISSIONS.USER.LIST
+      permission: PERMISSIONS.USER.WALLET_LIST
     }
   ];
 

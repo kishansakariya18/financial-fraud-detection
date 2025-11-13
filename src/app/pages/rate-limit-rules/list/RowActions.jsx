@@ -8,6 +8,8 @@ import PropTypes from 'prop-types';
 // Local Imports
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 import { TbStatusChange, TbEdit } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
@@ -17,6 +19,8 @@ import RateLimitRuleService from 'services/rate-limit-rules.services';
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { hasPermission } = usePermissions();
+  const canEdit = hasPermission(PERMISSIONS.RATE_LIMIT_RULES.EDIT);
 
   const confirmMessages = {
     pending: {
@@ -64,52 +68,54 @@ export function RowActions({ row, table }) {
 
   return (
     <>
-      <div className="flex justify-center space-x-1.5 rtl:space-x-reverse">
-        <Menu as="div" className="relative inline-block text-left">
-          <MenuButton as={Button} isIcon className="size-8 rounded-full">
-            <EllipsisHorizontalIcon className="size-4.5" />
-          </MenuButton>
-          <Transition
-            as={Fragment}
-            enter="transition ease-out"
-            enterFrom="opacity-0 translate-y-2"
-            enterTo="opacity-100 translate-y-0"
-            leave="transition ease-in"
-            leaveFrom="opacity-100 translate-y-0"
-            leaveTo="opacity-0 translate-y-2">
-            <MenuItems
-              anchor={{ to: 'bottom end', gap: 12 }}
-              className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    onClick={handleEditRule}
-                    className={clsx(
-                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
-                      focus && 'bg-this/10 dark:bg-this-light/10'
-                    )}>
-                    <TbEdit className="size-4.5 stroke-1" />
-                    <span>{t('edit')}</span>
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    onClick={openModal}
-                    className={clsx(
-                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
-                      focus && 'bg-this/10 dark:bg-this-light/10'
-                    )}>
-                    <TbStatusChange className="size-4.5 stroke-1" />
-                    <span>{t('change') + ' ' + t('status')}</span>
-                  </button>
-                )}
-              </MenuItem>
-            </MenuItems>
-          </Transition>
-        </Menu>
-      </div>
+      {canEdit && (
+        <div className="flex justify-center space-x-1.5 rtl:space-x-reverse">
+          <Menu as="div" className="relative inline-block text-left">
+            <MenuButton as={Button} isIcon className="size-8 rounded-full">
+              <EllipsisHorizontalIcon className="size-4.5" />
+            </MenuButton>
+            <Transition
+              as={Fragment}
+              enter="transition ease-out"
+              enterFrom="opacity-0 translate-y-2"
+              enterTo="opacity-100 translate-y-0"
+              leave="transition ease-in"
+              leaveFrom="opacity-100 translate-y-0"
+              leaveTo="opacity-0 translate-y-2">
+              <MenuItems
+                anchor={{ to: 'bottom end', gap: 12 }}
+                className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={handleEditRule}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                        focus && 'bg-this/10 dark:bg-this-light/10'
+                      )}>
+                      <TbEdit className="size-4.5 stroke-1" />
+                      <span>{t('edit')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={openModal}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                        focus && 'bg-this/10 dark:bg-this-light/10'
+                      )}>
+                      <TbStatusChange className="size-4.5 stroke-1" />
+                      <span>{t('change') + ' ' + t('status')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              </MenuItems>
+            </Transition>
+          </Menu>
+        </div>
+      )}
 
       <ConfirmModal
         show={statusModalOpen}

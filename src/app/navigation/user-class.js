@@ -9,6 +9,6 @@ export const userClass = {
   title: 'Player Class',
   transKey: 'Player Class',
   Icon: ArchiveBoxArrowDownIcon,
-  permission: PERMISSIONS.USER_CLASS.LIST,
+  permission: PERMISSIONS.USER_CLASS.VIEW,
   platformType: [PLATFORM_TYPE.B2C]
 };

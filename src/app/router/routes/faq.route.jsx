@@ -21,15 +21,29 @@ export const faqRoutes = [
       },
       {
         path: 'add',
-        lazy: async () => ({
-          Component: (await import('../../pages/faq/CreateFAQ')).default
-        })
+        lazy: async () => {
+          const { default: CreateFAQ } = await import('../../pages/faq/CreateFAQ');
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.FAQ.ADD}>
+                <CreateFAQ />
+              </PrivateRoute>
+            )
+          };
+        }
       },
       {
         path: 'edit/:faqUID',
-        lazy: async () => ({
-          Component: (await import('../../pages/faq/EditFAQ')).default
-        })
+        lazy: async () => {
+          const { default: EditFAQ } = await import('../../pages/faq/EditFAQ');
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.FAQ.EDIT}>
+                <EditFAQ />
+              </PrivateRoute>
+            )
+          };
+        }
       }
     ]
   }

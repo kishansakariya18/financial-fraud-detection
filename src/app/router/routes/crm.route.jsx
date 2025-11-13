@@ -22,7 +22,7 @@ export const pagesRoute = [
       const { default: Send } = await import('../../pages/crm/Send');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.CRM.VIEW}>
+          <PrivateRoute permission={PERMISSIONS.CRM.SEND_NOTIFICATION}>
             <Send />
           </PrivateRoute>
         )
