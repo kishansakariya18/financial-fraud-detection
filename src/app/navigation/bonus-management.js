@@ -1,5 +1,5 @@
 // Import Dependencies
-import { CircleStackIcon, ShareIcon } from '@heroicons/react/24/outline';
+import { CircleStackIcon, ShareIcon, DocumentDuplicateIcon } from '@heroicons/react/24/outline';
 import {
   NAV_TYPE_COLLAPSE,
   NAV_TYPE_ITEM,
@@ -14,9 +14,19 @@ export const bonusManagement = {
   title: 'Bonus Management',
   transKey: 'bonus_management',
   Icon: CircleStackIcon,
-  permission: [PERMISSIONS.REFERRAL_MANAGEMENT.VIEW],
+  permission: [PERMISSIONS.REFERRAL_MANAGEMENT.VIEW, PERMISSIONS.BONUS_TEMPLATES.LIST],
   platformType: PLATFORM_TYPE.B2C,
   childs: [
+    {
+      id: 'bonus_templates',
+      type: NAV_TYPE_ITEM,
+      path: '/bonus/templates',
+      title: 'Bonus Templates',
+      transKey: 'bonus_templates',
+      Icon: DocumentDuplicateIcon,
+      permission: PERMISSIONS.BONUS_TEMPLATES.LIST,
+      platformType: PLATFORM_TYPE.B2C
+    },
     {
       id: 'referral_management',
       type: NAV_TYPE_ITEM,

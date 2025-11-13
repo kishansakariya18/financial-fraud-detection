@@ -10,10 +10,11 @@ const GamesService = {
 
       const { status, keyword, startDate, endDate, provider } = filters;
 
-      const apiQueryParams = {
-        perPage: pagination.pageSize,
-        page: pagination.pageIndex + 1
-      };
+      const apiQueryParams = {};
+      if (pagination) {
+        apiQueryParams.perPage = pagination.pageSize;
+        apiQueryParams.page = pagination.pageIndex + 1;
+      }
 
       const apiRequestParams = {
         status: status ? parseProviderStatusToApi(status) : undefined,

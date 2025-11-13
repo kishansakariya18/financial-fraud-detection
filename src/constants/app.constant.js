@@ -237,6 +237,13 @@ export const PERMISSIONS = {
     DELETE: 'bonus-campaign-delete',
     SEGMENTATION: 'bonus-campaign-segmentation'
   },
+  BONUS_TEMPLATES: {
+    LIST: 'bonus-templates-view',
+    ADD: 'bonus-templates-add',
+    EDIT: 'bonus-templates-edit',
+    CHANGE_STATUS: 'bonus-templates-change-status',
+    DELETE: 'bonus-templates-delete'
+  },
   EMAIL_TEMPLATE: {
     LIST: 'setting-email-template-view',
     ADD: 'setting-email-template-add',

@@ -16,6 +16,64 @@ export const bonusManagementRoute = [
         )
       };
     }
+  },
+  {
+    path: 'bonus/templates',
+    lazy: async () => {
+      const { default: BonusTemplateList } = await import('../../pages/bonus-template/list/list');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.BONUS_TEMPLATES.LIST}>
+            <BonusTemplateList />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'bonus/templates/create',
+    lazy: async () => {
+      const { default: CreateBonusTemplate } = await import(
+        '../../pages/bonus-template/CreateBonusTemplate'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.BONUS_TEMPLATES.ADD}>
+            <CreateBonusTemplate />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'bonus/templates/:templateId/edit',
+    lazy: async () => {
+      const { default: EditBonusTemplate } = await import(
+        '../../pages/bonus-template/EditBonusTemplate'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.BONUS_TEMPLATES.EDIT}>
+            <EditBonusTemplate />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'bonus/templates/:templateId/view',
+    lazy: async () => {
+      const { default: ViewBonusTemplate } = await import(
+        '../../pages/bonus-template/ViewBonusTemplate'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.BONUS_TEMPLATES.VIEW}>
+            <ViewBonusTemplate />
+          </PrivateRoute>
+        )
+      };
+    }
   }
 ];
 

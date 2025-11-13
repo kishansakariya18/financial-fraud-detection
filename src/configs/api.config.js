@@ -145,6 +145,14 @@ export const apiConfig = {
       COMMISSION_REQUESTS_STATUS_UPDATE:
         '/admin/supervisor/redeem-commission-requests/:requestID/status'
     },
+    BONUS_TEMPLATE: {
+      LIST: '/bonus/admin/bonus-template/list',
+      DETAIL: '/bonus/admin/bonus-template/:bonusTemplateID/details',
+      CREATE: '/bonus/admin/bonus-template',
+      UPDATE: '/bonus/admin/bonus-template/:bonusTemplateID',
+      DELETE: '/bonus/admin/bonus-template/:bonusTemplateID',
+      UPDATE_STATUS: '/bonus/admin/bonus-template/:bonusTemplateID/change-status'
+    },
     AGENT: {
       DASHBOARD: '/admin/agent/dashboard',
       LIST: '/admin/agent/list',
