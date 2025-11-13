@@ -10,7 +10,7 @@ export const createAdminSchema = Yup.object().shape({
     .trim()
     .required('Last Name Required')
     .max(40, 'Maximum 40 Characters Allowed'),
-  userName: Yup.Yup.string()
+  userName: Yup.string()
     .trim()
     .required('User Name Required')
     .matches(
