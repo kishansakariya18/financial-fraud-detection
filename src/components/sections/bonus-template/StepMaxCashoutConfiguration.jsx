@@ -1,47 +1,60 @@
 import PropTypes from 'prop-types';
 
 import { Input, Select, Switch } from 'components/ui/Form';
+import { useTranslation } from 'react-i18next';
 
 export function StepMaxCashoutConfiguration({ data, onChange, options, baseOptions, errors = {} }) {
+  const { t } = useTranslation();
   const showBase = data.mode === 'multiplier';
   const showValue = data.mode === 'fixed_amount' || data.mode === 'multiplier';
 
   return (
     <div className="space-y-4">
       <Select
-        label="Max Cashout Mode"
+        label={t('max_cashout_mode')}
         data={options}
         value={data.mode}
-        onChange={(event) => onChange('mode', event.target.value)}
+        onChange={(event) => {
+          const value = event.target.value;
+          if (value === 'multiplier' && !data.base) {
+            onChange('base', baseOptions[0]?.value);
+          }
+          if (value === 'none') {
+            onChange('cashoutValue', '');
+            onChange('base', '');
+            onChange('stickyBonus', false);
+          }
+          onChange('mode', value);
+        }}
         error={errors.mode}
       />
 
       {showBase && (
         <Select
-          label="Max Cashout Base"
-          data={[{ label: 'Select base', value: '' }, ...baseOptions]}
+          label={t('max_cashout_base')}
+          data={[{ label: t('select_base'), value: '' }, ...baseOptions]}
           value={data.base}
           onChange={(event) => onChange('base', event.target.value)}
           error={errors.base}
         />
       )}
 
-      {showValue && (
-        <Input
-          label="Cashout Value"
-          type="number"
-          placeholder="e.g. 5000"
-          value={data.cashoutValue}
-          onChange={(event) => onChange('cashoutValue', event.target.value)}
-          error={errors.cashoutValue}
-        />
-      )}
+      <Input
+        label={t('cashout_value')}
+        type="number"
+        placeholder={t('enter_cashout_value_info')}
+        value={data.cashoutValue}
+        disabled={!showValue}
+        onChange={(event) => onChange('cashoutValue', event.target.value)}
+        error={errors.cashoutValue}
+      />
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="flex items-center">
           <Switch
-            label="Sticky Bonus (Non-Withdrawable)"
+            label={t('sticky_bonus_non_withdrawable')}
             checked={data.stickyBonus || false}
+            disabled={!showValue}
             onChange={(event) => onChange('stickyBonus', event.target.checked)}
           />
         </div>

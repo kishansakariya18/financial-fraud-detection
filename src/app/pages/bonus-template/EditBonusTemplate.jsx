@@ -18,6 +18,7 @@ export default function EditBonusTemplate() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLoadTemplate = useCallback(async () => {
+    setIsLoading(true);
     BonusTemplateService.getTemplateById(templateId)
       .then(({ response }) => {
         setTemplateDetail(response?.data ? normalizeBonusTemplateDetail(response?.data) : null);

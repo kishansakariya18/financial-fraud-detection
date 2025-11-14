@@ -1121,5 +1121,12 @@
   "type_provider_name_and_press_enter": "Type provider name and press Enter...",
   "type_category_name_and_press_enter": "Type category name and press Enter...",
   "include": "Include",
-  "select_games": "Select Games"
+  "select_games": "Select Games",
+  "max_cashout_mode": "Max Cashout Mode",
+  "max_cashout_base": "Max Cashout Base",
+  "sticky_bonus_non_withdrawable": "Sticky Bonus (Non-Withdrawable)",
+  "enter_cashout_value_info": "Enter cashout value",
+  "enter_wagering_value_info": "Enter wagering value",
+  "wagering_base": "Wagering Base" ,
+  "select_base": "Select Base"
 }

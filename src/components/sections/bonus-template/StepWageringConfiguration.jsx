@@ -1,41 +1,52 @@
 import PropTypes from 'prop-types';
 
 import { Input, Select } from 'components/ui/Form';
+import { useTranslation } from 'react-i18next';
 
 export function StepWageringConfiguration({ data, onChange, options, baseOptions, errors = {} }) {
+  const { t } = useTranslation();
   const showBase = data.mode === 'multiplier';
   const showValue = data.mode === 'fixed_amount' || data.mode === 'multiplier';
 
   return (
     <div className="space-y-4">
       <Select
-        label="Wagering Mode"
-        data={[{ label: 'Select mode', value: '' }, ...options]}
+        label={t('wagering_mode')}
+        data={options || []}
         value={data.mode}
-        onChange={(event) => onChange('mode', event.target.value)}
+        onChange={(event) => {
+          const value = event.target.value;
+          if (value === 'multiplier' && !data.base) {
+            onChange('base', baseOptions[0]?.value);
+          }
+          if (value === 'none') {
+            onChange('wageringValue', '');
+            onChange('base', '');
+          }
+          onChange('mode', value);
+        }}
         error={errors.mode}
       />
 
       {showBase && (
         <Select
-          label="Wagering Base"
-          data={[{ label: 'Select base', value: '' }, ...baseOptions]}
+          label={t('wagering_base')}
+          data={[{ label: t('select_base'), value: '' }, ...baseOptions]}
           value={data.base}
           onChange={(event) => onChange('base', event.target.value)}
           error={errors.base}
         />
       )}
 
-      {showValue && (
-        <Input
-          label="Wagering Value"
-          type="number"
-          placeholder="e.g. 20"
-          value={data.wageringValue}
-          onChange={(event) => onChange('wageringValue', event.target.value)}
-          error={errors.wageringValue}
-        />
-      )}
+      <Input
+        label={t('wagering_value')}
+        type="number"
+        placeholder={t('enter_wagering_value_info')}
+        value={data.wageringValue}
+        disabled={!showValue}
+        onChange={(event) => onChange('wageringValue', event.target.value)}
+        error={errors.wageringValue}
+      />
     </div>
   );
 }

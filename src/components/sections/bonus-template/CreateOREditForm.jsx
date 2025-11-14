@@ -131,11 +131,28 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
   );
 
   const handleTemplateInfoChange = (field, value) => {
+    const updateData = {
+      wageringConfig: {},
+      maxCashoutConfig: {}
+    };
+    console.log(field, value, 'handleTemplateInfoChange');
+    if (field === 'bonusType') {
+      updateData.wageringConfig.base = '';
+      updateData.maxCashoutConfig.base = '';
+    }
     setFormState((prev) => ({
       ...prev,
       templateInfo: {
         ...prev.templateInfo,
         [field]: value
+      },
+      wageringConfig: {
+        ...prev.wageringConfig,
+        ...updateData.wageringConfig
+      },
+      maxCashoutConfig: {
+        ...prev.maxCashoutConfig,
+        ...updateData.maxCashoutConfig
       }
     }));
   };

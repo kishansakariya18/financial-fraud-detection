@@ -37,7 +37,17 @@ export const getBonusTypeLabel = (type, t) => {
       return type;
   }
 };
-export const wageringModeOptionsLabel = (type, t) => {
+export const boostModeOptionsLabel = (type = '', t) => {
+  switch (type) {
+    case 'fixed':
+      return t('fixed');
+    case 'variable':
+      return t('variable');
+    default:
+      return type;
+  }
+};
+export const wageringModeOptionsLabel = (type = '', t) => {
   switch (type) {
     case 'deposit_boost':
       return t('deposit_boost');

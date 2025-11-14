@@ -2,6 +2,12 @@ import PropTypes from 'prop-types';
 
 import { Card } from 'components/ui';
 import { useTranslation } from 'react-i18next';
+import {
+  boostModeOptionsLabel,
+  getBonusTypeLabel,
+  wageringBaseOptionsLabel,
+  wageringModeOptionsLabel
+} from 'app/pages/bonus-template/happer';
 
 const renderList = (items = [], lookup = {}) => {
   if (!Array.isArray(items) || items.length === 0) {
@@ -51,15 +57,6 @@ export function BonusTemplatePreview({ data, lookups }) {
   const { t } = useTranslation();
   const { templateInfo, bonusDetails, rewardDetails, wageringConfig, maxCashoutConfig, gameplay } =
     data;
-
-  const bonusTypeLabel = lookups.bonusType[templateInfo.bonusType] || templateInfo.bonusType || '—';
-  const boostModeLabel = rewardDetails.boostMode
-    ? rewardDetails.boostMode.charAt(0).toUpperCase() + rewardDetails.boostMode.slice(1)
-    : '—';
-  const wageringModeLabel = lookups.wageringMode[wageringConfig.mode] || wageringConfig.mode || '—';
-  const maxCashoutModeLabel =
-    lookups.maxCashoutMode[maxCashoutConfig.mode] || maxCashoutConfig.mode || '—';
-
   return (
     <Card className="sticky top-4 overflow-hidden border border-gray-200 px-5 py-5 shadow-sm dark:border-dark-500">
       <div className="flex flex-col gap-4">
@@ -70,7 +67,9 @@ export function BonusTemplatePreview({ data, lookups }) {
               {templateInfo.templateName || '—'}
             </dd>
             <dt>{t('bonus_type')}</dt>
-            <dd className="font-medium text-gray-900 dark:text-dark-50">{bonusTypeLabel}</dd>
+            <dd className="font-medium text-gray-900 dark:text-dark-50">
+              {getBonusTypeLabel(templateInfo.bonusType || '_', t)}
+            </dd>
             <dt>{t('bonus_tags')}</dt>
             <dd className="font-medium text-gray-900 dark:text-dark-50">
               {templateInfo.bonusTag?.join(', ') || '—'}
@@ -105,7 +104,7 @@ export function BonusTemplatePreview({ data, lookups }) {
           {templateInfo.bonusType === 'deposit_boost' && (
             <dl className={compactListClasses}>
               <dt>{t('boost_mode')}</dt>
-              <dd>{boostModeLabel}</dd>
+              <dd>{boostModeOptionsLabel(rewardDetails.boostMode || '_', t)}</dd>
               {rewardDetails.boostMode === 'fixed' && (
                 <>
                   <dt>{t('boost_percentage')}</dt>
@@ -162,7 +161,13 @@ export function BonusTemplatePreview({ data, lookups }) {
         <Section title="Wagering Configuration">
           <dl className={compactListClasses}>
             <dt>{t('wagering_mode')}</dt>
-            <dd>{wageringModeLabel}</dd>
+            <dd>{wageringModeOptionsLabel(wageringConfig.mode || '_', t)}</dd>
+            {wageringConfig.mode === 'multiplier' && (
+              <>
+                <dt>{t('wagering_base')}</dt>
+                <dd>{wageringBaseOptionsLabel(wageringConfig.base || '_', t)}</dd>
+              </>
+            )}
             <dt>{t('wagering_value')}</dt>
             <dd>{wageringConfig.wageringValue || '—'}</dd>
             <dt>{t('days_to_wager')}</dt>
@@ -173,7 +178,13 @@ export function BonusTemplatePreview({ data, lookups }) {
         <Section title="Max Cashout Configuration">
           <dl className={compactListClasses}>
             <dt>{t('mode')}</dt>
-            <dd>{maxCashoutModeLabel}</dd>
+            <dd>{wageringModeOptionsLabel(maxCashoutConfig.mode || '_', t)}</dd>
+            {maxCashoutConfig.mode === 'multiplier' && (
+              <>
+                <dt>{t('max_cashout_base')}</dt>
+                <dd>{wageringBaseOptionsLabel(maxCashoutConfig.base || '_', t)}</dd>
+              </>
+            )}
             <dt>{t('max_cashout')}</dt>
             <dd>{maxCashoutConfig.maxCashoutValue || '—'}</dd>
             <dt>{t('sticky_bonus')}</dt>

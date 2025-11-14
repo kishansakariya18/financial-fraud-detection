@@ -309,7 +309,7 @@ export function VariableRulesEditor({ rules, onChange, paymentMethodOptions }) {
                           color="error"
                           className="h-8 px-3 text-xs"
                           onClick={() => handleDeleteRule(index)}>
-                          {t('delete')}
+                          {t('Delete')}
                         </Button>
                       </div>
                     </td>
