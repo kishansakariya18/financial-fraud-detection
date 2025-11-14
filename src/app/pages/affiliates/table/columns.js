@@ -4,7 +4,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 // Local Imports
 import { IdCell, DateCell, BoldCell, BadgeCell } from 'components/custom/table/cell';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
-import { affiliateStatusOptions } from 'app/pages/affiliate/helper';
+import { affiliateStatusOptions } from 'app/pages/affiliates/helper';
 import { RowActions } from './RowActions';
 
 const columnHelper = createColumnHelper();
