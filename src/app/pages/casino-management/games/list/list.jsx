@@ -17,6 +17,8 @@ import GamesService from 'services/games.services';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import ProviderService from 'services/provider.services';
 import GameService from 'services/game.services';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export default function Games() {
   const { t } = useTranslation();
@@ -24,6 +26,11 @@ export default function Games() {
   const pageTitle = t('casino_games');
   const [summary, setSummary] = useState(null);
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { hasPermission } = usePermissions();
+  const canShowActions =
+    hasPermission(PERMISSIONS.GAME.EDIT) ||
+    hasPermission(PERMISSIONS.GAME.CHANGE_STATUS) ||
+    hasPermission(PERMISSIONS.GAME.ADD_SEGMENTATION);
 
   const [providerOptions, setProviderOptions] = useState([]);
 
@@ -86,13 +93,13 @@ export default function Games() {
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchData: fetchProvider,
     queryParams,
     fetchSummary: fetchSummary,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'], right: canShowActions ? ['actions'] : [] },
       tableSettings: {}
     }
   });

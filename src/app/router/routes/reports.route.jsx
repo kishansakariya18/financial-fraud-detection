@@ -6,9 +6,16 @@ import PrivateRoute from '../private';
 export const reportsRoutes = [
   {
     path: 'report/betslip-transctions',
-    lazy: async () => ({
-      Component: (await import('../../pages/reports/list/list')).default
-    })
+    lazy: async () => {
+      const { default: BetslipList } = await import('../../pages/reports/list/list');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.REPORTS.BETSLIP.VIEW}>
+            <BetslipList />
+          </PrivateRoute>
+        )
+      };
+    }
   },
   {
     path: 'report/deposit-transctions',
@@ -16,7 +23,9 @@ export const reportsRoutes = [
       const { default: DepositTxnList } = await import('../../pages/reports/deposit-txn-list/list');
       return {
         Component: () => (
-          <PrivateRoute allowedPlatforms={[PLATFORM_TYPE.B2C]}>
+          <PrivateRoute
+            permission={PERMISSIONS.REPORTS.DEPOSIT.VIEW}
+            allowedPlatforms={[PLATFORM_TYPE.B2C]}>
             <DepositTxnList />
           </PrivateRoute>
         )
@@ -25,9 +34,18 @@ export const reportsRoutes = [
   },
   {
     path: 'report/withdraw-transctions',
-    lazy: async () => ({
-      Component: (await import('../../pages/reports/withdraw-txn-list/list')).default
-    })
+    lazy: async () => {
+      const { default: WithdrawTxnList } = await import(
+        '../../pages/reports/withdraw-txn-list/list'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.REPORTS.WITHDRAW.VIEW}>
+            <WithdrawTxnList />
+          </PrivateRoute>
+        )
+      };
+    }
   },
   {
     path: 'report/player-balance/list',
@@ -50,7 +68,7 @@ export const reportsRoutes = [
       return {
         Component: () => (
           <PrivateRoute
-            permission={PERMISSIONS.REPORT.AGENT_COMMISSION_REPORT}
+            permission={PERMISSIONS.REPORTS.B2B_AGENT.AGENT_COMMISSION_REPORT}
             allowedPlatforms={[PLATFORM_TYPE.B2B]}>
             <AgentCommission />
           </PrivateRoute>
@@ -67,7 +85,7 @@ export const reportsRoutes = [
       return {
         Component: () => (
           <PrivateRoute
-            permission={PERMISSIONS.REPORT.AGENT_WALLET_REPORT}
+            permission={PERMISSIONS.REPORTS.B2B_AGENT.AGENT_WALLET_REPORT}
             allowedPlatforms={[PLATFORM_TYPE.B2B]}>
             <AgentWallet />
           </PrivateRoute>

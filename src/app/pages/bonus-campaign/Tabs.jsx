@@ -21,7 +21,7 @@ export default function Tabs() {
       path: `/bonus-campaign/${bonusCampaignId}/tab/details`,
       icon: HomeIcon,
       index: 0,
-      permission: PERMISSIONS.BONUS_CAMPAIGN.LIST
+      permission: PERMISSIONS.BONUS_CAMPAIGN.VIEW
     },
     {
       id: randomId(),
@@ -29,7 +29,7 @@ export default function Tabs() {
       path: `/bonus-campaign/${bonusCampaignId}/tab/history`,
       icon: BiHistory,
       index: 0,
-      permission: PERMISSIONS.BONUS_CAMPAIGN.USER_LIST
+      permission: PERMISSIONS.BONUS_CAMPAIGN.VIEW_GRANTS
     }
   ];
 

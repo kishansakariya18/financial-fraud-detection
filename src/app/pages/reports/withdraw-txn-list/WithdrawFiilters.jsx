@@ -49,7 +49,7 @@ export function WithdrawFilters({
             {pageTitle}
           </h2>
         </div>
-        {hasPermission(PERMISSIONS.REPORT.WITHDRAW_EXPORT_REPORT) && (
+        {hasPermission(PERMISSIONS.REPORTS.WITHDRAW.EXPORT) && (
           <ExportCSV
             validateFilters={{
               startDate: filters.startDate,

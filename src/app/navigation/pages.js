@@ -11,5 +11,5 @@ export const pages = {
   title: 'Pages',
   transKey: 'pages',
   Icon: DocumentIcon,
-  permission: PERMISSIONS.PAGE.LIST
+  permission: PERMISSIONS.PAGE.VIEW
 };

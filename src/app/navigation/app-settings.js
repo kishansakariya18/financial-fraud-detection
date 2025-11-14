@@ -12,5 +12,5 @@ export const appSettings = {
   title: 'Application Settings',
   transKey: 'appSettings',
   Icon: LuSettings2,
-  permission: PERMISSIONS.COUNTRIES.LIST
+  permission: PERMISSIONS.APP_SETTING.EDIT
 };

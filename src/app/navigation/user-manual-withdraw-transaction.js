@@ -7,6 +7,6 @@ export const userManualWithdrawTransaction = {
   title: 'Withdraw Requests',
   transKey: 'user_manual_withdraw_transaction_view',
   Icon: PiHandDepositThin,
-  permission: PERMISSIONS.USER_MANUAL_DEPOSIT_TRANSACTION.VIEW,
+  permission: PERMISSIONS.PAYMENT.MANUAL_WITHDRAW_VIEW,
   platformType: [PLATFORM_TYPE.B2C]
 };

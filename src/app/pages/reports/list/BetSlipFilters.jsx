@@ -74,7 +74,7 @@ export function BetSlipFilters({
             {pageTitle}
           </h2>
         </div>
-        {hasPermission(PERMISSIONS.REPORT.BETSLIP_EXPORT_REPORT) && (
+        {hasPermission(PERMISSIONS.REPORTS.BETSLIP.EXPORT) && (
           <ExportCSV
             validateFilters={{
               startDate: filters.startDate,

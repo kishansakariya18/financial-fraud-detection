@@ -12,6 +12,8 @@ import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { useNavigate } from 'react-router';
 import { t } from 'i18next';
 import { statusOptions } from '../../admin/helper';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +26,7 @@ export function Toolbar({
   const { isXs } = useBreakpointsContext();
   const navigate = useNavigate();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const { hasPermission } = usePermissions();
 
   return (
     <div className="table-toolbar">
@@ -38,13 +41,15 @@ export function Toolbar({
           </h2>
         </div>
 
-        <Button
-          className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
-          color="primary"
-          onClick={() => navigate('/calling-agents/list/create')}>
-          <PlusIcon className="size-5" />
-          <span>{t('create') + ' ' + t('calling_agent')}</span>
-        </Button>
+        {hasPermission(PERMISSIONS.CALLING_AGENT.ADD) && (
+          <Button
+            className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
+            color="primary"
+            onClick={() => navigate('/calling-agents/list/create')}>
+            <PlusIcon className="size-5" />
+            <span>{t('create') + ' ' + t('calling_agent')}</span>
+          </Button>
+        )}
       </div>
       {isXs ? (
         <>

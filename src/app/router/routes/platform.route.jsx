@@ -1,15 +1,19 @@
+import { PERMISSIONS } from 'constants/app.constant';
+import PrivateRoute from '../private';
+
 export const platformRoute = [
   {
-    path: 'platform',
-    lazy: async () => ({
-      Component: (await import('../../pages/platform-limit/PlatformLimit')).default
-    })
-  },
-  {
     path: 'platform-limit',
-    lazy: async () => ({
-      Component: (await import('../../pages/platform-limit/PlatformLimit')).default
-    })
+    lazy: async () => {
+      const { default: PlatformLimit } = await import('../../pages/platform-limit/PlatformLimit');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.USER_LIMIT_SETTING.UPDATE}>
+            <PlatformLimit />
+          </PrivateRoute>
+        )
+      };
+    }
   }
 ];
 

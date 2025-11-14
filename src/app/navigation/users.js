@@ -18,12 +18,7 @@ export const users = {
   title: 'Users',
   transKey: 'nav.users.users',
   Icon: UsersIcon,
-  permission: [
-    PERMISSIONS.USER.LIST,
-    PERMISSIONS.ADMIN.LIST,
-    PERMISSIONS.AFFILIATES.LIST,
-    PERMISSIONS.SUPERVISOR.LIST
-  ],
+  permission: [PERMISSIONS.USER.LIST, PERMISSIONS.ADMIN.LIST, PERMISSIONS.SUPERVISOR.LIST],
   childs: [
     {
       id: 'users.admin',

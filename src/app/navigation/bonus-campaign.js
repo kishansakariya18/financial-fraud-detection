@@ -9,6 +9,6 @@ export const bonusCampaign = {
   title: 'Bonus Campaign',
   transKey: 'bonusCampaign',
   Icon: ReceiptPercentIcon,
-  permission: PERMISSIONS.LIST,
+  permission: PERMISSIONS.BONUS_CAMPAIGN.VIEW,
   platformType: PLATFORM_TYPE.B2C
 };

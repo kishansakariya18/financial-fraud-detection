@@ -15,6 +15,8 @@ import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import CategoryService from 'services/category.services';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export default function Category() {
   const { t } = useTranslation();
@@ -22,6 +24,9 @@ export default function Category() {
   const pageTitle = t('casino_category');
   const [summary, setSummary] = useState(null);
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { hasPermission } = usePermissions();
+  const canShowActions =
+    hasPermission(PERMISSIONS.CATEGORY.EDIT) || hasPermission(PERMISSIONS.CATEGORY.CHANGE_STATUS);
 
   const fetchCategory = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
@@ -61,13 +66,13 @@ export default function Category() {
     fetchSummary();
   }, []);
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchSummary: fetchSummary,
     fetchData: fetchCategory,
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'], right: canShowActions ? ['actions'] : [] },
       tableSettings: {}
     }
   });

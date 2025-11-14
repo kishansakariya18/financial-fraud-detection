@@ -246,13 +246,6 @@ export const PERMISSIONS = Object.freeze({
       EXPORT: 'affiliate-campaign-report-export'
     }
   },
-  BONUS_TEMPLATES: {
-    LIST: 'bonus-templates-view',
-    ADD: 'bonus-templates-add',
-    EDIT: 'bonus-templates-edit',
-    CHANGE_STATUS: 'bonus-templates-change-status',
-    DELETE: 'bonus-templates-delete'
-  },
   DEPOSIT_PROMO_CODE: {
     VIEW: 'deposit-promo-code-view',
     ADD: 'deposit-promo-code-add',

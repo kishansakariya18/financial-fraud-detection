@@ -14,6 +14,8 @@ import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import RateLimitRuleService from 'services/rate-limit-rules.services';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export default function RateLimitRules() {
   const { t } = useTranslation();
@@ -21,6 +23,10 @@ export default function RateLimitRules() {
   const pageTitle = t('rate_limit_rules');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { hasPermission } = usePermissions();
+  const canShowActions =
+    hasPermission(PERMISSIONS.RATE_LIMIT_RULES.EDIT) ||
+    hasPermission(PERMISSIONS.RATE_LIMIT_RULES.CHANGE_STATUS);
 
   const fetchRateLimitRules = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
@@ -42,12 +48,12 @@ export default function RateLimitRules() {
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchData: fetchRateLimitRules,
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['rateLimitID'], right: ['actions'] },
+      columnPinning: { left: ['rateLimitID'], right: canShowActions ? ['actions'] : [] },
       tableSettings: {},
       columnVisibility: { rateLimitUID: false }
     }

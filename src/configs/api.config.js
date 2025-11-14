@@ -504,13 +504,6 @@ export const apiConfig = {
       EDIT: '/payments/admin/user-bank-deposit/:depositId/edit',
       DELETE: '/payments/admin/user-bank-deposit/:depositId/delete'
     },
-    REGISTRATION_FIELDS: {
-      LIST: '/payments/admin/user-bank-deposit/list',
-      SUBMIT: '/payments/admin/user-bank-deposit/:depositId/manual-deposit/verify',
-      DETAIL: '/admin/user-bank-deposit/:depositId/details',
-      EDIT: '/admin/user-bank-deposit/:depositId/edit',
-      DELETE: '/admin/user-bank-deposit/:depositId/delete'
-    },
     RELEASE_NOTES: {
       LIST: '/content/admin/release-note/list',
       CREATE: '/content/admin/release-note/create',
@@ -524,6 +517,7 @@ export const apiConfig = {
     },
     WALLET: {
       LIST: '/wallet/admin/wallet/list/:userUID',
+      ALL_WALLET_LIST: '/wallet/admin/wallet/all-wallet-list/:userUID',
       FUND: '/wallet/admin/wallet/fund'
     },
     RESPONSIBLE_GAMING_LIMITS: {

@@ -1,4 +1,6 @@
 import { lazy } from 'react';
+import { PERMISSIONS } from 'constants/app.constant';
+import PrivateRoute from '../private';
 
 const CurrencyList = lazy(() => import('../../pages/casino-management/currencies/list/list'));
 const CreateCurrency = lazy(
@@ -12,19 +14,35 @@ const ExchangeHistoryList = lazy(
 const currenciesRoutes = [
   {
     path: 'casino-management/currencies',
-    element: <CurrencyList />
+    element: (
+      <PrivateRoute permission={PERMISSIONS.CURRENCY.VIEW}>
+        <CurrencyList />
+      </PrivateRoute>
+    )
   },
   {
     path: 'casino-management/currencies/create',
-    element: <CreateCurrency />
+    element: (
+      <PrivateRoute permission={PERMISSIONS.CURRENCY.CREATE}>
+        <CreateCurrency />
+      </PrivateRoute>
+    )
   },
   {
     path: 'casino-management/currencies/edit/:currencyId',
-    element: <EditCurrency />
+    element: (
+      <PrivateRoute permission={PERMISSIONS.CURRENCY.EDIT}>
+        <EditCurrency />
+      </PrivateRoute>
+    )
   },
   {
     path: 'casino-management/currencies/exchange-history/:currencyCode/list',
-    element: <ExchangeHistoryList />
+    element: (
+      <PrivateRoute permission={PERMISSIONS.CURRENCY.EXCHANGE_RATE_HISTORY}>
+        <ExchangeHistoryList />
+      </PrivateRoute>
+    )
   }
 ];
 

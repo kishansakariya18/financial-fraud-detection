@@ -19,6 +19,8 @@ import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.const
 import AggregatorService from 'services/aggregator.services';
 import { useLockScrollbar } from 'hooks';
 import { XCircleIcon } from '@heroicons/react/24/outline';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 function AggregatorToolbar({ pageTitle, tableSettings }) {
   const isFullScreenEnabled = tableSettings.enableFullScreen;
 
@@ -47,6 +49,8 @@ export default function AggregatorList() {
   const pageTitle = t('casino_aggregator');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { hasPermission } = usePermissions();
+  const canShowActions = hasPermission(PERMISSIONS.AGGREGATORS.FEED_GAMES);
 
   const fetchAggregators = async (params = {}) => {
     const pageIndex = Number.isNaN(+params.pageIndex) ? DEFAULT_PAGE_INDEX : +params.pageIndex;
@@ -73,13 +77,13 @@ export default function AggregatorList() {
   };
 
   const { table, isLoading, error, setError, tableSettings } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchData: fetchAggregators,
     fetchSummary: async () => ({ status: 200 }),
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'], right: canShowActions ? ['actions'] : [] },
       tableSettings: {}
     }
   });
