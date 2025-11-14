@@ -1,4 +1,9 @@
-import { ArchiveBoxIcon, CheckBadgeIcon, NoSymbolIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import {
+  ArchiveBoxIcon,
+  CheckBadgeIcon,
+  NoSymbolIcon,
+  XCircleIcon
+} from '@heroicons/react/24/outline';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 const statusToApp = (status) => {
