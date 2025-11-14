@@ -25,9 +25,9 @@ export const reports = {
   transKey: 'report',
   Icon: DocumentChartBarIcon,
   permission: [
-    PERMISSIONS.REPORT.BETSLIP_REPORT_VIEW,
-    PERMISSIONS.REPORT.DEPOSIT_REPORT_VIEW,
-    PERMISSIONS.REPORT.WITHDRAW_REPORT_VIEW
+    PERMISSIONS.REPORTS.BETSLIP.VIEW,
+    PERMISSIONS.REPORTS.DEPOSIT.VIEW,
+    PERMISSIONS.REPORTS.WITHDRAW.VIEW
   ],
   childs: [
     {
@@ -37,7 +37,7 @@ export const reports = {
       title: 'betslip',
       transKey: 'betslip_transactions',
       Icon: DocumentTextIcon,
-      permission: PERMISSIONS.REPORT.BETSLIP_REPORT_VIEW
+      permission: PERMISSIONS.REPORTS.BETSLIP.VIEW
     },
     {
       id: 'depositTransaction',
@@ -46,7 +46,7 @@ export const reports = {
       title: 'depsositTransaction',
       transKey: 'deposit_transactions',
       Icon: ArrowDownTrayIcon,
-      permission: PERMISSIONS.REPORT.DEPOSIT_REPORT_VIEW,
+      permission: PERMISSIONS.REPORTS.DEPOSIT.VIEW,
       platformType: [PLATFORM_TYPE.B2C]
     },
     {
@@ -56,7 +56,7 @@ export const reports = {
       title: 'withdrawTransaction',
       transKey: 'withdraw_transactions',
       Icon: ArrowUpTrayIcon,
-      permission: PERMISSIONS.REPORT.WITHDRAW_REPORT_VIEW
+      permission: PERMISSIONS.REPORTS.WITHDRAW.VIEW
     },
     // {
     //   id: 'playerBalance',
@@ -84,7 +84,7 @@ export const reports = {
       transKey: 'agent_commission',
       Icon: BanknotesIcon,
       platformType: PLATFORM_TYPE.B2B,
-      permission: PERMISSIONS.REPORT.AGENT_COMMISSION_REPORT
+      permission: PERMISSIONS.REPORTS.B2B_AGENT.AGENT_COMMISSION_REPORT
     },
     {
       id: 'agentWalletreport',
@@ -94,7 +94,7 @@ export const reports = {
       transKey: 'agent_wallet',
       Icon: BanknotesIcon,
       platformType: PLATFORM_TYPE.B2B,
-      permission: PERMISSIONS.REPORT.AGENT_WALLET_REPORT
+      permission: PERMISSIONS.REPORTS.B2B_AGENT.AGENT_WALLET_REPORT
     }
   ]
 };

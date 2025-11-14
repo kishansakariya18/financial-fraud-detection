@@ -14,6 +14,8 @@ import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import FaqService from 'services/faq.services';
 import { responseMapper } from '../helper';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export default function FaqList() {
   const { t } = useTranslation();
@@ -21,6 +23,9 @@ export default function FaqList() {
   const pageTitle = t('faq') + ' ' + t('list');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { hasPermission } = usePermissions();
+  const canShowActions =
+    hasPermission(PERMISSIONS.FAQ.EDIT) || hasPermission(PERMISSIONS.FAQ.DELETE);
 
   const fetchFaqs = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
@@ -42,12 +47,12 @@ export default function FaqList() {
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchData: fetchFaqs,
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'], right: canShowActions ? ['actions'] : [] },
       tableSettings: {},
       columnVisibility: { answer: false }
     }

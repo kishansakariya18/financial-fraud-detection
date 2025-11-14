@@ -1,24 +1,26 @@
 // Import Dependencies
-import { PhoneIcon, XMarkIcon } from '@heroicons/react/20/solid';
+import { XMarkIcon } from '@heroicons/react/20/solid';
 import { EnvelopeIcon, UserIcon } from '@heroicons/react/24/outline';
 import { useEffect, useState } from 'react';
 import { HiPencil } from 'react-icons/hi';
 
 // Local Imports
 import { PreviewImg } from 'components/shared/PreviewImg';
-import { Avatar, Button, Input, Upload } from 'components/ui';
+import { Avatar, Button, Input, InputErrorMsg, Upload } from 'components/ui';
 // import { Page } from 'components/shared/Page';
 import { useTranslation } from 'react-i18next';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 import { useDispatch, useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { editProfileSchema } from './schema';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import ProfileService from 'services/profile.services';
 import { toast } from 'sonner';
 import apiConfig from 'configs/api.config';
 import { LOCAL_STORAGE } from 'constants/app.constant';
 import { AuthAction } from 'store/admin-slice/AuthSlice';
+import { PhoneDialCode } from 'components/custom/PhoneDialCode';
+import AdminService from 'services/admin.services';
 
 export default function Profile() {
   const [avatar, setAvatar] = useState(null);
@@ -29,14 +31,12 @@ export default function Profile() {
   const userData = useSelector((data) => data.auth.userData);
   const dispatch = useDispatch();
 
-  console.log('avtar: ::> ', avatar);
-
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset
-    // control
+    reset,
+    control
   } = useForm({
     resolver: yupResolver(editProfileSchema),
     defaultValues: {
@@ -44,9 +44,30 @@ export default function Profile() {
       lastName: userData?.LastName,
       email: userData?.Email,
       mobile: userData?.Mobile,
-      userName: userData?.Username
+      userName: userData?.Username,
+      phoneCode: userData?.PhoneCode || '+1'
     }
   });
+
+  const [countries, setCountries] = useState([]);
+
+  const fetchCountryList = async () => {
+    try {
+      const result = await AdminService.fetchCountryList();
+      if (result.status === 200 || result.status === 201) {
+        const countries = result.response.data.map((c) => {
+          return {
+            phoneCode: c.PhoneCode,
+            name: c.CountryName,
+            code: c.CountryCode
+          };
+        });
+        setCountries(countries);
+      }
+    } catch (error) {
+      console.error('Error fetching countries:', error);
+    }
+  };
 
   const updateProfileAPI = async (requestObject) => {
     setLoading(true);
@@ -71,6 +92,9 @@ export default function Profile() {
     toast.error(error);
     setError('');
   }
+  useEffect(() => {
+    fetchCountryList();
+  }, []);
 
   useEffect(() => {
     if (!loading && !error && response) {
@@ -85,7 +109,8 @@ export default function Profile() {
         lastName: response?.data?.LastName,
         email: response?.data?.Email,
         mobile: response?.data?.Mobile,
-        userName: response?.data?.Username
+        userName: response?.data?.Username,
+        phoneCode: response?.data?.PhoneCode
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -169,14 +194,36 @@ export default function Profile() {
               {...register('email')}
               error={errors.email?.message}
             />
-            <Input
-              placeholder={t('enter') + ' ' + t('mobile')}
-              label={t('mobile')}
-              className="rounded-xl"
-              prefix={<PhoneIcon className="size-4.5" />}
-              {...register('mobile')}
-              error={errors.mobile?.message}
-            />
+            <div className="flex flex-col">
+              <span>{t('mobile')}</span>
+              <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
+                <Controller
+                  render={({ field: { onChange, value, name } }) => (
+                    <PhoneDialCode
+                      onChange={onChange}
+                      value={value}
+                      name={name}
+                      error={Boolean(errors?.phoneCode)}
+                      countries={countries}
+                    />
+                  )}
+                  control={control}
+                  name="phoneCode"
+                />
+                <Input
+                  {...register('mobile')}
+                  classNames={{
+                    root: 'flex-1',
+                    input: 'hover:z-1 focus:z-1 ltr:rounded-l-none rtl:rounded-r-none'
+                  }}
+                  error={Boolean(errors?.mobile)}
+                  placeholder={t('enter') + ' ' + t('mobile')}
+                />
+              </div>
+              <InputErrorMsg when={errors?.phoneCode || errors?.mobile}>
+                {errors?.phoneCode?.message ?? errors?.mobile?.message}
+              </InputErrorMsg>
+            </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
             <Button className="min-w-[7rem]" onClick={() => reset()}>

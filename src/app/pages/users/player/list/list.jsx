@@ -8,6 +8,8 @@ import { useTranslation } from 'react-i18next';
 import PlayerList from 'components/sections/player-management/player-list/PlayerList';
 import { useNavigate } from 'react-router';
 import { isB2BPlatform } from 'utils/platformNavigation';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export default function Player() {
   const { t } = useTranslation();
@@ -18,6 +20,7 @@ export default function Player() {
   const [segmentations, setSegmentations] = useState(null);
   const [playerClasses, setPlayerClasses] = useState([]);
   const isB2b = isB2BPlatform();
+  const { hasPermission } = usePermissions();
 
   const fetchPlayers = async (filters) => {
     const result = await PlayerService.playerList(filters);
@@ -87,7 +90,9 @@ export default function Player() {
     <PlayerList
       pageTitle={pageTitle}
       onView={handleViewPlayer}
-      onChangeStatus={handleChangePlayerStatus}
+      onChangeStatus={
+        hasPermission(PERMISSIONS.USER.CHANGE_STATUS) ? handleChangePlayerStatus : undefined
+      }
       listFor="admin"
       getPlayerList={fetchPlayers}
       countries={countries}

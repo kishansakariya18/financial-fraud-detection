@@ -16,6 +16,8 @@ import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export default function BlogCategories() {
   const { t } = useTranslation();
@@ -25,6 +27,11 @@ export default function BlogCategories() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editCategoryId, setEditCategoryId] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
+  const { hasPermission } = usePermissions();
+  const canShowActions =
+    hasPermission(PERMISSIONS.BLOG_CATEGORY.EDIT) ||
+    hasPermission(PERMISSIONS.BLOG_CATEGORY.CHANGE_STATUS) ||
+    hasPermission(PERMISSIONS.BLOG_CATEGORY.DELETE);
 
   const fetchBlogCategories = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
@@ -49,7 +56,7 @@ export default function BlogCategories() {
 
   // Create columns with edit handler
   const columnsWithEditHandler = useMemo(() => {
-    return columns.map((col) => {
+    return columns({ canShowActions }).map((col) => {
       if (col.id === 'actions') {
         return {
           ...col,
@@ -67,7 +74,7 @@ export default function BlogCategories() {
       }
       return col;
     });
-  }, []);
+  }, [canShowActions]);
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns: columnsWithEditHandler,
@@ -75,7 +82,7 @@ export default function BlogCategories() {
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'], right: canShowActions ? ['actions'] : [] },
       tableSettings: {}
     }
   });

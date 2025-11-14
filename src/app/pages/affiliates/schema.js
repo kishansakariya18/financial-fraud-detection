@@ -1,3 +1,4 @@
+import { CheckBadgeIcon, NoSymbolIcon } from '@heroicons/react/24/outline';
 import * as Yup from 'yup';
 
 export const createAffiliateSchema = Yup.object().shape({
@@ -5,15 +6,25 @@ export const createAffiliateSchema = Yup.object().shape({
   firstName: Yup.string()
     .trim()
     .required('First Name Required')
-    .max(40, 'Maximum 40 Characters Allowed'),
+    .matches(
+      /^[A-Za-z]{3,15}$/,
+      'First name must be 3–15 alphabetic characters with no spaces or special symbols'
+    ),
   lastName: Yup.string()
     .trim()
     .required('Last Name Required')
-    .max(40, 'Maximum 40 Characters Allowed'),
+    .max(40, 'Last name must be 3–15 alphabetic characters with no spaces or special symbols')
+    .matches(
+      /^[A-Za-z]{3,15}$/,
+      'Last name must be 3–15 alphabetic characters with no spaces or special symbols'
+    ),
   userName: Yup.string()
     .trim()
     .required('User Name Required')
-    .max(40, 'Maximum 40 Characters Allowed'),
+    .matches(
+      /^(?!.*__)[a-zA-Z][a-zA-Z0-9_]{1,28}[a-zA-Z0-9]$/,
+      'Username must start with a letter, contain only letters, numbers, or underscores, cannot have consecutive or ending underscores, and must be 3–30 characters long.'
+    ),
   password: Yup.string()
     .trim()
     .required('Password Required')
@@ -21,7 +32,13 @@ export const createAffiliateSchema = Yup.object().shape({
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
       'Minimum 8 Character Required, Atleast One Letter and One Number and One Special Character'
     ),
-  email: Yup.string().trim().required('Email Required').email('Invalid Email'),
+  email: Yup.string()
+    .trim()
+    .required('Email Required')
+    .matches(
+      /^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+      'Enter a valid email address without the "+" symbol'
+    ),
   mobile: Yup.string()
     .trim()
     .required('Enter Your Mobile Number')
@@ -48,8 +65,18 @@ export const createAffiliateSchema = Yup.object().shape({
 });
 export const editAffiliateSchema = Yup.object().shape({
   // Personal Information
-  firstName: Yup.string().trim().max(40, 'Maximum 40 Characters Allowed'),
-  lastName: Yup.string().trim().max(40, 'Maximum 40 Characters Allowed'),
+  firstName: Yup.string()
+    .trim()
+    .matches(
+      /^[A-Za-z]{3,15}$/,
+      'First name must be 3–15 alphabetic characters with no spaces or special symbols'
+    ),
+  lastName: Yup.string()
+    .trim()
+    .matches(
+      /^[A-Za-z]{3,15}$/,
+      'Last name must be 3–15 alphabetic characters with no spaces or special symbols'
+    ),
   gender: Yup.string().trim().required('Select Gender'),
   dateOfBirth: Yup.string()
     .trim()
@@ -68,3 +95,18 @@ export const editAffiliateSchema = Yup.object().shape({
       return actualAge >= 18;
     })
 });
+
+export const affiliateStatusOptions = [
+  {
+    value: 'ACTIVE',
+    label: 'Active',
+    color: 'success',
+    icon: CheckBadgeIcon
+  },
+  {
+    value: 'CLOSED',
+    label: 'Closed',
+    color: 'error',
+    icon: NoSymbolIcon
+  }
+];

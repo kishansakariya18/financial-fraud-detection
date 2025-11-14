@@ -15,9 +15,7 @@ import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
 import AffiliatesService from 'services/affiliates.services';
 import { genderOptions } from 'components/sections/player-management/helper';
-
-import { affiliateStatusOptions } from '../affiliate/helper';
-import { createAffiliateSchema } from './schema';
+import { affiliateStatusOptions, createAffiliateSchema } from './schema';
 
 const CreateAdmin = () => {
   const [countries, setCountries] = useState([]);
@@ -53,7 +51,7 @@ const CreateAdmin = () => {
     return { status: result.status, error: result.error };
   };
 
-  const createAdminAPI = async (requestObject) => {
+  const createAffiliateAPI = async (requestObject) => {
     setLoading(true);
     setError(null);
     const result = await AffiliatesService.createAffiliate(requestObject);
@@ -86,10 +84,10 @@ const CreateAdmin = () => {
   }
 
   const onSubmit = async (data) => {
-    await createAdminAPI(data);
+    await createAffiliateAPI(data);
   };
   return (
-    <Page title={t('create') + ' ' + t('admin')}>
+    <Page title={t('create') + ' ' + t('affiliate')}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
         <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
           <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">

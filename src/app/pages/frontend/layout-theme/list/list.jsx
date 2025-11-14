@@ -14,6 +14,8 @@ import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import LayoutThemeService from 'services/layout-theme.services';
 import { layoutThemeResponseMapper } from '../helper';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export default function LayoutThemeList() {
   const { t } = useTranslation();
@@ -22,6 +24,9 @@ export default function LayoutThemeList() {
   const { homeCategoryId } = useParams();
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { hasPermission } = usePermissions();
+  const canShowActions =
+    hasPermission(PERMISSIONS.LAYOUTS.STATUS) || hasPermission(PERMISSIONS.LAYOUTS.EDIT);
 
   const fetchLayoutThemeList = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
@@ -44,12 +49,12 @@ export default function LayoutThemeList() {
   };
 
   const { table, isLoading, error, setError, tableSettings } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchData: fetchLayoutThemeList,
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'], right: canShowActions ? ['actions'] : [] },
       tableSettings: { enableFullScreen: false },
       columnVisibility: { fontColor2: false, fontColor3: false, fontColor4: false }
     }

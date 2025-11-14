@@ -43,6 +43,7 @@ const EditAffiliate = () => {
 
         if (result) {
           return {
+            username: result.affiliates.Username || '',
             firstName: result.affiliates.FirstName || '',
             lastName: result.affiliates.LastName || '',
             dateOfBirth: result.affiliates.DOB || '',
@@ -116,6 +117,14 @@ const EditAffiliate = () => {
           {!loading && (
             <div className="mt-6 space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
+                <Input
+                  {...register('username')}
+                  prefix={<UserIcon className="size-5" />}
+                  label={t('username')}
+                  disabled
+                  error={errors?.username?.message}
+                  placeholder={t('enter') + ' ' + t('username')}
+                />
                 <Input
                   {...register('firstName')}
                   prefix={<UserIcon className="size-5" />}

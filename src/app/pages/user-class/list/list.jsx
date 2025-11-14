@@ -14,6 +14,8 @@ import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import UserClassService from 'services/user-class.services';
 import { userclassListResponseMapper } from '../helper';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export default function UserClass() {
   const { t } = useTranslation();
@@ -21,6 +23,13 @@ export default function UserClass() {
   const pageTitle = t('userClass') + ' ' + t('list');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { hasPermission } = usePermissions();
+  const canShowActions =
+    hasPermission(PERMISSIONS.USER_CLASS.EDIT) ||
+    hasPermission(PERMISSIONS.USER_CLASS.CHANGE_STATUS) ||
+    hasPermission(PERMISSIONS.USER_CLASS.DELETE) ||
+    hasPermission(PERMISSIONS.USER_CLASS_LIMIT.VIEW) ||
+    hasPermission(PERMISSIONS.USER_CLASS.MAP);
 
   const fetchUserClasses = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
@@ -45,12 +54,12 @@ export default function UserClass() {
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchData: fetchUserClasses,
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'], right: canShowActions ? ['actions'] : [] },
       tableSettings: { enableFullScreen: false },
       columnVisibility: { slug: false }
     }

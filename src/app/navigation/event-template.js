@@ -20,6 +20,6 @@ export const emailTemplate = [
     title: 'Assign to Group',
     transKey: 'assignTemplate',
     Icon: CalendarDateRangeIcon,
-    permission: PERMISSIONS.EVENT_TEMPLATE.EDIT
+    permission: PERMISSIONS.ASSIGN_EVENT_TEMPLATES.UPDATE
   }
 ];

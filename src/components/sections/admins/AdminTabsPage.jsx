@@ -12,7 +12,9 @@ const AdminTabsPage = ({ userUID, basePath, tabsConfig = [] }) => {
       ? tabConfig.titleKeys.map((key) => t(key)).join(' ')
       : t(tabConfig.titleKey),
     path: `${basePath}/${userUID}/tab/${tabConfig.path}`,
-    icon: tabConfig.icon
+    icon: tabConfig.icon,
+    permission: tabConfig.permission,
+    isHidden: tabConfig.isHidden
   }));
 
   return <TabsPage tabs={tabs} />;
@@ -26,7 +28,9 @@ AdminTabsPage.propTypes = {
       titleKey: PropTypes.string,
       titleKeys: PropTypes.arrayOf(PropTypes.string),
       path: PropTypes.string.isRequired,
-      icon: PropTypes.elementType.isRequired
+      icon: PropTypes.elementType.isRequired,
+      permission: PropTypes.string,
+      isHidden: PropTypes.bool
     })
   ).isRequired
 };

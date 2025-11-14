@@ -20,7 +20,7 @@ export const frontend = {
   title: 'Frontend',
   transKey: 'frontend',
   Icon: ComputerDesktopIcon,
-  permission: [PERMISSIONS.FRONTEND.VIEW, PERMISSIONS.FRONTEND.LAYOUT_THEME.VIEW],
+  permission: [PERMISSIONS.FRONTEND.VIEW, PERMISSIONS.LAYOUTS.VIEW],
   childs: [
     {
       id: 'homeCategory',
@@ -39,7 +39,7 @@ export const frontend = {
       transKey: 'layoutTheme',
       Icon: TbCategoryPlus,
       platformType: [PLATFORM_TYPE.B2C],
-      permission: PERMISSIONS.FRONTEND.LAYOUT_THEME.VIEW
+      permission: PERMISSIONS.LAYOUTS.VIEW
     }
     // ,
     // {

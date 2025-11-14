@@ -100,6 +100,7 @@ export default function ResetPasswordForm({
       .resedOtp({
         token: queryParams.token,
         mobile: queryParams.mobile,
+        phoneCode: queryParams.phoneCode,
         type: RESEND_OTP_TYPE.RESET_PASSWORD
       })
       .then((result) => {

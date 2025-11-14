@@ -13,6 +13,8 @@ import { t } from 'i18next';
 import { useNavigate } from 'react-router';
 import { campaignStatusOptions } from '../helper';
 import { DashboardCard } from 'components/custom/DashboardCard';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 // ----------------------------------------------------------------------
 
@@ -26,6 +28,7 @@ export function Toolbar({
   const { isXs } = useBreakpointsContext();
   const navigate = useNavigate();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const { hasPermission } = usePermissions();
 
   return (
     <div className="table-toolbar">
@@ -40,13 +43,15 @@ export function Toolbar({
           </h2>
         </div>
 
-        <Button
-          className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
-          color="primary"
-          onClick={() => navigate('/bonus-campaign/create')}>
-          <PlusIcon className="size-5" />
-          <span>{t('create') + ' ' + t('bonusCampaign')}</span>
-        </Button>
+        {hasPermission(PERMISSIONS.BONUS_CAMPAIGN.ADD) && (
+          <Button
+            className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
+            color="primary"
+            onClick={() => navigate('/bonus-campaign/create')}>
+            <PlusIcon className="size-5" />
+            <span>{t('create') + ' ' + t('bonusCampaign')}</span>
+          </Button>
+        )}
       </div>
       {summary && (
         <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-3">

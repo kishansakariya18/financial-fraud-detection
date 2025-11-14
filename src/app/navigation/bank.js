@@ -10,6 +10,6 @@ export const bank = {
   title: 'Bank',
   transKey: 'bank',
   Icon: BanknotesIcon,
-  permission: PERMISSIONS.BANK.VIEW,
+  permission: PERMISSIONS.DEPOSIT_BANK.VIEW,
   platformType: [PLATFORM_TYPE.B2C]
 };

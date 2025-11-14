@@ -22,7 +22,7 @@ export default function PlayerWallets({ playerId = null } = {}) {
   const fetchPlayerWallets = useCallback(
     async (params = {}) => {
       try {
-        const response = await WalletService.getWalletList({ userUID: playerId, ...params });
+        const response = await WalletService.getAllWalletList({ userUID: playerId, ...params });
         // Transform the API response to match the expected format
         const wallets = response.response.data?.map((wallet) => ({
           id: wallet.WalletID,

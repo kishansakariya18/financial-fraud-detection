@@ -69,7 +69,7 @@ export function RowActions({ row }) {
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
               className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
-              {hasPermission(PERMISSIONS.AUDIT_LOG.VIEW) && (
+              {hasPermission(PERMISSIONS.AUDIT_LOGS.VIEW) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
