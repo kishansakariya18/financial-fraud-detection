@@ -1,41 +1,37 @@
 import Fuse from 'fuse.js';
 import { useMemo, useState, useDeferredValue } from 'react';
 
-export function useFuse(list, options = {}) {
+export function useFuse(list, options) {
+  // defining our query state in there directly
   const [query, setQuery] = useState('');
-  const deferredQuery = useDeferredValue(query);
+  const defferedQuery = useDeferredValue(query);
 
-  const { limit, matchAllOnEmptyQuery = true, keys, ...fuseOptions } = options;
+  // removing custom options from Fuse options object
+  // NOTE: `limit` is actually a `fuse.search` option, but we merge all options for convenience
+  const { limit, matchAllOnEmptyQuery, ...fuseOptions } = options;
 
-  const shouldFilter = Array.isArray(keys) && keys.length > 0;
+  // let's memoize the fuse instance for performances
+  const fuse = useMemo(() => new Fuse(list, fuseOptions), [list, fuseOptions]);
 
-  const fuse = useMemo(() => {
-    if (!shouldFilter) {
-      return null;
-    }
-    return new Fuse(list, { ...fuseOptions, keys });
-  }, [list, fuseOptions, keys, shouldFilter]);
+  // memoize results whenever the query or options change
+  const result = useMemo(
+    // if query is empty and `matchAllOnEmptyQuery` is `true` then return all list
+    // NOTE: we remap the results to match the return structure of `fuse.search()`
+    () =>
+      !defferedQuery && matchAllOnEmptyQuery
+        ? fuse
+            .getIndex()
+            .docs.slice(0, limit)
+            .map((item, refIndex) => ({ item, refIndex }))
+        : fuse.search(defferedQuery.toString().trim(), { limit }),
+    [fuse, limit, matchAllOnEmptyQuery, defferedQuery]
+  );
 
-  const result = useMemo(() => {
-    if (!shouldFilter || !fuse) {
-      const sliceLimit = typeof limit === 'number' && limit >= 0 ? limit : undefined;
-      const source = sliceLimit ? list.slice(0, sliceLimit) : list;
-      return source.map((item, refIndex) => ({ item, refIndex }));
-    }
-
-    return !deferredQuery && matchAllOnEmptyQuery
-      ? fuse
-          .getIndex()
-          .docs.slice(0, limit)
-          .map((item, refIndex) => ({ item, refIndex }))
-      : fuse.search(deferredQuery.toString().trim(), { limit });
-  }, [shouldFilter, fuse, list, deferredQuery, limit, matchAllOnEmptyQuery]);
-
-  const loading = shouldFilter ? deferredQuery !== query : false;
+  const loading = defferedQuery !== query;
 
   return {
     result,
-    query: deferredQuery,
+    query: defferedQuery,
     loading,
     setQuery
   };

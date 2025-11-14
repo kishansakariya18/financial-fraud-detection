@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { XMarkIcon } from '@heroicons/react/24/outline';
 
 import { Input } from 'components/ui/Form';
 import { Switch, Button } from 'components/ui';
@@ -51,27 +50,6 @@ const mergeOptions = (options = [], selected = []) => {
     }
   });
   return Array.from(map.values());
-};
-
-const renderChips = (items, optionMap, onRemove) => {
-  if (!items.length) return null;
-  return (
-    <div className="flex flex-wrap gap-2">
-      {items.map((item) => (
-        <span
-          key={item.value}
-          className="inline-flex items-center gap-1 rounded-full bg-primary-100 px-2 py-1 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-200">
-          {optionMap.get(item.value)?.label ?? item.label ?? item.value}
-          <button
-            type="button"
-            onClick={() => onRemove(item.value)}
-            className="text-primary-500 hover:text-primary-700 focus-visible:outline-none dark:text-primary-300 dark:hover:text-primary-200">
-            <XMarkIcon className="h-3 w-3" />
-          </button>
-        </span>
-      ))}
-    </div>
-  );
 };
 
 export function StepGameplayConfiguration({
@@ -137,13 +115,11 @@ export function StepGameplayConfiguration({
             <span>{t('include')}</span>
           </div>
         </div>
-
-        {renderChips(comboboxValue, optionMap, handleRemove)}
-
         <Combobox
           multiple
           data={combinedOptions}
           value={comboboxValue}
+          searchFields={['label']}
           onChange={(selectedItems) => {
             const next = Array.isArray(selectedItems)
               ? selectedItems.map((item) => String(item.value ?? item))
@@ -152,7 +128,6 @@ export function StepGameplayConfiguration({
           }}
           placeholder={placeholder}
           error={error}
-          renderSelectedValues={() => null}
           classNames={{ root: 'space-y-1' }}
           inputProps={{
             onKeyDown: handleBackspace

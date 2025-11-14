@@ -35,9 +35,6 @@ const CustomCombobox = forwardRef(
       rootProps,
       className,
       classNames,
-      onSearchChange,
-      renderSelectedValues,
-      loading = false,
       ...rest
     },
     ref
@@ -45,21 +42,17 @@ const CustomCombobox = forwardRef(
     const {
       result: filteredData,
       query,
-      loading: fuseLoading,
       setQuery
     } = useFuse(data, {
       keys: searchFields,
       threshold: 0.2,
       matchAllOnEmptyQuery: true
     });
-
-    const isLoading = loading || fuseLoading;
     const boxSizeRef = useRef();
 
     const { width: inputWidth } = useBoxSize({ ref: boxSizeRef });
     const { left: inputLeft, ref: boxPositionRef } = useBoxPosition();
 
-    const { onChange: inputOnChange, ...restInputProps } = inputProps || {};
     return (
       <div className={clsx('flex flex-col', classNames?.root)} {...rootProps}>
         <Combobox
@@ -86,10 +79,9 @@ const CustomCombobox = forwardRef(
                             : 'border-gray-300 focus-within:!border-primary-600 hover:border-gray-400 dark:border-dark-450 dark:focus-within:!border-primary-500 dark:hover:border-dark-400'
                         )}>
                         <div className="flex flex-wrap justify-start gap-2 px-3 py-2 ltr:pr-9 rtl:pl-9">
-                          {selectedValue.length > 0 &&
-                            (renderSelectedValues
-                              ? renderSelectedValues(selectedValue)
-                              : selectedValue.map((val) => val?.[displayField]).join(', '))}
+                          {selectedValue.length > 0 && (
+                            <div>{selectedValue.map((val) => val?.[displayField]).join(', ')}</div>
+                          )}
                           <ComboboxInput
                             as={Input}
                             classNames={{
@@ -105,11 +97,9 @@ const CustomCombobox = forwardRef(
                             }
                             onChange={(event) => {
                               setQuery(event.target.value);
-                              inputOnChange?.(event);
-                              onSearchChange?.(event.target.value);
                             }}
                             value={query}
-                            {...restInputProps}
+                            {...inputProps}
                           />
                         </div>
 
@@ -134,11 +124,7 @@ const CustomCombobox = forwardRef(
                         autoComplete="new"
                         error={error}
                         displayValue={(val) => val?.[displayField]}
-                        onChange={(event) => {
-                          setQuery(event.target.value);
-                          inputOnChange?.(event);
-                          onSearchChange?.(event.target.value);
-                        }}
+                        onChange={(event) => setQuery(event.target.value)}
                         placeholder={placeholder}
                         suffix={
                           <ChevronDownIcon
@@ -146,7 +132,7 @@ const CustomCombobox = forwardRef(
                             aria-hidden="true"
                           />
                         }
-                        {...restInputProps}
+                        {...inputProps}
                       />
                     </ComboboxButton>
                   )}
@@ -170,17 +156,9 @@ const CustomCombobox = forwardRef(
                         'absolute !left-[--left-anchor] z-10 max-h-60 overflow-y-auto overflow-x-hidden rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none',
                         multiple && 'mt-2'
                       )}>
-                      {isLoading ? (
-                        <div className="relative cursor-default select-none px-4 py-2 text-gray-800 dark:text-dark-100">
-                          Loading…
-                        </div>
-                      ) : filteredData.length === 0 && query !== '' ? (
+                      {filteredData.length === 0 && query !== '' ? (
                         <div className="relative cursor-default select-none px-4 py-2 text-gray-800 dark:text-dark-100">
                           Nothing found for {query}
-                        </div>
-                      ) : filteredData.length === 0 ? (
-                        <div className="relative cursor-default select-none px-4 py-2 text-gray-800 dark:text-dark-100">
-                          No options available
                         </div>
                       ) : (
                         filteredData.map(({ item, refIndex }) => (
@@ -237,10 +215,7 @@ CustomCombobox.propTypes = {
   inputProps: PropTypes.object,
   rootProps: PropTypes.object,
   classNames: PropTypes.object,
-  className: PropTypes.string,
-  loading: PropTypes.bool,
-  onSearchChange: PropTypes.func,
-  renderSelectedValues: PropTypes.func
+  className: PropTypes.string
 };
 
 export { CustomCombobox as Combobox };
