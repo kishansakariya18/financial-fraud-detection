@@ -44,7 +44,7 @@ export function DepositFilters({
             {pageTitle}
           </h2>
         </div>
-        {hasPermission(PERMISSIONS.REPORT.DEPOSIT_EXPORT_REPORT) && (
+        {hasPermission(PERMISSIONS.REPORTS.DEPOSIT.EXPORT) && (
           <ExportCSV
             validateFilters={{
               startDate: filters.startDate,

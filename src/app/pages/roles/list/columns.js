@@ -10,7 +10,7 @@ import { CopyableCell } from '../../../../components/shared/table/CopyableCell';
 
 const columnHelper = createColumnHelper();
 
-export const columns = [
+export const columns = ({ canShowActions } = {}) => [
   columnHelper.accessor((row) => row.id, {
     id: 'id',
     label: 'Role ID',
@@ -40,11 +40,15 @@ export const columns = [
     filterFn: 'inNumberRange',
     enableSorting: false
   }),
-  columnHelper.display({
-    id: 'actions',
-    label: 'Row Actions',
-    header: 'Actions',
-    cell: RowActions,
-    enableSorting: false
-  })
+  ...(canShowActions
+    ? [
+        columnHelper.display({
+          id: 'actions',
+          label: 'Row Actions',
+          header: 'Actions',
+          cell: RowActions,
+          enableSorting: false
+        })
+      ]
+    : [])
 ];

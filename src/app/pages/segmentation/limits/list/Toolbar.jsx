@@ -55,7 +55,7 @@ export function Toolbar({
           <Breadcrumbs items={breadcrumbItems} />
         </div>
 
-        {hasPermission(PERMISSIONS.SEGMENTATION.LIMIT_CREATE) && (
+        {hasPermission(PERMISSIONS.SEGMENTATION_LIMIT.CREATE) && (
           <Button
             className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
             color="primary"

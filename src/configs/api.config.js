@@ -516,6 +516,7 @@ export const apiConfig = {
     },
     WALLET: {
       LIST: '/wallet/admin/wallet/list/:userUID',
+      ALL_WALLET_LIST: '/wallet/admin/wallet/all-wallet-list/:userUID',
       FUND: '/wallet/admin/wallet/fund'
     },
     RESPONSIBLE_GAMING_LIMITS: {

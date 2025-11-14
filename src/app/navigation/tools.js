@@ -1,4 +1,4 @@
-import { NAV_TYPE_ITEM } from 'constants/app.constant';
+import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
 export const toolsNavigation = {
@@ -8,7 +8,7 @@ export const toolsNavigation = {
   title: 'IP Lookup',
   transKey: 'ipLookup',
   Icon: MagnifyingGlassIcon,
-  permission: []
+  permission: PERMISSIONS.IP_LOOKUP.VIEW
 };
 
 export default toolsNavigation;

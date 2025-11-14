@@ -150,7 +150,7 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              {hasPermission(PERMISSIONS.PROVIDER.GAMES) && (
+              {hasPermission(PERMISSIONS.GAME.VIEW) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button

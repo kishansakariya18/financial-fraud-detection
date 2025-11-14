@@ -11,5 +11,5 @@ export const releaseNotes = {
   title: 'Release Notes',
   transKey: 'release_notes',
   Icon: TbNotes,
-  permission: PERMISSIONS.RELEASE_NOTES.VIEW
+  permission: PERMISSIONS.RELEASE_NOTE.VIEW
 };

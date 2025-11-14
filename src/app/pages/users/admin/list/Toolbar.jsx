@@ -16,6 +16,8 @@ import { t } from 'i18next';
 import { statusOptions } from '../helper';
 import { DashboardCard } from 'components/custom/DashboardCard';
 import { dummyCards } from 'helpers/functions';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +31,7 @@ export function Toolbar({
   const { isXs } = useBreakpointsContext();
   const navigate = useNavigate();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const { hasPermission } = usePermissions();
 
   return (
     <div className="table-toolbar">
@@ -43,13 +46,15 @@ export function Toolbar({
           </h2>
         </div>
 
-        <Button
-          className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
-          color="primary"
-          onClick={() => navigate('/users/admin/create')}>
-          <PlusIcon className="size-5" />
-          <span>{t('create') + ' ' + t('admin')}</span>
-        </Button>
+        {hasPermission(PERMISSIONS.ADMIN.CREATE) && (
+          <Button
+            className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
+            color="primary"
+            onClick={() => navigate('/users/admin/create')}>
+            <PlusIcon className="size-5" />
+            <span>{t('create') + ' ' + t('admin')}</span>
+          </Button>
+        )}
       </div>
       <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
         <DashboardCard

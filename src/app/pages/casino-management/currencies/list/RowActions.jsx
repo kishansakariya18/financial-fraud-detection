@@ -174,7 +174,7 @@ export function RowActions({ row, table }) {
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
               className="absolute z-[100] w-[15rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
-              {hasPermission(PERMISSIONS.CURRENCIES.CHANGE_STATUS) && (
+              {hasPermission(PERMISSIONS.CURRENCY.STATUS) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -189,7 +189,7 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              {hasPermission(PERMISSIONS.CURRENCIES.EDIT) && (
+              {hasPermission(PERMISSIONS.CURRENCY.EDIT) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -206,7 +206,7 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              {hasPermission(PERMISSIONS.CURRENCIES.EXCHANGE_HISTORY) && (
+              {hasPermission(PERMISSIONS.CURRENCY.EXCHANGE_RATE_HISTORY) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -226,7 +226,7 @@ export function RowActions({ row, table }) {
                 </MenuItem>
               )}
 
-              {hasPermission(PERMISSIONS.CURRENCIES.ADMIN_EXCHANGE_RATE) && (
+              {hasPermission(PERMISSIONS.CURRENCY.EDIT) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -241,7 +241,7 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              {hasPermission(PERMISSIONS.CURRENCIES.EXCHANGE_UPDATE_TYPE) && (
+              {hasPermission(PERMISSIONS.CURRENCY.EDIT) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button

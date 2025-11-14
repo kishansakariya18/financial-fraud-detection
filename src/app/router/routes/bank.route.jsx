@@ -9,7 +9,7 @@ export const bankRoute = [
       const { default: BankList } = await import('../../pages/manual-bank-deposit/list/list');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.BANK.VIEW}>
+          <PrivateRoute permission={PERMISSIONS.DEPOSIT_BANK.VIEW}>
             <BankList />
           </PrivateRoute>
         )
@@ -24,7 +24,7 @@ export const bankRoute = [
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.BANK.CREATE}>
+          <PrivateRoute permission={PERMISSIONS.DEPOSIT_BANK.ADD}>
             <AddBankDeposit />
           </PrivateRoute>
         )
@@ -39,7 +39,7 @@ export const bankRoute = [
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.BANK.UPDATE}>
+          <PrivateRoute permission={PERMISSIONS.DEPOSIT_BANK.EDIT}>
             <EditBankDeposit />
           </PrivateRoute>
         )

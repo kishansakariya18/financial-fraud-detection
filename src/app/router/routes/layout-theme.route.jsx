@@ -10,7 +10,7 @@ export const layoutThemeRoute = [
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.FRONTEND.VIEW}>
+          <PrivateRoute permission={PERMISSIONS.LAYOUTS.VIEW}>
             <LayoutThemeList />
           </PrivateRoute>
         )
@@ -25,7 +25,7 @@ export const layoutThemeRoute = [
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.FRONTEND.VIEW}>
+          <PrivateRoute permission={PERMISSIONS.LAYOUTS.ADD}>
             <CreateLayoutTheme />
           </PrivateRoute>
         )
@@ -40,7 +40,7 @@ export const layoutThemeRoute = [
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.FRONTEND.VIEW}>
+          <PrivateRoute permission={PERMISSIONS.LAYOUTS.EDIT}>
             <EditLayoutTheme />
           </PrivateRoute>
         )

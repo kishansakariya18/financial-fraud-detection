@@ -21,7 +21,7 @@ export function RowActions({ row }) {
   const aggregatorName = row?.original?.name;
   const isCurrentAggregator = isSyncing && activeAggregator === aggregatorName;
 
-  if (!hasPermission(PERMISSIONS.AGGREGATOR.FETCH_GAMES)) {
+  if (!hasPermission(PERMISSIONS.AGGREGATORS.FEED_GAMES)) {
     return null;
   }
 

@@ -14,6 +14,8 @@ import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { ADMIN_TYPE, DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export default function Admin() {
   const { t } = useTranslation();
@@ -21,6 +23,11 @@ export default function Admin() {
   const pageTitle = t('admins');
   const [summary, setSummary] = useState(null);
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { hasPermission } = usePermissions();
+  const canShowActions =
+    hasPermission(PERMISSIONS.ADMIN.LIST) ||
+    hasPermission(PERMISSIONS.ADMIN.EDIT) ||
+    hasPermission(PERMISSIONS.ADMIN.CHANGE_STATUS);
 
   const fetchAdmin = async () => {
     // setError(null);
@@ -61,13 +68,13 @@ export default function Admin() {
     fetchSummary();
   }, []);
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchSummary: fetchSummary,
     fetchData: fetchAdmin,
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'], right: canShowActions ? ['actions'] : [] },
       tableSettings: {},
       columnVisibility: { firstname: false, lastname: false, adminUID: false }
     }

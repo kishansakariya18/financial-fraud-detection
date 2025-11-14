@@ -88,7 +88,7 @@ export default function ViewModal({ row }) {
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                   {t('wallet_address')}:
                 </p>
-                <p>{row?.walletAddress || '-'}</p>
+                <p className="break-all">{row?.walletAddress || '-'}</p>
               </div>
               {/* <div>
       <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('txid')}:</p>

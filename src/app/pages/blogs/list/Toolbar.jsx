@@ -1,3 +1,5 @@
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 // Import Dependencies
 import { MagnifyingGlassIcon, MapPinIcon, PlusIcon, TagIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
@@ -26,6 +28,7 @@ export function Toolbar({
   const { isXs } = useBreakpointsContext();
   const navigate = useNavigate();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const { hasPermission } = usePermissions();
   const [categoryOptions, setCategoryOptions] = useState([]);
 
   useEffect(() => {
@@ -75,13 +78,15 @@ export function Toolbar({
           </h2>
         </div>
 
-        <Button
-          className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
-          color="primary"
-          onClick={() => navigate('/content-management/blogs/create')}>
-          <PlusIcon className="size-5" />
-          <span>{t('create') + ' ' + t('blog')}</span>
-        </Button>
+        {hasPermission(PERMISSIONS.BLOG.CREATE) && (
+          <Button
+            className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
+            color="primary"
+            onClick={() => navigate('/content-management/blogs/create')}>
+            <PlusIcon className="size-5" />
+            <span>{t('create') + ' ' + t('blog')}</span>
+          </Button>
+        )}
       </div>
       {isXs ? (
         <>

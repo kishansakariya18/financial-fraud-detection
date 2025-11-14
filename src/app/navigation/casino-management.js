@@ -26,7 +26,7 @@ export const casinoManagement = {
   permission: [
     PERMISSIONS.CATEGORY.VIEW,
     PERMISSIONS.PROVIDER.VIEW,
-    PERMISSIONS.AGGREGATOR.VIEW,
+    PERMISSIONS.AGGREGATORS.VIEW,
     PERMISSIONS.GAME.VIEW
   ],
   childs: [
@@ -55,7 +55,7 @@ export const casinoManagement = {
       title: 'Aggregator List',
       transKey: 'casino_aggregator',
       Icon: Squares2X2Icon,
-      permission: PERMISSIONS.AGGREGATOR.VIEW
+      permission: PERMISSIONS.AGGREGATORS.VIEW
     },
     {
       id: 'casino_currencies',
@@ -64,7 +64,7 @@ export const casinoManagement = {
       title: 'Currency',
       transKey: 'casino_currencies',
       Icon: HiOutlineCurrencyRupee, // Please replace with the correct icon
-      permission: null, // Please replace with the correct permission
+      permission: PERMISSIONS.CURRENCY.VIEW, // aligned to constants
       platformType: [PLATFORM_TYPE.B2C]
     },
     {
