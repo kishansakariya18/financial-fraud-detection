@@ -1,9 +1,70 @@
 import * as Yup from 'yup';
 
+// Reusable schema for a single variable rule item
+const variableRuleItemSchema = Yup.object().shape({
+  paymentMethod: Yup.string().nullable(),
+  rangeFrom: Yup.number()
+    .transform((value, originalValue) => {
+      return originalValue === '' || originalValue === null || originalValue === undefined
+        ? null
+        : Number(originalValue);
+    })
+    .nullable()
+    .min(0, 'Must more than 0')
+    .typeError('Invalid number'),
+  rangeTo: Yup.number()
+    .transform((value, originalValue) => {
+      return originalValue === '' || originalValue === null || originalValue === undefined
+        ? null
+        : Number(originalValue);
+    })
+    .nullable()
+    .min(0, 'Must more than 0')
+    .typeError('Invalid number')
+    .when('rangeFrom', {
+      is: (val) => val !== null && val !== undefined && val !== '',
+      then: (schema) =>
+        schema.test('greater-than-min', 'Must be ≥ min deposit', function (value) {
+          const { rangeFrom } = this.parent;
+          if (value === null || value === undefined || value === '') return true;
+          const minValue = Number(rangeFrom);
+          return !isNaN(minValue) && value >= minValue;
+        })
+    }),
+  boostPercent: Yup.number()
+    .transform((value, originalValue) => {
+      return originalValue === '' || originalValue === null || originalValue === undefined
+        ? null
+        : Number(originalValue);
+    })
+    .nullable()
+    .min(0, 'Must more than 0')
+    .max(100, 'Must less than or equal to 100')
+    .typeError('Invalid number'),
+  wagering: Yup.number()
+    .transform((value, originalValue) => {
+      return originalValue === '' || originalValue === null || originalValue === undefined
+        ? null
+        : Number(originalValue);
+    })
+    .nullable()
+    .min(0, 'Must more than 0')
+    .typeError('Invalid number'),
+  mco: Yup.number()
+    .transform((value, originalValue) => {
+      return originalValue === '' || originalValue === null || originalValue === undefined
+        ? null
+        : Number(originalValue);
+    })
+    .nullable()
+    .min(0, 'Must more than 0')
+    .typeError('Invalid number')
+});
+
 // Step 1: Template Info
 export const templateInfoSchema = Yup.object().shape({
-  templateName: Yup.string().trim().nullable(),
-  bonusType: Yup.string().nullable(),
+  templateName: Yup.string().trim().nullable().required('Template name is required'),
+  bonusType: Yup.string().nullable().required('Bonus type is required'),
   bonusTags: Yup.array().of(Yup.string()).nullable(),
   expiryAfterIssuanceDays: Yup.number()
     .transform((value, originalValue) => {
@@ -68,7 +129,13 @@ export const rewardDetailsSchema = Yup.object().shape({
     .nullable()
     .min(0, 'Max bonus amount must be 0 or greater')
     .typeError('Max bonus amount must be a valid number'),
-  variableRules: Yup.array().of(Yup.object()).nullable(),
+  variableRules: Yup.array()
+    .nullable()
+    .when('boostMode', {
+      is: (val) => val === 'variable',
+      then: (schema) => schema.of(variableRuleItemSchema),
+      otherwise: (schema) => schema.nullable()
+    }),
   // Free Chip
   amount: Yup.number()
     .transform((value, originalValue) => {
@@ -192,6 +259,10 @@ export const gameplaySchema = Yup.object().shape({
   gameIncluded: Yup.boolean().nullable()
 });
 
+export const variableRulesSchema = Yup.object().shape({
+  variableRules: Yup.array().of(variableRuleItemSchema)
+});
+
 // All step schemas mapped to step IDs
 export const stepSchemas = {
   templateInfo: templateInfoSchema,
@@ -199,5 +270,6 @@ export const stepSchemas = {
   rewardDetails: rewardDetailsSchema,
   wageringConfiguration: wageringConfigSchema,
   maxCashoutConfiguration: maxCashoutConfigSchema,
-  gameplayConfiguration: gameplaySchema
+  gameplayConfiguration: gameplaySchema,
+  variableRules: variableRulesSchema
 };

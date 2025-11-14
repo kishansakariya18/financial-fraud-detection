@@ -115,8 +115,6 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
   const currentStep = STEPS[activeStep];
   const isLastStep = activeStep === STEPS.length - 1;
 
-  console.log(formState, value);
-
   const lookups = useMemo(
     () => ({
       bonusType: createOptionLookup(BONUS_TYPE_OPTIONS(t)),
@@ -135,7 +133,6 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
       wageringConfig: {},
       maxCashoutConfig: {}
     };
-    console.log(field, value, 'handleTemplateInfoChange');
     if (field === 'bonusType') {
       updateData.wageringConfig.base = '';
       updateData.maxCashoutConfig.base = '';
@@ -198,7 +195,6 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
   };
 
   const handleVariableRulesChange = (rules) => {
-    console.log(rules, 'handleVariableRulesChange');
     setFormState((prev) => ({
       ...prev,
       rewardDetails: {

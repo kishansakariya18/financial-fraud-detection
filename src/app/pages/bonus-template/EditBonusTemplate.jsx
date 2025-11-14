@@ -127,7 +127,7 @@ export default function EditBonusTemplate() {
         }, 0);
       })
       .catch((error) => {
-        toast.error(error.message || 'Unable to update bonus template');
+        toast.error(error || 'Unable to update bonus template');
       });
   };
 

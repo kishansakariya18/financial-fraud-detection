@@ -106,7 +106,7 @@ export default function CreateBonusTemplate() {
         }, 0);
       })
       .catch((error) => {
-        toast.error(error.message);
+        toast.error(error);
       });
   };
 

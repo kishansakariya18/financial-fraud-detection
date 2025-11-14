@@ -2,11 +2,11 @@ import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useForm, Controller, useFieldArray, useWatch } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
 
 import { Button } from 'components/ui';
 import { Input, Select } from 'components/ui/Form';
 import { useTranslation } from 'react-i18next';
+import { variableRulesSchema } from 'app/pages/bonus-template/validationSchemas';
 const inputClassNames = {
   root: 'w-full',
   wrapper: 'mt-0',
@@ -22,75 +22,6 @@ const defaultRule = {
   wagering: '',
   mco: ''
 };
-
-// Validation schema - only validates data types and ranges, no required fields
-const variableRulesSchema = Yup.object().shape({
-  variableRules: Yup.array().of(
-    Yup.object().shape({
-      paymentMethod: Yup.string().nullable(),
-      rangeFrom: Yup.number()
-        .transform((value, originalValue) => {
-          return originalValue === '' || originalValue === null || originalValue === undefined
-            ? null
-            : Number(originalValue);
-        })
-        .nullable()
-        .min(0, 'Min deposit must be 0 or greater')
-        .typeError('Min deposit must be a valid number'),
-      rangeTo: Yup.number()
-        .transform((value, originalValue) => {
-          return originalValue === '' || originalValue === null || originalValue === undefined
-            ? null
-            : Number(originalValue);
-        })
-        .nullable()
-        .min(0, 'Max deposit must be 0 or greater')
-        .typeError('Max deposit must be a valid number')
-        .when('rangeFrom', {
-          is: (val) => val !== null && val !== undefined && val !== '',
-          then: (schema) =>
-            schema.test(
-              'greater-than-min',
-              'Max deposit must be greater than or equal to min deposit',
-              function (value) {
-                const { rangeFrom } = this.parent;
-                if (value === null || value === undefined || value === '') return true;
-                const minValue = Number(rangeFrom);
-                return !isNaN(minValue) && value >= minValue;
-              }
-            )
-        }),
-      boostPercent: Yup.number()
-        .transform((value, originalValue) => {
-          return originalValue === '' || originalValue === null || originalValue === undefined
-            ? null
-            : Number(originalValue);
-        })
-        .nullable()
-        .min(0, 'Boost percentage must be 0 or greater')
-        .max(100, 'Boost percentage cannot exceed 100')
-        .typeError('Boost percentage must be a valid number'),
-      wagering: Yup.number()
-        .transform((value, originalValue) => {
-          return originalValue === '' || originalValue === null || originalValue === undefined
-            ? null
-            : Number(originalValue);
-        })
-        .nullable()
-        .min(0, 'Wagering must be 0 or greater')
-        .typeError('Wagering must be a valid number'),
-      mco: Yup.number()
-        .transform((value, originalValue) => {
-          return originalValue === '' || originalValue === null || originalValue === undefined
-            ? null
-            : Number(originalValue);
-        })
-        .nullable()
-        .min(0, 'Max cashout must be 0 or greater')
-        .typeError('Max cashout must be a valid number')
-    })
-  )
-});
 
 export function VariableRulesEditor({ rules, onChange, paymentMethodOptions }) {
   const { t } = useTranslation();

@@ -88,9 +88,7 @@ export function BonusTemplatePreview({ data, lookups }) {
               {bonusDetails.displayTitle || '—'}
             </dd>
             <dt>{t('description')}</dt>
-            <dd className="overflow-hidden rounded bg-gray-100 px-2 py-1 text-xs leading-5 text-gray-600 dark:bg-dark-700/60 dark:text-dark-200">
-              {bonusDetails.description || 'No player-facing description added'}
-            </dd>
+            <dd className="overflow-hidden">{bonusDetails.description || '—'}</dd>
             <dt>{t('display_priority')}</dt>
             <dd>{bonusDetails.displayPriority || '—'}</dd>
             <dt>{t('desktop_image')}</dt>
@@ -121,7 +119,33 @@ export function BonusTemplatePreview({ data, lookups }) {
                     <>
                       <dt>{t('variable_rules')}</dt>
                       <dd>
-                        {rewardDetails.variableRules.map((rule) => (
+                        <table className="w-full divide-y divide-gray-200 text-tiny dark:divide-dark-500">
+                          <thead>
+                            <tr className="text-left font-semibold text-gray-600 dark:text-dark-200">
+                              <th>{t('payment_method')}</th>
+                              <th>{t('min_deposit')}</th>
+                              <th>{t('max_deposit')}</th>
+                              <th>{t('boost_percentage')}</th>
+                              <th>{t('wagering')}</th>
+                              <th>{t('mco')}</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {rewardDetails.variableRules.map((rule) => (
+                              <tr
+                                className="text-left text-gray-600 dark:text-dark-200"
+                                key={rule.id}>
+                                <td>{rule.paymentMethod}</td>
+                                <td>{rule.rangeFrom}</td>
+                                <td>{rule.rangeTo}</td>
+                                <td>{rule.boostPercent}</td>
+                                <td>{rule.wagering}</td>
+                                <td>{rule.mco}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                        {/* {rewardDetails.variableRules.map((rule) => (
                           <li
                             key={rule.id}
                             className="rounded bg-gray-100 px-2 py-1 dark:bg-dark-700/60">
@@ -130,7 +154,7 @@ export function BonusTemplatePreview({ data, lookups }) {
                             {t('boost_percentage')}: {rule.boostPercent || '—'}% · {t('wagering')}:{' '}
                             {rule.wagering || '—'} · {t('mco')}: {rule.mco || '—'}
                           </li>
-                        ))}
+                        ))} */}
                       </dd>
                     </>
                   )}
