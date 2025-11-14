@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
-import AffiliateService from 'services/affiliate.services';
+import AffiliateService from 'services/affiliates.services';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();

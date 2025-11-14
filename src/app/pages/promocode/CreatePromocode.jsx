@@ -16,7 +16,7 @@ import { CurrencyRupeeIcon, PercentBadgeIcon } from '@heroicons/react/24/outline
 import { DatePicker } from 'components/shared/form/Datepicker';
 import { TextEditor } from 'components/shared/form/TextEditor';
 import Quill, { Delta } from 'quill';
-import AffiliateService from 'services/affiliate.services';
+import AffiliateService from 'services/affiliates.services';
 import SegmentationService from 'services/segmentation.services';
 import GamesService from 'services/games.services';
 import { createPromocodeSchema } from './schema';
@@ -57,7 +57,7 @@ const CreatePromocode = () => {
   const fetchInfluencerList = async () => {
     console.log('fetchInfluencerList callled');
 
-    const result = await AffiliateService.getAffiliateList({ pagination: false });
+    const result = await AffiliateService.getList({ pagination: false });
     if (result) {
       if (result.status === 200) {
         setAffiliateList(result.response.data);
