@@ -15,9 +15,9 @@ import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
 import AffiliatesService from 'services/affiliates.services';
 import { genderOptions } from 'components/sections/player-management/helper';
-import { affiliateStatusOptions, createAffiliateSchema } from './schema';
+import { createAffiliateSchema } from './schema';
 
-const CreateAdmin = () => {
+const CreateAffiliate = () => {
   const [countries, setCountries] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -178,26 +178,6 @@ const CreateAdmin = () => {
             </div>
 
             <div className="grid gap-4 lg:grid-cols-2">
-              <Controller
-                render={({ field }) => (
-                  <Listbox
-                    data={affiliateStatusOptions}
-                    value={
-                      affiliateStatusOptions.find((status) => status.value === field.value) ||
-                      affiliateStatusOptions[0]
-                    }
-                    onChange={(val) => field.onChange(val.value)}
-                    name={field.name}
-                    label={t('status')}
-                    placeholder={t('select') + ' ' + t('status')}
-                    displayField="label"
-                    error={errors?.status?.message}
-                  />
-                )}
-                control={control}
-                name="status"
-              />
-
               <div className="grid grid-cols-3 gap-2">
                 <Controller
                   render={({ field }) => (
@@ -264,4 +244,4 @@ const CreateAdmin = () => {
   );
 };
 
-export default CreateAdmin;
+export default CreateAffiliate;
