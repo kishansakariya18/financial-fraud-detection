@@ -6,6 +6,8 @@ import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { HiOutlineBan } from 'react-icons/hi';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export default function Toolbar({
   table,
@@ -19,6 +21,7 @@ export default function Toolbar({
   const navigate = useNavigate();
   const pageTitle = t('blacklisted') + ' IP ' + t('address');
   const buttonTitle = t('blacklist_ip_address');
+  const { hasPermission } = usePermissions();
 
   const handleReset = () => {
     setSearchValue('');
@@ -37,13 +40,15 @@ export default function Toolbar({
             {pageTitle}
           </h2>
         </div>
-        <Button
-          className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
-          color="primary"
-          onClick={() => navigate('/blacklist/ip')}>
-          <HiOutlineBan className="size-5" />
-          <span>{buttonTitle}</span>
-        </Button>
+        {hasPermission(PERMISSIONS.BLACKLIST.CREATE) && (
+          <Button
+            className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
+            color="primary"
+            onClick={() => navigate('/blacklist/ip')}>
+            <HiOutlineBan className="size-5" />
+            <span>{buttonTitle}</span>
+          </Button>
+        )}
       </div>
       <div className="flex items-center justify-between px-[--margin-x] pt-4">
         <div className="flex space-x-2">

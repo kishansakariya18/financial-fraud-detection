@@ -41,10 +41,11 @@ const ProviderService = {
 
       const { status, keyword, startDate, endDate } = filters;
 
-      const apiQueryParams = {
-        perPage: pagination.pageSize,
-        page: pagination.pageIndex + 1
-      };
+      const apiQueryParams = {};
+      if (pagination) {
+        apiQueryParams.perPage = pagination.pageSize;
+        apiQueryParams.page = pagination.pageIndex + 1;
+      }
 
       const apiRequestParams = {
         status: status ? parseProviderStatusToApi(status) : undefined,
@@ -225,6 +226,24 @@ const ProviderService = {
         body: apiBody,
         headers: {
           'Content-Type': 'application/json'
+        }
+      });
+
+      return response;
+    } catch (error) {
+      console.log('error', error);
+    }
+  },
+  reorderProviders: async (providerOrderList) => {
+    try {
+      const response = await sendRequest({
+        url: `${apiConfig.baseURL.API_BASE_URL}${apiConfig.endPoints.PROVIDER.REORDER}`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          providerOrderList
         }
       });
 

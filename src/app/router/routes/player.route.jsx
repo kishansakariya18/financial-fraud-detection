@@ -64,7 +64,7 @@ export const playerRoutes = [
           );
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.USER.TRANSACTION}>
+              <PrivateRoute permission={PERMISSIONS.USER.TRANSACTION_LIST}>
                 <TransactionList />
               </PrivateRoute>
             )
@@ -126,36 +126,10 @@ export const playerRoutes = [
           return {
             Component: () => (
               <PrivateRoute
-                permission={PERMISSIONS.USER.COMMENT_VIEW}
+                permission={PERMISSIONS.USER.VIEW_REFERRAL}
                 allowedPlatforms={[PLATFORM_TYPE.B2C]}
                 fallbackPath="/users/player">
                 <ReferralList />
-              </PrivateRoute>
-            )
-          };
-        }
-      },
-      {
-        path: 'change-profile',
-        lazy: async () => {
-          const { default: Profile } = await import('../../pages/profile/Profile');
-          return {
-            Component: () => (
-              <PrivateRoute permission={PERMISSIONS.AFFILIATES.LIST}>
-                <Profile />
-              </PrivateRoute>
-            )
-          };
-        }
-      },
-      {
-        path: 'change-password',
-        lazy: async () => {
-          const { default: ChangePassword } = await import('../../pages/profile/ChangePassword');
-          return {
-            Component: () => (
-              <PrivateRoute permission={PERMISSIONS.AFFILIATES.LIST}>
-                <ChangePassword />
               </PrivateRoute>
             )
           };
@@ -167,7 +141,7 @@ export const playerRoutes = [
           const { default: PlayerWallets } = await import('../../pages/users/player/wallets/list');
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.USER.LIST}>
+              <PrivateRoute permission={PERMISSIONS.USER.WALLET_LIST}>
                 <PlayerWallets />
               </PrivateRoute>
             )

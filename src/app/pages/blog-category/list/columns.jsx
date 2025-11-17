@@ -10,12 +10,28 @@ import { statusOptions } from '../helper';
 
 const columnHelper = createColumnHelper();
 
-export const columns = [
+export const columns = ({ canShowActions } = {}) => [
   columnHelper.accessor((row) => row.id, {
     id: 'id',
     label: 'Category ID',
     header: 'Category ID',
     cell: IdCell,
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.imageUrl, {
+    id: 'image',
+    label: 'Image',
+    header: 'Image',
+    cell: (info) =>
+      info?.getValue() ? (
+        <div className="size-16 rounded">
+          <img
+            src={info?.getValue()}
+            alt={info?.row?.original?.name || 'Category Image'}
+            className="size-12 rounded object-cover"
+          />
+        </div>
+      ) : null,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.name, {
@@ -42,11 +58,15 @@ export const columns = [
     filterFn: 'inNumberRange',
     enableSorting: false
   }),
-  columnHelper.display({
-    id: 'actions',
-    label: 'Row Actions',
-    header: 'Actions',
-    cell: RowActions,
-    enableSorting: false
-  })
+  ...(canShowActions
+    ? [
+        columnHelper.display({
+          id: 'actions',
+          label: 'Row Actions',
+          header: 'Actions',
+          cell: RowActions,
+          enableSorting: false
+        })
+      ]
+    : [])
 ];

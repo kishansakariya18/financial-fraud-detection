@@ -141,7 +141,7 @@ export function RowActions({ row, table }) {
                   </button>
                 )}
               </MenuItem>
-              {hasPermission(PERMISSIONS.RESPONSIBLE_GAMBLING.CHANGE_STATUS) &&
+              {hasPermission(PERMISSIONS.RESPONSIBLE_GAMING_RESTRICTIONS.CHANGE_STATUS) &&
                 row?.original?.status === 'expired' &&
                 row?.original?.approvedAt == null && (
                   <MenuItem>

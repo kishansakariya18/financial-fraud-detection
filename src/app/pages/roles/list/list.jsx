@@ -14,12 +14,17 @@ import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export default function Roles() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t('roles');
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { hasPermission } = usePermissions();
+  const canShowActions =
+    hasPermission(PERMISSIONS.ROLES.EDIT) || hasPermission(PERMISSIONS.ROLES.DELETE);
 
   const fetchRoles = async () => {
     // setError(null);
@@ -42,12 +47,12 @@ export default function Roles() {
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchData: fetchRoles,
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'], right: canShowActions ? ['actions'] : [] },
       tableSettings: {},
       columnVisibility: { firstname: false }
     }

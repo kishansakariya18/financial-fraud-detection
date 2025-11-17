@@ -78,7 +78,7 @@ export default function Blogs() {
       const categoryValue = Number(queryParams.blogCategoryId);
       if (!Number.isNaN(categoryValue)) {
         filtersFromQuery.push({
-          id: 'categoryName',
+          id: 'categoryNames',
           value: categoryValue
         });
       }
@@ -114,7 +114,7 @@ export default function Blogs() {
         filterItems.isActive = data.value === 'active' ? 1 : 0;
       }
 
-      if (data.id === 'categoryName') {
+      if (data.id === 'categoryNames') {
         filterItems.blogCategoryId = data.value;
       }
 

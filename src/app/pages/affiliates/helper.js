@@ -1,22 +1,24 @@
-import { ArchiveBoxIcon, CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import {
+  ArchiveBoxIcon,
+  CheckBadgeIcon,
+  NoSymbolIcon,
+  XCircleIcon
+} from '@heroicons/react/24/outline';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 const statusToApp = (status) => {
   switch ((status || '').toString().toUpperCase()) {
     case 'ACTIVE':
       return 'ACTIVE';
-    case 'SUSPENDED':
-      return 'SUSPENDED';
     case 'CLOSED':
       return 'CLOSED';
     default:
-      return 'SUSPENDED';
+      return 'CLOSED';
   }
 };
 
 export const AFFILIATE_STATUS = {
   ACTIVE: 'ACTIVE',
-  SUSPENDED: 'SUSPENDED',
   CLOSED: 'CLOSED'
 };
 
@@ -92,7 +94,26 @@ const transactionStatus = (status) => {
       return 'pending';
   }
 };
-
+export const affiliateStatusOptions = [
+  {
+    value: 'ACTIVE',
+    label: 'Active',
+    color: 'success',
+    icon: CheckBadgeIcon
+  },
+  {
+    value: 'SUSPENDED',
+    label: 'Suspended',
+    color: 'warning',
+    icon: XCircleIcon
+  },
+  {
+    value: 'CLOSED',
+    label: 'Closed',
+    color: 'error',
+    icon: NoSymbolIcon
+  }
+];
 export const affiliatesWithdrawalsStatusOptions = [
   {
     value: 'approved',

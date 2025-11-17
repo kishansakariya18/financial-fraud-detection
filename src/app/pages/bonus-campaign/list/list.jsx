@@ -12,6 +12,8 @@ import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import BonusCampaignService from 'services/bonus-campaign.services';
 import { bonusCampaignListResponseMapper } from '../helper';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export default function BonusCampaignList() {
   const { t } = useTranslation();
@@ -19,6 +21,10 @@ export default function BonusCampaignList() {
   const pageTitle = t('bonusCampaign') + ' ' + t('list');
   const [summary, setSummary] = useState(null);
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { hasPermission } = usePermissions();
+  const canShowActions =
+    hasPermission(PERMISSIONS.BONUS_CAMPAIGN.VIEW) ||
+    hasPermission(PERMISSIONS.BONUS_CAMPAIGN.CHANGE_STATUS);
 
   const fetchBonusCampaigns = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
@@ -69,13 +75,13 @@ export default function BonusCampaignList() {
   }, []);
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchData: fetchBonusCampaigns,
     queryParams,
     fetchSummary,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'], right: canShowActions ? ['actions'] : [] },
       tableSettings: { enableFullScreen: false },
       columnVisibility: {}
     }

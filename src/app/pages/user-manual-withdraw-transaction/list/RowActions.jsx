@@ -16,9 +16,12 @@ import ViewModal from '../ViewModal';
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { toast } from 'sonner';
 import UserManualDepositTransactionService from 'services/user-manual-deposit-transaction.services';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
 
   const [modal, setModal] = useState({ type: null, open: false });
   const [loading, setLoading] = useState(false);
@@ -80,50 +83,54 @@ export function RowActions({ row, table }) {
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
               className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    onClick={onOpenDialogBox}
-                    className={clsx(
-                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
-                      focus && 'bg-this/10 dark:bg-this-light/10'
-                    )}>
-                    <EyeIcon className="size-4.5 stroke-1" />
-                    <span>{t('view')}</span>
-                  </button>
+              {hasPermission(PERMISSIONS.PAYMENT.MANUAL_WITHDRAW_VIEW) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={onOpenDialogBox}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                        focus && 'bg-this/10 dark:bg-this-light/10'
+                      )}>
+                      <EyeIcon className="size-4.5 stroke-1" />
+                      <span>{t('view')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
+              {row.original.depositStatus === 0 &&
+                hasPermission(PERMISSIONS.PAYMENT.MANUAL_WITHDRAW_UPDATE) && (
+                  <MenuItem>
+                    {({ focus }) => (
+                      <button
+                        onClick={() => openModal('accept')}
+                        className={clsx(
+                          'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                          focus && 'bg-this/10 dark:bg-this-light/10'
+                        )}>
+                        <CheckCircleIcon className="size-4.5 stroke-1" />
+                        <span>{t('accept')}</span>
+                      </button>
+                    )}
+                  </MenuItem>
                 )}
-              </MenuItem>
-              {row.original.depositStatus === 0 && (
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      onClick={() => openModal('accept')}
-                      className={clsx(
-                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
-                        focus && 'bg-this/10 dark:bg-this-light/10'
-                      )}>
-                      <CheckCircleIcon className="size-4.5 stroke-1" />
-                      <span>{t('accept')}</span>
-                    </button>
-                  )}
-                </MenuItem>
-              )}
 
-              {row.original.depositStatus === 0 && (
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      onClick={() => openModal('reject')}
-                      className={clsx(
-                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
-                        focus && 'bg-this/10 dark:bg-this-light/10'
-                      )}>
-                      <XCircleIcon className="size-4.5 stroke-1" />
-                      <span>{t('reject')}</span>
-                    </button>
-                  )}
-                </MenuItem>
-              )}
+              {row.original.depositStatus === 0 &&
+                hasPermission(PERMISSIONS.PAYMENT.MANUAL_WITHDRAW_UPDATE) && (
+                  <MenuItem>
+                    {({ focus }) => (
+                      <button
+                        onClick={() => openModal('reject')}
+                        className={clsx(
+                          'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                          focus && 'bg-this/10 dark:bg-this-light/10'
+                        )}>
+                        <XCircleIcon className="size-4.5 stroke-1" />
+                        <span>{t('reject')}</span>
+                      </button>
+                    )}
+                  </MenuItem>
+                )}
             </MenuItems>
           </Transition>
         </Menu>

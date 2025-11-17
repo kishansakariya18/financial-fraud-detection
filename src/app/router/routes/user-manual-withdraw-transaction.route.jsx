@@ -10,53 +10,8 @@ export const userManualWithdrawTransactionRoute = [
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.BANK.VIEW}>
+          <PrivateRoute permission={PERMISSIONS.PAYMENT.MANUAL_WITHDRAW_VIEW}>
             <List />
-          </PrivateRoute>
-        )
-      };
-    }
-  },
-  {
-    path: 'user-manual-withdraw-transaction/add',
-    lazy: async () => {
-      const { default: AddBankDeposit } = await import(
-        '../../pages/user-manual-withdraw-transaction/AddBankDeposit'
-      );
-      return {
-        Component: () => (
-          <PrivateRoute permission={PERMISSIONS.BANK.CREATE}>
-            <AddBankDeposit />
-          </PrivateRoute>
-        )
-      };
-    }
-  },
-  {
-    path: 'user-manual-withdraw-transaction/:id/edit',
-    lazy: async () => {
-      const { default: EditBankDeposit } = await import(
-        '../../pages/user-manual-withdraw-transaction/EditBankDeposit'
-      );
-      return {
-        Component: () => (
-          <PrivateRoute permission={PERMISSIONS.BANK.UPDATE}>
-            <EditBankDeposit />
-          </PrivateRoute>
-        )
-      };
-    }
-  },
-  {
-    path: 'user-manual-withdraw-transaction/view/:id',
-    lazy: async () => {
-      const { default: ViewWithdraw } = await import(
-        '../../pages/user-manual-withdraw-transaction/View'
-      );
-      return {
-        Component: () => (
-          <PrivateRoute permission={PERMISSIONS.USER_MANUAL_DEPOSIT_TRANSACTION.VIEW}>
-            <ViewWithdraw />
           </PrivateRoute>
         )
       };

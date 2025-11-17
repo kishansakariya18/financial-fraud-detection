@@ -81,7 +81,7 @@ export const segmentationRoutes = [
       const { default: Limits } = await import('../../pages/segmentation/limits/list/list');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.SEGMENTATION.LIMIT}>
+          <PrivateRoute permission={PERMISSIONS.SEGMENTATION_LIMIT.VIEW}>
             <Limits />
           </PrivateRoute>
         )
@@ -96,7 +96,7 @@ export const segmentationRoutes = [
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.SEGMENTATION.LIMIT_EDIT}>
+          <PrivateRoute permission={PERMISSIONS.SEGMENTATION_LIMIT.EDIT}>
             <EditSegmantationLimit />
           </PrivateRoute>
         )
@@ -111,7 +111,7 @@ export const segmentationRoutes = [
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.SEGMENTATION.LIMIT_CREATE}>
+          <PrivateRoute permission={PERMISSIONS.SEGMENTATION_LIMIT.CREATE}>
             <CreateSegmantationLimit />
           </PrivateRoute>
         )

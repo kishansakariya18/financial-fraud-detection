@@ -14,8 +14,7 @@ export const createBannerSchema = Yup.object().shape({
       otherwise: (schema) => schema.optional()
     }),
   startDate: Yup.date()
-    .nullable()
-    .notRequired()
+    .required('Start Date is required')
     .test(
       'start-date-required-if-end-date',
       'If End Date is provided, Start Date must also be provided.',
@@ -28,8 +27,7 @@ export const createBannerSchema = Yup.object().shape({
       }
     ),
   endDate: Yup.date()
-    .nullable()
-    .notRequired()
+    .required('End Date is required')
     .test(
       'end-date-required-if-start-date',
       'If Start Date is provided, End Date must also be provided.',
@@ -51,12 +49,14 @@ export const createBannerSchema = Yup.object().shape({
   bannerHeadline: Yup.string().optional(),
   bannerSubHeadline: Yup.string().optional(),
   targetUrl: Yup.string()
+    .max(250, 'URL must be less than or equal to 250 characters.') // Size validation
     .test('is-valid-url', 'Enter a correct URL!', function () {
       const { targetUrl } = this.parent;
 
       if (targetUrl && targetUrl.trim().length > 0) {
         const urlPattern =
-          /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/;
+          /^((http|https):\/\/)?(www.)?(?!.*(http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+(\/)?([^\s?]*)(\?[^/\s]*)?$/;
+
         return urlPattern.test(targetUrl);
       }
       return true;
@@ -78,8 +78,7 @@ export const editBannerSchema = Yup.object().shape({
       otherwise: (schema) => schema.optional()
     }),
   startDate: Yup.date()
-    .nullable()
-    .notRequired()
+    .required('Start Date is required')
     .test(
       'start-date-required-if-end-date',
       'If End Date is provided, Start Date must also be provided.',
@@ -92,8 +91,7 @@ export const editBannerSchema = Yup.object().shape({
       }
     ),
   endDate: Yup.date()
-    .nullable()
-    .notRequired()
+    .required('End Date is required')
     .test(
       'end-date-required-if-start-date',
       'If Start Date is provided, End Date must also be provided.',
@@ -115,12 +113,14 @@ export const editBannerSchema = Yup.object().shape({
   bannerHeadline: Yup.string().nullable().optional(),
   bannerSubHeadline: Yup.string().nullable().optional(),
   targetUrl: Yup.string()
+    .max(250, 'URL must be less than or equal to 250 characters.') // Size validation
     .test('is-valid-url', 'Enter a correct URL!', function () {
       const { targetUrl } = this.parent;
 
       if (targetUrl && targetUrl.trim().length > 0) {
         const urlPattern =
-          /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/;
+          /^((http|https):\/\/)?(www.)?(?!.*(http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+(\/)?([^\s?]*)(\?[^/\s]*)?$/;
+
         return urlPattern.test(targetUrl);
       }
       return true;

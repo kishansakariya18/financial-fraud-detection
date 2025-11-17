@@ -1,6 +1,11 @@
 // Import Dependencies
 import { RxDragHandleDots2 } from 'react-icons/rx';
-import { PuzzlePieceIcon, UserPlusIcon, ViewColumnsIcon } from '@heroicons/react/24/outline';
+import {
+  PuzzlePieceIcon,
+  Squares2X2Icon,
+  UserPlusIcon,
+  ViewColumnsIcon
+} from '@heroicons/react/24/outline';
 import { HiOutlineCurrencyRupee } from 'react-icons/hi2';
 // Local Imports
 // import SettingIcon from 'assets/dualicons/setting.svg?react';
@@ -18,7 +23,12 @@ export const casinoManagement = {
   title: 'Casino Management',
   transKey: 'casino_management',
   Icon: RxDragHandleDots2,
-  permission: [PERMISSIONS.CATEGORY.VIEW, PERMISSIONS.PROVIDER.VIEW, PERMISSIONS.GAME.VIEW],
+  permission: [
+    PERMISSIONS.CATEGORY.VIEW,
+    PERMISSIONS.PROVIDER.VIEW,
+    PERMISSIONS.AGGREGATORS.VIEW,
+    PERMISSIONS.GAME.VIEW
+  ],
   childs: [
     {
       id: 'casino_category',
@@ -39,13 +49,22 @@ export const casinoManagement = {
       permission: PERMISSIONS.PROVIDER.VIEW
     },
     {
+      id: 'casino_aggregator',
+      type: NAV_TYPE_ITEM,
+      path: '/casino/aggregator/list',
+      title: 'Aggregator List',
+      transKey: 'casino_aggregator',
+      Icon: Squares2X2Icon,
+      permission: PERMISSIONS.AGGREGATORS.VIEW
+    },
+    {
       id: 'casino_currencies',
       type: NAV_TYPE_ITEM,
       path: '/casino-management/currencies',
       title: 'Currency',
       transKey: 'casino_currencies',
       Icon: HiOutlineCurrencyRupee, // Please replace with the correct icon
-      permission: null, // Please replace with the correct permission
+      permission: PERMISSIONS.CURRENCY.VIEW, // aligned to constants
       platformType: [PLATFORM_TYPE.B2C]
     },
     {

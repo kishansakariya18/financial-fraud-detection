@@ -14,6 +14,8 @@ import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import SegmentationService from 'services/segmentation.services';
 import { segmentationResponseMapper } from '../helper';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export default function SegmentationList() {
   const { t } = useTranslation();
@@ -21,6 +23,12 @@ export default function SegmentationList() {
   const pageTitle = t('segmentation') + ' ' + t('list');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { hasPermission } = usePermissions();
+  const canShowActions =
+    hasPermission(PERMISSIONS.SEGMENTATION.LIST) ||
+    hasPermission(PERMISSIONS.SEGMENTATION.EDIT) ||
+    hasPermission(PERMISSIONS.SEGMENTATION.CHANGE_STATUS) ||
+    hasPermission(PERMISSIONS.SEGMENTATION.PLAYER_LIST);
 
   const fetchSegmentations = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
@@ -41,12 +49,12 @@ export default function SegmentationList() {
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchData: fetchSegmentations,
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'], right: canShowActions ? ['actions'] : [] },
       tableSettings: {},
       columnVisibility: {}
     }

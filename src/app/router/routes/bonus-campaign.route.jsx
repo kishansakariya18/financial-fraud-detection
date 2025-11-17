@@ -9,7 +9,7 @@ export const bonusCampaignRoute = [
       const { default: BonusCampaignList } = await import('../../pages/bonus-campaign/list/list');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.BONUS_CAMPAIGN?.LIST}>
+          <PrivateRoute permission={PERMISSIONS.BONUS_CAMPAIGN.VIEW}>
             <BonusCampaignList />
           </PrivateRoute>
         )
@@ -32,7 +32,7 @@ export const bonusCampaignRoute = [
           const { ViewDetails } = await import('../../pages/bonus-campaign/ViewDetails');
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.BONUS_CAMPAIGN?.LIST}>
+              <PrivateRoute permission={PERMISSIONS.BONUS_CAMPAIGN.VIEW}>
                 <ViewDetails />
               </PrivateRoute>
             )
@@ -47,7 +47,7 @@ export const bonusCampaignRoute = [
           );
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.BONUS_CAMPAIGN?.LIST}>
+              <PrivateRoute permission={PERMISSIONS.BONUS_CAMPAIGN.VIEW}>
                 <BonusCampaignHistory />
               </PrivateRoute>
             )
@@ -64,7 +64,7 @@ export const bonusCampaignRoute = [
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.BONUS_CAMPAIGN?.ADD}>
+          <PrivateRoute permission={PERMISSIONS.BONUS_CAMPAIGN.ADD}>
             <CreateBonusCampaign />
           </PrivateRoute>
         )
@@ -79,7 +79,7 @@ export const bonusCampaignRoute = [
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.BONUS_CAMPAIGN?.LIST}>
+          <PrivateRoute permission={PERMISSIONS.BONUS_CAMPAIGN.VIEW_GRANT_WAGERING}>
             <WageringContributions />
           </PrivateRoute>
         )

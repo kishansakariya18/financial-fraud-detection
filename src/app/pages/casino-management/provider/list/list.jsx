@@ -15,6 +15,8 @@ import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import ProviderService from 'services/provider.services';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export default function Provider() {
   const { t } = useTranslation();
@@ -23,6 +25,12 @@ export default function Provider() {
   const pageTitle = t('casino_provider');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { hasPermission } = usePermissions();
+  const canShowActions =
+    hasPermission(PERMISSIONS.PROVIDER.EDIT) ||
+    hasPermission(PERMISSIONS.PROVIDER.CHANGE_STATUS) ||
+    hasPermission(PERMISSIONS.PROVIDER.ADD_RESTRICTED_COUNTRY) ||
+    hasPermission(PERMISSIONS.GAME.VIEW);
   const fetchSummary = async () => {
     // setError(null);
 
@@ -62,13 +70,13 @@ export default function Provider() {
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchData: fetchProvider,
     queryParams,
     fetchSummary: fetchSummary,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'], right: canShowActions ? ['actions'] : [] },
       tableSettings: {}
     }
   });

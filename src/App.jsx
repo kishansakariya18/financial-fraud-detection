@@ -12,6 +12,7 @@ import { Provider } from 'react-redux';
 import store from './store/index';
 import { useEffect } from 'react';
 import { CurrencyProvider } from 'app/contexts/currency/Provider';
+import { PageHelpProvider } from 'app/contexts/page-help/Provider';
 
 // ----------------------------------------------------------------------
 
@@ -36,7 +37,9 @@ function App() {
             <BreakpointProvider>
               <SidebarProvider>
                 <TimezoneProvider>
-                  <RouterProvider router={router} />
+                  <PageHelpProvider>
+                    <RouterProvider router={router} />
+                  </PageHelpProvider>
                 </TimezoneProvider>
               </SidebarProvider>
             </BreakpointProvider>

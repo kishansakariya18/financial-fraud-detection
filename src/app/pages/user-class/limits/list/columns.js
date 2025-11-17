@@ -12,7 +12,7 @@ import {
 
 const columnHelper = createColumnHelper();
 
-export const columns = [
+export const columns = ({ canShowActions } = {}) => [
   columnHelper.accessor((row) => row.id, {
     id: 'ID',
     header: 'ID',
@@ -51,10 +51,14 @@ export const columns = [
     filterFn: 'inNumberRange',
     enableSorting: false
   }),
-  columnHelper.display({
-    id: 'Actions',
-    header: 'Actions',
-    cell: RowActions,
-    enableSorting: false
-  })
+  ...(canShowActions
+    ? [
+        columnHelper.display({
+          id: 'Actions',
+          header: 'Actions',
+          cell: RowActions,
+          enableSorting: false
+        })
+      ]
+    : [])
 ];

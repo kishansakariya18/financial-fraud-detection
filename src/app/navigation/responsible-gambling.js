@@ -9,5 +9,5 @@ export const responsibleGambling = {
   title: 'Responsible Gambling',
   transKey: 'responsible_gambling',
   Icon: ShieldCheckIcon,
-  permission: PERMISSIONS.RESPONSIBLE_GAMBLING.LIST
+  permission: PERMISSIONS.RESPONSIBLE_GAMING_RESTRICTIONS.VIEW
 };

@@ -12,7 +12,14 @@ export const blogSchema = (isEdit = false) => {
     content: isEdit
       ? Yup.string().trim().min(10, 'Content must be at least 10 characters')
       : Yup.string().trim().required('Content is required'),
-    blogCategoryId: Yup.number().required('Blog category is required'),
+    blogCategoryIds: Yup.array()
+      .of(
+        Yup.number()
+          .typeError('Blog categories are required')
+          .required('Blog categories are required')
+      )
+      .min(1, 'Blog categories are required')
+      .required('Blog categories are required'),
     shortDescription: Yup.string().trim().max(500, 'Maximum 500 characters allowed'),
     metaTitle: Yup.string().trim().max(200, 'Maximum 200 characters allowed'),
     metaDescription: Yup.string().trim(),

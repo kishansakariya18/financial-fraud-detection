@@ -20,6 +20,8 @@ import { useTranslation } from 'react-i18next';
 import UserClassService from 'services/user-class.services';
 import PlayerService from 'services/player.services';
 import { isB2BPlatform } from 'utils/platformNavigation';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 export function PlayerRowActions({
   row,
   table,
@@ -45,6 +47,7 @@ export function PlayerRowActions({
   const [allowedUpgradableIds, setAllowedUpgradableIds] = useState([]);
   const [selectedClassId, setSelectedClassId] = useState(null);
   const isB2b = isB2BPlatform();
+  const { hasPermission } = usePermissions();
 
   const confirmMessages = {
     pending: {
@@ -98,6 +101,22 @@ export function PlayerRowActions({
 
   // Derive current user's class id for display in modal
   const currentClassId = row?.original?.playerClassID || row?.original?.UserClassID;
+
+  // Permission-gated action flags
+  const canView = !!onView && hasPermission(PERMISSIONS.USER.LIST);
+  const canEdit = !!onEdit && hasPermission(PERMISSIONS.USER.LIST);
+  const canChangeStatus = !!onChangeStatus && hasPermission(PERMISSIONS.USER.CHANGE_STATUS);
+  const canCreditAmount =
+    !!onCreditAmount && listFor === 'agent' && hasPermission(PERMISSIONS.USER.ADD_MONEY);
+  const canResetPassword = !!onResetPassword && listFor === 'agent';
+  const canUpgradeUserClass = !isB2b && hasPermission(PERMISSIONS.USER.UPGRADE_USER_CLASS);
+  const canShowActions =
+    canView ||
+    canEdit ||
+    canChangeStatus ||
+    canCreditAmount ||
+    canResetPassword ||
+    canUpgradeUserClass;
 
   const handleUpgrade = useCallback(async () => {
     if (!selectedClassId || !allowedUpgradableIds.includes(selectedClassId)) return;
@@ -219,124 +238,126 @@ export function PlayerRowActions({
 
   return (
     <>
-      <div className="flex justify-center space-x-1.5 rtl:space-x-reverse">
-        <Menu as="div" className="relative inline-block text-left">
-          <MenuButton as={Button} isIcon className="size-8 rounded-full">
-            <EllipsisHorizontalIcon className="size-4.5" />
-          </MenuButton>
-          <Transition
-            as={Fragment}
-            enter="transition ease-out"
-            enterFrom="opacity-0 translate-y-2"
-            enterTo="opacity-100 translate-y-0"
-            leave="transition ease-in"
-            leaveFrom="opacity-100 translate-y-0"
-            leaveTo="opacity-0 translate-y-2">
-            <MenuItems
-              anchor={{ to: 'bottom end', gap: 12 }}
-              className="absolute z-[100] w-[12rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
-              {onView && (
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      className={clsx(
-                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
-                        focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
-                      )}
-                      onClick={() => onView(row.original)}>
-                      <EyeIcon className="size-4.5 stroke-1" />
-                      <span>{t('view')}</span>
-                    </button>
-                  )}
-                </MenuItem>
-              )}
-              {onEdit && (
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      className={clsx(
-                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
-                        focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
-                      )}
-                      onClick={() => onEdit(row.original)}>
-                      <EyeIcon className="size-4.5 stroke-1" />
-                      <span>{t('view')}</span>
-                    </button>
-                  )}
-                </MenuItem>
-              )}
-              {onChangeStatus && (
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      onClick={openModal}
-                      className={clsx(
-                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
-                        focus && 'bg-this/10 dark:bg-this-light/10'
-                      )}>
-                      {row?.original?.status === 'inactive' ? (
-                        <CgUnblock className="size-4.5 stroke-1" />
-                      ) : (
-                        <CgBlock className="size-4.5 stroke-1" />
-                      )}
-                      <span>
-                        {row?.original?.status === 'inactive'
-                          ? t('unblock') || 'Unblock'
-                          : t('block') || 'Block'}
-                      </span>
-                    </button>
-                  )}
-                </MenuItem>
-              )}
-              {onCreditAmount && listFor === 'agent' && (
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      onClick={() => onCreditAmount(row.original)}
-                      className={clsx(
-                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
-                        focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
-                      )}>
-                      <CreditCardIcon className="size-4.5 stroke-1" />
-                      <span>{t('credit_amount')}</span>
-                    </button>
-                  )}
-                </MenuItem>
-              )}
-              {onResetPassword && listFor === 'agent' && (
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      onClick={() => onResetPassword(row.original)}
-                      className={clsx(
-                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
-                        focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
-                      )}>
-                      <KeyIcon className="size-4.5 stroke-1" />
-                      <span>{t('reset_password')}</span>
-                    </button>
-                  )}
-                </MenuItem>
-              )}
-              {!isB2b && (
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      onClick={openUpgrade}
-                      className={clsx(
-                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
-                        focus && 'bg-this/10 dark:bg-this-light/10'
-                      )}>
-                      <GrUpgrade className="size-4.5 stroke-1" />
-                      <span>{t('upgrade_user_class') || 'Upgrade User Class'}</span>
-                    </button>
-                  )}
-                </MenuItem>
-              )}
-            </MenuItems>
-          </Transition>
-        </Menu>
-      </div>
+      {canShowActions && (
+        <div className="flex justify-center space-x-1.5 rtl:space-x-reverse">
+          <Menu as="div" className="relative inline-block text-left">
+            <MenuButton as={Button} isIcon className="size-8 rounded-full">
+              <EllipsisHorizontalIcon className="size-4.5" />
+            </MenuButton>
+            <Transition
+              as={Fragment}
+              enter="transition ease-out"
+              enterFrom="opacity-0 translate-y-2"
+              enterTo="opacity-100 translate-y-0"
+              leave="transition ease-in"
+              leaveFrom="opacity-100 translate-y-0"
+              leaveTo="opacity-0 translate-y-2">
+              <MenuItems
+                anchor={{ to: 'bottom end', gap: 12 }}
+                className="absolute z-[100] w-[12rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
+                {canView && (
+                  <MenuItem>
+                    {({ focus }) => (
+                      <button
+                        className={clsx(
+                          'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                          focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                        )}
+                        onClick={() => onView(row.original)}>
+                        <EyeIcon className="size-4.5 stroke-1" />
+                        <span>{t('view')}</span>
+                      </button>
+                    )}
+                  </MenuItem>
+                )}
+                {canEdit && (
+                  <MenuItem>
+                    {({ focus }) => (
+                      <button
+                        className={clsx(
+                          'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                          focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                        )}
+                        onClick={() => onEdit(row.original)}>
+                        <EyeIcon className="size-4.5 stroke-1" />
+                        <span>{t('view')}</span>
+                      </button>
+                    )}
+                  </MenuItem>
+                )}
+                {canChangeStatus && (
+                  <MenuItem>
+                    {({ focus }) => (
+                      <button
+                        onClick={openModal}
+                        className={clsx(
+                          'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                          focus && 'bg-this/10 dark:bg-this-light/10'
+                        )}>
+                        {row?.original?.status === 'inactive' ? (
+                          <CgUnblock className="size-4.5 stroke-1" />
+                        ) : (
+                          <CgBlock className="size-4.5 stroke-1" />
+                        )}
+                        <span>
+                          {row?.original?.status === 'inactive'
+                            ? t('unblock') || 'Unblock'
+                            : t('block') || 'Block'}
+                        </span>
+                      </button>
+                    )}
+                  </MenuItem>
+                )}
+                {canCreditAmount && (
+                  <MenuItem>
+                    {({ focus }) => (
+                      <button
+                        onClick={() => onCreditAmount(row.original)}
+                        className={clsx(
+                          'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                          focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                        )}>
+                        <CreditCardIcon className="size-4.5 stroke-1" />
+                        <span>{t('credit_amount')}</span>
+                      </button>
+                    )}
+                  </MenuItem>
+                )}
+                {canResetPassword && (
+                  <MenuItem>
+                    {({ focus }) => (
+                      <button
+                        onClick={() => onResetPassword(row.original)}
+                        className={clsx(
+                          'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                          focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                        )}>
+                        <KeyIcon className="size-4.5 stroke-1" />
+                        <span>{t('reset_password')}</span>
+                      </button>
+                    )}
+                  </MenuItem>
+                )}
+                {canUpgradeUserClass && (
+                  <MenuItem>
+                    {({ focus }) => (
+                      <button
+                        onClick={openUpgrade}
+                        className={clsx(
+                          'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                          focus && 'bg-this/10 dark:bg-this-light/10'
+                        )}>
+                        <GrUpgrade className="size-4.5 stroke-1" />
+                        <span>{t('upgrade_user_class') || 'Upgrade User Class'}</span>
+                      </button>
+                    )}
+                  </MenuItem>
+                )}
+              </MenuItems>
+            </Transition>
+          </Menu>
+        </div>
+      )}
 
       <ConfirmModal
         show={changeStatusModalOpen}

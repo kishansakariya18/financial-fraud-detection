@@ -16,7 +16,7 @@ export const contentManagement = {
   transKey: 'content_management',
   Icon: FolderIcon,
   permission: [
-    PERMISSIONS.PAGE.LIST,
+    PERMISSIONS.PAGE.VIEW,
     PERMISSIONS.BANNER.LIST,
     PERMISSIONS.BLOG.LIST,
     PERMISSIONS.BLOG_CATEGORY.LIST

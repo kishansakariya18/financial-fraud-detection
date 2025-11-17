@@ -10,7 +10,7 @@ export const responsibleGamblingRoute = [
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.RESPONSIBLE_GAMBLING.LIST}>
+          <PrivateRoute permission={PERMISSIONS.RESPONSIBLE_GAMING_RESTRICTIONS.VIEW}>
             <ResponsibleGamblingList />
           </PrivateRoute>
         )
@@ -23,7 +23,7 @@ export const responsibleGamblingRoute = [
       const { default: ViewDetails } = await import('../../pages/responsible-gambling/ViewDetails');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.RESPONSIBLE_GAMBLING.LIST}>
+          <PrivateRoute permission={PERMISSIONS.RESPONSIBLE_GAMING_RESTRICTIONS.VIEW}>
             <ViewDetails />
           </PrivateRoute>
         )

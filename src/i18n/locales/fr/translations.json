@@ -612,5 +612,8 @@
   "commission_amount_help_text": "Montant payé à l'afiliado cuando se cumplen las condiciones.",
   "min_deposit_for_cpa_help_text": "Cantidad del primer depósito requerida para calificar para CPA.",
   "min_wager_for_cpa_help_text": "Cantidad total apostada por el usuario final para calificar para CPA.",
-  "loss_commission_percent_help_text": "Porcentaje de la cantidad de pérdida a pagar al afiliado."
+  "loss_commission_percent_help_text": "Porcentaje de la cantidad de pérdida a pagar al afiliado.",
+  "source_of_fund": "Source du financement",
+  "identity": "Identité",
+  "bonus_templates": "Modèles de bonus"
 }

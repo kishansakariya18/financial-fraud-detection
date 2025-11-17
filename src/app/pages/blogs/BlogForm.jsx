@@ -1,22 +1,21 @@
-import { DocumentTextIcon, CloudArrowUpIcon } from '@heroicons/react/24/outline';
+import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
 import { Controller } from 'react-hook-form';
-import { Listbox } from 'components/shared/form/Listbox';
+import { Combobox } from 'components/shared/form/Combobox';
 import { Button, Input, Checkbox } from 'components/ui';
 import { TextEditor } from 'components/shared/form/TextEditor';
 import Quill, { Delta } from 'quill';
 import { Upload } from 'components/ui/Form/Upload';
 import RenderImage from 'components/ui/custom/ImageRender';
 import { Textarea } from 'components/ui/Form/Textarea';
-import { TagsInput } from 'components/shared/form/TagsInput';
-import { stringToSlug } from 'utils/stringToSlug';
 import { htmlToDelta } from 'utils/quillUtils';
 import PropTypes from 'prop-types';
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import TagInput from 'components/shared/form/TagsInput';
 
 const BlogForm = ({ form, categories = [], isEdit = false, initialImageUrl = null, onSubmit }) => {
   const { t } = useTranslation();
-  const { register, handleSubmit, formState, control, watch, setValue, reset } = form;
+  const { register, handleSubmit, formState, control, setValue, reset } = form;
   const { errors, isSubmitting } = formState;
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(initialImageUrl);
@@ -24,27 +23,16 @@ const BlogForm = ({ form, categories = [], isEdit = false, initialImageUrl = nul
   const [htmlContent, setHtmlContent] = useState('');
   const uploadRef = useRef();
 
-  const titleValue = watch('title');
-  const slugValue = watch('slug');
-
-  // Auto-generate slug from title (only in create mode and when slug is empty)
-  useEffect(() => {
-    if (!isEdit && titleValue && !slugValue) {
-      const generatedSlug = stringToSlug(titleValue);
-      setValue('slug', generatedSlug, { shouldValidate: false });
-    }
-  }, [titleValue, slugValue, isEdit, setValue]);
-
   const handleChange = (val) => {
     setContent(val);
     const quill = new Quill(document.createElement('div'));
     quill.setContents(val);
     setHtmlContent(quill.root.innerHTML);
+    setValue('content', quill.root.innerHTML);
   };
 
   // Initialize content for edit mode
   useEffect(() => {
-    console.log(form.formState.defaultValues);
     if (isEdit && form.formState.defaultValues?.content) {
       const delta = htmlToDelta(form.formState.defaultValues.content);
       setContent(delta);
@@ -57,7 +45,9 @@ const BlogForm = ({ form, categories = [], isEdit = false, initialImageUrl = nul
       {
         ...data,
         content: htmlContent,
-        blogCategoryId: data.blogCategoryId || null,
+        blogCategoryIds: Array.isArray(data.blogCategoryIds)
+          ? data.blogCategoryIds.filter((value) => value !== null && value !== undefined)
+          : [],
         tags: data.tags || []
       },
       file
@@ -98,14 +88,13 @@ const BlogForm = ({ form, categories = [], isEdit = false, initialImageUrl = nul
         <div className="lg:col-span-6">
           <Input
             {...register('title')}
-            prefix={<DocumentTextIcon className="size-5" />}
             label={t('title')}
             error={errors?.title?.message}
             placeholder={t('enter') + ' ' + t('title')}
           />
         </div>
 
-        <div className="lg:col-span-6">
+        {/* <div className="lg:col-span-6">
           <Input
             {...register('slug')}
             prefix={<DocumentTextIcon className="size-5" />}
@@ -113,46 +102,68 @@ const BlogForm = ({ form, categories = [], isEdit = false, initialImageUrl = nul
             error={errors?.slug?.message}
             placeholder={t('slug_auto_generate_info')}
             description={t('slug_auto_generate_info_description')}
-          />
-        </div>
+            onChange={(e) => {
+              setIsSlugManuallyEdited(true);
+              setValue('slug', e.target.value, { shouldValidate: true });
+            }}
+          />{' '}
+        </div> */}
 
         <div className="lg:col-span-6">
           <Controller
-            render={({ field }) => (
-              <Listbox
-                data={categories}
-                value={categories.find((cat) => cat.value === field.value) || null}
-                onChange={(val) => field.onChange(val?.value || null)}
-                name={field.name}
-                label={t('category')}
-                placeholder={t('select') + ' ' + t('category')}
-                displayField="label"
-                error={errors?.blogCategoryId?.message}
-              />
-            )}
             control={control}
-            name="blogCategoryId"
+            name="blogCategoryIds"
+            render={({ field }) => {
+              const normalizedValues = Array.isArray(field.value)
+                ? field.value.map((value) => {
+                    const parsed = Number(value);
+                    return Number.isNaN(parsed) ? value : parsed;
+                  })
+                : [];
+
+              const selectedCategories = categories.filter((option) =>
+                normalizedValues.includes(option.value)
+              );
+
+              return (
+                <Combobox
+                  multiple
+                  data={categories}
+                  value={selectedCategories}
+                  onChange={(selected) =>
+                    field.onChange(
+                      Array.isArray(selected)
+                        ? selected
+                            .map((option) => option?.value)
+                            .map((value) => {
+                              const parsed = Number(value);
+                              return Number.isNaN(parsed) ? value : parsed;
+                            })
+                            .filter((value) => value !== null && value !== undefined)
+                        : []
+                    )
+                  }
+                  name={field.name}
+                  label={t('category')}
+                  placeholder={t('select') + ' ' + t('category')}
+                  displayField="label"
+                  searchFields={['label']}
+                  error={errors?.blogCategoryIds?.message}
+                />
+              );
+            }}
           />
         </div>
 
         <div className="lg:col-span-6">
-          <Input
-            {...register('authorName')}
-            prefix={<DocumentTextIcon className="size-5" />}
-            label={t('author') + ' ' + t('name')}
-            error={errors?.authorName?.message}
-            placeholder={t('enter') + ' ' + t('author') + ' ' + t('name')}
-          />
-        </div>
-        <div className="lg:col-span-6">
           <Controller
             render={({ field }) => (
-              <TagsInput
-                value={field.value || []}
-                onChange={field.onChange}
+              <TagInput
                 label={t('tags')}
                 placeholder={t('enter_tags_info')}
                 error={errors?.tags?.message}
+                value={field.value || []}
+                onChange={field.onChange}
               />
             )}
             control={control}
@@ -162,7 +173,6 @@ const BlogForm = ({ form, categories = [], isEdit = false, initialImageUrl = nul
         <div className="lg:col-span-6">
           <Input
             {...register('metaTitle')}
-            prefix={<DocumentTextIcon className="size-5" />}
             label={t('meta') + ' ' + t('title')}
             error={errors?.metaTitle?.message}
             placeholder={t('enter') + ' ' + t('meta') + ' ' + t('title')}
@@ -187,17 +197,23 @@ const BlogForm = ({ form, categories = [], isEdit = false, initialImageUrl = nul
             rows={3}
           />
         </div>
-
         <div className="lg:col-span-12">
-          <TextEditor
-            value={content}
-            label={t('content')}
-            onChange={handleChange}
-            placeholder={
-              t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
-            }
-            className="[&_.ql-editor]:max-h-96 [&_.ql-editor]:min-h-[12rem]"
-            error={errors?.content?.message}
+          <Controller
+            control={control}
+            name="content"
+            rules={{ required: t('content') + ' ' + t('is_required') }}
+            render={() => (
+              <TextEditor
+                value={content}
+                label={t('content')}
+                onChange={(val) => {
+                  handleChange(val);
+                }}
+                placeholder={`${t('enter')} ${t('your')} ${t('content')} ${t('here')}...`}
+                className="[&_.ql-editor]:max-h-96 [&_.ql-editor]:min-h-[12rem]"
+                error={errors?.content?.message}
+              />
+            )}
           />
         </div>
 

@@ -14,6 +14,8 @@ import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import { userclassLimitListResponseMapper } from '../helper';
 import UserClassService from 'services/user-class.services';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export default function UserClassLimitsList() {
   const { t } = useTranslation();
@@ -22,6 +24,8 @@ export default function UserClassLimitsList() {
   const pageTitle = t('userClass') + ' ' + t('limits') + ' ' + t('list');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { hasPermission } = usePermissions();
+  const canShowActions = hasPermission(PERMISSIONS.USER_CLASS_LIMIT.EDIT);
 
   const fetchUserClassLimits = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
@@ -48,12 +52,12 @@ export default function UserClassLimitsList() {
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchData: fetchUserClassLimits,
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'], right: canShowActions ? ['Actions'] : [] },
       tableSettings: { enableFullScreen: false },
       columnVisibility: { slug: false }
     }

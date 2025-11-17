@@ -1,0 +1,225 @@
+import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router';
+import { useLockScrollbar } from 'hooks';
+
+import TableCard from 'components/ui/custom/TableCard';
+import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
+import { useTranslation } from 'react-i18next';
+import useTable from 'components/ui/useTable';
+import GamesService from 'services/games.services';
+import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
+import ProviderService from 'services/provider.services';
+import { gameSelectionModalColumns } from './columns';
+import { Button } from 'components/ui';
+import { CustomModal } from 'components/custom';
+import { providerResponserMapper, responseMapper } from 'app/pages/casino-management/games/helper';
+import { GamesFilters } from './gamesFilters';
+
+export default function GamesListModal({
+  open,
+  onClose,
+  onSelectSubmit,
+  selectedItems,
+  isIncluded
+}) {
+  const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const [checkedRows, setCheckedRows] = useState([]);
+  const checkedIds = useMemo(() => checkedRows.map((row) => row.value), [checkedRows]);
+
+  const [providerOptions, setProviderOptions] = useState([]);
+
+  const fetchAllProviders = async () => {
+    const result = await ProviderService.getAllProviders();
+
+    if (result.status === 200) {
+      setProviderOptions(providerResponserMapper(result.response.data));
+    }
+
+    return { status: result.status, error: result.error };
+  };
+
+  const handleCheck = (row) => {
+    console.log('row: ', row);
+    const isChecked = checkedRows.some((item) => item.value === row.id);
+    if (!isChecked) {
+      setCheckedRows((prev) => [...prev, { value: row.id, label: row.name }]);
+    } else {
+      setCheckedRows((prev) => prev.filter((item) => item.value !== row.id));
+    }
+  };
+
+  const handleTogglePageSelection = (tableInstance) => {
+    let currentRows = tableInstance.getRowModel().rows.map((row) => row.original);
+    if (currentRows.length === 0) {
+      return;
+    }
+    currentRows = currentRows.map((row) => ({ value: row.id, label: row.name }));
+
+    setCheckedRows((prev) => {
+      const allSelected = currentRows.every((row) => prev.some((item) => item.value === row.value));
+
+      if (allSelected) {
+        return prev.filter((item) => !currentRows.some((row) => row.value === item.value));
+      }
+      const nextSet = new Set(prev);
+      currentRows.forEach((row) => nextSet.add(row));
+      return Array.from(nextSet);
+    });
+  };
+
+  const fetchGames = async () => {
+    const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
+    const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
+
+    const result = await GamesService.getGamesList({
+      pagination: { pageIndex, pageSize },
+      filters: queryParams
+    });
+
+    if (result.status === 200) {
+      return {
+        status: 200,
+        data: responseMapper(result.response.data),
+        totalRecords: parseInt(result.response.totalRecords, 10) || 0
+      };
+    }
+
+    return { status: result.status, error: result.error };
+  };
+
+  useEffect(() => {
+    fetchAllProviders();
+  }, []);
+
+  useEffect(() => {
+    if (selectedItems) {
+      setCheckedRows(selectedItems);
+    }
+  }, [selectedItems]);
+
+  const columns = gameSelectionModalColumns({
+    selectedIds: checkedIds,
+    handleCheck,
+    actionLabel: 'Select',
+    onTogglePageSelection: handleTogglePageSelection
+  });
+
+  const { table, isLoading, tableSettings, setColumnFilters } = useTable({
+    columns,
+    fetchData: fetchGames,
+    queryParams,
+    setSearchParams,
+    initialSettings: {
+      columnPinning: { left: ['select', 'id'], right: ['actions'] },
+      tableSettings: {
+        enableFullScreen: false,
+        enableRowDense: false
+      }
+    }
+  });
+
+  useEffect(() => {
+    const filtersFromQuery = [];
+    if (queryParams.keyword) {
+      filtersFromQuery.push({ id: 'name', value: queryParams.keyword });
+    }
+    if (queryParams.status) {
+      filtersFromQuery.push({ id: 'status', value: queryParams.status });
+    }
+    if (queryParams.provider) {
+      filtersFromQuery.push({ id: 'provider', value: +queryParams.provider });
+    }
+
+    if (queryParams.startDate && queryParams.endDate) {
+      filtersFromQuery.push({
+        id: 'createdAt',
+        value: [+queryParams.startDate, +queryParams.endDate]
+      });
+    }
+    setColumnFilters(filtersFromQuery);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queryParams]);
+
+  const applyFilterHandler = () => {
+    const filterItems = {};
+
+    for (let data of table.getState().columnFilters) {
+      if (data.id === 'name') {
+        filterItems.keyword = data.value;
+      }
+
+      if (data.id === 'status') {
+        filterItems.status = data.value;
+      }
+
+      if (data.id === 'createdAt') {
+        filterItems.date = data.value;
+      }
+
+      if (data.id === 'provider') {
+        filterItems.provider = data.value;
+      }
+    }
+
+    setSearchParams({
+      pageIndex: DEFAULT_PAGE_INDEX,
+      pageSize: DEFAULT_PER_PAGE_RECORD,
+      ...(filterItems.keyword && { keyword: filterItems.keyword }),
+      ...(filterItems.status && { status: filterItems.status }),
+      ...(filterItems.date && { startDate: filterItems.date[0] }),
+      ...(filterItems.date && { endDate: filterItems?.date[1] }),
+      ...(filterItems.provider && { provider: filterItems.provider })
+    });
+  };
+
+  const clearFilterHandler = () => {
+    if (!isEmptyObject(queryParams)) {
+      setSearchParams({
+        pageIndex: DEFAULT_PAGE_INDEX,
+        pageSize: DEFAULT_PER_PAGE_RECORD
+      });
+    }
+    table.resetColumnFilters();
+  };
+
+  useLockScrollbar(tableSettings.enableFullScreen);
+  // console.log('tableSettings: from reports', table);
+  const onSubmit = async () => {
+    onSelectSubmit(checkedRows);
+  };
+
+  console.log('checkedRows: ', checkedRows);
+
+  return (
+    <CustomModal
+      title={isIncluded ? t('included_games') : t('excluded_games')}
+      show={open}
+      onClose={onClose}
+      sizeClass="max-w-7xl"
+      modalFooter={
+        <Button
+          type="button"
+          color="primary"
+          disabled={checkedRows.length === 0}
+          onClick={onSubmit}
+          className="whitespace-nowrap">
+          {t('assign') + ' ' + t('selected')}
+        </Button>
+      }>
+      <GamesFilters
+        table={table}
+        providerOptions={providerOptions}
+        onApplyFilters={applyFilterHandler}
+        onClearFilters={clearFilterHandler}
+      />
+      <TableCard
+        tableSettings={tableSettings}
+        table={table}
+        loading={isLoading}
+        disableDefaultPadding
+      />
+    </CustomModal>
+  );
+}

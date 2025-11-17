@@ -19,6 +19,17 @@ const EditBlog = () => {
   const [initialImageUrl, setInitialImageUrl] = useState(null);
   const [blog, setBlog] = useState(null);
 
+  const extractCategoryIds = (details) => {
+    if (!details) {
+      return [];
+    }
+
+    if (Array.isArray(details.categories)) {
+      return details.categories.map((cat) => cat.BlogCategoryID);
+    }
+    return [];
+  };
+
   const pageTitle = t('edit') + ' ' + t('blog');
 
   const breadcrumbItem = [
@@ -48,16 +59,14 @@ const EditBlog = () => {
           setInitialImageUrl(
             result.ImageName ? `${apiConfig.baseURL.S3_URL}/upload/blogs/${result.ImageName}` : null
           );
-          console.log(result);
           return {
             title: result.Title || '',
             slug: result.Slug || '',
             content: result.Content || '',
-            blogCategoryId: result.BlogCategoryID || null,
+            blogCategoryIds: extractCategoryIds(result),
             shortDescription: result.ShortDescription || '',
             metaTitle: result.MetaTitle || '',
             metaDescription: result.MetaDescription || '',
-            authorName: result.AuthorName || '',
             tags: tags,
             isFeatured: result.IsFeatured || 0,
             isActive: result.IsActive || 1
@@ -87,7 +96,7 @@ const EditBlog = () => {
       .then(({ response }) => {
         setCategories(
           response.data.map((cat) => ({
-            value: cat.BlogCategoryID,
+            value: Number(cat.BlogCategoryID),
             label: cat.Name
           }))
         );

@@ -8,7 +8,7 @@ import { TableConfig } from 'components/ui/custom/TableConfig';
 import { DateFilter } from 'components/shared/table/DateFilter';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
-import { affiliateStatusOptions } from 'app/pages/affiliate/helper';
+import { affiliateStatusOptions } from 'app/pages/affiliates/helper';
 import { useNavigate } from 'react-router';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';

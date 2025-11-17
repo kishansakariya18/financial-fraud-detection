@@ -22,7 +22,13 @@ export const createTenantSchema = Yup.object().shape({
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
       'Minimum 8 Character Required, Atleast One Letter and One Number and One Special Character'
     ),
-  email: Yup.string().trim().required('Email Required').email('Invalid Email'),
+  email: Yup.string()
+    .trim()
+    .required('Email Required')
+    .matches(
+      /^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+      'Enter a valid email address without the "+" symbol'
+    ),
   mobile: Yup.string()
     .trim()
     .required('Enter Your Mobile Number')

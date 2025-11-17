@@ -397,7 +397,8 @@ const AffiliatesService = {
         phoneCode: data.phoneCode,
         gender: data.gender === 'male' ? 0 : 1,
         firstname: data.firstName,
-        lastname: data.lastName
+        lastname: data.lastName,
+        status: data.status
       };
 
       const response = await sendRequest({

@@ -26,6 +26,7 @@ const CreateBlog = () => {
     defaultValues: {
       isFeatured: 0,
       isActive: 1,
+      blogCategoryIds: [],
       tags: []
     }
   });
@@ -37,7 +38,7 @@ const CreateBlog = () => {
       .then(({ response }) => {
         setCategories(
           response.data.map((cat) => ({
-            value: cat.BlogCategoryID,
+            value: Number(cat.BlogCategoryID),
             label: cat.Name
           }))
         );

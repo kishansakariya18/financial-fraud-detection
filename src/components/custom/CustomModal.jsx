@@ -20,6 +20,7 @@ export const CustomModal = ({
   onOpen = () => {},
   onClose = () => {},
   isShowBtn = false,
+  modalFooter = null,
   sizeClass = ''
 }) => {
   const saveRef = useRef(null);
@@ -82,6 +83,11 @@ export const CustomModal = ({
                 <p>{description}</p>
                 {children}
               </div>
+              {modalFooter && (
+                <div className="flex justify-center space-x-3 py-4 rtl:space-x-reverse">
+                  {modalFooter}
+                </div>
+              )}
             </DialogPanel>
           </TransitionChild>
         </Dialog>
@@ -103,6 +109,7 @@ CustomModal.propTypes = {
   onClose: PropTypes.func,
   isShowBtn: PropTypes.bool,
   panalClassName: PropTypes.string,
+  modalFooter: PropTypes.node,
   sizeClass: PropTypes.oneOf([
     'max-w-lg',
     'max-w-xl',

@@ -1,0 +1,83 @@
+import { createColumnHelper } from '@tanstack/react-table';
+import { BadgeCell } from 'components/custom/table/cell';
+import { bonusTemplateStatusOptions } from '../happer';
+import { BonusTemplateRowActions } from 'components/sections/bonus-template/BonusTemplateRowActions';
+
+const columnHelper = createColumnHelper();
+
+const formatDate = (value) => {
+  if (!value) return '—';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return date.toLocaleString();
+};
+
+export const createBonusTemplateColumns = ({ onView, onEdit, onDelete, onChangeStatus }) => [
+  columnHelper.accessor('id', {
+    id: 'id',
+    header: 'ID',
+    cell: (info) => <span className="font-medium text-gray-700">{info.getValue() || '—'}</span>,
+    enableSorting: false,
+    size: 120
+  }),
+  {
+    id: 'displayPriority',
+    header: 'Display Priority',
+    accessorKey: 'displayPriority',
+    enableSorting: false
+  },
+  columnHelper.accessor('templateName', {
+    id: 'templateName',
+    header: 'Template Name',
+    cell: (info) => <span className="font-medium text-gray-900">{info.getValue() || '—'}</span>,
+    enableSorting: false,
+    size: 220
+  }),
+  columnHelper.accessor('displayTitle', {
+    id: 'displayTitle',
+    header: 'Display Title',
+    cell: (info) => info.getValue() || '—',
+    enableSorting: false,
+    size: 200
+  }),
+  columnHelper.accessor('bonusType', {
+    id: 'bonusType',
+    header: 'Bonus Type',
+    cell: (info) => info.getValue() || '—',
+    enableSorting: false,
+    size: 180
+  }),
+  columnHelper.accessor('status', {
+    id: 'status',
+    header: 'Status',
+    cell: BadgeCell,
+    meta: { optionData: bonusTemplateStatusOptions },
+    enableSorting: false,
+    size: 150
+  }),
+  columnHelper.accessor('updatedAt', {
+    id: 'updatedAt',
+    header: 'Last Updated',
+    cell: (info) => formatDate(info.getValue()),
+    enableSorting: false,
+    size: 200
+  }),
+  columnHelper.display({
+    id: 'actions',
+    header: 'Actions',
+    cell: (props) => (
+      <BonusTemplateRowActions
+        {...props}
+        onView={onView}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        onChangeStatus={onChangeStatus}
+      />
+    ),
+    enableSorting: false,
+    size: 120
+  })
+];

@@ -12,12 +12,14 @@ import { DocumentDuplicateIcon } from '@heroicons/react/20/solid';
 import UserKycServices from 'services/player-kyc.services';
 import { parseUserKycStatusToApp } from './helper';
 import { toast } from 'sonner';
-import { DOCUMENT_STATUS, DOCUMENT_TYPE } from 'constants/app.constant';
+import { DOCUMENT_STATUS, DOCUMENT_TYPE, PERMISSIONS } from 'constants/app.constant';
 import { showImage } from 'utils/showImage';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import usePermissions from 'app/router/usePermissions';
 
 export function ViewDetails() {
   const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState('');
   const [error, setError] = useState('');
@@ -221,7 +223,13 @@ export function ViewDetails() {
                     Document Type:
                   </p>
                   <p>
-                    {+response?.DocumentType === DOCUMENT_TYPE.DOCUMENT ? t('document') : t('bank')}
+                    {+response?.DocumentType === DOCUMENT_TYPE.IDENTITY
+                      ? t('identity')
+                      : +response?.DocumentType === DOCUMENT_TYPE.ADDRESS
+                        ? t('address')
+                        : +response?.DocumentType === DOCUMENT_TYPE.SOURCE_OF_FUND
+                          ? t('source_of_fund')
+                          : '-'}
                   </p>
                 </div>
                 <div className="mt-4 flex flex-col gap-4 sm:flex-row">
@@ -245,54 +253,58 @@ export function ViewDetails() {
                   )}
                 </div>
 
-                <div className="mt-4 space-y-4">
-                  {+response?.DocumentStatus === DOCUMENT_STATUS.PENDING && (
-                    <div className="flex flex-wrap gap-5">
-                      <Radio
-                        value="approve"
-                        checked={selected === 'approve'}
-                        onChange={(event) => {
-                          setSelected(event.target.value);
-                        }}
-                        label="Approve"
-                      />
-                      <Radio
-                        value="reject"
-                        checked={selected === 'reject'}
-                        onChange={(event) => {
-                          setSelected(event.target.value);
-                        }}
-                        label={t('reject')}
-                      />
-                    </div>
-                  )}
-                  {selected === 'reject' &&
-                    +response?.DocumentStatus === DOCUMENT_STATUS.PENDING && (
-                      <div className="max-w-xl">
-                        <Input
-                          onChange={(e) => setRejectReason(e.target.value)}
-                          label={t('rejectReason')}
-                          placeholder={t('enter') + ' ' + t('rejectReason')}
+                {hasPermission(PERMISSIONS.USER_KYC.UPDATE_KYC) && (
+                  <div className="mt-4 space-y-4">
+                    {+response?.DocumentStatus === DOCUMENT_STATUS.PENDING && (
+                      <div className="flex flex-wrap gap-5">
+                        <Radio
+                          value="approve"
+                          checked={selected === 'approve'}
+                          onChange={(event) => {
+                            setSelected(event.target.value);
+                          }}
+                          label="Approve"
+                        />
+                        <Radio
+                          value="reject"
+                          checked={selected === 'reject'}
+                          onChange={(event) => {
+                            setSelected(event.target.value);
+                          }}
+                          label={t('reject')}
                         />
                       </div>
                     )}
-                </div>
+                    {selected === 'reject' &&
+                      +response?.DocumentStatus === DOCUMENT_STATUS.PENDING && (
+                        <div className="max-w-xl">
+                          <Input
+                            onChange={(e) => setRejectReason(e.target.value)}
+                            label={t('rejectReason')}
+                            placeholder={t('enter') + ' ' + t('rejectReason')}
+                          />
+                        </div>
+                      )}
+                  </div>
+                )}
               </div>
 
-              <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-                {+response?.DocumentStatus === DOCUMENT_STATUS.PENDING && (
-                  <Button
-                    className="min-w-[7rem]"
-                    color={'primary'}
-                    onClick={handleKycUpdate}
-                    disabled={loading}>
-                    {t('update')}
+              {hasPermission(PERMISSIONS.USER_KYC.UPDATE_KYC) && (
+                <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
+                  {+response?.DocumentStatus === DOCUMENT_STATUS.PENDING && (
+                    <Button
+                      className="min-w-[7rem]"
+                      color={'primary'}
+                      onClick={handleKycUpdate}
+                      disabled={loading}>
+                      {t('update')}
+                    </Button>
+                  )}
+                  <Button className="min-w-[7rem]" onClick={() => navigate('/player-kyc')}>
+                    {t('back')}
                   </Button>
-                )}
-                <Button className="min-w-[7rem]" onClick={() => navigate('/player-kyc')}>
-                  {t('back')}
-                </Button>
-              </div>
+                </div>
+              )}
             </Card>
           )}
         </div>

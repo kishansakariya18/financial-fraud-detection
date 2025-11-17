@@ -22,7 +22,7 @@ export const blacklistRoutes = [
           const { default: BlacklistIP } = await import('../../pages/blacklist/ip/list');
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.USER.LIST}>
+              <PrivateRoute permission={PERMISSIONS.BLACKLIST.VIEW}>
                 <BlacklistIP />
               </PrivateRoute>
             )
@@ -37,7 +37,7 @@ export const blacklistRoutes = [
           );
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.USER.LIST}>
+              <PrivateRoute permission={PERMISSIONS.BLACKLIST.VIEW_EMAIL_MOBILE_RESTRCTION}>
                 <BlacklistEmailPhone />
               </PrivateRoute>
             )
@@ -52,7 +52,7 @@ export const blacklistRoutes = [
           );
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.USER.LIST}>
+              <PrivateRoute permission={PERMISSIONS.BLACKLIST.VIEW_RESTRICTED_EMAIL_DOMAIN}>
                 <DisposableEmailList />
               </PrivateRoute>
             )
@@ -66,7 +66,11 @@ export const blacklistRoutes = [
     lazy: async () => {
       const { default: BlacklistIP } = await import('../../pages/blacklist/BlacklistIP');
       return {
-        Component: () => <BlacklistIP />
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.BLACKLIST.LIST}>
+            <BlacklistIP />
+          </PrivateRoute>
+        )
       };
     }
   },
@@ -77,7 +81,11 @@ export const blacklistRoutes = [
         '../../pages/blacklist/BlacklistEmailPhone'
       );
       return {
-        Component: () => <BlacklistEmailPhone />
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.BLACKLIST.LIST}>
+            <BlacklistEmailPhone />
+          </PrivateRoute>
+        )
       };
     }
   },
@@ -88,7 +96,11 @@ export const blacklistRoutes = [
         '../../pages/blacklist/disposable-email/list'
       );
       return {
-        Component: () => <DisposableEmailList />
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.BLACKLIST.LIST}>
+            <DisposableEmailList />
+          </PrivateRoute>
+        )
       };
     }
   }

@@ -100,6 +100,7 @@ const ProfileService = {
       formData.append('lastname', data.lastName);
       formData.append('email', data.email);
       formData.append('mobile', data.mobile);
+      formData.append('phoneCode', data.phoneCode);
 
       const response = await sendRequest({
         url: apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.ADMIN_USER.UPDATE_PROFILE,

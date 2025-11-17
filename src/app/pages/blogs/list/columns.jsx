@@ -32,18 +32,17 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.categoryName, {
-    id: 'categoryName',
-    label: 'Category',
-    header: 'Category',
+  columnHelper.accessor((row) => row.categoryNames, {
+    id: 'categoryNames',
+    label: 'Categories',
+    header: 'Categories',
     cell: BoldCell,
     enableSorting: false,
     filterFn: (row, columnId, value) => {
       if (value === undefined || value === null || value === '') {
         return true;
       }
-
-      return Number(row.original.blogCategoryId) === Number(value);
+      return row.original.categories.some((cat) => cat.BlogCategoryID === value);
     }
   }),
   columnHelper.accessor((row) => row.authorName, {

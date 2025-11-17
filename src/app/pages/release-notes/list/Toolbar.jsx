@@ -16,6 +16,8 @@ import { t } from 'i18next';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { releaseNoteStatusOption } from '../helper';
 // import { statusOptions } from '../helper';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +30,7 @@ export function Toolbar({
   const { isXs } = useBreakpointsContext();
   const navigate = useNavigate();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
+  const { hasPermission } = usePermissions();
 
   return (
     <div className="table-toolbar">
@@ -42,13 +45,15 @@ export function Toolbar({
           </h2>
         </div>
 
-        <Button
-          className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
-          color="primary"
-          onClick={() => navigate('/release-notes/add')}>
-          <PlusIcon className="size-5" />
-          <span>{t('add') + ' ' + t('release_note')}</span>
-        </Button>
+        {hasPermission(PERMISSIONS.RELEASE_NOTE.ADD) && (
+          <Button
+            className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
+            color="primary"
+            onClick={() => navigate('/release-notes/add')}>
+            <PlusIcon className="size-5" />
+            <span>{t('add') + ' ' + t('release_note')}</span>
+          </Button>
+        )}
       </div>
 
       {isXs ? (
