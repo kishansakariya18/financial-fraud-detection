@@ -11,6 +11,6 @@ export const faq = {
   title: 'FAQ',
   transKey: 'faq',
   Icon: TbMessage2Question,
-  permission: [PERMISSIONS.FAQ.VIEW],
+  permission: PERMISSIONS.FAQ.VIEW,
   platformType: [PLATFORM_TYPE.B2C]
 };

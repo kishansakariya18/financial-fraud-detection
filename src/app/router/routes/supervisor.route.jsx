@@ -133,7 +133,7 @@ const callingAgentsRoute = [
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.CALLING_AGENT.Add}>
+          <PrivateRoute permission={PERMISSIONS.CALLING_AGENT.ADD}>
             <Create />
           </PrivateRoute>
         )

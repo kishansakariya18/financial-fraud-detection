@@ -15,6 +15,8 @@ import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import BankService from 'services/bank.services';
 import { bankStatusToAPI } from '../helper';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export default function Bank() {
   const { t } = useTranslation();
@@ -23,6 +25,10 @@ export default function Bank() {
   const [refetch, setRefetch] = useState(false);
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { hasPermission } = usePermissions();
+  const canShowActions =
+    hasPermission(PERMISSIONS.DEPOSIT_BANK.EDIT) ||
+    hasPermission(PERMISSIONS.DEPOSIT_BANK.CHANGE_STATUS);
 
   const fetchBank = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
@@ -46,12 +52,12 @@ export default function Bank() {
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchData: fetchBank,
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'], right: canShowActions ? ['actions'] : [] },
       tableSettings: {}
     },
     meta: {

@@ -1,4 +1,4 @@
-import { PLATFORM_TYPE } from 'constants/app.constant';
+import { PERMISSIONS, PLATFORM_TYPE } from 'constants/app.constant';
 import PrivateRoute from '../private';
 
 export const siteConfigurationRoutes = [
@@ -9,7 +9,11 @@ export const siteConfigurationRoutes = [
         '../../pages/site-configuration/app-settings'
       );
       return {
-        Component: () => <ApplicationSettings />
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.APP_SETTING.EDIT}>
+            <ApplicationSettings />
+          </PrivateRoute>
+        )
       };
     }
   },
@@ -18,7 +22,11 @@ export const siteConfigurationRoutes = [
     lazy: async () => {
       const { default: EmailProvider } = await import('../../pages/email-provider/list/list');
       return {
-        Component: () => <EmailProvider />
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.EMAIL_PROVIDER.LIST}>
+            <EmailProvider />
+          </PrivateRoute>
+        )
       };
     }
   },
@@ -28,7 +36,9 @@ export const siteConfigurationRoutes = [
       const { default: KYCProvider } = await import('../../pages/kyc-provider/list/list');
       return {
         Component: () => (
-          <PrivateRoute allowedPlatforms={PLATFORM_TYPE.B2C}>
+          <PrivateRoute
+            permission={PERMISSIONS.KYC_PROVIDER.LIST}
+            allowedPlatforms={PLATFORM_TYPE.B2C}>
             <KYCProvider />
           </PrivateRoute>
         )
@@ -40,7 +50,11 @@ export const siteConfigurationRoutes = [
     lazy: async () => {
       const { default: SMSProvider } = await import('../../pages/sms-provider/list/list');
       return {
-        Component: () => <SMSProvider />
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.SMS_PROVIDER.LIST}>
+            <SMSProvider />
+          </PrivateRoute>
+        )
       };
     }
   },
@@ -52,7 +66,9 @@ export const siteConfigurationRoutes = [
       );
       return {
         Component: () => (
-          <PrivateRoute allowedPlatforms={[PLATFORM_TYPE.B2C]}>
+          <PrivateRoute
+            permission={PERMISSIONS.PAYMENT_PROVIDER.LIST}
+            allowedPlatforms={[PLATFORM_TYPE.B2C]}>
             <PaymentProvider />
           </PrivateRoute>
         )
@@ -66,7 +82,11 @@ export const siteConfigurationRoutes = [
         '../../pages/email-provider/EditProvider'
       );
       return {
-        Component: () => <EditEmailProvider />
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.EMAIL_PROVIDER.EDIT}>
+            <EditEmailProvider />
+          </PrivateRoute>
+        )
       };
     }
   },
@@ -75,7 +95,11 @@ export const siteConfigurationRoutes = [
     lazy: async () => {
       const { default: EditEmailProvider } = await import('../../pages/sms-provider/EditProvider');
       return {
-        Component: () => <EditEmailProvider />
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.SMS_PROVIDER.EDIT}>
+            <EditEmailProvider />
+          </PrivateRoute>
+        )
       };
     }
   },
@@ -84,7 +108,11 @@ export const siteConfigurationRoutes = [
     lazy: async () => {
       const { default: EditEmailProvider } = await import('../../pages/kyc-provider/EditProvider');
       return {
-        Component: () => <EditEmailProvider />
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.KYC_PROVIDER.EDIT}>
+            <EditEmailProvider />
+          </PrivateRoute>
+        )
       };
     }
   },
@@ -95,7 +123,11 @@ export const siteConfigurationRoutes = [
         '../../pages/payment-provider-config/EditProvider'
       );
       return {
-        Component: () => <EditEmailProvider />
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.PAYMENT_PROVIDER.EDIT}>
+            <EditEmailProvider />
+          </PrivateRoute>
+        )
       };
     }
   }

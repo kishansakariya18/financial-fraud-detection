@@ -10,5 +10,5 @@ export const auditlogs = {
   title: 'Audit Logs',
   transKey: 'auditlogs',
   Icon: CommandLineIcon,
-  permission: PERMISSIONS.AUDIT_LOG.VIEW
+  permission: PERMISSIONS.AUDIT_LOGS.VIEW
 };

@@ -7,7 +7,7 @@ export const userClasseRoute = [
       const { default: UserClass } = await import('../../pages/user-class/list/list');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.USER_CLASS.LIST}>
+          <PrivateRoute permission={PERMISSIONS.USER_CLASS.VIEW}>
             <UserClass />
           </PrivateRoute>
         )
@@ -46,7 +46,7 @@ export const userClasseRoute = [
       const { default: Limits } = await import('../../pages/user-class/limits/list/list');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.USER_CLASS.LIMITS}>
+          <PrivateRoute permission={PERMISSIONS.USER_CLASS_LIMIT.VIEW}>
             <Limits />
           </PrivateRoute>
         )
@@ -92,7 +92,7 @@ export const userClasseRoute = [
       return {
         Component: () => (
           <PrivateRoute
-            permission={PERMISSIONS.USER_CLASS.ASSIGN_BANK}
+            permission={PERMISSIONS.USER_CLASS.MAP}
             allowedPlatforms={[PLATFORM_TYPE.B2C]}>
             <AssignedBanks />
           </PrivateRoute>
@@ -107,7 +107,7 @@ export const userClasseRoute = [
       return {
         Component: () => (
           <PrivateRoute
-            permission={PERMISSIONS.USER_CLASS.ASSIGN_BANK}
+            permission={PERMISSIONS.USER_CLASS.MAP}
             allowedPlatforms={[PLATFORM_TYPE.B2C]}>
             <BankList />
           </PrivateRoute>

@@ -1,6 +1,6 @@
 import { PERMISSIONS } from 'constants/app.constant';
 import PrivateRoute from '../private';
-import { Navigate } from 'react-router';
+// import { Navigate } from 'react-router';
 
 export const emailTemplateRoute = [
   {
@@ -39,7 +39,7 @@ export const emailTemplateRoute = [
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.EVENT_TEMPLATE.EDIT}>
+          <PrivateRoute permission={PERMISSIONS.ASSIGN_EVENT_TEMPLATES.UPDATE}>
             <AssignEventToGroup />
           </PrivateRoute>
         )
@@ -60,34 +60,34 @@ export const emailTemplateRoute = [
         )
       };
     }
-  },
-  {
-    path: 'event-template/:id/tab',
-    lazy: async () => ({
-      Component: (await import('../../pages/player-kyc/Tabs')).default
-    }),
-    children: [
-      {
-        index: true,
-        element: <Navigate to="details" />
-      },
-      {
-        path: 'add',
-        lazy: async () => {
-          const { CreateEmailTemplate } = await import(
-            '../../pages/event-template/CreateEventTemplate'
-          );
-          return {
-            Component: () => (
-              <PrivateRoute permission={PERMISSIONS.USER_KYC.VIEW}>
-                <CreateEmailTemplate />
-              </PrivateRoute>
-            )
-          };
-        }
-      }
-    ]
   }
+  // {
+  //   path: 'event-template/:id/tab',
+  //   lazy: async () => ({
+  //     Component: (await import('../../pages/player-kyc/Tabs')).default
+  //   }),
+  //   children: [
+  //     {
+  //       index: true,
+  //       element: <Navigate to="details" />
+  //     },
+  //     {
+  //       path: 'add',
+  //       lazy: async () => {
+  //         const { CreateEmailTemplate } = await import(
+  //           '../../pages/event-template/CreateEventTemplate'
+  //         );
+  //         return {
+  //           Component: () => (
+  //             <PrivateRoute permission={PERMISSIONS.EVENT_TEMPLATE.ADD}>
+  //               <CreateEmailTemplate />
+  //             </PrivateRoute>
+  //           )
+  //         };
+  //       }
+  //     }
+  //   ]
+  // }
 ];
 
 export default emailTemplateRoute;

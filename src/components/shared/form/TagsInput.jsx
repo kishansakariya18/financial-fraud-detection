@@ -78,7 +78,7 @@ export default function TagInput({
         onClick={() => inputRef.current?.focus()}>
         <ul className="flex flex-wrap items-center gap-1.5">
           {(!tags || tags.length === 0) && input.length === 0 && (
-            <span className="select-none text-gray-400">{placeholder}</span>
+            <span className="select-none text-gray-600">{placeholder}</span>
           )}
 
           {tags.map((tag, i) => (
@@ -98,7 +98,6 @@ export default function TagInput({
               </button>
             </li>
           ))}
-
           {/* the real input lives inline with the chips */}
           <li className="min-w-[120px] flex-1">
             <input
@@ -107,7 +106,7 @@ export default function TagInput({
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKeyDown}
               onPaste={onPaste}
-              className="w-full border-none bg-transparent text-sm text-gray-900 placeholder-gray-400 outline-none dark:text-gray-100"
+              className="w-full border-none bg-transparent text-sm text-gray-900 placeholder-gray-700 outline-none dark:text-gray-100"
               placeholder={tags.length ? '' : ''}
               // optional accessibility
               role="combobox"

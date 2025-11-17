@@ -145,6 +145,14 @@ export const apiConfig = {
       COMMISSION_REQUESTS_STATUS_UPDATE:
         '/admin/supervisor/redeem-commission-requests/:requestID/status'
     },
+    BONUS_TEMPLATE: {
+      LIST: '/bonus/admin/bonus-template/list',
+      DETAIL: '/bonus/admin/bonus-template/:bonusTemplateID/details',
+      CREATE: '/bonus/admin/bonus-template',
+      UPDATE: '/bonus/admin/bonus-template/:bonusTemplateID',
+      DELETE: '/bonus/admin/bonus-template/:bonusTemplateID',
+      UPDATE_STATUS: '/bonus/admin/bonus-template/:bonusTemplateID/change-status'
+    },
     AGENT: {
       DASHBOARD: '/admin/agent/dashboard',
       LIST: '/admin/agent/list',
@@ -496,13 +504,6 @@ export const apiConfig = {
       EDIT: '/payments/admin/user-bank-deposit/:depositId/edit',
       DELETE: '/payments/admin/user-bank-deposit/:depositId/delete'
     },
-    REGISTRATION_FIELDS: {
-      LIST: '/payments/admin/user-bank-deposit/list',
-      SUBMIT: '/payments/admin/user-bank-deposit/:depositId/manual-deposit/verify',
-      DETAIL: '/admin/user-bank-deposit/:depositId/details',
-      EDIT: '/admin/user-bank-deposit/:depositId/edit',
-      DELETE: '/admin/user-bank-deposit/:depositId/delete'
-    },
     RELEASE_NOTES: {
       LIST: '/content/admin/release-note/list',
       CREATE: '/content/admin/release-note/create',
@@ -516,6 +517,7 @@ export const apiConfig = {
     },
     WALLET: {
       LIST: '/wallet/admin/wallet/list/:userUID',
+      ALL_WALLET_LIST: '/wallet/admin/wallet/all-wallet-list/:userUID',
       FUND: '/wallet/admin/wallet/fund'
     },
     RESPONSIBLE_GAMING_LIMITS: {

@@ -7,6 +7,7 @@ import TableCard from 'components/ui/custom/TableCard';
 import useTable from 'components/ui/useTable';
 import DashboardService from 'services/dashboard.services';
 import { t } from 'i18next';
+import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 export default function LastTenRegistrationList() {
   const title = `${t('lastTenRegistration')}`;
@@ -18,9 +19,16 @@ export default function LastTenRegistrationList() {
 
     console.log('result: ', result.response);
 
-    const apiData = result.response.data;
+    let apiData = result.response.data;
 
     if (result.status === 200) {
+      if (apiData?.length) {
+        apiData = apiData.map((d) => ({
+          ...d,
+          DateCreated: getDateInUTCToTimeZone(d.DateCreated)
+        }));
+      }
+
       return {
         status: 200,
         data: apiData

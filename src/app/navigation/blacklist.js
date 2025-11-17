@@ -8,5 +8,9 @@ export const blacklist = {
   title: 'Blacklist',
   transKey: 'blacklist',
   Icon: ShieldExclamationIcon,
-  permission: PERMISSIONS.USER.LIST
+  permission: [
+    PERMISSIONS.BLACKLIST.VIEW,
+    PERMISSIONS.BLACKLIST.VIEW_EMAIL_MOBILE_RESTRCTION,
+    PERMISSIONS.BLACKLIST.VIEW_RESTRICTED_EMAIL_DOMAIN
+  ]
 };

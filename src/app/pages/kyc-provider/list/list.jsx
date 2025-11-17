@@ -12,12 +12,19 @@ import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import { kycProviderResponseMapper } from '../helper';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export default function KYCProvider() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t('kycProvider');
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { hasPermission } = usePermissions();
+  const canShowActions =
+    hasPermission(PERMISSIONS.KYC_PROVIDER.EDIT) ||
+    hasPermission(PERMISSIONS.KYC_PROVIDER.CHANGE_STATUS) ||
+    hasPermission(PERMISSIONS.KYC_PROVIDER.DELETE);
 
   const fetchKycProviders = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
@@ -39,12 +46,12 @@ export default function KYCProvider() {
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchData: fetchKycProviders,
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'], right: canShowActions ? ['actions'] : [] },
       tableSettings: {},
       columnVisibility: {}
     }

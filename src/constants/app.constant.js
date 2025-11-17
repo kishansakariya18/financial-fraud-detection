@@ -114,22 +114,53 @@ export const DOCUMENT_STATUS = {
   REJECTED: 2
 };
 
-export const PERMISSIONS = {
-  ROLES: {
-    VIEW: 'roles-view',
-    ADD: 'roles-add',
-    EDIT: 'roles-edit',
-    DELETE: 'roles-delete'
+export const PERMISSIONS = Object.freeze({
+  BONUS_CAMPAIGN: {
+    ADD: 'bonus-campaign-add',
+    VIEW: 'bonus-campaign-view',
+    CHANGE_STATUS: 'bonus-campaign-change-status',
+    VIEW_GRANTS: 'bonus-campaign-view-grants',
+    VIEW_GRANT_WAGERING: 'bonus-campaign-view-grant-wagering',
+    MANAGE_GRANTS: 'bonus-campaign-manage-grants'
   },
+
+  ADMIN: {
+    LIST: 'admin-view',
+    CREATE: 'admin-add',
+    EDIT: 'admin-edit',
+    DELETE: 'admin-delete',
+    CHANGE_STATUS: 'admin-change-status',
+    VIEW_LOGIN_HISTORY: 'admin-login-history-view'
+  },
+  SUPERVISOR: {
+    LIST: 'supervisor-view'
+  },
+  CALLING_AGENT: {
+    LIST: 'calling-agent-view',
+    EDIT: 'calling-agent-edit',
+    ADD: 'calling-agent-add',
+    DELETE: 'calling-agent-delete'
+  },
+  AGENTS: {
+    ADD: 'agent-add',
+    EDIT: 'agent-edit',
+    VIEW: 'agent-view',
+    CHANGE_STATUS: 'agent-change-status',
+    MANAGE_FUND: 'agent-wallet-manage'
+  },
+  USER_LIMIT_SETTING: {
+    UPDATE: 'limit-setting-update'
+    // MODULE_NAME: this.MODULE_NAMES.USERS
+  },
+
   USER: {
     LIST: 'user-view',
-    REFERRAL_LIST: 'user-referral',
-    TRANSACTION_LIST: 'user-transaction',
-    USER_GAMES: 'user-games',
+    WALLET_LIST: 'user-wallet-list',
     ADD_MONEY: 'user-add-money',
     CHANGE_STATUS: 'user-change-status',
-    TRANSACTION: 'user-transaction',
+    TRANSACTION_LIST: 'user-transaction',
     GAMES: 'user-games',
+    VIEW_REFERRAL: 'user-referral',
     EXPORT_USER: 'users-export',
     RESET_BANK_REQUEST_COUNT: 'user-reset-bank-request-count',
     COMMENT_VIEW: 'user-comment-view',
@@ -137,123 +168,111 @@ export const PERMISSIONS = {
     COMMENT_EDIT: 'user-comment-edit',
     COMMENT_DELETE: 'user-comment-delete',
     ALL_TRANSACTION: 'all-transaction',
+    VIEW_LOGIN_HISTORY: 'user-login-history-view',
     USER_LEVEL_LIMITS: 'user-level-risk-mangement',
-    VIEW_LOGIN_HISTORY: 'user-login-history-view'
-  },
-  SUPERVISOR: {
-    LIST: 'supervisor-view'
-  },
-  CALLING_AGENT: {
-    LIST: 'calling-agent-view',
-    Add: 'calling-agent-add',
-    DELETE: 'calling-agent-delete',
-    EDIT: 'calling-agent-edit'
-  },
-  REPORT: {
-    BETSLIP_REPORT_VIEW: 'betslip-report-view',
-    DEPOSIT_REPORT_VIEW: 'deposit-report-view',
-    WITHDRAW_REPORT_VIEW: 'withdraw-report-view',
-    BETSLIP_EXPORT_REPORT: 'betslip-export-report',
-    DEPOSIT_EXPORT_REPORT: 'deposit-export-report',
-    WITHDRAW_EXPORT_REPORT: 'withdraw-export-report',
-    PLAYER_BALANCE_REPORT_VIEW: 'player-balance-report-view',
-    PLAYER_BALANCE_EXPORT_REPORT: 'player-balance-export-report',
-    AGENT_COMMISSION_REPORT: 'agent-commission-report',
-    AGENT_WALLET_REPORT: 'agent-wallet-report'
-  },
-  USER_LIMIT_SETTING: {
-    VIEW: 'limit-setting-view',
-    UPDATE: 'limit-setting-update'
-  },
-  COUNTRIES: {
-    LIST: 'country-view',
-    CHANGE_STATUS: 'country-change-status'
-  },
-  AUDIT_LOG: {
-    VIEW: 'user-enquiry-view'
-  },
-  USER_ENQUIRY: {
-    LIST: 'user-enquiry-view'
-  },
-  PAGE: {
-    LIST: 'pages-view',
-    EDIT: 'pages-edit',
-    STATUS: 'pages-change-status'
-  },
-  APP_VERSION: {
-    VIEW: 'app-version-view',
-    ADD: 'app-version-add',
-    EDIT: 'app-version-edit',
-    STATUS: 'app-version-change-status',
-    APPLY: 'app-version-apply'
-  },
-  ADMIN: {
-    LIST: 'admin-view',
-    CREATE: 'admin-add',
-    EDIT: 'admin-edit',
-    CHANGE_STATUS: 'admin-change-status',
-    VIEW_LOGIN_HISTORY: 'admin-login-history-view'
+    USER_SUMMARY: 'user-summary',
+    UPGRADE_USER_CLASS: 'user-class-upgrade-user-class',
+    LIMIT_USER_SUMMARY: 'limit-user-summary',
+    RESPONSIBLE_GAMING_VIEW: 'user-responsible-gaming-view',
+    RESPONSIBLE_GAMING_EDIT: 'user-responsible-gaming-edit',
+    RESPONSIBLE_GAMING_DELETE: 'user-responsible-gaming-delete'
   },
   BANNER: {
     LIST: 'banner-view',
     ADD: 'banner-add',
     EDIT: 'banner-edit',
-    VIEW: 'banner-view',
     DELETE: 'banner-delete',
-    CHANGE_STATUS: 'banner-change-status',
-    UPLOAD_SEGMENTATION_CSV: 'banner-upload-segmentation-csv',
-    SEGMENTATION: 'banner-upload-segmentation-csv'
+    CHANGE_STATUS: 'banner-change-status'
   },
-  BLOG: {
-    LIST: 'blogs-view',
-    CREATE: 'blogs-create',
-    EDIT: 'blogs-edit',
-    DELETE: 'blogs-delete',
-    CHANGE_STATUS: 'blogs-change-status'
+
+  LAYOUTS: {
+    VIEW: 'layout-theme-view',
+    ADD: 'layout-theme-add',
+    EDIT: 'layout-theme-edit',
+    STATUS: 'layout-theme-status'
   },
-  BLOG_CATEGORY: {
-    LIST: 'blog-categories-view',
-    CREATE: 'blog-categories-create',
-    EDIT: 'blog-categories-edit',
-    DELETE: 'blog-categories-delete',
-    CHANGE_STATUS: 'blog-categories-change-status'
+  DASHBOARD: {
+    CARDS: 'dashboard-cards',
+    DEPOSIT_STATS: 'dashboard-deposit-stats',
+    WITHDRAW_STATS: 'dashboard-withdraw-stats',
+    CASINO_STATS: 'dashboard-casino-stats',
+    GGR_REPORT: 'dashboard-ggr-report',
+    LOGGED_IN_PLAYERS: 'dashboard-logged-in-players',
+    ACTIVE_PLAYERS: 'dashboard-active-players',
+    DEMOGRAPHIC_REPORT: 'dashboard-demographic-report',
+    KPI_SUMMARY: 'dashboard-kpi-summary',
+    TOP_PLAYERS: 'dashboard-top-players',
+    TOP_GAMES: 'dashboard-top-games'
   },
-  APP_SETTING: {
-    LIST: 'app-setting-view'
+  COUNTRIES: {
+    VIEW: 'country-view',
+    LIST: 'country-view',
+    CHANGE_STATUS: 'country-change-status',
+    ADD_REMOVE_COUNTRY_RESTRICTIONS: 'add-remove-country-restrictions',
+    VIEW_RESTRICTIONS: 'view-country-restrictions',
+    ADD_REMOVE_COUNTRY_MODULE_RESTRICTIONS: 'add-remove-country-module-restrictions',
+    ADD_REMOVE_COUNTRY_PROVIDER_RESTRICTIONS: 'add-remove-country-provider-restrictions'
   },
-  DEPOSIT_PROMOCODE: {
-    LIST: 'deposit-promo-code-view',
+  API_LOGS: {
+    VIEW: 'api-logs-view'
+  },
+  AFFILIATES: {
+    VIEW: 'affiliate-view',
+    ADD: 'affiliate-add',
+    EDIT: 'affiliate-edit',
+    CHANGE_STATUS: 'affiliate-change-status',
+    TRANSACTIONS: 'affiliate-transactions',
+    USER_SIGNUP_LIST: 'affiliate-user-signup-list',
+    PAYOUT: 'affiliate-payout',
+    UPDATE_PAYTOUT: 'affiliate-payout-update',
+    VIEW_LOGIN_HISTORY: 'affiliate-login-history-view',
+    CAMPAIGN: {
+      VIEW: 'affiliate-campaign-view',
+      CHANGE_STATUS: 'affiliate-campaign-change-status'
+    },
+    COMMISSION_SETTING: {
+      GLOBAL: {
+        VIEW: 'affiliate-commission-setting-global-view',
+        UPDATE: 'affiliate-commission-setting-global-update'
+      },
+      PER_AFFILIATE: {
+        VIEW: 'affiliate-commission-setting-per-affiliate-view',
+        UPDATE: 'affiliate-commission-setting-per-affiliate-update',
+        DELETE: 'affiliate-commission-setting-per-affiliate-delete'
+      }
+    },
+    REPORT: {
+      VIEW: 'affiliate-campaign-report-view',
+      EXPORT: 'affiliate-campaign-report-export'
+    }
+  },
+  BONUS_TEMPLATES: {
+    LIST: 'bonus-templates-view',
+    ADD: 'bonus-templates-add',
+    EDIT: 'bonus-templates-edit',
+    CHANGE_STATUS: 'bonus-templates-change-status',
+    DELETE: 'bonus-templates-delete'
+  },
+  DEPOSIT_PROMO_CODE: {
+    VIEW: 'deposit-promo-code-view',
     ADD: 'deposit-promo-code-add',
-    USER_LIST: 'deposit-promo-code-users-list',
     CHANGE_STATUS: 'deposit-promo-code-change-status',
+    USER_LIST: 'deposit-promo-code-users-list',
+    UPLOAD_SEGMENTATION_CSV: 'deposit-promo-code-segmentation',
     DELETE: 'deposit-promo-code-delete',
-    SEGMENTATION: 'deposit-promo-code-segmentation'
+    EDIT: 'deposit-promo-code-edit'
   },
-  BONUS_CAMPAIGN: {
-    LIST: 'bonus-campaign-view',
-    ADD: 'bonus-campaign-add',
-    USER_LIST: 'bonus-campaign-users-list',
-    CHANGE_STATUS: 'bonus-campaign-change-status',
-    DELETE: 'bonus-campaign-delete',
-    SEGMENTATION: 'bonus-campaign-segmentation'
+
+  PROMO_CODE_REPORT: {
+    VIEW: 'promo-code-reports-view',
+    EXPORT: 'reports-promocode-export'
   },
-  EMAIL_TEMPLATE: {
-    LIST: 'setting-email-template-view',
-    ADD: 'setting-email-template-add',
-    EDIT: 'setting-email-template-edit'
+  ROLES: {
+    VIEW: 'roles-view',
+    ADD: 'roles-add',
+    EDIT: 'roles-edit',
+    DELETE: 'role-delete'
   },
-  EVENT_TEMPLATE: {
-    VIEW: 'event-template-view',
-    ADD: 'event-template-add',
-    EDIT: 'event-template-edit',
-    CHANGE_STATUS: 'event-template-status',
-    DELETE: 'event-template-delete',
-    ASSIGN: 'event-template-assign'
-  },
-  REFERRAL_OFFERS: {
-    VIEW: 'setting-referral-amount-view'
-  },
-  API_LOGS: 'api-logs-view',
   SEGMENTATION: {
     LIST: 'segmentation-view',
     ADD: 'segmentation-add',
@@ -261,28 +280,21 @@ export const PERMISSIONS = {
     CHANGE_STATUS: 'segmentation-change-status',
     PLAYER_LIST: 'segmentation-player-list'
   },
-  AFFILIATES: {
-    LIST: 'affiliate-view',
-    CHANGE_STATUS: 'affiliate-change-status',
-    ADD: 'affiliate-add',
-    EDIT: 'affiliate-edit',
-    ADD_MONEY: 'affiliate-add-money',
-    TRANSACTIONS: 'affiliate-transactions',
-    USER_SIGNUP_LIST: 'affiliate-user-signup-list',
-    PAYOUT: 'affiliate-payout',
-    UPDATE_PAYTOUT: 'affiliate-payout-update',
-    VIEW_LOGIN_HISTORY: 'affiliate-login-history-view',
-    WITHDRAWALS_LIST: 'affiliate-withdrawals-list',
-    COMMISSION: 'affiliate-commission',
-    CAMPAIGNS: 'affiliate-campaigns',
-    TRANSACTIONS_LIST: 'affiliate-transactions-list',
-    CREATE: 'affiliate-create'
-  },
   PAYMENT: {
-    VIEW: 'payment-view'
+    WITHDRAW: 'withdraw',
+    DEPOSIT: 'deposit',
+    BETSLIP: 'betslip',
+    WINNING: 'winning',
+    MANUAL_WITHDRAW_VIEW: 'manual-withdraw-view',
+    MANUAL_WITHDRAW_UPDATE: 'manual-withdraw-update'
   },
   USER_KYC: {
-    VIEW: 'user-kyc-view'
+    VIEW: 'user-kyc-view',
+    UPDATE_KYC: 'update-kyc'
+  },
+
+  REFERRAL_MANAGEMENT: {
+    EDIT: 'setting-referral-amount-edit'
   },
   CATEGORY: {
     VIEW: 'category-view',
@@ -298,12 +310,7 @@ export const PERMISSIONS = {
     ADD_RESTRICTED_COUNTRY: 'provider-add-restricted-country',
     REMOVE_RESTRICTED_COUNTRY: 'provider-remove-restricted-country',
     CHANGE_STATUS: 'provider-change-status',
-    VIEW_RESTRICTED_COUNTRY: 'provider-view-restricted-country',
-    GAMES: 'provider-games'
-  },
-  AGGREGATOR: {
-    VIEW: 'aggregators-view',
-    FEED_GAMES: 'aggregator-feed-games'
+    VIEW_RESTRICTED_COUNTRY: 'provider-view-restricted-country'
   },
   GAME: {
     VIEW: 'game-view',
@@ -313,139 +320,204 @@ export const PERMISSIONS = {
     DELETE: 'game-delete',
     ADD_SEGMENTATION: 'game-add-segmentation'
   },
+  CURRENCY: {
+    CREATE: 'currency-add',
+    VIEW: 'currency-view',
+    EDIT: 'currency-edit',
+    DELETE: 'currency-delete',
+    EXCHANGE_RATE_HISTORY: 'currency-exchange-rate-history'
+  },
   CRM: {
-    VIEW: 'crm-view'
-  },
-  EMAIL_PROVIDER: {
-    LIST: 'email-provider-view',
-    DELETE: 'email-provider-delete',
-    CHANGE_STATUS: 'email-provider-status',
-    EDIT: 'email-provider-edit'
-  },
-  KYC_PROVIDER: {
-    LIST: 'kyc-provider-view',
-    DELETE: 'kyc-provider-delete',
-    CHANGE_STATUS: 'kyc-provider-status',
-    EDIT: 'kyc-provider-edit'
-  },
-  SMS_PROVIDER: {
-    LIST: 'sms-provider-view',
-    DELETE: 'sms-provider-delete',
-    CHANGE_STATUS: 'sms-provider-status',
-    EDIT: 'sms-provider-edit'
-  },
-  PAYMENT_PROVIDER: {
-    LIST: 'payment-provider-view',
-    DELETE: 'payment-provider-delete',
-    CHANGE_STATUS: 'payment-provider-status',
-    EDIT: 'payment-provider-edit'
+    VIEW: 'crm-view',
+    SEND_NOTIFICATION: 'crm-send-notification'
   },
   FRONTEND: {
     VIEW: 'frontend-home-category-list',
     ADD_HOME_CATEGORY: 'frontend-home-add-category',
     EDIT_HOME_CATEGORY: 'frontend-home-edit-category',
     CHANGE_HOME_CATEGORY_STATUS: 'frontend-change-home-category-status',
+    DELETE_HOME_GAME: 'frontend-delete-home-game',
     REORDER_HOME_CATEGORY: 'frontend-reorder-home-category',
     VIEW_HOME_GAMES: 'frontend-home-game-list',
     ADD_HOME_GAMES: 'frontend-add-home-games',
     CHANGE_HOME_GAME_STATUS: 'frontend-change-home-game-status',
     REORDER_HOME_GAMES: 'frontend-reorder-home-games',
-    DELETE_HOME_GAME: 'frontend-delete-home-game',
     APPEARANCE_VIEW: 'frontend-view-appearance',
     ADD_APPEARANCE: 'frontend-add-appearance',
-    CHANGE_APPEARANCE_STATUS: 'frontend-change-appearance-status',
-    LAYOUT_THEME: {
-      VIEW: 'layout-theme-view',
-      ADD: 'layout-theme-add',
-      EDIT: 'layout-theme-edit',
-      STATUS: 'layout-theme-status'
-    }
-  },
-  BUX_AI: {
-    VIEW: 'bux-ai-view'
+    CHANGE_APPEARANCE_STATUS: 'frontend-change-appearance-status'
   },
   TENANT: {
     VIEW: 'tenant-view',
     CREATE: 'tenant-create',
     CHANGE_STATUS: 'tenant-change-status'
   },
-  REFERRAL_MANAGEMENT: {
-    VIEW: 'referral-management-view'
-  },
   USER_CLASS: {
-    LIST: 'player-class-list',
-    VIEW: 'player-class-view',
-    CREATE: 'player-class-create',
-    EDIT: 'player-class-edit',
-    CHANGE_STATUS: 'player-class-change-status',
-    DELETE: 'player-class-delete',
-    ASSIGN_BANK: 'player-class-assign-bank'
+    VIEW: 'user-class-view',
+    CREATE: 'user-class-create',
+    EDIT: 'user-class-edit',
+    CHANGE_STATUS: 'user-class-change-status',
+    DELETE: 'user-class-delete',
+    MAP: 'deposit-bank-map'
   },
   USER_CLASS_LIMIT: {
-    LIST: 'player-class-limit-list',
-    CREATE: 'player-class-limit-create',
-    EDIT: 'player-class-limit-edit',
-    CHANGE_STATUS: 'player-class-limit-change-status',
-    DELETE: 'player-class-limit-delete'
+    VIEW: 'user-class-limit-view',
+    CREATE: 'user-class-limit-create',
+    EDIT: 'user-class-limit-edit',
+    DELETE: 'user-class-limit-delete'
+  },
+  SEGMENTATION_LIMIT: {
+    VIEW: 'segmentation-limit-view',
+    CREATE: 'segmentation-limit-create',
+    EDIT: 'segmentation-limit-edit',
+    DELETE: 'segmentation-limit-delete'
   },
   RATE_LIMIT_RULES: {
-    LIST: 'rate-limit-rules-view'
+    LIST: 'rate-limit-list-view',
+    EDIT: 'rate-limit-rules-edit',
+    CHANGE_STATUS: 'rate-limit-rules-change-status'
   },
-  RESPONSIBLE_GAMBLING: {
-    LIST: 'responsible-gambling-list',
-    CREATE: 'responsible-gambling-create',
-    EDIT: 'responsible-gambling-edit',
-    CHANGE_STATUS: 'responsible-gambling-change-status',
-    DELETE: 'responsible-gambling-delete'
+  RELEASE_NOTE: {
+    ADD: 'release-note-add',
+    EDIT: 'release-note-edit',
+    VIEW: 'release-note-view',
+    DELETE: 'release-note-delete',
+    CHANGE_STATUS: 'release-note-change-status'
   },
-  BANK: {
-    VIEW: 'bank-view',
-    STATUS: 'bank-status',
-    CREATE: 'bank-create',
-    EDIT: 'bank-edit'
+  DEPOSIT_BANK: {
+    ADD: 'deposit-bank-add',
+    EDIT: 'deposit-bank-edit',
+    VIEW: 'deposit-bank-view',
+    CHANGE_STATUS: 'deposit-bank-change-status'
   },
-  USER_MANUAL_DEPOSIT_TRANSACTION: {
-    VIEW: 'user-manual-deposit-transaction-view',
-    ADD: 'user-manual-deposit-transaction-add',
-    EDIT: 'user-manual-deposit-transaction-edit'
+  USER_BANK_DEPOSIT: {
+    VIEW: 'user-bank-deposit-view',
+    VERIFY: 'user-bank-deposit-verify'
   },
-  CURRENCIES: {
-    LIST: 'currencies-list',
-    CREATE: 'currencies-create',
-    EDIT: 'currencies-edit',
-    CHANGE_STATUS: 'currencies-change-status',
-    DELETE: 'currencies-delete',
-    EXCHANGE_HISTORY: 'currencies-exchange-history',
-    ADMIN_EXCHANGE_RATE: 'currencies-admin-exchange-history',
-    EXCHANGE_UPDATE_TYPE: 'currencies-exchange-update-type'
+  BLACKLIST: {
+    MODULE_NAME: 'Blacklist',
+    CREATE: 'blacklist-create',
+    VIEW: 'blacklist-view',
+    DELETE: 'blacklist-delete',
+    UPDATE: 'blacklist-update',
+    VIEW_EMAIL_MOBILE_RESTRCTION: 'blacklist-view-restricted-email-mobile',
+    DELETE_EMAIL_MOBILE_RESTRCTION: 'blacklist-delete-restricted-email-mobile',
+    ADD_EMAIL_MOBILE_RESTRCTION: 'blacklist-add-restricted-email-mobile',
+    ADD_RESTRICTED_EMAIL_DOMAIN: 'blacklist-add-restricted-email-domain',
+    VIEW_RESTRICTED_EMAIL_DOMAIN: 'blacklist-view-restricted-email-domain',
+    DELETE_RESTRICTED_EMAIL_DOMAIN: 'blacklist-delete-restricted-email-domain',
+    UPDATE_RESTRICTED_EMAIL_DOMAIN: 'blacklist-update-restricted-email-domain'
   },
-  REGISTRATION_FIELDS: {
-    VIEW: 'registration-fields-view'
+  PAYMENT_PROVIDER: {
+    LIST: 'payment-provider-view',
+    ADD: 'payment-provider-add',
+    EDIT: 'payment-provider-edit',
+    CHANGE_STATUS: 'payment-provider-status',
+    DELETE: 'payment-provider-delete'
   },
-  RELEASE_NOTES: {
-    VIEW: 'release-notes-view'
+  SMS_PROVIDER: {
+    LIST: 'sms-provider-view',
+    ADD: 'sms-provider-add',
+    EDIT: 'sms-provider-edit',
+    CHANGE_STATUS: 'sms-provider-status',
+    DELETE: 'sms-provider-delete'
   },
-  FAQ: {
-    VIEW: 'faq-view'
+  EMAIL_PROVIDER: {
+    LIST: 'email-provider-view',
+    ADD: 'email-provider-add',
+    EDIT: 'email-provider-edit',
+    CHANGE_STATUS: 'email-provider-status',
+    DELETE: 'email-provider-delete'
   },
-  COMMISSION_SETTING: {
-    UPDATE: 'commission-setting-update'
+  APP_SETTING: {
+    EDIT: 'app-setting-edit'
+  },
+  KYC_PROVIDER: {
+    LIST: 'kyc-provider-view',
+    ADD: 'kyc-provider-add',
+    EDIT: 'kyc-provider-edit',
+    CHANGE_STATUS: 'kyc-provider-status',
+    DELETE: 'kyc-provider-delete'
+  },
+  REPORTS: {
+    BETSLIP: {
+      VIEW: 'betslip-report-view',
+      EXPORT: 'betslip-export-report'
+    },
+    DEPOSIT: {
+      VIEW: 'deposit-report-view',
+      EXPORT: 'deposit-export-report'
+    },
+    WITHDRAW: {
+      VIEW: 'withdraw-report-view',
+      EXPORT: 'withdraw-export-report'
+    },
+    B2B_AGENT: {
+      AGENT_COMMISSION_REPORT: 'agent-commission-report',
+      AGENT_WALLET_REPORT: 'agent-wallet-report'
+    }
+  },
+  EVENT_TEMPLATE: {
+    VIEW: 'event-template-view',
+    ADD: 'event-template-add',
+    EDIT: 'event-template-edit',
+    CHANGE_STATUS: 'event-template-status'
+  },
+  ASSIGN_EVENT_TEMPLATES: {
+    UPDATE: 'assign-event-templates-update'
   },
   OPERATOR: {
+    MANAGE_FUND: 'deposit-withdraw-fund',
     WALLET_VIEW: 'operator-wallet-view',
-    WALLET_TRANSACTION_LIST: 'transaction-list',
-    MENAGE_FUNDS: 'deposit-withdraw-fund',
-    WITHDRAW_REQUESTS: 'operator-withdraw-requests-view',
+    WALLET_TRANSACTION_LIST: 'transaction-view',
+    WITHDRAW_REQUESTS_VIEW: 'operator-withdraw-requests-view',
     WITHDRAW_REQUESTS_EDIT: 'operator-withdraw-requests-edit'
   },
-  AGENTS: {
-    ADD: 'agent-add',
-    EDIT: 'agent-edit',
-    VIEW: 'agent-view',
-    CHANGE_STATUS: 'agent-change-status',
-    WALLET_MANAGE: 'agent-wallet-manage'
+  BLOG: {
+    LIST: 'blogs-view',
+    CREATE: 'blogs-create',
+    EDIT: 'blogs-edit',
+    DELETE: 'blogs-delete',
+    CHANGE_STATUS: 'blogs-change-status'
+  },
+
+  BLOG_CATEGORY: {
+    LIST: 'blog-categories-view',
+    CREATE: 'blog-categories-create',
+    EDIT: 'blog-categories-edit',
+    DELETE: 'blog-categories-delete',
+    CHANGE_STATUS: 'blog-categories-change-status'
+  },
+  FAQ: {
+    VIEW: 'faq-view',
+    ADD: 'faq-add',
+    EDIT: 'faq-update',
+    DELETE: 'faq-delete'
+  },
+  IP_LOOKUP: {
+    VIEW: 'ip-lookup-view'
+  },
+  PAGE: {
+    VIEW: 'page-view',
+    ADD: 'page-add',
+    EDIT: 'page-edit',
+    CHANGE_STATUS: 'page-change-status',
+    DELETE: 'page-delete'
+  },
+  AUDIT_LOGS: {
+    VIEW: 'audit-logs-view'
+  },
+  AGGREGATORS: {
+    VIEW: 'aggregator-view',
+    FEED_GAMES: 'aggregator-feed-games'
+  },
+  RESPONSIBLE_GAMING_RESTRICTIONS: {
+    VIEW: 'responsible-gaming-restrictions-view',
+    CREATE: 'responsible-gaming-restrictions-create',
+    EDIT: 'responsible-gaming-restrictions-edit',
+    DELETE: 'responsible-gaming-restrictions-delete',
+    APPROVE: 'responsible-gaming-restrictions-approve'
   }
-};
+});
 
 export const DEFAULT_PAGE_INDEX = 0;
 export const DEFAULT_PER_PAGE_RECORD = 10;

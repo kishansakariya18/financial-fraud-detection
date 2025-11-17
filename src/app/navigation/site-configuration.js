@@ -19,7 +19,7 @@ export const siteConfiguration = {
   transKey: 'site_configuration',
   Icon: Cog6ToothIcon,
   permission: [
-    PERMISSIONS.COUNTRIES.LIST,
+    PERMISSIONS.APP_SETTING.EDIT,
     PERMISSIONS.RATE_LIMIT_RULES.LIST,
     PERMISSIONS.EMAIL_PROVIDER.LIST,
     PERMISSIONS.SMS_PROVIDER.LIST,
