@@ -54,7 +54,7 @@ export default function ForgotPasswordForm({
         const validateResponse = result.response.data;
         toast.success(result.response.message);
 
-        const redirectUrl = `${resetPasswordRoute}?token=${validateResponse.token}&&mobile=${validateResponse.mobile}&&email=${validateResponse.email}&&otp=${validateResponse.otp}`;
+        const redirectUrl = `${resetPasswordRoute}?token=${validateResponse.token}&&mobile=${validateResponse.mobile}&&email=${validateResponse.email}&&otp=${validateResponse.otp}&phoneCode=${encodeURIComponent(validateResponse.phoneCode)}`;
 
         if (onForgotPasswordSuccess) {
           onForgotPasswordSuccess(validateResponse, redirectUrl);
