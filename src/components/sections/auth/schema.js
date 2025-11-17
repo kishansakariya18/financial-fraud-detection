@@ -30,7 +30,7 @@ export const forgotPasswordSchema = Yup.object().shape({
 });
 
 export const resetPasswordSchema = Yup.object().shape({
-  otp: Yup.string().trim().required('OTP Is Required').length(6, 'OTP Length Must be 6'),
+  otp: Yup.string().trim().required('OTP Is Required'),
   password: Yup.string()
     .required('Password is required')
     .min(8, 'Password must be at least 8 characters')
