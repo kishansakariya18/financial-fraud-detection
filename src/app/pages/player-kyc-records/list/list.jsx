@@ -19,7 +19,7 @@ import UserKycServices from 'services/player-kyc.services';
 export default function UserKYC() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('playerKyc');
+  const pageTitle = t('playerKycRecords');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 

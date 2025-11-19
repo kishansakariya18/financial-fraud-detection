@@ -12,7 +12,7 @@ import platformRoute from './routes/platform.route';
 import countryRoutes from './routes/country.route';
 import reportsRoutes from './routes/reports.route';
 import paymentRoute from './routes/payment.route';
-import userKycRoute from './routes/player-kyc.routes';
+import userKycRoute from './routes/player-kyc-records.routes';
 import casinoRoutes from './routes/casino.route';
 import currenciesRoutes from './routes/currencies.route';
 

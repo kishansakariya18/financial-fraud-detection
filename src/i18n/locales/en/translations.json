@@ -186,7 +186,7 @@
   "paymentProvider": "Payment Provider",
   "promoCode": "Promo Code",
   "game": "Game",
-  "playerKyc": "Player KYC",
+  "playerKycRecords": "Player KYC Records",
   "document": "Document",
   "rejectReason": "Reject Reason",
   "identification": "Identification",
@@ -1115,7 +1115,7 @@
   "cashout_value": "Cashout Value",
   "mco": "MCO",
   "base": "Base",
-  "range_from": "Range From", 
+  "range_from": "Range From",
   "range_to": "Range To",
   "bet_restrictions": "Bet Restrictions",
   "type_provider_name_and_press_enter": "Type provider name and press Enter...",
@@ -1127,6 +1127,6 @@
   "sticky_bonus_non_withdrawable": "Sticky Bonus (Non-Withdrawable)",
   "enter_cashout_value_info": "Enter cashout value",
   "enter_wagering_value_info": "Enter wagering value",
-  "wagering_base": "Wagering Base" ,
+  "wagering_base": "Wagering Base",
   "select_base": "Select Base"
 }
