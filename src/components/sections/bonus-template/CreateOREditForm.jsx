@@ -69,7 +69,8 @@ const defaultFormState = {
   wageringConfig: {
     mode: 'none',
     base: '',
-    wageringValue: ''
+    wageringValue: '',
+    daysToWager: null
   },
   maxCashoutConfig: {
     mode: 'none',
@@ -109,7 +110,7 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
   const [activeStep, setActiveStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [stepErrors, setStepErrors] = useState({});
-  const { providerOptions, categoryOptions, gameOptions, handleGameOptionsCache } =
+  const { providerOptions, categoryOptions, gameOptions, tagOptions, handleGameOptionsCache } =
     useBonusTemplateOptions();
 
   const currentStep = STEPS[activeStep];
@@ -159,7 +160,8 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
       ...prev,
       templateInfo: {
         ...prev.templateInfo,
-        bonusTags: tags
+        bonusTagsSelectedData: tags,
+        bonusTags: tags.map((tag) => tag.value)
       }
     }));
   };
@@ -202,6 +204,73 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
         variableRules: rules
       }
     }));
+  };
+
+  // Validate a single field and update errors incrementally
+  const validateVariableRuleField = async (rules) => {
+    const schema = stepSchemas.rewardDetails;
+    if (!schema) return;
+
+    try {
+      const boostMode = formState.rewardDetails.boostMode;
+      const stepData = {
+        ...formState.rewardDetails,
+        variableRules: rules
+      };
+      const context = boostMode ? { boostMode } : {};
+
+      // Validate the entire step data
+      await schema.validate(stepData, { abortEarly: false, context });
+
+      // If validation passes, clear only variableRules errors (all of them since validation passed)
+      setStepErrors((prev) => {
+        const updated = { ...prev };
+        if (updated.rewardDetails) {
+          const newRewardErrors = { ...updated.rewardDetails };
+          // Remove all variableRules errors since validation passed
+          Object.keys(newRewardErrors).forEach((key) => {
+            if (key.startsWith('variableRules')) {
+              delete newRewardErrors[key];
+            }
+          });
+          updated.rewardDetails =
+            Object.keys(newRewardErrors).length > 0 ? newRewardErrors : undefined;
+          if (!updated.rewardDetails) {
+            delete updated.rewardDetails;
+          }
+        }
+        return updated;
+      });
+    } catch (error) {
+      // Only update errors for variableRules fields
+      if (error.inner) {
+        const fieldErrors = {};
+        error.inner.forEach((err) => {
+          if (err.path && err.path.startsWith('variableRules')) {
+            fieldErrors[err.path] = err.message;
+          }
+        });
+
+        // Merge with existing errors, keeping non-variableRules errors
+        setStepErrors((prev) => {
+          const existingRewardErrors = prev.rewardDetails || {};
+          const nonVariableRulesErrors = {};
+          Object.keys(existingRewardErrors).forEach((key) => {
+            if (!key.startsWith('variableRules')) {
+              nonVariableRulesErrors[key] = existingRewardErrors[key];
+            }
+          });
+
+          return {
+            ...prev,
+            rewardDetails: {
+              ...nonVariableRulesErrors,
+              ...fieldErrors
+            }
+          };
+        });
+      }
+    }
   };
 
   const handleWageringConfigChange = (field, value) => {
@@ -289,16 +358,15 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
     }
 
     const { isValid, errors } = await validateStep(stepId, stepData, boostMode);
-
+    console.log('errors', errors);
     if (!isValid) {
       setStepErrors((prev) => ({
         ...prev,
         [stepId]: errors
       }));
-      console.error('Please fix the errors before proceeding');
+      console.error('Please fix the errors before proceeding', errors);
       return;
     }
-
     // Clear errors for current step
     setStepErrors((prev) => {
       const updated = { ...prev };
@@ -343,6 +411,7 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
         return (
           <StepTemplateInfo
             data={formState.templateInfo}
+            tagOptions={tagOptions}
             onChange={handleTemplateInfoChange}
             onTagsChange={handleBonusTagsChange}
             bonusTypeOptions={BONUS_TYPE_OPTIONS(t)}
@@ -367,6 +436,7 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
             boostModeOptions={BOOST_MODE_OPTIONS(t)}
             paymentMethodOptions={PAYMENT_METHOD_OPTIONS(t)}
             onRulesChange={handleVariableRulesChange}
+            onValidateRuleField={validateVariableRuleField}
             onGameOptionsCache={handleGameOptionsCache}
             errors={currentStepErrors}
           />
@@ -439,6 +509,7 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
           firstErrorStepIndex = i;
         }
       }
+      delete formState?.templateInfo?.bonusTagsSelectedData;
     }
 
     if (firstErrorStepIndex !== -1) {

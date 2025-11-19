@@ -1,12 +1,11 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useForm, Controller, useFieldArray, useWatch } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Button } from 'components/ui';
 import { Input, Select } from 'components/ui/Form';
 import { useTranslation } from 'react-i18next';
-import { variableRulesSchema } from 'app/pages/bonus-template/validationSchemas';
+import { TrashIcon } from '@heroicons/react/24/outline';
+
 const inputClassNames = {
   root: 'w-full',
   wrapper: 'mt-0',
@@ -23,40 +22,62 @@ const defaultRule = {
   mco: ''
 };
 
-export function VariableRulesEditor({ rules, onChange, paymentMethodOptions }) {
+export function VariableRulesEditor({
+  rules,
+  onChange,
+  onValidateRuleField,
+  paymentMethodOptions,
+  errors = {}
+}) {
   const { t } = useTranslation();
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors }
-  } = useForm({
-    resolver: yupResolver(variableRulesSchema),
-    mode: 'onChange',
-    defaultValues: {
-      variableRules: rules.length > 0 ? rules : []
-    }
-  });
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'variableRules'
-  });
-
-  // 🔑 Store JSON snapshot instead of object reference
+  const [localRules, setLocalRules] = useState(rules || []);
   const previousRulesJsonRef = useRef(JSON.stringify(rules || []));
   const isInternalUpdateRef = useRef(false);
 
-  const watchedRules = useWatch({
-    control,
-    name: 'variableRules'
-  });
+  // Helper function to get error message from bracket notation path
+  // e.g., "variableRules[0].rangeTo" -> errors["variableRules[0].rangeTo"]
+  const getFieldError = useCallback(
+    (index, field) => {
+      if (!errors || typeof errors !== 'object') return undefined;
 
-  // Sync external `rules` -> form (reset) when parent changes
+      // Try bracket notation first (e.g., "variableRules[0].rangeTo")
+      const bracketPath = `variableRules[${index}].${field}`;
+      if (errors[bracketPath]) {
+        return errors[bracketPath];
+      }
+
+      // Try nested object notation (e.g., errors.variableRules[0].rangeTo)
+      if (errors.variableRules && Array.isArray(errors.variableRules)) {
+        const ruleError = errors.variableRules[index];
+        if (ruleError && ruleError[field]) {
+          return ruleError[field];
+        }
+      }
+
+      return undefined;
+    },
+    [errors]
+  );
+
+  // allow only first row form to edit other disbale , payment method wise
+  const isDisabledFormField = useCallback(
+    (index) => {
+      const currentRule = localRules[index];
+      const paymentMethod = currentRule.paymentMethod || 'all';
+      const samePaymentMethodRules = localRules
+        .map((rule, idx) => ({ ...rule, index: idx }))
+        .filter(
+          (rule, idx) => (rule.paymentMethod || 'all') === (paymentMethod || 'all') && idx < index
+        );
+
+      return samePaymentMethodRules.length > 0;
+    },
+    [localRules]
+  );
+
+  // Sync external rules to local state
   useEffect(() => {
     if (isInternalUpdateRef.current) {
-      // This change originated from inside (we already called onChange)
-      // so don't immediately reset again
       isInternalUpdateRef.current = false;
       return;
     }
@@ -66,35 +87,126 @@ export function VariableRulesEditor({ rules, onChange, paymentMethodOptions }) {
 
     if (hasChanged) {
       previousRulesJsonRef.current = incomingJson;
-      reset({
-        variableRules: rules && rules.length > 0 ? rules : []
+      setLocalRules(rules && rules.length > 0 ? rules : []);
+    }
+  }, [rules]);
+
+  // Helper function to get the previous rule's rangeTo for the same payment method
+  const getPreviousRangeTo = useCallback(
+    (paymentMethod, currentIndex) => {
+      if (!localRules || localRules.length === 0) return null;
+
+      // Get all rules with the same payment method, excluding current index
+      const samePaymentMethodRules = localRules
+        .map((rule, idx) => ({ ...rule, index: idx }))
+        .filter(
+          (rule, idx) =>
+            (rule.paymentMethod || 'all') === (paymentMethod || 'all') && idx !== currentIndex
+        );
+
+      if (samePaymentMethodRules.length === 0) return null;
+
+      // Sort by rangeFrom to find the last range
+      const sortedRules = [...samePaymentMethodRules].sort((a, b) => {
+        const aFrom = Number(a.rangeFrom) || 0;
+        const bFrom = Number(b.rangeFrom) || 0;
+        return aFrom - bFrom;
       });
-    }
-  }, [rules, reset]);
 
-  // Sync form -> parent `onChange` on every real change
-  useEffect(() => {
-    if (!watchedRules) return;
+      // Get the last rule's rangeTo (the one that should connect to current rule)
+      const lastRule = sortedRules[sortedRules.length - 1];
+      const lastRangeTo = Number(lastRule.rangeTo);
 
-    const currentJson = JSON.stringify(watchedRules || []);
-    const hasChanged = currentJson !== previousRulesJsonRef.current;
+      return !isNaN(lastRangeTo) && lastRangeTo !== null && lastRangeTo !== undefined
+        ? lastRangeTo
+        : null;
+    },
+    [localRules]
+  );
 
-    if (hasChanged) {
-      // Mark that the next incoming `rules` change is from us
+  // Update a rule field and handle auto-fill logic
+  const updateRuleField = useCallback(
+    async (index, field, value) => {
+      const updatedRules = [...localRules];
+      const currentRule = { ...updatedRules[index] };
+      currentRule[field] = value;
+      updatedRules[index] = currentRule;
+
+      // Handle auto-fill logic based on field type
+      if (field === 'rangeTo') {
+        // When rangeTo changes, update the next rule's rangeFrom if same payment method
+        const paymentMethod = currentRule.paymentMethod || 'all';
+        const nextRuleIndex = updatedRules.findIndex(
+          (rule, idx) => idx > index && (rule.paymentMethod || 'all') === paymentMethod
+        );
+
+        if (nextRuleIndex !== -1) {
+          const numValue = Number(value);
+          if (!isNaN(numValue) && numValue !== null && numValue !== undefined) {
+            updatedRules[nextRuleIndex] = {
+              ...updatedRules[nextRuleIndex],
+              rangeFrom: numValue
+            };
+          }
+        }
+      } else if (field === 'paymentMethod') {
+        // When payment method changes, auto-fill rangeFrom from previous rule with same payment method
+        const previousRangeTo = getPreviousRangeTo(value, index);
+        if (previousRangeTo !== null) {
+          currentRule.rangeFrom = previousRangeTo;
+          updatedRules[index] = currentRule;
+        }
+      }
+
+      setLocalRules(updatedRules);
       isInternalUpdateRef.current = true;
-      previousRulesJsonRef.current = currentJson;
-      onChange(watchedRules);
-    }
-  }, [watchedRules, onChange]);
+      previousRulesJsonRef.current = JSON.stringify(updatedRules);
+      onChange(updatedRules);
+
+      // Validate the field that changed and update errors incrementally
+      if (onValidateRuleField) {
+        await onValidateRuleField(updatedRules);
+      }
+    },
+    [localRules, getPreviousRangeTo, onChange, onValidateRuleField]
+  );
+
   const handleAddRule = () => {
-    append({
+    const newRule = {
       ...defaultRule,
       id: Date.now().toString()
-    });
+    };
+
+    // Check if there's a previous rule with the same payment method to auto-fill rangeFrom
+    const lastRuleWithSamePayment = localRules
+      .filter((rule) => (rule?.paymentMethod || 'all') === (newRule.paymentMethod || 'all'))
+      .sort((a, b) => {
+        const aFrom = Number(a.rangeFrom) || 0;
+        const bFrom = Number(b.rangeFrom) || 0;
+        return aFrom - bFrom;
+      })
+      .pop();
+
+    if (lastRuleWithSamePayment) {
+      const lastRangeTo = Number(lastRuleWithSamePayment.rangeTo);
+      if (!isNaN(lastRangeTo) && lastRangeTo !== null && lastRangeTo !== undefined) {
+        newRule.rangeFrom = lastRangeTo;
+      }
+    }
+
+    const updatedRules = [...localRules, newRule];
+    setLocalRules(updatedRules);
+    isInternalUpdateRef.current = true;
+    previousRulesJsonRef.current = JSON.stringify(updatedRules);
+    onChange(updatedRules);
   };
 
   const handleDeleteRule = (index) => {
-    remove(index);
+    const updatedRules = localRules.filter((_, idx) => idx !== index);
+    setLocalRules(updatedRules);
+    isInternalUpdateRef.current = true;
+    previousRulesJsonRef.current = JSON.stringify(updatedRules);
+    onChange(updatedRules);
   };
 
   return (
@@ -106,7 +218,7 @@ export function VariableRulesEditor({ rules, onChange, paymentMethodOptions }) {
       </div>
 
       <div className="overflow-hidden rounded-lg border border-gray-200 dark:border-dark-500">
-        <form onSubmit={handleSubmit(() => {})}>
+        <div>
           <table className="min-w-full divide-y divide-gray-200 text-xs dark:divide-dark-500">
             <thead className="bg-gray-50 dark:bg-dark-700/40">
               <tr className="text-left font-semibold uppercase tracking-wide text-gray-600 dark:text-dark-200">
@@ -116,11 +228,11 @@ export function VariableRulesEditor({ rules, onChange, paymentMethodOptions }) {
                 <th className="px-3 py-2">{t('boost_percentage')}</th>
                 <th className="px-3 py-2">{t('wagering')}</th>
                 <th className="px-3 py-2">{t('max_cashout')}</th>
-                <th className="px-3 py-2 text-right">{t('actions')}</th>
+                <th className="px-3 py-2 text-right"></th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-dark-500">
-              {fields.length === 0 ? (
+              {localRules.length === 0 ? (
                 <tr>
                   <td
                     colSpan={7}
@@ -129,118 +241,84 @@ export function VariableRulesEditor({ rules, onChange, paymentMethodOptions }) {
                   </td>
                 </tr>
               ) : (
-                fields.map((field, index) => (
+                localRules.map((rule, index) => (
                   <tr
-                    key={field.id}
+                    key={rule.id || `rule-${index}`}
                     className="bg-white text-gray-700 dark:bg-dark-700 dark:text-dark-100">
                     <td className="px-3 py-2">
-                      <Controller
-                        name={`variableRules.${index}.paymentMethod`}
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                          <Select
-                            label={t('payment_method')}
-                            data={paymentMethodOptions}
-                            value={value || 'all'}
-                            onChange={(e) => onChange(e.target.value)}
-                            classNames={{
-                              ...inputClassNames,
-                              select: 'h-9 text-xs'
-                            }}
-                            error={errors?.variableRules?.[index]?.paymentMethod?.message}
-                          />
-                        )}
+                      <Select
+                        label={t('payment_method')}
+                        data={paymentMethodOptions}
+                        value={rule.paymentMethod || 'all'}
+                        onChange={(e) => updateRuleField(index, 'paymentMethod', e.target.value)}
+                        classNames={{
+                          ...inputClassNames,
+                          select: 'h-9 text-xs'
+                        }}
+                        error={getFieldError(index, 'paymentMethod')}
                       />
                     </td>
                     <td className="px-3 py-2">
-                      <Controller
-                        name={`variableRules.${index}.rangeFrom`}
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                          <Input
-                            label={t('min_deposit')}
-                            type="number"
-                            value={value || ''}
-                            onChange={(e) => onChange(e.target.value)}
-                            classNames={inputClassNames}
-                            error={errors?.variableRules?.[index]?.rangeFrom?.message}
-                          />
-                        )}
+                      <Input
+                        label={t('min_deposit')}
+                        type="number"
+                        value={rule.rangeFrom || ''}
+                        disabled={isDisabledFormField(index)}
+                        onChange={(e) => updateRuleField(index, 'rangeFrom', e.target.value)}
+                        classNames={inputClassNames}
+                        error={getFieldError(index, 'rangeFrom')}
                       />
                     </td>
                     <td className="px-3 py-2">
-                      <Controller
-                        name={`variableRules.${index}.rangeTo`}
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                          <Input
-                            label={t('max_deposit')}
-                            type="number"
-                            value={value || ''}
-                            onChange={(e) => onChange(e.target.value)}
-                            classNames={inputClassNames}
-                            error={errors?.variableRules?.[index]?.rangeTo?.message}
-                          />
-                        )}
+                      <Input
+                        label={t('max_deposit')}
+                        type="number"
+                        value={rule.rangeTo || ''}
+                        onChange={(e) => updateRuleField(index, 'rangeTo', e.target.value)}
+                        classNames={inputClassNames}
+                        error={getFieldError(index, 'rangeTo')}
                       />
                     </td>
                     <td className="px-3 py-2">
-                      <Controller
-                        name={`variableRules.${index}.boostPercent`}
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                          <Input
-                            label={t('boost_percentage')}
-                            type="number"
-                            value={value || ''}
-                            onChange={(e) => onChange(e.target.value)}
-                            classNames={inputClassNames}
-                            error={errors?.variableRules?.[index]?.boostPercent?.message}
-                          />
-                        )}
+                      <Input
+                        label={t('boost_percentage')}
+                        type="number"
+                        value={rule.boostPercent || ''}
+                        onChange={(e) => updateRuleField(index, 'boostPercent', e.target.value)}
+                        classNames={inputClassNames}
+                        error={getFieldError(index, 'boostPercent')}
                       />
                     </td>
                     <td className="px-3 py-2">
-                      <Controller
-                        name={`variableRules.${index}.wagering`}
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                          <Input
-                            label={t('wagering')}
-                            type="number"
-                            value={value || ''}
-                            onChange={(e) => onChange(e.target.value)}
-                            classNames={inputClassNames}
-                            error={errors?.variableRules?.[index]?.wagering?.message}
-                          />
-                        )}
+                      <Input
+                        label={t('wagering')}
+                        type="number"
+                        value={rule.wagering || ''}
+                        onChange={(e) => updateRuleField(index, 'wagering', e.target.value)}
+                        classNames={inputClassNames}
+                        error={getFieldError(index, 'wagering')}
                       />
                     </td>
                     <td className="px-3 py-2">
-                      <Controller
-                        name={`variableRules.${index}.mco`}
-                        control={control}
-                        render={({ field: { onChange, value } }) => (
-                          <Input
-                            label={t('max_cashout')}
-                            type="number"
-                            value={value || ''}
-                            onChange={(e) => onChange(e.target.value)}
-                            classNames={inputClassNames}
-                            error={errors?.variableRules?.[index]?.mco?.message}
-                          />
-                        )}
+                      <Input
+                        label={t('max_cashout')}
+                        type="number"
+                        value={rule.mco || ''}
+                        onChange={(e) => updateRuleField(index, 'mco', e.target.value)}
+                        classNames={inputClassNames}
+                        error={getFieldError(index, 'mco')}
                       />
                     </td>
                     <td className="px-3 py-2">
                       <div className="flex justify-end gap-2">
                         <Button
                           type="button"
+                          isIcon
                           variant="flat"
                           color="error"
-                          className="h-8 px-3 text-xs"
+                          className="size-8"
                           onClick={() => handleDeleteRule(index)}>
-                          {t('Delete')}
+                          <TrashIcon className="size-4.5 stroke-1" />
                         </Button>
                       </div>
                     </td>
@@ -249,7 +327,7 @@ export function VariableRulesEditor({ rules, onChange, paymentMethodOptions }) {
               )}
             </tbody>
           </table>
-        </form>
+        </div>
       </div>
 
       <div className="flex justify-end">
@@ -266,18 +344,20 @@ VariableRulesEditor.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       paymentMethod: PropTypes.string,
-      minDeposit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      maxDeposit: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      rangeFrom: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      rangeTo: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       boostPercent: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
       wagering: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      maxCashout: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+      mco: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     })
   ).isRequired,
   onChange: PropTypes.func.isRequired,
+  onValidateRuleField: PropTypes.func,
   paymentMethodOptions: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired
     })
-  ).isRequired
+  ).isRequired,
+  errors: PropTypes.object
 };

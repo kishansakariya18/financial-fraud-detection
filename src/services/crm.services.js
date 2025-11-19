@@ -12,11 +12,11 @@ const EmailTemplateService = {
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        params: {
+        body: {
           page: pagination.pageIndex + 1,
           perPage: pagination.pageSize,
           startDate: filters.startDate ? dayjs(+filters.startDate).format('YYYY-MM-DD') : undefined,

@@ -1,65 +1,172 @@
 import * as Yup from 'yup';
 
+// Helper function to transform string/number to number or null
+const numberTransform = (value, originalValue) => {
+  return originalValue === '' || originalValue === null || originalValue === undefined
+    ? null
+    : Number(originalValue);
+};
+
 // Reusable schema for a single variable rule item
-const variableRuleItemSchema = Yup.object().shape({
-  paymentMethod: Yup.string().nullable(),
-  rangeFrom: Yup.number()
-    .transform((value, originalValue) => {
-      return originalValue === '' || originalValue === null || originalValue === undefined
-        ? null
-        : Number(originalValue);
-    })
-    .nullable()
-    .min(0, 'Must more than 0')
-    .typeError('Invalid number'),
-  rangeTo: Yup.number()
-    .transform((value, originalValue) => {
-      return originalValue === '' || originalValue === null || originalValue === undefined
-        ? null
-        : Number(originalValue);
-    })
-    .nullable()
-    .min(0, 'Must more than 0')
-    .typeError('Invalid number')
-    .when('rangeFrom', {
-      is: (val) => val !== null && val !== undefined && val !== '',
-      then: (schema) =>
-        schema.test('greater-than-min', 'Must be ≥ min deposit', function (value) {
-          const { rangeFrom } = this.parent;
-          if (value === null || value === undefined || value === '') return true;
+const variableRuleItemSchema = Yup.object()
+  .shape({
+    paymentMethod: Yup.string().nullable(),
+    rangeFrom: Yup.number()
+      .transform(numberTransform)
+      .nullable()
+      .min(0, 'Must be greater than 0')
+      .test('required-when-range-to-exists', 'Please add min deposit', function (value) {
+        const { rangeTo } = this.parent;
+        // If rangeTo is set, rangeFrom is required
+        if (value === 0 && rangeTo > 0) {
+          return false;
+        }
+        if (rangeTo !== null && rangeTo !== undefined && rangeTo !== '') {
+          return value !== null && value !== undefined && value !== '';
+        }
+
+        return true;
+      })
+      .typeError('Invalid number'),
+    rangeTo: Yup.number()
+      .transform(numberTransform)
+      .nullable()
+      .min(0, 'Must be greater than 0')
+      .test('greater-than-range-from', 'Must be greater than min deposit', function (value) {
+        const { rangeFrom } = this.parent;
+        // If both values exist, rangeTo must be >= rangeFrom
+        if (
+          value !== null &&
+          value !== undefined &&
+          value !== '' &&
+          rangeFrom !== null &&
+          rangeFrom !== undefined &&
+          rangeFrom !== ''
+        ) {
           const minValue = Number(rangeFrom);
-          return !isNaN(minValue) && value >= minValue;
-        })
-    }),
-  boostPercent: Yup.number()
-    .transform((value, originalValue) => {
-      return originalValue === '' || originalValue === null || originalValue === undefined
-        ? null
-        : Number(originalValue);
-    })
-    .nullable()
-    .min(0, 'Must more than 0')
-    .max(100, 'Must less than or equal to 100')
-    .typeError('Invalid number'),
-  wagering: Yup.number()
-    .transform((value, originalValue) => {
-      return originalValue === '' || originalValue === null || originalValue === undefined
-        ? null
-        : Number(originalValue);
-    })
-    .nullable()
-    .min(0, 'Must more than 0')
-    .typeError('Invalid number'),
-  mco: Yup.number()
-    .transform((value, originalValue) => {
-      return originalValue === '' || originalValue === null || originalValue === undefined
-        ? null
-        : Number(originalValue);
-    })
-    .nullable()
-    .min(0, 'Must more than 0')
-    .typeError('Invalid number')
-});
+          const maxValue = Number(value);
+          if (!isNaN(minValue) && !isNaN(maxValue)) {
+            return maxValue >= minValue;
+          }
+        }
+        return true;
+      })
+      .typeError('Invalid number'),
+    boostPercent: Yup.number()
+      .transform(numberTransform)
+      .nullable()
+      .min(0, 'Must be greater than 0')
+      .max(100, 'Must be less than or equal to 100')
+      .typeError('Invalid number'),
+    wagering: Yup.number()
+      .transform(numberTransform)
+      .nullable()
+      .min(0, 'Must be greater than 0')
+      .typeError('Invalid number'),
+    mco: Yup.number()
+      .transform(numberTransform)
+      .nullable()
+      .min(0, 'Must be greater than 0')
+      .typeError('Invalid number')
+  })
+  .test('continuous-range-with-previous', 'Range continuity error', function (currentRule) {
+    let parentArray;
+
+    // Try to get array from validation context stack
+    if (this.from && this.from.length > 1) {
+      // Navigate up to find the array
+      for (let i = this.from.length - 1; i >= 0; i--) {
+        const context = this.from[i];
+        if (context && context.value && context.value?.variableRules) {
+          parentArray = context.value?.variableRules.map((rule, idx) => ({
+            ...rule,
+            mapIndex: idx
+          }));
+          break;
+        }
+      }
+    }
+
+    // Fallback: try to get from parent object if it has variableRules
+    if (!parentArray && this.parent && this.parent.variableRules) {
+      parentArray = this.parent.variableRules.map((rule, idx) => ({ ...rule, mapIndex: idx }));
+    }
+
+    if (!parentArray || !Array.isArray(parentArray)) return true;
+
+    const currentIndex = parentArray.findIndex(
+      (rule) => rule === currentRule || (rule.id && currentRule.id && rule.id === currentRule.id)
+    );
+    if (currentIndex <= 0) return true; // First rule, no previous to check
+
+    const currentFrom = currentRule.rangeFrom;
+    // const currentTo = currentRule.rangeTo;
+    const paymentMethod = currentRule?.paymentMethod || 'all';
+
+    // Skip if rangeFrom is invalid
+    if (isNaN(currentFrom) || currentFrom === null || currentFrom === undefined) {
+      const hasExistAfterThisRuleWithSamePayment =
+        parentArray
+          .slice(currentIndex)
+          .filter((rule) => (rule?.paymentMethod || 'all') === paymentMethod).length > 0;
+      if (hasExistAfterThisRuleWithSamePayment) {
+        return this.createError({
+          path: `variableRules[${currentIndex}].rangeTo`,
+          message: 'Please add max deposit'
+        });
+      }
+
+      return true;
+    }
+
+    // Find previous rules with same payment method
+    const previousRulesWithSamePayment = parentArray
+      .slice(0, currentIndex)
+      .filter((rule) => (rule?.paymentMethod || 'all') === paymentMethod)
+      .map((rule, idx) => ({ ...rule, originalIndex: idx }));
+
+    if (previousRulesWithSamePayment.length === 0) return true;
+
+    // Sort by rangeFrom to find the last (highest) range
+    const sortedPrevious = [...previousRulesWithSamePayment];
+
+    const lastPreviousRule = sortedPrevious[sortedPrevious.length - 1];
+    const previousTo = lastPreviousRule.rangeTo;
+
+    // If previous rule has a rangeTo, current rangeFrom must equal it
+    if (
+      !isNaN(Number(previousTo)) &&
+      previousTo !== null &&
+      previousTo !== undefined &&
+      previousTo !== ''
+    ) {
+      const numCurrentFrom = Number(currentFrom);
+      const numPreviousTo = Number(previousTo);
+      if (numCurrentFrom !== numPreviousTo) {
+        return this.createError({
+          path: `variableRules[${currentIndex}].rangeFrom`,
+          message: `Range must start from ${previousTo} to maintain continuity with previous range`
+        });
+      }
+    }
+
+    // Check if rangeTo is required (not last rule with same payment method)
+    const lastRuleWithSamePayment = parentArray
+      .filter(
+        (rule) => (rule?.paymentMethod || 'all') === paymentMethod && rule?.mapIndex < currentIndex
+      )
+      .pop();
+
+    const numCurrentFrom = currentFrom;
+    if (!lastRuleWithSamePayment?.rangeTo && numCurrentFrom > 0) {
+      return this.createError({
+        path: `variableRules[${lastRuleWithSamePayment.mapIndex}].rangeTo`,
+        message: 'Please add max deposit'
+      });
+    }
+
+    return true;
+  });
 
 // Step 1: Template Info
 export const templateInfoSchema = Yup.object().shape({
@@ -73,7 +180,7 @@ export const templateInfoSchema = Yup.object().shape({
         : Number(originalValue);
     })
     .nullable()
-    .min(1, 'Expiry days must be at least 1')
+    .min(0, 'Expiry days must be at least 1')
     .integer('Expiry days must be a whole number')
     .typeError('Expiry days must be a valid number')
 });
@@ -92,8 +199,16 @@ export const bonusDetailsSchema = Yup.object().shape({
     .integer('Display priority must be a whole number')
     .min(1, 'Display priority must be at least 1')
     .typeError('Display priority must be a valid number'),
-  desktopImage: Yup.mixed().nullable(),
-  mobileImage: Yup.mixed().nullable()
+  desktopImage: Yup.mixed()
+    .test('accepted', 'File must be an image', (value) => {
+      return value === null || value === undefined || value?.type?.startsWith('image/');
+    })
+    .nullable(),
+  mobileImage: Yup.mixed()
+    .test('accepted', 'File must be an image', (value) => {
+      return value === null || value === undefined || value?.type?.startsWith('image/');
+    })
+    .nullable()
 });
 
 // Step 3: Reward Details (validates all possible fields, but only relevant ones are used based on bonusType)
@@ -108,7 +223,7 @@ export const rewardDetailsSchema = Yup.object().shape({
     })
     .nullable()
     .min(0, 'Boost percentage must be 0 or greater')
-    .max(1000, 'Boost percentage cannot exceed 1000')
+    .max(100, 'Boost percentage cannot exceed 100')
     .typeError('Boost percentage must be a valid number'),
   minDepositAmount: Yup.number()
     .transform((value, originalValue) => {
@@ -129,13 +244,7 @@ export const rewardDetailsSchema = Yup.object().shape({
     .nullable()
     .min(0, 'Max bonus amount must be 0 or greater')
     .typeError('Max bonus amount must be a valid number'),
-  variableRules: Yup.array()
-    .nullable()
-    .when('boostMode', {
-      is: (val) => val === 'variable',
-      then: (schema) => schema.of(variableRuleItemSchema),
-      otherwise: (schema) => schema.nullable()
-    }),
+  variableRules: Yup.array().of(variableRuleItemSchema).nullable(),
   // Free Chip
   amount: Yup.number()
     .transform((value, originalValue) => {
@@ -197,7 +306,16 @@ export const wageringConfigSchema = Yup.object().shape({
     })
     .nullable()
     .min(0, 'Wagering value must be 0 or greater')
-    .typeError('Wagering value must be a valid number')
+    .typeError('Wagering value must be a valid number'),
+  daysToWager: Yup.number()
+    .transform((value, originalValue) => {
+      return originalValue === '' || originalValue === null || originalValue === undefined
+        ? null
+        : Number(originalValue);
+    })
+    .nullable()
+    .min(0, 'Days to wager must be 0 or greater')
+    .typeError('Days to wager must be a valid number')
 });
 
 // Step 5: Max Cashout Configuration
@@ -259,9 +377,9 @@ export const gameplaySchema = Yup.object().shape({
   gameIncluded: Yup.boolean().nullable()
 });
 
-export const variableRulesSchema = Yup.object().shape({
-  variableRules: Yup.array().of(variableRuleItemSchema)
-});
+// export const variableRulesSchema = Yup.object().shape({
+
+// });
 
 // All step schemas mapped to step IDs
 export const stepSchemas = {
@@ -270,6 +388,5 @@ export const stepSchemas = {
   rewardDetails: rewardDetailsSchema,
   wageringConfiguration: wageringConfigSchema,
   maxCashoutConfiguration: maxCashoutConfigSchema,
-  gameplayConfiguration: gameplaySchema,
-  variableRules: variableRulesSchema
+  gameplayConfiguration: gameplaySchema
 };

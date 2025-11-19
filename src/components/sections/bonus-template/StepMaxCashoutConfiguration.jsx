@@ -52,7 +52,7 @@ export function StepMaxCashoutConfiguration({ data, onChange, options, baseOptio
       <div className="grid gap-4 md:grid-cols-2">
         <div className="flex items-center">
           <Switch
-            label={t('sticky_bonus_non_withdrawable')}
+            label={t('sticky_bonus')}
             checked={data.stickyBonus || false}
             disabled={!showValue}
             onChange={(event) => onChange('stickyBonus', event.target.checked)}

@@ -83,6 +83,21 @@ export const wageringBaseOptionsLabel = (type, t) => {
   }
 };
 
+export const paymentMethodOptionsLabel = (type = '', t) => {
+  switch (type) {
+    case 'all':
+      return t('all_payment_methods');
+    case 'credit_card':
+      return t('credit_card');
+    case 'crypto':
+      return t('crypto');
+    case 'wallet':
+      return t('wallet');
+    default:
+      return type;
+  }
+};
+
 const buildImageUrl = (imageName) =>
   imageName ? `${apiConfig.baseURL.S3_URL}/bonus-template/${imageName}` : null;
 
@@ -129,7 +144,9 @@ export const normalizeBonusTemplateDetail = (payload) => {
   const templateInfo = {
     templateName: template.TemplateName,
     bonusType: template.BonusType,
-    bonusTag: template.BonusTag,
+    bonusTag: template.bonusTags?.map((tag) => tag.TagName) || [],
+    bonusTagsSelectedData:
+      template.bonusTags?.map((tag) => ({ id: tag.BonusTagID, value: tag.TagName })) || [],
     expiryAfterIssuanceDays: template.ExpiryAfterIssuanceDays
   };
   const bonusDetails = {
@@ -176,7 +193,8 @@ export const normalizeBonusTemplateDetail = (payload) => {
   const wageringConfig = {
     mode: template.WageringMode ?? template.wageringMode ?? 'none',
     base: template.WageringBase ?? template.wageringBase ?? null,
-    wageringValue: Number(template.WageringValue) || null
+    wageringValue: Number(template.WageringValue) || null,
+    daysToWager: Number(template.DaysToWager) || null
   };
 
   const maxCashoutConfig = {
