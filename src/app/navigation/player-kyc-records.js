@@ -8,7 +8,7 @@ export const playerKycRecords = {
   id: 'player-kyc-records',
   type: NAV_TYPE_ITEM,
   path: '/kyc/player-kyc-records',
-  title: 'User KYC',
+  title: 'User KYC Records',
   transKey: 'playerKycRecords',
   Icon: PiListChecks,
   permission: PERMISSIONS.USER_KYC.VIEW,

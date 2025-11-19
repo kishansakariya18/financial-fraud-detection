@@ -1128,5 +1128,6 @@
   "enter_cashout_value_info": "Enter cashout value",
   "enter_wagering_value_info": "Enter wagering value",
   "wagering_base": "Wagering Base",
-  "select_base": "Select Base"
+  "select_base": "Select Base",
+  "kycConfigurations": "KYC Configurations"
 }

@@ -288,6 +288,10 @@ export const apiConfig = {
         LIST: '/users/admin/kyc/doc/list',
         DETAILS: '/users/admin/kyc/doc/:documentId/details',
         UPDATE: '/users/admin/kyc/update'
+      },
+      KYC_CONFIGURATIONS: {
+        GET_CONFIGURATIONS: '/users/admin/kyc/get-level-config',
+        UPDATE_CONFIGURATIONS: '/users/admin/kyc/set-level-config'
       }
     },
     EVENT_TEMPLATE: {

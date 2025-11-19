@@ -9,7 +9,7 @@ import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions
 import { useTranslation } from 'react-i18next';
 import { useClipboard } from 'hooks';
 import { DocumentDuplicateIcon } from '@heroicons/react/20/solid';
-import UserKycServices from 'services/player-kyc.services';
+import UserKycServices from 'services/player-kyc-records.services';
 import { parseUserKycStatusToApp } from './helper';
 import { toast } from 'sonner';
 import { DOCUMENT_STATUS, DOCUMENT_TYPE, PERMISSIONS } from 'constants/app.constant';

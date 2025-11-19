@@ -55,6 +55,7 @@ import { platformGuard } from './PlatformRouteGuard';
 import { Outlet } from 'react-router';
 import { PLATFORM_TYPE } from 'constants/app.constant';
 import { userManualWithdrawTransactionRoute } from './routes/user-manual-withdraw-transaction.route';
+import kycConfigurationsRoute from './routes/kyc-configurations.route';
 // ----------------------------------------------------------------------
 
 const protectedRoutes = {
@@ -116,7 +117,8 @@ const protectedRoutes = {
                 ...userClass,
                 ...faqRoutes,
                 ...userKycRoute,
-                ...layoutThemeRoute
+                ...layoutThemeRoute,
+                ...kycConfigurationsRoute
               ]
             },
 
