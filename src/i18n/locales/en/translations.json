@@ -1139,5 +1139,7 @@
   "duplicate_bonus_template_confirmation": "Are you sure you want to duplicate this bonus template?",
   "bonus_template_duplicated_successfully": "Bonus template duplicated successfully",
   "failed_to_duplicate_bonus_template": "Failed to duplicate the bonus template. Please try again.",
-  "retry": "Retry"
+  "retry": "Retry",
+  "updated_range": "Updated Range",
+  "apply_filters": "Apply Filters"
 }

@@ -23,7 +23,7 @@ export const bonusManagementRoute = [
       const { default: BonusTemplateList } = await import('../../pages/bonus-template/list/list');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.BONUS_TEMPLATES.LIST}>
+          <PrivateRoute permission={PERMISSIONS.BONUS_TEMPLATES.VIEW}>
             <BonusTemplateList />
           </PrivateRoute>
         )
@@ -70,6 +70,66 @@ export const bonusManagementRoute = [
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.BONUS_TEMPLATES.VIEW}>
             <ViewBonusTemplate />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'bonus/player-segmentation',
+    lazy: async () => {
+      const { default: PlayerSegmentationList } = await import(
+        '../../pages/player-segmentation/list/list'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.LIST}>
+            <PlayerSegmentationList />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'bonus/player-segmentation/create',
+    lazy: async () => {
+      const { default: CreatePlayerSegmentation } = await import(
+        '../../pages/player-segmentation/CreatePlayerSegmentation'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.ADD}>
+            <CreatePlayerSegmentation />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'bonus/player-segmentation/:playerSegmentationId/edit',
+    lazy: async () => {
+      const { default: EditPlayerSegmentation } = await import(
+        '../../pages/player-segmentation/EditPlayerSegmentation'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.EDIT}>
+            <EditPlayerSegmentation />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'bonus/player-segmentation/:playerSegmentationId/view',
+    lazy: async () => {
+      const { default: ViewPlayerSegmentation } = await import(
+        '../../pages/player-segmentation/ViewPlayerSegmentation'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.VIEW}>
+            <ViewPlayerSegmentation />
           </PrivateRoute>
         )
       };
