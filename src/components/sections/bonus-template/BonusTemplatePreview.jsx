@@ -68,7 +68,7 @@ export function BonusTemplatePreview({ data, lookups }) {
             <dt>{t('bonus_type')}</dt>
             <dd>{getBonusTypeLabel(templateInfo.bonusType || '_', t)}</dd>
             <dt>{t('bonus_tags')}</dt>
-            <dd>{templateInfo.bonusTags?.join(', ') || '—'}</dd>
+            <dd>{templateInfo.bonusTag?.join(', ') || '—'}</dd>
             <dt>{t('expiry_after_issuance_days')}</dt>
             <dd>{templateInfo.expiryAfterIssuanceDays || '—'}</dd>
           </dl>
@@ -78,8 +78,10 @@ export function BonusTemplatePreview({ data, lookups }) {
           <dl className={compactListClasses}>
             <dt>{t('bonus_name')}</dt>
             <dd>{bonusDetails.displayTitle || '—'}</dd>
-            <dt>{t('description')}</dt>
+            <dt>{t('description') + ` (${t('player_facing')})`}</dt>
             <dd className="overflow-hidden">{bonusDetails.notes || '—'}</dd>
+            <dt>{t('description') + ` (${t('internal')})`}</dt>
+            <dd className="overflow-hidden">{bonusDetails.adminNotes || '—'}</dd>
             <dt>{t('display_priority')}</dt>
             <dd>{bonusDetails.displayPriority || '—'}</dd>
             <dt>{t('desktop_image')}</dt>

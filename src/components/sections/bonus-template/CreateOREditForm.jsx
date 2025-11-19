@@ -162,7 +162,7 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
       templateInfo: {
         ...prev.templateInfo,
         bonusTagsSelectedData: tags,
-        bonusTags: tags.map((tag) => tag.value)
+        bonusTag: tags.map((tag) => tag.value)
       }
     }));
   };

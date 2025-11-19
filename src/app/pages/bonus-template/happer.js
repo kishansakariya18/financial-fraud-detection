@@ -144,9 +144,9 @@ export const normalizeBonusTemplateDetail = (payload) => {
   const templateInfo = {
     templateName: template.TemplateName,
     bonusType: template.BonusType,
-    bonusTag: template.bonusTags?.map((tag) => tag.TagName) || [],
+    bonusTag: template.bonusTag?.map((tag) => tag.TagName) || [],
     bonusTagsSelectedData:
-      template.bonusTags?.map((tag) => ({ id: tag.BonusTagID, value: tag.TagName })) || [],
+      template.bonusTag?.map((tag) => ({ id: tag.BonusTagID, value: tag.TagName })) || [],
     expiryAfterIssuanceDays: template.ExpiryAfterIssuanceDays
   };
   const bonusDetails = {
