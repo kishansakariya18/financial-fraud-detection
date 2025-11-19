@@ -13,7 +13,6 @@ export function StepTemplateInfo({
   errors = {}
 }) {
   const { t } = useTranslation();
-  console.log('data', data, data.bonusTagsSelectedData);
   return (
     <div className="space-y-4">
       <Input

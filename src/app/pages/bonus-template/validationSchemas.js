@@ -172,7 +172,7 @@ const variableRuleItemSchema = Yup.object()
 export const templateInfoSchema = Yup.object().shape({
   templateName: Yup.string().trim().nullable().required('Template name is required'),
   bonusType: Yup.string().nullable().required('Bonus type is required'),
-  bonusTags: Yup.array().of(Yup.string()).nullable(),
+  bonusTag: Yup.array().of(Yup.string()).nullable(),
   expiryAfterIssuanceDays: Yup.number()
     .transform((value, originalValue) => {
       return originalValue === '' || originalValue === null || originalValue === undefined
