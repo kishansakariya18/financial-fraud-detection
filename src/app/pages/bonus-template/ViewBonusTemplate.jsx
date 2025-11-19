@@ -10,6 +10,7 @@ import {
   getBonusTypeLabel,
   getTemplateStatusLabel,
   normalizeBonusTemplateDetail,
+  paymentMethodOptionsLabel,
   wageringBaseOptionsLabel,
   wageringModeOptionsLabel
 } from './happer';
@@ -104,9 +105,9 @@ export default function ViewBonusTemplate() {
   const renderVariableRules = (variableRules) => {
     if (!variableRules || variableRules.length === 0) return '—';
     return (
-      <table className="min-w-full divide-y divide-gray-200 text-xs dark:divide-dark-500">
+      <table className="min-w-full divide-y divide-gray-200 text-tiny dark:divide-dark-500">
         <thead className="bg-gray-50 dark:bg-dark-700/40">
-          <tr className="text-left font-semibold uppercase tracking-wide text-gray-600 dark:text-dark-200">
+          <tr className="text-left text-gray-600 dark:text-dark-200">
             <th>{t('payment_method')}</th>
             <th>{t('range_from')}</th>
             <th>{t('range_to')}</th>
@@ -117,10 +118,8 @@ export default function ViewBonusTemplate() {
         </thead>
         <tbody>
           {variableRules.map((rule) => (
-            <tr
-              className="text-left font-semibold uppercase tracking-wide text-gray-600 dark:text-dark-200"
-              key={rule.id}>
-              <td>{rule.paymentMethod}</td>
+            <tr className="text-left text-gray-600 dark:text-dark-200" key={rule.id}>
+              <td>{paymentMethodOptionsLabel(rule.paymentMethod, t)}</td>
               <td>{rule.rangeFrom}</td>
               <td>{rule.rangeTo}</td>
               <td>{rule.boostPercent}</td>
@@ -173,6 +172,7 @@ export default function ViewBonusTemplate() {
     ? formatStatusBadge(getTemplateStatusLabel(normalized.status, t), normalized.statusColor)
     : null;
 
+  console.log('normalized.bonusDetails: ', normalized.bonusDetails);
   return (
     <ContentWrapper pageTitle="Bonus Template Details">
       <div className="mx-[--margin-x] mt-4 space-y-6">
@@ -256,9 +256,20 @@ export default function ViewBonusTemplate() {
                 {
                   label: t('desktop_image'),
                   value: normalized.bonusDetails.desktopImageUrl ? (
-                    <RenderImage
+                    <img
                       src={normalized.bonusDetails.desktopImageUrl}
-                      alt={t('desktop_image')}
+                      alt={''}
+                      className="h-full w-full object-cover"
+                      style={{
+                        maxWidth: '100px',
+                        maxHeight: '100px'
+                      }}
+                      // onError={(e) => {
+                      //   e.target.src = '/images/default-image.png';
+                      // }}
+                      // onLoad={(e) => {
+                      //   e.target.style.display = 'block';
+                      // }}
                     />
                   ) : (
                     'Not uploaded'
@@ -355,7 +366,8 @@ export default function ViewBonusTemplate() {
                   label: t('base'),
                   value: wageringBaseOptionsLabel(normalized.wageringConfig.base, t) || '—'
                 },
-                { label: t('value'), value: normalized.wageringConfig.wageringValue ?? '—' }
+                { label: t('value'), value: normalized.wageringConfig.wageringValue ?? '—' },
+                { label: t('days_to_wager'), value: normalized.wageringConfig.daysToWager ?? '—' }
               ]}
             />
 

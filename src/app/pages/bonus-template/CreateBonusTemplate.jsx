@@ -52,7 +52,8 @@ export default function CreateBonusTemplate() {
       wageringConfig: {
         wageringMode: wageringConfig.mode || null,
         wageringBase: wageringConfig.base || null,
-        wageringValue: Number(wageringConfig.wageringValue) || 0
+        wageringValue: Number(wageringConfig.wageringValue) || 0,
+        daysToWager: Number(wageringConfig.daysToWager) || 0
       },
       maxCashoutConfig: {
         mcoMode: maxCashoutConfig.mode || null,

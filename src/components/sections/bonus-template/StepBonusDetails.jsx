@@ -10,7 +10,7 @@ export function StepBonusDetails({ data, onChange, onImageChange, errors = {} })
   return (
     <div className="space-y-4">
       <Input
-        label={t('bonus_name_player_facing')}
+        label={t('bonus_name') + ' ' + t('player_facing')}
         placeholder={t('enter_bonus_name_player_facing_info')}
         value={data.displayTitle}
         onChange={(event) => onChange('displayTitle', event.target.value)}
@@ -18,12 +18,20 @@ export function StepBonusDetails({ data, onChange, onImageChange, errors = {} })
       />
 
       <Textarea
-        label={t('description')}
-        minRows={4}
+        label={t('description') + ` (${t('player_facing')})`}
+        rows={4}
         placeholder={t('enter_description_info')}
         value={data.notes}
         onChange={(event) => onChange('notes', event.target.value)}
         error={errors.notes}
+      />
+      <Textarea
+        label={t('description') + ` (${t('internal')})`}
+        rows={4}
+        placeholder={t('enter_description_internal_info')}
+        value={data.adminNote}
+        onChange={(event) => onChange('adminNote', event.target.value)}
+        error={errors.adminNote}
       />
 
       <Input
@@ -66,6 +74,7 @@ const UploadField = ({ label, value, error, onChange }) => {
       <div className="flex flex-wrap items-center gap-2">
         <Upload
           ref={uploadRef}
+          accept="image/*"
           onChange={(file) => {
             onChange(file);
           }}>

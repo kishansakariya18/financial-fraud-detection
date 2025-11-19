@@ -11,6 +11,7 @@ export function StepRewardDetails({
   boostModeOptions,
   paymentMethodOptions,
   onRulesChange,
+  onValidateRuleField,
   onGameOptionsCache,
   errors = {}
 }) {
@@ -72,13 +73,15 @@ export function StepRewardDetails({
             <VariableRulesEditor
               rules={data.variableRules || []}
               onChange={onRulesChange}
+              onValidateRuleField={onValidateRuleField}
               paymentMethodOptions={paymentMethodOptions}
+              errors={errors}
             />
-            {errors.variableRules && (
+            {/* {errors.variableRules && (
               <p className="mt-2 text-sm text-error dark:text-error-light">
                 {errors.variableRules}
               </p>
-            )}
+            )} */}
           </div>
         )}
       </div>
@@ -184,6 +187,7 @@ StepRewardDetails.propTypes = {
     })
   ),
   onRulesChange: PropTypes.func,
+  onValidateRuleField: PropTypes.func,
   onGameOptionsCache: PropTypes.func,
   errors: PropTypes.object
 };

@@ -19,6 +19,10 @@ const BonusTemplateService = {
     return apiInstance.get(endpoint);
   },
 
+  getTagList: async (filters = {}) => {
+    return await apiInstance.get(apiConfig.endPoints.BONUS_TEMPLATE.LIST_TAGS, { params: filters });
+  },
+
   createTemplate: async (formState) => {
     const formData = objectToFormData(formState);
     console.log('formData: ', formData);
