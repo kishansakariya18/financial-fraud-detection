@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 export default function ReOrderCategory() {
   const [categoryList, setCategoryList] = useState([]);
@@ -19,6 +20,13 @@ export default function ReOrderCategory() {
 
   const { t } = useTranslation();
 
+  const pageTitle = t('reorder') + ' ' + t('category');
+
+  const breadcrumbItems = [
+    { title: t('homeCategory') + ' ' + t('list'), path: '/web/home-category' },
+    { title: pageTitle }
+  ];
+
   const columns = [
     { accessorKey: 'draggable', header: 'Drag' },
     { accessorKey: 'homeCategoryId', header: 'Home Category ID ' },
@@ -27,7 +35,9 @@ export default function ReOrderCategory() {
 
   const fetchHomeCategoryList = async () => {
     const result = await HomePageService.getHomeCategories({
-      filters: {},
+      filters: {
+        status: 'active'
+      },
       pagination: {
         pageIndex: 0,
         pageSize: 20
@@ -87,11 +97,19 @@ export default function ReOrderCategory() {
   }, [submitResponse]);
 
   return (
-    <ContentWrapper
-      pageTitle={t('reorder') + ' ' + t('category')}
-      title={t('reorder') + ' ' + t('category')}
-      enableFullScreen={false}>
+    <ContentWrapper pageTitle={pageTitle} title={pageTitle} enableFullScreen={false}>
       <Card className={clsx('relative flex grow flex-col')}>
+        <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-4 pt-4">
+          <div className="flex items-center space-x-4 lg:py-2 rtl:space-x-reverse">
+            <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
+              {pageTitle}
+            </h2>
+            <div className="hidden self-stretch py-1 sm:flex">
+              <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+            </div>
+            <Breadcrumbs items={breadcrumbItems} className="max-sm:hidden" />
+          </div>
+        </div>
         <Table
           data={categoryList}
           setData={(oldData, active, over) => {
