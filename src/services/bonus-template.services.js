@@ -31,6 +31,15 @@ const BonusTemplateService = {
     });
   },
 
+  duplicateTemplate: async (templateId) => {
+    const endpoint = replaceText(
+      apiConfig.endPoints.BONUS_TEMPLATE.DUPLICATE,
+      ':bonusTemplateID',
+      templateId
+    );
+    return apiInstance.post(endpoint);
+  },
+
   updateTemplateStatus: async (templateId) => {
     const endpoint = replaceText(
       apiConfig.endPoints.BONUS_TEMPLATE.UPDATE_STATUS,

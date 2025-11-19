@@ -152,7 +152,8 @@ export const apiConfig = {
       UPDATE: '/bonus/admin/bonus-template/:bonusTemplateID',
       DELETE: '/bonus/admin/bonus-template/:bonusTemplateID',
       UPDATE_STATUS: '/bonus/admin/bonus-template/:bonusTemplateID/change-status',
-      LIST_TAGS: '/bonus/admin/bonus-template/tags/list'
+      LIST_TAGS: '/bonus/admin/bonus-template/tags/list',
+      DUPLICATE: '/bonus/admin/bonus-template/:bonusTemplateID/duplicate'
     },
     AGENT: {
       DASHBOARD: '/admin/agent/dashboard',

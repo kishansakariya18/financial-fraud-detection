@@ -46,6 +46,7 @@ const defaultFormState = {
   bonusDetails: {
     displayTitle: '',
     notes: '',
+    adminNotes: '',
     displayPriority: '',
     desktopImage: null,
     mobileImage: null

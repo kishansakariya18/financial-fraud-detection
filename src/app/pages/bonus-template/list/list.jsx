@@ -72,15 +72,21 @@ export default function BonusTemplateList() {
     return BonusTemplateService.updateTemplateStatus(template.id);
   }, []);
 
+  const handleDuplicate = useCallback(async (template) => {
+    if (!template?.id) return null;
+    return BonusTemplateService.duplicateTemplate(template.id);
+  }, []);
+
   const tableColumns = useMemo(
     () =>
       createBonusTemplateColumns({
         onView: handleView,
         onEdit: handleEdit,
         onDelete: handleDelete,
-        onChangeStatus: handleChangeStatus
+        onChangeStatus: handleChangeStatus,
+        onDuplicate: handleDuplicate
       }),
-    [handleView, handleEdit, handleDelete, handleChangeStatus]
+    [handleView, handleEdit, handleDelete, handleChangeStatus, handleDuplicate]
   );
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({

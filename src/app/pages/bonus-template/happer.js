@@ -152,6 +152,7 @@ export const normalizeBonusTemplateDetail = (payload) => {
   const bonusDetails = {
     displayTitle: template.DisplayTitle,
     notes: template.Notes,
+    adminNotes: template.AdminNote,
     displayPriority: template.DisplayPriority,
     desktopImage: template.DesktopImageName,
     mobileImage: template.MobileImageName,
