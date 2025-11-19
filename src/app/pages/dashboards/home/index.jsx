@@ -814,7 +814,7 @@ export default function Home() {
       endDate: dayjs().locale(locale).format('YYYY-MM-DD')
     });
 
-    setDateFilterApplied(false);
+    setDateFilterApplied((prev) => !prev);
   };
 
   return (
@@ -882,12 +882,13 @@ export default function Home() {
 
           <div className="mt-2 flex w-full flex-wrap items-center gap-2">
             <DatePicker
+              value={[dateFilters?.startDate, dateFilters?.endDate]}
               onChange={onDateChange}
               className="w-full sm:w-[250px] md:w-[300px] lg:w-[350px] xl:w-[400px]"
               options={{
                 mode: 'range',
-                dateFormat: 'Y-m-d',
-                defaultDate: [dateFilters?.startDate, dateFilters?.endDate]
+                dateFormat: 'Y-m-d'
+                // defaultDate: [dateFilters?.startDate, dateFilters?.endDate]
               }}
               placeholder="Choose date..."
             />
@@ -896,7 +897,7 @@ export default function Home() {
               type="submit"
               color="primary"
               className="rounded px-4 py-2 font-semibold text-white"
-              onClick={() => setDateFilterApplied(true)}>
+              onClick={() => setDateFilterApplied((prev) => !prev)}>
               Apply
             </Button>
             <Button

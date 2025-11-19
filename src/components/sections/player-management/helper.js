@@ -31,7 +31,7 @@ export const responseMapper = (apiData) => {
       lastLoginAt: item.LastLoginAt ? getDateInUTCToTimeZone(item.LastLoginAt) : '',
       isBankVerified: playerBankVerifyToApp(item.isBankVerified),
       isKYCVerified: playerKycToApp(item.isKYCVerified),
-      gender: item.Gender,
+      gender: item.Gender || '-',
       country: item.CountryID,
       SegmentationID: '0',
       blockedAt: item?.UserBlockedAt ? getDateInUTCToTimeZone(item.UserBlockedAt) : '',

@@ -394,10 +394,18 @@ export const PERMISSIONS = Object.freeze({
     VERIFY: 'user-bank-deposit-verify'
   },
   BLACKLIST: {
-    LIST: 'blacklist-view',
+    MODULE_NAME: 'Blacklist',
     CREATE: 'blacklist-create',
-    EDIT: 'blacklist-update',
-    DELETE: 'blacklist-delete'
+    VIEW: 'blacklist-view',
+    DELETE: 'blacklist-delete',
+    UPDATE: 'blacklist-update',
+    VIEW_EMAIL_MOBILE_RESTRCTION: 'blacklist-view-restricted-email-mobile',
+    DELETE_EMAIL_MOBILE_RESTRCTION: 'blacklist-delete-restricted-email-mobile',
+    ADD_EMAIL_MOBILE_RESTRCTION: 'blacklist-add-restricted-email-mobile',
+    ADD_RESTRICTED_EMAIL_DOMAIN: 'blacklist-add-restricted-email-domain',
+    VIEW_RESTRICTED_EMAIL_DOMAIN: 'blacklist-view-restricted-email-domain',
+    DELETE_RESTRICTED_EMAIL_DOMAIN: 'blacklist-delete-restricted-email-domain',
+    UPDATE_RESTRICTED_EMAIL_DOMAIN: 'blacklist-update-restricted-email-domain'
   },
   PAYMENT_PROVIDER: {
     LIST: 'payment-provider-view',
