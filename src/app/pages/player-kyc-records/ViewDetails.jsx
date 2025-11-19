@@ -9,7 +9,7 @@ import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions
 import { useTranslation } from 'react-i18next';
 import { useClipboard } from 'hooks';
 import { DocumentDuplicateIcon } from '@heroicons/react/20/solid';
-import UserKycServices from 'services/player-kyc.services';
+import UserKycServices from 'services/player-kyc-records.services';
 import { parseUserKycStatusToApp } from './helper';
 import { toast } from 'sonner';
 import { DOCUMENT_STATUS, DOCUMENT_TYPE, PERMISSIONS } from 'constants/app.constant';
@@ -25,9 +25,12 @@ export function ViewDetails() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { documentId } = useParams();
-  const pageTitle = t('playerKyc') + ' ' + t('details');
+  const pageTitle = t('player') + ' ' + t('kyc') + ' ' + t('details');
   const { copied, copy } = useClipboard({ timeout: 2000 });
-  const breadcrumbItem = [{ title: t('playerKyc'), path: '/player-kyc' }, { title: t('update') }];
+  const breadcrumbItem = [
+    { title: t('playerKycRecords'), path: '/kyc/player-kyc-records' },
+    { title: t('details') }
+  ];
 
   const [selected, setSelected] = useState('');
   const [rejectReason, setRejectReason] = useState('');

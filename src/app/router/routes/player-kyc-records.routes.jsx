@@ -4,9 +4,9 @@ import { Navigate } from 'react-router';
 
 export const userKycRoute = [
   {
-    path: 'player-kyc',
+    path: 'kyc/player-kyc-records',
     lazy: async () => {
-      const { default: UserKycList } = await import('../../pages/player-kyc/list/list');
+      const { default: UserKycList } = await import('../../pages/player-kyc-records/list/list');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.USER_KYC.VIEW}>
@@ -17,9 +17,9 @@ export const userKycRoute = [
     }
   },
   {
-    path: 'player-kyc/:documentId/tab',
+    path: 'kyc/player-kyc-records/:documentId/tab',
     lazy: async () => ({
-      Component: (await import('../../pages/player-kyc/Tabs')).default
+      Component: (await import('../../pages/player-kyc-records/Tabs')).default
     }),
     children: [
       {
@@ -29,7 +29,7 @@ export const userKycRoute = [
       {
         path: 'details',
         lazy: async () => {
-          const { ViewDetails } = await import('../../pages/player-kyc/ViewDetails');
+          const { ViewDetails } = await import('../../pages/player-kyc-records/ViewDetails');
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.USER_KYC.VIEW}>

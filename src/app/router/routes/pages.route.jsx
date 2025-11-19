@@ -45,7 +45,7 @@ export const pagesRoute = [
   {
     path: 'content-management/pages/:id/tab',
     lazy: async () => ({
-      Component: (await import('../../pages/player-kyc/Tabs')).default
+      Component: (await import('../../pages/player-kyc-records/Tabs')).default
     }),
     children: [
       {

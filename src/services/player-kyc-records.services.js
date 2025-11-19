@@ -1,4 +1,4 @@
-import { parseUserKycStatusToAPI } from 'app/pages/player-kyc/helper';
+import { parseUserKycStatusToAPI } from 'app/pages/player-kyc-records/helper';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
 import { sendRequest } from 'utils/axios';
