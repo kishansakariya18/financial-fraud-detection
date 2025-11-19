@@ -129,6 +129,8 @@ export function StepGameplayConfiguration({
           placeholder={placeholder}
           error={error}
           classNames={{ root: 'space-y-1' }}
+          showSelectAll
+          selectAllLabel={t('select_all')}
           inputProps={{
             onKeyDown: handleBackspace
           }}

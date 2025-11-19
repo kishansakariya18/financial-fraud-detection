@@ -151,7 +151,9 @@ export const apiConfig = {
       CREATE: '/bonus/admin/bonus-template',
       UPDATE: '/bonus/admin/bonus-template/:bonusTemplateID',
       DELETE: '/bonus/admin/bonus-template/:bonusTemplateID',
-      UPDATE_STATUS: '/bonus/admin/bonus-template/:bonusTemplateID/change-status'
+      UPDATE_STATUS: '/bonus/admin/bonus-template/:bonusTemplateID/change-status',
+      LIST_TAGS: '/bonus/admin/bonus-template/tags/list',
+      DUPLICATE: '/bonus/admin/bonus-template/:bonusTemplateID/duplicate'
     },
     AGENT: {
       DASHBOARD: '/admin/agent/dashboard',
@@ -415,7 +417,7 @@ export const apiConfig = {
     CRM: {
       SEND: '/notifications/admin/crm/sendNotification',
       LIST: '/notifications/admin/crm/notification/list',
-      DETAIL: '/notifications/admin/crm/notification/:notificationId'
+      DETAIL: '/notifications/admin/crm/notification/:notificationId/details'
     },
     HOME_PAGE: {
       HOME_CATEGORY_LIST: '/config/admin/home-page/home-category/list',

@@ -97,7 +97,6 @@ export default function EditBonusTemplate() {
     const payload = {
       ...templateInfo,
       ...bonusDetails,
-      bonusTag: templateInfo.bonusTags,
       displayPriority: Number(bonusDetails.displayPriority) || 0,
       expiryAfterIssuanceDays: Number(templateInfo.expiryAfterIssuanceDays) || 0,
 
