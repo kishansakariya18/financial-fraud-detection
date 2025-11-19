@@ -200,13 +200,89 @@ export const bonusDetailsSchema = Yup.object().shape({
     .min(1, 'Display priority must be at least 1')
     .typeError('Display priority must be a valid number'),
   desktopImage: Yup.mixed()
-    .test('accepted', 'File must be an image', (value) => {
-      return value === null || value === undefined || value?.type?.startsWith('image/');
+    .test('file-type', 'File must be PNG or JPG', (value) => {
+      if (value === null || value === undefined) return true;
+      if (typeof value === 'string') return true; // Existing file path
+      const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+      return validTypes.includes(value?.type?.toLowerCase());
+    })
+    .test('file-size', 'Image must be exactly 1024x1024px', function (value) {
+      if (value === null || value === undefined) return true;
+      if (typeof value === 'string') return true; // Existing file path, skip validation
+      if (!(value instanceof File)) return true;
+
+      return new Promise((resolve) => {
+        const img = new Image();
+        const objectUrl = URL.createObjectURL(value);
+
+        img.onload = () => {
+          URL.revokeObjectURL(objectUrl);
+          const isValid = img.naturalWidth === 1024 && img.naturalHeight === 1024;
+          if (!isValid) {
+            resolve(
+              this.createError({
+                message: 'Image must be exactly 1024x1024px'
+              })
+            );
+          } else {
+            resolve(true);
+          }
+        };
+
+        img.onerror = () => {
+          URL.revokeObjectURL(objectUrl);
+          resolve(
+            this.createError({
+              message: 'Invalid image file'
+            })
+          );
+        };
+
+        img.src = objectUrl;
+      });
     })
     .nullable(),
   mobileImage: Yup.mixed()
-    .test('accepted', 'File must be an image', (value) => {
-      return value === null || value === undefined || value?.type?.startsWith('image/');
+    .test('file-type', 'File must be PNG or JPG', (value) => {
+      if (value === null || value === undefined) return true;
+      if (typeof value === 'string') return true; // Existing file path
+      const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+      return validTypes.includes(value?.type?.toLowerCase());
+    })
+    .test('file-size', 'Image must be exactly 1024x1024px', function (value) {
+      if (value === null || value === undefined) return true;
+      if (typeof value === 'string') return true; // Existing file path, skip validation
+      if (!(value instanceof File)) return true;
+      console.log('value: ', value);
+      return new Promise((resolve) => {
+        const img = new Image();
+        const objectUrl = URL.createObjectURL(value);
+
+        img.onload = () => {
+          URL.revokeObjectURL(objectUrl);
+          const isValid = img.naturalWidth === 1024 && img.naturalHeight === 1024;
+          if (!isValid) {
+            resolve(
+              this.createError({
+                message: 'Image must be exactly 1024x1024px'
+              })
+            );
+          } else {
+            resolve(true);
+          }
+        };
+
+        img.onerror = () => {
+          URL.revokeObjectURL(objectUrl);
+          resolve(
+            this.createError({
+              message: 'Invalid image file'
+            })
+          );
+        };
+
+        img.src = objectUrl;
+      });
     })
     .nullable()
 });

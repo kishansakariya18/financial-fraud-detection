@@ -15,7 +15,13 @@ const formatDate = (value) => {
   return date.toLocaleString();
 };
 
-export const createBonusTemplateColumns = ({ onView, onEdit, onDelete, onChangeStatus }) => [
+export const createBonusTemplateColumns = ({
+  onView,
+  onEdit,
+  onDelete,
+  onChangeStatus,
+  onDuplicate
+}) => [
   columnHelper.accessor('id', {
     id: 'id',
     header: 'ID',
@@ -23,12 +29,6 @@ export const createBonusTemplateColumns = ({ onView, onEdit, onDelete, onChangeS
     enableSorting: false,
     size: 120
   }),
-  {
-    id: 'displayPriority',
-    header: 'Display Priority',
-    accessorKey: 'displayPriority',
-    enableSorting: false
-  },
   columnHelper.accessor('templateName', {
     id: 'templateName',
     header: 'Template Name',
@@ -75,6 +75,7 @@ export const createBonusTemplateColumns = ({ onView, onEdit, onDelete, onChangeS
         onEdit={onEdit}
         onDelete={onDelete}
         onChangeStatus={onChangeStatus}
+        onDuplicate={onDuplicate}
       />
     ),
     enableSorting: false,

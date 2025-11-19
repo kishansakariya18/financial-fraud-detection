@@ -3,7 +3,8 @@ import {
   EllipsisHorizontalIcon,
   EyeIcon,
   PencilSquareIcon,
-  TrashIcon
+  TrashIcon,
+  DocumentDuplicateIcon
 } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
@@ -17,7 +18,15 @@ import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
 import { TbStatusChange } from 'react-icons/tb';
 
-export function BonusTemplateRowActions({ row, table, onView, onEdit, onDelete, onChangeStatus }) {
+export function BonusTemplateRowActions({
+  row,
+  table,
+  onView,
+  onEdit,
+  onDelete,
+  onChangeStatus,
+  onDuplicate
+}) {
   const { t } = useTranslation();
   const { hasPermission } = usePermissions();
 
@@ -30,6 +39,11 @@ export function BonusTemplateRowActions({ row, table, onView, onEdit, onDelete, 
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
+
+  const [duplicateModalOpen, setDuplicateModalOpen] = useState(false);
+  const [duplicateLoading, setDuplicateLoading] = useState(false);
+  const [duplicateSuccess, setDuplicateSuccess] = useState(false);
+  const [duplicateError, setDuplicateError] = useState(false);
 
   const currentStatus = row?.original?.status || 'inactive';
   const isActive = String(currentStatus).toLowerCase() === 'active';
@@ -67,6 +81,18 @@ export function BonusTemplateRowActions({ row, table, onView, onEdit, onDelete, 
     }
   };
 
+  const duplicateMessages = {
+    pending: {
+      title: t('duplicate') + ' ' + t('bonus_template'),
+      description: t('duplicate_bonus_template_confirmation'),
+      actionText: t('duplicate') || 'Duplicate'
+    },
+    success: {
+      title: t('duplicated_successfully'),
+      description: t('bonus_template_duplicated_successfully')
+    }
+  };
+
   const openStatusModal = () => {
     setStatusModalOpen(true);
     setStatusError(false);
@@ -85,6 +111,16 @@ export function BonusTemplateRowActions({ row, table, onView, onEdit, onDelete, 
 
   const closeDeleteModal = () => {
     setDeleteModalOpen(false);
+  };
+
+  const openDuplicateModal = () => {
+    setDuplicateModalOpen(true);
+    setDuplicateError(false);
+    setDuplicateSuccess(false);
+  };
+
+  const closeDuplicateModal = () => {
+    setDuplicateModalOpen(false);
   };
 
   const handleChangeStatus = useCallback(async () => {
@@ -125,13 +161,34 @@ export function BonusTemplateRowActions({ row, table, onView, onEdit, onDelete, 
     }
   }, [onDelete, row, table, t]);
 
+  const handleDuplicate = useCallback(async () => {
+    if (typeof onDuplicate !== 'function') return;
+    setDuplicateLoading(true);
+    await onDuplicate(row.original)
+      .then(({ response }) => {
+        setDuplicateSuccess(true);
+        toast.success(response?.message);
+        table.options.meta?.fetchNewList?.(false);
+      })
+      .catch((error) => {
+        setDuplicateError(true);
+        toast.error(error);
+      })
+      .finally(() => {
+        setDuplicateLoading(false);
+      });
+  }, [onDuplicate, row, table]);
+
   const statusState = statusError ? 'error' : statusSuccess ? 'success' : 'pending';
   const deleteState = deleteError ? 'error' : deleteSuccess ? 'success' : 'pending';
+  const duplicateState = duplicateError ? 'error' : duplicateSuccess ? 'success' : 'pending';
 
   const canView = hasPermission(PERMISSIONS.BONUS_TEMPLATES.LIST) && typeof onView === 'function';
   const canEdit = hasPermission(PERMISSIONS.BONUS_TEMPLATES.EDIT) && typeof onEdit === 'function';
   const canDelete =
     hasPermission(PERMISSIONS.BONUS_TEMPLATES.DELETE) && typeof onDelete === 'function';
+  const canDuplicate =
+    hasPermission(PERMISSIONS.BONUS_TEMPLATES.ADD) && typeof onDuplicate === 'function';
 
   return (
     <>
@@ -201,6 +258,22 @@ export function BonusTemplateRowActions({ row, table, onView, onEdit, onDelete, 
                 </MenuItem>
               )}
 
+              {canDuplicate && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={openDuplicateModal}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                        focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                      )}>
+                      <DocumentDuplicateIcon className="size-4.5 stroke-1" />
+                      <span>{t('duplicate')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
+
               {canDelete && (
                 <MenuItem>
                   {({ focus }) => (
@@ -247,6 +320,22 @@ export function BonusTemplateRowActions({ row, table, onView, onEdit, onDelete, 
         confirmLoading={deleteLoading}
         state={deleteState}
       />
+
+      <ConfirmModal
+        show={duplicateModalOpen}
+        onClose={closeDuplicateModal}
+        messages={{
+          ...duplicateMessages,
+          error: {
+            title: t('error'),
+            description: t('failed_to_duplicate_bonus_template'),
+            actionText: t('retry')
+          }
+        }}
+        onOk={handleDuplicate}
+        confirmLoading={duplicateLoading}
+        state={duplicateState}
+      />
     </>
   );
 }
@@ -257,5 +346,6 @@ BonusTemplateRowActions.propTypes = {
   onView: PropTypes.func,
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
-  onChangeStatus: PropTypes.func
+  onChangeStatus: PropTypes.func,
+  onDuplicate: PropTypes.func
 };

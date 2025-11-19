@@ -29,9 +29,9 @@ export function StepBonusDetails({ data, onChange, onImageChange, errors = {} })
         label={t('description') + ` (${t('internal')})`}
         rows={4}
         placeholder={t('enter_description_internal_info')}
-        value={data.adminNote}
-        onChange={(event) => onChange('adminNote', event.target.value)}
-        error={errors.adminNote}
+        value={data.adminNotes}
+        onChange={(event) => onChange('adminNotes', event.target.value)}
+        error={errors.adminNotes}
       />
 
       <Input
@@ -101,6 +101,9 @@ const UploadField = ({ label, value, error, onChange }) => {
       </div>
       <p className="text-sm text-gray-500 dark:text-dark-300">
         File name: <span className="font-medium">{fileName}</span>
+      </p>
+      <p className="text-xs text-gray-400 dark:text-dark-400">
+        Required size: 1024x1024px (PNG/JPG)
       </p>
       {error && <p className="text-sm text-error dark:text-error-light">{error}</p>}
     </div>
