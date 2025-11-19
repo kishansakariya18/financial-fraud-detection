@@ -8,12 +8,17 @@ import useTable from 'components/ui/useTable';
 
 import BonusTemplateService from 'services/bonus-template.services';
 
-import { Toolbar } from './Toolbar';
 import { createBonusTemplateColumns } from './columns.jsx';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
-import { mapBonusTemplateListItem } from '../happer';
+import {
+  mapBonusTemplateListItem,
+  bonusTemplateStatusOptions,
+  bonusTemplateTypeOptions
+} from '../happer';
 import { useTranslation } from 'react-i18next';
+import { PERMISSIONS } from 'constants/app.constant';
+import { TableToolbar } from 'components/shared/table/TableToolbar';
 
 export default function BonusTemplateList() {
   const { t } = useTranslation();
@@ -179,11 +184,46 @@ export default function BonusTemplateList() {
 
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
-      <Toolbar
+      <TableToolbar
         table={table}
         pageTitle={pageTitle}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
+        searchColumn="templateName"
+        searchPlaceholder={t('search') + ' templates...'}
+        createButton={{
+          show: true,
+          permission: PERMISSIONS.BONUS_TEMPLATES.ADD,
+          route: '/bonus/templates/create',
+          text: t('create') + ' ' + t('template')
+        }}
+        filters={[
+          {
+            type: 'faceted',
+            column: 'status',
+            title: t('status'),
+            options: bonusTemplateStatusOptions,
+            isMultiple: false,
+            showCheckbox: false
+          },
+          {
+            type: 'faceted',
+            column: 'bonusType',
+            title: t('bonus_type'),
+            options: bonusTemplateTypeOptions,
+            isMultiple: false,
+            showCheckbox: false
+          },
+          {
+            type: 'date',
+            column: 'updatedAt',
+            title: t('updated_range'),
+            config: {
+              mode: 'range',
+              maxDate: new Date().fp_incr?.(1)
+            }
+          }
+        ]}
       />
       <TableCard
         tableSettings={tableSettings}

@@ -14,7 +14,7 @@ export const bonusManagement = {
   title: 'Bonus Management',
   transKey: 'bonus_management',
   Icon: CircleStackIcon,
-  permission: [PERMISSIONS.REFERRAL_MANAGEMENT.EDIT, PERMISSIONS.BONUS_TEMPLATES.LIST],
+  permission: [PERMISSIONS.REFERRAL_MANAGEMENT.EDIT, PERMISSIONS.BONUS_TEMPLATES.VIEW],
   platformType: PLATFORM_TYPE.B2C,
   childs: [
     {
@@ -24,7 +24,7 @@ export const bonusManagement = {
       title: 'Bonus Templates',
       transKey: 'bonus_templates',
       Icon: DocumentDuplicateIcon,
-      permission: PERMISSIONS.BONUS_TEMPLATES.LIST,
+      permission: PERMISSIONS.BONUS_TEMPLATES.VIEW,
       platformType: PLATFORM_TYPE.B2C
     },
     {
@@ -37,5 +37,13 @@ export const bonusManagement = {
       permission: PERMISSIONS.REFERRAL_MANAGEMENT.EDIT,
       platformType: PLATFORM_TYPE.B2C
     }
+    // {
+    //   id: 'player_segmentation',
+    //   type: NAV_TYPE_ITEM,
+    //   path: '/bonus/player-segmentation',
+    //   title: 'Player Segmentation',
+    //   transKey: 'player_segmentation',
+    //   Icon: UserGroupIcon
+    // }
   ]
 };

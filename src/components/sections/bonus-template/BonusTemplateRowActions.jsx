@@ -183,7 +183,7 @@ export function BonusTemplateRowActions({
   const deleteState = deleteError ? 'error' : deleteSuccess ? 'success' : 'pending';
   const duplicateState = duplicateError ? 'error' : duplicateSuccess ? 'success' : 'pending';
 
-  const canView = hasPermission(PERMISSIONS.BONUS_TEMPLATES.LIST) && typeof onView === 'function';
+  const canView = hasPermission(PERMISSIONS.BONUS_TEMPLATES.VIEW) && typeof onView === 'function';
   const canEdit = hasPermission(PERMISSIONS.BONUS_TEMPLATES.EDIT) && typeof onEdit === 'function';
   const canDelete =
     hasPermission(PERMISSIONS.BONUS_TEMPLATES.DELETE) && typeof onDelete === 'function';
