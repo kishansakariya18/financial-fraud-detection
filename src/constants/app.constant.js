@@ -104,8 +104,8 @@ export const PAYMENT_OPT = {
 
 export const DOCUMENT_TYPE = {
   IDENTITY: 1,
-  ADDRESS: 2,
-  SOURCE_OF_FUND: 3
+  SOURCE_OF_FUND: 2,
+  ADDRESS: 3
 };
 
 export const DOCUMENT_STATUS = {
