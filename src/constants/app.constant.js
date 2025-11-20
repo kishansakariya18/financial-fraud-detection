@@ -247,11 +247,10 @@ export const PERMISSIONS = Object.freeze({
     }
   },
   BONUS_TEMPLATES: {
-    LIST: 'bonus-templates-view',
-    ADD: 'bonus-templates-add',
-    EDIT: 'bonus-templates-edit',
-    CHANGE_STATUS: 'bonus-templates-change-status',
-    DELETE: 'bonus-templates-delete'
+    ADD: 'bonus-template-add',
+    EDIT: 'bonus-template-edit',
+    VIEW: 'bonus-template-view',
+    DELETE: 'bonus-template-delete'
   },
   DEPOSIT_PROMO_CODE: {
     VIEW: 'deposit-promo-code-view',
@@ -516,6 +515,13 @@ export const PERMISSIONS = Object.freeze({
     EDIT: 'responsible-gaming-restrictions-edit',
     DELETE: 'responsible-gaming-restrictions-delete',
     APPROVE: 'responsible-gaming-restrictions-approve'
+  },
+  PLAYER_SEGMENTATION: {
+    LIST: 'player-segmentation-view',
+    ADD: 'player-segmentation-add',
+    EDIT: 'player-segmentation-edit',
+    CHANGE_STATUS: 'player-segmentation-change-status',
+    DELETE: 'player-segmentation-delete'
   }
 });
 
