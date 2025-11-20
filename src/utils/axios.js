@@ -9,8 +9,8 @@ axios.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
     config.headers.Token = `${token}`;
-    config.headers['time-zone'] = Intl.DateTimeFormat().resolvedOptions().timeZone;
   }
+  config.headers['time-zone'] = Intl.DateTimeFormat().resolvedOptions().timeZone;
   return config;
 });
 
