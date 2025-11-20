@@ -11,6 +11,7 @@ import KycConfigurationsService from 'services/kyc-configurations.services';
 import KYCProviderService from 'services/kyc-provider.services';
 import { Listbox } from 'components/shared/form/Listbox';
 import { Button } from 'components/ui';
+import { capitalizeFirstLetter } from 'helpers/functions';
 // import { Card } from 'components/ui';
 
 const KycConfigurations = () => {
@@ -40,7 +41,7 @@ const KycConfigurations = () => {
       const list = res.response?.data || [];
       const options = [
         { value: 'manual', label: 'Manual' },
-        ...list.map((p) => ({ value: p.ProviderID, label: p.ProviderName }))
+        ...list.map((p) => ({ value: p.ProviderID, label: capitalizeFirstLetter(p.ProviderName) }))
       ];
       setProviderOptions(options);
     } else if (res?.error) {
@@ -62,7 +63,12 @@ const KycConfigurations = () => {
         const hasMapping =
           Array.isArray(it.documentProviderMappings) && it.documentProviderMappings.length > 0;
         const providerId = hasMapping ? it.documentProviderMappings[0]?.ProviderID : 'manual';
-        return { slug: it.Slug, provider: providerId ?? 'manual', title: it.Title };
+        return {
+          slug: it.Slug,
+          provider: providerId ?? 'manual',
+          title: it.Title,
+          isRequired: it.IsRequired
+        };
       });
       reset({ mappings });
     } else if (res?.error) {
@@ -82,18 +88,22 @@ const KycConfigurations = () => {
     setError('');
   }
 
-  if (!levelLoading && !saving && !error && response) {
-    toast.success(response.message || t('updatedSuccessfully'));
-    setResponse(null);
-    fetchLevelConfig();
-  }
+  useEffect(() => {
+    if (!levelLoading && !error && response) {
+      const message = response?.message || t('updatedSuccessfully');
+      toast.success(message);
+      setResponse(null);
+      fetchLevelConfig();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response]);
 
   const mappings = watch('mappings');
 
   const onSubmit = async (data) => {
     try {
       setSaving(true);
-      setError(null);
+      setError('');
       const payload = (data?.mappings || [])
         .filter((m) => m?.slug !== 'basic_details')
         .map((m) => ({
@@ -130,48 +140,50 @@ const KycConfigurations = () => {
               {t('kyc_level_configurations') || 'KYC Level Configurations'}
             </h3>
           </div> */}
-          <form onSubmit={handleSubmit(onSubmit)} noValidate autoComplete="off">
-            <div className="grid gap-4 md:grid-cols-2">
-              {(levelLoading ? Array.from({ length: 4 }) : mappings || []).map((row, idx) => (
-                <div key={row?.title || idx} className="gap-2">
-                  <div className="pb-2 text-sm font-medium capitalize text-gray-700 dark:text-dark-200">
-                    {row?.title}
+          {(levelLoading || (Array.isArray(mappings) && mappings.length > 0)) && (
+            <form onSubmit={handleSubmit(onSubmit)} noValidate autoComplete="off">
+              <div className="grid gap-4 md:grid-cols-2">
+                {(levelLoading ? Array.from({ length: 0 }) : mappings || []).map((row, idx) => (
+                  <div key={row?.title || idx} className="gap-2">
+                    <div className="pb-2 text-sm font-medium capitalize text-gray-700 dark:text-dark-200">
+                      {row?.title}
+                    </div>
+                    <Controller
+                      name={`mappings.${idx}.provider`}
+                      render={({ field, fieldState }) => (
+                        <Listbox
+                          data={providerOptions}
+                          value={providerOptions.find((opt) => opt.value === field.value) || null}
+                          onChange={(val) => field.onChange(val.value)}
+                          name={field.name}
+                          placeholder={t('select') + ' ' + t('provider')}
+                          displayField="label"
+                          error={fieldState?.error?.message}
+                          disabled={!row?.isRequired}
+                        />
+                      )}
+                      control={control}
+                    />
                   </div>
-                  <Controller
-                    name={`mappings.${idx}.provider`}
-                    render={({ field, fieldState }) => (
-                      <Listbox
-                        data={providerOptions}
-                        value={providerOptions.find((opt) => opt.value === field.value) || null}
-                        onChange={(val) => field.onChange(val.value)}
-                        name={field.name}
-                        placeholder={t('select') + ' ' + t('provider')}
-                        displayField="label"
-                        error={fieldState?.error?.message}
-                        disabled={row?.slug === 'basic_details' ? true : false}
-                      />
-                    )}
-                    control={control}
-                  />
-                </div>
-              ))}
-            </div>
-            <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-              <Button
-                className="min-w-[7rem]"
-                onClick={() => reset()}
-                disabled={saving || levelLoading}>
-                {t('reset')}
-              </Button>
-              <Button
-                type="submit"
-                className="min-w-[7rem]"
-                color="primary"
-                disabled={saving || levelLoading}>
-                {t('update')}
-              </Button>
-            </div>
-          </form>
+                ))}
+              </div>
+              <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
+                <Button
+                  className="min-w-[7rem]"
+                  onClick={() => reset()}
+                  disabled={saving || levelLoading}>
+                  {t('reset')}
+                </Button>
+                <Button
+                  type="submit"
+                  className="min-w-[7rem]"
+                  color="primary"
+                  disabled={saving || levelLoading}>
+                  {t('update')}
+                </Button>
+              </div>
+            </form>
+          )}
         </div>
       </div>
     </Page>
