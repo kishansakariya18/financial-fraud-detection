@@ -1177,5 +1177,8 @@
   "deposit_bonus_ratio": "Deposit Bonus %",
   "total_bonus_ratio": "Bonus %",
   "calculations": "Calculations",
-  "blocked": "Blocked"
+  "blocked": "Blocked",
+  "template_manager": "Template Manager",
+  "eventGroup": "Event Group",
+  "channelCode": "Channel Code"
 }

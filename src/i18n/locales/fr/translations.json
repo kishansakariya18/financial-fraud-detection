@@ -616,5 +616,8 @@
   "source_of_fund": "Source du financement",
   "identity": "Identité",
   "bonus_templates": "Modèles de bonus",
-  "kycConfigurations": "Configurations KYC"
+  "kycConfigurations": "Configurations KYC",
+  "template_manager": "Gestionnaire de modèles",
+  "eventGroup": "Groupe d'événements",
+  "channelCode": "Code de canal"
 }

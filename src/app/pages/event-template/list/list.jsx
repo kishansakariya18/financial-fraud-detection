@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
@@ -21,6 +21,9 @@ export default function EmailTemplates() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const pageTitle = t('eventTemplate') + ' ' + t('list');
+  const [loading, setLoading] = useState(false);
+  const [eventGroupList, setEventGroupList] = useState([]);
+  const [channelList, setChannelList] = useState([]);
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
   const { hasPermission } = usePermissions();
@@ -47,6 +50,38 @@ export default function EmailTemplates() {
     }
     return { status: result.status, error: result.error };
   };
+
+  const getEventMasterList = async () => {
+    setLoading(true);
+    setError(null);
+    const result = await EventTemplateService.getTemplateData();
+    if (result) {
+      if (result.status === 200 || result.status === 201) {
+        const channels =
+          result?.response?.data?.channels.map((item) => ({
+            key: item.ChannelID,
+            value: item.ChannelCode,
+            label: item.ChannelCode
+          })) || [];
+
+        const groupList = result.response.data?.groups || [];
+        setEventGroupList(
+          groupList?.map((item) => ({
+            key: item.EventGroupID,
+            value: item.EventGroupID,
+            label: item.EventGroupCategory
+          }))
+        );
+        setChannelList(channels);
+      } else {
+        setError(result.error);
+      }
+    }
+    setLoading(false);
+  };
+  useEffect(() => {
+    getEventMasterList();
+  }, []);
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns: columns({ canShowActions }),
@@ -76,6 +111,12 @@ export default function EmailTemplates() {
     if (queryParams.status) {
       filtersFromQuery.push({ id: 'status', value: queryParams.status });
     }
+    if (queryParams.eventGroupId) {
+      filtersFromQuery.push({ id: 'eventGroup', value: queryParams.eventGroupId });
+    }
+    if (queryParams.channelCode) {
+      filtersFromQuery.push({ id: 'channelCode', value: queryParams.channelCode });
+    }
     if (queryParams.startDate && queryParams.endDate) {
       filtersFromQuery.push({
         id: 'createdAt',
@@ -99,6 +140,12 @@ export default function EmailTemplates() {
       if (data.id === 'createdAt') {
         filterItems.date = data.value;
       }
+      if (data.id === 'eventGroup') {
+        filterItems.eventGroupId = data.value;
+      }
+      if (data.id === 'channelCode') {
+        filterItems.channelCode = data.value;
+      }
     }
 
     setSearchParams({
@@ -107,7 +154,9 @@ export default function EmailTemplates() {
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
       ...(filterItems.status && { status: filterItems.status }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
-      ...(filterItems.date && { endDate: filterItems?.date[1] })
+      ...(filterItems.date && { endDate: filterItems?.date[1] }),
+      ...(filterItems.eventGroupId && { eventGroupId: filterItems.eventGroupId }),
+      ...(filterItems.channelCode && { channelCode: filterItems.channelCode })
     });
   };
 
@@ -127,8 +176,10 @@ export default function EmailTemplates() {
         pageTitle={pageTitle}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
+        eventGroupOptions={eventGroupList}
+        channelOptions={channelList}
       />
-      <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
+      <TableCard tableSettings={tableSettings} table={table} loading={isLoading || loading} />
     </ContentWrapper>
   );
 }
