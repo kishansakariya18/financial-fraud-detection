@@ -12,7 +12,7 @@ import platformRoute from './routes/platform.route';
 import countryRoutes from './routes/country.route';
 import reportsRoutes from './routes/reports.route';
 import paymentRoute from './routes/payment.route';
-import userKycRoute from './routes/player-kyc.routes';
+import userKycRoute from './routes/player-kyc-records.routes';
 import casinoRoutes from './routes/casino.route';
 import currenciesRoutes from './routes/currencies.route';
 
@@ -55,6 +55,7 @@ import { platformGuard } from './PlatformRouteGuard';
 import { Outlet } from 'react-router';
 import { PLATFORM_TYPE } from 'constants/app.constant';
 import { userManualWithdrawTransactionRoute } from './routes/user-manual-withdraw-transaction.route';
+import kycConfigurationsRoute from './routes/kyc-configurations.route';
 // ----------------------------------------------------------------------
 
 const protectedRoutes = {
@@ -116,7 +117,8 @@ const protectedRoutes = {
                 ...userClass,
                 ...faqRoutes,
                 ...userKycRoute,
-                ...layoutThemeRoute
+                ...layoutThemeRoute,
+                ...kycConfigurationsRoute
               ]
             },
 

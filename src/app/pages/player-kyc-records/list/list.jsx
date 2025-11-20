@@ -14,12 +14,12 @@ import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import { userKYCResponseMapper } from '../helper';
-import UserKycServices from 'services/player-kyc.services';
+import UserKycServices from 'services/player-kyc-records.services';
 
 export default function UserKYC() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('playerKyc');
+  const pageTitle = t('playerKycRecords');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 

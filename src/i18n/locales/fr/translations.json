@@ -156,7 +156,7 @@
   "odd": "Cote",
   "promoCode": "Code promo",
   "game": "Jeu",
-  "playerKyc": "KYC du joueur",
+  "playerKycRecords": "Enregistrements KYC du joueur",
   "document": "Document",
   "rejectReason": "Motif de rejet",
   "identification": "Identification",
@@ -615,5 +615,6 @@
   "loss_commission_percent_help_text": "Porcentaje de la cantidad de pérdida a pagar al afiliado.",
   "source_of_fund": "Source du financement",
   "identity": "Identité",
-  "bonus_templates": "Modèles de bonus"
+  "bonus_templates": "Modèles de bonus",
+  "kycConfigurations": "Configurations KYC"
 }
