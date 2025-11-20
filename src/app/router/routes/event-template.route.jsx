@@ -4,7 +4,7 @@ import PrivateRoute from '../private';
 
 export const emailTemplateRoute = [
   {
-    path: 'event-template',
+    path: 'event-template/list',
     lazy: async () => {
       const { default: EmailTemplateList } = await import('../../pages/event-template/list/list');
       return {
@@ -32,7 +32,7 @@ export const emailTemplateRoute = [
     }
   },
   {
-    path: '/event-template-assign',
+    path: 'event-template/event-template-assign',
     lazy: async () => {
       const { default: AssignEventToGroup } = await import(
         '../../pages/event-template/AssignEventtemplate'

@@ -634,5 +634,8 @@
   "loss_commission_percent_help_text": "Porcentaje de la cantidad de pérdida a pagar al afiliado.",
   "source_of_fund": "Fuente de fondos",
   "identity": "Identidad",
-  "bonus_templates": "Plantillas de bonos"
+  "bonus_templates": "Plantillas de bonos",
+  "template_manager": "Gestor de plantillas",
+  "eventGroup": "Grupo de eventos",
+  "channelCode": "Código de canal"
 }
