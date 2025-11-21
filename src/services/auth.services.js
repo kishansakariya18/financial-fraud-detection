@@ -22,6 +22,7 @@ const AuthService = {
   },
   valdiateResetPassword: async (body) => {
     const requestObject = {
+      phoneCode: String(body.phoneCode),
       mobile: String(body.mobile),
       email: String(body.email)
     };
@@ -34,7 +35,8 @@ const AuthService = {
       token: String(body.token),
       otp: String(body.otp),
       password: String(body.password),
-      confirm_password: String(body.confirmPassword)
+      confirm_password: String(body.confirmPassword),
+      phoneCode: String(body.phoneCode)
     };
     return apiInstance.post(apiConfig.endPoints.AUTH.RESET_PASSWORD, requestObject);
   },

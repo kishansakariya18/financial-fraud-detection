@@ -187,7 +187,13 @@ const CreateEventTemplate = () => {
     const quillInstance = editorRef.current?.getQuillInstance();
     if (!quillInstance) return;
 
-    const index = typeof cursorIndex === 'number' ? cursorIndex : quillInstance.getLength() - 1;
+    const selection = quillInstance.getSelection();
+    const index =
+      selection && typeof selection.index === 'number'
+        ? selection.index
+        : typeof cursorIndex === 'number'
+          ? cursorIndex
+          : quillInstance.getLength();
 
     quillInstance.insertText(index, textToInsert, 'user');
     quillInstance.setSelection(index + textToInsert.length, 0, 'user');

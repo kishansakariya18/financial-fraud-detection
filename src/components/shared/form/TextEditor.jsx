@@ -75,6 +75,11 @@ const TextEditor = forwardRef(
           const newContent = quill.getContents();
           onChangeRef?.current(newContent, quill);
           onTextChangeRef.current?.(...args);
+
+          const currentSelection = quill.getSelection();
+          if (currentSelection) {
+            onSelectionChangeRef.current?.(currentSelection, null, source);
+          }
         }
       });
 
