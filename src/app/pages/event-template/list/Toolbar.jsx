@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router';
 import { emailTemplateOptions } from '../helper';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
+import { FaFilter } from 'react-icons/fa6';
 
 // ----------------------------------------------------------------------
 
@@ -21,7 +22,9 @@ export function Toolbar({
   table,
   pageTitle = '',
   onApplyFilters = () => {},
-  onClearFilters = () => {}
+  onClearFilters = () => {},
+  eventGroupOptions = [{ label: '', value: '' }],
+  channelOptions = [{ label: '', value: '' }]
 }) {
   const { isXs } = useBreakpointsContext();
   const navigate = useNavigate();
@@ -71,6 +74,8 @@ export function Toolbar({
               table={table}
               onApplyFilters={onApplyFilters}
               onClearFilters={onClearFilters}
+              eventGroupOptions={eventGroupOptions}
+              channelOptions={channelOptions}
             />
           </div>
         </>
@@ -89,6 +94,8 @@ export function Toolbar({
               table={table}
               onApplyFilters={onApplyFilters}
               onClearFilters={onClearFilters}
+              eventGroupOptions={eventGroupOptions}
+              channelOptions={channelOptions}
             />
           </div>
 
@@ -119,7 +126,13 @@ function SearchInput({ table, onApplyFilters }) {
   );
 }
 
-function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }) {
+function Filters({
+  table,
+  onApplyFilters = () => {},
+  onClearFilters = () => {},
+  eventGroupOptions = [],
+  channelOptions = []
+}) {
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>
@@ -129,6 +142,27 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           column={table.getColumn('status')}
           title={t('status')}
           Icon={MapPinIcon}
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
+
+      {table.getColumn('eventGroup') && (
+        <FacedtedFilter
+          options={eventGroupOptions}
+          column={table.getColumn('eventGroup')}
+          title={t('eventGroup')}
+          Icon={FaFilter}
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
+      {table.getColumn('channelCode') && (
+        <FacedtedFilter
+          options={channelOptions}
+          column={table.getColumn('channelCode')}
+          title={t('channelCode')}
+          Icon={FaFilter}
           isMultiple={false}
           showCheckbox={false}
         />

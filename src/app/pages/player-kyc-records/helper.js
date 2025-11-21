@@ -1,6 +1,6 @@
 import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { DOCUMENT_TYPE } from 'constants/app.constant';
-import { getDateInUTCToTimeZone } from 'helpers/functions';
+import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
 import { CiWarning } from 'react-icons/ci';
 
 export const userKYCResponseMapper = (apiData, type) => {
@@ -17,7 +17,11 @@ export const userKYCResponseMapper = (apiData, type) => {
         username: data.user.Username || '',
         mobile: data.user.Mobile || '',
         status: parseUserKycStatusToApp(data.DocumentStatus),
-        date: getDateInUTCToTimeZone(data.DateCreated)
+        date: getDateInUTCToTimeZone(data.DateCreated),
+        provider:
+          data.KycProvider === '0' || data.KycProvider === null || data.KycProvider === undefined
+            ? 'Manual'
+            : capitalizeFirstLetter(data.KycProvider)
       };
     } else {
       return {
@@ -29,7 +33,11 @@ export const userKYCResponseMapper = (apiData, type) => {
         mobile: data.user.Mobile || '',
         status: parseUserKycStatusToApp(data.DocumentStatus),
         date: getDateInUTCToTimeZone(data.DateCreated),
-        type: String(data.DocumentType)
+        type: String(data.DocumentType),
+        provider:
+          data.KycProvider === '0' || data.KycProvider === null || data.KycProvider === undefined
+            ? 'Manual'
+            : capitalizeFirstLetter(data.KycProvider)
       };
     }
   });
@@ -54,10 +62,15 @@ export const parseUserKycStatusToApp = (status) => {
     res = 'approved';
   } else if (+status === 0) {
     res = 'pending';
-  } else {
+  } else if (+status === 2) {
     res = 'rejected';
+  } else if (+status === 3) {
+    res = 'auto approved';
+  } else if (+status === 4) {
+    res = 'auto rejected';
+  } else {
+    res = 'pending';
   }
-
   return res;
 };
 
@@ -67,6 +80,10 @@ export const parseUserKycStatusToAPI = (status) => {
     res = 1;
   } else if (status === 'rejected') {
     res = 2;
+  } else if (status === 'auto approved') {
+    res = 3;
+  } else if (status === 'auto rejected') {
+    res = 4;
   }
 
   return res;
@@ -90,20 +107,32 @@ export const userKycStatusOptions = [
     label: 'Rejected',
     color: 'error',
     icon: XCircleIcon
+  },
+  {
+    value: 'auto approved',
+    label: 'Auto Approved',
+    color: 'success',
+    icon: CheckBadgeIcon
+  },
+  {
+    value: 'auto rejected',
+    label: 'Auto Rejected',
+    color: 'error',
+    icon: XCircleIcon
   }
 ];
 
 export const documentTypeOption = [
   {
     value: '1',
-    label: 'Identity'
-  },
-  {
-    value: '2',
-    label: 'Address'
+    label: 'Level 2'
   },
   {
     value: '3',
-    label: 'Source of fund'
+    label: 'Level 3'
+  },
+  {
+    value: '2',
+    label: 'Level 4'
   }
 ];

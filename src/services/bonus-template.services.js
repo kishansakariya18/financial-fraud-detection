@@ -19,12 +19,25 @@ const BonusTemplateService = {
     return apiInstance.get(endpoint);
   },
 
+  getTagList: async (filters = {}) => {
+    return await apiInstance.get(apiConfig.endPoints.BONUS_TEMPLATE.LIST_TAGS, { params: filters });
+  },
+
   createTemplate: async (formState) => {
     const formData = objectToFormData(formState);
     console.log('formData: ', formData);
     return apiInstance.post(apiConfig.endPoints.BONUS_TEMPLATE.CREATE, formData, {
       headers: { 'Content-Type': 'multipart/form-data' }
     });
+  },
+
+  duplicateTemplate: async (templateId) => {
+    const endpoint = replaceText(
+      apiConfig.endPoints.BONUS_TEMPLATE.DUPLICATE,
+      ':bonusTemplateID',
+      templateId
+    );
+    return apiInstance.post(endpoint);
   },
 
   updateTemplateStatus: async (templateId) => {

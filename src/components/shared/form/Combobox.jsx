@@ -35,6 +35,9 @@ const CustomCombobox = forwardRef(
       rootProps,
       className,
       classNames,
+      showSelectAll = false,
+      selectAllLabel = 'Select All',
+      onChange,
       ...rest
     },
     ref
@@ -60,8 +63,70 @@ const CustomCombobox = forwardRef(
           className={clsx(classNames?.root, className)}
           multiple={multiple}
           ref={ref}
+          onChange={onChange}
           {...rest}>
           {({ open, value: selectedValue }) => {
+            // Calculate if all filtered items are selected
+            const selectedValueSet = new Set(
+              Array.isArray(selectedValue)
+                ? selectedValue.map((val) => {
+                    if (typeof val === 'object' && val !== null) {
+                      return val.value ?? val[displayField];
+                    }
+                    return val;
+                  })
+                : []
+            );
+
+            const allFilteredSelected =
+              multiple &&
+              filteredData.length > 0 &&
+              filteredData.every(({ item }) => {
+                const itemValue = item?.value ?? item?.[displayField] ?? item;
+                return selectedValueSet.has(itemValue);
+              });
+
+            const handleSelectAll = () => {
+              if (!multiple || !showSelectAll || !onChange) return;
+
+              if (allFilteredSelected) {
+                // Deselect all filtered items
+                const filteredValues = filteredData.map(({ item }) => {
+                  const itemValue = item?.value ?? item?.[displayField] ?? item;
+                  return itemValue;
+                });
+                const newSelection = Array.isArray(selectedValue)
+                  ? selectedValue.filter((val) => {
+                      const valValue =
+                        typeof val === 'object' && val !== null
+                          ? (val.value ?? val[displayField])
+                          : val;
+                      return !filteredValues.includes(valValue);
+                    })
+                  : [];
+                onChange(newSelection);
+              } else {
+                // Select all filtered items
+                const filteredItems = filteredData.map(({ item }) => item);
+                const existingSelection = Array.isArray(selectedValue) ? [...selectedValue] : [];
+                const existingValues = new Set(
+                  existingSelection.map((val) => {
+                    if (typeof val === 'object' && val !== null) {
+                      return val.value ?? val[displayField];
+                    }
+                    return val;
+                  })
+                );
+
+                const newItems = filteredItems.filter((item) => {
+                  const itemValue = item?.value ?? item?.[displayField] ?? item;
+                  return !existingValues.has(itemValue);
+                });
+
+                onChange([...existingSelection, ...newItems]);
+              }
+            };
+
             return (
               <>
                 {label && <Label>{label}</Label>}
@@ -161,33 +226,47 @@ const CustomCombobox = forwardRef(
                           Nothing found for {query}
                         </div>
                       ) : (
-                        filteredData.map(({ item, refIndex }) => (
-                          <ComboboxOption
-                            key={refIndex}
-                            className={({ selected, active }) =>
-                              clsx(
-                                'relative cursor-pointer select-none px-4 py-2 outline-none transition-colors',
-                                active && !selected && 'bg-gray-100 dark:bg-dark-600',
-                                selected
-                                  ? 'bg-primary-600 text-white dark:bg-primary-500'
-                                  : 'text-gray-800 dark:text-dark-100'
-                              )
-                            }
-                            value={item}>
-                            {({ selected }) => (
-                              <span
-                                className={`block truncate ${
-                                  selected ? 'font-medium' : 'font-normal'
-                                }`}>
-                                {highlight ? (
-                                  <Highlight query={query}>{item?.[displayField]}</Highlight>
-                                ) : (
-                                  item?.[displayField]
-                                )}
-                              </span>
-                            )}
-                          </ComboboxOption>
-                        ))
+                        <>
+                          {multiple && showSelectAll && filteredData.length > 0 && (
+                            <div
+                              onClick={handleSelectAll}
+                              className={clsx(
+                                'relative cursor-pointer select-none border-b border-gray-200 px-4 py-2 outline-none transition-colors dark:border-dark-500',
+                                allFilteredSelected
+                                  ? 'bg-primary-100 font-medium text-primary-700 dark:bg-primary-900/30 dark:text-primary-300'
+                                  : 'bg-gray-50 text-gray-700 hover:bg-gray-100 dark:bg-dark-600 dark:text-dark-100 dark:hover:bg-dark-500'
+                              )}>
+                              <span className="block truncate">{selectAllLabel}</span>
+                            </div>
+                          )}
+                          {filteredData.map(({ item, refIndex }) => (
+                            <ComboboxOption
+                              key={refIndex}
+                              className={({ selected, active }) =>
+                                clsx(
+                                  'relative cursor-pointer select-none px-4 py-2 outline-none transition-colors',
+                                  active && !selected && 'bg-gray-100 dark:bg-dark-600',
+                                  selected
+                                    ? 'bg-primary-600 text-white dark:bg-primary-500'
+                                    : 'text-gray-800 dark:text-dark-100'
+                                )
+                              }
+                              value={item}>
+                              {({ selected }) => (
+                                <span
+                                  className={`block truncate ${
+                                    selected ? 'font-medium' : 'font-normal'
+                                  }`}>
+                                  {highlight ? (
+                                    <Highlight query={query}>{item?.[displayField]}</Highlight>
+                                  ) : (
+                                    item?.[displayField]
+                                  )}
+                                </span>
+                              )}
+                            </ComboboxOption>
+                          ))}
+                        </>
                       )}
                     </ComboboxOptions>
                   </Transition>
@@ -215,7 +294,9 @@ CustomCombobox.propTypes = {
   inputProps: PropTypes.object,
   rootProps: PropTypes.object,
   classNames: PropTypes.object,
-  className: PropTypes.string
+  className: PropTypes.string,
+  showSelectAll: PropTypes.bool,
+  selectAllLabel: PropTypes.string
 };
 
 export { CustomCombobox as Combobox };

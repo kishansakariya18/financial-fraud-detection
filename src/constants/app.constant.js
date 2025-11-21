@@ -104,8 +104,8 @@ export const PAYMENT_OPT = {
 
 export const DOCUMENT_TYPE = {
   IDENTITY: 1,
-  ADDRESS: 2,
-  SOURCE_OF_FUND: 3
+  SOURCE_OF_FUND: 2,
+  ADDRESS: 3
 };
 
 export const DOCUMENT_STATUS = {
@@ -224,6 +224,7 @@ export const PERMISSIONS = Object.freeze({
     TRANSACTIONS: 'affiliate-transactions',
     USER_SIGNUP_LIST: 'affiliate-user-signup-list',
     PAYOUT: 'affiliate-payout',
+    COMISSIONS: 'affiliate-commission-view',
     UPDATE_PAYTOUT: 'affiliate-payout-update',
     VIEW_LOGIN_HISTORY: 'affiliate-login-history-view',
     CAMPAIGN: {
@@ -242,16 +243,16 @@ export const PERMISSIONS = Object.freeze({
       }
     },
     REPORT: {
-      VIEW: 'affiliate-campaign-report-view',
-      EXPORT: 'affiliate-campaign-report-export'
+      COMMISSION_SUMMARY_EXPORT: 'affiliate-commission-summary-report-export',
+      EXPORT: 'affiliate-campaign-report-export',
+      REFFERED_USER_EXPORT: 'affiliate-referred-user-report-export'
     }
   },
   BONUS_TEMPLATES: {
-    LIST: 'bonus-templates-view',
-    ADD: 'bonus-templates-add',
-    EDIT: 'bonus-templates-edit',
-    CHANGE_STATUS: 'bonus-templates-change-status',
-    DELETE: 'bonus-templates-delete'
+    ADD: 'bonus-template-add',
+    EDIT: 'bonus-template-edit',
+    VIEW: 'bonus-template-view',
+    DELETE: 'bonus-template-delete'
   },
   DEPOSIT_PROMO_CODE: {
     VIEW: 'deposit-promo-code-view',
@@ -290,7 +291,8 @@ export const PERMISSIONS = Object.freeze({
   },
   USER_KYC: {
     VIEW: 'user-kyc-view',
-    UPDATE_KYC: 'update-kyc'
+    UPDATE_KYC: 'update-kyc',
+    KYC_CONFIGURATIONS: 'map-level-provider'
   },
 
   REFERRAL_MANAGEMENT: {
@@ -322,10 +324,12 @@ export const PERMISSIONS = Object.freeze({
   },
   CURRENCY: {
     CREATE: 'currency-add',
+    STATUS: 'currency-status',
     VIEW: 'currency-view',
     EDIT: 'currency-edit',
-    DELETE: 'currency-delete',
-    EXCHANGE_RATE_HISTORY: 'currency-exchange-rate-history'
+    EXCHANGE_RATE_HISTORY: 'currency-exchange-rate-history',
+    EXCHANGE_UPDATE_TYPE: 'currency-exchange-update-type',
+    EXCHANGE_RATE_EDIT: 'currency-exchange-rate-edit'
   },
   CRM: {
     VIEW: 'crm-view',
@@ -516,6 +520,13 @@ export const PERMISSIONS = Object.freeze({
     EDIT: 'responsible-gaming-restrictions-edit',
     DELETE: 'responsible-gaming-restrictions-delete',
     APPROVE: 'responsible-gaming-restrictions-approve'
+  },
+  PLAYER_SEGMENTATION: {
+    LIST: 'player-segmentation-view',
+    ADD: 'player-segmentation-add',
+    EDIT: 'player-segmentation-edit',
+    CHANGE_STATUS: 'player-segmentation-change-status',
+    DELETE: 'player-segmentation-delete'
   }
 });
 

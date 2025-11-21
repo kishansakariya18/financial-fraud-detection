@@ -3,6 +3,7 @@ import { toast } from 'sonner';
 
 import ProviderService from 'services/provider.services';
 import CategoryService from 'services/category.services';
+import BonusTemplateService from 'services/bonus-template.services';
 
 const getArray = (payload) => {
   if (!payload) return [];
@@ -46,6 +47,24 @@ const useBonusTemplateOptions = () => {
   const [providerOptions, setProviderOptions] = useState([]);
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [gameOptions, setGameOptions] = useState([]);
+  const [tagOptions, setTagOptions] = useState([]);
+
+  const loadTagOptions = async () => {
+    const filters = {
+      keyword: '',
+      page: 1,
+      perPage: 1000
+    };
+    BonusTemplateService.getTagList(filters)
+      .then(({ response }) => {
+        setTagOptions(
+          response?.data?.map((item) => ({ id: item.BonusTagID, value: item.TagName }))
+        );
+      })
+      .catch((error) => {
+        toast.error(error);
+      });
+  };
 
   useEffect(() => {
     const loadGameplayOptions = async () => {
@@ -77,6 +96,7 @@ const useBonusTemplateOptions = () => {
     };
 
     loadGameplayOptions();
+    loadTagOptions();
   }, []);
 
   const handleGameOptionsCache = useCallback((options = []) => {
@@ -98,7 +118,8 @@ const useBonusTemplateOptions = () => {
     providerOptions,
     categoryOptions,
     gameOptions,
-    handleGameOptionsCache
+    handleGameOptionsCache,
+    tagOptions
   };
 };
 

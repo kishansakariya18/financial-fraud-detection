@@ -1,14 +1,15 @@
 import { useLocation, useNavigate } from 'react-router';
 import { EnvelopeIcon } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
-import { CiMobile1 } from 'react-icons/ci';
 
-import { Button, Card, Input } from 'components/ui';
+import { Button, Card, Input, InputErrorMsg } from 'components/ui';
+import { PhoneDialCode } from 'components/custom/PhoneDialCode';
+import AdminService from 'services/admin.services';
 
 // ----------------------------------------------------------------------
 
@@ -25,6 +26,7 @@ export default function ForgotPasswordForm({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { state } = useLocation();
+  const [countries, setCountries] = useState([]);
 
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
@@ -38,14 +40,38 @@ export default function ForgotPasswordForm({
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting }
+    formState: { errors, isSubmitting },
+    control
   } = useForm({
     resolver: yupResolver(forgotPasswordSchema),
     defaultValues: {
       mobile: '',
-      email: ''
+      email: '',
+      phoneCode: '+1'
     }
   });
+
+  const fetchCountryList = async () => {
+    try {
+      const result = await AdminService.fetchCountryList();
+      if (result.status === 200 || result.status === 201) {
+        const countries = result.response.data.map((c) => {
+          return {
+            phoneCode: c.PhoneCode,
+            name: c.CountryName,
+            code: c.CountryCode
+          };
+        });
+        setCountries(countries);
+      }
+    } catch (error) {
+      console.error('Error fetching countries:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCountryList();
+  }, []);
 
   const submitHandler = async (data) => {
     await authService
@@ -76,15 +102,36 @@ export default function ForgotPasswordForm({
       <Card className="mt-5 rounded-lg p-5 lg:p-7">
         <form onSubmit={handleSubmit(submitHandler)} autoComplete="off">
           <div className="space-y-4">
-            <Input
-              label={t('mobile')}
-              placeholder={t('enter') + ' ' + t('mobile')}
-              prefix={
-                <CiMobile1 className="size-5 transition-colors duration-200" strokeWidth="1" />
-              }
-              {...register('mobile')}
-              error={errors?.mobile?.message}
-            />
+            <div className="flex flex-col">
+              <span>{t('mobile')}</span>
+              <div className="mt-1.5 flex -space-x-px rtl:space-x-reverse">
+                <Controller
+                  render={({ field: { onChange, value, name } }) => (
+                    <PhoneDialCode
+                      onChange={onChange}
+                      value={value}
+                      name={name}
+                      error={Boolean(errors?.phoneCode)}
+                      countries={countries}
+                    />
+                  )}
+                  control={control}
+                  name="phoneCode"
+                />
+                <Input
+                  {...register('mobile')}
+                  classNames={{
+                    root: 'flex-1',
+                    input: 'hover:z-1 focus:z-1 ltr:rounded-l-none rtl:rounded-r-none'
+                  }}
+                  error={Boolean(errors?.mobile)}
+                  placeholder={t('enter') + ' ' + t('mobile')}
+                />
+              </div>
+              <InputErrorMsg when={errors?.phoneCode || errors?.mobile}>
+                {errors?.phoneCode?.message ?? errors?.mobile?.message}
+              </InputErrorMsg>
+            </div>
             <Input
               label={t('email')}
               placeholder={t('enter') + ' ' + t('email')}

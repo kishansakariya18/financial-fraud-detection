@@ -20,7 +20,9 @@ const EventTemplateService = {
             : undefined,
           startDate: filters.startDate
             ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
-            : undefined
+            : undefined,
+          eventGroupID: filters?.eventGroupId || undefined,
+          channelCode: filters?.channelCode || undefined
         }
       };
       const endPoint = apiConfig.endPoints.EVENT_TEMPLATE.LIST;

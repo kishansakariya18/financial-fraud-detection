@@ -20,10 +20,6 @@ const AssignEventToGroup = () => {
   const [eventTypeList, setEventTypeList] = useState({});
   const [response, setResponse] = useState(null);
 
-  console.log('eventGroupList::', eventGroupList);
-  console.log('error::', error);
-  console.log('loading::', loading);
-  console.log('eventTypeList::', eventTypeList);
   const {
     formState: { errors },
     control,
@@ -40,7 +36,6 @@ const AssignEventToGroup = () => {
     setLoading(true);
     setError(null);
     const result = await EventTemplateService.getTemplateData();
-    console.log('result:', result);
     if (result) {
       if (result.status === 200 || result.status === 201) {
         const channels =
@@ -49,7 +44,6 @@ const AssignEventToGroup = () => {
             value: item.ChannelID,
             label: item.ChannelCode
           })) || [];
-        console.log('channels::', channels);
 
         const groupList = result.response.data?.groups || [];
         setEventGroupList(
@@ -77,23 +71,17 @@ const AssignEventToGroup = () => {
                     templateItem.channelID === channel.key &&
                     type.EventTypeID === templateItem.eventTypeID
                 );
-              console.log('templates::', templates);
               // Set defalut value of template logic
               for (const assignObj of type.eventTypeChannels) {
                 const assigned = templates.find(
                   (item) => +assignObj.AssignedTemplateID === +item.key
                 );
                 if (assigned) {
-                  console.log(
-                    'template event channel::',
-                    `template${type.EventTypeID}${channel.key}`
-                  );
                   setValue(
                     `template${type.EventTypeID}${channel.key}`,
                     assignObj.AssignedTemplateID
                   );
                 }
-                console.log('assigned::', assigned);
               }
 
               return {
@@ -104,14 +92,7 @@ const AssignEventToGroup = () => {
                 ]
               };
             });
-            console.log('templateMappedChannel::', templateMappedChannel);
 
-            // for (const assignObj of type.eventTypeChannels) {
-            //   const assigned = templateMappedChannel.find(
-            //     (item) => assignObj.AssignedTemplateID === item.key
-            //   );
-            //   console.log('assigned::', assigned);
-            // }
             return {
               EventTypeID: type.EventTypeID,
               Name: type.EventCode,
@@ -125,10 +106,6 @@ const AssignEventToGroup = () => {
 
           return acc;
         }, {});
-        // console.log('eventTypes:', eventTypes);
-
-        // const initialGroupID = groupList[0]?.EventGroupID;
-        // await mapTemplateData({ currencGroupID: initialGroupID, eventTypes });
 
         setEventTypeList(eventTypes);
       } else {
@@ -141,16 +118,13 @@ const AssignEventToGroup = () => {
     getEventMasterList();
   }, []);
 
-  console.log('watch group::', watch('group'));
-
   const breadcrumbItem = [
-    { title: t('eventTemplate'), path: '/event-template' },
+    { title: t('eventTemplate'), path: '/event-template/list' },
     { title: t('assign') }
   ];
   const onAssign = async ({ channelID, templateID, eventTypeID }) => {
     setLoading(true);
     setError(null);
-    console.log('Assigning:', { channelID, templateID, eventTypeID });
 
     const result = await EventTemplateService.assignEventTemplate({
       channelID,

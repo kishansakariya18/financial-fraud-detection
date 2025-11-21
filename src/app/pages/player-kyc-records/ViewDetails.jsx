@@ -9,7 +9,7 @@ import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions
 import { useTranslation } from 'react-i18next';
 import { useClipboard } from 'hooks';
 import { DocumentDuplicateIcon } from '@heroicons/react/20/solid';
-import UserKycServices from 'services/player-kyc.services';
+import UserKycServices from 'services/player-kyc-records.services';
 import { parseUserKycStatusToApp } from './helper';
 import { toast } from 'sonner';
 import { DOCUMENT_STATUS, DOCUMENT_TYPE, PERMISSIONS } from 'constants/app.constant';
@@ -25,9 +25,12 @@ export function ViewDetails() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { documentId } = useParams();
-  const pageTitle = t('playerKyc') + ' ' + t('details');
+  const pageTitle = t('player') + ' ' + t('kyc') + ' ' + t('details');
   const { copied, copy } = useClipboard({ timeout: 2000 });
-  const breadcrumbItem = [{ title: t('playerKyc'), path: '/player-kyc' }, { title: t('update') }];
+  const breadcrumbItem = [
+    { title: t('playerKycRecords'), path: '/kyc/player-kyc-records' },
+    { title: t('details') }
+  ];
 
   const [selected, setSelected] = useState('');
   const [rejectReason, setRejectReason] = useState('');
@@ -213,6 +216,18 @@ export function ViewDetails() {
                   </p>
                   <p>{getDateInUTCToTimeZone(response?.DateCreated)}</p>
                 </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('provider')}:
+                  </p>
+                  <p>
+                    {response?.KycProvider === '0' ||
+                    response?.KycProvider === null ||
+                    response?.KycProvider === undefined
+                      ? 'Manual'
+                      : capitalizeFirstLetter(response?.KycProvider)}
+                  </p>
+                </div>
               </div>
               <h6 className="mt-8 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
                 {t('identification')}:
@@ -224,11 +239,11 @@ export function ViewDetails() {
                   </p>
                   <p>
                     {+response?.DocumentType === DOCUMENT_TYPE.IDENTITY
-                      ? t('identity')
+                      ? t('level') + ' 2: ' + t('identity')
                       : +response?.DocumentType === DOCUMENT_TYPE.ADDRESS
-                        ? t('address')
+                        ? t('level') + ' 3: ' + t('address')
                         : +response?.DocumentType === DOCUMENT_TYPE.SOURCE_OF_FUND
-                          ? t('source_of_fund')
+                          ? t('level') + ' 4: ' + t('source_of_fund')
                           : '-'}
                   </p>
                 </div>
@@ -300,7 +315,9 @@ export function ViewDetails() {
                       {t('update')}
                     </Button>
                   )}
-                  <Button className="min-w-[7rem]" onClick={() => navigate('/player-kyc')}>
+                  <Button
+                    className="min-w-[7rem]"
+                    onClick={() => navigate('/kyc/player-kyc-records')}>
                     {t('back')}
                   </Button>
                 </div>

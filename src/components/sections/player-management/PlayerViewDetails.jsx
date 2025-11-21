@@ -3,18 +3,7 @@
 import { useEffect, useState } from 'react';
 
 // Local Imports
-import {
-  Button,
-  Card,
-  Skeleton,
-  Table,
-  TBody,
-  Td,
-  Th,
-  THead,
-  Tr,
-  GhostSpinner
-} from 'components/ui';
+import { Button, Card, Skeleton } from 'components/ui';
 import { Chart } from 'components/custom/Chart';
 import { Link, useNavigate, useParams } from 'react-router';
 import { Page } from 'components/shared/Page';
@@ -33,6 +22,7 @@ import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useCurrencyContext } from 'app/contexts/currency/context';
 import { isB2BPlatform, isB2CPlatform } from 'utils/platformNavigation';
 import LimitHistoryDialog from './LimitHistoryDialog';
+import UserSummaryCard from './UserSummaryCard';
 import PropTypes from 'prop-types';
 
 const LimitItem = ({
@@ -107,7 +97,8 @@ export function PlayerViewDetails({
     user: true,
     admin: true,
     userClass: true,
-    global: true
+    global: true,
+    userOverallSummary: true
   });
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -828,89 +819,22 @@ export function PlayerViewDetails({
 
               {/* User Overall Summary Box */}
               <Card className="mt-6 p-4 sm:p-5">
-                <h6 className="border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
-                  {t('user_overall_summary')}
-                </h6>
-                <div className="mt-4">
-                  {summaryLoading ? (
-                    <div className="flex justify-center py-4">
-                      <GhostSpinner className="size-4 border-2" />
-                    </div>
-                  ) : userSummaryData.length === 0 ? (
-                    <p className="text-sm text-gray-600">{t('noData')}</p>
+                <button
+                  type="button"
+                  className="flex w-full items-center justify-between pb-2 text-left text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200"
+                  onClick={() =>
+                    setSectionsOpen((s) => ({ ...s, userOverallSummary: !s.userOverallSummary }))
+                  }>
+                  <span>{t('user_overall_summary')}</span>
+                  {sectionsOpen.userOverallSummary ? (
+                    <ChevronUpIcon className="size-7" />
                   ) : (
-                    <div className="overflow-x-auto">
-                      <Table hoverable className="w-full text-left rtl:text-right">
-                        <THead>
-                          <Tr>
-                            <Th className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
-                              {t('currency')}
-                            </Th>
-                            <Th className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
-                              {t('total_bets')}
-                            </Th>
-                            <Th className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
-                              {t('total_wins')}
-                            </Th>
-                            <Th className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
-                              {t('total_ggr')}
-                            </Th>
-                            <Th className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
-                              {t('bet_count')}
-                            </Th>
-                            <Th className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
-                              {t('average_bet_size')}
-                            </Th>
-                            <Th className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
-                              {t('total_deposits')}
-                            </Th>
-                            <Th className="bg-gray-200 font-semibold uppercase text-gray-800 dark:bg-dark-800 dark:text-dark-100">
-                              {t('total_withdrawals')}
-                            </Th>
-                          </Tr>
-                        </THead>
-                        <TBody>
-                          {userSummaryData.map((summary, index) => (
-                            <Tr key={index} className="hover:bg-gray-50 dark:hover:bg-dark-600">
-                              <Td className="font-medium text-gray-900 dark:text-white">
-                                {summary.currency.code}
-                              </Td>
-                              <Td className="text-center">{summary.TotalBets || 0}</Td>
-                              <Td className="text-center">{summary.TotalWins || 0}</Td>
-                              <Td className="text-center">
-                                <span
-                                  className={
-                                    summary.TotalGGR > 0
-                                      ? 'text-success dark:text-success-light'
-                                      : 'text-gray-600 dark:text-gray-400'
-                                  }>
-                                  {summary.TotalGGR || 0}
-                                </span>
-                              </Td>
-                              <Td className="text-center">{summary.BetCount || 0}</Td>
-                              <Td className="text-center">{summary.AverageBetSize || 0}</Td>
-                              <Td className="text-center">
-                                <span className="text-success dark:text-success-light">
-                                  {formatCurrency(summary.TotalDeposits, summary.currency.code)}
-                                </span>
-                              </Td>
-                              <Td className="text-center">
-                                <span className="text-error dark:text-error-light">
-                                  {formatCurrency(summary.TotalWithdrawals, summary.currency.code)}
-                                </span>
-                              </Td>
-                              {/* <Td className="text-center text-sm text-gray-600 dark:text-gray-400">
-                                {summary.LastActiveAt
-                                  ? getDateInUTCToTimeZone(summary.LastActiveAt)
-                                  : '-'}
-                              </Td> */}
-                            </Tr>
-                          ))}
-                        </TBody>
-                      </Table>
-                    </div>
+                    <ChevronDownIcon className="size-7" />
                   )}
-                </div>
+                </button>
+                {sectionsOpen.userOverallSummary && (
+                  <UserSummaryCard summaryData={userSummaryData} loading={summaryLoading} />
+                )}
               </Card>
 
               {/* User Limits Card */}

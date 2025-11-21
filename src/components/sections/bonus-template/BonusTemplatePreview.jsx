@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import {
   boostModeOptionsLabel,
   getBonusTypeLabel,
+  paymentMethodOptionsLabel,
   wageringBaseOptionsLabel,
   wageringModeOptionsLabel
 } from 'app/pages/bonus-template/happer';
@@ -63,32 +64,24 @@ export function BonusTemplatePreview({ data, lookups }) {
         <Section title={t('template_info')}>
           <dl className={compactListClasses}>
             <dt>{t('template_name')}</dt>
-            <dd className="font-medium text-gray-900 dark:text-dark-50">
-              {templateInfo.templateName || '—'}
-            </dd>
+            <dd>{templateInfo.templateName || '—'}</dd>
             <dt>{t('bonus_type')}</dt>
-            <dd className="font-medium text-gray-900 dark:text-dark-50">
-              {getBonusTypeLabel(templateInfo.bonusType || '_', t)}
-            </dd>
+            <dd>{getBonusTypeLabel(templateInfo.bonusType || '_', t)}</dd>
             <dt>{t('bonus_tags')}</dt>
-            <dd className="font-medium text-gray-900 dark:text-dark-50">
-              {templateInfo.bonusTag?.join(', ') || '—'}
-            </dd>
+            <dd>{templateInfo.bonusTag?.join(', ') || '—'}</dd>
             <dt>{t('expiry_after_issuance_days')}</dt>
-            <dd className="font-medium text-gray-900 dark:text-dark-50">
-              {templateInfo.expiryAfterIssuanceDays || '—'}
-            </dd>
+            <dd>{templateInfo.expiryAfterIssuanceDays || '—'}</dd>
           </dl>
         </Section>
 
         <Section title={t('bonus_details')}>
           <dl className={compactListClasses}>
-            <dt>{t('display_title')}</dt>
-            <dd className="font-medium text-gray-900 dark:text-dark-50">
-              {bonusDetails.displayTitle || '—'}
-            </dd>
-            <dt>{t('description')}</dt>
-            <dd className="overflow-hidden">{bonusDetails.description || '—'}</dd>
+            <dt>{t('bonus_name')}</dt>
+            <dd>{bonusDetails.displayTitle || '—'}</dd>
+            <dt>{t('description') + ` (${t('player_facing')})`}</dt>
+            <dd className="overflow-hidden">{bonusDetails.notes || '—'}</dd>
+            <dt>{t('description') + ` (${t('internal')})`}</dt>
+            <dd className="overflow-hidden">{bonusDetails.adminNotes || '—'}</dd>
             <dt>{t('display_priority')}</dt>
             <dd>{bonusDetails.displayPriority || '—'}</dd>
             <dt>{t('desktop_image')}</dt>
@@ -100,67 +93,59 @@ export function BonusTemplatePreview({ data, lookups }) {
 
         <Section title="Reward Details">
           {templateInfo.bonusType === 'deposit_boost' && (
-            <dl className={compactListClasses}>
-              <dt>{t('boost_mode')}</dt>
-              <dd>{boostModeOptionsLabel(rewardDetails.boostMode || '_', t)}</dd>
-              {rewardDetails.boostMode === 'fixed' && (
-                <>
-                  <dt>{t('boost_percentage')}</dt>
-                  <dd>{rewardDetails.boostPercent || '—'}</dd>
-                  <dt>{t('minimum_deposit')}</dt>
-                  <dd>{rewardDetails.minDepositAmount || '—'}</dd>
-                </>
+            <>
+              <dl className={compactListClasses}>
+                <dt>{t('boost_mode')}</dt>
+                <dd>{boostModeOptionsLabel(rewardDetails.boostMode || '_', t)}</dd>
+                {rewardDetails.boostMode === 'fixed' && (
+                  <>
+                    <dt>{t('boost_percentage')}</dt>
+                    <dd>{rewardDetails.boostPercent || '—'}</dd>
+                    <dt>{t('minimum_deposit')}</dt>
+                    <dd>{rewardDetails.minDepositAmount || '—'}</dd>
+                  </>
+                )}
+                {rewardDetails.boostMode === 'variable' && (
+                  <>
+                    <dt>{t('max_bonus_amount')}</dt>
+                    <dd>{rewardDetails.maxBonusAmount || '—'}</dd>
+                    <dt>{t('variable_rules')}</dt>
+                    <dd>{''}</dd>
+                  </>
+                )}
+              </dl>
+              {rewardDetails.variableRules && rewardDetails.boostMode === 'variable' && (
+                <div>
+                  {/* <span className="block text-xs">{t('variable_rules')}</span> */}
+                  <div className="mt-2">
+                    <table className="w-full min-w-full divide-y divide-gray-200 text-tiny dark:divide-dark-500">
+                      <thead>
+                        <tr className="text-left font-medium">
+                          <th>{t('payment_method')}</th>
+                          <th>{t('min_deposit')}</th>
+                          <th>{t('max_deposit')}</th>
+                          <th>{t('boost_percentage')}</th>
+                          <th>{t('wagering')}</th>
+                          <th>{t('mco')}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {rewardDetails.variableRules.map((rule, index) => (
+                          <tr className="text-left" key={rule.id || `rule-${index}`}>
+                            <td>{paymentMethodOptionsLabel(rule.paymentMethod, t)}</td>
+                            <td>{rule.rangeFrom}</td>
+                            <td>{rule.rangeTo}</td>
+                            <td>{rule.boostPercent}</td>
+                            <td>{rule.wagering}</td>
+                            <td>{rule.mco}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               )}
-              {rewardDetails.boostMode === 'variable' && (
-                <>
-                  <dt>{t('max_bonus_amount')}</dt>
-                  <dd>{rewardDetails.maxBonusAmount || '—'}</dd>
-                  {rewardDetails.variableRules && rewardDetails.variableRules.length > 0 && (
-                    <>
-                      <dt>{t('variable_rules')}</dt>
-                      <dd>
-                        <table className="w-full divide-y divide-gray-200 text-tiny dark:divide-dark-500">
-                          <thead>
-                            <tr className="text-left font-semibold text-gray-600 dark:text-dark-200">
-                              <th>{t('payment_method')}</th>
-                              <th>{t('min_deposit')}</th>
-                              <th>{t('max_deposit')}</th>
-                              <th>{t('boost_percentage')}</th>
-                              <th>{t('wagering')}</th>
-                              <th>{t('mco')}</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {rewardDetails.variableRules.map((rule) => (
-                              <tr
-                                className="text-left text-gray-600 dark:text-dark-200"
-                                key={rule.id}>
-                                <td>{rule.paymentMethod}</td>
-                                <td>{rule.rangeFrom}</td>
-                                <td>{rule.rangeTo}</td>
-                                <td>{rule.boostPercent}</td>
-                                <td>{rule.wagering}</td>
-                                <td>{rule.mco}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                        {/* {rewardDetails.variableRules.map((rule) => (
-                          <li
-                            key={rule.id}
-                            className="rounded bg-gray-100 px-2 py-1 dark:bg-dark-700/60">
-                            {t('payment_method')}: {rule.paymentMethod} · {t('min_deposit')}:{' '}
-                            {rule.rangeFrom || '—'} - {rule.rangeTo || '—'} ·{' '}
-                            {t('boost_percentage')}: {rule.boostPercent || '—'}% · {t('wagering')}:{' '}
-                            {rule.wagering || '—'} · {t('mco')}: {rule.mco || '—'}
-                          </li>
-                        ))} */}
-                      </dd>
-                    </>
-                  )}
-                </>
-              )}
-            </dl>
+            </>
           )}
           {templateInfo.bonusType === 'free_chip' && (
             <dl className={compactListClasses}>
@@ -210,7 +195,7 @@ export function BonusTemplatePreview({ data, lookups }) {
               </>
             )}
             <dt>{t('max_cashout')}</dt>
-            <dd>{maxCashoutConfig.maxCashoutValue || '—'}</dd>
+            <dd>{maxCashoutConfig.cashoutValue || '—'}</dd>
             <dt>{t('sticky_bonus')}</dt>
             <dd>{maxCashoutConfig.stickyBonus ? 'Yes' : 'No'}</dd>
             {/* <dt>{t('variable_rules')}</dt>

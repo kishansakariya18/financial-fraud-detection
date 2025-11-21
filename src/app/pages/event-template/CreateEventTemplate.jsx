@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import { Button, Input } from 'components/ui';
 import { EmailInput } from 'components/custom/EmailInput';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
@@ -28,7 +28,7 @@ const CreateEventTemplate = () => {
   const { t } = useTranslation();
 
   const breadcrumbItem = [
-    { title: t('eventTemplate'), path: '/event-template' },
+    { title: t('eventTemplate'), path: '/event-template/list' },
     { title: t('create') }
   ];
 
@@ -55,15 +55,16 @@ const CreateEventTemplate = () => {
   const channelType = watch('channel');
 
   const [content, setContent] = useState(defaultValue);
+  const editorRef = useRef(null);
+  const [cursorIndex, setCursorIndex] = useState(null);
+  const subjectRef = useRef(null);
+  const [subjectCursorIndex, setSubjectCursorIndex] = useState(null);
+  const [lastActiveField, setLastActiveField] = useState('editor');
   const [eventChannelList, setEventChannelList] = useState([]);
   const [eventGroupList, setEventGroupList] = useState([]);
   const [eventTypeList, setEventTypeList] = useState([]);
   const [eventTypeReplacerKeywords, setEventTypeReplacerKeywords] = useState([]);
   const title = watch('title');
-  console.log('eventGroupList::', eventGroupList);
-  console.log('eventChannelList::', eventChannelList);
-  console.log('eventTypeList::', eventTypeList);
-  console.log('eventTypeReplacerKeywords::', eventTypeReplacerKeywords);
 
   const handleChange = (val) => {
     setContent(val);
@@ -78,8 +79,6 @@ const CreateEventTemplate = () => {
   };
 
   const createEventTemplateAPI = async (requestObject) => {
-    console.log('requestObject:::::', requestObject);
-
     setLoading(true);
     setError(null);
     const result = await EventTemplateService.eventTemplateSubmit(requestObject);
@@ -126,7 +125,6 @@ const CreateEventTemplate = () => {
           }
           return acc;
         }, {});
-        console.log('eventTypes:', eventTypes);
 
         setEventTypeReplacerKeywords(eventTypeReplacerKeywordsMap);
         setEventTypeList(eventTypes);
@@ -143,12 +141,10 @@ const CreateEventTemplate = () => {
   useEffect(() => {
     getEventMasterData();
   }, []);
-  console.log('!loading && !error && response', loading, error, response);
-
   if (!loading && !error && response) {
     toast.success(response.message);
     setTimeout(() => {
-      navigate('/event-template');
+      navigate('/event-template/list');
     }, 0);
 
     setResponse(null);
@@ -159,23 +155,48 @@ const CreateEventTemplate = () => {
   const keywordsForSelectedType =
     eventTypeReplacerKeywords[`event_type_${selectedEventType}`] || [];
   const insertKeyword = (keyword) => {
-    // Use a temporary Quill instance to get the new Delta
-    const tempQuill = new Quill(document.createElement('div'));
-    tempQuill.setContents(content);
+    const textToInsert = keyword.VariableCode + ' ';
 
-    // Get the length of the current content
-    const length = tempQuill.getLength();
+    if (lastActiveField === 'subject' && subjectRef.current) {
+      const input = subjectRef.current;
+      const value = input.value || '';
 
-    // Insert the keyword at the end of the content
-    // The 'user' source is recommended for this type of programmatic change
-    tempQuill.insertText(length - 1, ' ' + keyword.VariableCode + ' ');
+      const basePos =
+        typeof subjectCursorIndex === 'number'
+          ? subjectCursorIndex
+          : typeof input.selectionEnd === 'number'
+            ? input.selectionEnd
+            : value.length;
 
-    // Get the new Delta from the temporary Quill instance
-    const newDelta = tempQuill.getContents();
+      const newValue = value.slice(0, basePos) + textToInsert + value.slice(basePos);
 
-    // Update the state
-    setContent(newDelta);
-    setHtmlContent(tempQuill.root.innerHTML);
+      setValue('heading', newValue, { shouldDirty: true });
+
+      const caretPos = basePos + textToInsert.length;
+      setSubjectCursorIndex(caretPos);
+      requestAnimationFrame(() => {
+        if (subjectRef.current) {
+          subjectRef.current.focus();
+          subjectRef.current.setSelectionRange(caretPos, caretPos);
+        }
+      });
+
+      return;
+    }
+
+    const quillInstance = editorRef.current?.getQuillInstance();
+    if (!quillInstance) return;
+
+    const selection = quillInstance.getSelection();
+    const index =
+      selection && typeof selection.index === 'number'
+        ? selection.index
+        : typeof cursorIndex === 'number'
+          ? cursorIndex
+          : quillInstance.getLength();
+
+    quillInstance.insertText(index, textToInsert, 'user');
+    quillInstance.setSelection(index + textToInsert.length, 0, 'user');
   };
 
   const handleReset = () => {
@@ -194,10 +215,6 @@ const CreateEventTemplate = () => {
     setHtmlContent('');
     setTemplateError('');
   };
-
-  console.log('selectedGroup:', selectedGroup);
-  console.log('channelType:', channelType);
-  console.log('eventTypesForSelectedGroup:', eventTypesForSelectedGroup);
   const onSubmit = async (data) => {
     const contentHTML = htmlContent?.replace(/<(.|\n)*?>/g, '').trim(); // Strip HTML tags
 
@@ -215,8 +232,6 @@ const CreateEventTemplate = () => {
 
     await createEventTemplateAPI(requestData);
   };
-  console.log('selectedEventType', selectedEventType);
-  console.log('keywordsForSelectedType', keywordsForSelectedType);
 
   return (
     <Page title={t('create') + ' ' + t('eventTemplate')}>
@@ -322,12 +337,36 @@ const CreateEventTemplate = () => {
               />
             </div>
             <div className="grid gap-4 sm:grid-cols-1">
-              <Input
-                key={'heading'}
-                {...register('heading')}
-                label={t('heading')}
-                error={errors?.heading?.message}
-                placeholder={t('enter') + ' ' + t('heading')}
+              <Controller
+                name="heading"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    key={'heading'}
+                    {...field}
+                    ref={subjectRef}
+                    label={t('heading')}
+                    error={errors?.heading?.message}
+                    placeholder={t('enter') + ' ' + t('heading')}
+                    onFocus={(e) => {
+                      setLastActiveField('subject');
+                      field.onFocus && field.onFocus(e);
+                    }}
+                    onSelect={(e) => {
+                      setSubjectCursorIndex(e.target.selectionStart);
+                      setLastActiveField('subject');
+                    }}
+                    onClick={(e) => {
+                      setSubjectCursorIndex(e.target.selectionStart ?? e.target.value.length);
+                      setLastActiveField('subject');
+                    }}
+                    onChange={(e) => {
+                      setSubjectCursorIndex(e.target.selectionStart ?? e.target.value.length);
+                      setLastActiveField('subject');
+                      field.onChange(e);
+                    }}
+                  />
+                )}
               />
             </div>
             <div className="grid gap-4 sm:grid-cols-1">
@@ -354,9 +393,16 @@ const CreateEventTemplate = () => {
                 )}
                 <TextEditor
                   key={'template'}
+                  ref={editorRef}
                   value={content}
                   label={t('template')}
                   onChange={handleChange}
+                  onSelectionChange={(range) => {
+                    if (range) {
+                      setCursorIndex(range.index);
+                      setLastActiveField('editor');
+                    }
+                  }}
                   placeholder={
                     t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
                   }

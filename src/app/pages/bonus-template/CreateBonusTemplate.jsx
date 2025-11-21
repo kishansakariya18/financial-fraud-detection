@@ -52,7 +52,8 @@ export default function CreateBonusTemplate() {
       wageringConfig: {
         wageringMode: wageringConfig.mode || null,
         wageringBase: wageringConfig.base || null,
-        wageringValue: Number(wageringConfig.wageringValue) || 0
+        wageringValue: Number(wageringConfig.wageringValue) || 0,
+        daysToWager: Number(wageringConfig.daysToWager) || 0
       },
       maxCashoutConfig: {
         mcoMode: maxCashoutConfig.mode || null,
@@ -76,7 +77,6 @@ export default function CreateBonusTemplate() {
     const payload = {
       ...templateInfo,
       ...bonusDetails,
-      bonusTag: templateInfo.bonusTags,
       displayPriority: Number(bonusDetails.displayPriority) || 0,
       expiryAfterIssuanceDays: Number(templateInfo.expiryAfterIssuanceDays) || 0,
 

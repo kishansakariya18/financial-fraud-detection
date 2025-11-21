@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import { Button, Input } from 'components/ui';
 import { EmailInput } from 'components/custom/EmailInput';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import { useNavigate, useParams } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
@@ -33,7 +33,6 @@ const EditEmailTemplate = () => {
   const [currentChannelCode, setCurrentChannelCode] = useState('');
   const [eventTypeReplacerKeywords, setEventTypeReplacerKeywords] = useState([]);
   const [templateData, setTemplateData] = useState(null);
-  console.log('currentChannelCode:', currentChannelCode);
 
   const {
     register,
@@ -55,14 +54,20 @@ const EditEmailTemplate = () => {
   const selectedGroup = watch('group');
   const selectedEventType = watch('eventType');
   const breadcrumbItem = [
-    { title: t('eventTemplate'), path: '/event-template' },
+    { title: t('eventTemplate'), path: '/event-template/list' },
     { title: t('edit') }
   ];
 
   const navigate = useNavigate();
 
   const [content, setContent] = useState(defaultValue);
-  const title = watch('title');
+  const editorRef = useRef(null);
+  const [cursorIndex, setCursorIndex] = useState(null);
+  const subjectRef = useRef(null);
+  const [subjectCursorIndex, setSubjectCursorIndex] = useState(null);
+  const [lastActiveField, setLastActiveField] = useState('editor');
+
+  console.log('cursorIndex: ', cursorIndex);
 
   const handleChange = (val) => {
     setContent(val);
@@ -140,7 +145,6 @@ const EditEmailTemplate = () => {
           }
           return acc;
         }, {});
-        console.log('eventTypes:', eventTypes);
 
         setEventTypeReplacerKeywords(eventTypeReplacerKeywordsMap);
         setEventTypeList(eventTypes);
@@ -196,7 +200,7 @@ const EditEmailTemplate = () => {
 
   if (!loading && !error && response) {
     toast.success(response.message);
-    navigate('/event-template');
+    navigate('/event-template/list');
     setResponse(null);
     // fetchEmailTemplateDetails();
   }
@@ -234,30 +238,54 @@ const EditEmailTemplate = () => {
     }
   };
   const insertKeyword = (keyword) => {
-    // Use a temporary Quill instance to get the new Delta
-    const tempQuill = new Quill(document.createElement('div'));
-    tempQuill.setContents(content);
+    const textToInsert = keyword.VariableCode + ' ';
 
-    // Get the length of the current content
-    const length = tempQuill.getLength();
+    if (lastActiveField === 'subject' && subjectRef.current) {
+      const input = subjectRef.current;
+      const value = input.value || '';
 
-    // Insert the keyword at the end of the content
-    // The 'user' source is recommended for this type of programmatic change
-    tempQuill.insertText(length - 1, ' ' + keyword.VariableCode + ' ');
+      const basePos =
+        typeof subjectCursorIndex === 'number'
+          ? subjectCursorIndex
+          : typeof input.selectionEnd === 'number'
+            ? input.selectionEnd
+            : value.length;
 
-    // Get the new Delta from the temporary Quill instance
-    const newDelta = tempQuill.getContents();
+      const newValue = value.slice(0, basePos) + textToInsert + value.slice(basePos);
 
-    // Update the state
-    setContent(newDelta);
-    setHtmlContent(tempQuill.root.innerHTML);
+      setValue('heading', newValue, { shouldDirty: true });
+
+      const caretPos = basePos + textToInsert.length;
+      setSubjectCursorIndex(caretPos);
+      requestAnimationFrame(() => {
+        if (subjectRef.current) {
+          subjectRef.current.focus();
+          subjectRef.current.setSelectionRange(caretPos, caretPos);
+        }
+      });
+
+      return;
+    }
+
+    const quillInstance = editorRef.current?.getQuillInstance();
+    if (!quillInstance) return;
+
+    const selection = quillInstance.getSelection();
+    const index =
+      selection && typeof selection.index === 'number'
+        ? selection.index
+        : typeof cursorIndex === 'number'
+          ? cursorIndex
+          : quillInstance.getLength();
+
+    quillInstance.insertText(index, textToInsert, 'user');
+    quillInstance.setSelection(index + textToInsert.length, 0, 'user');
   };
   const onSubmit = async (data) => {
     if (+content.ops.length === 0) {
       setTemplateError('Template content is required');
       return;
     }
-    console.log('data==>:', data);
 
     const requestData = {
       ...data,
@@ -270,7 +298,6 @@ const EditEmailTemplate = () => {
 
     await editEmailTemplateAPI(requestData);
   };
-  console.log('title: ', title);
   return (
     <Page title={t('edit') + ' ' + t('eventTemplate')}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
@@ -358,7 +385,6 @@ const EditEmailTemplate = () => {
                     }
                     onChange={(val) => {
                       field.onChange(val.value);
-                      console.log('val;;', val);
                       setCurrentChannelCode(val.label);
                     }}
                     name={field.name}
@@ -382,12 +408,36 @@ const EditEmailTemplate = () => {
               />
             </div>
             <div className="grid gap-4 sm:grid-cols-1">
-              <Input
-                key={'heading'}
-                {...register('heading')}
-                label={t('subject')}
-                error={errors?.heading?.message}
-                placeholder={t('enter') + ' ' + t('subject')}
+              <Controller
+                name="heading"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    key={'heading'}
+                    {...field}
+                    ref={subjectRef}
+                    label={t('subject')}
+                    error={errors?.heading?.message}
+                    placeholder={t('enter') + ' ' + t('subject')}
+                    onFocus={(e) => {
+                      setLastActiveField('subject');
+                      field.onFocus && field.onFocus(e);
+                    }}
+                    onSelect={(e) => {
+                      setSubjectCursorIndex(e.target.selectionStart);
+                      setLastActiveField('subject');
+                    }}
+                    onClick={(e) => {
+                      setSubjectCursorIndex(e.target.selectionStart ?? e.target.value.length);
+                      setLastActiveField('subject');
+                    }}
+                    onChange={(e) => {
+                      setSubjectCursorIndex(e.target.selectionStart ?? e.target.value.length);
+                      setLastActiveField('subject');
+                      field.onChange(e);
+                    }}
+                  />
+                )}
               />
             </div>
             <div className="grid gap-4 sm:grid-cols-1">
@@ -414,9 +464,16 @@ const EditEmailTemplate = () => {
                 )}
                 <TextEditor
                   key={'template'}
+                  ref={editorRef}
                   value={content}
                   label={t('template')}
                   onChange={handleChange}
+                  onSelectionChange={(range) => {
+                    if (range) {
+                      setCursorIndex(range.index);
+                      setLastActiveField('editor');
+                    }
+                  }}
                   placeholder={
                     t('enter') + ' ' + t('your') + ' ' + t('content') + ' ' + t('here') + '...'
                   }

@@ -24,7 +24,7 @@ export default function Tabs() {
       path: `/affiliates/users/${affiliateId}/tab/details`,
       icon: HomeIcon,
       index: 0,
-      permission: PERMISSIONS.AFFILIATES.LIST
+      permission: PERMISSIONS.AFFILIATES.VIEW
     },
     {
       id: randomId(),
@@ -32,7 +32,7 @@ export default function Tabs() {
       path: `/affiliates/users/${affiliateId}/tab/campaigns`,
       icon: HiOutlineSpeakerphone,
       index: 1,
-      permission: PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST
+      permission: PERMISSIONS.AFFILIATES.CAMPAIGN.VIEW
     },
     {
       id: randomId(),
@@ -40,7 +40,7 @@ export default function Tabs() {
       path: `/affiliates/users/${affiliateId}/tab/referred_users`,
       icon: TbUsersPlus,
       index: 1,
-      permission: PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST
+      permission: PERMISSIONS.AFFILIATES.USER_SIGNUP_LIST
     },
     {
       id: randomId(),
@@ -48,7 +48,7 @@ export default function Tabs() {
       path: `/affiliates/users/${affiliateId}/tab/withdrawals`,
       icon: CiViewList,
       index: 1,
-      permission: PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST
+      permission: PERMISSIONS.AFFILIATES.PAYOUT
     },
     {
       id: randomId(),
@@ -56,7 +56,7 @@ export default function Tabs() {
       path: `/affiliates/users/${affiliateId}/tab/commission-settings`,
       icon: GrSettingsOption,
       index: 1,
-      permission: PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST
+      permission: PERMISSIONS.AFFILIATES.COMMISSION_SETTING.PER_AFFILIATE
     },
     {
       id: randomId(),
@@ -64,7 +64,7 @@ export default function Tabs() {
       path: `/affiliates/users/${affiliateId}/tab/commission`,
       icon: HiOutlineCash,
       index: 1,
-      permission: PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST
+      permission: PERMISSIONS.AFFILIATES.COMISSIONS
     },
     {
       id: randomId(),
@@ -72,7 +72,7 @@ export default function Tabs() {
       path: `/affiliates/users/${affiliateId}/tab/transactions`,
       icon: ListBulletIcon,
       index: 1,
-      permission: PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST
+      permission: PERMISSIONS.AFFILIATES.TRANSACTIONS
     }
   ];
 

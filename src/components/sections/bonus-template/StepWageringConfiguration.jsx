@@ -22,6 +22,7 @@ export function StepWageringConfiguration({ data, onChange, options, baseOptions
           if (value === 'none') {
             onChange('wageringValue', '');
             onChange('base', '');
+            onChange('daysToWager', '');
           }
           onChange('mode', value);
         }}
@@ -46,6 +47,16 @@ export function StepWageringConfiguration({ data, onChange, options, baseOptions
         disabled={!showValue}
         onChange={(event) => onChange('wageringValue', event.target.value)}
         error={errors.wageringValue}
+      />
+
+      <Input
+        label={t('days_to_wager')}
+        type="number"
+        placeholder={t('enter_days_to_wager_info')}
+        value={data.daysToWager}
+        disabled={!showValue}
+        onChange={(event) => onChange('daysToWager', event.target.value)}
+        error={errors.daysToWager}
       />
     </div>
   );

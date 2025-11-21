@@ -14,12 +14,12 @@ import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import { userKYCResponseMapper } from '../helper';
-import UserKycServices from 'services/player-kyc.services';
+import UserKycServices from 'services/player-kyc-records.services';
 
 export default function UserKYC() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const pageTitle = t('playerKyc');
+  const pageTitle = t('playerKycRecords');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 
@@ -72,7 +72,7 @@ export default function UserKYC() {
       filtersFromQuery.push({ id: 'status', value: queryParams.status });
     }
     if (queryParams.type) {
-      filtersFromQuery.push({ id: 'type', value: queryParams.type });
+      filtersFromQuery.push({ id: 'level', value: queryParams.type });
     }
     if (queryParams.startDate && queryParams.endDate) {
       filtersFromQuery.push({
@@ -94,7 +94,7 @@ export default function UserKYC() {
       if (data.id === 'status') {
         filterItems.status = data.value;
       }
-      if (data.id === 'type') {
+      if (data.id === 'level') {
         filterItems.type = data.value;
       }
       if (data.id === 'date') {

@@ -4,7 +4,7 @@ import { NAV_TYPE_ITEM, NAV_TYPE_ROOT } from 'constants/app.constant';
 import { users } from './users';
 import { platform } from './platoform';
 import { reports } from './report';
-import { playerKyc } from './player-kyc';
+// import { playerKyc } from './player-kyc';
 import { casinoManagement } from './casino-management';
 import { segmentation } from './segmentation';
 import { emailTemplate } from './event-template';
@@ -31,6 +31,7 @@ import { b2bAgent } from './b2b-agent';
 import { bonusCampaign } from './bonus-campaign';
 import { faq } from './faq';
 import { affiliatesNew } from './affiliates-new';
+import { kyc } from './kyc';
 // import { globalCommissionSetting } from './global-commission-setting';
 
 export const dashboards = () => ({
@@ -62,7 +63,8 @@ export const dashboards = () => ({
     frontend,
     reports,
     // tenants,
-    playerKyc,
+    kyc,
+    // playerKyc,
     casinoManagement,
     segmentation,
     ...emailTemplate,
