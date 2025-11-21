@@ -64,7 +64,8 @@ export default function ResetPasswordForm({
         ...data,
         token: queryParams.token,
         email: queryParams.email,
-        mobile: queryParams.mobile
+        mobile: queryParams.mobile,
+        phoneCode: queryParams.phoneCode
       })
       .then((result) => {
         toast.success(result.response.message);
