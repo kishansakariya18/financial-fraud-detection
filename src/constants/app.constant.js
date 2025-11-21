@@ -290,7 +290,8 @@ export const PERMISSIONS = Object.freeze({
   },
   USER_KYC: {
     VIEW: 'user-kyc-view',
-    UPDATE_KYC: 'update-kyc'
+    UPDATE_KYC: 'update-kyc',
+    KYC_CONFIGURATIONS: 'map-level-provider'
   },
 
   REFERRAL_MANAGEMENT: {

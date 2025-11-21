@@ -18,7 +18,10 @@ export const userKYCResponseMapper = (apiData, type) => {
         mobile: data.user.Mobile || '',
         status: parseUserKycStatusToApp(data.DocumentStatus),
         date: getDateInUTCToTimeZone(data.DateCreated),
-        provider: data.KycProvider === '0' ? 'Manual' : capitalizeFirstLetter(data.KycProvider)
+        provider:
+          data.KycProvider === '0' || data.KycProvider === null || data.KycProvider === undefined
+            ? 'Manual'
+            : capitalizeFirstLetter(data.KycProvider)
       };
     } else {
       return {
@@ -31,7 +34,10 @@ export const userKYCResponseMapper = (apiData, type) => {
         status: parseUserKycStatusToApp(data.DocumentStatus),
         date: getDateInUTCToTimeZone(data.DateCreated),
         type: String(data.DocumentType),
-        provider: data.KycProvider === '0' ? 'Manual' : capitalizeFirstLetter(data.KycProvider)
+        provider:
+          data.KycProvider === '0' || data.KycProvider === null || data.KycProvider === undefined
+            ? 'Manual'
+            : capitalizeFirstLetter(data.KycProvider)
       };
     }
   });

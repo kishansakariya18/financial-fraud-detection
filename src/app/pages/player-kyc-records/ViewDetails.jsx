@@ -221,7 +221,9 @@ export function ViewDetails() {
                     {t('provider')}:
                   </p>
                   <p>
-                    {response?.KycProvider === '0'
+                    {response?.KycProvider === '0' ||
+                    response?.KycProvider === null ||
+                    response?.KycProvider === undefined
                       ? 'Manual'
                       : capitalizeFirstLetter(response?.KycProvider)}
                   </p>

@@ -11,5 +11,5 @@ export const kycConfigurations = {
   title: 'KYC Configurations',
   transKey: 'kycConfigurations',
   Icon: TbAdjustmentsCheck,
-  permission: PERMISSIONS.USER_KYC.VIEW
+  permission: PERMISSIONS.USER_KYC.KYC_CONFIGURATIONS
 };
