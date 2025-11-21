@@ -242,8 +242,9 @@ export const PERMISSIONS = Object.freeze({
       }
     },
     REPORT: {
-      VIEW: 'affiliate-campaign-report-view',
-      EXPORT: 'affiliate-campaign-report-export'
+      COMMISSION_SUMMARY_EXPORT: 'affiliate-commission-summary-report-export',
+      EXPORT: 'affiliate-campaign-report-export',
+      REFFERED_USER_EXPORT: 'affiliate-referred-user-report-export'
     }
   },
   BONUS_TEMPLATES: {
@@ -322,10 +323,12 @@ export const PERMISSIONS = Object.freeze({
   },
   CURRENCY: {
     CREATE: 'currency-add',
+    STATUS: 'currency-status',
     VIEW: 'currency-view',
     EDIT: 'currency-edit',
-    DELETE: 'currency-delete',
-    EXCHANGE_RATE_HISTORY: 'currency-exchange-rate-history'
+    EXCHANGE_RATE_HISTORY: 'currency-exchange-rate-history',
+    EXCHANGE_UPDATE_TYPE: 'currency-exchange-update-type',
+    EXCHANGE_RATE_EDIT: 'currency-exchange-rate-edit'
   },
   CRM: {
     VIEW: 'crm-view',
