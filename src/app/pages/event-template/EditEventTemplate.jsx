@@ -67,6 +67,8 @@ const EditEmailTemplate = () => {
   const [subjectCursorIndex, setSubjectCursorIndex] = useState(null);
   const [lastActiveField, setLastActiveField] = useState('editor');
 
+  console.log('cursorIndex: ', cursorIndex);
+
   const handleChange = (val) => {
     setContent(val);
     const quill = new Quill(document.createElement('div'));
@@ -268,7 +270,13 @@ const EditEmailTemplate = () => {
     const quillInstance = editorRef.current?.getQuillInstance();
     if (!quillInstance) return;
 
-    const index = typeof cursorIndex === 'number' ? cursorIndex : quillInstance.getLength() - 1;
+    const selection = quillInstance.getSelection();
+    const index =
+      selection && typeof selection.index === 'number'
+        ? selection.index
+        : typeof cursorIndex === 'number'
+          ? cursorIndex
+          : quillInstance.getLength();
 
     quillInstance.insertText(index, textToInsert, 'user');
     quillInstance.setSelection(index + textToInsert.length, 0, 'user');
