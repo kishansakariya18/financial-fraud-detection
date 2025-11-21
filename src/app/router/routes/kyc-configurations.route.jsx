@@ -8,7 +8,7 @@ export const kycConfigurationsRoute = [
       const { default: KycConfigurations } = await import('../../pages/kyc-configurations/index');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.USER_KYC.VIEW}>
+          <PrivateRoute permission={PERMISSIONS.USER_KYC.KYC_CONFIGURATIONS}>
             <KycConfigurations />
           </PrivateRoute>
         )
