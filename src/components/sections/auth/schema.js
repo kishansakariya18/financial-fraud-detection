@@ -15,6 +15,7 @@ export const otpVerificationSchema = Yup.object().shape({
 });
 
 export const forgotPasswordSchema = Yup.object().shape({
+  phoneCode: Yup.string().trim().required('Country Code Is Required'),
   mobile: Yup.string()
     .trim()
     .required('Mobile Is Required')
