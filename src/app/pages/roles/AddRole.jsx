@@ -26,31 +26,30 @@ const AddRole = () => {
   const [checkedList, setCheckedList] = useState([]);
   const handleCheck = (checked, permissionObj, modulePermissionList) => {
     let newCheckedList = [...checkedList];
-    if (permissionObj.permissionName == 'View') {
-      const modulePermissionIds = modulePermissionList.map((item) => item.permissionID);
-      if (!checked) {
-        modulePermissionIds.forEach((id) => {
-          const foundIndex = newCheckedList.findIndex((item) => item == id);
-          if (foundIndex != -1) {
-            newCheckedList.splice(foundIndex, 1);
+
+    if (!checked) {
+      // Unselect only this permission ID
+      newCheckedList = newCheckedList.filter(
+        (checkedId) => checkedId !== permissionObj.permissionID
+      );
+    } else {
+      const idsToAdd = [permissionObj.permissionID];
+
+      // Auto-select dependent permissions based on RequiredPermissions (slug list)
+      if (permissionObj.requiredPermissions && permissionObj.requiredPermissions.length > 0) {
+        permissionObj.requiredPermissions.forEach((requiredSlug) => {
+          const requiredPermission = modulePermissionList.find(
+            (perm) => perm.permissionSlug === requiredSlug
+          );
+          if (requiredPermission) {
+            idsToAdd.push(requiredPermission.permissionID);
           }
         });
-      } else {
-        newCheckedList = [...newCheckedList, ...modulePermissionIds];
       }
-    } else {
-      const viewId = modulePermissionList.find((item) => item.permissionName == 'View');
-      if (viewId && !newCheckedList.includes(viewId.permissionID)) {
-        newCheckedList = [...newCheckedList, viewId.permissionID, permissionObj.permissionID];
-      } else {
-        newCheckedList = [...newCheckedList, permissionObj.permissionID];
-      }
-      if (!checked) {
-        newCheckedList = newCheckedList.filter(
-          (checkedId) => checkedId !== permissionObj.permissionID
-        );
-      }
+
+      newCheckedList = [...newCheckedList, ...idsToAdd];
     }
+
     // Remove duplicates
     newCheckedList = Array.from(new Set(newCheckedList));
     setCheckedList(newCheckedList);

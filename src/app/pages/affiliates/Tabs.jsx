@@ -64,7 +64,7 @@ export default function Tabs() {
       path: `/affiliates/users/${affiliateId}/tab/commission`,
       icon: HiOutlineCash,
       index: 1,
-      permission: PERMISSIONS.AFFILIATES.VIEW
+      permission: PERMISSIONS.AFFILIATES.COMISSIONS
     },
     {
       id: randomId(),
