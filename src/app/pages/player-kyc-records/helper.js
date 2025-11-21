@@ -1,6 +1,6 @@
 import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { DOCUMENT_TYPE } from 'constants/app.constant';
-import { getDateInUTCToTimeZone } from 'helpers/functions';
+import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
 import { CiWarning } from 'react-icons/ci';
 
 export const userKYCResponseMapper = (apiData, type) => {
@@ -17,7 +17,8 @@ export const userKYCResponseMapper = (apiData, type) => {
         username: data.user.Username || '',
         mobile: data.user.Mobile || '',
         status: parseUserKycStatusToApp(data.DocumentStatus),
-        date: getDateInUTCToTimeZone(data.DateCreated)
+        date: getDateInUTCToTimeZone(data.DateCreated),
+        provider: data.KycProvider === '0' ? 'Manual' : capitalizeFirstLetter(data.KycProvider)
       };
     } else {
       return {
@@ -29,7 +30,8 @@ export const userKYCResponseMapper = (apiData, type) => {
         mobile: data.user.Mobile || '',
         status: parseUserKycStatusToApp(data.DocumentStatus),
         date: getDateInUTCToTimeZone(data.DateCreated),
-        type: String(data.DocumentType)
+        type: String(data.DocumentType),
+        provider: data.KycProvider === '0' ? 'Manual' : capitalizeFirstLetter(data.KycProvider)
       };
     }
   });

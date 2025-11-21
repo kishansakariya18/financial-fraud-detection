@@ -216,6 +216,16 @@ export function ViewDetails() {
                   </p>
                   <p>{getDateInUTCToTimeZone(response?.DateCreated)}</p>
                 </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('provider')}:
+                  </p>
+                  <p>
+                    {response?.KycProvider === '0'
+                      ? 'Manual'
+                      : capitalizeFirstLetter(response?.KycProvider)}
+                  </p>
+                </div>
               </div>
               <h6 className="mt-8 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
                 {t('identification')}:

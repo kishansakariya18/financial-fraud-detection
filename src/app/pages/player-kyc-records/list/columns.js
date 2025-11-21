@@ -3,7 +3,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 
 // Local Imports
 import { RowActions } from './RowActions';
-import { IdCell, DateCell, BadgeCell } from '../../../../components/custom/table/cell';
+import { IdCell, DateCell, BadgeCell, BoldCell } from '../../../../components/custom/table/cell';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
 import { documentTypeOption, userKycStatusOptions } from '../helper';
 
@@ -62,6 +62,14 @@ export const columns = [
     header: 'Level',
     cell: BadgeCell,
     meta: { optionData: documentTypeOption },
+    filterFn: 'arrIncludesSome',
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.provider, {
+    id: 'provider',
+    label: 'Provider',
+    header: 'Provider',
+    cell: BoldCell,
     filterFn: 'arrIncludesSome',
     enableSorting: false
   }),
