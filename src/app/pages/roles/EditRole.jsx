@@ -63,33 +63,34 @@ const EditRole = () => {
   const handleCheck = (checked, permissionObj, modulePermissionList) => {
     console.log('handleCheck', checked, permissionObj, modulePermissionList);
 
-    if (permissionObj.permissionName == 'View') {
-      const modulePermissionIds = modulePermissionList.map((item) => item.permissionID);
-      if (!checked) {
-        modulePermissionIds.forEach((id) => {
-          const foundIndex = checkedList.findIndex((item) => item == id);
-          if (foundIndex != -1) {
-            // console.log('found index::', id);
-            checkedList.splice(foundIndex, 1);
-            // console.log('new checklist:', checkedList);
+    let newCheckedList = [...checkedList];
+
+    if (!checked) {
+      // Unselect only this permission ID
+      newCheckedList = newCheckedList.filter(
+        (checkedId) => checkedId !== permissionObj.permissionID
+      );
+    } else {
+      const idsToAdd = [permissionObj.permissionID];
+
+      // Auto-select dependent permissions based on RequiredPermissions (slug list)
+      if (permissionObj.requiredPermissions && permissionObj.requiredPermissions.length > 0) {
+        permissionObj.requiredPermissions.forEach((requiredSlug) => {
+          const requiredPermission = modulePermissionList.find(
+            (perm) => perm.permissionSlug === requiredSlug
+          );
+          if (requiredPermission) {
+            idsToAdd.push(requiredPermission.permissionID);
           }
         });
-        setCheckedList([...checkedList]);
-      } else {
-        // console.log('modulePermissionIds:', modulePermissionIds);
-        setCheckedList([...checkedList, ...modulePermissionIds]);
       }
-    } else {
-      const viewId = modulePermissionList.find((item) => item.permissionName == 'View');
-      if (viewId && !checkedList.includes(viewId.permissionID)) {
-        setCheckedList([...checkedList, viewId.permissionID, permissionObj.permissionID]);
-      } else {
-        setCheckedList([...checkedList, permissionObj.permissionID]);
-      }
-      if (!checked) {
-        setCheckedList(checkedList.filter((checkedId) => checkedId !== permissionObj.permissionID));
-      }
+
+      newCheckedList = [...newCheckedList, ...idsToAdd];
     }
+
+    // Remove duplicates
+    newCheckedList = Array.from(new Set(newCheckedList));
+    setCheckedList(newCheckedList);
   };
 
   console.log('checkedList: ', checkedList);

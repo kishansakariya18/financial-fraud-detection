@@ -224,6 +224,7 @@ export const PERMISSIONS = Object.freeze({
     TRANSACTIONS: 'affiliate-transactions',
     USER_SIGNUP_LIST: 'affiliate-user-signup-list',
     PAYOUT: 'affiliate-payout',
+    COMISSIONS: 'affiliate-commission-view',
     UPDATE_PAYTOUT: 'affiliate-payout-update',
     VIEW_LOGIN_HISTORY: 'affiliate-login-history-view',
     CAMPAIGN: {
