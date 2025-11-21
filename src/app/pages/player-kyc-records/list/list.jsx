@@ -72,7 +72,7 @@ export default function UserKYC() {
       filtersFromQuery.push({ id: 'status', value: queryParams.status });
     }
     if (queryParams.type) {
-      filtersFromQuery.push({ id: 'type', value: queryParams.type });
+      filtersFromQuery.push({ id: 'level', value: queryParams.type });
     }
     if (queryParams.startDate && queryParams.endDate) {
       filtersFromQuery.push({
@@ -94,7 +94,7 @@ export default function UserKYC() {
       if (data.id === 'status') {
         filterItems.status = data.value;
       }
-      if (data.id === 'type') {
+      if (data.id === 'level') {
         filterItems.type = data.value;
       }
       if (data.id === 'date') {

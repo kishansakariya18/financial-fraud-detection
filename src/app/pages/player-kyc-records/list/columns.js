@@ -57,9 +57,9 @@ export const columns = [
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.type, {
-    id: 'type',
-    label: 'Type',
-    header: 'Type',
+    id: 'level',
+    label: 'Level',
+    header: 'Level',
     cell: BadgeCell,
     meta: { optionData: documentTypeOption },
     filterFn: 'arrIncludesSome',

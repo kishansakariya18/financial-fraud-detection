@@ -118,11 +118,11 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           showCheckbox={false}
         />
       )}
-      {table.getColumn('type') && (
+      {table.getColumn('level') && (
         <FacedtedFilter
           options={documentTypeOption}
-          column={table.getColumn('type')}
-          title={t('type')}
+          column={table.getColumn('level')}
+          title={t('level')}
           Icon={FunnelIcon}
           isMultiple={false}
           showCheckbox={false}
