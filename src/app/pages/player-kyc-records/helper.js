@@ -54,10 +54,15 @@ export const parseUserKycStatusToApp = (status) => {
     res = 'approved';
   } else if (+status === 0) {
     res = 'pending';
-  } else {
+  } else if (+status === 2) {
     res = 'rejected';
+  } else if (+status === 3) {
+    res = 'auto approved';
+  } else if (+status === 4) {
+    res = 'auto rejected';
+  } else {
+    res = 'pending';
   }
-
   return res;
 };
 
@@ -67,6 +72,10 @@ export const parseUserKycStatusToAPI = (status) => {
     res = 1;
   } else if (status === 'rejected') {
     res = 2;
+  } else if (status === 'auto approved') {
+    res = 3;
+  } else if (status === 'auto rejected') {
+    res = 4;
   }
 
   return res;
@@ -88,6 +97,18 @@ export const userKycStatusOptions = [
   {
     value: 'rejected',
     label: 'Rejected',
+    color: 'error',
+    icon: XCircleIcon
+  },
+  {
+    value: 'auto approved',
+    label: 'Auto Approved',
+    color: 'success',
+    icon: CheckBadgeIcon
+  },
+  {
+    value: 'auto rejected',
+    label: 'Auto Rejected',
     color: 'error',
     icon: XCircleIcon
   }
