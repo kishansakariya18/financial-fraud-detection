@@ -67,7 +67,7 @@ export const blacklistRoutes = [
       const { default: BlacklistIP } = await import('../../pages/blacklist/BlacklistIP');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.BLACKLIST.LIST}>
+          <PrivateRoute permission={PERMISSIONS.BLACKLIST.VIEW}>
             <BlacklistIP />
           </PrivateRoute>
         )
@@ -82,7 +82,7 @@ export const blacklistRoutes = [
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.BLACKLIST.LIST}>
+          <PrivateRoute permission={PERMISSIONS.BLACKLIST.VIEW_EMAIL_MOBILE_RESTRCTION}>
             <BlacklistEmailPhone />
           </PrivateRoute>
         )
@@ -97,7 +97,7 @@ export const blacklistRoutes = [
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.BLACKLIST.LIST}>
+          <PrivateRoute permission={PERMISSIONS.BLACKLIST.VIEW_RESTRICTED_EMAIL_DOMAIN}>
             <DisposableEmailList />
           </PrivateRoute>
         )

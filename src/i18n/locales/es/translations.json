@@ -635,5 +635,8 @@
   "source_of_fund": "Fuente de fondos",
   "identity": "Identidad",
   "bonus_templates": "Plantillas de bonos",
-  "kycConfigurations": "Configuraciones KYC"
+  "kycConfigurations": "Configuraciones KYC",
+  "template_manager": "Gestor de plantillas",
+  "eventGroup": "Grupo de eventos",
+  "channelCode": "Código de canal"
 }

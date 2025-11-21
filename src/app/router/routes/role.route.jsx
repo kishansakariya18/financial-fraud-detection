@@ -21,15 +21,29 @@ export const roleRoutes = [
       },
       {
         path: 'add',
-        lazy: async () => ({
-          Component: (await import('../../pages/roles/AddRole')).default
-        })
+        lazy: async () => {
+          const { default: AddRole } = await import('../../pages/roles/AddRole');
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.ROLES.ADD}>
+                <AddRole />
+              </PrivateRoute>
+            )
+          };
+        }
       },
       {
         path: 'edit/:roleId',
-        lazy: async () => ({
-          Component: (await import('../../pages/roles/EditRole')).default
-        })
+        lazy: async () => {
+          const { default: EditRole } = await import('../../pages/roles/EditRole');
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.ROLES.EDIT}>
+                <EditRole />
+              </PrivateRoute>
+            )
+          };
+        }
       }
     ]
   }

@@ -10,6 +10,7 @@ axios.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${token}`;
     config.headers.Token = `${token}`;
   }
+  config.headers['time-zone'] = Intl.DateTimeFormat().resolvedOptions().timeZone;
   return config;
 });
 
