@@ -106,7 +106,7 @@ export const bonusManagementRoute = [
     }
   },
   {
-    path: 'bonus/player-segmentation/:playerSegmentationId/edit',
+    path: 'bonus/player-segmentation/:segmentationUID/edit',
     lazy: async () => {
       const { default: EditPlayerSegmentation } = await import(
         '../../pages/player-segmentation/EditPlayerSegmentation'
@@ -121,7 +121,7 @@ export const bonusManagementRoute = [
     }
   },
   {
-    path: 'bonus/player-segmentation/:playerSegmentationId/view',
+    path: 'bonus/player-segmentation/:segmentationUID/view',
     lazy: async () => {
       const { default: ViewPlayerSegmentation } = await import(
         '../../pages/player-segmentation/ViewPlayerSegmentation'
@@ -130,6 +130,21 @@ export const bonusManagementRoute = [
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.VIEW}>
             <ViewPlayerSegmentation />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: 'bonus/player-segmentation/:segmentationUID/players',
+    lazy: async () => {
+      const { default: PlayerSegmentationPlayerList } = await import(
+        '../../pages/player-segmentation/PlayerSegmentationPlayerList'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.PLAYER_LIST}>
+            <PlayerSegmentationPlayerList />
           </PrivateRoute>
         )
       };

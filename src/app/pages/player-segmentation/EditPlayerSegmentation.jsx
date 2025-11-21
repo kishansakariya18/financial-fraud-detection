@@ -1,57 +1,116 @@
 // Import Dependencies
 import { Page } from 'components/shared/Page';
-import { UserIcon } from '@heroicons/react/20/solid';
-import { Button, Input } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useNavigate, useParams } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
+import CreateOrEditFormPlayerSegmentation from 'components/sections/player-segmentation/CreateOrEditForm';
+import PlayerSegmentationService from 'services/player-segmentation.services';
+import { createDefaultRuleTree } from 'components/sections/player-segmentation/ruleUtils';
 
 const EditPlayerSegmentation = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [initialData, setInitialData] = useState(null);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { segmentationUID } = useParams();
 
   const breadcrumbItem = [
     { title: t('player_segmentation'), path: '/bonus/player-segmentation' },
     { title: t('edit') }
   ];
 
-  // TODO: Add form state and validation
-  const [formData, setFormData] = useState({
-    name: ''
-  });
-
-  // TODO: Add API call to fetch data
+  // Fetch segmentation details
   useEffect(() => {
-    if (id) {
-      // Placeholder - API call will be added later
-      // fetchPlayerSegmentationDetails(id).then((data) => {
-      //   setFormData(data);
-      // });
-    }
-  }, [id]);
+    const fetchSegmentationDetail = async () => {
+      if (!segmentationUID) {
+        toast.error(t('invalid_segmentation_id') || 'Invalid segmentation ID');
+        navigate('/bonus/player-segmentation');
+        return;
+      }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+      try {
+        setLoading(true);
+        const response = await PlayerSegmentationService.detail(segmentationUID);
 
-    // TODO: Add API call here
-    try {
-      // Placeholder - API call will be added later
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      toast.success(
-        t('player_segmentation_updated_successfully') || 'Player segmentation updated successfully'
-      );
-      navigate('/bonus/player-segmentation');
-    } catch (error) {
-      toast.error(error?.message || t('something_went_wrong'));
-    } finally {
-      setLoading(false);
-    }
+        if (response.status === 200 && response.response?.data) {
+          const data = response.response.data;
+          // Map API response
+          // Parse SegmentRules if it's a JSON string
+          let parsedRules = createDefaultRuleTree();
+          if (data.SegmentRules) {
+            try {
+              parsedRules =
+                typeof data.SegmentRules === 'string'
+                  ? JSON.parse(data.SegmentRules)
+                  : data.SegmentRules;
+            } catch (parseError) {
+              console.error('Error parsing SegmentRules:', parseError);
+              toast.warning(t('rules_parse_error') || 'Error parsing rules, using default');
+            }
+          }
+
+          const mappedData = {
+            segmentationUID: data.SegmentationUID,
+            segmentName: data.SegmentName || '',
+            segmentDescription: data.SegmentDescription || '',
+            segmentTag: data.SegmentTag || '',
+            segmentRules: parsedRules,
+            isScheduled: data.IsScheduled === 1,
+            evaluationFrequency: data.EvaluationFrequency || 'DAILY'
+          };
+
+          setInitialData(mappedData);
+        } else {
+          throw new Error(response.response?.message || 'Failed to fetch segmentation details');
+        }
+      } catch (error) {
+        console.error('Error fetching segmentation details:', error);
+        toast.error(
+          error.response?.data?.message ||
+            error.message ||
+            t('failed_to_fetch_details') ||
+            'Failed to fetch segmentation details'
+        );
+        navigate('/bonus/player-segmentation');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSegmentationDetail();
+  }, [segmentationUID, navigate, t]);
+
+  const handleSuccess = () => {
+    navigate('/bonus/player-segmentation');
   };
+
+  const handleCancel = () => {
+    navigate('/bonus/player-segmentation');
+  };
+
+  if (loading) {
+    return (
+      <Page title={t('edit') + ' ' + t('player_segmentation')}>
+        <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
+          <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+            <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
+              {t('edit') + ' ' + t('player_segmentation') + ' ' + t('form')}
+            </h2>
+          </div>
+          <div className="flex items-center justify-center py-12">
+            <div className="text-center">
+              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary-500 border-r-transparent"></div>
+              <p className="mt-4 text-gray-600 dark:text-gray-400">
+                {t('loading') || 'Loading'}...
+              </p>
+            </div>
+          </div>
+        </div>
+      </Page>
+    );
+  }
 
   return (
     <Page title={t('edit') + ' ' + t('player_segmentation')}>
@@ -66,32 +125,14 @@ const EditPlayerSegmentation = () => {
           <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
 
-        <form onSubmit={handleSubmit} autoComplete="off">
-          <div className="mt-6 space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Input
-                label={t('name')}
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                prefix={<UserIcon className="size-5" />}
-                placeholder={t('enter') + ' ' + t('name')}
-                required
-              />
-            </div>
-          </div>
-
-          <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
-            <Button
-              className="min-w-[7rem]"
-              onClick={() => navigate('/bonus/player-segmentation')}
-              disabled={loading}>
-              {t('cancel')}
-            </Button>
-            <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
-              {t('update')}
-            </Button>
-          </div>
-        </form>
+        {initialData && (
+          <CreateOrEditFormPlayerSegmentation
+            mode="edit"
+            initialData={initialData}
+            onSuccess={handleSuccess}
+            onCancel={handleCancel}
+          />
+        )}
       </div>
     </Page>
   );
