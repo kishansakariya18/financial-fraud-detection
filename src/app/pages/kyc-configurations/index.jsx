@@ -146,7 +146,15 @@ const KycConfigurations = () => {
                 {(levelLoading ? Array.from({ length: 0 }) : mappings || []).map((row, idx) => (
                   <div key={row?.title || idx} className="gap-2">
                     <div className="pb-2 text-sm font-medium capitalize text-gray-700 dark:text-dark-200">
-                      {row?.title}
+                      {row?.slug === 'basic_details'
+                        ? t('level') + ' 1: ' + t('basic') + ' ' + t('details')
+                        : row?.slug === 'identity'
+                          ? t('level') + ' 2: ' + t('identity')
+                          : row?.slug === 'payment'
+                            ? t('level') + ' 4: ' + t('source_of_fund')
+                            : row?.slug === 'address'
+                              ? t('level') + ' 3: ' + t('address')
+                              : undefined}
                     </div>
                     <Controller
                       name={`mappings.${idx}.provider`}
