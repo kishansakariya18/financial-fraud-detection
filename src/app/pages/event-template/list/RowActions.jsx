@@ -63,7 +63,8 @@ export function RowActions({ row, table }) {
 
   return (
     <>
-      {hasPermission(PERMISSIONS.EVENT_TEMPLATE.CHANGE_STATUS) && (
+      {(hasPermission(PERMISSIONS.EVENT_TEMPLATE.EDIT) ||
+        hasPermission(PERMISSIONS.EVENT_TEMPLATE.CHANGE_STATUS)) && (
         <div className="flex justify-center space-x-1.5 rtl:space-x-reverse">
           <Menu as="div" className="relative inline-block text-left">
             <MenuButton as={Button} isIcon className="size-8 rounded-full">
@@ -80,19 +81,21 @@ export function RowActions({ row, table }) {
               <MenuItems
                 anchor={{ to: 'bottom end', gap: 12 }}
                 className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      className={clsx(
-                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
-                        focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
-                      )}
-                      onClick={() => navigate(`/event-template/${row.original.id}/edit`)}>
-                      <PencilIcon className="size-4.5 stroke-1" />
-                      <span>{t('edit')}</span>
-                    </button>
-                  )}
-                </MenuItem>
+                {hasPermission(PERMISSIONS.EVENT_TEMPLATE.EDIT) && (
+                  <MenuItem>
+                    {({ focus }) => (
+                      <button
+                        className={clsx(
+                          'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                          focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                        )}
+                        onClick={() => navigate(`/event-template/${row.original.id}/edit`)}>
+                        <PencilIcon className="size-4.5 stroke-1" />
+                        <span>{t('edit')}</span>
+                      </button>
+                    )}
+                  </MenuItem>
+                )}
                 {hasPermission(PERMISSIONS.EVENT_TEMPLATE.CHANGE_STATUS) && (
                   <MenuItem>
                     {({ focus }) => (

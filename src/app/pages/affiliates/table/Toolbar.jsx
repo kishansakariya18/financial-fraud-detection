@@ -31,7 +31,7 @@ export function Toolbar({ table, pageTitle, onApplyFilters, onClearFilters }) {
             {pageTitle}
           </h2>
         </div>
-        {hasPermission(PERMISSIONS.AFFILIATES.CREATE) && (
+        {hasPermission(PERMISSIONS.AFFILIATES.ADD) && (
           <Button
             className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
             color="primary"

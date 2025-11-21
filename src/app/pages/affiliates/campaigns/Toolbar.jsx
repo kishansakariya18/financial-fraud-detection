@@ -9,6 +9,8 @@ import AffiliatesService from 'services/affiliates.services';
 import { TbUpload } from 'react-icons/tb';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { PERMISSIONS } from 'constants/app.constant';
+import usePermissions from 'app/router/usePermissions';
 
 export function Toolbar({
   keyword,
@@ -27,7 +29,7 @@ export function Toolbar({
     { title: t('affiliates'), path: '/affiliates/users' },
     { title: t('campaign') + ' ' + t('list') }
   ];
-
+  const hasPermission = usePermissions();
   const handleExport = async () => {
     if (!affiliateId) return;
     try {
@@ -76,15 +78,17 @@ export function Toolbar({
             <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
           </div>
         </div>
-        <Button
-          variant="outlined"
-          className="h-8 space-x-2 rounded-md px-3 text-xs rtl:space-x-reverse"
-          onClick={handleExport}
-          disabled={isExporting || !affiliateId}
-          title={`${t('export_text') + ' ' + t('report')}`}>
-          <TbUpload className="size-4" />
-          <span>{isExporting ? t('exporting') : t('export_text') + ' ' + t('report')}</span>
-        </Button>
+        {hasPermission(PERMISSIONS.AFFILIATES.REPORT?.EXPORT) && (
+          <Button
+            variant="outlined"
+            className="h-8 space-x-2 rounded-md px-3 text-xs rtl:space-x-reverse"
+            onClick={handleExport}
+            disabled={isExporting || !affiliateId}
+            title={`${t('export_text') + ' ' + t('report')}`}>
+            <TbUpload className="size-4" />
+            <span>{isExporting ? t('exporting') : t('export_text') + ' ' + t('report')}</span>
+          </Button>
+        )}
       </div>
 
       {isXs ? (

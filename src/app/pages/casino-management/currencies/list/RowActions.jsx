@@ -226,7 +226,7 @@ export function RowActions({ row, table }) {
                 </MenuItem>
               )}
 
-              {hasPermission(PERMISSIONS.CURRENCY.EDIT) && (
+              {hasPermission(PERMISSIONS.CURRENCY.EXCHANGE_RATE_EDIT) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -241,7 +241,7 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              {hasPermission(PERMISSIONS.CURRENCY.EDIT) && (
+              {hasPermission(PERMISSIONS.CURRENCY.EXCHANGE_UPDATE_TYPE) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button

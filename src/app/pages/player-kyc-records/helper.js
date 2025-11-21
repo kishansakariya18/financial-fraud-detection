@@ -96,14 +96,14 @@ export const userKycStatusOptions = [
 export const documentTypeOption = [
   {
     value: '1',
-    label: 'Identity'
-  },
-  {
-    value: '2',
-    label: 'Source of fund'
+    label: 'Level 2'
   },
   {
     value: '3',
-    label: 'Address'
+    label: 'Level 3'
+  },
+  {
+    value: '2',
+    label: 'Level 4'
   }
 ];

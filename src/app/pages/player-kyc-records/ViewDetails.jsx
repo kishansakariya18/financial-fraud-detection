@@ -227,11 +227,11 @@ export function ViewDetails() {
                   </p>
                   <p>
                     {+response?.DocumentType === DOCUMENT_TYPE.IDENTITY
-                      ? t('identity')
+                      ? t('level') + ' 2: ' + t('identity')
                       : +response?.DocumentType === DOCUMENT_TYPE.ADDRESS
-                        ? t('address')
+                        ? t('level') + ' 3: ' + t('address')
                         : +response?.DocumentType === DOCUMENT_TYPE.SOURCE_OF_FUND
-                          ? t('source_of_fund')
+                          ? t('level') + ' 4: ' + t('source_of_fund')
                           : '-'}
                   </p>
                 </div>
@@ -303,7 +303,9 @@ export function ViewDetails() {
                       {t('update')}
                     </Button>
                   )}
-                  <Button className="min-w-[7rem]" onClick={() => navigate('/player-kyc')}>
+                  <Button
+                    className="min-w-[7rem]"
+                    onClick={() => navigate('/kyc/player-kyc-records')}>
                     {t('back')}
                   </Button>
                 </div>

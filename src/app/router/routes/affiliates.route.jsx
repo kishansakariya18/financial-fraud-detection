@@ -9,7 +9,7 @@ export const affiliatesRoutes = [
       const { default: AffiliatesList } = await import('../../pages/affiliates/list');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.AFFILIATES.LIST}>
+          <PrivateRoute permission={PERMISSIONS.AFFILIATES.VIEW}>
             <AffiliatesList />
           </PrivateRoute>
         )
@@ -22,7 +22,7 @@ export const affiliatesRoutes = [
       const { default: CreateAffiliate } = await import('../../pages/affiliates/CreateAffiliate');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.AFFILIATES.CREATE}>
+          <PrivateRoute permission={PERMISSIONS.AFFILIATES.ADD}>
             <CreateAffiliate />
           </PrivateRoute>
         )
@@ -35,7 +35,7 @@ export const affiliatesRoutes = [
       const { default: AffiliateDetails } = await import('../../pages/affiliates/details');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.AFFILIATES.LIST}>
+          <PrivateRoute permission={PERMISSIONS.AFFILIATES.VIEW}>
             <AffiliateDetails />
           </PrivateRoute>
         )
@@ -61,7 +61,7 @@ export const affiliatesRoutes = [
       const { default: CommissionSummary } = await import('../../pages/affiliates/commission/list');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.AFFILIATES.COMMISSION_SUMMARY}>
+          <PrivateRoute permission={PERMISSIONS.AFFILIATES.COMMISSION_SETTING}>
             <CommissionSummary />
           </PrivateRoute>
         )
@@ -89,7 +89,7 @@ export const affiliatesRoutes = [
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.AFFILIATES.WITHDRAWALS_LIST}>
+          <PrivateRoute permission={PERMISSIONS.AFFILIATES.TRANSACTIONS}>
             <AffiliateWithdrawalsList />
           </PrivateRoute>
         )
@@ -113,7 +113,7 @@ export const affiliatesRoutes = [
           return {
             Component: () => (
               <>
-                <PrivateRoute permission={PERMISSIONS.AFFILIATES.LIST}>
+                <PrivateRoute permission={PERMISSIONS.AFFILIATES.VIEW}>
                   <AffiliateDetails />
                 </PrivateRoute>
               </>
@@ -130,7 +130,7 @@ export const affiliatesRoutes = [
           return {
             Component: () => (
               <>
-                <PrivateRoute permission={PERMISSIONS.AFFILIATES.LIST}>
+                <PrivateRoute permission={PERMISSIONS.AFFILIATES.CAMPAIGN.VIEW}>
                   <AffiliateCampaignsList />
                 </PrivateRoute>
               </>
@@ -146,7 +146,7 @@ export const affiliatesRoutes = [
           );
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST}>
+              <PrivateRoute permission={PERMISSIONS.AFFILIATES.CAMPAIGN.VIEW}>
                 <AffiliateCampaignDetails />
               </PrivateRoute>
             )
@@ -161,7 +161,7 @@ export const affiliatesRoutes = [
           );
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST}>
+              <PrivateRoute permission={PERMISSIONS.AFFILIATES.USER_SIGNUP_LIST}>
                 <AffiliateCampaignReferredUsers />
               </PrivateRoute>
             )
@@ -176,7 +176,7 @@ export const affiliatesRoutes = [
           );
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST}>
+              <PrivateRoute permission={PERMISSIONS.AFFILIATES.TRANSACTIONS}>
                 <AffiliateCampaignReferredUsersTransactions />
               </PrivateRoute>
             )
@@ -219,7 +219,7 @@ export const affiliatesRoutes = [
           );
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.AFFILIATES.WITHDRAWALS_LIST}>
+              <PrivateRoute permission={PERMISSIONS.AFFILIATES.PAYOUT}>
                 <AffiliateWithdrawalsList />
               </PrivateRoute>
             )
@@ -234,7 +234,7 @@ export const affiliatesRoutes = [
           );
           return {
             Component: () => (
-              <PrivateRoute permission={PERMISSIONS.AFFILIATES.COMMISSION_SUMMARY}>
+              <PrivateRoute permission={PERMISSIONS.AFFILIATES.C}>
                 <CommissionSummary />
               </PrivateRoute>
             )

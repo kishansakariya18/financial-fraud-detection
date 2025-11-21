@@ -11,9 +11,10 @@ import ContentWrapper from 'components/ui/custom/ContentWrapper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
-import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
+import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD, PERMISSIONS } from 'constants/app.constant';
 import CurrencyService from 'services/currency.services';
 import { currencyListResponseMapper } from '../helper';
+import usePermissions from 'app/router/usePermissions';
 
 export default function Currency() {
   const { t } = useTranslation();
@@ -21,6 +22,13 @@ export default function Currency() {
   const pageTitle = t('currency');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { hasPermission } = usePermissions();
+  const canShowActions =
+    hasPermission(PERMISSIONS.CURRENCY.STATUS) ||
+    hasPermission(PERMISSIONS.CURRENCY.EDIT) ||
+    hasPermission(PERMISSIONS.CURRENCY.EXCHANGE_RATE_HISTORY) ||
+    hasPermission(PERMISSIONS.CURRENCY.EXCHANGE_RATE_EDIT) ||
+    hasPermission(PERMISSIONS.CURRENCY.EXCHANGE_UPDATE_TYPE);
   // const fetchSummary = async () => {
   //   // setError(null);
 
@@ -62,12 +70,12 @@ export default function Currency() {
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchData: fetchCurrencies,
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['ID'], right: ['Actions'] },
+      columnPinning: { left: ['ID'], right: canShowActions ? ['Actions'] : [] },
       tableSettings: { enableFullScreen: false }
     }
   });
