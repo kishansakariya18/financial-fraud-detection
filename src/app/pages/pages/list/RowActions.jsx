@@ -98,19 +98,21 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              <MenuItem>
-                {({ focus }) => (
-                  <button
-                    className={clsx(
-                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
-                      focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
-                    )}
-                    onClick={() => navigate(`/content-management/pages/${row.original.id}/edit`)}>
-                    <PencilIcon className="size-4.5 stroke-1" />
-                    <span>{t('edit')}</span>
-                  </button>
-                )}
-              </MenuItem>
+              {hasPermission(PERMISSIONS.PAGE.EDIT) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                        focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                      )}
+                      onClick={() => navigate(`/content-management/pages/${row.original.id}/edit`)}>
+                      <PencilIcon className="size-4.5 stroke-1" />
+                      <span>{t('edit')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
               {hasPermission(PERMISSIONS.PAGE.CHANGE_STATUS) && (
                 <MenuItem>
                   {({ focus }) => (
