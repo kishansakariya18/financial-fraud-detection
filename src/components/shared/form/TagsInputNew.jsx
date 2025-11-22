@@ -128,7 +128,7 @@ const TagsInputNew = forwardRef(
         {({ open }) => (
           <>
             {label && <Label>{label}</Label>}
-            <div className="relative">
+            <div className={`relative ${label ? 'mt-1.5' : ''}`}>
               <div className="relative w-full">
                 <div
                   className={clsx(
