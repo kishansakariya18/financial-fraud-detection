@@ -18,7 +18,7 @@ const TagsInputNew = forwardRef(
   (
     {
       onChange,
-      value = [],
+      value: initialValue = [],
       options = [],
       placeholder = 'Enter tags...',
       error,
@@ -34,6 +34,17 @@ const TagsInputNew = forwardRef(
     const normalizedOptions = useMemo(
       () => (options || []).map((opt) => (typeof opt === 'string' ? { id: opt, value: opt } : opt)),
       [options]
+    );
+
+    const value = useMemo(
+      () =>
+        [...(initialValue || [])]?.map((v) => {
+          if (typeof v === 'string') {
+            return { id: v, value: v };
+          }
+          return v;
+        }) || [],
+      [initialValue]
     );
 
     const selectedValuesLower = useMemo(() => new Set(value.map((v) => v.value ?? '')), [value]);

@@ -24,7 +24,7 @@ export const blogSchema = (isEdit = false) => {
     metaTitle: Yup.string().trim().max(200, 'Maximum 200 characters allowed'),
     metaDescription: Yup.string().trim(),
     authorName: Yup.string().trim(),
-    tags: Yup.array().of(Yup.string().trim()),
+    tags: Yup.array().label('Tags'),
     isFeatured: Yup.number().oneOf([0, 1], 'Invalid featured value'),
     isActive: Yup.number().oneOf([0, 1], 'Invalid active value')
   };
