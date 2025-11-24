@@ -46,12 +46,10 @@ export const playerStatusToApp = (status) => {
   switch (+status) {
     case 1:
       return 'active';
-    case 0:
-      return 'inactive';
     case 2:
       return 'blocked';
     default:
-      break;
+      return 'blocked';
   }
 };
 export const playerKycToApp = (kyc) => {
