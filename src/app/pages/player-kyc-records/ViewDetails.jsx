@@ -66,6 +66,10 @@ export function ViewDetails() {
   }
 
   const handleKycUpdate = async () => {
+    if (!selected) {
+      toast.error('At least one option must be selected');
+      return;
+    }
     setLoading(true);
     setError('');
     const result = await UserKycServices.updateKyc({
