@@ -294,14 +294,14 @@ export function PlayerRowActions({
                           'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
                           focus && 'bg-this/10 dark:bg-this-light/10'
                         )}>
-                        {row?.original?.status === 'inactive' ? (
+                        {row?.original?.status === 'blocked' ? (
                           <CgUnblock className="size-4.5 stroke-1" />
                         ) : (
                           <CgBlock className="size-4.5 stroke-1" />
                         )}
                         <span>
-                          {row?.original?.status === 'inactive'
-                            ? t('unblock') || 'Unblock'
+                          {row?.original?.status === 'blocked'
+                            ? t('active') || 'Active'
                             : t('block') || 'Block'}
                         </span>
                       </button>
