@@ -798,14 +798,14 @@ export function PlayerViewDetails({
                     <p>{response?.UserKYCLevel >= 1 ? response?.UserKYCLevel : `Not Initiated`}</p>
                   </div>
 
-                  {isB2C && (
+                  {isB2C && response?.affiliate && (
                     <div>
                       <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                         {t('affiliate')}
                       </p>
                       {response?.affiliate ? (
                         <Link
-                          to={`/users/affiliate/${response?.affiliate?.AffiliatesUID}/tab/details`}
+                          to={`/affiliates/users/${response?.affiliate?.AffiliatesUID}/tab/details`}
                           className="tracking-wide text-primary-600 transition-colors hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500">
                           <p className="text-center">{response?.affiliate?.Username || '-'}</p>
                         </Link>

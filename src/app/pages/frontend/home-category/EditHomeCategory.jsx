@@ -11,7 +11,7 @@ import HomePageService from 'services/home-page.services';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { changeCategorySchema } from './schema';
 
-const EditHomeCategory = ({ onClose, homeCategoryId }) => {
+const EditHomeCategory = ({ onClose, homeCategoryId, categoryName, categoryId }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
@@ -104,7 +104,12 @@ const EditHomeCategory = ({ onClose, homeCategoryId }) => {
             render={({ field }) => (
               <Listbox
                 data={categoryOptions}
-                value={categoryOptions.find((status) => status.value === field.value) || null}
+                value={
+                  categoryOptions.find((status) => status.value === field.value) || {
+                    value: categoryId,
+                    label: categoryName
+                  }
+                }
                 onChange={(val) => field.onChange(val.value)}
                 name={field.name}
                 label={t('category')}

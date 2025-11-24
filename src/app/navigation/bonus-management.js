@@ -1,5 +1,10 @@
 // Import Dependencies
-import { CircleStackIcon, ShareIcon, DocumentDuplicateIcon } from '@heroicons/react/24/outline';
+import {
+  CircleStackIcon,
+  ShareIcon,
+  DocumentDuplicateIcon,
+  UserGroupIcon
+} from '@heroicons/react/24/outline';
 import {
   NAV_TYPE_COLLAPSE,
   NAV_TYPE_ITEM,
@@ -36,14 +41,14 @@ export const bonusManagement = {
       Icon: ShareIcon,
       permission: PERMISSIONS.REFERRAL_MANAGEMENT.EDIT,
       platformType: PLATFORM_TYPE.B2C
+    },
+    {
+      id: 'player_segmentation',
+      type: NAV_TYPE_ITEM,
+      path: '/bonus/player-segmentation',
+      title: 'Player Segmentation',
+      transKey: 'player_segmentation',
+      Icon: UserGroupIcon
     }
-    // {
-    //   id: 'player_segmentation',
-    //   type: NAV_TYPE_ITEM,
-    //   path: '/bonus/player-segmentation',
-    //   title: 'Player Segmentation',
-    //   transKey: 'player_segmentation',
-    //   Icon: UserGroupIcon
-    // }
   ]
 };

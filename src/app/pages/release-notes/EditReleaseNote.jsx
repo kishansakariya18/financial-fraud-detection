@@ -14,6 +14,7 @@ import ReleaseNotesService from 'services/release-notes.services';
 // import { useParams } from 'react-router';
 import { useNavigate, useParams } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { getDateInTimeZoneToUTC } from 'helpers/functions';
 
 const EditReleaseNote = () => {
   const { releaseNoteId: releaseNoteUID } = useParams();
@@ -135,7 +136,7 @@ const EditReleaseNote = () => {
               placeholder={t('enter') + ' ' + t('title')}
               error={errors?.title?.message}
             />
-            <Controller
+            {/* <Controller
               name="releaseDate"
               control={control}
               render={({ field: { onChange, value, ...rest } }) => {
@@ -143,18 +144,37 @@ const EditReleaseNote = () => {
                 return (
                   <DatePicker
                     onChange={onChange}
-                    value={value || ''}
+                    value={getDateInTimeZoneToUTC(value)}
                     label={t('release_date')}
                     error={errors?.releaseDate?.message}
                     options={{
                       disableMobile: true,
-                      time_24hr: true
+                      time_24hr: true,
+                      minDate: 'today'
                     }}
                     placeholder="Choose date..."
                     {...rest}
                   />
                 );
               }}
+            /> */}
+            <Controller
+              render={({ field: { onChange, value, ...rest } }) => (
+                <DatePicker
+                  onChange={onChange}
+                  value={getDateInTimeZoneToUTC(value) || ''}
+                  label={t('release_date')}
+                  error={errors?.releaseDate?.message}
+                  options={{
+                    disableMobile: true,
+                    time_24hr: true
+                  }}
+                  placeholder="Choose date..."
+                  {...rest}
+                />
+              )}
+              control={control}
+              name="releaseDate"
             />
           </div>
           <div className="space-y-2">

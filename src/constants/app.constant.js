@@ -522,11 +522,12 @@ export const PERMISSIONS = Object.freeze({
     APPROVE: 'responsible-gaming-restrictions-approve'
   },
   PLAYER_SEGMENTATION: {
-    LIST: 'player-segmentation-view',
+    VIEW: 'player-segmentation-view',
     ADD: 'player-segmentation-add',
     EDIT: 'player-segmentation-edit',
+    REFRESH: 'player-segmentation-refresh',
     CHANGE_STATUS: 'player-segmentation-change-status',
-    DELETE: 'player-segmentation-delete'
+    PLAYER_LIST: 'player-segmentation-player-list'
   }
 });
 
