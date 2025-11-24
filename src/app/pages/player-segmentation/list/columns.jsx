@@ -1,30 +1,56 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import { BadgeCell } from 'components/custom/table/cell';
+import { BadgeCell, DateCell } from 'components/custom/table/cell';
 import { PlayerSegmentationRowActions } from './RowActions';
 
 const columnHelper = createColumnHelper();
-
-const formatDate = (value) => {
-  if (!value) return '—';
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-  return date.toLocaleString();
-};
 
 export const playerSegmentationColumns = ({ canShowActions }) => [
   columnHelper.accessor('id', {
     id: 'id',
     header: 'ID',
     enableSorting: false,
-    size: 120
+    size: 80
   }),
-  columnHelper.accessor('name', {
-    id: 'name',
-    header: 'Name',
+  columnHelper.accessor('segmentName', {
+    id: 'segmentName',
+    header: 'Segment Name',
     enableSorting: false,
-    size: 220
+    size: 200
+  }),
+  columnHelper.accessor('segmentTag', {
+    id: 'segmentTag',
+    header: 'Tag',
+    enableSorting: false,
+    size: 140
+  }),
+  columnHelper.accessor('isScheduled', {
+    id: 'isScheduled',
+    header: 'Scheduled',
+    cell: BadgeCell,
+    meta: {
+      optionData: [
+        { value: true, label: 'Yes', color: 'success' },
+        { value: false, label: 'No', color: null }
+      ]
+    },
+    enableSorting: false,
+    size: 100
+  }),
+  columnHelper.accessor('evaluationFrequency', {
+    id: 'evaluationFrequency',
+    header: 'Frequency',
+    cell: BadgeCell,
+    meta: {
+      optionData: [
+        { value: 'NONE', label: 'None', color: null },
+        { value: 'HOURLY', label: 'Hourly', color: null },
+        { value: 'DAILY', label: 'Daily', color: null },
+        { value: 'WEEKLY', label: 'Weekly', color: null },
+        { value: 'MONTHLY', label: 'Monthly', color: null }
+      ]
+    },
+    enableSorting: false,
+    size: 120
   }),
   columnHelper.accessor('status', {
     id: 'status',
@@ -32,19 +58,19 @@ export const playerSegmentationColumns = ({ canShowActions }) => [
     cell: BadgeCell,
     meta: {
       optionData: [
-        { value: 1, label: 'Active', color: 'success' },
-        { value: 0, label: 'Inactive', color: 'error' }
+        { value: 'active', label: 'Active', color: 'success' },
+        { value: 'inactive', label: 'Inactive', color: 'error' }
       ]
     },
     enableSorting: false,
-    size: 150
+    size: 100
   }),
   columnHelper.accessor('createdAt', {
     id: 'createdAt',
     header: 'Created At',
-    cell: (info) => formatDate(info.getValue()),
+    cell: DateCell,
     enableSorting: false,
-    size: 200
+    size: 160
   }),
   ...(canShowActions
     ? [
@@ -53,7 +79,7 @@ export const playerSegmentationColumns = ({ canShowActions }) => [
           header: 'Actions',
           cell: (props) => <PlayerSegmentationRowActions {...props} />,
           enableSorting: false,
-          size: 120
+          size: 100
         })
       ]
     : [])

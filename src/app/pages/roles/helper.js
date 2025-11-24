@@ -12,7 +12,9 @@ export const rolePermissionListMapper = (apiData) => {
         createBy: permission.CreateBy,
         username: permission.Username,
         status: permission.Status,
-        moduleName: item.ModuleName
+        moduleName: item.ModuleName,
+        permissionSlug: permission.SlugName,
+        requiredPermissions: permission.RequiredPermissions || []
       };
     });
     return {

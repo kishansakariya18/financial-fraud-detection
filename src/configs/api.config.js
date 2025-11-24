@@ -319,6 +319,15 @@ export const apiConfig = {
       USER_LIST: '/bonus/admin/segmentation/player-list',
       REFRESH_USER_LIST: '/bonus/admin/segmentation/:segmentationId/refresh'
     },
+    PLAYER_SEGMENTATION: {
+      LIST: '/bonus/admin/player-segmentation/list',
+      ADD: '/bonus/admin/player-segmentation/add',
+      EDIT: '/bonus/admin/player-segmentation/edit',
+      DETAIL: '/bonus/admin/player-segmentation/:segmentationUID/details',
+      CHANGE_STATUS: '/bonus/admin/player-segmentation/:segmentationUID/change-status',
+      REFRESH: '/bonus/admin/player-segmentation/:segmentationUID/refresh',
+      PLAYER_LIST: '/bonus/admin/player-segmentation/:segmentationUID/player-list'
+    },
     // COUNTRY: {
     //   LIST: '/admin/country/list',
     //   SUMMARY: '/admin/country/summary',
@@ -379,7 +388,8 @@ export const apiConfig = {
       DELETE: '/wallet/admin/currency/:currencyId',
       CHANGE_STATUS: '/wallet/admin/currency/status/:currencyId',
       ADMIN_EXCHANGE_RATE: '/wallet/admin/currency/add-exchange-rate/:currencyId',
-      ADMIN_EXCHANGE_TYPE_UPDATE: '/wallet/admin/currency/exchange-update-type/:currencyId'
+      ADMIN_EXCHANGE_TYPE_UPDATE: '/wallet/admin/currency/exchange-update-type/:currencyId',
+      PLATFORM_CODE_LIST: '/wallet/admin/currency/platforms/codes'
     },
     EXCHANGE_RATE: {
       HISTORY: '/wallet/admin/exchange-rate/history/:currencyId',
