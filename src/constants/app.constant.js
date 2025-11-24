@@ -1,4 +1,4 @@
-export const APP_NAME = 'Bet Nexus';
+export const APP_NAME = 'Cloverino Casino';
 //
 export const APP_KEY = 'tailux';
 
