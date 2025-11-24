@@ -198,6 +198,11 @@ const CurrencyService = {
         'Content-Type': 'application/json'
       }
     });
+  },
+  getPlatformCurrancyCodes: async () => {
+    return apiInstance.get(apiConfig.endPoints.CURRENCY.PLATFORM_CODE_LIST, {
+      params: { isActive: 1 }
+    });
   }
 };
 

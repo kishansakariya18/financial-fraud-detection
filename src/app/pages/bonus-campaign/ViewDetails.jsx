@@ -183,6 +183,12 @@ export function ViewDetails() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                    {t('isKYCRequired')}
+                  </p>
+                  <p>{response?.IsKYCRequired ? t('yes') : t('no')}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                     {t('bonusCampaign') + ' ' + t('startAt')}
                   </p>
                   <p>{getDateInUTCToTimeZone(response?.StartDate)}</p>

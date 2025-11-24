@@ -14,6 +14,8 @@ import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
 import { playerSegmentationColumns } from './columns';
 import { TableToolbar } from 'components/shared/table/TableToolbar';
+import PlayerSegmentationService from 'services/player-segmentation.services';
+import { playerSegmentationResponseMapper } from '../hapler';
 
 export default function PlayerSegmentationList() {
   const { t } = useTranslation();
@@ -23,22 +25,48 @@ export default function PlayerSegmentationList() {
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
   const { hasPermission } = usePermissions();
   const canShowActions =
-    hasPermission(PERMISSIONS.PLAYER_SEGMENTATION.LIST) ||
+    hasPermission(PERMISSIONS.PLAYER_SEGMENTATION.VIEW) ||
     hasPermission(PERMISSIONS.PLAYER_SEGMENTATION.EDIT) ||
     hasPermission(PERMISSIONS.PLAYER_SEGMENTATION.CHANGE_STATUS) ||
     hasPermission(PERMISSIONS.PLAYER_SEGMENTATION.PLAYER_LIST);
 
-  // TODO: Add API call here
   const fetchPlayerSegmentations = async () => {
-    // const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
-    // const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
+    try {
+      const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
+      const pageSize = isNaN(queryParams.pageSize)
+        ? DEFAULT_PER_PAGE_RECORD
+        : +queryParams.pageSize;
 
-    // Placeholder - API call will be added later
-    return {
-      status: 200,
-      data: [],
-      totalRecords: 0
-    };
+      // Build filters from query params
+      const filters = {};
+      if (queryParams.keyword) {
+        filters.keyword = queryParams.keyword;
+      }
+      if (queryParams.status) {
+        filters.status = queryParams.status;
+      }
+      if (queryParams.startDate) {
+        filters.startDate = queryParams.startDate;
+      }
+      if (queryParams.endDate) {
+        filters.endDate = queryParams.endDate;
+      }
+
+      // Call API service
+      const response = await PlayerSegmentationService.list(pageIndex, pageSize, filters);
+
+      // Map API response to frontend format
+      const mappedData = playerSegmentationResponseMapper(response.response.data || []);
+
+      return {
+        status: response.status,
+        data: mappedData,
+        totalRecords: response.response.totalRecords || 0
+      };
+    } catch (error) {
+      console.error('Error fetching player segmentations:', error);
+      throw error;
+    }
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
@@ -64,7 +92,7 @@ export default function PlayerSegmentationList() {
   useEffect(() => {
     const filtersFromQuery = [];
     if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'name', value: queryParams.keyword });
+      filtersFromQuery.push({ id: 'segmentName', value: queryParams.keyword });
     }
     if (queryParams.status) {
       filtersFromQuery.push({ id: 'status', value: queryParams.status });
@@ -83,7 +111,7 @@ export default function PlayerSegmentationList() {
   const applyFilterHandler = () => {
     const filterItems = {};
     for (let data of table.getState().columnFilters) {
-      if (data.id === 'name') {
+      if (data.id === 'segmentName') {
         filterItems.keyword = data.value;
       }
       if (data.id === 'status') {
@@ -123,8 +151,8 @@ export default function PlayerSegmentationList() {
         pageTitle={pageTitle}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
-        searchColumn="name"
-        searchPlaceholder={t('search') + ' ' + t('name') + '...'}
+        searchColumn="segmentName"
+        searchPlaceholder={t('search') + ' ' + t('segment_name') + '...'}
         createButton={{
           show: true,
           permission: PERMISSIONS.PLAYER_SEGMENTATION?.ADD || PERMISSIONS.SEGMENTATION.ADD,
@@ -137,8 +165,8 @@ export default function PlayerSegmentationList() {
             column: 'status',
             title: t('status'),
             options: [
-              { value: 1, label: t('active'), color: 'success' },
-              { value: 0, label: t('inactive'), color: 'error' }
+              { value: 'active', label: t('active'), color: 'success' },
+              { value: 'inactive', label: t('inactive'), color: 'error' }
             ],
             isMultiple: false,
             showCheckbox: false

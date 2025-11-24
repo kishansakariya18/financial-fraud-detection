@@ -23,6 +23,8 @@ export function RowActions({ row, table }) {
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
   const navigate = useNavigate();
+  const userData = JSON.parse(localStorage.getItem('UserData'));
+  const isSelf = row.original.id === userData.AdminID;
 
   const confirmMessages = {
     pending: {
@@ -104,7 +106,7 @@ export function RowActions({ row, table }) {
                     )}
                   </MenuItem>
                 )}
-                {hasPermission(PERMISSIONS.ADMIN.EDIT) && (
+                {hasPermission(PERMISSIONS.ADMIN.EDIT) && !isSelf && (
                   <MenuItem>
                     {({ focus }) => (
                       <button
@@ -119,7 +121,7 @@ export function RowActions({ row, table }) {
                     )}
                   </MenuItem>
                 )}
-                {hasPermission(PERMISSIONS.ADMIN.CHANGE_STATUS) && (
+                {hasPermission(PERMISSIONS.ADMIN.CHANGE_STATUS) && !isSelf && (
                   <MenuItem>
                     {({ focus }) => (
                       <button

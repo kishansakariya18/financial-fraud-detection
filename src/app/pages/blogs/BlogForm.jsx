@@ -11,7 +11,7 @@ import { htmlToDelta } from 'utils/quillUtils';
 import PropTypes from 'prop-types';
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import TagInput from 'components/shared/form/TagsInput';
+import { TagsInputNew } from 'components/shared/form/TagsInputNew';
 
 const BlogForm = ({ form, categories = [], isEdit = false, initialImageUrl = null, onSubmit }) => {
   const { t } = useTranslation();
@@ -30,7 +30,6 @@ const BlogForm = ({ form, categories = [], isEdit = false, initialImageUrl = nul
     setHtmlContent(quill.root.innerHTML);
     setValue('content', quill.root.innerHTML);
   };
-
   // Initialize content for edit mode
   useEffect(() => {
     if (isEdit && form.formState.defaultValues?.content) {
@@ -48,7 +47,7 @@ const BlogForm = ({ form, categories = [], isEdit = false, initialImageUrl = nul
         blogCategoryIds: Array.isArray(data.blogCategoryIds)
           ? data.blogCategoryIds.filter((value) => value !== null && value !== undefined)
           : [],
-        tags: data.tags || []
+        tags: data.tags?.map((item) => (item?.value ? item?.value?.trim() : item?.trim())) || []
       },
       file
     );
@@ -158,7 +157,7 @@ const BlogForm = ({ form, categories = [], isEdit = false, initialImageUrl = nul
         <div className="lg:col-span-6">
           <Controller
             render={({ field }) => (
-              <TagInput
+              <TagsInputNew
                 label={t('tags')}
                 placeholder={t('enter_tags_info')}
                 error={errors?.tags?.message}

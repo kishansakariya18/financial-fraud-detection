@@ -6,7 +6,6 @@ import {
   Label,
   Transition
 } from '@headlessui/react';
-import PropTypes from 'prop-types';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import clsx from 'clsx';
 import { forwardRef, Fragment, useMemo, useRef, useState } from 'react';
@@ -19,7 +18,7 @@ const TagsInputNew = forwardRef(
   (
     {
       onChange,
-      value = [],
+      value: initialValue = [],
       options = [],
       placeholder = 'Enter tags...',
       error,
@@ -35,6 +34,17 @@ const TagsInputNew = forwardRef(
     const normalizedOptions = useMemo(
       () => (options || []).map((opt) => (typeof opt === 'string' ? { id: opt, value: opt } : opt)),
       [options]
+    );
+
+    const value = useMemo(
+      () =>
+        [...(initialValue || [])]?.map((v) => {
+          if (typeof v === 'string') {
+            return { id: v, value: v };
+          }
+          return v;
+        }) || [],
+      [initialValue]
     );
 
     const selectedValuesLower = useMemo(() => new Set(value.map((v) => v.value ?? '')), [value]);
@@ -118,8 +128,7 @@ const TagsInputNew = forwardRef(
         {({ open }) => (
           <>
             {label && <Label>{label}</Label>}
-
-            <div className="relative mt-1">
+            <div className={`relative ${label ? 'mt-1.5' : ''}`}>
               <div className="relative w-full">
                 <div
                   className={clsx(
@@ -134,7 +143,9 @@ const TagsInputNew = forwardRef(
                   }}>
                   {value.map((tag) => (
                     <Tag key={tag.id} component="button" type="button">
-                      <span className="border-r border-gray-300 pr-1">{tag.value}</span>
+                      <span className="border-r border-gray-300 pr-1 leading-none text-gray-600 dark:text-dark-200">
+                        {tag.value}
+                      </span>
                       <Button
                         type="button"
                         isIcon
@@ -145,7 +156,7 @@ const TagsInputNew = forwardRef(
                           inputRef.current?.focus();
                         }}
                         className="ml-1">
-                        <XMarkIcon className="h-3.5 w-3.5" />
+                        <XMarkIcon className="h-3 w-3" />
                       </Button>
                     </Tag>
                   ))}
@@ -238,15 +249,4 @@ const TagsInputNew = forwardRef(
   }
 );
 TagsInputNew.displayName = 'TagsInputNew';
-
-TagsInputNew.propTypes = {
-  onChange: PropTypes.func,
-  value: PropTypes.array, // [{ id, value }]
-  options: PropTypes.array, // [{ id, value }] or [string]
-  label: PropTypes.node,
-  error: PropTypes.oneOfType([PropTypes.bool, PropTypes.node]),
-  placeholder: PropTypes.string,
-  allowCustom: PropTypes.bool
-};
-
 export { TagsInputNew };

@@ -14,7 +14,6 @@ function Breadcrumbs({ items = [], className, ...rest }) {
 
   const SeparatorIcon = isRtl ? ChevronLeftIcon : ChevronRightIcon;
 
-  console.log('items', items);
   return (
     <ul className={clsx('flex flex-wrap items-center gap-1.5', className)} {...rest}>
       {items.map((item, i) => (

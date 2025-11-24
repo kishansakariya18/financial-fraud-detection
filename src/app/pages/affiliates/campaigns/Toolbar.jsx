@@ -29,7 +29,7 @@ export function Toolbar({
     { title: t('affiliates'), path: '/affiliates/users' },
     { title: t('campaign') + ' ' + t('list') }
   ];
-  const hasPermission = usePermissions();
+  const { hasPermission } = usePermissions();
   const handleExport = async () => {
     if (!affiliateId) return;
     try {
