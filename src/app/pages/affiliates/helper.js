@@ -5,6 +5,7 @@ import {
   XCircleIcon
 } from '@heroicons/react/24/outline';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
+import { TbCancel } from 'react-icons/tb';
 
 const statusToApp = (status) => {
   switch ((status || '').toString().toUpperCase()) {
@@ -90,6 +91,8 @@ const transactionStatus = (status) => {
       return 'pending';
     case 'REJECTED':
       return 'rejected';
+    case 'CANCELED':
+      return 'canceled';
     default:
       return 'pending';
   }
@@ -132,5 +135,11 @@ export const affiliatesWithdrawalsStatusOptions = [
     label: 'Rejected',
     color: 'error',
     icon: ArchiveBoxIcon
+  },
+  {
+    value: 'canceled',
+    label: 'Cancelled',
+    color: 'error',
+    icon: TbCancel
   }
 ];
