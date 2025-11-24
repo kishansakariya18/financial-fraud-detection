@@ -154,6 +154,7 @@ export function RowActions({ row, table }) {
         state={state}
         messages={{
           pending: {
+            title: t('areYouSure'),
             description:
               t('areYouSureYouWantToAcceptThisTransaction') ||
               'Are you sure you want to accept this transaction?',
@@ -176,6 +177,7 @@ export function RowActions({ row, table }) {
         state={state}
         messages={{
           pending: {
+            title: t('areYouSure'),
             description:
               t('areYouSureYouWantToRejectThisTransaction') ||
               'Are you sure you want to reject this transaction?',
