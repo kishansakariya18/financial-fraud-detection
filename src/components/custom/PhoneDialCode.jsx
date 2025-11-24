@@ -50,7 +50,7 @@ export function PhoneDialCode({ onChange, value, name, error, countries }) {
                 error={error}
                 displayValue={(val) => val?.phoneCode}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Country Code"
+                placeholder=""
                 suffix={
                   <ComboboxButton className="z-1">
                     <ChevronDownIcon
