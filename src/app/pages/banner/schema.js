@@ -1,7 +1,10 @@
 import * as Yup from 'yup';
 
 export const createBannerSchema = Yup.object().shape({
-  bannerName: Yup.string().trim().required('Banner Name is required'),
+  bannerName: Yup.string()
+    .trim()
+    .max(200, 'Banner Name must be less than or equal to 200 characters')
+    .required('Banner Name is required'),
   placementType: Yup.number().required('Placement Type is required'),
   segmentationType: Yup.number()
     .oneOf([0, 1], 'Invalid segmentation type')
@@ -46,8 +49,12 @@ export const createBannerSchema = Yup.object().shape({
       }
       return true;
     }),
-  bannerHeadline: Yup.string().optional(),
-  bannerSubHeadline: Yup.string().optional(),
+  bannerHeadline: Yup.string()
+    .optional()
+    .max(200, 'Banner Headline must be less than or equal to 200 characters'),
+  bannerSubHeadline: Yup.string()
+    .optional()
+    .max(200, 'Banner Sub Headline must be less than or equal to 200 characters'),
   targetUrl: Yup.string()
     .max(250, 'URL must be less than or equal to 250 characters.') // Size validation
     .test('is-valid-url', 'Enter a correct URL!', function () {
@@ -65,7 +72,10 @@ export const createBannerSchema = Yup.object().shape({
 });
 
 export const editBannerSchema = Yup.object().shape({
-  bannerName: Yup.string().trim().required('Banner Name is required'),
+  bannerName: Yup.string()
+    .trim()
+    .max(200, 'Banner Name must be less than or equal to 200 characters')
+    .required('Banner Name is required'),
   placementType: Yup.number().required('Placement Type is required'),
   segmentationType: Yup.number()
     .oneOf([0, 1], 'Invalid segmentation type')
@@ -110,8 +120,14 @@ export const editBannerSchema = Yup.object().shape({
       }
       return true;
     }),
-  bannerHeadline: Yup.string().nullable().optional(),
-  bannerSubHeadline: Yup.string().nullable().optional(),
+  bannerHeadline: Yup.string()
+    .nullable()
+    .optional()
+    .max(200, 'Banner Headline must be less than or equal to 200 characters'),
+  bannerSubHeadline: Yup.string()
+    .nullable()
+    .optional()
+    .max(200, 'Banner Sub Headline must be less than or equal to 200 characters'),
   targetUrl: Yup.string()
     .max(250, 'URL must be less than or equal to 250 characters.') // Size validation
     .test('is-valid-url', 'Enter a correct URL!', function () {

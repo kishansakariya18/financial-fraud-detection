@@ -8,6 +8,14 @@ export function getDateInUTCToTimeZone(
   return moment.utc(date).tz(timeZone).format(dateFormat);
 }
 
+export function getDateInTimeZoneToUTC(
+  date,
+  timeZone = getTimezone(),
+  dateFormat = 'DD MMM YYYY hh:mm A'
+) {
+  return moment.tz(date, dateFormat, timeZone).utc().format();
+}
+
 export function getTimezone() {
   return Intl.DateTimeFormat().resolvedOptions().timeZone;
 }
