@@ -72,7 +72,7 @@ export default function ViewModal({ row }) {
           </div>
         </div>
 
-        {(row?.CurrencyType ?? row?.currencyType === 'CRYPTO') ? (
+        {(row?.WithdrawType ?? row?.withdrawType === 'CRYPTO') ? (
           <>
             <h6 className="mt-4 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
               {t('crypto_wallet_information')}:
