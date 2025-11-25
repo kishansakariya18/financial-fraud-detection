@@ -1,8 +1,7 @@
 import { parseCampaignStatusToApi, parseGrantStatusToApi } from 'app/pages/bonus-campaign/helper';
 import { discountTypeToAPI, segmentationTypeToAPI } from 'app/pages/promocode/helper';
 import apiConfig from 'configs/api.config';
-import dayjs from 'dayjs';
-import { getEndOfDate, getStartofDate } from 'helpers/functions';
+import { getEndDate, getEndOfDate, getStartDate, getStartofDate } from 'helpers/functions';
 import { sendRequest } from 'utils/axios';
 import { replaceText } from 'utils/custom.utilities';
 
@@ -19,12 +18,8 @@ const PromoCodeService = {
       const apiRequestParams = {
         ...(filters.status && { status: parseCampaignStatusToApi(filters.status) }),
         ...(filters.keyword && { keyword: filters.keyword }),
-        start_date: filters.startDate
-          ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
-          : undefined,
-        end_date: filters.endDate
-          ? dayjs(+filters.endDate).format('YYYY-MM-DD HH:mm:ss')
-          : undefined
+        start_date: filters.startDate ? getStartDate(filters.startDate) : undefined,
+        end_date: filters.endDate ? getEndDate(filters.endDate) : undefined
       };
 
       const response = await sendRequest({

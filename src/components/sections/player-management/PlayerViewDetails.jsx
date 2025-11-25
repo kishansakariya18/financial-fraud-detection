@@ -25,6 +25,27 @@ import LimitHistoryDialog from './LimitHistoryDialog';
 import UserSummaryCard from './UserSummaryCard';
 import PropTypes from 'prop-types';
 
+// Helper function to format session time in hours and minutes
+const formatSessionTime = (hours) => {
+  if (!hours || hours <= 0) return '-';
+
+  const totalMinutes = hours * 60;
+  const wholeHours = Math.floor(hours);
+  const remainingMinutes = Math.round(totalMinutes - wholeHours * 60);
+
+  const parts = [];
+
+  if (wholeHours > 0) {
+    parts.push(`${wholeHours} ${wholeHours === 1 ? 'hour' : 'hours'}`);
+  }
+
+  if (remainingMinutes > 0) {
+    parts.push(`${remainingMinutes} ${remainingMinutes === 1 ? 'minute' : 'minutes'}`);
+  }
+
+  return parts.length > 0 ? parts.join(' and ') : '-';
+};
+
 const LimitItem = ({
   title,
   value,
@@ -863,6 +884,7 @@ export function PlayerViewDetails({
                           onHistoryClick={() => openHistoryDialog('user', l.type, l.period)}
                           formatValue={(amount) => {
                             if (amount > 0 && l.type !== 'session') return formatCurrency(amount);
+                            if (l.type === 'session') return formatSessionTime(amount);
                             return amount || '-';
                           }}
                         />
@@ -898,6 +920,7 @@ export function PlayerViewDetails({
                           onHistoryClick={() => openHistoryDialog('admin', l.type, l.period)}
                           formatValue={(amount) => {
                             if (amount > 0 && l.type !== 'session') return formatCurrency(amount);
+                            if (l.type === 'session') return formatSessionTime(amount);
                             return amount || '-';
                           }}
                         />
@@ -936,6 +959,7 @@ export function PlayerViewDetails({
                             }
                             formatValue={(amount) => {
                               if (amount > 0 && l.type !== 'session') return formatCurrency(amount);
+                              if (l.type === 'session') return formatSessionTime(amount);
                               return amount || '-';
                             }}
                           />
