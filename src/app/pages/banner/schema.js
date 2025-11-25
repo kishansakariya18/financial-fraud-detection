@@ -17,6 +17,10 @@ export const createBannerSchema = Yup.object().shape({
       otherwise: (schema) => schema.optional()
     }),
   startDate: Yup.date()
+    .nullable()
+    .transform((curr, orig) =>
+      orig === '' || (Array.isArray(orig) && orig.length === 0) ? null : curr
+    )
     .required('Start Date is required')
     .test(
       'start-date-required-if-end-date',
@@ -30,6 +34,10 @@ export const createBannerSchema = Yup.object().shape({
       }
     ),
   endDate: Yup.date()
+    .nullable()
+    .transform((curr, orig) =>
+      orig === '' || (Array.isArray(orig) && orig.length === 0) ? null : curr
+    )
     .required('End Date is required')
     .test(
       'end-date-required-if-start-date',
@@ -88,6 +96,10 @@ export const editBannerSchema = Yup.object().shape({
       otherwise: (schema) => schema.optional()
     }),
   startDate: Yup.date()
+    .nullable()
+    .transform((curr, orig) =>
+      orig === '' || (Array.isArray(orig) && orig.length === 0) ? null : curr
+    )
     .required('Start Date is required')
     .test(
       'start-date-required-if-end-date',
@@ -101,6 +113,10 @@ export const editBannerSchema = Yup.object().shape({
       }
     ),
   endDate: Yup.date()
+    .nullable()
+    .transform((curr, orig) =>
+      orig === '' || (Array.isArray(orig) && orig.length === 0) ? null : curr
+    )
     .required('End Date is required')
     .test(
       'end-date-required-if-start-date',

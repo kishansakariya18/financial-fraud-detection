@@ -168,7 +168,7 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           column={table.getColumn('dateCreated')}
           title={t('date') + ' ' + t('range')}
           config={{
-            maxDate: new Date().fp_incr(1),
+            // maxDate: new Date().fp_incr(1),
             mode: 'range'
           }}
         />
