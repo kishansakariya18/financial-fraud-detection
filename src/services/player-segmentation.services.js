@@ -74,6 +74,14 @@ const PlayerSegmentationService = {
     return apiInstance.post(`${url}?page=${page}&perPage=${perPage}`, requestData);
   },
 
+  playerPreview: async ({ segmentationUID, segmentRules }) => {
+    const data = {
+      SegmentationUID: segmentationUID,
+      SegmentRules: segmentRules
+    };
+    return apiInstance.post(apiConfig.endPoints.PLAYER_SEGMENTATION.PLAYER_PREVIEW, data);
+  },
+
   duplicate: async (segmentationUID) => {
     // First, fetch the details of the segmentation to duplicate
     const detailUrl = apiConfig.endPoints.PLAYER_SEGMENTATION.DETAIL.replace(

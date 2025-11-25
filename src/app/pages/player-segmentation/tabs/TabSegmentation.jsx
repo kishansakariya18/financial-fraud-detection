@@ -6,7 +6,7 @@ import { randomId } from 'utils/randomId';
 import TabsPage from 'components/custom/TabsPage';
 import { PERMISSIONS } from 'constants/app.constant';
 
-const ViewPlayerSegmentation = () => {
+const TabSegmentation = () => {
   const { segmentationUID } = useParams();
   const { t } = useTranslation();
 
@@ -14,7 +14,7 @@ const ViewPlayerSegmentation = () => {
     {
       id: randomId(),
       title: t('details'),
-      path: `/bonus/player-segmentation/${segmentationUID}/view/details`,
+      path: `/bonus/player-segmentation/${segmentationUID}/tab/details`,
       icon: HomeIcon,
       index: 0,
       permission: PERMISSIONS.PLAYER_SEGMENTATION.VIEW
@@ -22,7 +22,7 @@ const ViewPlayerSegmentation = () => {
     {
       id: randomId(),
       title: t('players'),
-      path: `/bonus/player-segmentation/${segmentationUID}/view/players`,
+      path: `/bonus/player-segmentation/${segmentationUID}/tab/players`,
       icon: UserGroupIcon,
       index: 1,
       permission: PERMISSIONS.PLAYER_SEGMENTATION.PLAYER_LIST
@@ -30,7 +30,7 @@ const ViewPlayerSegmentation = () => {
     {
       id: randomId(),
       title: t('logs'),
-      path: `/bonus/player-segmentation/${segmentationUID}/view/logs`,
+      path: `/bonus/player-segmentation/${segmentationUID}/tab/logs`,
       icon: ListBulletIcon,
       index: 2,
       permission: PERMISSIONS.PLAYER_SEGMENTATION.VIEW // Assuming same permission for logs for now
@@ -40,4 +40,4 @@ const ViewPlayerSegmentation = () => {
   return <TabsPage tabs={tabs} />;
 };
 
-export default ViewPlayerSegmentation;
+export default TabSegmentation;

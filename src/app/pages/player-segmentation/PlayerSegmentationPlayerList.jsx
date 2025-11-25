@@ -1,10 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useParams, useSearchParams } from 'react-router';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { useLockScrollbar } from 'hooks';
-import { Page } from 'components/shared/Page';
-import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import TableCard from 'components/ui/custom/TableCard';
 import useTable from 'components/ui/useTable';
 import { TableToolbar } from 'components/shared/table/TableToolbar';
@@ -69,16 +67,8 @@ export default function PlayerSegmentationPlayerList() {
   const { t } = useTranslation();
   const { segmentationUID } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [segmentationName, setSegmentationName] = useState('');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
-  const pageTitle =
-    t('player') + ' ' + t('list') + (segmentationName ? ` - ${segmentationName}` : '');
-
-  const breadcrumbItem = [
-    { title: t('player_segmentation'), path: '/bonus/player-segmentation' },
-    { title: t('player') + ' ' + t('list') }
-  ];
 
   // Fetch player list
   const fetchPlayers = async () => {
@@ -145,26 +135,6 @@ export default function PlayerSegmentationPlayerList() {
     }
   });
 
-  // Fetch segmentation name for display
-  useEffect(() => {
-    const fetchSegmentationName = async () => {
-      try {
-        if (segmentationUID) {
-          const response = await PlayerSegmentationService.detail(segmentationUID);
-          if (response.status === 200 && response.response?.data) {
-            setSegmentationName(
-              response.response.data.SegmentName || response.response.data.segmentName || ''
-            );
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching segmentation name:', error);
-      }
-    };
-
-    fetchSegmentationName();
-  }, [segmentationUID]);
-
   useEffect(() => {
     if (!isLoading && error) {
       toast.error(error);
@@ -215,48 +185,15 @@ export default function PlayerSegmentationPlayerList() {
   useLockScrollbar(tableSettings.enableFullScreen);
 
   return (
-    <Page title={pageTitle}>
-      <div className="">
-        <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x]">
-          <div className="flex items-center space-x-4 py-2 lg:py-3 rtl:space-x-reverse">
-            <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
-              {pageTitle}
-            </h2>
-            <div className="hidden self-stretch py-1 sm:flex">
-              <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
-            </div>
-            <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
-          </div>
-        </div>
-        <TableToolbar
-          table={table}
-          // pageTitle={pageTitle}
-          onApplyFilters={applyFilterHandler}
-          onClearFilters={clearFilterHandler}
-          searchColumn="username"
-          searchPlaceholder={t('search') + ' ' + t('username') + ', ' + t('email') + '...'}
-          // backButton={{
-          //   show: true,
-          //   route: '/bonus/player-segmentation',
-          //   text: t('back') + ' ' + t('to') + ' ' + t('player_segmentation')
-          // }}
-          // filters={[
-          //   {
-          //     type: 'faceted',
-          //     column: 'status',
-          //     title: t('status'),
-          //     options: [
-          //       { value: 'active', label: t('active'), color: 'success' },
-          //       { value: 'inactive', label: t('inactive'), color: 'error' },
-          //       { value: 'blocked', label: t('blocked'), color: 'warning' }
-          //     ],
-          //     isMultiple: false,
-          //     showCheckbox: false
-          //   }
-          // ]}
-        />
-        <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
-      </div>
-    </Page>
+    <div className="space-y-4 p-4">
+      <TableToolbar
+        table={table}
+        onApplyFilters={applyFilterHandler}
+        onClearFilters={clearFilterHandler}
+        searchColumn="username"
+        searchPlaceholder={t('search') + ' ' + t('username') + ', ' + t('email') + '...'}
+      />
+      <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
+    </div>
   );
 }

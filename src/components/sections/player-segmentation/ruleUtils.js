@@ -11,26 +11,23 @@ export const generateId = (prefix = 'node') => {
 // Create a new empty group
 export const createEmptyGroup = (operator = 'AND') => ({
   id: generateId('grp'),
-  type: 'group',
   operator,
-  children: []
+  conditions: []
 });
 
 // Create a new empty condition
 export const createEmptyCondition = () => ({
   id: generateId('cond'),
-  type: 'condition',
-  attributeKey: '',
+  field: '',
+  dataType: '',
   operator: '',
   value: null
 });
 
-// Create default root structure
+// Create a default rule tree with a root group containing one empty condition
 export const createDefaultRuleTree = () => ({
-  root: {
-    ...createEmptyGroup('AND'),
-    children: [createEmptyCondition()]
-  }
+  ...createEmptyGroup('AND'),
+  conditions: [createEmptyCondition()]
 });
 
 // Find a node by ID in the tree (recursive)
@@ -39,8 +36,9 @@ export const findNodeById = (node, targetId) => {
     return node;
   }
 
-  if (node.type === 'group' && node.children) {
-    for (const child of node.children) {
+  // Groups have 'conditions' array
+  if (node.conditions && Array.isArray(node.conditions)) {
+    for (const child of node.conditions) {
       const found = findNodeById(child, targetId);
       if (found) return found;
     }
@@ -55,8 +53,9 @@ export const findParentNode = (node, targetId, parent = null) => {
     return parent;
   }
 
-  if (node.type === 'group' && node.children) {
-    for (const child of node.children) {
+  // Groups have 'conditions' array
+  if (node.conditions && Array.isArray(node.conditions)) {
+    for (const child of node.conditions) {
       const found = findParentNode(child, targetId, node);
       if (found) return found;
     }
@@ -72,48 +71,46 @@ export const updateNodeInTree = (tree, nodeId, updateFn) => {
       return updateFn(node);
     }
 
-    if (node.type === 'group' && node.children) {
+    // Groups have 'conditions' array
+    if (node.conditions && Array.isArray(node.conditions)) {
       return {
         ...node,
-        children: node.children.map(updateNode)
+        conditions: node.conditions.map(updateNode)
       };
     }
 
     return node;
   };
 
-  return {
-    root: updateNode(tree.root)
-  };
+  return updateNode(tree);
 };
 
 // Add a child to a group
 export const addChildToGroup = (tree, groupId, child) => {
   return updateNodeInTree(tree, groupId, (node) => ({
     ...node,
-    children: [...node.children, child]
+    conditions: [...node.conditions, child]
   }));
 };
 
 // Remove a node from the tree
 export const removeNodeFromTree = (tree, nodeId) => {
-  const removeFromChildren = (children) => {
-    return children.filter((child) => {
+  const removeFromChildren = (conditions) => {
+    return conditions.filter((child) => {
       if (child.id === nodeId) {
         return false;
       }
-      if (child.type === 'group') {
-        child.children = removeFromChildren(child.children);
+      // Groups have 'conditions' array
+      if (child.conditions && Array.isArray(child.conditions)) {
+        child.conditions = removeFromChildren(child.conditions);
       }
       return true;
     });
   };
 
   return {
-    root: {
-      ...tree.root,
-      children: removeFromChildren(tree.root.children)
-    }
+    ...tree,
+    conditions: removeFromChildren(tree.conditions)
   };
 };
 
@@ -127,12 +124,13 @@ export const toggleGroupOperator = (tree, groupId) => {
 
 // Count total conditions in tree (recursive)
 export const countConditions = (node) => {
-  if (node.type === 'condition') {
+  // Conditions have 'field' property, groups have 'conditions' array
+  if (node.field !== undefined) {
     return 1;
   }
 
-  if (node.type === 'group' && node.children) {
-    return node.children.reduce((sum, child) => sum + countConditions(child), 0);
+  if (node.conditions && Array.isArray(node.conditions)) {
+    return node.conditions.reduce((sum, child) => sum + countConditions(child), 0);
   }
 
   return 0;
@@ -140,12 +138,15 @@ export const countConditions = (node) => {
 
 // Get nesting depth of tree
 export const getTreeDepth = (node, currentDepth = 0) => {
-  if (node.type === 'condition') {
+  console.log(node, currentDepth);
+  // Conditions have 'field' property
+  if (node.field !== undefined) {
     return currentDepth;
   }
 
-  if (node.type === 'group' && node.children && node.children.length > 0) {
-    const childDepths = node.children.map((child) => getTreeDepth(child, currentDepth + 1));
+  // Groups have 'conditions' array
+  if (node.conditions && Array.isArray(node.conditions) && node.conditions.length > 0) {
+    const childDepths = node.conditions.map((child) => getTreeDepth(child, currentDepth + 1));
     return Math.max(...childDepths);
   }
 
@@ -156,43 +157,46 @@ export const getTreeDepth = (node, currentDepth = 0) => {
 export const validateRuleTree = (tree) => {
   const errors = [];
 
-  if (!tree || !tree.root) {
-    errors.push('Rule tree must have a root node');
+  if (!tree || !tree.id) {
+    errors.push('Rule tree must have a valid structure');
     return { valid: false, errors };
   }
 
-  const conditionCount = countConditions(tree.root);
+  const conditionCount = countConditions(tree);
   if (conditionCount === 0) {
     errors.push('Rule tree must have at least one condition');
   }
 
-  const depth = getTreeDepth(tree.root);
+  const depth = getTreeDepth(tree);
   if (depth > 10) {
     errors.push('Rule tree exceeds maximum nesting depth of 10');
   }
 
   // Validate each node recursively
   const validateNode = (node, path = 'root') => {
-    if (!node.id || !node.type) {
+    if (!node.id) {
       errors.push(`Invalid node structure at ${path}`);
       return;
     }
 
-    if (node.type === 'group') {
+    // Check if it's a group (has conditions array)
+    if (node.conditions && Array.isArray(node.conditions)) {
       if (!node.operator || !['AND', 'OR'].includes(node.operator)) {
         errors.push(`Invalid group operator at ${path}`);
       }
 
-      if (!Array.isArray(node.children)) {
-        errors.push(`Group must have children array at ${path}`);
+      if (node.conditions.length === 0) {
+        errors.push(`Group must have at least one condition at ${path}`);
       } else {
-        node.children.forEach((child, index) => {
-          validateNode(child, `${path}.children[${index}]`);
+        node.conditions.forEach((child, index) => {
+          validateNode(child, `${path}.conditions[${index}]`);
         });
       }
-    } else if (node.type === 'condition') {
-      if (!node.attributeKey) {
-        errors.push(`Condition missing attributeKey at ${path}`);
+    }
+    // Check if it's a condition (has field property)
+    else if (node.field !== undefined) {
+      if (!node.field) {
+        errors.push(`Condition missing field at ${path}`);
       }
 
       if (!node.operator) {
@@ -201,11 +205,11 @@ export const validateRuleTree = (tree) => {
 
       // Value validation is context-dependent, handled in form validation
     } else {
-      errors.push(`Unknown node type at ${path}: ${node.type}`);
+      errors.push(`Unknown node structure at ${path}`);
     }
   };
 
-  validateNode(tree.root);
+  validateNode(tree);
 
   return {
     valid: errors.length === 0,
@@ -215,19 +219,21 @@ export const validateRuleTree = (tree) => {
 
 // Clone a node (deep copy)
 export const cloneNode = (node) => {
-  if (node.type === 'condition') {
+  // Conditions have 'field' property
+  if (node.field !== undefined) {
     return {
       ...node,
       id: generateId('cond'),
-      value: node.value && typeof node.value === 'object' ? { ...node.value } : node.value
+      value: node.value
     };
   }
 
-  if (node.type === 'group') {
+  // Groups have 'conditions' array
+  if (node.conditions && Array.isArray(node.conditions)) {
     return {
       ...node,
       id: generateId('grp'),
-      children: node.children ? node.children.map(cloneNode) : []
+      conditions: node.conditions.map(cloneNode)
     };
   }
 
@@ -238,13 +244,16 @@ export const cloneNode = (node) => {
 export const flattenConditions = (node, path = []) => {
   const results = [];
 
-  if (node.type === 'condition') {
+  // Conditions have 'field' property
+  if (node.field !== undefined) {
     results.push({
       ...node,
       path: [...path, node.id]
     });
-  } else if (node.type === 'group' && node.children) {
-    node.children.forEach((child, index) => {
+  }
+  // Groups have 'conditions' array
+  else if (node.conditions && Array.isArray(node.conditions)) {
+    node.conditions.forEach((child, index) => {
       results.push(...flattenConditions(child, [...path, `${node.operator}[${index}]`]));
     });
   }
@@ -254,13 +263,13 @@ export const flattenConditions = (node, path = []) => {
 
 // Check if a node can be removed (root group cannot be removed)
 export const canRemoveNode = (tree, nodeId) => {
-  return tree.root.id !== nodeId;
+  return tree.id !== nodeId;
 };
 
 // Get human-readable summary of condition
 export const getConditionSummary = (condition, attributeRegistry, operatorLabels) => {
-  const attribute = attributeRegistry[condition.attributeKey];
-  const attrLabel = attribute?.label || condition.attributeKey;
+  const attribute = attributeRegistry[condition.field];
+  const attrLabel = attribute?.label || condition.field;
   const operatorLabel = operatorLabels[condition.operator] || condition.operator;
 
   let valueStr = '';
@@ -273,4 +282,25 @@ export const getConditionSummary = (condition, attributeRegistry, operatorLabels
   }
 
   return `${attrLabel} ${operatorLabel} ${valueStr}`.trim();
+};
+
+// Process rule tree recursively (map over nodes)
+export const processRuleTree = (node, transformFn) => {
+  if (!node) return node;
+
+  // Clone node to avoid mutation
+  const newNode = { ...node };
+
+  // Groups have 'conditions' array
+  if (newNode.conditions && Array.isArray(newNode.conditions)) {
+    newNode.conditions = newNode.conditions.map((child) => processRuleTree(child, transformFn));
+    return newNode;
+  }
+
+  // Conditions have 'field' property
+  if (newNode.field !== undefined) {
+    return transformFn(newNode);
+  }
+
+  return newNode;
 };
