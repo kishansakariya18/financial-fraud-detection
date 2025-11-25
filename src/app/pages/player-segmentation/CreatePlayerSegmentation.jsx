@@ -10,7 +10,7 @@ const CreatePlayerSegmentation = () => {
   const navigate = useNavigate();
 
   const breadcrumbItem = [
-    { title: t('player_segmentation'), path: '/player-segmentation' },
+    { title: t('player_segmentation'), path: '/bonus/player-segmentation' },
     { title: t('create') }
   ];
 

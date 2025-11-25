@@ -91,7 +91,7 @@ export function PlayerSegmentationRowActions({ row, table }) {
 
   // Handlers
   const handleView = () => {
-    navigate(`/bonus/player-segmentation/${row.original.segmentationUID}/view`);
+    navigate(`/bonus/player-segmentation/${row.original.segmentationUID}/tab`);
   };
 
   const handleEdit = () => {
@@ -99,7 +99,7 @@ export function PlayerSegmentationRowActions({ row, table }) {
   };
 
   const handlePlayerList = () => {
-    navigate(`/bonus/player-segmentation/${row.original.segmentationUID}/players`);
+    navigate(`/bonus/player-segmentation/${row.original.segmentationUID}/tab/players`);
   };
 
   const handleChangeStatus = useCallback(() => {
