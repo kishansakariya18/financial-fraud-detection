@@ -65,13 +65,12 @@ export default function EmailTemplates() {
           })) || [];
 
         const groupList = result.response.data?.groups || [];
-        setEventGroupList(
-          groupList?.map((item) => ({
-            key: item.EventGroupID,
-            value: item.EventGroupID,
-            label: item.EventGroupCategory
-          }))
-        );
+        const eventGroupList = groupList?.map((item) => ({
+          key: item.EventGroupID,
+          value: String(item.EventGroupID),
+          label: item.EventGroupCategory
+        }));
+        setEventGroupList(eventGroupList);
         setChannelList(channels);
       } else {
         setError(result.error);
