@@ -327,7 +327,10 @@ export const apiConfig = {
       CHANGE_STATUS: '/bonus/admin/player-segmentation/:segmentationUID/change-status',
       REFRESH: '/bonus/admin/player-segmentation/:segmentationUID/refresh',
       PLAYER_LIST: '/bonus/admin/player-segmentation/:segmentationUID/player-list',
-      PLAYER_PREVIEW: '/bonus/admin/player-segmentation/preview'
+      PLAYER_PREVIEW: '/bonus/admin/player-segmentation/preview',
+      CHANGE_LOG: '/bonus/admin/player-segmentation/change-log',
+      EXECUTION_LOG: '/bonus/admin/player-segmentation/execution-log',
+      MAP_CHANGE_LOG: '/bonus/admin/player-segmentation/:segmentationUID/map-change-log'
     },
     // COUNTRY: {
     //   LIST: '/admin/country/list',

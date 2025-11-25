@@ -162,15 +162,45 @@ export const bonusManagementRoute = [
         }
       },
       {
-        path: 'logs',
+        path: 'change-history',
         lazy: async () => {
-          const { default: SegmentationLogs } = await import(
-            '../../pages/player-segmentation/tabs/SegmentationLogs'
+          const { default: ChangeHistory } = await import(
+            '../../pages/player-segmentation/tabs/ChangeHistory'
           );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.VIEW}>
-                <SegmentationLogs />
+                <ChangeHistory />
+              </PrivateRoute>
+            )
+          };
+        }
+      },
+      {
+        path: 'player-activity',
+        lazy: async () => {
+          const { default: PlayerActivity } = await import(
+            '../../pages/player-segmentation/tabs/PlayerActivity'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.VIEW}>
+                <PlayerActivity />
+              </PrivateRoute>
+            )
+          };
+        }
+      },
+      {
+        path: 'execution-history',
+        lazy: async () => {
+          const { default: ExecutionHistory } = await import(
+            '../../pages/player-segmentation/tabs/ExecutionHistory'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.VIEW}>
+                <ExecutionHistory />
               </PrivateRoute>
             )
           };

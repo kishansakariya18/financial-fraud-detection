@@ -109,6 +109,69 @@ const PlayerSegmentationService = {
 
     // Use the add method to create the duplicate
     return PlayerSegmentationService.add(duplicateData);
+  },
+
+  // Log APIs
+  getChangeLog: async (page = 1, perPage = 10, filters = {}) => {
+    const requestData = { filters: {} };
+
+    if (filters.keyword) {
+      requestData.filters.keyword = filters.keyword;
+    }
+    if (filters.startDate) {
+      requestData.filters.startDate = moment(+filters.startDate).startOf('day').toDate();
+    }
+    if (filters.endDate) {
+      requestData.filters.endDate = moment(+filters.endDate).endOf('day').toDate();
+    }
+
+    return apiInstance.post(
+      `${apiConfig.endPoints.PLAYER_SEGMENTATION.CHANGE_LOG}?page=${page}&per_page=${perPage}`,
+      requestData
+    );
+  },
+
+  getExecutionLog: async (page = 1, perPage = 10, filters = {}) => {
+    const requestData = { filters: {} };
+
+    if (filters.evaluationType) {
+      requestData.filters.evaluationType = filters.evaluationType;
+    }
+    if (filters.startDate) {
+      requestData.filters.startDate = moment(+filters.startDate).startOf('day').toDate();
+    }
+    if (filters.endDate) {
+      requestData.filters.endDate = moment(+filters.endDate).endOf('day').toDate();
+    }
+
+    return apiInstance.post(
+      `${apiConfig.endPoints.PLAYER_SEGMENTATION.EXECUTION_LOG}?page=${page}&per_page=${perPage}`,
+      requestData
+    );
+  },
+
+  getMapChangeLog: async (segmentationUID, page = 1, perPage = 10, filters = {}) => {
+    const requestData = { filters: {} };
+
+    if (filters.keyword) {
+      requestData.filters.keyword = filters.keyword;
+    }
+    if (filters.userId) {
+      requestData.filters.userId = filters.userId;
+    }
+    if (filters.startDate) {
+      requestData.filters.startDate = moment(+filters.startDate).startOf('day').toDate();
+    }
+    if (filters.endDate) {
+      requestData.filters.endDate = moment(+filters.endDate).endOf('day').toDate();
+    }
+
+    const url = apiConfig.endPoints.PLAYER_SEGMENTATION.MAP_CHANGE_LOG.replace(
+      ':segmentationUID',
+      segmentationUID
+    );
+
+    return apiInstance.post(`${url}?page=${page}&per_page=${perPage}`, requestData);
   }
 };
 
