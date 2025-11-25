@@ -39,6 +39,12 @@ export const responseMapper = (apiData) => {
     depositBankAccountID: data.DepositBankAccountID,
     currencyCode: data.Currency,
     currencyType: data.CurrencyType === '0' ? 'FIAT' : 'CRYPTO',
+    withdrawType:
+      data.WithdrawType !== null
+        ? data.WithdrawType
+        : data.CurrencyType === '0'
+          ? 'FIAT'
+          : 'CRYPTO',
     amount: data.TransactionAmount,
     depositTime: data.DepositTime,
     screenshotURL: data.ScreenshotURL,
