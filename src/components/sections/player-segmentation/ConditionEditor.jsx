@@ -16,12 +16,13 @@ import {
   NumericOperator,
   DatetimeOperator,
   EnumStringOperator,
-  SegmentAttributeKey
+  SegmentAttributeKey,
+  ValueInputType
 } from './attributeRegistry';
 
-const ConditionEditor = ({ condition, onChange, disabled, onRemove, onCopy, error }) => {
+const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCopy, error }) => {
   const { t } = useTranslation();
-  const [attributeKey, setAttributeKey] = useState(condition.attributeKey || '');
+  const [field, setField] = useState(condition.field || '');
   const [operator, setOperator] = useState(condition.operator || '');
   const [value, setValue] = useState(condition.value);
   const [countryOptions, setCountryOptions] = useState([]);
@@ -31,19 +32,19 @@ const ConditionEditor = ({ condition, onChange, disabled, onRemove, onCopy, erro
   const currenciesFetched = useRef(false);
 
   const attributeOptions = getAttributeOptions();
-  const operatorOptions = getOperatorOptions(attributeKey);
-  const selectedAttribute = getAttribute(attributeKey);
+  const operatorOptions = getOperatorOptions(field);
+  const selectedAttribute = getAttribute(field);
 
   // Fetch country/currency options when attribute changes to country or currency
   useEffect(() => {
     const fetchAttributeOptions = async () => {
-      if (attributeKey === SegmentAttributeKey.COUNTRY && !countriesFetched.current) {
+      if (field === SegmentAttributeKey.COUNTRY && !countriesFetched.current) {
         countriesFetched.current = true;
         await AuthService.getCountries()
           .then(({ response }) => {
             const options = response.data.map((country) => ({
-              value: country.CountryCode,
-              label: country.CountryCode
+              value: country.CountryID,
+              label: country.CountryName
             }));
             setCountryOptions(options);
           })
@@ -52,12 +53,12 @@ const ConditionEditor = ({ condition, onChange, disabled, onRemove, onCopy, erro
             setCountryOptions([]);
           });
       }
-      if (attributeKey === SegmentAttributeKey.CURRENCY && !currenciesFetched.current) {
+      if (field === SegmentAttributeKey.CURRENCY && !currenciesFetched.current) {
         currenciesFetched.current = true;
         await CurrencyService.getPlatformCurrancyCodes()
           .then(({ response }) => {
-            const options = response.data.map(({ Code }) => ({
-              value: Code,
+            const options = response.data.map(({ Code, CurrencyID }) => ({
+              value: CurrencyID,
               label: Code
             }));
             setCurrencyOptions(options);
@@ -69,15 +70,15 @@ const ConditionEditor = ({ condition, onChange, disabled, onRemove, onCopy, erro
       }
     };
     fetchAttributeOptions();
-  }, [attributeKey]);
+  }, [field]);
 
   // Reset operator and value when attribute changes
   useEffect(() => {
-    if (condition.attributeKey !== attributeKey) {
+    if (condition.field !== field) {
       setOperator('');
       setValue(null);
     }
-  }, [attributeKey, condition.attributeKey]);
+  }, [field, condition.field]);
 
   // Reset value when operator changes
   useEffect(() => {
@@ -86,19 +87,19 @@ const ConditionEditor = ({ condition, onChange, disabled, onRemove, onCopy, erro
       if (!requiresValue(operator)) {
         setValue(null);
       } else if (operator === NumericOperator.BETWEEN) {
-        setValue({ min: 0, max: 100 });
+        setValue([0, 0]);
       } else if (
         operator === DatetimeOperator.LESS_THAN_X_AGO ||
         operator === DatetimeOperator.GREATER_THAN_X_AGO
       ) {
-        setValue({ amount: 7, unit: 'days' });
+        setValue({ amount: 7, direction: 'Ago', unit: 'days' });
       } else if (operator === DatetimeOperator.BETWEEN_RELATIVE) {
         setValue({
           from: { amount: 7, unit: 'days' },
           to: { amount: 0, unit: 'days' }
         });
       } else if (operator === DatetimeOperator.BETWEEN_DATE_RANGE) {
-        setValue({ from: '', to: '' });
+        setValue(['', '']);
       } else if (operator === EnumStringOperator.IN || operator === EnumStringOperator.NOT_IN) {
         setValue([]);
       } else {
@@ -111,12 +112,13 @@ const ConditionEditor = ({ condition, onChange, disabled, onRemove, onCopy, erro
   useEffect(() => {
     onChange({
       ...condition,
-      attributeKey,
+      field,
+      dataType: selectedAttribute?.dataType,
       operator,
       value
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [attributeKey, operator, value]);
+  }, [field, selectedAttribute, operator, value]);
 
   // Render value input based on operator
   const renderValueInput = () => {
@@ -126,8 +128,8 @@ const ConditionEditor = ({ condition, onChange, disabled, onRemove, onCopy, erro
 
     // Helper function to get dynamic options for country/currency
     const getDynamicOptions = () => {
-      if (attributeKey === SegmentAttributeKey.COUNTRY) return countryOptions;
-      if (attributeKey === SegmentAttributeKey.CURRENCY) return currencyOptions;
+      if (field === SegmentAttributeKey.COUNTRY) return countryOptions;
+      if (field === SegmentAttributeKey.CURRENCY) return currencyOptions;
       return null;
     };
 
@@ -136,7 +138,7 @@ const ConditionEditor = ({ condition, onChange, disabled, onRemove, onCopy, erro
       const options = getDynamicOptions();
       if (!options || options.length === 0) return null;
 
-      const attributeLabel = attributeKey === SegmentAttributeKey.COUNTRY ? 'country' : 'currency';
+      const attributeLabel = field === SegmentAttributeKey.COUNTRY ? 'country' : 'currency';
 
       return (
         <Combobox
@@ -171,14 +173,17 @@ const ConditionEditor = ({ condition, onChange, disabled, onRemove, onCopy, erro
     };
 
     // Numeric operators
-    if (operator === NumericOperator.BETWEEN) {
+    if (
+      selectedAttribute?.inputType === ValueInputType.NUMBER &&
+      operator === NumericOperator.BETWEEN
+    ) {
       return (
         <div className="flex items-center gap-2">
           <Input
             type="number"
             placeholder="Min"
-            value={value?.min || ''}
-            onChange={(e) => setValue({ ...value, min: parseFloat(e.target.value) || 0 })}
+            value={value?.[0] || ''}
+            onChange={(e) => setValue([parseFloat(e.target.value) || 0, value?.[1]])}
             error={Boolean(error?.value)}
             classNames={{ root: 'flex-1' }}
           />
@@ -186,8 +191,8 @@ const ConditionEditor = ({ condition, onChange, disabled, onRemove, onCopy, erro
           <Input
             type="number"
             placeholder="Max"
-            value={value?.max || ''}
-            onChange={(e) => setValue({ ...value, max: parseFloat(e.target.value) || 0 })}
+            value={value?.[1] || ''}
+            onChange={(e) => setValue([value?.[0], parseFloat(e.target.value) || 0])}
             error={Boolean(error?.value)}
             classNames={{ root: 'flex-1' }}
           />
@@ -202,7 +207,7 @@ const ConditionEditor = ({ condition, onChange, disabled, onRemove, onCopy, erro
         NumericOperator.GREATER_THAN,
         NumericOperator.LESS_THAN
       ].includes(operator) &&
-      selectedAttribute?.dataType === 'numeric'
+      selectedAttribute?.inputType === ValueInputType.NUMBER
     ) {
       return (
         <Input
@@ -227,7 +232,9 @@ const ConditionEditor = ({ condition, onChange, disabled, onRemove, onCopy, erro
             type="number"
             placeholder="Amount"
             value={value?.amount || ''}
-            onChange={(e) => setValue({ ...value, amount: parseInt(e.target.value) || 0 })}
+            onChange={(e) =>
+              setValue({ ...value, direction: 'Ago', amount: parseInt(e.target.value) || 0 })
+            }
             error={Boolean(error?.value)}
             classNames={{ root: 'w-20' }}
           />
@@ -313,21 +320,24 @@ const ConditionEditor = ({ condition, onChange, disabled, onRemove, onCopy, erro
     }
 
     // Datetime operators - absolute date range
-    if (operator === DatetimeOperator.BETWEEN_DATE_RANGE) {
+    if (
+      selectedAttribute?.inputType === ValueInputType.DATETIME &&
+      operator === DatetimeOperator.BETWEEN_DATE_RANGE
+    ) {
       return (
         <div className="flex items-center gap-2">
           <Input
             type="datetime-local"
-            value={value?.from || ''}
-            onChange={(e) => setValue({ ...value, from: e.target.value })}
+            value={value?.[0] || ''}
+            onChange={(e) => setValue([e.target.value, value?.[1] || ''])}
             error={Boolean(error?.value)}
             classNames={{ root: 'flex-1' }}
           />
           <span className="text-xs text-gray-500 dark:text-dark-300">to</span>
           <Input
             type="datetime-local"
-            value={value?.to || ''}
-            onChange={(e) => setValue({ ...value, to: e.target.value })}
+            value={value?.[1] || ''}
+            onChange={(e) => setValue([value?.[0] || '', e.target.value])}
             error={Boolean(error?.value)}
             classNames={{ root: 'flex-1' }}
           />
@@ -338,9 +348,10 @@ const ConditionEditor = ({ condition, onChange, disabled, onRemove, onCopy, erro
     // Enum operators - IN/NOT_IN (Multiple select)
     if (operator === EnumStringOperator.IN || operator === EnumStringOperator.NOT_IN) {
       // Check for dynamic options (country/currency)
-      const dynamicCombobox = renderDynamicCombobox(true);
-      if (dynamicCombobox) return dynamicCombobox;
-
+      if (selectedAttribute?.inputType === ValueInputType.AUTOCOMPLETE) {
+        const dynamicCombobox = renderDynamicCombobox(true);
+        if (dynamicCombobox) return dynamicCombobox;
+      }
       // For attributes with predefined options
       if (selectedAttribute?.options) {
         return (
@@ -378,13 +389,12 @@ const ConditionEditor = ({ condition, onChange, disabled, onRemove, onCopy, erro
     }
 
     // String operators - EQUALS/NOT_EQUALS (Single select)
-    if (
-      [EnumStringOperator.EQUALS, EnumStringOperator.NOT_EQUALS].includes(operator) &&
-      selectedAttribute?.dataType === 'string'
-    ) {
-      // Check for dynamic options (country/currency)
-      const dynamicCombobox = renderDynamicCombobox(false);
-      if (dynamicCombobox) return dynamicCombobox;
+
+    if ([EnumStringOperator.EQUALS, EnumStringOperator.NOT_EQUALS].includes(operator)) {
+      if (selectedAttribute?.inputType === ValueInputType.AUTOCOMPLETE) {
+        const dynamicCombobox = renderDynamicCombobox(false);
+        if (dynamicCombobox) return dynamicCombobox;
+      }
 
       // For attributes with predefined options
       if (selectedAttribute?.options) {
@@ -411,7 +421,7 @@ const ConditionEditor = ({ condition, onChange, disabled, onRemove, onCopy, erro
     }
 
     // Enum with options
-    if (selectedAttribute?.dataType === 'enum' && selectedAttribute?.options) {
+    if (selectedAttribute?.inputType === ValueInputType.ENUM && selectedAttribute?.options) {
       return (
         <Listbox
           data={selectedAttribute.options}
@@ -443,27 +453,25 @@ const ConditionEditor = ({ condition, onChange, disabled, onRemove, onCopy, erro
         <div className="w-[220px] flex-shrink-0">
           <Listbox
             data={attributeOptions}
-            value={attributeOptions.find((opt) => opt.value === attributeKey) || null}
-            onChange={(opt) => setAttributeKey(opt.value)}
+            value={attributeOptions.find((opt) => opt.value === field) || null}
+            onChange={(opt) => setField(opt.value)}
             placeholder={t('attribute')}
             displayField="label"
-            error={error?.attributeKey || (error?.field === 'attributeKey' && error?.message)}
+            error={error?.field || (error?.field === 'field' && error?.message)}
           />
         </div>
-
         {/* Operator Selector */}
-        <div className="w-[180px] flex-shrink-0">
+        <div className="w-[240px] flex-shrink-0">
           <Listbox
             data={operatorOptions}
             value={operatorOptions.find((opt) => opt.value === operator) || null}
             onChange={(opt) => setOperator(opt.value)}
             placeholder={t('operator')}
             displayField="label"
-            disabled={!attributeKey}
+            disabled={!field}
             error={error?.operator || (error?.field === 'operator' && error?.message)}
           />
         </div>
-
         {/* Value Input */}
         <div className="min-w-0 flex-1">{renderValueInput()}</div>
       </div>

@@ -1,3 +1,4 @@
+import { Navigate } from 'react-router';
 import PrivateRoute from '../private';
 import { PERMISSIONS } from 'constants/app.constant';
 
@@ -121,34 +122,91 @@ export const bonusManagementRoute = [
     }
   },
   {
-    path: 'bonus/player-segmentation/:segmentationUID/view',
-    lazy: async () => {
-      const { default: ViewPlayerSegmentation } = await import(
-        '../../pages/player-segmentation/ViewPlayerSegmentation'
-      );
-      return {
-        Component: () => (
-          <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.VIEW}>
-            <ViewPlayerSegmentation />
-          </PrivateRoute>
-        )
-      };
-    }
-  },
-  {
-    path: 'bonus/player-segmentation/:segmentationUID/players',
-    lazy: async () => {
-      const { default: PlayerSegmentationPlayerList } = await import(
-        '../../pages/player-segmentation/PlayerSegmentationPlayerList'
-      );
-      return {
-        Component: () => (
-          <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.PLAYER_LIST}>
-            <PlayerSegmentationPlayerList />
-          </PrivateRoute>
-        )
-      };
-    }
+    path: 'bonus/player-segmentation/:segmentationUID/tab',
+    lazy: async () => ({
+      Component: (await import('../../pages/player-segmentation/tabs/TabSegmentation')).default
+    }),
+    children: [
+      {
+        index: true,
+        element: <Navigate to="./details" />
+      },
+      {
+        path: 'details',
+        lazy: async () => {
+          const { default: SegmentationDetails } = await import(
+            '../../pages/player-segmentation/tabs/SegmentationDetails'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.VIEW}>
+                <SegmentationDetails />
+              </PrivateRoute>
+            )
+          };
+        }
+      },
+      {
+        path: 'players',
+        lazy: async () => {
+          const { default: PlayerSegmentationPlayerList } = await import(
+            '../../pages/player-segmentation/tabs/PlayerSegmentationPlayerList'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.PLAYER_LIST}>
+                <PlayerSegmentationPlayerList />
+              </PrivateRoute>
+            )
+          };
+        }
+      },
+      {
+        path: 'change-history',
+        lazy: async () => {
+          const { default: ChangeHistory } = await import(
+            '../../pages/player-segmentation/tabs/ChangeHistory'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.VIEW}>
+                <ChangeHistory />
+              </PrivateRoute>
+            )
+          };
+        }
+      },
+      {
+        path: 'player-activity',
+        lazy: async () => {
+          const { default: PlayerActivity } = await import(
+            '../../pages/player-segmentation/tabs/PlayerActivity'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.VIEW}>
+                <PlayerActivity />
+              </PrivateRoute>
+            )
+          };
+        }
+      },
+      {
+        path: 'execution-history',
+        lazy: async () => {
+          const { default: ExecutionHistory } = await import(
+            '../../pages/player-segmentation/tabs/ExecutionHistory'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.VIEW}>
+                <ExecutionHistory />
+              </PrivateRoute>
+            )
+          };
+        }
+      }
+    ]
   }
 ];
 

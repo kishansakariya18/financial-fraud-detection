@@ -13,7 +13,16 @@ import {
   createDefaultRuleTree
 } from './ruleUtils';
 
-const RuleGroup = ({ group, onChange, onRemove, disabled, depth = 0, isRoot = false, errors }) => {
+const RuleGroup = ({
+  group,
+  onChange,
+  onRemove,
+  disabled,
+  depth = 0,
+  isRoot = false,
+  errors,
+  groupErrors
+}) => {
   const { t } = useTranslation();
   const maxDepth = 10;
   const canNest = depth < maxDepth;
@@ -24,47 +33,47 @@ const RuleGroup = ({ group, onChange, onRemove, disabled, depth = 0, isRoot = fa
   ];
 
   const handleOperatorChange = (opt) => {
-    const newTree = updateNodeInTree({ root: group }, group.id, (node) => ({
+    const newTree = updateNodeInTree(group, group.id, (node) => ({
       ...node,
       operator: opt.value
     }));
-    onChange(newTree.root);
+    onChange(newTree);
   };
 
   const handleAddCondition = () => {
     const newCondition = createEmptyCondition();
-    const newTree = addChildToGroup({ root: group }, group.id, newCondition);
-    onChange(newTree.root);
+    const newTree = addChildToGroup(group, group.id, newCondition);
+    onChange(newTree);
   };
 
   const handleAddGroup = () => {
     if (!canNest) return;
     const newGroup = createEmptyGroup('AND');
-    newGroup.children = [createEmptyCondition()];
-    const newTree = addChildToGroup({ root: group }, group.id, newGroup);
-    onChange(newTree.root);
+    newGroup.conditions = [createEmptyCondition()];
+    const newTree = addChildToGroup(group, group.id, newGroup);
+    onChange(newTree);
   };
 
   const handleRemoveChild = (childId) => {
     // Prevent removing the last child
-    console.log(childId, group.children.length, isRoot);
-    if (group.children.length <= 1 && isRoot) {
-      return;
-    }
+    console.log(childId, group.conditions.length, isRoot);
+    // if (group.conditions.length <= 1 && isRoot) {
+    //   return;
+    // }
 
-    const newTree = removeNodeFromTree({ root: group }, childId);
-    onChange(newTree.root);
+    const newTree = removeNodeFromTree(group, childId);
+    onChange(newTree);
   };
 
   const handleUpdateChild = (childId, updatedChild) => {
-    const newTree = updateNodeInTree({ root: group }, childId, () => updatedChild);
-    onChange(newTree.root);
+    const newTree = updateNodeInTree(group, childId, () => updatedChild);
+    onChange(newTree);
   };
 
   const handleCopyChild = (child) => {
     const clonedChild = cloneNode(child);
-    const newTree = addChildToGroup({ root: group }, group.id, clonedChild);
-    onChange(newTree.root);
+    const newTree = addChildToGroup(group, group.id, clonedChild);
+    onChange(newTree);
   };
 
   // Background colors for nested hierarchy
@@ -121,8 +130,8 @@ const RuleGroup = ({ group, onChange, onRemove, disabled, depth = 0, isRoot = fa
 
       {/* Children */}
       <div className="space-y-2">
-        {group.children && group.children.length > 0 ? (
-          group.children.map((child, index) => (
+        {group.conditions && group.conditions.length > 0 ? (
+          group.conditions.map((child, index) => (
             <div key={child.id} className="flex items-start gap-2">
               {/* Show operator chip on left side (except first) */}
 
@@ -133,24 +142,25 @@ const RuleGroup = ({ group, onChange, onRemove, disabled, depth = 0, isRoot = fa
               </div>
 
               <div className="min-w-0 flex-1">
-                {child.type === 'condition' ? (
+                {child.conditions && Array.isArray(child.conditions) ? (
+                  <RuleGroup
+                    group={child}
+                    onChange={(updatedGroup) => handleUpdateChild(child.id, updatedGroup)}
+                    onRemove={() => handleRemoveChild(child.id)}
+                    // disabled={!!(group.conditions.length <= 1 && isRoot)}
+                    depth={depth + 1}
+                    isRoot={false}
+                    errors={errors}
+                    groupErrors={groupErrors}
+                  />
+                ) : (
                   <ConditionEditor
                     condition={child}
                     onChange={(updatedCondition) => handleUpdateChild(child.id, updatedCondition)}
                     onRemove={() => handleRemoveChild(child.id)}
                     onCopy={() => handleCopyChild(child)}
-                    disabled={!!(group.children.length <= 1 && isRoot)}
+                    // disabled={!!(group.conditions.length <= 1 && isRoot)}
                     error={errors?.[child.id]}
-                  />
-                ) : (
-                  <RuleGroup
-                    group={child}
-                    onChange={(updatedGroup) => handleUpdateChild(child.id, updatedGroup)}
-                    onRemove={() => handleRemoveChild(child.id)}
-                    disabled={!!(group.children.length <= 1 && isRoot)}
-                    depth={depth + 1}
-                    isRoot={false}
-                    errors={errors}
                   />
                 )}
               </div>
@@ -159,6 +169,15 @@ const RuleGroup = ({ group, onChange, onRemove, disabled, depth = 0, isRoot = fa
         ) : (
           <div className="rounded border-2 border-dashed border-gray-300 p-6 text-center dark:border-dark-600">
             <p className="text-sm text-gray-500 dark:text-dark-400">{t('no_conditions_add_one')}</p>
+          </div>
+        )}
+
+        {/* Group Error Message */}
+        {groupErrors?.[group.id] && (
+          <div className="mt-2">
+            <p className="input-text-error mt-1 text-xs text-error dark:text-error-lighter">
+              {groupErrors[group.id].message}
+            </p>
           </div>
         )}
       </div>
@@ -202,14 +221,15 @@ const RuleBuilder = ({ value, onChange, error }) => {
   const { t } = useTranslation();
 
   const handleChange = (newRoot) => {
-    onChange({ root: newRoot });
+    onChange(newRoot);
   };
 
   // Extract individual field errors from react-hook-form nested structure
   const extractFieldErrors = (ruleTree, errors) => {
     const fieldErrors = {};
+    const groupErrors = {};
 
-    if (!errors || !ruleTree) return fieldErrors;
+    if (!errors || !ruleTree) return { fieldErrors, groupErrors };
 
     // Handle case where errors is an object with nested structure from Yup
     const errorObj = typeof errors === 'object' ? errors : {};
@@ -218,20 +238,20 @@ const RuleBuilder = ({ value, onChange, error }) => {
     const traverse = (node, errorNode, path = '') => {
       if (!node) return;
 
-      // If this node is a condition, extract field errors
-      if (node.type === 'condition' && errorNode) {
+      // If this node is a condition (has field property), extract field errors
+      if (node.field !== undefined && errorNode) {
         const hasErrors =
-          errorNode.attributeKey || errorNode.operator || errorNode.value || errorNode.message;
+          errorNode.field || errorNode.operator || errorNode.value || errorNode.message;
 
         if (hasErrors) {
           fieldErrors[node.id] = {};
 
           // Extract specific field errors
-          if (errorNode.attributeKey) {
-            fieldErrors[node.id].attributeKey =
-              typeof errorNode.attributeKey === 'string'
-                ? errorNode.attributeKey
-                : errorNode.attributeKey.message || 'Attribute is required';
+          if (errorNode.field) {
+            fieldErrors[node.id].field =
+              typeof errorNode.field === 'string'
+                ? errorNode.field
+                : errorNode.field.message || 'Attribute is required';
           }
 
           if (errorNode.operator) {
@@ -249,56 +269,60 @@ const RuleBuilder = ({ value, onChange, error }) => {
           }
 
           // If there's a general message but no field-specific ones
-          if (
-            errorNode.message &&
-            !errorNode.attributeKey &&
-            !errorNode.operator &&
-            !errorNode.value
-          ) {
+          if (errorNode.message && !errorNode.field && !errorNode.operator && !errorNode.value) {
             fieldErrors[node.id].message = errorNode.message;
           }
         }
       }
 
-      // Traverse children for groups
-      if (node.type === 'group' && node.children && Array.isArray(node.children)) {
-        node.children.forEach((child, index) => {
+      // If this node is a group, check for group-level errors
+      if (node.conditions && Array.isArray(node.conditions) && errorNode) {
+        // Check if there's an error on the conditions array itself (e.g., min length)
+        if (errorNode.conditions && typeof errorNode.conditions === 'object') {
+          // Check if conditions has a validation error (not an array of child errors)
+          if (errorNode.conditions.message || errorNode.conditions.type) {
+            groupErrors[node.id] = {
+              message: errorNode.conditions.message || 'Group validation error',
+              type: errorNode.conditions.type
+            };
+          }
+        }
+
+        // Traverse child conditions
+        node.conditions.forEach((child, index) => {
           let childError = null;
 
           // Try to get error for this child
-          if (errorNode && errorNode.children) {
-            if (Array.isArray(errorNode.children)) {
-              childError = errorNode.children[index];
-            } else if (typeof errorNode.children === 'object') {
-              childError = errorNode.children[index.toString()] || errorNode.children[index];
+          if (errorNode && errorNode.conditions) {
+            if (Array.isArray(errorNode.conditions)) {
+              childError = errorNode.conditions[index];
+            } else if (typeof errorNode.conditions === 'object' && !errorNode.conditions.message) {
+              childError = errorNode.conditions[index.toString()] || errorNode.conditions[index];
             }
           }
 
-          traverse(child, childError, `${path}.children[${index}]`);
+          traverse(child, childError, `${path}.conditions[${index}]`);
         });
       }
     };
 
     // Start traversal from root
-    if (errorObj.root && ruleTree.root) {
-      traverse(ruleTree.root, errorObj.root, 'root');
-    } else if (ruleTree.root) {
-      // Try traversing with the error object directly in case it's structured differently
-      traverse(ruleTree.root, errorObj, 'root');
+    if (ruleTree && errorObj) {
+      traverse(ruleTree, errorObj, '');
     }
 
-    return fieldErrors;
+    return { fieldErrors, groupErrors };
   };
 
-  // Get field-level errors
-  const fieldErrors = extractFieldErrors(value, error);
+  // Get field-level and group-level errors
+  const { fieldErrors, groupErrors } = extractFieldErrors(value, error);
 
   const handleResetToDefault = () => {
     const defaultTree = createDefaultRuleTree();
     onChange(defaultTree);
   };
 
-  if (!value || !value.root) {
+  if (!value || !value.id) {
     return (
       <div className="space-y-2">
         <label className="block text-sm font-medium text-gray-700 dark:text-dark-100">
@@ -347,14 +371,15 @@ const RuleBuilder = ({ value, onChange, error }) => {
       </div>
 
       <RuleGroup
-        group={value.root}
+        group={value}
         onChange={handleChange}
         onRemove={() => {
-          console.log('Remove root group', value.root);
+          console.log('Remove root group', value);
         }}
         depth={0}
         isRoot={true}
         errors={fieldErrors}
+        groupErrors={groupErrors}
       />
     </div>
   );

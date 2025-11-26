@@ -27,10 +27,10 @@ export const columns = [
     cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.currencyType, {
-    id: 'currencyType',
-    label: 'Currency Type',
-    header: 'Currency Type',
+  columnHelper.accessor((row) => row.withdrawType, {
+    id: 'withdrawType',
+    label: 'Withdraw Type',
+    header: 'Withdraw Type',
     cell: BoldCell,
     enableSorting: false
   }),

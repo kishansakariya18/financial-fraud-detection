@@ -10,7 +10,7 @@ export function StepBonusDetails({ data, onChange, onImageChange, errors = {} })
   return (
     <div className="space-y-4">
       <Input
-        label={t('bonus_name') + ' ' + t('player_facing')}
+        label={t('bonus_name') + ` (${t('player_facing')})`}
         placeholder={t('enter_bonus_name_player_facing_info')}
         value={data.displayTitle}
         onChange={(event) => onChange('displayTitle', event.target.value)}
