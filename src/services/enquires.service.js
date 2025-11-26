@@ -7,15 +7,14 @@ const EnquiresService = {
     try {
       const body = {
         page: (pagination?.pageIndex ?? 0) + 1,
-        per_page: pagination?.pageSize ?? 10,
+        limit: pagination?.pageSize ?? 10,
         filters: {
-          restrictionType: filters?.keyword || undefined,
+          keyword: filters?.keyword || undefined,
           status: filters?.status || undefined,
           setBy: filters?.setBy || undefined
         }
       };
-      const url =
-        apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.RESPONSIBLE_GAMBLING_RESTRICTIONS.LIST;
+      const url = apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.ENQUIRES.LIST;
       return await sendRequest({
         url,
         method: 'POST',
@@ -60,18 +59,21 @@ const EnquiresService = {
       console.log('Error deleting Enquires item', error);
     }
   },
-  changeStatus: async (restrictionId) => {
+  changeStatus: async (status, enquiryUId) => {
     try {
       const endPoint = replaceText(
-        apiConfig.endPoints.RESPONSIBLE_GAMBLING_RESTRICTIONS.APPROVE,
-        ':restrictionId',
-        restrictionId
+        apiConfig.endPoints.ENQUIRES.CHANGE_STATUS,
+        ':enquiryUId',
+        enquiryUId
       );
       const url = apiConfig.baseURL.API_BASE_URL + endPoint;
       return await sendRequest({
         url,
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
+        body: {
+          status
+        }
       });
     } catch (error) {
       console.log('Error changing Enquires status', error);

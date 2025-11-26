@@ -610,6 +610,11 @@ export const apiConfig = {
       DELETE: '/content/admin/blogs/:blogId/delete',
       DETAIL: '/content/admin/blogs/:slug/details',
       CHANGE_STATUS: '/content/admin/blogs/:blogId/change-status'
+    },
+    ENQUIRES: {
+      LIST: '/users/admin/enquiries/list',
+      DETAIL: '/users/admin/enquiries/:enquiryId/details',
+      CHANGE_STATUS: '/users/admin/enquiries/update-status'
     }
   }
 };

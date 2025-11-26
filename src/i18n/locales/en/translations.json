@@ -1270,5 +1270,16 @@
   "end_time": "End Time",
   "error": "Error",
   "failed_to_fetch_logs": "Failed to fetch logs",
-  "date_range": "Date Range"
+  "date_range": "Date Range",
+  "set_by": "Set By",
+  "enquiry_subject": "Subject",
+  "enquiry_description": "Description",
+  "enquiry_status": "Status",
+  "enquiry_created_at": "Created At",
+  "enquiry_modified_at": "Modified At",
+  "enquiry_user": "User",
+  "enquiry_email": "Email",
+  "enquiry_set_by": "Set By",
+  "areYouSureEnquires": "Are you sure you want to delete this enquiry?",
+  "areYouSureEnquiresChangeStatus": "Are you sure you want to change the status of this enquiry?"
 }

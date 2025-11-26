@@ -12,6 +12,10 @@ import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { enquiresStatusOptions } from '../helper';
 
 export function Toolbar({
+  keyword,
+  setKeyword,
+  searchParams,
+  setSearchParams,
   table,
   pageTitle = '',
   onApplyFilters = () => {},
@@ -41,6 +45,12 @@ export function Toolbar({
               'flex space-x-2 pt-4 rtl:space-x-reverse [&_.input-root]:flex-1',
               isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x]'
             )}>
+            <SearchInput
+              keyword={keyword}
+              setKeyword={setKeyword}
+              searchParams={searchParams}
+              setSearchParams={setSearchParams}
+            />
             <TableConfig table={table} />
           </div>
           <div
@@ -65,6 +75,12 @@ export function Toolbar({
             '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)'
           }}>
           <div className="flex shrink-0 space-x-2 rtl:space-x-reverse">
+            <SearchInput
+              keyword={keyword}
+              setKeyword={setKeyword}
+              searchParams={searchParams}
+              setSearchParams={setSearchParams}
+            />
             <Filters
               table={table}
               onApplyFilters={onApplyFilters}
@@ -79,23 +95,62 @@ export function Toolbar({
   );
 }
 
-function SearchInput({ table, onApplyFilters }) {
+function SearchInput({ keyword, setKeyword, searchParams, setSearchParams }) {
   return (
-    <Input
-      value={table?.getColumn('Name')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('Name').setFilterValue(e.target.value)}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') {
-          onApplyFilters();
+    <>
+      <Input
+        value={keyword}
+        onChange={(e) => setKeyword(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            setSearchParams(
+              (prev) => ({
+                ...Object.fromEntries(prev),
+                keyword: keyword.trim(),
+                pageIndex: 0
+              }),
+              { replace: true }
+            );
+          }
+        }}
+        prefix={<MagnifyingGlassIcon className="size-4" />}
+        classNames={{
+          input: 'h-8 text-xs ring-primary-500/50 focus:ring',
+          root: 'shrink-0'
+        }}
+        placeholder={t('search') + ' ' + t('name') + ', ' + t('email') + '...'}
+      />
+      <Button
+        onClick={() =>
+          setSearchParams(
+            (prev) => ({
+              ...Object.fromEntries(prev),
+              keyword: keyword.trim(),
+              pageIndex: 0
+            }),
+            { replace: true }
+          )
         }
-      }}
-      prefix={<MagnifyingGlassIcon className="size-4" />}
-      classNames={{
-        input: 'h-8 text-xs ring-primary-500/50 focus:ring',
-        root: 'shrink-0'
-      }}
-      placeholder={t('search_desc')}
-    />
+        className="h-8 whitespace-nowrap px-2.5 text-xs">
+        {t('search')}
+      </Button>
+      <Button
+        onClick={() => {
+          setKeyword('');
+          setSearchParams(
+            (prev) => {
+              const next = { ...Object.fromEntries(prev), pageIndex: 0 };
+              delete next.keyword;
+              return next;
+            },
+            { replace: true }
+          );
+        }}
+        className="h-8 whitespace-nowrap px-2.5 text-xs"
+        disabled={!keyword && !(searchParams.get('keyword') || '')}>
+        {t('reset') + ' ' + t('search')}
+      </Button>
+    </>
   );
 }
 
@@ -116,7 +171,7 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
 
       <div>
         <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
-          {t('search')}
+          {t('apply_filters')}
         </Button>
         <Button
           onClick={onClearFilters}
@@ -130,14 +185,25 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
 }
 
 Toolbar.propTypes = {
-  table: PropTypes.object
+  keyword: PropTypes.string.isRequired,
+  setKeyword: PropTypes.func.isRequired,
+  searchParams: PropTypes.object.isRequired,
+  setSearchParams: PropTypes.func.isRequired,
+  table: PropTypes.object,
+  pageTitle: PropTypes.string,
+  onApplyFilters: PropTypes.func,
+  onClearFilters: PropTypes.func
 };
 
 SearchInput.propTypes = {
-  table: PropTypes.object,
-  onApplyFilters: PropTypes.func
+  keyword: PropTypes.string.isRequired,
+  setKeyword: PropTypes.func.isRequired,
+  searchParams: PropTypes.object.isRequired,
+  setSearchParams: PropTypes.func.isRequired
 };
 
 Filters.propTypes = {
-  table: PropTypes.object
+  table: PropTypes.object,
+  onApplyFilters: PropTypes.func,
+  onClearFilters: PropTypes.func
 };

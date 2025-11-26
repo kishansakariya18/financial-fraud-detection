@@ -638,5 +638,15 @@
   "kycConfigurations": "Configuraciones KYC",
   "template_manager": "Gestor de plantillas",
   "eventGroup": "Grupo de eventos",
-  "channelCode": "Código de canal"
+  "channelCode": "Código de canal",
+  "enquiry_subject": "Asunto",
+  "enquiry_description": "Descripción",
+  "enquiry_status": "Estado",
+  "enquiry_created_at": "Creado el",
+  "enquiry_modified_at": "Modificado el",
+  "enquiry_user": "Usuario",
+  "enquiry_email": "Correo electrónico",
+  "enquiry_set_by": "Establecido por",
+  "areYouSureEnquires": "¿Estás seguro de que quieres eliminar esta consulta?",
+  "areYouSureEnquiresChangeStatus": "¿Estás seguro de que quieres cambiar el estado de esta consulta?"
 }

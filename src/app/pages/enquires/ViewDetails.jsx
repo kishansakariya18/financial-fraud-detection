@@ -10,6 +10,7 @@ import { Page } from 'components/shared/Page';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import EnquiresService from 'services/enquires.service';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
+import { enquiresStatusOptions } from './helper';
 
 export default function ViewDetails() {
   const { t } = useTranslation();
@@ -61,15 +62,11 @@ export default function ViewDetails() {
   );
 
   // Normalize some expected fields
-  const restrictionType = detail?.RestrictionType || detail?.restrictionType || detail?.Title;
-  const setBy = detail?.SetBy || detail?.setBy;
+  const subject = detail?.Subject || detail?.subject;
+  const description = detail?.Description || detail?.description;
   const statusVal = detail?.Status ?? detail?.status;
   const createdAt = detail?.DateCreated || detail?.createdAt;
-  const modifiedAt = detail?.DateModified || detail?.updatedAt;
-  const user = detail?.User || detail?.user || {};
-  const firstName = user?.FirstName ?? user?.first_name;
-  const lastName = user?.LastName ?? user?.last_name;
-  const email = user?.Email ?? user?.email;
+  const email = detail?.Email || detail?.email;
 
   return (
     <Page title={pageTitle}>
@@ -95,20 +92,15 @@ export default function ViewDetails() {
             <>
               <Card className="p-4 sm:p-5">
                 <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {field(
-                    t('id'),
-                    detail?.ResponsibleGamingRestrictionID || detail?.Id || detail?.ID
-                  )}
-                  {field(t('type'), restrictionType)}
+                  {field(t('id'), detail?.EnquiryUID || detail?.Id || detail?.ID)}
+                  {field(t('subject'), subject)}
+                  {field(t('description'), description)}
                   {field(
                     t('status'),
-                    statusVal === 1 || statusVal === 'active' ? t('active') : t('inactive')
+                    enquiresStatusOptions.find((opt) => opt.value === statusVal)?.label || statusVal
                   )}
                   {field(t('createdAt'), createdAt ? getDateInUTCToTimeZone(createdAt) : '-')}
-                  {field(t('modifiedAt'), modifiedAt ? getDateInUTCToTimeZone(modifiedAt) : '-')}
-                  {field(t('user'), `${firstName || '-'} ${lastName || ''}`.trim())}
                   {field(t('email'), email)}
-                  {field(t('setBy') || 'Set By', setBy)}
                 </div>
               </Card>
               <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
@@ -18,6 +18,7 @@ import { listResponseMapper } from '../helper';
 export default function EnquiresList() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [keyword, setKeyword] = useState(searchParams.get('keyword') || '');
   const pageTitle = t('enquires') + ' ' + t('list');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
@@ -36,8 +37,8 @@ export default function EnquiresList() {
         status: 200,
         data: mapped,
         totalRecords:
-          parseInt(result.response?.total_records, 10) || result.response?.data?.length || 0,
-        totalPages: result.response?.total_pages || 1
+          parseInt(result.response?.totalRecords, 10) || result.response?.data?.length || 0,
+        totalPages: result.response?.totalPages || 1
       };
     }
     return { status: result?.status, error: result?.error };
@@ -64,9 +65,12 @@ export default function EnquiresList() {
 
   useEffect(() => {
     const filtersFromQuery = [];
-    if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'Name', value: queryParams.keyword });
+
+    // Sync keyword state with URL params
+    if (queryParams.keyword !== keyword) {
+      setKeyword(queryParams.keyword || '');
     }
+
     if (queryParams.status) {
       filtersFromQuery.push({ id: 'Status', value: queryParams.status });
     }
@@ -87,9 +91,6 @@ export default function EnquiresList() {
   const applyFilterHandler = () => {
     const filterItems = {};
     for (let data of table.getState().columnFilters) {
-      if (data.id === 'Name') {
-        filterItems.keyword = data.value;
-      }
       if (data.id === 'Status') {
         filterItems.status = data.value;
       }
@@ -104,7 +105,7 @@ export default function EnquiresList() {
     setSearchParams({
       pageIndex: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PER_PAGE_RECORD,
-      ...(filterItems.keyword && { keyword: filterItems.keyword }),
+      ...(keyword.trim() && { keyword: keyword.trim() }),
       ...(filterItems.status && { status: filterItems.status }),
       ...(filterItems.setBy && { setBy: filterItems.setBy }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
@@ -113,6 +114,7 @@ export default function EnquiresList() {
   };
 
   const clearFilterHandler = () => {
+    setKeyword('');
     if (!isEmptyObject(queryParams)) {
       setSearchParams({ pageIndex: DEFAULT_PAGE_INDEX, pageSize: DEFAULT_PER_PAGE_RECORD });
     }
@@ -124,6 +126,10 @@ export default function EnquiresList() {
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
       <Toolbar
+        keyword={keyword}
+        setKeyword={setKeyword}
+        searchParams={searchParams}
+        setSearchParams={setSearchParams}
         table={table}
         pageTitle={pageTitle}
         onApplyFilters={applyFilterHandler}

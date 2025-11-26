@@ -52,7 +52,7 @@ export function RowActions({ row, table }) {
 
   const statusConfirmMessages = {
     pending: {
-      description: t('areYouSureEnquires'),
+      description: t('areYouSureEnquiresChangeStatus'),
       actionText: t('submit')
     },
     success: {
@@ -135,9 +135,8 @@ export function RowActions({ row, table }) {
                   </button>
                 )}
               </MenuItem>
-              {hasPermission(PERMISSIONS.RESPONSIBLE_GAMING_RESTRICTIONS.CHANGE_STATUS) &&
-                row?.original?.status === 'expired' &&
-                row?.original?.approvedAt == null && (
+              {hasPermission(PERMISSIONS.ENQUIRES.CHANGE_STATUS) &&
+                row?.original?.status === 'NEW' && (
                   <MenuItem>
                     {({ focus }) => (
                       <button
