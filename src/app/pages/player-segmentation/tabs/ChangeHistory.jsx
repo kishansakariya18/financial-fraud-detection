@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useCallback } from 'react';
+import { useEffect, useMemo, useCallback, useState } from 'react';
 import { useSearchParams, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { Button } from 'components/ui';
 import TableCard from 'components/ui/custom/TableCard';
 import useTable from 'components/ui/useTable';
 import { TableToolbar } from 'components/shared/table/TableToolbar';
@@ -11,6 +12,8 @@ import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import { Page } from 'components/shared/Page';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { EyeIcon } from '@heroicons/react/24/outline';
+import ChangeHistoryModal from 'components/sections/player-segmentation/ChangeHistoryModal';
 
 const columnHelper = createColumnHelper();
 
@@ -19,6 +22,7 @@ const ChangeHistory = () => {
   const { segmentationUID } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const [selectedChange, setSelectedChange] = useState(null);
 
   const breadcrumbItem = [
     { title: t('player_segmentation'), path: '/bonus/player-segmentation' },
@@ -28,6 +32,10 @@ const ChangeHistory = () => {
     },
     { title: t('change_history') }
   ];
+
+  const handleViewClick = (rowData) => {
+    setSelectedChange(rowData);
+  };
 
   const columns = [
     columnHelper.accessor('SegmentName', {
@@ -43,15 +51,16 @@ const ChangeHistory = () => {
       enableSorting: false
     }),
     columnHelper.accessor('ChangeType', {
-      header: t('change_type'),
+      header: t('operation_type'),
       cell: BadgeCell,
       meta: {
         optionData: [
-          { value: 'CREATED', label: 'Created', color: 'success' },
-          { value: 'UPDATED', label: 'Updated', color: 'info' },
-          { value: 'DELETED', label: 'Deleted', color: 'error' },
-          { value: 'ACTIVATED', label: 'Activated', color: 'success' },
-          { value: 'DEACTIVATED', label: 'Deactivated', color: 'warning' }
+          { value: 'CREATED', label: 'Create', color: 'success' },
+          { value: 'UPDATED', label: 'Update', color: 'info' },
+          { value: 'DELETED', label: 'Delete', color: 'error' },
+          { value: 'ARCHIVED', label: 'Archive', color: 'warning' },
+          { value: 'ACTIVATED', label: 'Activate', color: 'success' },
+          { value: 'DEACTIVATED', label: 'Deactivate', color: 'warning' }
         ]
       },
       size: 120,
@@ -80,13 +89,26 @@ const ChangeHistory = () => {
       cell: DateCell,
       size: 160,
       enableSorting: false
+    }),
+    columnHelper.display({
+      id: 'actions',
+      header: t('actions'),
+      cell: ({ row }) => (
+        <Button
+          isIcon
+          className="size-8 rounded-full"
+          onClick={() => handleViewClick(row.original)}>
+          <EyeIcon className="size-4" />
+        </Button>
+      ),
+      size: 50,
+      enableSorting: false
     })
   ];
 
   const fetchData = useCallback(async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
-
     const filters = {};
     if (queryParams.keyword) {
       filters.keyword = queryParams.keyword;
@@ -98,7 +120,12 @@ const ChangeHistory = () => {
       filters.endDate = queryParams.endDate;
     }
 
-    const response = await PlayerSegmentationService.getChangeLog(pageIndex, pageSize, filters);
+    const response = await PlayerSegmentationService.getChangeLog(
+      pageIndex,
+      pageSize,
+      filters,
+      segmentationUID
+    );
 
     if (response.status === 200 && response.response) {
       return {
@@ -109,7 +136,14 @@ const ChangeHistory = () => {
     }
 
     throw new Error('Failed to fetch change log');
-  }, [queryParams]);
+  }, [
+    queryParams.endDate,
+    queryParams.keyword,
+    queryParams.pageIndex,
+    queryParams.pageSize,
+    queryParams.startDate,
+    segmentationUID
+  ]);
 
   const { table, isLoading, tableSettings, setColumnFilters } = useTable({
     columns,
@@ -117,7 +151,7 @@ const ChangeHistory = () => {
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: [], right: [] },
+      columnPinning: { left: [], right: ['actions'] },
       tableSettings: {},
       columnVisibility: {}
     }
@@ -204,6 +238,13 @@ const ChangeHistory = () => {
           />
         </div>
       </div>
+
+      {/* Change History Modal */}
+      <ChangeHistoryModal
+        isOpen={!!selectedChange}
+        onClose={() => setSelectedChange(null)}
+        changeData={selectedChange}
+      />
     </Page>
   );
 };

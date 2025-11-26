@@ -56,11 +56,29 @@ const PlayerActivity = () => {
       cell: BadgeCell,
       meta: {
         optionData: [
-          { value: 'ADDED', label: 'Added', color: 'success' },
+          { value: 'ADDED', label: 'Entered', color: 'success' },
           { value: 'REMOVED', label: 'Removed', color: 'error' }
         ]
       },
       size: 120,
+      enableSorting: false
+    }),
+    columnHelper.accessor('EvaluationMode', {
+      header: t('evaluation_type'),
+      cell: BadgeCell,
+      meta: {
+        optionData: [
+          { value: 'EVENT_DRIVEN', label: 'Event Driven', color: 'info' },
+          { value: 'MANUAL', label: 'Manual', color: 'warning' },
+          { value: 'SCHEDULED', label: 'Scheduled', color: 'success' }
+        ]
+      },
+      size: 140,
+      enableSorting: false
+    }),
+    columnHelper.accessor('TriggerEvent', {
+      header: t('trigger_event'),
+      size: 140,
       enableSorting: false
     }),
     columnHelper.accessor('ChangeReason', {

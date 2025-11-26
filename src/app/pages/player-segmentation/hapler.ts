@@ -34,14 +34,28 @@ export const playerSegmentationResponseMapper = (apiData: any) => {
  * Convert status from API (1/0) to app (active/inactive)
  */
 export const statusToApp = (status: number) => {
-    return status === 1 ? 'active' : 'inactive';
+    switch (status) {
+        case 1:
+            return 'active';
+        case 0:
+            return 'inactive';
+        case 2:
+            return 'archived';
+        default:
+            return 'active';
+    }
 };
-
-/**
- * Convert status from app (active/inactive) to API (1/0)  
- */
 export const statusToAPI = (status: string) => {
-    return status === 'active' ? 1 : 0;
+    switch (status) {
+        case 'active':
+            return 1;
+        case 'inactive':
+            return 0;
+        case 'archived':
+            return 2;
+        default:
+            return 1;
+    }
 };
 
 /**

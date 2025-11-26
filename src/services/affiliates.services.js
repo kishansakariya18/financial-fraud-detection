@@ -464,6 +464,22 @@ const AffiliatesService = {
     } catch (err) {
       console.log('Error', err);
     }
+  },
+  getAffiliateDropDown: async () => {
+    try {
+      const endPoint = apiConfig.endPoints.AFFILIATES.DROPDOWN;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
   }
 };
 

@@ -5,8 +5,7 @@ import {
   HomeIcon,
   UserGroupIcon,
   DocumentTextIcon,
-  ArrowsRightLeftIcon,
-  ClockIcon
+  ArrowsRightLeftIcon
 } from '@heroicons/react/24/outline';
 import { randomId } from 'utils/randomId';
 import TabsPage from 'components/custom/TabsPage';
@@ -48,15 +47,15 @@ const TabSegmentation = () => {
       icon: ArrowsRightLeftIcon,
       index: 3,
       permission: PERMISSIONS.PLAYER_SEGMENTATION.VIEW
-    },
-    {
-      id: randomId(),
-      title: t('execution_history'),
-      path: `/bonus/player-segmentation/${segmentationUID}/tab/execution-history`,
-      icon: ClockIcon,
-      index: 4,
-      permission: PERMISSIONS.PLAYER_SEGMENTATION.VIEW
     }
+    // {
+    //   id: randomId(),
+    //   title: t('execution_history'),
+    //   path: `/bonus/player-segmentation/${segmentationUID}/tab/execution-history`,
+    //   icon: ClockIcon,
+    //   index: 4,
+    //   permission: PERMISSIONS.PLAYER_SEGMENTATION.VIEW
+    // }
   ];
 
   return <TabsPage tabs={tabs} />;

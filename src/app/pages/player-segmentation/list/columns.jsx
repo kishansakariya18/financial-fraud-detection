@@ -59,7 +59,8 @@ export const playerSegmentationColumns = ({ canShowActions }) => [
     meta: {
       optionData: [
         { value: 'active', label: 'Active', color: 'success' },
-        { value: 'inactive', label: 'Inactive', color: 'error' }
+        { value: 'inactive', label: 'Inactive', color: 'error' },
+        { value: 'archived', label: 'Archived', color: 'warning' }
       ]
     },
     enableSorting: false,
