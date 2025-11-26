@@ -13,7 +13,7 @@ const ReportService = {
     try {
       const { pagination, filters } = body;
 
-      const { type, keyword, startDate, endDate, stage } = filters;
+      const { type, keyword, startDate, endDate, stage, currencyID } = filters;
       console.log('filters:', filters);
 
       const apiQueryParams = {
@@ -28,7 +28,13 @@ const ReportService = {
         endDate: endDate
           ? dayjs(+endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
           : undefined,
-        stage: getStageAppToApi(stage) > -1 ? getStageAppToApi(stage) : undefined
+        stage: getStageAppToApi(stage) > -1 ? getStageAppToApi(stage) : undefined,
+        currency:
+          typeof currencyID !== 'undefined' && currencyID !== null && currencyID !== ''
+            ? currencyID.includes(',')
+              ? currencyID.split(',')
+              : [currencyID]
+            : undefined
       };
 
       const response = await sendRequest({
@@ -50,7 +56,7 @@ const ReportService = {
     try {
       const { pagination, filters } = body;
 
-      const { keyword, startDate, endDate, status } = filters;
+      const { keyword, startDate, endDate, status, currencyID } = filters;
 
       const apiQueryParams = {
         perPage: pagination.pageSize,
@@ -63,7 +69,13 @@ const ReportService = {
         endDate: endDate
           ? dayjs(+endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
           : undefined,
-        status: status ? transactionStatusToAPI(status) : undefined
+        status: status ? transactionStatusToAPI(status) : undefined,
+        currency:
+          typeof currencyID !== 'undefined' && currencyID !== null && currencyID !== ''
+            ? currencyID.includes(',')
+              ? currencyID.split(',')
+              : [currencyID]
+            : undefined
       };
 
       const response = await sendRequest({
@@ -85,7 +97,7 @@ const ReportService = {
     try {
       const { pagination, filters } = body;
 
-      const { keyword, startDate, endDate, status } = filters;
+      const { keyword, startDate, endDate, status, currencyID } = filters;
 
       const apiQueryParams = {
         perPage: pagination.pageSize,
@@ -96,7 +108,13 @@ const ReportService = {
         keyword: keyword || undefined,
         startDate: startDate ? moment(+startDate).startOf('day').toDate() : undefined,
         endDate: endDate ? moment(+endDate).endOf('day').toDate() : undefined,
-        status: status ? transactionStatusToAPI(status) : undefined
+        status: status ? transactionStatusToAPI(status) : undefined,
+        currency:
+          typeof currencyID !== 'undefined' && currencyID !== null && currencyID !== ''
+            ? currencyID.includes(',')
+              ? currencyID.split(',')
+              : [currencyID]
+            : undefined
       };
 
       const response = await sendRequest({

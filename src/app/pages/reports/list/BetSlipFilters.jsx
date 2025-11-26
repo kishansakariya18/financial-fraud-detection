@@ -1,8 +1,9 @@
 // Import Dependencies
 import { MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
-// import { TbCurrencyDollar } from "react-icons/tb";
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
+import CurrencyService from 'services/currency.services';
 
 // Local Imports
 // import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
@@ -23,6 +24,7 @@ import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
 import { useMemo } from 'react';
 import dayjs from 'dayjs';
+import { HiOutlineCash } from 'react-icons/hi';
 
 // ----------------------------------------------------------------------
 
@@ -82,19 +84,34 @@ export function BetSlipFilters({
             }}
             apiEndpoint={apiConfig.endPoints.REPORTS.BETSLIP_EXPORT}
             requestFilters={{
-              startDate: filters.startDate
-                ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss'))
-                : '',
-              endDate: filters.endDate
-                ? String(
-                    dayjs(+filters.endDate)
-                      .hour(23)
-                      .minute(59)
-                      .second(59)
-                      .format('YYYY-MM-DD HH:mm:ss')
-                  )
-                : '',
-              keyword: filters.keyword || ''
+              filters: {
+                type: filters.type ? mapType(filters.type) : undefined,
+                keyword: filters.keyword || undefined,
+                startDate: filters.startDate
+                  ? String(dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss'))
+                  : undefined,
+                endDate: filters.endDate
+                  ? String(
+                      dayjs(+filters.endDate)
+                        .hour(23)
+                        .minute(59)
+                        .second(59)
+                        .format('YYYY-MM-DD HH:mm:ss')
+                    )
+                  : undefined,
+                stage:
+                  filters.stage && getStageAppToApi(filters.stage) > -1
+                    ? getStageAppToApi(filters.stage)
+                    : undefined,
+                currency:
+                  typeof filters.currencyID !== 'undefined' &&
+                  filters.currencyID !== null &&
+                  filters.currencyID !== ''
+                    ? filters.currencyID.includes(',')
+                      ? filters.currencyID.split(',')
+                      : [filters.currencyID]
+                    : undefined
+              }
             }}
           />
         )}
@@ -170,6 +187,34 @@ function SearchInput({ table, onApplyFilters }) {
 
 function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }) {
   const isFiltered = table.getState().columnFilters.length > 0;
+  const [currencyOptions, setCurrencyOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchCurrencies = async () => {
+      try {
+        const response = await CurrencyService.getCurrencyList({
+          pagination: { pageSize: 1000, pageIndex: 0 },
+          filters: { status: 'active' }
+        });
+        const data = response?.data?.data || response?.response?.data || [];
+        if (Array.isArray(data) && data.length > 0) {
+          const options = data.map((currency) => ({
+            value: String(currency.CurrencyID),
+            label: currency.Code || currency.Name
+          }));
+          setCurrencyOptions(options);
+        } else {
+          console.warn('No active currencies found');
+          setCurrencyOptions([]);
+        }
+      } catch (error) {
+        console.error('Error fetching currencies:', error);
+        setCurrencyOptions([]);
+      }
+    };
+
+    fetchCurrencies();
+  }, []);
   return (
     <>
       {table.getColumn('stage') && (
@@ -189,6 +234,16 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           title="User's Type"
           Icon={MapPinIcon}
           isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
+      {table.getColumn('currencyID') && (
+        <FacedtedFilter
+          options={currencyOptions}
+          column={table.getColumn('currencyID')}
+          title={t('currency')}
+          Icon={HiOutlineCash}
+          isMultiple={true}
           showCheckbox={false}
         />
       )}

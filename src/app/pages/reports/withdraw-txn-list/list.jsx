@@ -72,7 +72,16 @@ export default function WithdrawTxnReports() {
     if (queryParams.status) {
       filtersFromQuery.push({ id: 'status', value: queryParams.status });
     }
-
+    if (typeof queryParams.currencyID !== 'undefined' && queryParams.currencyID !== null) {
+      const currencyIDStr = queryParams.currencyID;
+      let currencyIDArray = [];
+      if (currencyIDStr.includes(',')) {
+        currencyIDArray = currencyIDStr.split(',');
+      } else {
+        currencyIDArray = [currencyIDStr];
+      }
+      filtersFromQuery.push({ id: 'currencyID', value: currencyIDArray });
+    }
     if (queryParams.startDate && queryParams.endDate) {
       filtersFromQuery.push({
         id: 'createdAt',
@@ -94,16 +103,25 @@ export default function WithdrawTxnReports() {
       if (data.id === 'status') {
         filterItems.status = data.value;
       }
+      if (data.id === 'currencyID') {
+        filterItems.currencyID = Array.isArray(data.value) ? data.value : [data.value];
+      }
       if (data.id === 'createdAt') {
         filterItems.date = data.value;
       }
     }
+
+    const apiCurrencyID =
+      filterItems.currencyID && filterItems.currencyID.length
+        ? filterItems.currencyID.join(',')
+        : undefined;
 
     setSearchParams({
       pageIndex: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
       ...(filterItems.status && { status: filterItems.status }),
+      ...(apiCurrencyID && { currencyID: apiCurrencyID }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
       ...(filterItems.date && { endDate: filterItems?.date[1] })
     });
