@@ -65,6 +65,10 @@ export default function PlayerSegmentationPlayerList() {
 
   const breadcrumbItem = [
     { title: t('player_segmentation'), path: '/bonus/player-segmentation' },
+    {
+      title: t('view'),
+      path: `/bonus/player-segmentation/${segmentationUID}/tab/details`
+    },
     { title: t('players') }
   ];
 
@@ -125,7 +129,7 @@ export default function PlayerSegmentationPlayerList() {
         <div className="grid w-full grid-rows-[auto_1fr] px-[--margin-x]">
           <div className="flex items-center space-x-4 pt-5 lg:pt-6 rtl:space-x-reverse">
             <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
-              {t('edit') + ' ' + t('player_segmentation') + ' ' + t('form')}
+              {t('players')}
             </h2>
             <div className="hidden self-stretch py-1 sm:flex">
               <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
