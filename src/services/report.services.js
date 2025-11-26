@@ -13,7 +13,7 @@ const ReportService = {
     try {
       const { pagination, filters } = body;
 
-      const { type, keyword, startDate, endDate, stage } = filters;
+      const { type, keyword, startDate, endDate, stage, currencyID } = filters;
       console.log('filters:', filters);
 
       const apiQueryParams = {
@@ -28,7 +28,13 @@ const ReportService = {
         endDate: endDate
           ? dayjs(+endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
           : undefined,
-        stage: getStageAppToApi(stage) > -1 ? getStageAppToApi(stage) : undefined
+        stage: getStageAppToApi(stage) > -1 ? getStageAppToApi(stage) : undefined,
+        currency:
+          typeof currencyID !== 'undefined' && currencyID !== null && currencyID !== ''
+            ? currencyID.includes(',')
+              ? currencyID.split(',')
+              : [currencyID]
+            : undefined
       };
 
       const response = await sendRequest({
