@@ -77,6 +77,16 @@ export default function Reports() {
     if (queryParams.type) {
       filtersFromQuery.push({ id: 'type', value: queryParams.type });
     }
+    if (typeof queryParams.currencyID !== 'undefined' && queryParams.currencyID !== null) {
+      const currencyIDStr = queryParams.currencyID;
+      let currencyIDArray = [];
+      if (currencyIDStr.includes(',')) {
+        currencyIDArray = currencyIDStr.split(',');
+      } else {
+        currencyIDArray = [currencyIDStr];
+      }
+      filtersFromQuery.push({ id: 'currencyID', value: currencyIDArray });
+    }
     if (queryParams.startDate && queryParams.endDate) {
       filtersFromQuery.push({
         id: 'createdAt',
@@ -102,11 +112,19 @@ export default function Reports() {
       if (data.id === 'type') {
         filterItems.type = data.value;
       }
+      if (data.id === 'currencyID') {
+        filterItems.currencyID = Array.isArray(data.value) ? data.value : [data.value];
+      }
       if (data.id === 'createdAt') {
         filterItems.date = data.value;
       }
       console.log('filterItems:', filterItems);
     }
+
+    const apiCurrencyID =
+      filterItems.currencyID && filterItems.currencyID.length
+        ? filterItems.currencyID.join(',')
+        : undefined;
 
     setSearchParams({
       pageIndex: DEFAULT_PAGE_INDEX,
@@ -114,6 +132,7 @@ export default function Reports() {
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
       ...(filterItems.stage && { stage: filterItems.stage }),
       ...(filterItems.type && { type: filterItems.type }),
+      ...(apiCurrencyID && { currencyID: apiCurrencyID }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
       ...(filterItems.date && { endDate: filterItems?.date[1] })
     });

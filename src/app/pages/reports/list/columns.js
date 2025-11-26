@@ -65,7 +65,7 @@ export const columns = [
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.currencyCode, {
-    id: 'currencyCode',
+    id: 'currencyID',
     label: 'Currency',
     header: 'Currency',
     cell: BoldCell,

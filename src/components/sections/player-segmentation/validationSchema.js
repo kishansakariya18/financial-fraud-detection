@@ -11,8 +11,7 @@ import {
 const createConditionSchema = () => {
   return Yup.object().shape({
     id: Yup.string().required('Condition ID is required'),
-    type: Yup.string().oneOf(['condition'], 'Type must be condition').required(),
-    attributeKey: Yup.string()
+    field: Yup.string()
       .required('Attribute is required')
       .test('not-empty', 'Attribute is required', (value) => {
         return value && value.trim().length > 0;
@@ -25,10 +24,10 @@ const createConditionSchema = () => {
     value: Yup.mixed()
       .nullable()
       .test('value-validation', 'Value is required', function (value) {
-        const { operator, attributeKey } = this.parent;
+        const { operator, field } = this.parent;
 
-        // Skip validation if operator or attributeKey is not set yet
-        if (!operator || !attributeKey) {
+        // Skip validation if operator or field is not set yet
+        if (!operator || !field) {
           return true;
         }
 
@@ -37,22 +36,25 @@ const createConditionSchema = () => {
         }
 
         // Get attribute metadata to determine data type
-        const attribute = getAttribute(attributeKey);
+        const attribute = getAttribute(field);
         if (!attribute) {
           return this.createError({ message: 'Invalid attribute' });
         }
 
         const dataType = attribute.dataType;
 
-        // Between numeric
-        if (operator === NumericOperator.BETWEEN) {
-          if (!value || typeof value !== 'object') {
-            return this.createError({ message: 'Value must be an object with min and max' });
+        // Between numeric - expects array [min, max]
+        if (operator === NumericOperator.BETWEEN && dataType === 'numeric') {
+          if (!Array.isArray(value)) {
+            return this.createError({ message: 'Please enter min and max values' });
           }
-          if (typeof value.min !== 'number' || typeof value.max !== 'number') {
-            return this.createError({ message: 'Min and max must be numbers' });
+          if (value.length !== 2) {
+            return this.createError({ message: 'Please enter min and max values' });
           }
-          if (value.min >= value.max) {
+          if (typeof value[0] !== 'number' || typeof value[1] !== 'number') {
+            return this.createError({ message: 'Both min and max must be numbers' });
+          }
+          if (value[0] >= value[1]) {
             return this.createError({ message: 'Max must be greater than min' });
           }
           return true;
@@ -123,18 +125,21 @@ const createConditionSchema = () => {
           return true;
         }
 
-        // Between date range
-        if (operator === DatetimeOperator.BETWEEN_DATE_RANGE) {
-          if (!value || typeof value !== 'object') {
+        // Between date range - expects array [fromDate, toDate]
+        if (operator === DatetimeOperator.BETWEEN_DATE_RANGE && dataType === 'datetime') {
+          if (!Array.isArray(value)) {
             return this.createError({
-              message: 'Value must be an object with from and to dates'
+              message: 'Please enter from and to dates'
             });
           }
-          if (!value.from || !value.to) {
-            return this.createError({ message: 'Both from and to dates are required' });
+          if (value.length !== 2) {
+            return this.createError({ message: 'Please enter from and to dates' });
           }
-          const fromDate = new Date(value.from);
-          const toDate = new Date(value.to);
+          if (!value[0] || !value[1]) {
+            return this.createError({ message: 'Please enter from and to dates' });
+          }
+          const fromDate = new Date(value[0]);
+          const toDate = new Date(value[1]);
           if (isNaN(fromDate.getTime()) || isNaN(toDate.getTime())) {
             return this.createError({ message: 'Invalid date format' });
           }
@@ -165,21 +170,21 @@ const createGroupSchema = () => {
   return Yup.lazy(() =>
     Yup.object().shape({
       id: Yup.string().required('Group ID is required'),
-      type: Yup.string().oneOf(['group'], 'Type must be group').required(),
       operator: Yup.string()
         .oneOf(['AND', 'OR'], 'Operator must be AND or OR')
         .required('Group operator is required'),
-      children: Yup.array()
+      conditions: Yup.array()
         .of(
           Yup.lazy((child) => {
-            if (child && child.type === 'group') {
+            // Check if child is a group (has conditions array) or condition (has field)
+            if (child && child.conditions !== undefined) {
               return createGroupSchema();
             }
             return createConditionSchema();
           })
         )
         .min(1, 'Group must have at least one child')
-        .required('Children are required')
+        .required('Conditions are required')
     })
   );
 };
@@ -201,53 +206,80 @@ export const playerSegmentationSchema = Yup.object().shape({
   segmentTag: Yup.string().nullable().max(100, 'Tag cannot exceed 100 characters'),
   // .matches(/^[a-zA-Z0-9_-]*$/, 'Tag can only contain letters, numbers, hyphens, and underscores'),
 
-  segmentRules: Yup.object()
-    .shape({
-      root: createGroupSchema()
-    })
-    .required('Segment rules are required')
-    .test('root-required', 'Root group is required', function (value) {
-      return value && value.root;
-    })
-    .test('has-conditions', 'At least one condition is required', function (value) {
-      if (!value || !value.root) return false;
-
-      // Count conditions recursively
-      const countConditions = (node) => {
-        if (node.type === 'condition') return 1;
-        if (node.type === 'group' && node.children) {
-          return node.children.reduce((sum, child) => sum + countConditions(child), 0);
+  segmentRules: Yup.lazy(() => {
+    // Validate as a group schema
+    return Yup.object()
+      .shape({
+        id: Yup.string().required('Group ID is required'),
+        operator: Yup.string()
+          .oneOf(['AND', 'OR'], 'Operator must be AND or OR')
+          .required('Group operator is required'),
+        conditions: Yup.array()
+          .of(
+            Yup.lazy((child) => {
+              // Check if child is a group (has conditions array) or condition (has field)
+              if (child && child.conditions !== undefined) {
+                return createGroupSchema();
+              }
+              return createConditionSchema();
+            })
+          )
+          .min(1, 'Group must have at least one child')
+          .required('Conditions are required')
+      })
+      .required('Segment rules are required')
+      .test('rule-tree-structure', 'Invalid rule structure', function (value) {
+        if (!value) return this.createError({ message: 'Segment rules are required' });
+        // Check basic structure
+        if (!value.id || !value.operator) {
+          return this.createError({ message: 'Invalid rule structure' });
         }
-        return 0;
-      };
+        return true;
+      })
+      .test('condition-count', 'At least one condition is required', function (value) {
+        if (!value) return true;
 
-      const conditionCount = countConditions(value.root);
-      if (conditionCount === 0) {
-        return this.createError({ message: 'At least one condition is required' });
-      }
+        // Count conditions recursively
+        const countConditions = (node) => {
+          // Conditions have 'field' property
+          if (node.field !== undefined) return 1;
+          // Groups have 'conditions' array
+          if (node.conditions && Array.isArray(node.conditions)) {
+            return node.conditions.reduce((sum, child) => sum + countConditions(child), 0);
+          }
+          return 0;
+        };
 
-      return true;
-    })
-    .test('max-depth', 'Maximum nesting depth exceeded', function (value) {
-      if (!value || !value.root) return false;
-
-      // Check depth recursively
-      const getDepth = (node, currentDepth = 0) => {
-        if (node.type === 'condition') return currentDepth;
-        if (node.type === 'group' && node.children && node.children.length > 0) {
-          const childDepths = node.children.map((child) => getDepth(child, currentDepth + 1));
-          return Math.max(...childDepths);
+        const totalConditions = countConditions(value);
+        if (totalConditions === 0) {
+          return this.createError({ message: 'At least one condition is required' });
         }
-        return currentDepth;
-      };
 
-      const depth = getDepth(value.root);
-      if (depth > 10) {
-        return this.createError({ message: 'Maximum nesting depth of 10 exceeded' });
-      }
+        return true;
+      })
+      .test('nesting-depth', 'Maximum nesting depth exceeded (10 levels)', function (value) {
+        if (!value) return true;
 
-      return true;
-    }),
+        // Check depth recursively
+        const getDepth = (node, currentDepth = 0) => {
+          // Conditions have 'field' property
+          if (node.field !== undefined) return currentDepth;
+          // Groups have 'conditions' array
+          if (node.conditions && Array.isArray(node.conditions) && node.conditions.length > 0) {
+            const childDepths = node.conditions.map((child) => getDepth(child, currentDepth + 1));
+            return Math.max(...childDepths);
+          }
+          return currentDepth;
+        };
+
+        const depth = getDepth(value);
+        if (depth > 10) {
+          return this.createError({ message: 'Maximum nesting depth exceeded (10 levels)' });
+        }
+
+        return true;
+      });
+  }),
 
   isScheduled: Yup.boolean().nullable(),
 
@@ -278,7 +310,7 @@ export const extractRuleErrors = (errors) => {
 
   // Parse tree errors from Yup
   const parseErrors = (path, error) => {
-    const match = path.match(/root\.children\[(\d+)\]/g);
+    const match = path.match(/conditions\[(\d+)\]/g);
     if (match) {
       // Extract node IDs from path if possible
       // This is a simplified approach; in practice, you might need

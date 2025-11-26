@@ -3,6 +3,8 @@ import { MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { t } from 'i18next';
+import { useState, useEffect } from 'react';
+import CurrencyService from 'services/currency.services';
 
 // Local Imports
 import { DateFilter } from 'components/shared/table/DateFilter';
@@ -112,25 +114,34 @@ function SearchInput({ table, onApplyFilters }) {
 
 function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }) {
   const isFiltered = table.getState().columnFilters.length > 0;
-  // Build currency options from current table data
-  const buildCurrencyOptions = () => {
-    try {
-      const rows = table?.getRowModel?.()?.rows || [];
-      const map = new Map();
-      for (const r of rows) {
-        const cur = r?.original?.currency;
-        if (cur?.id && !map.has(String(cur.id))) {
-          map.set(String(cur.id), {
-            value: String(cur.id),
-            label: cur.code || String(cur.id)
-          });
+  const [currencyOptions, setCurrencyOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchCurrencies = async () => {
+      try {
+        const response = await CurrencyService.getCurrencyList({
+          pagination: { pageSize: 1000, pageIndex: 0 },
+          filters: { status: 'active' }
+        });
+        const data = response?.data?.data || response?.response?.data || [];
+        if (Array.isArray(data) && data.length > 0) {
+          const options = data.map((currency) => ({
+            value: String(currency.CurrencyID),
+            label: currency.Code || currency.Name
+          }));
+          setCurrencyOptions(options);
+        } else {
+          console.warn('No active currencies found');
+          setCurrencyOptions([]);
         }
+      } catch (error) {
+        console.error('Error fetching currencies:', error);
+        setCurrencyOptions([]);
       }
-      return Array.from(map.values());
-    } catch {
-      return [];
-    }
-  };
+    };
+
+    fetchCurrencies();
+  }, []);
   return (
     <>
       {table.getColumn('planType') && (
@@ -157,7 +168,7 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
 
       {table.getColumn('currencyID') && (
         <FacedtedFilter
-          options={buildCurrencyOptions()}
+          options={currencyOptions}
           column={table.getColumn('currencyID')}
           title={t('currency')}
           Icon={HiOutlineCash}

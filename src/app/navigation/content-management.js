@@ -5,8 +5,8 @@ import { FolderIcon } from '@heroicons/react/24/outline';
 import { NAV_TYPE_COLLAPSE, PERMISSIONS } from 'constants/app.constant';
 import { banner } from './banner';
 import { pages } from './pages';
-import { blog } from './blog';
-import { blogCategory } from './blog-category';
+// import { blog } from './blog';
+// import { blogCategory } from './blog-category';
 
 export const contentManagement = {
   id: 'content.management',
@@ -21,5 +21,10 @@ export const contentManagement = {
     PERMISSIONS.BLOG.LIST,
     PERMISSIONS.BLOG_CATEGORY.LIST
   ],
-  childs: [pages, banner, blogCategory, blog]
+  childs: [
+    pages,
+    banner
+    // blogCategory,
+    // blog
+  ]
 };

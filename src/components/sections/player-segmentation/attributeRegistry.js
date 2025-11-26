@@ -40,18 +40,18 @@ export const SegmentAttributeKey = {
 
 // Operator Keys by Type
 export const NumericOperator = {
-  EQUALS: 'equals',
-  NOT_EQUALS: 'not_equals',
-  GREATER_THAN: 'greater_than',
-  LESS_THAN: 'less_than',
+  EQUALS: '=',
+  NOT_EQUALS: '!=',
+  GREATER_THAN: '>',
+  LESS_THAN: '<',
   BETWEEN: 'between'
 };
 
 export const DatetimeOperator = {
-  LESS_THAN_X_AGO: 'less_than_x_ago',
-  GREATER_THAN_X_AGO: 'greater_than_x_ago',
+  LESS_THAN_X_AGO: '< x ago',
+  GREATER_THAN_X_AGO: '> x ago',
   BETWEEN_RELATIVE: 'between_relative',
-  BETWEEN_DATE_RANGE: 'between_date_range',
+  BETWEEN_DATE_RANGE: 'between',
   IS_NULL: 'is_null',
   IS_NOT_NULL: 'is_not_null'
 };
@@ -62,10 +62,19 @@ export const BooleanOperator = {
 };
 
 export const EnumStringOperator = {
-  EQUALS: 'equals',
-  NOT_EQUALS: 'not_equals',
+  EQUALS: '=',
+  NOT_EQUALS: '!=',
   IN: 'in',
   NOT_IN: 'not_in'
+};
+
+export const ValueInputType = {
+  NUMBER: 'number',
+  DATETIME: 'datetime',
+  BOOLEAN: 'boolean',
+  ENUM: 'enum',
+  AUTOCOMPLETE: 'autocomplete',
+  TAG_INPUT: 'tag-input'
 };
 
 // Time Units for Relative Date Operations
@@ -79,9 +88,9 @@ export const TimeUnit = {
 
 // Account Status Options
 export const AccountStatus = {
-  ACTIVE: 'active',
-  INACTIVE: 'inactive',
-  BLOCKED: 'blocked'
+  INACTIVE: 0,
+  ACTIVE: 1,
+  BLOCKED: 2
 };
 
 const numericOperator = [
@@ -117,78 +126,91 @@ export const attributeRegistry = {
     key: SegmentAttributeKey.DEPOSIT_COUNT,
     label: 'Deposit Count',
     dataType: 'numeric',
+    inputType: ValueInputType.NUMBER,
     supportedOperators: numericOperator
   },
   [SegmentAttributeKey.DEPOSIT_AMOUNT]: {
     key: SegmentAttributeKey.DEPOSIT_AMOUNT,
     label: 'Deposit Amount',
     dataType: 'numeric',
+    inputType: ValueInputType.NUMBER,
     supportedOperators: numericOperator
   },
   [SegmentAttributeKey.WITHDRAWAL_COUNT]: {
     key: SegmentAttributeKey.WITHDRAWAL_COUNT,
     label: 'Withdrawal Count',
     dataType: 'numeric',
+    inputType: ValueInputType.NUMBER,
     supportedOperators: numericOperator
   },
   [SegmentAttributeKey.WITHDRAWAL_AMOUNT]: {
     key: SegmentAttributeKey.WITHDRAWAL_AMOUNT,
     label: 'Withdrawal Amount',
     dataType: 'numeric',
+    inputType: ValueInputType.NUMBER,
     supportedOperators: numericOperator
   },
   [SegmentAttributeKey.NET_AMOUNT]: {
     key: SegmentAttributeKey.NET_AMOUNT,
     label: 'Net Amount',
     dataType: 'numeric',
+    inputType: ValueInputType.NUMBER,
     supportedOperators: numericOperator
   },
   [SegmentAttributeKey.FREE_BONUS_COUNT]: {
     key: SegmentAttributeKey.FREE_BONUS_COUNT,
     label: 'Free Bonus Count',
     dataType: 'numeric',
+    inputType: ValueInputType.NUMBER,
     supportedOperators: numericOperator
   },
   [SegmentAttributeKey.FREE_BONUS_AMOUNT]: {
     key: SegmentAttributeKey.FREE_BONUS_AMOUNT,
     label: 'Free Bonus Amount',
     dataType: 'numeric',
+    inputType: ValueInputType.NUMBER,
     supportedOperators: numericOperator
   },
   [SegmentAttributeKey.FREE_BONUS_RATIO]: {
     key: SegmentAttributeKey.FREE_BONUS_RATIO,
     label: 'Free Bonus Ratio (%)',
     dataType: 'numeric',
+    inputType: ValueInputType.NUMBER,
     supportedOperators: numericOperator
   },
   [SegmentAttributeKey.DEPOSIT_BONUS_COUNT]: {
     key: SegmentAttributeKey.DEPOSIT_BONUS_COUNT,
     label: 'Deposit Bonus Count',
     dataType: 'numeric',
+    inputType: ValueInputType.NUMBER,
     supportedOperators: numericOperator
   },
   [SegmentAttributeKey.DEPOSIT_BONUS_AMOUNT]: {
     key: SegmentAttributeKey.DEPOSIT_BONUS_AMOUNT,
     label: 'Deposit Bonus Amount',
     dataType: 'numeric',
+    inputType: ValueInputType.NUMBER,
     supportedOperators: numericOperator
   },
   [SegmentAttributeKey.CLEAN_DEPOSIT_RATIO]: {
     key: SegmentAttributeKey.CLEAN_DEPOSIT_RATIO,
     label: 'Clean Deposit Ratio (%)',
     dataType: 'numeric',
+    inputType: ValueInputType.NUMBER,
     supportedOperators: numericOperator
   },
   [SegmentAttributeKey.DEPOSIT_BONUS_RATIO]: {
     key: SegmentAttributeKey.DEPOSIT_BONUS_RATIO,
     label: 'Deposit Bonus Ratio (%)',
     dataType: 'numeric',
+    inputType: ValueInputType.NUMBER,
     supportedOperators: numericOperator
   },
   [SegmentAttributeKey.TOTAL_BONUS_RATIO]: {
     key: SegmentAttributeKey.TOTAL_BONUS_RATIO,
     label: 'Total Bonus Ratio (%)',
     dataType: 'numeric',
+    inputType: ValueInputType.NUMBER,
     supportedOperators: numericOperator
   },
 
@@ -197,42 +219,49 @@ export const attributeRegistry = {
     key: SegmentAttributeKey.SIGNUP_DATETIME,
     label: 'Signup Date',
     dataType: 'datetime',
+    inputType: ValueInputType.DATETIME,
     supportedOperators: datetimeOperator
   },
   [SegmentAttributeKey.FIRST_DEPOSIT_TIME]: {
     key: SegmentAttributeKey.FIRST_DEPOSIT_TIME,
     label: 'First Deposit Time',
     dataType: 'datetime',
+    inputType: ValueInputType.DATETIME,
     supportedOperators: datetimeOperator
   },
   [SegmentAttributeKey.LAST_DEPOSIT_TIME]: {
     key: SegmentAttributeKey.LAST_DEPOSIT_TIME,
     label: 'Last Deposit Time',
     dataType: 'datetime',
+    inputType: ValueInputType.DATETIME,
     supportedOperators: datetimeOperator
   },
   [SegmentAttributeKey.LAST_LOGIN_TIME]: {
     key: SegmentAttributeKey.LAST_LOGIN_TIME,
     label: 'Last Login Time',
     dataType: 'datetime',
+    inputType: ValueInputType.DATETIME,
     supportedOperators: datetimeOperator
   },
   [SegmentAttributeKey.LAST_BONUS_CLAIM_TIME]: {
     key: SegmentAttributeKey.LAST_BONUS_CLAIM_TIME,
     label: 'Last Bonus Claim Time',
     dataType: 'datetime',
+    inputType: ValueInputType.DATETIME,
     supportedOperators: datetimeOperator
   },
   [SegmentAttributeKey.LAST_BONUS_CLAIM_TIME]: {
     key: SegmentAttributeKey.LAST_BONUS_CLAIM_TIME,
     label: 'Last Bonus Claim Time',
     dataType: 'datetime',
+    inputType: ValueInputType.DATETIME,
     supportedOperators: datetimeOperator
   },
   [SegmentAttributeKey.LAST_ACTIVITY_TIME]: {
     key: SegmentAttributeKey.LAST_ACTIVITY_TIME,
     label: 'Last Activity Time',
     dataType: 'datetime',
+    inputType: ValueInputType.DATETIME,
     supportedOperators: datetimeOperator
   },
 
@@ -241,18 +270,21 @@ export const attributeRegistry = {
     key: SegmentAttributeKey.EMAIL_VERIFIED,
     label: 'Email Verified',
     dataType: 'boolean',
+    inputType: ValueInputType.BOOLEAN,
     supportedOperators: booleanOperator
   },
   [SegmentAttributeKey.PHONE_VERIFIED]: {
     key: SegmentAttributeKey.PHONE_VERIFIED,
     label: 'Phone Verified',
     dataType: 'boolean',
+    inputType: ValueInputType.BOOLEAN,
     supportedOperators: booleanOperator
   },
   [SegmentAttributeKey.KYC_VERIFIED]: {
     key: SegmentAttributeKey.KYC_VERIFIED,
     label: 'KYC Verified',
     dataType: 'boolean',
+    inputType: ValueInputType.BOOLEAN,
     supportedOperators: booleanOperator
   },
 
@@ -261,6 +293,7 @@ export const attributeRegistry = {
     key: SegmentAttributeKey.ACCOUNT_STATUS,
     label: 'Account Status',
     dataType: 'enum',
+    inputType: ValueInputType.ENUM,
     supportedOperators: enumStringOperator,
     options: [
       { value: AccountStatus.ACTIVE, label: 'Active' },
@@ -271,19 +304,22 @@ export const attributeRegistry = {
   [SegmentAttributeKey.COUNTRY]: {
     key: SegmentAttributeKey.COUNTRY,
     label: 'Country',
-    dataType: 'string',
+    dataType: 'enum',
+    inputType: ValueInputType.AUTOCOMPLETE,
     supportedOperators: enumStringOperator
   },
   [SegmentAttributeKey.CURRENCY]: {
     key: SegmentAttributeKey.CURRENCY,
     label: 'Currency',
-    dataType: 'string',
+    dataType: 'enum',
+    inputType: ValueInputType.AUTOCOMPLETE,
     supportedOperators: enumStringOperator
   },
   [SegmentAttributeKey.AFFILIATE]: {
     key: SegmentAttributeKey.AFFILIATE,
     label: 'Affiliate',
     dataType: 'string',
+    inputType: ValueInputType.TAG_INPUT,
     supportedOperators: enumStringOperator
   }
 };
@@ -301,7 +337,7 @@ export const operatorLabels = {
   [DatetimeOperator.LESS_THAN_X_AGO]: 'Less Than X Ago',
   [DatetimeOperator.GREATER_THAN_X_AGO]: 'Greater Than X Ago',
   [DatetimeOperator.BETWEEN_RELATIVE]: 'Between (Relative)',
-  [DatetimeOperator.BETWEEN_DATE_RANGE]: 'Between (Date Range)',
+  [DatetimeOperator.BETWEEN_DATE_RANGE]: 'Between',
   [DatetimeOperator.IS_NULL]: 'Is Null',
   [DatetimeOperator.IS_NOT_NULL]: 'Is Not Null',
 
