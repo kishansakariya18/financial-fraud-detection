@@ -530,8 +530,8 @@ export const PERMISSIONS = Object.freeze({
     PLAYER_LIST: 'player-segmentation-player-list'
   },
   ENQUIRES: {
-    LIST: 'enquires-view',
-    CHANGE_STATUS: 'enquires-change-status'
+    LIST: 'enquiry-view',
+    CHANGE_STATUS: 'enquiry-change-status'
   }
 });
 

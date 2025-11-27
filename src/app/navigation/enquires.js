@@ -9,5 +9,5 @@ export const enquires = {
   title: 'Enquires',
   transKey: 'enquires',
   Icon: ChatBubbleLeftRightIcon,
-  permission: PERMISSIONS.RESPONSIBLE_GAMING_RESTRICTIONS.VIEW
+  permission: PERMISSIONS.ENQUIRES.LIST
 };
