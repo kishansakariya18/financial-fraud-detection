@@ -9,7 +9,7 @@ import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
-import { enquiresStatusOptions } from '../helper';
+import { enquiresStatusOptions, enquiresSubjectOptions } from '../helper';
 
 export function Toolbar({
   keyword,
@@ -163,6 +163,17 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           options={enquiresStatusOptions}
           column={table.getColumn('Status')}
           title={t('status')}
+          Icon={MapPinIcon}
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
+
+      {table.getColumn('Subject') && (
+        <FacedtedFilter
+          options={enquiresSubjectOptions}
+          column={table.getColumn('Subject')}
+          title={t('enquiry_subject')}
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}

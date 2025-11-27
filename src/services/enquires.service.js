@@ -11,7 +11,8 @@ const EnquiresService = {
         filters: {
           keyword: filters?.keyword || undefined,
           status: filters?.status || undefined,
-          setBy: filters?.setBy || undefined
+          setBy: filters?.setBy || undefined,
+          type: filters?.subject || undefined
         }
       };
       const url = apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.ENQUIRES.LIST;

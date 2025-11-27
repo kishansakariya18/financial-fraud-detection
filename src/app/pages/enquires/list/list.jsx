@@ -74,6 +74,9 @@ export default function EnquiresList() {
     if (queryParams.status) {
       filtersFromQuery.push({ id: 'Status', value: queryParams.status });
     }
+    if (queryParams.subject) {
+      filtersFromQuery.push({ id: 'Subject', value: queryParams.subject });
+    }
     if (queryParams.setBy) {
       filtersFromQuery.push({ id: 'Set By', value: queryParams.setBy });
     }
@@ -94,6 +97,9 @@ export default function EnquiresList() {
       if (data.id === 'Status') {
         filterItems.status = data.value;
       }
+      if (data.id === 'Subject') {
+        filterItems.subject = data.value;
+      }
       if (data.id === 'Set By') {
         filterItems.setBy = data.value;
       }
@@ -107,6 +113,7 @@ export default function EnquiresList() {
       pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(keyword.trim() && { keyword: keyword.trim() }),
       ...(filterItems.status && { status: filterItems.status }),
+      ...(filterItems.subject && { subject: filterItems.subject }),
       ...(filterItems.setBy && { setBy: filterItems.setBy }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
       ...(filterItems.date && { endDate: filterItems?.date[1] })

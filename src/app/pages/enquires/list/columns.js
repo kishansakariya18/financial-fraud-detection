@@ -4,7 +4,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 // Local Imports
 import { IdCell, DateCell, BoldCell, BadgeCell } from 'components/custom/table/cell';
 import { RowActions } from './RowActions';
-import { enquiresStatusOptions } from '../helper';
+import { enquiresStatusOptions, enquiresSubjectOptions } from '../helper';
 
 const columnHelper = createColumnHelper();
 
@@ -19,6 +19,8 @@ export const columns = [
     id: 'Subject',
     header: 'Subject',
     cell: BoldCell,
+    meta: { optionData: enquiresSubjectOptions },
+    filterFn: 'arrIncludesSome',
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.description, {
