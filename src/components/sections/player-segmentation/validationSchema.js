@@ -103,30 +103,33 @@ const createConditionSchema = () => {
           return true;
         }
 
-        // Between relative
-        if (operator === DatetimeOperator.BETWEEN_RELATIVE) {
-          if (!value || typeof value !== 'object') {
+        // Between relative (new structure: array of two time period objects)
+        if (operator === DatetimeOperator.BETWEEN && dataType === 'datetime') {
+          if (!Array.isArray(value)) {
             return this.createError({
-              message: 'Value must be an object with from and to'
+              message: 'Value must be an array with from and to time periods'
             });
           }
-          if (!value.from || !value.to) {
-            return this.createError({ message: 'Both from and to are required' });
+          if (value.length !== 2) {
+            return this.createError({ message: 'Both from and to time periods are required' });
           }
-          if (typeof value.from.amount !== 'number' || typeof value.to.amount !== 'number') {
+          if (!value[0] || !value[1]) {
+            return this.createError({ message: 'Both from and to time periods are required' });
+          }
+          if (typeof value[0].amount !== 'number' || typeof value[1].amount !== 'number') {
             return this.createError({ message: 'Amounts must be numbers' });
           }
           if (
-            !['minutes', 'hours', 'days', 'weeks', 'months'].includes(value.from.unit) ||
-            !['minutes', 'hours', 'days', 'weeks', 'months'].includes(value.to.unit)
+            !['minutes', 'hours', 'days', 'weeks', 'months'].includes(value[0].unit) ||
+            !['minutes', 'hours', 'days', 'weeks', 'months'].includes(value[1].unit)
           ) {
             return this.createError({ message: 'Invalid time units' });
           }
           return true;
         }
 
-        // Between date range - expects array [fromDate, toDate]
-        if (operator === DatetimeOperator.BETWEEN_DATE_RANGE && dataType === 'datetime') {
+        // In range (absolute date range) - expects array [fromDate, toDate]
+        if (operator === DatetimeOperator.IN_RANGE && dataType === 'datetime') {
           if (!Array.isArray(value)) {
             return this.createError({
               message: 'Please enter from and to dates'

@@ -623,5 +623,17 @@
   "verify_kyc": "Vérifier KYC",
   "verify_kyc_confirmation": "Êtes-vous sûr de vouloir vérifier le KYC pour ce joueur?",
   "kyc_verified_successfully": "Le KYC a été vérifié avec succès pour ce joueur.",
-  "failed_to_verify_kyc": "Échec de la vérification du KYC. Veuillez réessayer ou vérifier les détails du joueur."
+  "failed_to_verify_kyc": "Échec de la vérification du KYC. Veuillez réessayer ou vérifier les détails du joueur.",
+  "enquiry_subject": "Sujet",
+  "enquiry_description": "Description",
+  "enquiry_status": "Statut",
+  "enquiry_created_at": "Créé le",
+  "enquiry_modified_at": "Modifié le",
+  "enquiry_user": "Utilisateur",
+  "enquiry_email": "Email",
+  "enquiry_set_by": "Estableci",
+  "areYouSureEnquires": "Êtes-vous sûr de vouloir supprimer cette enquire?",
+  "areYouSureEnquiresChangeStatus": "Êtes-vous sûr de vouloir changer le statut de cette enquire?",
+  "enquiry_change_status": "Changer le statut",
+  "enquires": "Demandes de renseignements"
 }

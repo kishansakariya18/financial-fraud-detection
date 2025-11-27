@@ -4,8 +4,8 @@ import {
   EllipsisHorizontalIcon,
   EyeIcon,
   CreditCardIcon,
-  KeyIcon,
-  CheckCircleIcon
+  KeyIcon
+  // CheckCircleIcon
 } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useEffect, useState } from 'react';
@@ -23,6 +23,7 @@ import PlayerService from 'services/player.services';
 import { isB2BPlatform } from 'utils/platformNavigation';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
+import { FaCheck } from 'react-icons/fa6';
 export function PlayerRowActions({
   row,
   table,
@@ -316,7 +317,7 @@ export function PlayerRowActions({
               leaveTo="opacity-0 translate-y-2">
               <MenuItems
                 anchor={{ to: 'bottom end', gap: 12 }}
-                className="absolute z-[100] w-[12rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
+                className="absolute z-[100] w-[14rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
                 {canView && (
                   <MenuItem>
                     {({ focus }) => (
@@ -424,7 +425,7 @@ export function PlayerRowActions({
                           'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
                           focus && 'bg-this/10 dark:bg-this-light/10'
                         )}>
-                        <CheckCircleIcon className="size-4.5 stroke-1" />
+                        <FaCheck className="size-4.5 stroke-1" />
                         <span>{t('verify_kyc') || 'Verify KYC'}</span>
                       </button>
                     )}

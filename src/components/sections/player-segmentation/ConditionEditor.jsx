@@ -1,12 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TrashIcon, DocumentDuplicateIcon } from '@heroicons/react/24/outline';
 import { Button, Input } from 'components/ui';
 import { Listbox } from 'components/shared/form/Listbox';
 import { Combobox } from 'components/shared/form/Combobox';
 import { TagsInputNew } from 'components/shared/form/TagsInputNew';
-import AuthService from 'services/auth.services';
-import CurrencyService from 'services/currency.services';
+import { useSegmentationMappings } from './useSegmentationMappings';
 import {
   getAttribute,
   getAttributeOptions,
@@ -25,52 +24,21 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
   const [field, setField] = useState(condition.field || '');
   const [operator, setOperator] = useState(condition.operator || '');
   const [value, setValue] = useState(condition.value);
-  const [countryOptions, setCountryOptions] = useState([]);
-  const [currencyOptions, setCurrencyOptions] = useState([]);
 
-  const countriesFetched = useRef(false);
-  const currenciesFetched = useRef(false);
+  // Use the custom hook to fetch and cache data
+  const { countryOptions, currencyOptions, affiliateOptions } = useSegmentationMappings({
+    fetchCountries: field === SegmentAttributeKey.COUNTRY,
+    fetchCurrencies: field === SegmentAttributeKey.CURRENCY,
+    fetchAffiliates: field === SegmentAttributeKey.AFFILIATE
+  });
+
+  console.log('countryOptions', countryOptions);
+  console.log('currencyOptions', currencyOptions);
+  console.log('affiliateOptions', affiliateOptions);
 
   const attributeOptions = getAttributeOptions();
   const operatorOptions = getOperatorOptions(field);
   const selectedAttribute = getAttribute(field);
-
-  // Fetch country/currency options when attribute changes to country or currency
-  useEffect(() => {
-    const fetchAttributeOptions = async () => {
-      if (field === SegmentAttributeKey.COUNTRY && !countriesFetched.current) {
-        countriesFetched.current = true;
-        await AuthService.getCountries()
-          .then(({ response }) => {
-            const options = response.data.map((country) => ({
-              value: country.CountryID,
-              label: country.CountryName
-            }));
-            setCountryOptions(options);
-          })
-          .catch(() => {
-            countriesFetched.current = false; // Reset on error so it can retry
-            setCountryOptions([]);
-          });
-      }
-      if (field === SegmentAttributeKey.CURRENCY && !currenciesFetched.current) {
-        currenciesFetched.current = true;
-        await CurrencyService.getPlatformCurrancyCodes()
-          .then(({ response }) => {
-            const options = response.data.map(({ Code, CurrencyID }) => ({
-              value: CurrencyID,
-              label: Code
-            }));
-            setCurrencyOptions(options);
-          })
-          .catch(() => {
-            currenciesFetched.current = false; // Reset on error so it can retry
-            setCurrencyOptions([]);
-          });
-      }
-    };
-    fetchAttributeOptions();
-  }, [field]);
 
   // Reset operator and value when attribute changes
   useEffect(() => {
@@ -93,12 +61,13 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
         operator === DatetimeOperator.GREATER_THAN_X_AGO
       ) {
         setValue({ amount: 7, direction: 'Ago', unit: 'days' });
-      } else if (operator === DatetimeOperator.BETWEEN_RELATIVE) {
-        setValue({
-          from: { amount: 7, unit: 'days' },
-          to: { amount: 0, unit: 'days' }
-        });
-      } else if (operator === DatetimeOperator.BETWEEN_DATE_RANGE) {
+      } else if (operator === DatetimeOperator.BETWEEN) {
+        setValue([
+          { amount: 7, unit: 'days' },
+          { amount: 0, unit: 'days' }
+        ]);
+      } else if (operator === DatetimeOperator.IN_RANGE) {
+        // Absolute date range: array of datetime strings
         setValue(['', '']);
       } else if (operator === EnumStringOperator.IN || operator === EnumStringOperator.NOT_IN) {
         setValue([]);
@@ -130,6 +99,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
     const getDynamicOptions = () => {
       if (field === SegmentAttributeKey.COUNTRY) return countryOptions;
       if (field === SegmentAttributeKey.CURRENCY) return currencyOptions;
+      if (field === SegmentAttributeKey.AFFILIATE) return affiliateOptions;
       return null;
     };
 
@@ -138,7 +108,14 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
       const options = getDynamicOptions();
       if (!options || options.length === 0) return null;
 
-      const attributeLabel = field === SegmentAttributeKey.COUNTRY ? 'country' : 'currency';
+      const attributeLabel =
+        field === SegmentAttributeKey.COUNTRY
+          ? 'country'
+          : field === SegmentAttributeKey.CURRENCY
+            ? 'currency'
+            : field === SegmentAttributeKey.AFFILIATE
+              ? 'affiliate'
+              : null;
 
       return (
         <Combobox
@@ -251,8 +228,14 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
       );
     }
 
-    if (operator === DatetimeOperator.BETWEEN_RELATIVE) {
+    if (
+      operator === DatetimeOperator.BETWEEN &&
+      selectedAttribute?.inputType === ValueInputType.DATETIME
+    ) {
       const timeUnitOptions = getTimeUnitOptions();
+      const fromValue = value?.[0] || { amount: 7, unit: 'days' };
+      const toValue = value?.[1] || { amount: 30, unit: 'days' };
+
       return (
         <div className="space-y-1.5">
           <div className="flex items-center gap-1.5">
@@ -260,25 +243,17 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
             <Input
               type="number"
               placeholder="Value"
-              value={value?.from?.amount || ''}
+              value={fromValue.amount || ''}
               onChange={(e) =>
-                setValue({
-                  ...value,
-                  from: { ...value?.from, amount: parseInt(e.target.value) || 0 }
-                })
+                setValue([{ ...fromValue, amount: parseInt(e.target.value) || 0 }, toValue])
               }
               error={Boolean(error?.value)}
               classNames={{ root: 'w-16' }}
             />
             <Listbox
               data={timeUnitOptions}
-              value={timeUnitOptions.find((opt) => opt.value === value?.from?.unit) || null}
-              onChange={(opt) =>
-                setValue({
-                  ...value,
-                  from: { ...value?.from, unit: opt.value }
-                })
-              }
+              value={timeUnitOptions.find((opt) => opt.value === fromValue.unit) || null}
+              onChange={(opt) => setValue([{ ...fromValue, unit: opt.value }, toValue])}
               placeholder="Unit"
               displayField="label"
               classNames={{ root: 'flex-1' }}
@@ -290,25 +265,17 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
             <Input
               type="number"
               placeholder="Amt"
-              value={value?.to?.amount || ''}
+              value={toValue.amount || ''}
               onChange={(e) =>
-                setValue({
-                  ...value,
-                  to: { ...value?.to, amount: parseInt(e.target.value) || 0 }
-                })
+                setValue([fromValue, { ...toValue, amount: parseInt(e.target.value) || 0 }])
               }
               error={Boolean(error?.value)}
               classNames={{ root: 'w-16' }}
             />
             <Listbox
               data={timeUnitOptions}
-              value={timeUnitOptions.find((opt) => opt.value === value?.to?.unit) || null}
-              onChange={(opt) =>
-                setValue({
-                  ...value,
-                  to: { ...value?.to, unit: opt.value }
-                })
-              }
+              value={timeUnitOptions.find((opt) => opt.value === toValue.unit) || null}
+              onChange={(opt) => setValue([fromValue, { ...toValue, unit: opt.value }])}
               placeholder="Unit"
               displayField="label"
               classNames={{ root: 'flex-1' }}
@@ -322,7 +289,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
     // Datetime operators - absolute date range
     if (
       selectedAttribute?.inputType === ValueInputType.DATETIME &&
-      operator === DatetimeOperator.BETWEEN_DATE_RANGE
+      operator === DatetimeOperator.IN_RANGE
     ) {
       return (
         <div className="flex items-center gap-2">

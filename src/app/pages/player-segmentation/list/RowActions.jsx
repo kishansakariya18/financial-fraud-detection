@@ -5,7 +5,8 @@ import {
   PencilSquareIcon,
   DocumentDuplicateIcon,
   UserGroupIcon,
-  ArrowPathIcon
+  ArrowPathIcon,
+  ArchiveBoxIcon
 } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
@@ -35,13 +36,14 @@ export function PlayerSegmentationRowActions({ row, table }) {
   const [refreshSuccess, setRefreshSuccess] = useState(false);
   const [refreshError, setRefreshError] = useState(false);
 
-  const [duplicateModalOpen, setDuplicateModalOpen] = useState(false);
-  const [duplicateLoading, setDuplicateLoading] = useState(false);
-  const [duplicateSuccess, setDuplicateSuccess] = useState(false);
-  const [duplicateError, setDuplicateError] = useState(false);
+  const [archiveModalOpen, setArchiveModalOpen] = useState(false);
+  const [archiveLoading, setArchiveLoading] = useState(false);
+  const [archiveSuccess, setArchiveSuccess] = useState(false);
+  const [archiveError, setArchiveError] = useState(false);
 
   const currentStatus = row?.original?.status || 'inactive';
-  const isActive = String(currentStatus).toLowerCase() === 'active';
+  const isActive = currentStatus === 'active';
+  const isArchived = currentStatus === 'archived';
 
   const canView = hasPermission(PERMISSIONS.PLAYER_SEGMENTATION.VIEW);
   const canEdit = hasPermission(PERMISSIONS.PLAYER_SEGMENTATION.EDIT);
@@ -49,6 +51,7 @@ export function PlayerSegmentationRowActions({ row, table }) {
   const canRefresh = hasPermission(PERMISSIONS.PLAYER_SEGMENTATION.REFRESH);
   const canViewPlayers = hasPermission(PERMISSIONS.PLAYER_SEGMENTATION.PLAYER_LIST);
   const canDuplicate = hasPermission(PERMISSIONS.PLAYER_SEGMENTATION.ADD);
+  const canArchive = hasPermission(PERMISSIONS.PLAYER_SEGMENTATION.ARCHIVE);
 
   // Messages
   const changeStatusMessages = {
@@ -77,15 +80,15 @@ export function PlayerSegmentationRowActions({ row, table }) {
     }
   };
 
-  const duplicateMessages = {
+  const archiveMessages = {
     pending: {
-      title: t('duplicate') + ' ' + t('player_segmentation'),
-      description: t('player_segmentation_duplicate_confirmation'),
-      actionText: t('duplicate')
+      title: t('archive') + ' ' + t('player_segmentation'),
+      description: t('player_segmentation_archive_confirmation'),
+      actionText: t('archive')
     },
     success: {
-      title: t('duplicated_successfully'),
-      description: t('player_segmentation_duplicated_successfully')
+      title: t('archived_successfully'),
+      description: t('player_segmentation_archived_successfully')
     }
   };
 
@@ -136,25 +139,29 @@ export function PlayerSegmentationRowActions({ row, table }) {
   }, [row, table]);
 
   const handleDuplicate = useCallback(() => {
-    setDuplicateLoading(true);
-    PlayerSegmentationService.duplicate(row.original.segmentationUID)
+    navigate(`/bonus/player-segmentation/create?cloneId=${row.original.segmentationUID}`);
+  }, [row, navigate]);
+
+  const handleArchive = useCallback(() => {
+    setArchiveLoading(true);
+    PlayerSegmentationService.archive(row.original.segmentationUID)
       .then(({ response }) => {
-        setDuplicateSuccess(true);
+        setArchiveSuccess(true);
         toast.success(response?.message);
         table.options.meta?.fetchNewList?.(false);
       })
       .catch((error) => {
-        setDuplicateError(true);
+        setArchiveError(true);
         toast.error(error);
       })
       .finally(() => {
-        setDuplicateLoading(false);
+        setArchiveLoading(false);
       });
   }, [row, table]);
 
   const statusState = statusError ? 'error' : statusSuccess ? 'success' : 'pending';
   const refreshState = refreshError ? 'error' : refreshSuccess ? 'success' : 'pending';
-  const duplicateState = duplicateError ? 'error' : duplicateSuccess ? 'success' : 'pending';
+  const archiveState = archiveError ? 'error' : archiveSuccess ? 'success' : 'pending';
 
   return (
     <>
@@ -190,7 +197,7 @@ export function PlayerSegmentationRowActions({ row, table }) {
                 </MenuItem>
               )}
 
-              {canEdit && (
+              {canEdit && !isArchived && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -222,7 +229,7 @@ export function PlayerSegmentationRowActions({ row, table }) {
                 </MenuItem>
               )}
 
-              {canChangeStatus && (
+              {canChangeStatus && !isArchived && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -238,7 +245,7 @@ export function PlayerSegmentationRowActions({ row, table }) {
                 </MenuItem>
               )}
 
-              {canRefresh && (
+              {canRefresh && !isArchived && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -258,13 +265,29 @@ export function PlayerSegmentationRowActions({ row, table }) {
                 <MenuItem>
                   {({ focus }) => (
                     <button
-                      onClick={() => setDuplicateModalOpen(true)}
+                      onClick={handleDuplicate}
                       className={clsx(
                         'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
                         focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
                       )}>
                       <DocumentDuplicateIcon className="size-4.5 stroke-1" />
-                      <span>{t('duplicate')}</span>
+                      <span>{t('clone')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
+
+              {canArchive && !isArchived && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={() => setArchiveModalOpen(true)}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-orange-600 outline-none transition-colors dark:text-orange-400 rtl:space-x-reverse',
+                        focus && 'bg-orange-50 dark:bg-orange-900/20'
+                      )}>
+                      <ArchiveBoxIcon className="size-4.5 stroke-1" />
+                      <span>{t('archive')}</span>
                     </button>
                   )}
                 </MenuItem>
@@ -308,21 +331,21 @@ export function PlayerSegmentationRowActions({ row, table }) {
         state={refreshState}
       />
 
-      {/* Duplicate Modal */}
+      {/* Archive Modal */}
       <ConfirmModal
-        show={duplicateModalOpen}
-        onClose={() => setDuplicateModalOpen(false)}
+        show={archiveModalOpen}
+        onClose={() => setArchiveModalOpen(false)}
         messages={{
-          ...duplicateMessages,
+          ...archiveMessages,
           error: {
             title: t('error'),
-            description: t('failed_to_duplicate'),
+            description: t('failed_to_archive'),
             actionText: t('retry')
           }
         }}
-        onOk={handleDuplicate}
-        confirmLoading={duplicateLoading}
-        state={duplicateState}
+        onOk={handleArchive}
+        confirmLoading={archiveLoading}
+        state={archiveState}
       />
     </>
   );
