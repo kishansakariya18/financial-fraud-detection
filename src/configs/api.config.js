@@ -73,7 +73,8 @@ export const apiConfig = {
       USER_OVER_ALL_SUMMARY: '/users/admin/user-summary/:userId',
       LIMIT_SUMMARY: '/users/admin/limit-summary/:userId',
       COUNTRY_LIST: '/config/admin/config/countries',
-      SEGMENTATION_LIST: '/bonus/admin/segmentation/list'
+      SEGMENTATION_LIST: '/bonus/admin/segmentation/list',
+      VERIFY_KYC_BY_ADMIN: '/users/admin/kyc/:userUID/veryfyByAdmin'
     },
     ADMIN_USER: {
       ADMIN_LIST: '/admin/admin/admin/list',

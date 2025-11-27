@@ -193,15 +193,12 @@ const EditProvider = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-800 dark:text-dark-100">Logo</p>
-                  <img
-                    src={providerDetails.Logo || '/images/no-image.png'}
-                    onError={(e) => {
-                      e.currentTarget.onerror = null;
-                      e.currentTarget.src = '/images/no-image.png';
-                    }}
-                    className="h-10 w-10 rounded bg-white object-contain"
-                    alt="Provider Logo"
+                  <RenderImage
+                    preview={preview}
+                    value={providerDetails?.Logo || ''}
+                    id={'providerLogo'}
+                    label={t('logo')}
+                    enableModal={true}
                   />
                 </div>
               </div>
@@ -293,6 +290,7 @@ const EditProvider = () => {
                           preview={preview}
                           value={providerDetails?.Logo || ''}
                           id={'providerLogo'}
+                          enableModal={true}
                         />
                       )}
                       <Upload

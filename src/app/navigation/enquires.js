@@ -1,5 +1,5 @@
 // Local Imports
-import { ChatBubbleLeftRightIcon } from '@heroicons/react/24/outline';
+import { IoMdContacts } from 'react-icons/io';
 import { NAV_TYPE_ITEM, PERMISSIONS } from 'constants/app.constant';
 
 export const enquires = {
@@ -8,6 +8,6 @@ export const enquires = {
   path: '/enquires',
   title: 'Enquires',
   transKey: 'enquires',
-  Icon: ChatBubbleLeftRightIcon,
+  Icon: IoMdContacts,
   permission: PERMISSIONS.ENQUIRES.LIST
 };

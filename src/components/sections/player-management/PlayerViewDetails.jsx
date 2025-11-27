@@ -752,6 +752,7 @@ export function PlayerViewDetails({
                           <RenderImage
                             value={`${apiConfig.baseURL.S3_URL}/user/${response?.ImageName}`}
                             id={'gameImage'}
+                            enableModal={true}
                           />
                         )}
                         {response?.ImageName}
@@ -790,6 +791,16 @@ export function PlayerViewDetails({
                       {response?.IsKYCVerified === 1 || response?.IsKYCVerified === true
                         ? `Verified`
                         : `Pending`}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('kyc_verified') + ' ' + t('by')}
+                    </p>
+                    <p>
+                      {response?.KYCVerifiedBy
+                        ? capitalizeFirstLetter(response?.KYCVerifiedBy)
+                        : '-'}
                     </p>
                   </div>
                   <div>

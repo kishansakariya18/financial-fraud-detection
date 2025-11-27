@@ -5,6 +5,7 @@ import {
   EyeIcon,
   CreditCardIcon,
   KeyIcon
+  // CheckCircleIcon
 } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useEffect, useState } from 'react';
@@ -22,6 +23,7 @@ import PlayerService from 'services/player.services';
 import { isB2BPlatform } from 'utils/platformNavigation';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
+import { FaCheck } from 'react-icons/fa6';
 export function PlayerRowActions({
   row,
   table,
@@ -46,6 +48,12 @@ export function PlayerRowActions({
   // All upgradable target class IDs (as strings)
   const [allowedUpgradableIds, setAllowedUpgradableIds] = useState([]);
   const [selectedClassId, setSelectedClassId] = useState(null);
+
+  const [verifyKycModalOpen, setVerifyKycModalOpen] = useState(false);
+  const [verifyKycLoading, setVerifyKycLoading] = useState(false);
+  const [verifyKycSuccess, setVerifyKycSuccess] = useState(false);
+  const [verifyKycError, setVerifyKycError] = useState(false);
+
   const isB2b = isB2BPlatform();
   const { hasPermission } = usePermissions();
 
@@ -57,6 +65,27 @@ export function PlayerRowActions({
     success: {
       title: t('player') + ' ' + t('status') + ' ' + t('changed'),
       description: t('player_status_suceess')
+    }
+  };
+
+  const verifyKycMessages = {
+    pending: {
+      title: t('areYouSure'),
+      description:
+        t('verify_kyc_confirmation') || 'Are you sure you want to verify the KYC for this player?',
+      actionText: t('verify') || 'Verify'
+    },
+    success: {
+      title: t('success') || 'KYC Verified',
+      description:
+        t('kyc_verified_successfully') || 'The KYC has been verified successfully for this player.'
+    },
+    error: {
+      title: t('error') || 'Error',
+      description:
+        t('failed_to_verify_kyc') ||
+        'Failed to verify KYC. Please try again or check the player details.',
+      actionText: t('retry') || 'Retry'
     }
   };
 
@@ -81,6 +110,16 @@ export function PlayerRowActions({
     setUpgradeModalOpen(false);
   };
 
+  const openVerifyKycModal = () => {
+    setVerifyKycModalOpen(true);
+    setVerifyKycError(false);
+    setVerifyKycSuccess(false);
+  };
+
+  const closeVerifyKycModal = () => {
+    setVerifyKycModalOpen(false);
+  };
+
   const handleChangeStatus = useCallback(async () => {
     setConfirmDeleteLoading(true);
     const result = await onChangeStatus(row.original);
@@ -98,6 +137,7 @@ export function PlayerRowActions({
 
   const state = changeStatusError ? 'error' : changeStatusSuccess ? 'success' : 'pending';
   const upgradeState = upgradeError ? 'error' : upgradeSuccess ? 'success' : 'pending';
+  const verifyKycState = verifyKycError ? 'error' : verifyKycSuccess ? 'success' : 'pending';
 
   // Derive current user's class id for display in modal
   const currentClassId = row?.original?.playerClassID || row?.original?.UserClassID;
@@ -110,13 +150,19 @@ export function PlayerRowActions({
     !!onCreditAmount && listFor === 'agent' && hasPermission(PERMISSIONS.USER.ADD_MONEY);
   const canResetPassword = !!onResetPassword && listFor === 'agent';
   const canUpgradeUserClass = !isB2b && hasPermission(PERMISSIONS.USER.UPGRADE_USER_CLASS);
+  const canVerifyKyc = !isB2b && hasPermission(PERMISSIONS.USER.VERIFY_KYC_BY_ADMIN);
+  // Check if KYC is pending or rejected to show verify KYC option
+  const kycStatus = row?.original?.isKYCVerified;
+  const showVerifyKyc = canVerifyKyc && (kycStatus === 'pending' || kycStatus === 'rejected');
+
   const canShowActions =
     canView ||
     canEdit ||
     canChangeStatus ||
     canCreditAmount ||
     canResetPassword ||
-    canUpgradeUserClass;
+    canUpgradeUserClass ||
+    showVerifyKyc;
 
   const handleUpgrade = useCallback(async () => {
     if (!selectedClassId || !allowedUpgradableIds.includes(selectedClassId)) return;
@@ -141,6 +187,23 @@ export function PlayerRowActions({
     setUpgradeLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedClassId, row]);
+
+  const handleVerifyKyc = useCallback(async () => {
+    setVerifyKycLoading(true);
+    const result = await PlayerService.verifyKycByAdmin(row.original.userUID);
+    if (result?.status === 200) {
+      setVerifyKycSuccess(true);
+      toast.success(result?.response.message || 'KYC verified successfully');
+      // Refresh table data to reflect the KYC status change
+      table.options.meta?.editRow?.();
+      table.options.meta?.fetchSummary?.();
+    } else {
+      setVerifyKycError(true);
+      toast.error(result?.response.message || 'Failed to verify KYC');
+    }
+    setVerifyKycLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [row]);
   // Fetch user classes when upgrade modal opens
   useEffect(() => {
     if (isB2b) return;
@@ -254,7 +317,7 @@ export function PlayerRowActions({
               leaveTo="opacity-0 translate-y-2">
               <MenuItems
                 anchor={{ to: 'bottom end', gap: 12 }}
-                className="absolute z-[100] w-[12rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
+                className="absolute z-[100] w-[14rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
                 {canView && (
                   <MenuItem>
                     {({ focus }) => (
@@ -353,6 +416,21 @@ export function PlayerRowActions({
                     )}
                   </MenuItem>
                 )}
+                {showVerifyKyc && (
+                  <MenuItem>
+                    {({ focus }) => (
+                      <button
+                        onClick={openVerifyKycModal}
+                        className={clsx(
+                          'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-this outline-none transition-colors dark:text-this-light rtl:space-x-reverse',
+                          focus && 'bg-this/10 dark:bg-this-light/10'
+                        )}>
+                        <FaCheck className="size-4.5 stroke-1" />
+                        <span>{t('verify_kyc') || 'Verify KYC'}</span>
+                      </button>
+                    )}
+                  </MenuItem>
+                )}
               </MenuItems>
             </Transition>
           </Menu>
@@ -444,6 +522,15 @@ export function PlayerRowActions({
           </div>
         )}
       </ConfirmModal>
+
+      <ConfirmModal
+        show={verifyKycModalOpen}
+        onClose={closeVerifyKycModal}
+        messages={verifyKycMessages}
+        onOk={handleVerifyKyc}
+        confirmLoading={verifyKycLoading}
+        state={verifyKycState}
+      />
     </>
   );
 }

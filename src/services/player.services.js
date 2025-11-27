@@ -736,6 +736,30 @@ const PlayerService = {
     return apiInstance.patch(apiConfig.endPoints.B2B_AGENT.PLAYER_RESET_PASSWORD(userUID), {
       password
     });
+  },
+
+  verifyKycByAdmin: async (userUID) => {
+    try {
+      const endPoint = replaceText(
+        apiConfig.endPoints.USER.VERIFY_KYC_BY_ADMIN,
+        ':userUID',
+        userUID
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          userUID: userUID
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from verifyKycByAdmin', error);
+    }
   }
 };
 

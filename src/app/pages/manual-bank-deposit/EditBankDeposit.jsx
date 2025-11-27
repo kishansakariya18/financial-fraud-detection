@@ -238,6 +238,7 @@ const EditBankDeposit = () => {
                       value={`${apiConfig.baseURL.S3_URL}/deposit-bank/${bankDetail.qrCode}`}
                       maxWidth="300px"
                       maxHeight="300px"
+                      enableModal={true}
                     />
                   )}
                   <Upload
