@@ -531,8 +531,6 @@ export const PERMISSIONS = Object.freeze({
   },
   ENQUIRES: {
     LIST: 'enquires-view',
-    DETAIL: 'enquires-detail',
-    DELETE: 'enquires-delete',
     CHANGE_STATUS: 'enquires-change-status'
   }
 });

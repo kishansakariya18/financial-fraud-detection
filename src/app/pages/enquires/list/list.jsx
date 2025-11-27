@@ -19,7 +19,7 @@ export default function EnquiresList() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyword, setKeyword] = useState(searchParams.get('keyword') || '');
-  const pageTitle = t('enquires') + ' ' + t('list');
+  const pageTitle = t('enquires');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
 

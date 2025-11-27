@@ -118,7 +118,7 @@ function SearchInput({ keyword, setKeyword, searchParams, setSearchParams }) {
           input: 'h-8 text-xs ring-primary-500/50 focus:ring',
           root: 'shrink-0'
         }}
-        placeholder={t('search') + ' ' + t('name') + ', ' + t('email') + '...'}
+        placeholder={t('search') + ' ' + t('enquiry_subject') + ', ' + t('email') + '...'}
       />
       <Button
         onClick={() =>

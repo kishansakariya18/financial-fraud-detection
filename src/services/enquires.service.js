@@ -25,40 +25,6 @@ const EnquiresService = {
       console.log('Error from Enquires list', error);
     }
   },
-  detail: async (restrictionId) => {
-    try {
-      const endPoint = replaceText(
-        apiConfig.endPoints.RESPONSIBLE_GAMBLING_RESTRICTIONS.DETAIL,
-        ':restrictionId',
-        restrictionId
-      );
-      const url = apiConfig.baseURL.API_BASE_URL + endPoint;
-      return await sendRequest({
-        url,
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-      });
-    } catch (error) {
-      console.log('Error from Enquires detail', error);
-    }
-  },
-  delete: async (restrictionId) => {
-    try {
-      const endPoint = replaceText(
-        apiConfig.endPoints.RESPONSIBLE_GAMBLING_RESTRICTIONS.DELETE,
-        ':restrictionId',
-        restrictionId
-      );
-      const url = apiConfig.baseURL.API_BASE_URL + endPoint;
-      return await sendRequest({
-        url,
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' }
-      });
-    } catch (error) {
-      console.log('Error deleting Enquires item', error);
-    }
-  },
   changeStatus: async (status, enquiryUId) => {
     try {
       const endPoint = replaceText(
@@ -69,10 +35,11 @@ const EnquiresService = {
       const url = apiConfig.baseURL.API_BASE_URL + endPoint;
       return await sendRequest({
         url,
-        method: 'PUT',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: {
-          status
+          status: status,
+          enquiryUID: enquiryUId
         }
       });
     } catch (error) {

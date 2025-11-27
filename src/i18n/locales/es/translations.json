@@ -648,5 +648,7 @@
   "enquiry_email": "Correo electrónico",
   "enquiry_set_by": "Establecido por",
   "areYouSureEnquires": "¿Estás seguro de que quieres eliminar esta consulta?",
-  "areYouSureEnquiresChangeStatus": "¿Estás seguro de que quieres cambiar el estado de esta consulta?"
+  "areYouSureEnquiresChangeStatus": "¿Estás seguro de que quieres cambiar el estado de esta consulta?",
+  "enquiry_change_status": "Cambiar estado",
+  "enquires": "Consultas"
 }

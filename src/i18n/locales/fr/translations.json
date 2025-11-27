@@ -629,5 +629,7 @@
   "enquiry_email": "Email",
   "enquiry_set_by": "Estableci",
   "areYouSureEnquires": "Êtes-vous sûr de vouloir supprimer cette enquire?",
-  "areYouSureEnquiresChangeStatus": "Êtes-vous sûr de vouloir changer le statut de cette enquire?"
+  "areYouSureEnquiresChangeStatus": "Êtes-vous sûr de vouloir changer le statut de cette enquire?",
+  "enquiry_change_status": "Changer le statut",
+  "enquires": "Demandes de renseignements"
 }
