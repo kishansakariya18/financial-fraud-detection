@@ -111,11 +111,11 @@ export function StepRewardDetails({
         <GameSelect
           value={data.selectedGame}
           onChange={(selected) => {
-            onChange('gameId', selected?.value || ''),
+            (onChange('gameId', selected?.value || ''),
               onChange('selectedGame', {
                 value: selected?.value || '',
                 label: selected?.label || ''
-              });
+              }));
           }}
           placeholder={t('search_game_info')}
           error={errors.gameId}

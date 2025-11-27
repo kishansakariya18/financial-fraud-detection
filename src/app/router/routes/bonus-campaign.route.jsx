@@ -42,9 +42,8 @@ export const bonusCampaignRoute = [
       {
         path: 'history',
         lazy: async () => {
-          const { default: BonusCampaignHistory } = await import(
-            '../../pages/bonus-campaign/history/list'
-          );
+          const { default: BonusCampaignHistory } =
+            await import('../../pages/bonus-campaign/history/list');
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.BONUS_CAMPAIGN.VIEW}>
@@ -59,9 +58,8 @@ export const bonusCampaignRoute = [
   {
     path: 'bonus-campaign/create',
     lazy: async () => {
-      const { default: CreateBonusCampaign } = await import(
-        '../../pages/bonus-campaign/CreateBonusCampaign'
-      );
+      const { default: CreateBonusCampaign } =
+        await import('../../pages/bonus-campaign/CreateBonusCampaign');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.BONUS_CAMPAIGN.ADD}>
@@ -74,9 +72,8 @@ export const bonusCampaignRoute = [
   {
     path: 'bonus-campaign/grant/:grantId/wagering-contributions',
     lazy: async () => {
-      const { default: WageringContributions } = await import(
-        'app/pages/bonus-campaign/history/wagering-contributions/list'
-      );
+      const { default: WageringContributions } =
+        await import('app/pages/bonus-campaign/history/wagering-contributions/list');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.BONUS_CAMPAIGN.VIEW_GRANT_WAGERING}>

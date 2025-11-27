@@ -35,9 +35,8 @@ export const reportsRoutes = [
   {
     path: 'report/withdraw-transctions',
     lazy: async () => {
-      const { default: WithdrawTxnList } = await import(
-        '../../pages/reports/withdraw-txn-list/list'
-      );
+      const { default: WithdrawTxnList } =
+        await import('../../pages/reports/withdraw-txn-list/list');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.REPORTS.WITHDRAW.VIEW}>
@@ -62,9 +61,8 @@ export const reportsRoutes = [
   {
     path: 'report/agent-commission',
     lazy: async () => {
-      const { default: AgentCommission } = await import(
-        '../../pages/b2b-agent/admin/report/AgentCommission'
-      );
+      const { default: AgentCommission } =
+        await import('../../pages/b2b-agent/admin/report/AgentCommission');
       return {
         Component: () => (
           <PrivateRoute
@@ -79,9 +77,8 @@ export const reportsRoutes = [
   {
     path: 'report/agent-wallet',
     lazy: async () => {
-      const { default: AgentWallet } = await import(
-        '../../pages/b2b-agent/admin/report/AgentWallet'
-      );
+      const { default: AgentWallet } =
+        await import('../../pages/b2b-agent/admin/report/AgentWallet');
       return {
         Component: () => (
           <PrivateRoute

@@ -7,9 +7,11 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import eslintPluginPrettier from 'eslint-plugin-prettier';
 
+// Disable prettier rule when explicitly requested (e.g., during build)
+const prettierOff = process.env.ESLINT_PRETTIER_OFF === '1';
+
 export default [
-  eslintConfigPrettier,
-  { ignores: ['dist', 'vite.config.js'] },
+  { ignores: ['dist', 'vite.config.js', 'eslint.config.js'] },
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
@@ -38,7 +40,9 @@ export default [
       'react/prop-types': 'off',
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       'jsx-a11y/alt-text': 'error',
-      'prettier/prettier': 'error'
+      'prettier/prettier': prettierOff ? 'off' : 'error'
     }
-  }
+  },
+  // Keep this last to turn off conflicting rules with Prettier
+  eslintConfigPrettier
 ];
