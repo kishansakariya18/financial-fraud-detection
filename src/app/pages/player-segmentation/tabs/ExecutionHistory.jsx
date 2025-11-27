@@ -99,7 +99,9 @@ const ExecutionHistory = () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
 
-    const filters = {};
+    const filters = {
+      segmentationUID: segmentationUID
+    };
     if (queryParams.evaluationType) {
       filters.evaluationType = queryParams.evaluationType;
     }
@@ -121,7 +123,14 @@ const ExecutionHistory = () => {
     }
 
     throw new Error('Failed to fetch execution log');
-  }, [queryParams]);
+  }, [
+    queryParams.endDate,
+    queryParams.evaluationType,
+    queryParams.pageIndex,
+    queryParams.pageSize,
+    queryParams.startDate,
+    segmentationUID
+  ]);
 
   const { table, isLoading, tableSettings, setColumnFilters } = useTable({
     columns,
