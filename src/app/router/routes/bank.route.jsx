@@ -19,9 +19,8 @@ export const bankRoute = [
   {
     path: 'bank/add',
     lazy: async () => {
-      const { default: AddBankDeposit } = await import(
-        '../../pages/manual-bank-deposit/AddBankDeposit'
-      );
+      const { default: AddBankDeposit } =
+        await import('../../pages/manual-bank-deposit/AddBankDeposit');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.DEPOSIT_BANK.ADD}>
@@ -34,9 +33,8 @@ export const bankRoute = [
   {
     path: 'bank/:id/edit',
     lazy: async () => {
-      const { default: EditBankDeposit } = await import(
-        '../../pages/manual-bank-deposit/EditBankDeposit'
-      );
+      const { default: EditBankDeposit } =
+        await import('../../pages/manual-bank-deposit/EditBankDeposit');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.DEPOSIT_BANK.EDIT}>

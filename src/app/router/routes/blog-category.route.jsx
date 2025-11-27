@@ -18,9 +18,8 @@ export const blogCategoryRoute = [
   {
     path: 'content-management/blog-category/:categoryId/details',
     lazy: async () => {
-      const { default: ViewBlogCategoryDetails } = await import(
-        '../../pages/blog-category/ViewBlogCategoryDetails'
-      );
+      const { default: ViewBlogCategoryDetails } =
+        await import('../../pages/blog-category/ViewBlogCategoryDetails');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.BLOG_CATEGORY.LIST}>

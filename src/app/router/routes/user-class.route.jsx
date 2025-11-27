@@ -56,9 +56,8 @@ export const userClasseRoute = [
   {
     path: '/user-class/:userClassID/:userClassLimitUID/limits/edit',
     lazy: async () => {
-      const { default: EditUserClassLimit } = await import(
-        '../../pages/user-class/limits/EditUserClassLimit'
-      );
+      const { default: EditUserClassLimit } =
+        await import('../../pages/user-class/limits/EditUserClassLimit');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.USER_CLASS_LIMIT.EDIT}>
@@ -71,9 +70,8 @@ export const userClasseRoute = [
   {
     path: '/user-class/:userClassUID/limits/create',
     lazy: async () => {
-      const { default: CreateUserClassLimit } = await import(
-        '../../pages/user-class/limits/CreateUserClassLimit'
-      );
+      const { default: CreateUserClassLimit } =
+        await import('../../pages/user-class/limits/CreateUserClassLimit');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.USER_CLASS_LIMIT.CREATE}>
@@ -86,9 +84,8 @@ export const userClasseRoute = [
   {
     path: '/user-class/:id/assign-bank',
     lazy: async () => {
-      const { default: AssignedBanks } = await import(
-        '../../pages/user-class/assigned-banks/AssignedBanks'
-      );
+      const { default: AssignedBanks } =
+        await import('../../pages/user-class/assigned-banks/AssignedBanks');
       return {
         Component: () => (
           <PrivateRoute

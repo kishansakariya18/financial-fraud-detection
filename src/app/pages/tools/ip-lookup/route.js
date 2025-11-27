@@ -4,7 +4,7 @@ const IPLookup = lazy(() => import('./IPLookup'));
 
 const ipLookupRoute = {
   path: 'tools/ip-lookup',
-  element: <IPLookup />,
+  element: <IPLookup />
 };
 
 export default ipLookupRoute;
