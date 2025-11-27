@@ -256,14 +256,27 @@ export default function ViewBonusTemplate() {
                 {
                   label: t('desktop_image'),
                   value: normalized.bonusDetails.desktopImageUrl ? (
-                    <img
-                      src={normalized.bonusDetails.desktopImageUrl}
-                      alt={''}
-                      className="h-full w-full object-cover"
-                      style={{
-                        maxWidth: '100px',
-                        maxHeight: '100px'
-                      }}
+                    // <img
+                    //   src={normalized.bonusDetails.desktopImageUrl}
+                    //   alt={''}
+                    //   className="h-full w-full object-cover"
+                    //   style={{
+                    //     maxWidth: '100px',
+                    //     maxHeight: '100px'
+                    //   }}
+                    //   // onError={(e) => {
+                    //   //   e.target.src = '/images/default-image.png';
+                    //   // }}
+                    //   // onLoad={(e) => {
+                    //   //   e.target.style.display = 'block';
+                    //   // }}
+                    // />
+                    <RenderImage
+                      value={normalized.bonusDetails.desktopImageUrl}
+                      alt={t('desktop_image')}
+                      maxWidth="100px"
+                      maxHeight="100px"
+                      enableModal={true}
                       // onError={(e) => {
                       //   e.target.src = '/images/default-image.png';
                       // }}
@@ -279,8 +292,11 @@ export default function ViewBonusTemplate() {
                   label: t('mobile_image'),
                   value: normalized.bonusDetails.mobileImageUrl ? (
                     <RenderImage
-                      src={normalized.bonusDetails.mobileImageUrl}
+                      value={normalized.bonusDetails.mobileImageUrl}
                       alt={t('mobile_image')}
+                      maxWidth="100px"
+                      maxHeight="100px"
+                      enableModal={true}
                     />
                   ) : (
                     'Not uploaded'
