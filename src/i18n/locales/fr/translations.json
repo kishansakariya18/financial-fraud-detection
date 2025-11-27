@@ -619,5 +619,9 @@
   "kycConfigurations": "Configurations KYC",
   "template_manager": "Gestionnaire de modèles",
   "eventGroup": "Groupe d'événements",
-  "channelCode": "Code de canal"
+  "channelCode": "Code de canal",
+  "verify_kyc": "Vérifier KYC",
+  "verify_kyc_confirmation": "Êtes-vous sûr de vouloir vérifier le KYC pour ce joueur?",
+  "kyc_verified_successfully": "Le KYC a été vérifié avec succès pour ce joueur.",
+  "failed_to_verify_kyc": "Échec de la vérification du KYC. Veuillez réessayer ou vérifier les détails du joueur."
 }

@@ -1270,5 +1270,9 @@
   "end_time": "End Time",
   "error": "Error",
   "failed_to_fetch_logs": "Failed to fetch logs",
-  "date_range": "Date Range"
+  "date_range": "Date Range",
+  "verify_kyc": "Verify KYC",
+  "verify_kyc_confirmation": "Are you sure you want to verify the KYC for this player?",
+  "kyc_verified_successfully": "The KYC has been verified successfully for this player.",
+  "failed_to_verify_kyc": "Failed to verify KYC. Please try again or check the player details."
 }

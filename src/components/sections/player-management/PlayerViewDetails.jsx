@@ -795,6 +795,16 @@ export function PlayerViewDetails({
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
+                      {t('kyc_verified') + ' ' + t('by')}
+                    </p>
+                    <p>
+                      {response?.KYCVerifiedBy
+                        ? capitalizeFirstLetter(response?.KYCVerifiedBy)
+                        : '-'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
                       {t('bank') + ' ' + t('status')}
                     </p>
                     <p>
