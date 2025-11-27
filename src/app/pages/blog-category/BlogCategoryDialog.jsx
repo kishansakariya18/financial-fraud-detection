@@ -21,7 +21,8 @@ const BlogCategoryDialog = ({ show, onClose, isEdit = false, categoryId = null, 
     resolver: yupResolver(isEdit ? editBlogCategorySchema : createBlogCategorySchema),
     defaultValues: {
       name: '',
-      isActive: 1
+      isActive: 1,
+      image: null
     }
   });
 
@@ -137,9 +138,9 @@ const BlogCategoryDialog = ({ show, onClose, isEdit = false, categoryId = null, 
             <div className="grid gap-4 sm:grid-cols-1">
               <Input
                 {...register('name')}
-                label={t('name')}
+                label={t('category_name')}
                 error={errors?.name?.message}
-                placeholder={t('enter') + ' ' + t('name')}
+                placeholder={t('enter') + ' ' + t('category_name')}
               />
             </div>
 
@@ -147,7 +148,7 @@ const BlogCategoryDialog = ({ show, onClose, isEdit = false, categoryId = null, 
               <Controller
                 render={({ field }) => (
                   <Checkbox
-                    label={t('active')}
+                    label={t('set_as_active')}
                     checked={field.value === 1}
                     onChange={(e) => field.onChange(e.target.checked ? 1 : 0)}
                   />
@@ -168,23 +169,37 @@ const BlogCategoryDialog = ({ show, onClose, isEdit = false, categoryId = null, 
                 />
               )}
 
-              <Upload
-                onChange={(newFile) => {
-                  setFile(newFile);
-                  if (!newFile) {
-                    setPreview(null);
-                  }
-                }}
-                ref={uploadRef}
-                setPreview={setPreview}
-                accept={'image/*'}>
-                {({ onClick, disabled }) => (
-                  <Button onClick={onClick} disabled={disabled} className="space-x-2" type="button">
-                    <CloudArrowUpIcon className="size-5" />
-                    <span>{t('choose_file')}</span>
-                  </Button>
+              <Controller
+                control={control}
+                name="image"
+                render={({ field }) => (
+                  <Upload
+                    onChange={(newFile) => {
+                      setFile(newFile);
+                      field.onChange(newFile); // Update react-hook-form field
+                      if (!newFile) {
+                        setPreview(null);
+                      }
+                    }}
+                    ref={uploadRef}
+                    setPreview={setPreview}
+                    accept={'image/png, image/jpeg, image/jpg'}>
+                    {({ onClick, disabled }) => (
+                      <Button
+                        onClick={onClick}
+                        disabled={disabled}
+                        className="space-x-2"
+                        type="button">
+                        <CloudArrowUpIcon className="size-5" />
+                        <span>{t('choose_image_for_category')}</span>
+                      </Button>
+                    )}
+                  </Upload>
                 )}
-              </Upload>
+              />
+              {errors?.image?.message && (
+                <p className="mt-2 text-sm text-red-500">{errors?.image?.message}</p>
+              )}
             </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">

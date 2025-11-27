@@ -39,6 +39,7 @@ import usePermissions from 'app/router/usePermissions';
 export function TableToolbar({
   table,
   pageTitle = '',
+  disableGutters = false,
   onApplyFilters = () => {},
   onClearFilters = () => {},
   searchColumn = 'name',
@@ -48,7 +49,8 @@ export function TableToolbar({
     show: false,
     permission: '',
     route: '',
-    text: ''
+    text: '',
+    onClick: null
   },
   filters = []
 }) {
@@ -62,12 +64,30 @@ export function TableToolbar({
     createButton.show && createButton.permission && hasPermission(createButton.permission);
   const createButtonText = createButton.text || t('create');
 
+  // Determine horizontal padding based on disableGutters and fullscreen
+  const getHorizontalPadding = () => {
+    if (disableGutters) return '';
+    if (isFullScreenEnabled) return 'px-4 sm:px-5';
+    return 'px-[--margin-x]';
+  };
+
+  const horizontalPadding = getHorizontalPadding();
+
+  const handleCreateClick = () => {
+    if (createButton.onClick) {
+      createButton.onClick();
+    } else if (createButton.route) {
+      navigate(createButton.route);
+    }
+  };
+
   return (
     <div className="table-toolbar">
       <div
         className={clsx(
           'transition-content flex items-center justify-between gap-4',
-          isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x] pt-4'
+          horizontalPadding,
+          'pt-4'
         )}>
         <div className="min-w-0 space-y-2">
           <h2 className="truncate text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
@@ -80,7 +100,7 @@ export function TableToolbar({
             <Button
               className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
               color="primary"
-              onClick={() => navigate(createButton.route)}>
+              onClick={handleCreateClick}>
               <PlusIcon className="size-5" />
               <span>{createButtonText}</span>
             </Button>
@@ -93,7 +113,7 @@ export function TableToolbar({
           <div
             className={clsx(
               'flex space-x-2 pt-4 rtl:space-x-reverse [&_.input-root]:flex-1',
-              isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x]'
+              horizontalPadding
             )}>
             {showSearch && (
               <SearchInput
@@ -108,7 +128,7 @@ export function TableToolbar({
           <div
             className={clsx(
               'hide-scrollbar flex shrink-0 space-x-2 overflow-x-auto pb-1 pt-4 rtl:space-x-reverse',
-              isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x]'
+              horizontalPadding
             )}>
             <Filters
               table={table}
@@ -122,7 +142,7 @@ export function TableToolbar({
         <div
           className={clsx(
             'custom-scrollbar transition-content flex justify-between space-x-4 overflow-x-auto pb-1 pt-4 rtl:space-x-reverse',
-            isFullScreenEnabled ? 'px-4 sm:px-5' : 'px-[--margin-x]'
+            horizontalPadding
           )}
           style={{
             '--margin-scroll': isFullScreenEnabled ? '1.25rem' : 'var(--margin-x)'
@@ -230,7 +250,8 @@ TableToolbar.propTypes = {
     show: PropTypes.bool,
     permission: PropTypes.string,
     route: PropTypes.string,
-    text: PropTypes.string
+    text: PropTypes.string,
+    onClick: PropTypes.func
   }),
   filters: PropTypes.arrayOf(
     PropTypes.shape({

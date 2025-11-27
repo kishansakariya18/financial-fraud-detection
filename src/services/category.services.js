@@ -139,7 +139,7 @@ const CategoryService = {
   },
   getAllActiveCategories: async (body) => {
     try {
-      const { pagination, isPaginationRequired = false } = body;
+      const { pagination, isPaginationRequired = false, filters } = body;
 
       const apiQueryParams = {
         perPage: pagination?.pageSize || 10,
@@ -149,11 +149,29 @@ const CategoryService = {
       const response = await sendRequest({
         url: apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.CATEGORY.ALL_ACTIVE_LIST,
         method: 'POST',
-        body: { isPaginationRequired },
+        body: { isPaginationRequired, filters },
         headers: {
           'Content-Type': 'application/json'
         },
         params: isPaginationRequired ? apiQueryParams : {}
+      });
+
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
+  getCategoryByProviderIds: async (providerIds) => {
+    try {
+      const response = await sendRequest({
+        url:
+          apiConfig.baseURL.API_BASE_URL +
+          apiConfig.endPoints.CATEGORY.GET_CATEGORY_BY_PROVIDER_IDS,
+        method: 'POST',
+        body: { providerIds },
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
 
       return response;

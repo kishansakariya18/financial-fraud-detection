@@ -119,6 +119,9 @@ export function StepRewardDetails({
           }}
           placeholder={t('search_game_info')}
           error={errors.gameId}
+          filters={{
+            onlyFreeSpinSupport: 1
+          }}
           onOptionsCache={onGameOptionsCache}
         />
         <div className="grid gap-4 md:grid-cols-2">

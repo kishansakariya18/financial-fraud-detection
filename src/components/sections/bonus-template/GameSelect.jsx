@@ -29,6 +29,7 @@ const GameSelectComponent = ({
   error,
   onOptionsCache,
   renderSelected,
+  filters = {},
   status = 1
 }) => {
   const [options, setOptions] = useState([]);
@@ -95,7 +96,8 @@ const GameSelectComponent = ({
           pagination: { pageIndex: 0, pageSize: 30 },
           filters: {
             keyword: keyword || undefined,
-            status
+            status,
+            ...filters
           },
           isPaginationRequired: true
         });
@@ -272,6 +274,7 @@ GameSelect.propTypes = {
   error: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   onOptionsCache: PropTypes.func,
   renderSelected: PropTypes.func,
+  filters: PropTypes.object,
   status: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 
@@ -282,5 +285,6 @@ GameSelect.defaultProps = {
   error: null,
   onOptionsCache: undefined,
   renderSelected: undefined,
+  filters: {},
   status: 1
 };

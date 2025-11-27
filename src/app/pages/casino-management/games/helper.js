@@ -30,7 +30,9 @@ export const responseMapper = (apiData) => {
     minBetAmount: item.MinBetAmount || '-',
     maxBetAmount: item.MaxBetAmount || '-',
     provider: item?.provider?.Name || '-',
+    providerId: item?.provider?.ProviderID || item?.ProviderID,
     aggregatorCategory: item?.aggregatorCategory?.Name || '-',
+    categoryId: item?.aggregatorCategory?.CategoryID || item?.CategoryID,
     status: parseProviderStatusToApp(item.IsActive),
     createdAt: getDateInUTCToTimeZone(item.DateCreated),
     updatedAt: getDateInUTCToTimeZone(item.DateModified)

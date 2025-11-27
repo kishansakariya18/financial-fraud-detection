@@ -210,21 +210,17 @@ export const normalizeBonusTemplateDetail = (payload) => {
     minBet: Number(template.MinBet) || null,
     maxBet: Number(template.MaxBet) || null,
     allowedProviders:
-      template.bonusTemplateAllowedProviders?.map((provider) => ({
-        value: provider.ProviderID,
-        label: provider.ProviderName
-      })) || [],
+      template.bonusTemplateAllowedProviders?.map(({ ProviderID }) => ProviderID) || [],
     providerIncluded: asBoolean(template.GameProviderIncluded ?? template.providerIncluded ?? true),
     allowedCategories:
-      template.bonusTemplateAllowedCategories?.map((category) => ({
-        value: category.CategoryID,
-        label: category.CategoryName
-      })) || [],
+      template.bonusTemplateAllowedCategories?.map(({ CategoryID }) => CategoryID) || [],
     categoryIncluded: asBoolean(template.GameCategoryIncluded ?? template.categoryIncluded ?? true),
     allowedGames:
       template.bonusTemplateAllowedGames?.map((game) => ({
         value: game.GameID,
-        label: game.GameName
+        label: game.GameName,
+        providerId: game.ProviderID,
+        categoryId: game.CategoryID
       })) || [],
     gameIncluded: asBoolean(template.GameIncluded ?? template.gameIncluded ?? true)
   };

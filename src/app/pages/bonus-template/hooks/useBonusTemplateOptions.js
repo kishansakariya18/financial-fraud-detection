@@ -74,7 +74,10 @@ const useBonusTemplateOptions = () => {
             filters: { status: 1 },
             isPaginationRequired: false
           }),
-          CategoryService.getAllActiveCategories({ isPaginationRequired: false })
+          CategoryService.getAllActiveCategories({
+            isPaginationRequired: false,
+            filters: { status: 1 }
+          })
         ]);
 
         if (providersResult?.status === 200) {
