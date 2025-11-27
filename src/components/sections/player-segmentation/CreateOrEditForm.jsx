@@ -23,7 +23,7 @@ const evaluationFrequencyOptions = [
 
 const transformToUTC = (condition) => {
   const attribute = getAttribute(condition.field);
-  if (attribute?.dataType === 'datetime' && condition.value) {
+  if (attribute?.dataType === 'datetime' && condition?.operator === 'in_range' && condition.value) {
     const transformValue = (val) => {
       if (!val) return val;
       return moment(val).utc().format();
@@ -40,7 +40,7 @@ const transformToUTC = (condition) => {
 
 const transformToLocal = (condition) => {
   const attribute = getAttribute(condition.field);
-  if (attribute?.dataType === 'datetime' && condition.value) {
+  if (attribute?.dataType === 'datetime' && condition?.operator === 'in_range' && condition.value) {
     const transformValue = (val) => {
       if (!val) return val;
       return moment.utc(val).local().format('YYYY-MM-DDTHH:mm');
@@ -79,6 +79,7 @@ const CreateOrEditFormPlayerSegmentation = ({
       segmentName: '',
       segmentDescription: '',
       segmentTag: '',
+      isActive: true,
       segmentRules: createDefaultRuleTree(),
       isScheduled: true,
       evaluationFrequency: 'DAILY',
@@ -111,7 +112,7 @@ const CreateOrEditFormPlayerSegmentation = ({
   // Load initial data for edit mode
   useEffect(() => {
     let initialValues;
-    if (isEditMode && initialData) {
+    if (initialData) {
       const rules = initialData.segmentRules || initialData.SegmentRules || createDefaultRuleTree();
       // Convert UTC dates to local time for display
       const segmentRules = processRuleTree(rules, transformToLocal);
@@ -122,6 +123,7 @@ const CreateOrEditFormPlayerSegmentation = ({
         segmentDescription: initialData.segmentDescription || initialData.SegmentDescription || '',
         segmentTag: initialData.segmentTag || initialData.SegmentTag || '',
         segmentRules: segmentRules,
+        isActive: initialData.IsActive || initialData.isActive,
         isScheduled:
           initialData.isScheduled !== undefined
             ? initialData.isScheduled
@@ -134,6 +136,7 @@ const CreateOrEditFormPlayerSegmentation = ({
         segmentName: '',
         segmentDescription: '',
         segmentTag: '',
+        isActive: true,
         segmentRules: createDefaultRuleTree(),
         isScheduled: true,
         evaluationFrequency: 'DAILY'

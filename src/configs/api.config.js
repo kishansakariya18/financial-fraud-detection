@@ -327,10 +327,12 @@ export const apiConfig = {
       CHANGE_STATUS: '/bonus/admin/player-segmentation/:segmentationUID/change-status',
       REFRESH: '/bonus/admin/player-segmentation/:segmentationUID/refresh',
       PLAYER_LIST: '/bonus/admin/player-segmentation/:segmentationUID/player-list',
+      PLAYER_LIST_EXPORT: '/bonus/admin/player-segmentation/:segmentationUID/player-list/export',
       PLAYER_PREVIEW: '/bonus/admin/player-segmentation/preview',
-      CHANGE_LOG: '/bonus/admin/player-segmentation/change-log',
+      CHANGE_LOG: '/bonus/admin/player-segmentation/:segmentationUID/change-log',
       EXECUTION_LOG: '/bonus/admin/player-segmentation/execution-log',
-      MAP_CHANGE_LOG: '/bonus/admin/player-segmentation/:segmentationUID/map-change-log'
+      MAP_CHANGE_LOG: '/bonus/admin/player-segmentation/:segmentationUID/map-change-log',
+      ARCHIVE: '/bonus/admin/player-segmentation/:segmentationUID/archive'
     },
     // COUNTRY: {
     //   LIST: '/admin/country/list',
@@ -580,7 +582,8 @@ export const apiConfig = {
       REFERRED_USERS_REPORT: '/affiliates/admin/affiliates/{affiliateId}/export-referred-users',
       CREATE: '/users/admin/users/create-affiliate-user',
       EDIT: '/users/admin/users/edit-affiliate-user',
-      CHANGE_STATUS: '/affiliates/admin/affiliates/{affiliateUID}/change-status'
+      CHANGE_STATUS: '/affiliates/admin/affiliates/{affiliateUID}/change-status',
+      DROPDOWN: '/affiliates/admin/affiliates/normal-list'
     },
     FAQ: {
       LIST: '/affiliates/admin/faq/list',

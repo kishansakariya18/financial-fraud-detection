@@ -50,8 +50,8 @@ export const NumericOperator = {
 export const DatetimeOperator = {
   LESS_THAN_X_AGO: '< x ago',
   GREATER_THAN_X_AGO: '> x ago',
-  BETWEEN_RELATIVE: 'between_relative',
-  BETWEEN_DATE_RANGE: 'between',
+  BETWEEN: 'between', // Relative time range: between X and Y ago
+  IN_RANGE: 'in_range', // Absolute date range
   IS_NULL: 'is_null',
   IS_NOT_NULL: 'is_not_null'
 };
@@ -104,8 +104,8 @@ const numericOperator = [
 const datetimeOperator = [
   DatetimeOperator.LESS_THAN_X_AGO,
   DatetimeOperator.GREATER_THAN_X_AGO,
-  DatetimeOperator.BETWEEN_RELATIVE,
-  DatetimeOperator.BETWEEN_DATE_RANGE,
+  DatetimeOperator.BETWEEN,
+  DatetimeOperator.IN_RANGE,
   DatetimeOperator.IS_NULL,
   DatetimeOperator.IS_NOT_NULL
 ];
@@ -297,7 +297,6 @@ export const attributeRegistry = {
     supportedOperators: enumStringOperator,
     options: [
       { value: AccountStatus.ACTIVE, label: 'Active' },
-      { value: AccountStatus.INACTIVE, label: 'Inactive' },
       { value: AccountStatus.BLOCKED, label: 'Blocked' }
     ]
   },
@@ -319,7 +318,7 @@ export const attributeRegistry = {
     key: SegmentAttributeKey.AFFILIATE,
     label: 'Affiliate',
     dataType: 'string',
-    inputType: ValueInputType.TAG_INPUT,
+    inputType: ValueInputType.AUTOCOMPLETE,
     supportedOperators: enumStringOperator
   }
 };
@@ -336,8 +335,8 @@ export const operatorLabels = {
   // Datetime
   [DatetimeOperator.LESS_THAN_X_AGO]: 'Less Than X Ago',
   [DatetimeOperator.GREATER_THAN_X_AGO]: 'Greater Than X Ago',
-  [DatetimeOperator.BETWEEN_RELATIVE]: 'Between (Relative)',
-  [DatetimeOperator.BETWEEN_DATE_RANGE]: 'Between',
+  [DatetimeOperator.BETWEEN]: 'Between (Relative)',
+  [DatetimeOperator.IN_RANGE]: 'In Range',
   [DatetimeOperator.IS_NULL]: 'Is Null',
   [DatetimeOperator.IS_NOT_NULL]: 'Is Not Null',
 
@@ -363,19 +362,32 @@ export const timeUnitLabels = {
 export const getAttribute = (key) => attributeRegistry[key] || null;
 
 export const getAttributeOptions = () =>
-  Object.values(attributeRegistry).map((attr) => ({
-    value: attr.key,
-    label: attr.label
-  }));
+  Object.values(attributeRegistry)
+    .map((attr) => ({
+      value: attr.key,
+      label: attr.label
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label));
 
 export const getOperatorOptions = (attributeKey) => {
   const attribute = getAttribute(attributeKey);
   if (!attribute) return [];
 
-  return attribute.supportedOperators.map((op) => ({
-    value: op,
-    label: operatorLabels[op] || op
-  }));
+  return attribute.supportedOperators.map((op) => {
+    let label = operatorLabels[op] || op;
+    // Customize "Between" label based on data type
+    if (op === 'between') {
+      if (attribute.dataType === 'numeric') {
+        label = 'Between';
+      } else if (attribute.dataType === 'datetime') {
+        label = 'Between (Relative)';
+      }
+    }
+    return {
+      value: op,
+      label: label
+    };
+  });
 };
 
 export const getTimeUnitOptions = () =>
