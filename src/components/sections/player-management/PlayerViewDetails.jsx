@@ -752,6 +752,7 @@ export function PlayerViewDetails({
                           <RenderImage
                             value={`${apiConfig.baseURL.S3_URL}/user/${response?.ImageName}`}
                             id={'gameImage'}
+                            enableModal={true}
                           />
                         )}
                         {response?.ImageName}

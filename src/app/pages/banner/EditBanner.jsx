@@ -336,6 +336,7 @@ const EditBanner = () => {
                       value={`${apiConfig.baseURL.S3_URL}/banner/${bannerImage}`}
                       maxWidth="300px"
                       maxHeight="300px"
+                      enableModal={true}
                     />
                   )}
                   <Upload
