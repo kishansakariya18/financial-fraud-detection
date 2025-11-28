@@ -1,6 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { BadgeCell, DateCell } from 'components/custom/table/cell';
 import { PlayerSegmentationRowActions } from './RowActions';
+import { CopyableCell } from 'components/shared/table/CopyableCell';
 
 const columnHelper = createColumnHelper();
 
@@ -16,6 +17,7 @@ export const playerSegmentationColumns = ({ canShowActions }) => [
     id: 'segmentName',
     header: 'Segment Name',
     label: 'Segment Name',
+    cell: CopyableCell,
     enableSorting: false,
     size: 200
   }),

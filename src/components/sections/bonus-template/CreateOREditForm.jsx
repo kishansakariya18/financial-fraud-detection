@@ -554,14 +554,11 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
               </Button>
 
               <div className="flex gap-3">
-                <Button
-                  type="button"
-                  variant="outlined"
-                  color="neutral"
-                  onClick={handleBack}
-                  disabled={activeStep === 0}>
-                  Back
-                </Button>
+                {activeStep !== 0 && (
+                  <Button type="button" variant="outlined" color="neutral" onClick={handleBack}>
+                    Back
+                  </Button>
+                )}
                 <Button
                   type="submit"
                   color="primary"
