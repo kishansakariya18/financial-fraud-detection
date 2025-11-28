@@ -40,8 +40,7 @@ export default [
       'react/prop-types': 'off',
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       'jsx-a11y/alt-text': 'error',
-      'prettier/prettier': 'error'
-    }
+      'prettier/prettier': prettierOff ? 'off' : 'error'    }
   },
   // Keep this last to turn off conflicting rules with Prettier
   eslintConfigPrettier
