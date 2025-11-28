@@ -6,9 +6,8 @@ export const bonusManagementRoute = [
   {
     path: 'bonus/referral-management',
     lazy: async () => {
-      const { default: ReferralManagement } = await import(
-        '../../pages/referral-management/ReferralManagement'
-      );
+      const { default: ReferralManagement } =
+        await import('../../pages/referral-management/ReferralManagement');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.REFERRAL_MANAGEMENT.EDIT}>
@@ -34,9 +33,8 @@ export const bonusManagementRoute = [
   {
     path: 'bonus/templates/create',
     lazy: async () => {
-      const { default: CreateBonusTemplate } = await import(
-        '../../pages/bonus-template/CreateBonusTemplate'
-      );
+      const { default: CreateBonusTemplate } =
+        await import('../../pages/bonus-template/CreateBonusTemplate');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.BONUS_TEMPLATES.ADD}>
@@ -49,9 +47,8 @@ export const bonusManagementRoute = [
   {
     path: 'bonus/templates/:templateId/edit',
     lazy: async () => {
-      const { default: EditBonusTemplate } = await import(
-        '../../pages/bonus-template/EditBonusTemplate'
-      );
+      const { default: EditBonusTemplate } =
+        await import('../../pages/bonus-template/EditBonusTemplate');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.BONUS_TEMPLATES.EDIT}>
@@ -64,9 +61,8 @@ export const bonusManagementRoute = [
   {
     path: 'bonus/templates/:templateId/view',
     lazy: async () => {
-      const { default: ViewBonusTemplate } = await import(
-        '../../pages/bonus-template/ViewBonusTemplate'
-      );
+      const { default: ViewBonusTemplate } =
+        await import('../../pages/bonus-template/ViewBonusTemplate');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.BONUS_TEMPLATES.VIEW}>
@@ -79,9 +75,8 @@ export const bonusManagementRoute = [
   {
     path: 'bonus/player-segmentation',
     lazy: async () => {
-      const { default: PlayerSegmentationList } = await import(
-        '../../pages/player-segmentation/list/list'
-      );
+      const { default: PlayerSegmentationList } =
+        await import('../../pages/player-segmentation/list/list');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.LIST}>
@@ -94,9 +89,8 @@ export const bonusManagementRoute = [
   {
     path: 'bonus/player-segmentation/create',
     lazy: async () => {
-      const { default: CreatePlayerSegmentation } = await import(
-        '../../pages/player-segmentation/CreatePlayerSegmentation'
-      );
+      const { default: CreatePlayerSegmentation } =
+        await import('../../pages/player-segmentation/CreatePlayerSegmentation');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.ADD}>
@@ -109,9 +103,8 @@ export const bonusManagementRoute = [
   {
     path: 'bonus/player-segmentation/:segmentationUID/edit',
     lazy: async () => {
-      const { default: EditPlayerSegmentation } = await import(
-        '../../pages/player-segmentation/EditPlayerSegmentation'
-      );
+      const { default: EditPlayerSegmentation } =
+        await import('../../pages/player-segmentation/EditPlayerSegmentation');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.EDIT}>
@@ -134,9 +127,8 @@ export const bonusManagementRoute = [
       {
         path: 'details',
         lazy: async () => {
-          const { default: SegmentationDetails } = await import(
-            '../../pages/player-segmentation/tabs/SegmentationDetails'
-          );
+          const { default: SegmentationDetails } =
+            await import('../../pages/player-segmentation/tabs/SegmentationDetails');
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.VIEW}>
@@ -149,9 +141,8 @@ export const bonusManagementRoute = [
       {
         path: 'players',
         lazy: async () => {
-          const { default: PlayerSegmentationPlayerList } = await import(
-            '../../pages/player-segmentation/tabs/PlayerSegmentationPlayerList'
-          );
+          const { default: PlayerSegmentationPlayerList } =
+            await import('../../pages/player-segmentation/tabs/PlayerSegmentationPlayerList');
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.PLAYER_LIST}>
@@ -164,9 +155,8 @@ export const bonusManagementRoute = [
       {
         path: 'change-history',
         lazy: async () => {
-          const { default: ChangeHistory } = await import(
-            '../../pages/player-segmentation/tabs/ChangeHistory'
-          );
+          const { default: ChangeHistory } =
+            await import('../../pages/player-segmentation/tabs/ChangeHistory');
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.VIEW}>
@@ -179,9 +169,8 @@ export const bonusManagementRoute = [
       {
         path: 'player-activity',
         lazy: async () => {
-          const { default: PlayerActivity } = await import(
-            '../../pages/player-segmentation/tabs/PlayerActivity'
-          );
+          const { default: PlayerActivity } =
+            await import('../../pages/player-segmentation/tabs/PlayerActivity');
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.VIEW}>
@@ -194,9 +183,8 @@ export const bonusManagementRoute = [
       {
         path: 'execution-history',
         lazy: async () => {
-          const { default: ExecutionHistory } = await import(
-            '../../pages/player-segmentation/tabs/ExecutionHistory'
-          );
+          const { default: ExecutionHistory } =
+            await import('../../pages/player-segmentation/tabs/ExecutionHistory');
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.PLAYER_SEGMENTATION.VIEW}>

@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState, useRef } from 'react';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
-import { Toolbar } from './Toolbar';
 import { columns } from './columns.jsx';
 import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
@@ -11,13 +10,14 @@ import { RowActions } from './RowActions';
 
 import BlogCategoryService from '../../../../services/blog-category.services';
 
-import { responseMapper } from '../helper';
+import { responseMapper, statusOptions } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
+import { TableToolbar } from 'components/shared/table/TableToolbar';
 
 export default function BlogCategories() {
   const { t } = useTranslation();
@@ -126,12 +126,6 @@ export default function BlogCategories() {
         value: queryParams.isActive === 1 ? 'active' : 'inactive'
       });
     }
-    if (queryParams.startDate && queryParams.endDate) {
-      filtersFromQuery.push({
-        id: 'createdAt',
-        value: [+queryParams.startDate, +queryParams.endDate]
-      });
-    }
 
     setColumnFilters(filtersFromQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -147,27 +141,21 @@ export default function BlogCategories() {
       if (data.id === 'status') {
         filterItems.isActive = data.value === 'active' ? 1 : 0;
       }
-
-      if (data.id === 'createdAt') {
-        filterItems.date = data.value;
-      }
     }
 
     setSearchParams({
       pageIndex: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
-      ...(filterItems.isActive !== undefined && { isActive: filterItems.isActive }),
-      ...(filterItems.date && { startDate: filterItems.date[0] }),
-      ...(filterItems.date && { endDate: filterItems?.date[1] })
+      ...(filterItems.isActive !== undefined && { isActive: filterItems.isActive })
     });
   };
 
   const clearFilterHandler = () => {
     if (!isEmptyObject(queryParams)) {
       setSearchParams({
-        pageIndex: 0,
-        pageSize: 10
+        pageIndex: DEFAULT_PAGE_INDEX,
+        pageSize: DEFAULT_PER_PAGE_RECORD
       });
     }
     table.resetColumnFilters();
@@ -177,12 +165,29 @@ export default function BlogCategories() {
 
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
-      <Toolbar
+      <TableToolbar
         pageTitle={pageTitle}
         table={table}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
-        onCreateClick={() => handleAddEditClick(null)}
+        searchColumn="name"
+        searchPlaceholder={t('search') + ' ' + t('category') + '...'}
+        createButton={{
+          show: true,
+          permission: PERMISSIONS.BLOG_CATEGORY.CREATE,
+          text: t('create') + ' ' + t('category'),
+          onClick: () => handleAddEditClick(null)
+        }}
+        filters={[
+          {
+            type: 'faceted',
+            column: 'status',
+            title: t('status'),
+            options: statusOptions,
+            isMultiple: false,
+            showCheckbox: false
+          }
+        ]}
       />
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
       <BlogCategoryDialog

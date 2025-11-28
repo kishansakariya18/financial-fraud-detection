@@ -32,10 +32,6 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
     fetchAffiliates: field === SegmentAttributeKey.AFFILIATE
   });
 
-  console.log('countryOptions', countryOptions);
-  console.log('currencyOptions', currencyOptions);
-  console.log('affiliateOptions', affiliateOptions);
-
   const attributeOptions = getAttributeOptions();
   const operatorOptions = getOperatorOptions(field);
   const selectedAttribute = getAttribute(field);

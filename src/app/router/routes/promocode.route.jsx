@@ -30,9 +30,8 @@ export const promocodeRoute = [
       {
         path: 'details',
         lazy: async () => {
-          const { ViewDetails: PromoCodeDetails } = await import(
-            '../../pages/promocode/ViewDetails'
-          );
+          const { ViewDetails: PromoCodeDetails } =
+            await import('../../pages/promocode/ViewDetails');
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.DEPOSIT_PROMOCODE.LIST}>
@@ -58,9 +57,8 @@ export const promocodeRoute = [
       {
         path: 'segmentation-list',
         lazy: async () => {
-          const { default: SegmentationList } = await import(
-            '../../pages/promocode/segmentation/list'
-          );
+          const { default: SegmentationList } =
+            await import('../../pages/promocode/segmentation/list');
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.DEPOSIT_PROMOCODE.SEGMENTATION}>

@@ -19,9 +19,8 @@ export const emailTemplateRoute = [
   {
     path: 'event-template/add',
     lazy: async () => {
-      const { default: CreateEmailTemplate } = await import(
-        '../../pages/event-template/CreateEventTemplate'
-      );
+      const { default: CreateEmailTemplate } =
+        await import('../../pages/event-template/CreateEventTemplate');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.EVENT_TEMPLATE.ADD}>
@@ -34,9 +33,8 @@ export const emailTemplateRoute = [
   {
     path: 'event-template/event-template-assign',
     lazy: async () => {
-      const { default: AssignEventToGroup } = await import(
-        '../../pages/event-template/AssignEventtemplate'
-      );
+      const { default: AssignEventToGroup } =
+        await import('../../pages/event-template/AssignEventtemplate');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.ASSIGN_EVENT_TEMPLATES.UPDATE}>
@@ -49,9 +47,8 @@ export const emailTemplateRoute = [
   {
     path: 'event-template/:templateId/edit',
     lazy: async () => {
-      const { default: EditEmailTemplate } = await import(
-        '../../pages/event-template/EditEventTemplate'
-      );
+      const { default: EditEmailTemplate } =
+        await import('../../pages/event-template/EditEventTemplate');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.EVENT_TEMPLATE.EDIT}>

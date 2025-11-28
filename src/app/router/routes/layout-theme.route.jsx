@@ -5,9 +5,8 @@ export const layoutThemeRoute = [
   {
     path: 'layout/layout-theme',
     lazy: async () => {
-      const { default: LayoutThemeList } = await import(
-        '../../pages/frontend/layout-theme/list/list'
-      );
+      const { default: LayoutThemeList } =
+        await import('../../pages/frontend/layout-theme/list/list');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.LAYOUTS.VIEW}>
@@ -20,9 +19,8 @@ export const layoutThemeRoute = [
   {
     path: 'layout/layout-theme/create',
     lazy: async () => {
-      const { default: CreateLayoutTheme } = await import(
-        '../../pages/frontend/layout-theme/CreateLayoutTheme'
-      );
+      const { default: CreateLayoutTheme } =
+        await import('../../pages/frontend/layout-theme/CreateLayoutTheme');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.LAYOUTS.ADD}>
@@ -35,9 +33,8 @@ export const layoutThemeRoute = [
   {
     path: 'layout/layout-theme/edit/:layoutThemeID',
     lazy: async () => {
-      const { default: EditLayoutTheme } = await import(
-        '../../pages/frontend/layout-theme/EditLayoutTheme'
-      );
+      const { default: EditLayoutTheme } =
+        await import('../../pages/frontend/layout-theme/EditLayoutTheme');
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.LAYOUTS.EDIT}>

@@ -166,8 +166,8 @@ export default function PlayerSegmentationList() {
             title: t('status'),
             options: [
               { value: 'active', label: t('active'), color: 'success' },
-              { value: 'inactive', label: t('inactive'), color: 'error' }
-              // { value: 'archived', label: t('archived'), color: 'warning' }
+              { value: 'inactive', label: t('inactive'), color: 'error' },
+              { value: 'archived', label: t('archived'), color: 'warning' }
             ],
             isMultiple: false,
             showCheckbox: false
