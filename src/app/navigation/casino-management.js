@@ -27,7 +27,8 @@ export const casinoManagement = {
     PERMISSIONS.CATEGORY.VIEW,
     PERMISSIONS.PROVIDER.VIEW,
     PERMISSIONS.AGGREGATORS.VIEW,
-    PERMISSIONS.GAME.VIEW
+    PERMISSIONS.GAME.VIEW,
+    PERMISSIONS.CURRENCY.VIEW
   ],
   childs: [
     {
@@ -63,8 +64,8 @@ export const casinoManagement = {
       path: '/casino-management/currencies',
       title: 'Currency',
       transKey: 'casino_currencies',
-      Icon: HiOutlineCurrencyRupee, // Please replace with the correct icon
-      permission: PERMISSIONS.CURRENCY.VIEW, // aligned to constants
+      Icon: HiOutlineCurrencyRupee,
+      permission: PERMISSIONS.CURRENCY.VIEW,
       platformType: [PLATFORM_TYPE.B2C]
     },
     {

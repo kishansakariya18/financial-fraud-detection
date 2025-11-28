@@ -56,7 +56,7 @@ export default function Tabs() {
       path: `/affiliates/users/${affiliateId}/tab/commission-settings`,
       icon: GrSettingsOption,
       index: 1,
-      permission: PERMISSIONS.AFFILIATES.COMMISSION_SETTING.PER_AFFILIATE
+      permission: PERMISSIONS.AFFILIATES.COMMISSION_SETTING.PER_AFFILIATE.VIEW
     },
     {
       id: randomId(),
