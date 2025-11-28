@@ -127,7 +127,7 @@ export const PlayerColumns = ({
                   id: 'isKYCVerified',
                   label: 'KYC Verified',
                   header: 'KYC Verified',
-                  cell: BoldCell,
+                  cell: BadgeCell,
                   meta: { optionData: panVerifiedOptions },
                   filterFn: 'arrIncludesSome',
                   enableSorting: false

@@ -638,5 +638,21 @@
   "kycConfigurations": "Configuraciones KYC",
   "template_manager": "Gestor de plantillas",
   "eventGroup": "Grupo de eventos",
-  "channelCode": "Código de canal"
+  "channelCode": "Código de canal",
+  "verify_kyc": "Verificar KYC",
+  "verify_kyc_confirmation": "¿Estás seguro de que quieres verificar el KYC para este jugador?",
+  "kyc_verified_successfully": "El KYC se ha verificado exitosamente para este jugador.",
+  "failed_to_verify_kyc": "Error al verificar KYC. Por favor, intenta de nuevo o verifica los detalles del jugador.",
+  "enquiry_subject": "Asunto",
+  "enquiry_description": "Descripción",
+  "enquiry_status": "Estado",
+  "enquiry_created_at": "Creado el",
+  "enquiry_modified_at": "Modificado el",
+  "enquiry_user": "Usuario",
+  "enquiry_email": "Correo electrónico",
+  "enquiry_set_by": "Establecido por",
+  "areYouSureEnquires": "¿Estás seguro de que quieres eliminar esta consulta?",
+  "areYouSureEnquiresChangeStatus": "¿Estás seguro de que quieres cambiar el estado de esta consulta?",
+  "enquiry_change_status": "Cambiar estado",
+  "enquires": "Consultas"
 }

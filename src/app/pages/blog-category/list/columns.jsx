@@ -3,7 +3,13 @@ import { createColumnHelper } from '@tanstack/react-table';
 
 // Local Imports
 import { RowActions } from './RowActions';
-import { IdCell, DateCell, BoldCell, BadgeCell } from '../../../../components/custom/table/cell';
+import {
+  IdCell,
+  DateCell,
+  BoldCell,
+  BadgeCell,
+  ImageWithPreviewCell
+} from '../../../../components/custom/table/cell';
 import { statusOptions } from '../helper';
 
 // ----------------------------------------------------------------------
@@ -22,22 +28,13 @@ export const columns = ({ canShowActions } = {}) => [
     id: 'image',
     label: 'Image',
     header: 'Image',
-    cell: (info) =>
-      info?.getValue() ? (
-        <div className="size-16 rounded">
-          <img
-            src={info?.getValue()}
-            alt={info?.row?.original?.name || 'Category Image'}
-            className="size-12 rounded object-cover"
-          />
-        </div>
-      ) : null,
+    cell: (row) => ImageWithPreviewCell({ info: row }),
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.name, {
     id: 'name',
-    label: 'Name',
-    header: 'Name',
+    label: 'Category Name',
+    header: 'Category Name',
     cell: BoldCell,
     enableSorting: false
   }),

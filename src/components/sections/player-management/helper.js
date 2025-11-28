@@ -29,8 +29,8 @@ export const responseMapper = (apiData) => {
       status: playerStatusToApp(item.AccountStatus),
       createdAt: item.DateCreated ? getDateInUTCToTimeZone(item.DateCreated) : '',
       lastLoginAt: item.LastLoginAt ? getDateInUTCToTimeZone(item.LastLoginAt) : '',
-      isBankVerified: playerBankVerifyToApp(item.isBankVerified),
-      isKYCVerified: playerKycToApp(item.isKYCVerified),
+      isBankVerified: playerBankVerifyToApp(item.IsBankVerified),
+      isKYCVerified: playerKycToApp(item.IsKYCVerified),
       gender: item.Gender || '-',
       country: item.CountryID,
       SegmentationID: '0',
@@ -54,12 +54,14 @@ export const playerStatusToApp = (status) => {
 };
 export const playerKycToApp = (kyc) => {
   switch (+kyc) {
+    case 0:
+      return 'pending';
     case 1:
       return 'verified';
-    case 0:
-      return 'not-verified';
+    case 2:
+      return 'rejected';
     default:
-      break;
+      return 'pending';
   }
 };
 export const playerBankVerifyToApp = (bankStatus) => {
@@ -74,10 +76,12 @@ export const playerBankVerifyToApp = (bankStatus) => {
 };
 export const playerKycToAPI = (kyc) => {
   switch (kyc) {
+    case 'pending':
+      return 0;
     case 'verified':
       return 1;
-    case 'not-verified':
-      return 0;
+    case 'rejected':
+      return 2;
     default:
       return null;
   }
@@ -153,17 +157,25 @@ export const bankVerifyOptionToAPI = (status) => {
       return null;
   }
 };
-export const panVerifyOptionToAPI = (status) => {
-  switch (status) {
+export const panVerifyOptionToAPI = (kyc) => {
+  switch (kyc) {
+    case 'pending':
+      return 0;
     case 'verified':
       return 1;
-    case 'not-verified':
-      return 0;
+    case 'rejected':
+      return 2;
     default:
       return null;
   }
 };
 export const panVerifiedOptions = [
+  {
+    value: 'pending',
+    label: 'Pending',
+    color: 'warning',
+    icon: ClockIcon
+  },
   {
     value: 'verified',
     label: 'Verified',
@@ -171,8 +183,8 @@ export const panVerifiedOptions = [
     icon: CheckBadgeIcon
   },
   {
-    value: 'not-verified',
-    label: 'Not Verified',
+    value: 'rejected',
+    label: 'Rejected',
     color: 'error',
     icon: XCircleIcon
   }

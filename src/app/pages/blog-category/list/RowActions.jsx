@@ -187,7 +187,7 @@ export function RowActions({ row, table, onAddEditClick }) {
                           focus && 'bg-error/10'
                         )}>
                         <TrashIcon className="size-4.5 stroke-1" />
-                        <span>{t('delete')}</span>
+                        <span>{t('deleteItem')}</span>
                       </button>
                     )}
                   </MenuItem>

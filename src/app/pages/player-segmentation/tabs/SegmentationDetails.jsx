@@ -193,7 +193,7 @@ const SegmentationDetails = () => {
               value: getDateInUTCToTimeZone(segmentationData.CreatedAt)
             },
             {
-              label: t('updated_at'),
+              label: t('updatedAt'),
               value: getDateInUTCToTimeZone(segmentationData.UpdatedAt)
             }
           ]}

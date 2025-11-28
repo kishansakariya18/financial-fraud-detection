@@ -16,6 +16,8 @@ import { DOCUMENT_STATUS, DOCUMENT_TYPE, PERMISSIONS } from 'constants/app.const
 import { showImage } from 'utils/showImage';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import usePermissions from 'app/router/usePermissions';
+// import RenderImage from 'components/ui/custom/ImageRender';
+// import apiConfig from 'configs/api.config';
 
 export function ViewDetails() {
   const { t } = useTranslation();
@@ -258,6 +260,13 @@ export function ViewDetails() {
                     </p>
                     <div className="mt-2 h-64 rounded-md border p-2 dark:border-dark-500">
                       {showImage('document', response?.FrontImage, 'h-full w-full object-contain')}
+                      {/* <RenderImage
+                        value={`${apiConfig.baseURL.S3_URL}/document/${response?.FrontImage}`}
+                        alt={t('frontImage')}
+                        maxWidth="100px"
+                        maxHeight="100px"
+                        enableModal={true}
+                      /> */}
                     </div>
                   </div>
                   {response?.BackImage && (

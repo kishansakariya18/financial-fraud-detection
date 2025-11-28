@@ -136,6 +136,7 @@ export default function ViewBannerDetails() {
                       value={`${apiConfig.baseURL.S3_URL}/banner/${bannerImage}`}
                       maxWidth="300px"
                       maxHeight="300px"
+                      enableModal={true}
                     />
                   )}
                 </div>

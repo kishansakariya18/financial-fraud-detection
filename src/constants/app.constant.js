@@ -175,7 +175,8 @@ export const PERMISSIONS = Object.freeze({
     LIMIT_USER_SUMMARY: 'limit-user-summary',
     RESPONSIBLE_GAMING_VIEW: 'user-responsible-gaming-view',
     RESPONSIBLE_GAMING_EDIT: 'user-responsible-gaming-edit',
-    RESPONSIBLE_GAMING_DELETE: 'user-responsible-gaming-delete'
+    RESPONSIBLE_GAMING_DELETE: 'user-responsible-gaming-delete',
+    VERIFY_KYC_BY_ADMIN: 'verify-user-kyc'
   },
   BANNER: {
     LIST: 'banner-view',
@@ -529,6 +530,10 @@ export const PERMISSIONS = Object.freeze({
     CHANGE_STATUS: 'player-segmentation-change-status',
     PLAYER_LIST: 'player-segmentation-player-list',
     ARCHIVE: 'player-segmentation-archive'
+  },
+  ENQUIRES: {
+    LIST: 'enquiry-view',
+    CHANGE_STATUS: 'enquiry-change-status'
   }
 });
 

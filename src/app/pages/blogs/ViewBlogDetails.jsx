@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import BlogService from '../../../services/blog.services';
 import { Button, Card, GhostSpinner, Skeleton } from 'components/ui';
 import apiConfig from '../../../configs/api.config';
+import RenderImage from 'components/ui/custom/ImageRender';
 
 const ViewBlogDetails = () => {
   const { t } = useTranslation();
@@ -87,11 +88,14 @@ const ViewBlogDetails = () => {
             {!loading && blog && (
               <div className="mt-4 space-y-6">
                 {blog.ImageName && (
-                  <div className="flex justify-center">
-                    <img
-                      src={imageUrl}
-                      alt={blog.Title}
-                      className="max-h-64 rounded-lg object-cover"
+                  <div className="justify-center">
+                    <RenderImage
+                      id={'blogImage'}
+                      label="Blog Image :"
+                      value={imageUrl}
+                      enableModal={true}
+                      maxWidth="300px"
+                      maxHeight="300px"
                     />
                   </div>
                 )}

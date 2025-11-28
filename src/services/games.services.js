@@ -8,7 +8,16 @@ const GamesService = {
     try {
       const { pagination, filters, isPaginationRequired = true } = body;
 
-      const { status, keyword, startDate, endDate, provider } = filters;
+      const {
+        status,
+        keyword,
+        startDate,
+        endDate,
+        provider,
+        providerIds,
+        categoryIds,
+        onlyFreeSpinSupport = undefined
+      } = filters;
 
       const apiQueryParams = {};
       if (pagination) {
@@ -21,7 +30,10 @@ const GamesService = {
         keyword: keyword || undefined,
         startDate: startDate ? getStartDate(startDate) : undefined,
         endDate: endDate ? getEndDate(endDate) : undefined,
-        providerId: provider || undefined
+        providerId: provider || undefined,
+        providerIds: providerIds || undefined,
+        categoryIds: categoryIds || undefined,
+        onlyFreeSpinSupport
       };
 
       const response = await sendRequest({

@@ -73,7 +73,8 @@ export const apiConfig = {
       USER_OVER_ALL_SUMMARY: '/users/admin/user-summary/:userId',
       LIMIT_SUMMARY: '/users/admin/limit-summary/:userId',
       COUNTRY_LIST: '/config/admin/config/countries',
-      SEGMENTATION_LIST: '/bonus/admin/segmentation/list'
+      SEGMENTATION_LIST: '/bonus/admin/segmentation/list',
+      VERIFY_KYC_BY_ADMIN: '/users/admin/kyc/:userUID/veryfyByAdmin'
     },
     ADMIN_USER: {
       ADMIN_LIST: '/admin/admin/admin/list',
@@ -356,7 +357,8 @@ export const apiConfig = {
       EDIT: '/games/admin/casino-management/category/:categoryId/edit',
       DELETE: '/games/admin/casino-management/category/:categoryId/delete',
       CHANGE_STATUS: '/games/admin/casino-management/category/:categoryId/change-status',
-      ALL_ACTIVE_LIST: '/games/admin/casino-management/category/all'
+      ALL_ACTIVE_LIST: '/games/admin/casino-management/category/all',
+      GET_CATEGORY_BY_PROVIDER_IDS: '/games/admin/casino-management/category/by-provider-ids'
     },
     TOOLS: {
       DETAIL: '/games/admin/ip-lookup/details'
@@ -613,6 +615,10 @@ export const apiConfig = {
       DELETE: '/content/admin/blogs/:blogId/delete',
       DETAIL: '/content/admin/blogs/:slug/details',
       CHANGE_STATUS: '/content/admin/blogs/:blogId/change-status'
+    },
+    ENQUIRES: {
+      LIST: '/users/admin/enquiries/list',
+      CHANGE_STATUS: '/users/admin/enquiries/update-status'
     }
   }
 };
