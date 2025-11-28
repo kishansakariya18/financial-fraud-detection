@@ -135,7 +135,7 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              {hasPermission(PERMISSIONS.SEGMENTATION.EDIT) && (
+              {hasPermission(PERMISSIONS.SEGMENTATION.REFRESH) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
