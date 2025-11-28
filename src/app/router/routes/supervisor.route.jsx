@@ -33,8 +33,9 @@ const supervisorRoute = [
       {
         path: 'details',
         lazy: async () => {
-          const { default: ViewDetails } =
-            await import('../../pages/users/supervisor/ViewSupervisor');
+          const { default: ViewDetails } = await import(
+            '../../pages/users/supervisor/ViewSupervisor'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.SUPERVISOR.LIST}>
@@ -47,8 +48,9 @@ const supervisorRoute = [
       {
         path: 'calling-agents',
         lazy: async () => {
-          const { default: CallingAgents } =
-            await import('../../pages/users/supervisor/calling-agents/list/list');
+          const { default: CallingAgents } = await import(
+            '../../pages/users/supervisor/calling-agents/list/list'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.SUPERVISOR.LIST}>
@@ -61,8 +63,9 @@ const supervisorRoute = [
       {
         path: 'calling-agents-details/:callingAgentUID',
         lazy: async () => {
-          const { default: CallingAgentsDetails } =
-            await import('../../pages/users/supervisor/calling-agents/ViewAgents');
+          const { default: CallingAgentsDetails } = await import(
+            '../../pages/users/supervisor/calling-agents/ViewAgents'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.SUPERVISOR.LIST}>
@@ -75,8 +78,9 @@ const supervisorRoute = [
       {
         path: 'login-history',
         lazy: async () => {
-          const { default: LoginHistory } =
-            await import('../../pages/users/supervisor/login-history/list');
+          const { default: LoginHistory } = await import(
+            '../../pages/users/supervisor/login-history/list'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.SUPERVISOR.LIST}>
@@ -94,8 +98,9 @@ const callingAgentsRoute = [
   {
     path: 'calling-agents/supervisor-dashboard',
     lazy: async () => {
-      const { default: SuervisorDashboard } =
-        await import('../../pages/users/supervisor/dashboard/SuervisorDashboard');
+      const { default: SuervisorDashboard } = await import(
+        '../../pages/users/supervisor/dashboard/SuervisorDashboard'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.CALLING_AGENT.LIST}>
@@ -108,8 +113,9 @@ const callingAgentsRoute = [
   {
     path: 'calling-agents/list',
     lazy: async () => {
-      const { default: CallingAgentsList } =
-        await import('../../pages/users/calling-agents/list/list');
+      const { default: CallingAgentsList } = await import(
+        '../../pages/users/calling-agents/list/list'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.CALLING_AGENT.LIST}>
@@ -122,8 +128,9 @@ const callingAgentsRoute = [
   {
     path: 'calling-agents/list/create',
     lazy: async () => {
-      const { default: Create } =
-        await import('../../pages/users/calling-agents/CreateCallingAgent');
+      const { default: Create } = await import(
+        '../../pages/users/calling-agents/CreateCallingAgent'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.CALLING_AGENT.ADD}>
@@ -163,8 +170,9 @@ const callingAgentsRoute = [
       {
         path: 'details',
         lazy: async () => {
-          const { default: ViewDetails } =
-            await import('../../pages/users/calling-agents/ViewCallingAgent');
+          const { default: ViewDetails } = await import(
+            '../../pages/users/calling-agents/ViewCallingAgent'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.CALLING_AGENT.LIST}>
@@ -177,8 +185,9 @@ const callingAgentsRoute = [
       {
         path: 'login-history',
         lazy: async () => {
-          const { default: LoginHistory } =
-            await import('../../pages/users/calling-agents/login-history/list');
+          const { default: LoginHistory } = await import(
+            '../../pages/users/calling-agents/login-history/list'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.CALLING_AGENT.LIST}>
@@ -191,8 +200,9 @@ const callingAgentsRoute = [
       {
         path: 'target-management',
         lazy: async () => {
-          const { default: TargetManagement } =
-            await import('../../pages/users/calling-agents/target-management/TargetManagement');
+          const { default: TargetManagement } = await import(
+            '../../pages/users/calling-agents/target-management/TargetManagement'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.CALLING_AGENT.LIST}>
@@ -205,8 +215,9 @@ const callingAgentsRoute = [
       {
         path: 'redeem-requests',
         lazy: async () => {
-          const { default: RedeemRequests } =
-            await import('../../pages/users/calling-agents/redeem-requests/RedeemRequests');
+          const { default: RedeemRequests } = await import(
+            '../../pages/users/calling-agents/redeem-requests/RedeemRequests'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.CALLING_AGENT.LIST}>
@@ -219,8 +230,9 @@ const callingAgentsRoute = [
       {
         path: 'assigned-players',
         lazy: async () => {
-          const { default: AssignedPlayers } =
-            await import('../../pages/users/calling-agents/assigned-players/list');
+          const { default: AssignedPlayers } = await import(
+            '../../pages/users/calling-agents/assigned-players/list'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.CALLING_AGENT.LIST}>
@@ -233,8 +245,9 @@ const callingAgentsRoute = [
       {
         path: 'commission-summary',
         lazy: async () => {
-          const { default: CommissionSummary } =
-            await import('../../pages/users/calling-agents/ComssionSummary');
+          const { default: CommissionSummary } = await import(
+            '../../pages/users/calling-agents/ComssionSummary'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.CALLING_AGENT.LIST}>
@@ -249,8 +262,9 @@ const callingAgentsRoute = [
   {
     path: 'calling-agents/list/:agentUID/commission-summary/:summaryId/details',
     lazy: async () => {
-      const { default: CommissionSummaryDetails } =
-        await import('../../pages/users/calling-agents/commission-summary-details/CommissionSummaryDetails');
+      const { default: CommissionSummaryDetails } = await import(
+        '../../pages/users/calling-agents/commission-summary-details/CommissionSummaryDetails'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.CALLING_AGENT.LIST}>
@@ -263,8 +277,9 @@ const callingAgentsRoute = [
   {
     path: 'calling-agents/list/:agentUID/unassigned-players',
     lazy: async () => {
-      const { default: UnassignedPlayers } =
-        await import('../../pages/users/calling-agents/assigned-players/UnassignedPlayers');
+      const { default: UnassignedPlayers } = await import(
+        '../../pages/users/calling-agents/assigned-players/UnassignedPlayers'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.CALLING_AGENT.LIST}>

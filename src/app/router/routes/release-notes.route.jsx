@@ -22,8 +22,9 @@ export const releaseNotesRoutes = [
       {
         path: 'add',
         lazy: async () => {
-          const { default: AddReleaseNote } =
-            await import('../../pages/release-notes/AddReleaseNote');
+          const { default: AddReleaseNote } = await import(
+            '../../pages/release-notes/AddReleaseNote'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.RELEASE_NOTE.ADD}>
@@ -36,8 +37,9 @@ export const releaseNotesRoutes = [
       {
         path: 'edit/:releaseNoteId',
         lazy: async () => {
-          const { default: EditReleaseNote } =
-            await import('../../pages/release-notes/EditReleaseNote');
+          const { default: EditReleaseNote } = await import(
+            '../../pages/release-notes/EditReleaseNote'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.RELEASE_NOTE.EDIT}>

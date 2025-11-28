@@ -36,8 +36,9 @@ export const profileRoute = [
       {
         path: 'player-fund-password',
         lazy: async () => {
-          const { default: PlayerFundPassword } =
-            await import('../../pages/profile/PlayerFundPassword');
+          const { default: PlayerFundPassword } = await import(
+            '../../pages/profile/PlayerFundPassword'
+          );
           return {
             Component: () => (
               <PrivateRoute allowedPlatforms={[PLATFORM_TYPE.B2C]}>
@@ -50,8 +51,9 @@ export const profileRoute = [
       {
         path: 'affiliate-fund-password',
         lazy: async () => {
-          const { default: AffiliateFundPassword } =
-            await import('../../pages/profile/AffiliateFundPassword');
+          const { default: AffiliateFundPassword } = await import(
+            '../../pages/profile/AffiliateFundPassword'
+          );
           return {
             Component: () => (
               <PrivateRoute allowedPlatforms={[PLATFORM_TYPE.B2C]}>
@@ -64,8 +66,9 @@ export const profileRoute = [
       {
         path: 'agent-fund-password',
         lazy: async () => {
-          const { default: AgentFundPassword } =
-            await import('../../pages/profile/AgentFundPassword');
+          const { default: AgentFundPassword } = await import(
+            '../../pages/profile/AgentFundPassword'
+          );
           return {
             Component: () => (
               <PrivateRoute allowedPlatforms={[PLATFORM_TYPE.B2B]}>

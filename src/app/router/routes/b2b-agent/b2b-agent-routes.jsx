@@ -13,8 +13,9 @@ const b2bAgentRoutes = [
   {
     path: 'agent/tree-view',
     lazy: async () => {
-      const { default: AgentAgentTree } =
-        await import('../../../pages/b2b-agent/agent/AgentAgentTree');
+      const { default: AgentAgentTree } = await import(
+        '../../../pages/b2b-agent/agent/AgentAgentTree'
+      );
       return {
         Component: AgentAgentTree
       };
@@ -23,8 +24,9 @@ const b2bAgentRoutes = [
   {
     path: 'agent/transaction',
     lazy: async () => {
-      const { default: AgentTransaction } =
-        await import('../../../pages/b2b-agent/agent/AgentTransaction');
+      const { default: AgentTransaction } = await import(
+        '../../../pages/b2b-agent/agent/AgentTransaction'
+      );
       return {
         Component: AgentTransaction
       };
@@ -33,8 +35,9 @@ const b2bAgentRoutes = [
   {
     path: 'agent/my-requests',
     lazy: async () => {
-      const { default: MyWithdrawRequest } =
-        await import('../../../pages/b2b-agent/agent/MyWithdrawRequest');
+      const { default: MyWithdrawRequest } = await import(
+        '../../../pages/b2b-agent/agent/MyWithdrawRequest'
+      );
       return {
         Component: MyWithdrawRequest
       };
@@ -43,8 +46,9 @@ const b2bAgentRoutes = [
   {
     path: 'agent/agent-withdrawals',
     lazy: async () => {
-      const { default: AgentWithdrawRequest } =
-        await import('../../../pages/b2b-agent/agent/AgentWithdrawReques');
+      const { default: AgentWithdrawRequest } = await import(
+        '../../../pages/b2b-agent/agent/AgentWithdrawReques'
+      );
       return {
         Component: AgentWithdrawRequest
       };
@@ -53,8 +57,9 @@ const b2bAgentRoutes = [
   {
     path: 'agent/player-requests',
     lazy: async () => {
-      const { default: PlayerWithdrawRequest } =
-        await import('../../../pages/b2b-agent/agent/PlayerWithdrawRequest');
+      const { default: PlayerWithdrawRequest } = await import(
+        '../../../pages/b2b-agent/agent/PlayerWithdrawRequest'
+      );
       return {
         Component: PlayerWithdrawRequest
       };
@@ -103,8 +108,9 @@ const b2bAgentRoutes = [
           {
             path: 'details',
             lazy: async () => {
-              const { default: ChildAgentDetails } =
-                await import('../../../pages/b2b-agent/agent/tabs/ChildAgentDetails');
+              const { default: ChildAgentDetails } = await import(
+                '../../../pages/b2b-agent/agent/tabs/ChildAgentDetails'
+              );
               return {
                 Component: () => <ChildAgentDetails />
               };
@@ -113,8 +119,9 @@ const b2bAgentRoutes = [
           {
             path: 'login-history',
             lazy: async () => {
-              const { default: ChildAgentLoginHistory } =
-                await import('../../../pages/b2b-agent/agent/tabs/ChildAgentLoginHistory');
+              const { default: ChildAgentLoginHistory } = await import(
+                '../../../pages/b2b-agent/agent/tabs/ChildAgentLoginHistory'
+              );
               return {
                 Component: () => <ChildAgentLoginHistory />
               };
@@ -123,8 +130,9 @@ const b2bAgentRoutes = [
           {
             path: 'wallet',
             lazy: async () => {
-              const { default: ChildAgentWallet } =
-                await import('../../../pages/b2b-agent/agent/tabs/ChildAgentWallet');
+              const { default: ChildAgentWallet } = await import(
+                '../../../pages/b2b-agent/agent/tabs/ChildAgentWallet'
+              );
               return {
                 Component: () => <ChildAgentWallet />
               };
@@ -133,8 +141,9 @@ const b2bAgentRoutes = [
           {
             path: 'agents',
             lazy: async () => {
-              const { default: ChildAgentList } =
-                await import('../../../pages/b2b-agent/agent/tabs/ChildAgentList');
+              const { default: ChildAgentList } = await import(
+                '../../../pages/b2b-agent/agent/tabs/ChildAgentList'
+              );
               return {
                 Component: () => <ChildAgentList />
               };
@@ -143,8 +152,9 @@ const b2bAgentRoutes = [
           {
             path: 'players',
             lazy: async () => {
-              const { default: ChildAgentPlayerList } =
-                await import('../../../pages/b2b-agent/agent/tabs/ChildAgentPlayerList');
+              const { default: ChildAgentPlayerList } = await import(
+                '../../../pages/b2b-agent/agent/tabs/ChildAgentPlayerList'
+              );
               return {
                 Component: () => <ChildAgentPlayerList />
               };
@@ -153,8 +163,9 @@ const b2bAgentRoutes = [
           {
             path: 'withdraw-requests',
             lazy: async () => {
-              const { default: ChildAgentWithdrawRequest } =
-                await import('../../../pages/b2b-agent/agent/tabs/ChildAgentWithdrawRequest');
+              const { default: ChildAgentWithdrawRequest } = await import(
+                '../../../pages/b2b-agent/agent/tabs/ChildAgentWithdrawRequest'
+              );
               return {
                 Component: () => <ChildAgentWithdrawRequest />
               };
@@ -170,8 +181,9 @@ const b2bAgentRoutes = [
       {
         index: true,
         lazy: async () => {
-          const { default: AgentPlayerList } =
-            await import('../../../pages/b2b-agent/agent/player/AgentPlayerList');
+          const { default: AgentPlayerList } = await import(
+            '../../../pages/b2b-agent/agent/player/AgentPlayerList'
+          );
           return {
             Component: AgentPlayerList
           };
@@ -180,8 +192,9 @@ const b2bAgentRoutes = [
       {
         path: 'create',
         lazy: async () => {
-          const { default: CreatePlayer } =
-            await import('../../../pages/b2b-agent/agent/player/CreatePlayer');
+          const { default: CreatePlayer } = await import(
+            '../../../pages/b2b-agent/agent/player/CreatePlayer'
+          );
           return {
             Component: CreatePlayer
           };
@@ -199,8 +212,9 @@ const b2bAgentRoutes = [
       {
         path: ':playerUID/tab',
         lazy: async () => {
-          const { default: PlayerDetailTabs } =
-            await import('../../../pages/b2b-agent/agent/player/PlayerDetailTabs');
+          const { default: PlayerDetailTabs } = await import(
+            '../../../pages/b2b-agent/agent/player/PlayerDetailTabs'
+          );
           return {
             Component: PlayerDetailTabs
           };
@@ -213,8 +227,9 @@ const b2bAgentRoutes = [
           {
             path: 'details',
             lazy: async () => {
-              const { default: PlayerDetails } =
-                await import('../../../pages/b2b-agent/agent/player/tabs/PlayerDetails');
+              const { default: PlayerDetails } = await import(
+                '../../../pages/b2b-agent/agent/player/tabs/PlayerDetails'
+              );
               return {
                 Component: PlayerDetails
               };
@@ -223,8 +238,9 @@ const b2bAgentRoutes = [
           {
             path: 'transactions',
             lazy: async () => {
-              const { default: PlayerTransactions } =
-                await import('../../../pages/b2b-agent/agent/player/tabs/PlayerTransactions');
+              const { default: PlayerTransactions } = await import(
+                '../../../pages/b2b-agent/agent/player/tabs/PlayerTransactions'
+              );
               return {
                 Component: PlayerTransactions
               };
@@ -233,8 +249,9 @@ const b2bAgentRoutes = [
           {
             path: 'login-history',
             lazy: async () => {
-              const { default: PlayerLoginHistory } =
-                await import('../../../pages/b2b-agent/agent/player/tabs/PlayerLoginHistory');
+              const { default: PlayerLoginHistory } = await import(
+                '../../../pages/b2b-agent/agent/player/tabs/PlayerLoginHistory'
+              );
               return {
                 Component: PlayerLoginHistory
               };
@@ -243,8 +260,9 @@ const b2bAgentRoutes = [
           {
             path: 'wallets',
             lazy: async () => {
-              const { default: PlayerWallets } =
-                await import('../../../pages/b2b-agent/agent/player/tabs/PlayerWallets');
+              const { default: PlayerWallets } = await import(
+                '../../../pages/b2b-agent/agent/player/tabs/PlayerWallets'
+              );
               return {
                 Component: PlayerWallets
               };
