@@ -1,6 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { BadgeCell, DateCell } from 'components/custom/table/cell';
 import { PlayerSegmentationRowActions } from './RowActions';
+import { CopyableCell } from 'components/shared/table/CopyableCell';
 
 const columnHelper = createColumnHelper();
 
@@ -8,24 +9,29 @@ export const playerSegmentationColumns = ({ canShowActions }) => [
   columnHelper.accessor('id', {
     id: 'id',
     header: 'ID',
+    label: 'ID',
     enableSorting: false,
     size: 80
   }),
   columnHelper.accessor('segmentName', {
     id: 'segmentName',
     header: 'Segment Name',
+    label: 'Segment Name',
+    cell: CopyableCell,
     enableSorting: false,
     size: 200
   }),
   columnHelper.accessor('segmentTag', {
     id: 'segmentTag',
     header: 'Tag',
+    label: 'Tag',
     enableSorting: false,
     size: 140
   }),
   columnHelper.accessor('isScheduled', {
     id: 'isScheduled',
     header: 'Scheduled',
+    label: 'Scheduled',
     cell: BadgeCell,
     meta: {
       optionData: [
@@ -39,6 +45,7 @@ export const playerSegmentationColumns = ({ canShowActions }) => [
   columnHelper.accessor('evaluationFrequency', {
     id: 'evaluationFrequency',
     header: 'Frequency',
+    label: 'Frequency',
     cell: BadgeCell,
     meta: {
       optionData: [
@@ -55,6 +62,7 @@ export const playerSegmentationColumns = ({ canShowActions }) => [
   columnHelper.accessor('status', {
     id: 'status',
     header: 'Status',
+    label: 'Status',
     cell: BadgeCell,
     meta: {
       optionData: [
@@ -69,6 +77,7 @@ export const playerSegmentationColumns = ({ canShowActions }) => [
   columnHelper.accessor('createdAt', {
     id: 'createdAt',
     header: 'Created At',
+    label: 'Created At',
     cell: DateCell,
     enableSorting: false,
     size: 160
@@ -78,6 +87,7 @@ export const playerSegmentationColumns = ({ canShowActions }) => [
         columnHelper.display({
           id: 'actions',
           header: 'Actions',
+          label: 'Actions',
           cell: (props) => <PlayerSegmentationRowActions {...props} />,
           enableSorting: false,
           size: 100

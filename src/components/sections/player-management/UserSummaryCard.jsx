@@ -11,14 +11,14 @@ const SummarySection = ({ children, className = '' }) => {
   return (
     <div className={`flex flex-col gap-y-1 ${className}`}>
       {/* <p className="font-semibold text-gray-800 dark:text-dark-100">{title}:</p> */}
-      <div className="flex flex-wrap gap-4">{children}</div>
+      <div className="flex flex-wrap gap-2">{children}</div>
     </div>
   );
 };
 
 const SummaryDataItem = ({ label, value, valueClassName = '' }) => {
   return (
-    <div className="min-w-[150px]">
+    <div className="min-w-[176px]">
       <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{label}</p>
       <p className={`${valueClassName}`}>{value}</p>
     </div>
@@ -101,6 +101,10 @@ const UserSummaryCard = ({ summaryData, loading }) => {
                 value={formatBoolean(commonData.IsKYCVerified)}
               />
               <SummaryDataItem label={t('affiliate_id')} value={commonData.AffiliateID || '-'} />
+              <SummaryDataItem
+                label={t('referred_by_player_id')}
+                value={commonData.ReferredByPlayerID || '-'}
+              />
               <SummaryDataItem label={t('country_id')} value={commonData.CountryID || '-'} />
             </div>
           </div>

@@ -1,18 +1,42 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomModal } from 'components/custom/CustomModal';
 import { RuleTreeDisplay } from './RuleTreeDisplay';
 import { useSegmentationMappings } from './useSegmentationMappings';
+import { extractPlayerIdsFromRuleTree } from './ruleUtils';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 const ChangeHistoryModal = ({ isOpen, onClose, changeData }) => {
   const { t } = useTranslation();
 
+  // Extract player IDs from both new and old rules (memoized)
+  const playerIds = useMemo(() => {
+    const newRulesPlayerIds = changeData?.NewRules
+      ? extractPlayerIdsFromRuleTree(changeData.NewRules)
+      : [];
+    const oldRulesPlayerIds = changeData?.OldRules
+      ? extractPlayerIdsFromRuleTree(changeData.OldRules)
+      : [];
+    const ids = [...new Set([...newRulesPlayerIds, ...oldRulesPlayerIds])];
+    return ids;
+  }, [changeData?.NewRules, changeData?.OldRules]);
+
   // Use the custom hook to fetch and cache mapping data
-  const { countryMap, currencyMap, affiliateMap } = useSegmentationMappings({
+  const { countryMap, currencyMap, affiliateMap, playerOptions } = useSegmentationMappings({
     fetchCountries: true,
     fetchCurrencies: true,
-    fetchAffiliates: true
+    fetchAffiliates: true,
+    playerIds: playerIds // Fetch player details for display
   });
+
+  // Create playerMap from playerOptions (memoized)
+  const playerMap = useMemo(() => {
+    const map = {};
+    playerOptions.forEach((player) => {
+      map[player.value] = player.label;
+    });
+    return map;
+  }, [playerOptions]);
 
   if (!changeData) return null;
 
@@ -69,6 +93,7 @@ const ChangeHistoryModal = ({ isOpen, onClose, changeData }) => {
                   affiliateMap={affiliateMap}
                   countryMap={countryMap}
                   currencyMap={currencyMap}
+                  playerMap={playerMap}
                 />
               ) : (
                 <div className="text-sm italic text-gray-500 dark:text-dark-300">
@@ -89,6 +114,7 @@ const ChangeHistoryModal = ({ isOpen, onClose, changeData }) => {
                   countryMap={countryMap}
                   affiliateMap={affiliateMap}
                   currencyMap={currencyMap}
+                  playerMap={playerMap}
                 />
               ) : (
                 <div className="text-sm italic text-gray-500 dark:text-dark-300">

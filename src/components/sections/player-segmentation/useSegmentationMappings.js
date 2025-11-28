@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import AuthService from 'services/auth.services';
 import CurrencyService from 'services/currency.services';
 import AffiliatesService from 'services/affiliates.services';
+import PlayerService from 'services/player.services';
 
 // Global cache to share data across all hook instances
 const cache = {
@@ -10,14 +11,16 @@ const cache = {
   affiliates: null,
   countryMap: null,
   currencyMap: null,
-  affiliateMap: null
+  affiliateMap: null,
+  players: {} // Store players by ID
 };
 
 // Flags to track ongoing fetches
 const fetchStatus = {
   countries: { loading: false, error: null },
   currencies: { loading: false, error: null },
-  affiliates: { loading: false, error: null }
+  affiliates: { loading: false, error: null },
+  players: { loading: false, error: null }
 };
 
 // Subscribers for updates
@@ -28,19 +31,21 @@ const notifySubscribers = () => {
 };
 
 /**
- * Custom hook to fetch and cache country, currency, and affiliate data
+ * Custom hook to fetch and cache country, currency, affiliate, and player data
  * This prevents multiple API calls across different components
  *
  * @param {Object} options - Configuration options
  * @param {boolean} options.fetchCountries - Whether to fetch countries (default: false)
  * @param {boolean} options.fetchCurrencies - Whether to fetch currencies (default: false)
  * @param {boolean} options.fetchAffiliates - Whether to fetch affiliates (default: false)
+ * @param {Array<string|number>} options.playerIds - Player IDs to fetch (for edit mode)
  * @returns {Object} - Contains options arrays, maps, and loading states
  */
 export const useSegmentationMappings = ({
   fetchCountries = false,
   fetchCurrencies = false,
-  fetchAffiliates = false
+  fetchAffiliates = false,
+  playerIds = []
 } = {}) => {
   const [, forceUpdate] = useState({});
   const isMounted = useRef(true);
@@ -155,16 +160,51 @@ export const useSegmentationMappings = ({
           fetchStatus.affiliates.loading = false;
         }
       }
+
+      // Fetch specific players by IDs (for edit mode)
+      if (playerIds && playerIds.length > 0 && !fetchStatus.players.loading) {
+        // Check which players we need to fetch
+        const missingPlayerIds = playerIds.filter((id) => !cache.players[String(id)]);
+
+        if (missingPlayerIds.length > 0) {
+          fetchStatus.players.loading = true;
+          fetchStatus.players.error = null;
+
+          try {
+            const { response } = await PlayerService.getReferrersList({
+              playesIds: missingPlayerIds
+            });
+            if (response?.data) {
+              // Store each player in cache
+              response.data.forEach((player) => {
+                const playerId = String(player.UserID);
+                cache.players[playerId] = {
+                  value: playerId,
+                  label: player.Username || `Player ${playerId}`
+                };
+              });
+
+              notifySubscribers();
+            }
+          } catch (error) {
+            console.error('Error fetching players:', error);
+            fetchStatus.players.error = error;
+          } finally {
+            fetchStatus.players.loading = false;
+          }
+        }
+      }
     };
 
     fetchData();
-  }, [fetchCountries, fetchCurrencies, fetchAffiliates]);
+  }, [fetchCountries, fetchCurrencies, fetchAffiliates, playerIds]);
 
   return {
     // Options arrays for Combobox/Listbox components
     countryOptions: cache.countries || [],
     currencyOptions: cache.currencies || [],
     affiliateOptions: cache.affiliates || [],
+    playerOptions: Object.values(cache.players || {}), // Convert players object to array
 
     // Maps for quick lookups (used in RuleTreeDisplay)
     countryMap: cache.countryMap || {},
@@ -175,11 +215,13 @@ export const useSegmentationMappings = ({
     isLoadingCountries: fetchStatus.countries.loading,
     isLoadingCurrencies: fetchStatus.currencies.loading,
     isLoadingAffiliates: fetchStatus.affiliates.loading,
+    isLoadingPlayers: fetchStatus.players.loading,
 
     // Error states
     countriesError: fetchStatus.countries.error,
     currenciesError: fetchStatus.currencies.error,
-    affiliatesError: fetchStatus.affiliates.error
+    affiliatesError: fetchStatus.affiliates.error,
+    playersError: fetchStatus.players.error
   };
 };
 

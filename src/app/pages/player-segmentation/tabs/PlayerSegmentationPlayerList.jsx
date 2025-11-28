@@ -11,6 +11,7 @@ import { BadgeCell, DateCell } from 'components/custom/table/cell';
 import { ExportCSV } from 'components/custom/export';
 import apiConfig from 'configs/api.config';
 import { getQueryParams } from 'utils/custom.utilities';
+import { CopyableCell } from 'components/shared/table/CopyableCell';
 
 const columnHelper = createColumnHelper();
 
@@ -19,30 +20,38 @@ const playerColumns = [
   columnHelper.accessor('userID', {
     id: 'userID',
     header: 'User ID',
+    label: 'User ID',
     enableSorting: false,
     size: 140
   }),
   columnHelper.accessor('username', {
     id: 'username',
     header: 'Username',
+    label: 'Username',
+    cell: CopyableCell,
     enableSorting: false,
     size: 160
   }),
   columnHelper.accessor('email', {
     id: 'email',
     header: 'Email',
+    label: 'Email',
+    cell: CopyableCell,
     enableSorting: false,
     size: 200
   }),
   columnHelper.accessor('mobile', {
     id: 'mobile',
     header: 'Mobile',
+    label: 'Mobile',
+    cell: CopyableCell,
     enableSorting: false,
     size: 140
   }),
   columnHelper.accessor('status', {
     id: 'status',
     header: 'Status',
+    label: 'Status',
     cell: BadgeCell,
     meta: {
       optionData: [
@@ -57,6 +66,7 @@ const playerColumns = [
   columnHelper.accessor('createdAt', {
     id: 'createdAt',
     header: 'Joined Date',
+    label: 'Joined Date',
     cell: DateCell,
     enableSorting: false,
     size: 160

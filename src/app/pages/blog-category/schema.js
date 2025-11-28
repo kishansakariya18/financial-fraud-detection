@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 
 export const createBlogCategorySchema = Yup.object().shape({
-  name: Yup.string().trim().required('Name is required').max(100, 'Maximum 100 characters allowed'),
+  name: Yup.string().trim().required('Name is required').max(30, 'Maximum 30 characters allowed'),
   isActive: Yup.number().oneOf([0, 1], 'Invalid active value'),
   image: Yup.mixed()
     .required('Image is required')
@@ -16,7 +16,7 @@ export const createBlogCategorySchema = Yup.object().shape({
 });
 
 export const editBlogCategorySchema = Yup.object().shape({
-  name: Yup.string().trim().max(100, 'Maximum 100 characters allowed'),
+  name: Yup.string().trim().max(30, 'Maximum 30 characters allowed'),
   isActive: Yup.number().oneOf([0, 1], 'Invalid active value'),
   image: Yup.mixed()
     .nullable() // Image is optional in edit mode

@@ -12,7 +12,7 @@ import {
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 // Component to display a single condition in a human-readable way
-const ConditionDisplay = ({ condition, countryMap, affiliateMap, currencyMap }) => {
+const ConditionDisplay = ({ condition, countryMap, affiliateMap, currencyMap, playerMap }) => {
   const attribute = attributeRegistry[condition.field];
   const attrLabel = attribute?.label || condition.field;
 
@@ -80,6 +80,10 @@ const ConditionDisplay = ({ condition, countryMap, affiliateMap, currencyMap }) 
     // Handle array values (IN, NOT_IN) - with proper mapping
     if (Array.isArray(condition.value)) {
       const mappedValues = condition.value.map((val) => {
+        // Map referred_by player IDs to usernames
+        if (condition.field === SegmentAttributeKey.REFERRED_BY && playerMap?.[val]) {
+          return playerMap[val];
+        }
         // Map country IDs to names
         if (condition.field === SegmentAttributeKey.COUNTRY && countryMap?.[val]) {
           return countryMap[val];
@@ -100,6 +104,11 @@ const ConditionDisplay = ({ condition, countryMap, affiliateMap, currencyMap }) 
         return val;
       });
       return mappedValues.join(', ');
+    }
+
+    // Map single referred_by player ID to username
+    if (condition.field === SegmentAttributeKey.REFERRED_BY && playerMap?.[condition.value]) {
+      return playerMap[condition.value];
     }
 
     // Handle single enum values with options
@@ -139,7 +148,14 @@ const ConditionDisplay = ({ condition, countryMap, affiliateMap, currencyMap }) 
 };
 
 // Recursive component to display rule groups and conditions
-export const RuleTreeDisplay = ({ node, depth = 0, countryMap, affiliateMap, currencyMap }) => {
+export const RuleTreeDisplay = ({
+  node,
+  depth = 0,
+  countryMap,
+  affiliateMap,
+  currencyMap,
+  playerMap
+}) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   if (!node) return null;
 
@@ -154,6 +170,7 @@ export const RuleTreeDisplay = ({ node, depth = 0, countryMap, affiliateMap, cur
           countryMap={countryMap}
           affiliateMap={affiliateMap}
           currencyMap={currencyMap}
+          playerMap={playerMap}
         />
       </div>
     );
@@ -218,6 +235,7 @@ export const RuleTreeDisplay = ({ node, depth = 0, countryMap, affiliateMap, cur
                     countryMap={countryMap}
                     affiliateMap={affiliateMap}
                     currencyMap={currencyMap}
+                    playerMap={playerMap}
                   />
                 </div>
               ))
