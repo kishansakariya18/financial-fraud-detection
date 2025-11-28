@@ -44,8 +44,9 @@ export const homeCategoryRoute = [
   {
     path: 'web/home-category/reorder-category',
     lazy: async () => {
-      const { default: ReOrderCategory } =
-        await import('../../pages/frontend/home-category/ReOrderCategory');
+      const { default: ReOrderCategory } = await import(
+        '../../pages/frontend/home-category/ReOrderCategory'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.FRONTEND.REORDER_HOME_CATEGORY}>
@@ -58,8 +59,9 @@ export const homeCategoryRoute = [
   {
     path: 'web/home-category/:homeCategoryId/reorder-games',
     lazy: async () => {
-      const { default: ReOrderGames } =
-        await import('../../pages/frontend/home-games/ReOrderGames');
+      const { default: ReOrderGames } = await import(
+        '../../pages/frontend/home-games/ReOrderGames'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.FRONTEND.REORDER_HOME_GAMES}>
@@ -72,8 +74,9 @@ export const homeCategoryRoute = [
   {
     path: 'web/appearance/create',
     lazy: async () => {
-      const { default: CreateAppearance } =
-        await import('../../pages/frontend/appearance/CreateAppearance');
+      const { default: CreateAppearance } = await import(
+        '../../pages/frontend/appearance/CreateAppearance'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.FRONTEND.ADD_APPEARANCE}>
