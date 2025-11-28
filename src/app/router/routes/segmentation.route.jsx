@@ -18,8 +18,9 @@ export const segmentationRoutes = [
   {
     path: 'segmentation/create',
     lazy: async () => {
-      const { default: CreateSegmentation } =
-        await import('../../pages/segmentation/CreateSegmentation');
+      const { default: CreateSegmentation } = await import(
+        '../../pages/segmentation/CreateSegmentation'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.SEGMENTATION.ADD}>
@@ -32,8 +33,9 @@ export const segmentationRoutes = [
   {
     path: 'segmentation/:segmentationUID/edit',
     lazy: async () => {
-      const { default: EditSegmeantation } =
-        await import('../../pages/segmentation/EditSegmentation');
+      const { default: EditSegmeantation } = await import(
+        '../../pages/segmentation/EditSegmentation'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.SEGMENTATION.EDIT}>
@@ -46,8 +48,9 @@ export const segmentationRoutes = [
   {
     path: 'segmentation/:segmentationUID/player-list',
     lazy: async () => {
-      const { default: UserList } =
-        await import('../../pages/segmentation/segmented-player-list/list');
+      const { default: UserList } = await import(
+        '../../pages/segmentation/segmented-player-list/list'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.SEGMENTATION.PLAYER_LIST}>
@@ -60,8 +63,9 @@ export const segmentationRoutes = [
   {
     path: 'segmentation/:segmentationUID/details',
     lazy: async () => {
-      const { default: ViewSegmentation } =
-        await import('../../pages/segmentation/ViewSegmentation');
+      const { default: ViewSegmentation } = await import(
+        '../../pages/segmentation/ViewSegmentation'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.SEGMENTATION.LIST}>
@@ -87,8 +91,9 @@ export const segmentationRoutes = [
   {
     path: '/segmentation/:segmentationId/:segmentationLimitUID/limits/edit',
     lazy: async () => {
-      const { default: EditSegmantationLimit } =
-        await import('../../pages/segmentation/limits/EditSegmantationLimit');
+      const { default: EditSegmantationLimit } = await import(
+        '../../pages/segmentation/limits/EditSegmantationLimit'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.SEGMENTATION_LIMIT.EDIT}>
@@ -101,8 +106,9 @@ export const segmentationRoutes = [
   {
     path: '/segmentation/:segmentationId/limits/create',
     lazy: async () => {
-      const { default: CreateSegmantationLimit } =
-        await import('../../pages/segmentation/limits/CreateSegmantationLimit');
+      const { default: CreateSegmantationLimit } = await import(
+        '../../pages/segmentation/limits/CreateSegmantationLimit'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.SEGMENTATION_LIMIT.CREATE}>

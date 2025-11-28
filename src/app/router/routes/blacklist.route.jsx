@@ -32,8 +32,9 @@ export const blacklistRoutes = [
       {
         path: 'tab/email-phone',
         lazy: async () => {
-          const { default: BlacklistEmailPhone } =
-            await import('../../pages/blacklist/email-phone/list');
+          const { default: BlacklistEmailPhone } = await import(
+            '../../pages/blacklist/email-phone/list'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.BLACKLIST.VIEW_EMAIL_MOBILE_RESTRCTION}>
@@ -46,8 +47,9 @@ export const blacklistRoutes = [
       {
         path: 'tab/disposable-email',
         lazy: async () => {
-          const { default: DisposableEmailList } =
-            await import('../../pages/blacklist/disposable-email/list');
+          const { default: DisposableEmailList } = await import(
+            '../../pages/blacklist/disposable-email/list'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.BLACKLIST.VIEW_RESTRICTED_EMAIL_DOMAIN}>
@@ -75,8 +77,9 @@ export const blacklistRoutes = [
   {
     path: 'blacklist/email-phone',
     lazy: async () => {
-      const { default: BlacklistEmailPhone } =
-        await import('../../pages/blacklist/BlacklistEmailPhone');
+      const { default: BlacklistEmailPhone } = await import(
+        '../../pages/blacklist/BlacklistEmailPhone'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.BLACKLIST.VIEW_EMAIL_MOBILE_RESTRCTION}>
@@ -89,8 +92,9 @@ export const blacklistRoutes = [
   {
     path: 'blacklist/disposable-email',
     lazy: async () => {
-      const { default: DisposableEmailList } =
-        await import('../../pages/blacklist/disposable-email/list');
+      const { default: DisposableEmailList } = await import(
+        '../../pages/blacklist/disposable-email/list'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.BLACKLIST.VIEW_RESTRICTED_EMAIL_DOMAIN}>

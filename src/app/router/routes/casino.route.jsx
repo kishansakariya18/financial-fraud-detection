@@ -44,8 +44,9 @@ export const casinoRoutes = [
   {
     path: '/casino/provider/reorder',
     lazy: async () => {
-      const { default: ReorderProvider } =
-        await import('../../pages/casino-management/provider/ReorderProvider');
+      const { default: ReorderProvider } = await import(
+        '../../pages/casino-management/provider/ReorderProvider'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.PROVIDER.EDIT}>
@@ -58,8 +59,9 @@ export const casinoRoutes = [
   {
     path: '/casino/provider/list/select-countries/:providerId/list',
     lazy: async () => {
-      const { default: CountryList } =
-        await import('../../pages/casino-management/provider/restricted-countries-list/countryList');
+      const { default: CountryList } = await import(
+        '../../pages/casino-management/provider/restricted-countries-list/countryList'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.PROVIDER.VIEW_RESTRICTED_COUNTRY}>
@@ -72,8 +74,9 @@ export const casinoRoutes = [
   {
     path: '/casino/provider/list/restricted-countries/:providerId/list',
     lazy: async () => {
-      const { default: RestrictedCountry } =
-        await import('../../pages/casino-management/provider/restricted-countries-list/restrictedCountry');
+      const { default: RestrictedCountry } = await import(
+        '../../pages/casino-management/provider/restricted-countries-list/restrictedCountry'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.PROVIDER.VIEW_RESTRICTED_COUNTRY}>

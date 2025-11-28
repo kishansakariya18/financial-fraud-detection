@@ -4,8 +4,9 @@ const onlyCallingAgentRoutes = [
   {
     path: 'calling-agents/dashboard',
     lazy: async () => {
-      const { default: AgentDashboard } =
-        await import('../../pages/calling-agent-manage/dashbaord/AgentDashboard');
+      const { default: AgentDashboard } = await import(
+        '../../pages/calling-agent-manage/dashbaord/AgentDashboard'
+      );
       return {
         Component: AgentDashboard
       };
@@ -14,8 +15,9 @@ const onlyCallingAgentRoutes = [
   {
     path: 'calling-agents/targets',
     lazy: async () => {
-      const { default: AgentTargets } =
-        await import('../../pages/calling-agent-manage/targets/Targets');
+      const { default: AgentTargets } = await import(
+        '../../pages/calling-agent-manage/targets/Targets'
+      );
       return {
         Component: AgentTargets
       };
@@ -24,8 +26,9 @@ const onlyCallingAgentRoutes = [
   {
     path: 'calling-agents/assigned-players',
     lazy: async () => {
-      const { default: AgentAssignedPlayers } =
-        await import('../../pages/calling-agent-manage/assigned-players/AssignedPlayers');
+      const { default: AgentAssignedPlayers } = await import(
+        '../../pages/calling-agent-manage/assigned-players/AssignedPlayers'
+      );
       return {
         Component: AgentAssignedPlayers
       };
@@ -34,8 +37,9 @@ const onlyCallingAgentRoutes = [
   {
     path: 'calling-agents/assigned-players-details/:playerId/tab',
     lazy: async () => {
-      const { default: AgentPlayerDetailTabs } =
-        await import('../../pages/calling-agent-manage/assigned-players-details/Tabs');
+      const { default: AgentPlayerDetailTabs } = await import(
+        '../../pages/calling-agent-manage/assigned-players-details/Tabs'
+      );
       return {
         Component: AgentPlayerDetailTabs
       };
@@ -48,8 +52,9 @@ const onlyCallingAgentRoutes = [
       {
         path: 'details',
         lazy: async () => {
-          const { default: AgentPlayerDetails } =
-            await import('../../pages/calling-agent-manage/assigned-players-details/PlayerDetails');
+          const { default: AgentPlayerDetails } = await import(
+            '../../pages/calling-agent-manage/assigned-players-details/PlayerDetails'
+          );
           return {
             Component: AgentPlayerDetails
           };
@@ -69,8 +74,9 @@ const onlyCallingAgentRoutes = [
       {
         path: 'transactions',
         lazy: async () => {
-          const { default: AgentPlayerTransactions } =
-            await import('../../pages/calling-agent-manage/assigned-players-details/PlayerTransactions');
+          const { default: AgentPlayerTransactions } = await import(
+            '../../pages/calling-agent-manage/assigned-players-details/PlayerTransactions'
+          );
           return {
             Component: AgentPlayerTransactions
           };
@@ -79,8 +85,9 @@ const onlyCallingAgentRoutes = [
       {
         path: 'total-events',
         lazy: async () => {
-          const { default: AgentPlayerTotalEvents } =
-            await import('../../pages/calling-agent-manage/assigned-players-details/TotalEvents');
+          const { default: AgentPlayerTotalEvents } = await import(
+            '../../pages/calling-agent-manage/assigned-players-details/TotalEvents'
+          );
           return {
             Component: AgentPlayerTotalEvents
           };
@@ -89,8 +96,9 @@ const onlyCallingAgentRoutes = [
       {
         path: 'login-history',
         lazy: async () => {
-          const { default: AgentPlayerLoginHistory } =
-            await import('../../pages/calling-agent-manage/assigned-players-details/PlayerLoginHistory');
+          const { default: AgentPlayerLoginHistory } = await import(
+            '../../pages/calling-agent-manage/assigned-players-details/PlayerLoginHistory'
+          );
           return {
             Component: AgentPlayerLoginHistory
           };
@@ -99,8 +107,9 @@ const onlyCallingAgentRoutes = [
       {
         path: 'player-notes',
         lazy: async () => {
-          const { default: AgentPlayerNotes } =
-            await import('../../pages/calling-agent-manage/assigned-players-details/PlayerNotes');
+          const { default: AgentPlayerNotes } = await import(
+            '../../pages/calling-agent-manage/assigned-players-details/PlayerNotes'
+          );
           return {
             Component: AgentPlayerNotes
           };
@@ -109,8 +118,9 @@ const onlyCallingAgentRoutes = [
       {
         path: 'referrals',
         lazy: async () => {
-          const { default: AgentPlayerReferrals } =
-            await import('../../pages/calling-agent-manage/assigned-players-details/PlayerReferrals');
+          const { default: AgentPlayerReferrals } = await import(
+            '../../pages/calling-agent-manage/assigned-players-details/PlayerReferrals'
+          );
           return {
             Component: AgentPlayerReferrals
           };
@@ -119,8 +129,9 @@ const onlyCallingAgentRoutes = [
       {
         path: 'wallets',
         lazy: async () => {
-          const { default: AgentPlayerWallets } =
-            await import('../../pages/calling-agent-manage/assigned-players-details/PlayerWallets');
+          const { default: AgentPlayerWallets } = await import(
+            '../../pages/calling-agent-manage/assigned-players-details/PlayerWallets'
+          );
           return {
             Component: AgentPlayerWallets
           };
@@ -146,8 +157,9 @@ const onlyCallingAgentRoutes = [
   {
     path: 'calling-agents/summary',
     lazy: async () => {
-      const { default: AgentSummary } =
-        await import('../../pages/calling-agent-manage/summary/Summary');
+      const { default: AgentSummary } = await import(
+        '../../pages/calling-agent-manage/summary/Summary'
+      );
       return {
         Component: AgentSummary
       };
@@ -156,8 +168,9 @@ const onlyCallingAgentRoutes = [
   {
     path: 'calling-agents/summary/:summaryId/details',
     lazy: async () => {
-      const { default: AgentCommissionSummaryDetails } =
-        await import('../../pages/calling-agent-manage/commission-summary-details/CommissionSummaryDetails');
+      const { default: AgentCommissionSummaryDetails } = await import(
+        '../../pages/calling-agent-manage/commission-summary-details/CommissionSummaryDetails'
+      );
       return {
         Component: AgentCommissionSummaryDetails
       };

@@ -516,7 +516,6 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
     if (firstErrorStepIndex !== -1) {
       setStepErrors(allErrors);
       setActiveStep(firstErrorStepIndex);
-      console.error('Please fix all errors before submitting');
       return;
     }
 

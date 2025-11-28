@@ -56,46 +56,6 @@ const UserSummaryCard = ({ summaryData, loading }) => {
     };
   }, [summaryData]);
 
-  // Calculate ratios and net amount for a currency item
-  const calculateMetrics = (item) => {
-    const totalDeposits = Number(item.TotalDeposits) || 0;
-    const totalWithdrawals = Number(item.TotalWithdrawals) || 0;
-    const freeBonusAmount = Number(item.FreeBonusAmount) || 0;
-    const depositBonusAmount = Number(item.DepositBonusAmount) || 0;
-
-    // House Net Earnings: Total Deposit - Total Withdrawal Amount
-    const netAmount = totalDeposits - totalWithdrawals;
-
-    // Free Bonus %: (Free Bonus Amount / Total Deposits) * 100
-    const freeBonusRatio =
-      totalDeposits > 0 ? ((freeBonusAmount / totalDeposits) * 100).toFixed(2) : 0;
-
-    // Clean Deposits %: ((Total Deposits - Deposit Bonus Amount) / Total Deposits) * 100
-    // Clean Deposits = Total Deposits - Deposit Bonus Amount
-    const cleanDepositRatio =
-      totalDeposits > 0
-        ? (((totalDeposits - depositBonusAmount) / totalDeposits) * 100).toFixed(2)
-        : 0;
-
-    // Deposit Bonus %: (Deposit Bonus Amount / Total Deposits) * 100
-    const depositBonusRatio =
-      totalDeposits > 0 ? ((depositBonusAmount / totalDeposits) * 100).toFixed(2) : 0;
-
-    // Total Bonus %: (Total Bonus Claimed / Total Deposits) * 100
-    // Total Bonus Claimed = Free Bonus Amount + Deposit Bonus Amount
-    const totalBonusClaimed = freeBonusAmount + depositBonusAmount;
-    const totalBonusRatio =
-      totalDeposits > 0 ? ((totalBonusClaimed / totalDeposits) * 100).toFixed(2) : 0;
-
-    return {
-      netAmount,
-      freeBonusRatio,
-      cleanDepositRatio,
-      depositBonusRatio,
-      totalBonusRatio
-    };
-  };
-
   return (
     <>
       {loading ? (
@@ -153,7 +113,6 @@ const UserSummaryCard = ({ summaryData, loading }) => {
             <div className="overflow-x-auto">
               <div className="flex flex-col gap-3">
                 {summaryData.map((item, index) => {
-                  const metrics = calculateMetrics(item);
                   return (
                     <Card key={index} className="border border-gray-200 p-3 dark:border-dark-500">
                       {/* Currency Header */}
@@ -216,11 +175,11 @@ const UserSummaryCard = ({ summaryData, loading }) => {
                             value={item.BonusUsedCount || 0}
                           />
                           <SummaryDataItem
-                            label={t('free_count')}
+                            label={t('free_bonus_count')}
                             value={item.FreeBonusCount || 0}
                           />
                           <SummaryDataItem
-                            label={t('free_amount')}
+                            label={t('free_bonus_amount')}
                             value={formatCurrency(item.FreeBonusAmount || 0, item.currency?.code)}
                           />
                           <SummaryDataItem
@@ -239,11 +198,11 @@ const UserSummaryCard = ({ summaryData, loading }) => {
                           {/* Transaction Data */}
                           {/* <SummarySection title={t('transactions')}> */}
                           <SummaryDataItem
-                            label={t('deposits')}
+                            label={t('total_deposits')}
                             value={formatCurrency(item.TotalDeposits || 0, item.currency?.code)}
                           />
                           <SummaryDataItem
-                            label={t('withdrawals')}
+                            label={t('total_withdrawals')}
                             value={formatCurrency(item.TotalWithdrawals || 0, item.currency?.code)}
                           />
                           <SummaryDataItem label={t('dep_count')} value={item.DepositCount || 0} />
@@ -256,28 +215,32 @@ const UserSummaryCard = ({ summaryData, loading }) => {
                         <SummarySection title={t('calculations')}> */}
                           <SummaryDataItem
                             label={t('house_net_earnings')}
-                            value={formatCurrency(metrics.netAmount, item.currency?.code)}
+                            value={formatCurrency(item.NetAmount, item.currency?.code)}
                             valueClassName={
-                              metrics.netAmount >= 0
+                              item.NetAmount >= 0
                                 ? 'text-success dark:text-success-light'
                                 : 'text-error dark:text-error-light'
                             }
                           />
                           <SummaryDataItem
                             label={t('free_bonus_ratio')}
-                            value={`${metrics.freeBonusRatio}%`}
+                            value={`${item.FreeBonusRatio}%`}
                           />
                           <SummaryDataItem
-                            label={t('clean_deposit_ratio')}
-                            value={`${metrics.cleanDepositRatio}%`}
+                            label={t('clean_deposit_count_ratio')}
+                            value={`${item.CleanDepositCountRatio}%`}
+                          />
+                          <SummaryDataItem
+                            label={t('clean_deposit_amount_ratio')}
+                            value={`${item.CleanDepositAmountRatio}%`}
                           />
                           <SummaryDataItem
                             label={t('deposit_bonus_ratio')}
-                            value={`${metrics.depositBonusRatio}%`}
+                            value={`${item.DepositBonusRatio}%`}
                           />
                           <SummaryDataItem
                             label={t('total_bonus_ratio')}
-                            value={`${metrics.totalBonusRatio}%`}
+                            value={`${item.TotalBonusRatio}%`}
                           />
                           {/* </SummarySection> */}
 
@@ -285,23 +248,23 @@ const UserSummaryCard = ({ summaryData, loading }) => {
 
                           {/* <SummarySection title={t('dates')}> */}
                           <SummaryDataItem
-                            label={t('first_bet')}
+                            label={t('first_bet_date')}
                             value={item.FirstBetAt ? formatDate(item.FirstBetAt) : '-'}
                           />
                           <SummaryDataItem
-                            label={t('last_bet')}
+                            label={t('last_bet_date')}
                             value={formatDate(item.LastBetAt)}
                           />
                           <SummaryDataItem
-                            label={t('first_deposit')}
+                            label={t('first_deposit_date')}
                             value={formatDate(item.FirstDepositAt)}
                           />
                           <SummaryDataItem
-                            label={t('last_deposit')}
+                            label={t('last_deposit_date')}
                             value={formatDate(item.LastDepositAt)}
                           />
                           <SummaryDataItem
-                            label={t('last_bonus')}
+                            label={t('last_bonus_date')}
                             value={formatDate(item.LastBonusClaimedAt)}
                           />
                         </SummarySection>

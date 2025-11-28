@@ -6,7 +6,7 @@ import TableCard from 'components/ui/custom/TableCard';
 import useTable from 'components/ui/useTable';
 import { TableToolbar } from 'components/shared/table/TableToolbar';
 import { createColumnHelper } from '@tanstack/react-table';
-import { BadgeCell, DateCell } from 'components/custom/table/cell';
+import { BadgeCell } from 'components/custom/table/cell';
 import PlayerSegmentationService from 'services/player-segmentation.services';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
@@ -14,6 +14,7 @@ import { Page } from 'components/shared/Page';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import ChangeHistoryModal from 'components/sections/player-segmentation/ChangeHistoryModal';
+import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 const columnHelper = createColumnHelper();
 
@@ -74,19 +75,19 @@ const ChangeHistory = () => {
     }),
     columnHelper.accessor('EffectiveFrom', {
       header: t('effective_from'),
-      cell: DateCell,
+      accessorFn: (row) => (row.EffectiveFrom ? getDateInUTCToTimeZone(row.EffectiveFrom) : '—'),
       size: 160,
       enableSorting: false
     }),
     columnHelper.accessor('EffectiveTo', {
       header: t('effective_to'),
-      cell: DateCell,
+      accessorFn: (row) => (row.EffectiveTo ? getDateInUTCToTimeZone(row.EffectiveTo) : '—'),
       size: 160,
       enableSorting: false
     }),
     columnHelper.accessor('DateCreated', {
       header: t('date_created'),
-      cell: DateCell,
+      accessorFn: (row) => (row.DateCreated ? getDateInUTCToTimeZone(row.DateCreated) : '—'),
       size: 160,
       enableSorting: false
     }),

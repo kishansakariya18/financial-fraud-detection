@@ -9,8 +9,9 @@ const b2bAgentAdminRoutes = [
       {
         path: 'transections',
         lazy: async () => {
-          const { default: OperatorTransection } =
-            await import('../../../pages/b2b-agent/admin/OperatorTransection');
+          const { default: OperatorTransection } = await import(
+            '../../../pages/b2b-agent/admin/OperatorTransection'
+          );
           return {
             Component: () => (
               <PrivateRoute
@@ -40,8 +41,9 @@ const b2bAgentAdminRoutes = [
       {
         path: 'tree',
         lazy: async () => {
-          const { default: AdminAgentTree } =
-            await import('../../../pages/b2b-agent/admin/AdminAgantTree');
+          const { default: AdminAgentTree } = await import(
+            '../../../pages/b2b-agent/admin/AdminAgantTree'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.AGENTS.VIEW}>
@@ -54,8 +56,9 @@ const b2bAgentAdminRoutes = [
       {
         path: 'withdraw-requests',
         lazy: async () => {
-          const { default: AdminWithdrawRequest } =
-            await import('../../../pages/b2b-agent/admin/AdminWithdrawRequest');
+          const { default: AdminWithdrawRequest } = await import(
+            '../../../pages/b2b-agent/admin/AdminWithdrawRequest'
+          );
           return {
             Component: () => (
               <PrivateRoute
@@ -108,8 +111,9 @@ const b2bAgentAdminRoutes = [
           {
             path: 'details',
             lazy: async () => {
-              const { default: AgentDetails } =
-                await import('../../../pages/b2b-agent/admin/tabs/AgentDetails');
+              const { default: AgentDetails } = await import(
+                '../../../pages/b2b-agent/admin/tabs/AgentDetails'
+              );
               return {
                 Component: () => (
                   <PrivateRoute permission={PERMISSIONS.AGENTS.VIEW}>
@@ -122,8 +126,9 @@ const b2bAgentAdminRoutes = [
           {
             path: 'login-history',
             lazy: async () => {
-              const { default: AgentLoginHistory } =
-                await import('../../../pages/b2b-agent/admin/tabs/AgentLoginHistory');
+              const { default: AgentLoginHistory } = await import(
+                '../../../pages/b2b-agent/admin/tabs/AgentLoginHistory'
+              );
               return {
                 Component: () => (
                   <PrivateRoute permission={PERMISSIONS.AGENTS.VIEW}>
@@ -136,8 +141,9 @@ const b2bAgentAdminRoutes = [
           {
             path: 'wallet',
             lazy: async () => {
-              const { default: AgentWallet } =
-                await import('../../../pages/b2b-agent/admin/tabs/AgentWalletTab');
+              const { default: AgentWallet } = await import(
+                '../../../pages/b2b-agent/admin/tabs/AgentWalletTab'
+              );
               return {
                 Component: () => (
                   <PrivateRoute permission={PERMISSIONS.AGENTS.VIEW}>
@@ -150,8 +156,9 @@ const b2bAgentAdminRoutes = [
           {
             path: 'agents',
             lazy: async () => {
-              const { default: AgentAgents } =
-                await import('../../../pages/b2b-agent/admin/tabs/AgentAgents');
+              const { default: AgentAgents } = await import(
+                '../../../pages/b2b-agent/admin/tabs/AgentAgents'
+              );
               return {
                 Component: () => (
                   <PrivateRoute permission={PERMISSIONS.AGENTS.VIEW}>
@@ -164,8 +171,9 @@ const b2bAgentAdminRoutes = [
           {
             path: 'players',
             lazy: async () => {
-              const { default: AgentPlayerList } =
-                await import('../../../pages/b2b-agent/admin/tabs/AgentPlayerList');
+              const { default: AgentPlayerList } = await import(
+                '../../../pages/b2b-agent/admin/tabs/AgentPlayerList'
+              );
               return {
                 Component: () => (
                   <PrivateRoute permission={PERMISSIONS.AGENTS.VIEW}>
@@ -178,8 +186,9 @@ const b2bAgentAdminRoutes = [
           {
             path: 'withdraw-requests',
             lazy: async () => {
-              const { default: AgentWithdrawRequest } =
-                await import('../../../pages/b2b-agent/admin/tabs/AgentWithdrawRequest');
+              const { default: AgentWithdrawRequest } = await import(
+                '../../../pages/b2b-agent/admin/tabs/AgentWithdrawRequest'
+              );
               return {
                 Component: () => (
                   <PrivateRoute permission={PERMISSIONS.AGENTS.VIEW}>

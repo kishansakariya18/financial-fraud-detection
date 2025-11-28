@@ -357,7 +357,8 @@ export const apiConfig = {
       EDIT: '/games/admin/casino-management/category/:categoryId/edit',
       DELETE: '/games/admin/casino-management/category/:categoryId/delete',
       CHANGE_STATUS: '/games/admin/casino-management/category/:categoryId/change-status',
-      ALL_ACTIVE_LIST: '/games/admin/casino-management/category/all'
+      ALL_ACTIVE_LIST: '/games/admin/casino-management/category/all',
+      GET_CATEGORY_BY_PROVIDER_IDS: '/games/admin/casino-management/category/by-provider-ids'
     },
     TOOLS: {
       DETAIL: '/games/admin/ip-lookup/details'

@@ -31,7 +31,7 @@ export function Toolbar({ table, pageTitle = '' }) {
         </div>
 
         <div>
-          {hasPermission(PERMISSIONS.FRONTEND.ADD_APPEARANCE) && (
+          {hasPermission(PERMISSIONS.LAYOUTS.ADD) && (
             <Button
               className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
               color="primary"

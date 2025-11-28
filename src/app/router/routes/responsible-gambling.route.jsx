@@ -5,8 +5,9 @@ export const responsibleGamblingRoute = [
   {
     path: '/responsible-gambling',
     lazy: async () => {
-      const { default: ResponsibleGamblingList } =
-        await import('../../pages/responsible-gambling/list/list');
+      const { default: ResponsibleGamblingList } = await import(
+        '../../pages/responsible-gambling/list/list'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.RESPONSIBLE_GAMING_RESTRICTIONS.VIEW}>

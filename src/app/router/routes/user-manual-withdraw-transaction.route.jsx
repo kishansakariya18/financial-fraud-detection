@@ -5,8 +5,9 @@ export const userManualWithdrawTransactionRoute = [
   {
     path: 'user-manual-withdraw-transaction',
     lazy: async () => {
-      const { default: List } =
-        await import('../../pages/user-manual-withdraw-transaction/list/list');
+      const { default: List } = await import(
+        '../../pages/user-manual-withdraw-transaction/list/list'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.PAYMENT.MANUAL_WITHDRAW_VIEW}>

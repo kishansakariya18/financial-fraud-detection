@@ -2,10 +2,12 @@ import apiConfig from '../configs/api.config';
 import { replaceText } from 'utils/custom.utilities';
 import { DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import apiInstance from 'utils/apiInstance';
+import moment from 'moment';
 
 const BlogCategoryService = {
   getBlogCategoryList: (data) => {
     const { pagination, filters } = data || {};
+    console.log('filters', filters);
 
     const apiQueryParams = {
       keyword: filters?.keyword || undefined,
@@ -14,6 +16,11 @@ const BlogCategoryService = {
       page: pagination?.pageIndex !== undefined ? pagination.pageIndex + 1 : 1,
       perPage: pagination?.pageSize || DEFAULT_PER_PAGE_RECORD
     };
+    if (filters?.startDate && filters?.endDate) {
+      apiQueryParams.startDate = moment(+filters.startDate).startOf('day').toDate();
+      apiQueryParams.endDate = moment(+filters.endDate).endOf('day').toDate();
+    }
+    console.log(apiQueryParams);
 
     // Remove undefined values
     Object.keys(apiQueryParams).forEach((key) => {

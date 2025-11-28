@@ -33,8 +33,8 @@ export const columns = ({ canShowActions } = {}) => [
   }),
   columnHelper.accessor((row) => row.name, {
     id: 'name',
-    label: 'Name',
-    header: 'Name',
+    label: 'Category Name',
+    header: 'Category Name',
     cell: BoldCell,
     enableSorting: false
   }),
