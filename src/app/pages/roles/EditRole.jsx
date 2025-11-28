@@ -4,8 +4,9 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 
 import { Page } from 'components/shared/Page';
-import { Button, Card, Input } from 'components/ui';
-import { useEffect, useState } from 'react';
+import { Button, Card, Checkbox, Input } from 'components/ui';
+import { Listbox } from 'components/shared/form/Listbox';
+import { useEffect, useMemo, useState } from 'react';
 import { roleDetailMapper, rolePermissionListMapper } from './helper';
 import RoleService from 'services/role.services';
 // import { useParams } from 'react-router';
@@ -60,23 +61,83 @@ const EditRole = () => {
   const [error, setError] = useState('');
 
   const [checkedList, setCheckedList] = useState([]);
+  const allPermissionIds = useMemo(() => {
+    const ids = [];
+    response?.forEach((mod) => {
+      mod?.permissionList?.forEach((perm) => ids.push(perm.permissionID));
+    });
+    return Array.from(new Set(ids));
+  }, [response]);
+
+  // Flatten all permissions across modules for global dependency checks
+  const allPermissions = useMemo(() => {
+    const list = [];
+    response?.forEach((mod) => {
+      mod?.permissionList?.forEach((perm) => list.push(perm));
+    });
+    return list;
+  }, [response]);
+
+  // Module-wise filter (multi-select with 'All')
+  const [selectedModules, setSelectedModules] = useState(['all']);
+  const moduleOptions = useMemo(() => {
+    const list = [{ label: 'All Modules', value: 'all' }];
+    const names = new Set();
+    response?.forEach((m) => {
+      if (m?.moduleName && !names.has(m.moduleName)) {
+        names.add(m.moduleName);
+        list.push({ label: m.moduleName, value: m.moduleName });
+      }
+    });
+    return list;
+  }, [response]);
+
+  const filteredModules = useMemo(() => {
+    if (!selectedModules?.length || selectedModules.includes('all')) return response || [];
+    const setSel = new Set(selectedModules);
+    return (response || []).filter((m) => setSel.has(m.moduleName));
+  }, [response, selectedModules]);
+
+  const allSelected =
+    allPermissionIds.length > 0 && allPermissionIds.every((id) => checkedList.includes(id));
+
+  const handleToggleAll = () => {
+    const newCheckedList = allSelected ? [] : [...allPermissionIds];
+    setCheckedList(newCheckedList);
+  };
   const handleCheck = (checked, permissionObj, modulePermissionList) => {
     console.log('handleCheck', checked, permissionObj, modulePermissionList);
 
     let newCheckedList = [...checkedList];
 
     if (!checked) {
-      // Unselect only this permission ID
-      newCheckedList = newCheckedList.filter(
-        (checkedId) => checkedId !== permissionObj.permissionID
-      );
+      // Cascading deselect: remove this permission and any dependents globally
+      const toRemove = new Set([permissionObj.permissionID]);
+
+      const collectDependents = (slug) => {
+        allPermissions
+          .filter(
+            (perm) =>
+              Array.isArray(perm.requiredPermissions) && perm.requiredPermissions.includes(slug)
+          )
+          .forEach((child) => {
+            if (!toRemove.has(child.permissionID)) {
+              toRemove.add(child.permissionID);
+              if (child.permissionSlug) collectDependents(child.permissionSlug);
+            }
+          });
+      };
+
+      if (permissionObj.permissionSlug) collectDependents(permissionObj.permissionSlug);
+
+      newCheckedList = newCheckedList.filter((id) => !toRemove.has(id));
     } else {
       const idsToAdd = [permissionObj.permissionID];
 
-      // Auto-select dependent permissions based on RequiredPermissions (slug list)
+      // Auto-select required permissions (parents) based on RequiredPermissions (slug list)
       if (permissionObj.requiredPermissions && permissionObj.requiredPermissions.length > 0) {
         permissionObj.requiredPermissions.forEach((requiredSlug) => {
-          const requiredPermission = modulePermissionList.find(
+          const requiredPermission = allPermissions.find(
             (perm) => perm.permissionSlug === requiredSlug
           );
           if (requiredPermission) {
@@ -206,29 +267,65 @@ const EditRole = () => {
               <Card className="p-4 sm:px-5">
                 <div className="mt-5 space-y-5">
                   {
-                    <Input
-                      id="roleName"
-                      className={`form-control ${errors.roleName ? 'is-invalid' : ''}`}
-                      defaultValue={detail.roleName}
-                      type="text"
-                      name="roleName"
-                      label={roleName}
-                      placeholder="Enter Role Name"
-                      {...register('roleName', {
-                        required: 'Role name is required'
-                      })}
-                      error={errors?.roleName?.message}
-                    />
+                    <div className="max-w-sm">
+                      <Input
+                        id="roleName"
+                        className={`form-control ${errors.roleName ? 'is-invalid' : ''}`}
+                        defaultValue={detail.roleName}
+                        type="text"
+                        name="roleName"
+                        label={roleName}
+                        placeholder="Enter Role Name"
+                        {...register('roleName', {
+                          required: 'Role name is required'
+                        })}
+                        error={errors?.roleName?.message}
+                      />
+                    </div>
                   }
                   <div className="flex flex-col">
                     <div>
-                      {response?.length > 0 &&
-                        response?.map((item) => (
+                      <div className="mb-4">
+                        <Checkbox
+                          label={
+                            allSelected ? 'Deselect all permissions' : 'Select all permissions'
+                          }
+                          checked={allSelected}
+                          onChange={handleToggleAll}
+                        />
+                      </div>
+                      <div className="mb-4 max-w-md">
+                        <Listbox
+                          data={moduleOptions}
+                          multiple
+                          value={
+                            Array.isArray(selectedModules)
+                              ? moduleOptions.filter((opt) => selectedModules.includes(opt.value))
+                              : []
+                          }
+                          onChange={(vals) => {
+                            const values = (vals || []).map((v) => v.value);
+                            if (!values.length) {
+                              setSelectedModules(['all']);
+                              return;
+                            }
+                            if (values.includes('all') && values.length > 1) {
+                              setSelectedModules(values.filter((v) => v !== 'all'));
+                              return;
+                            }
+                            setSelectedModules(values);
+                          }}
+                          placeholder={'Filter by module(s)'}
+                          displayField="label"
+                        />
+                      </div>
+                      {filteredModules?.length > 0 &&
+                        filteredModules?.map((item) => (
                           <>
                             <div key={item.moduleName} className="mb-4 grid"></div>
                             <div className="flex items-center gap-3">
                               <div className="w-1/4">
-                                <h4>{item.moduleName}</h4>
+                                <h4 className="font-bold">{item.moduleName}</h4>
                                 <p className="text-sm text-gray-400">
                                   Access control for {item.moduleName}
                                 </p>

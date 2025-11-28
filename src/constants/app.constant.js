@@ -277,7 +277,8 @@ export const PERMISSIONS = Object.freeze({
   SEGMENTATION: {
     LIST: 'segmentation-view',
     ADD: 'segmentation-add',
-    EDIT: 'segmentation-add',
+    EDIT: 'segmentation-edit',
+    REFRESH: 'segmentation-refresh',
     CHANGE_STATUS: 'segmentation-change-status',
     PLAYER_LIST: 'segmentation-player-list'
   },
