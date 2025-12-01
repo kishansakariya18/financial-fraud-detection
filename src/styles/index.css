@@ -9,7 +9,3 @@
 @import "tailwindcss/utilities"; /* TailwindCSS utilities Layer (@tailwind utilities)*/
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-
-:root {
---anchor-max-height: 400px;
-}
