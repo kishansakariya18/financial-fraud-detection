@@ -6,7 +6,14 @@ import {
   XCircleIcon
 } from '@heroicons/react/24/outline';
 import { TRANSACTION } from 'constants/app.constant';
-import { RiNumber0, RiNumber1, RiNumber2, RiNumber3, RiNumber4 } from 'react-icons/ri';
+import {
+  // TbCircleNumber0,
+  TbCircleNumber1,
+  TbCircleNumber2,
+  TbCircleNumber3,
+  TbCircleNumber4
+} from 'react-icons/tb';
+import { CiCircleRemove } from 'react-icons/ci';
 
 export const responseMapper = (apiData) => {
   const list = apiData.map((item) => {
@@ -39,7 +46,7 @@ export const responseMapper = (apiData) => {
       agentName: item?.Agent?.Username,
       isEmailVerified: playerEmailVerifyToApp(item.IsEmailVerified),
       isMobileVerified: playerMobileVerifyToApp(item.IsMobileVerified),
-      userKYCLevel: item.UserKYCLevel
+      userKYCLevel: item.UserKYCLevel ? item.UserKYCLevel : '0'
     };
   });
 
@@ -239,29 +246,29 @@ export const mobileVerifyOptionToAPI = (status) => {
 
 export const playerKycLevelOptions = [
   {
-    value: null,
+    value: '0',
     label: 'Not Initiated',
-    icon: RiNumber0
+    icon: CiCircleRemove
   },
   {
     value: '1',
     label: 'Level 1',
-    icon: RiNumber1
+    icon: TbCircleNumber1
   },
   {
     value: '2',
     label: 'Level 2',
-    icon: RiNumber2
+    icon: TbCircleNumber2
   },
   {
     value: '3',
     label: 'Level 3',
-    icon: RiNumber3
+    icon: TbCircleNumber3
   },
   {
     value: '4',
     label: 'Level 4',
-    icon: RiNumber4
+    icon: TbCircleNumber4
   }
 ];
 

@@ -23,7 +23,9 @@ export const PlayerColumns = ({
   onEdit,
   onChangeStatus,
   onCreditAmount,
-  onResetPassword
+  onResetPassword,
+  playerClasses,
+  countries
 }) => {
   const isB2B = isB2BPlatform();
   return [
@@ -165,20 +167,33 @@ export const PlayerColumns = ({
                   filterFn: 'arrIncludesSome',
                   enableSorting: false
                 }),
-                columnHelper.display({
+                columnHelper.accessor((row) => row.playerClassID, {
                   id: 'playerClassID',
                   label: 'Player Class',
                   header: 'Player Class',
-                  cell: BoldCell,
+                  cell: BadgeCell,
+                  meta: {
+                    optionData: Array.isArray(playerClasses) ? playerClasses : []
+                  },
+                  filterFn: 'arrIncludesSome',
                   enableSorting: false
                 })
               ]
             : []),
-          columnHelper.accessor((row) => row.CountryID, {
+          columnHelper.accessor((row) => row.country, {
             id: 'CountryID',
             label: 'Country',
             header: 'Country',
-            cell: BoldCell,
+            cell: BadgeCell,
+            meta: {
+              optionData: countries
+                ? countries.map((countr) => ({
+                    value: countr.CountryID,
+                    label: countr.CountryName
+                  }))
+                : []
+            },
+            filterFn: 'arrIncludesSome',
             enableSorting: false
           })
           // columnHelper.accessor((row) => row.SegmentationID, {
