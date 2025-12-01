@@ -1,0 +1,248 @@
+// Import Dependencies
+import { Page } from 'components/shared/Page';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import { Button, Input, Select, Textarea } from 'components/ui';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import CampaignService from 'services/campaign.service';
+import { createCampaignSchema } from './schema';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { XMarkIcon } from '@heroicons/react/24/outline';
+
+const CreateCampaign = () => {
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [response, setResponse] = useState(null);
+  const [tags, setTags] = useState([]);
+  const [tagInput, setTagInput] = useState('');
+  const { t } = useTranslation();
+
+  const breadcrumbItem = [{ title: t('campaign'), path: '/campaign' }, { title: t('create') }];
+
+  const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    watch,
+    setValue
+  } = useForm({
+    resolver: yupResolver(createCampaignSchema),
+    defaultValues: {
+      campaignName: '',
+      status: 'inactive',
+      startDate: '',
+      endDate: '',
+      description: '',
+      tags: []
+    }
+  });
+
+  const description = watch('description') || '';
+
+  const createCampaignAPI = async (requestObject) => {
+    setLoading(true);
+    setError(null);
+
+    const result = await CampaignService.createCampaign(requestObject);
+    if (result) {
+      if (result.status === 200 || result.status === 201) {
+        setResponse(result.response);
+      } else {
+        setError(result.error);
+      }
+    }
+    setLoading(false);
+  };
+
+  if (!loading && error) {
+    toast.error(error);
+    setError('');
+  }
+
+  useEffect(() => {
+    if (!loading && !error && response) {
+      toast.success(response.message || 'Campaign created successfully');
+      setResponse(null);
+      reset();
+      setTags([]);
+      navigate('/campaign');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response]);
+
+  const onSubmit = async (data) => {
+    const submitData = {
+      ...data,
+      tags: tags
+    };
+    await createCampaignAPI(submitData);
+  };
+
+  const handleAddTag = () => {
+    const trimmedTag = tagInput.trim();
+    if (trimmedTag && !tags.includes(trimmedTag)) {
+      const newTags = [...tags, trimmedTag];
+      setTags(newTags);
+      setValue('tags', newTags);
+      setTagInput('');
+    }
+  };
+
+  const handleRemoveTag = (tagToRemove) => {
+    const newTags = tags.filter((tag) => tag !== tagToRemove);
+    setTags(newTags);
+    setValue('tags', newTags);
+  };
+
+  const handleTagInputKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAddTag();
+    }
+  };
+
+  const statusOptions = [
+    { value: 'inactive', label: 'Inactive' },
+    { value: 'active', label: 'Active' }
+  ];
+
+  return (
+    <Page title={t('create') + ' ' + t('campaign')}>
+      <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
+        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
+            {t('create') + ' ' + t('campaign')}
+          </h2>
+          <div className="hidden self-stretch py-1 sm:flex">
+            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          </div>
+          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
+        </div>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate autoComplete="off">
+          <div className="space-y-6">
+            {/* Basics Section */}
+            <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-600 dark:bg-dark-800">
+              <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-dark-50">
+                1. Basics
+              </h3>
+              <p className="mb-6 text-sm text-gray-500 dark:text-dark-300">
+                Name, optional timing, and tags. Status stays Inactive until you activate in Review.
+              </p>
+
+              <div className="space-y-4">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Input
+                    {...register('campaignName')}
+                    label={t('campaign') + ' ' + t('name') + '*'}
+                    error={errors?.campaignName?.message}
+                    placeholder="e.g. August Kickoff Reloads"
+                  />
+                  <Select
+                    {...register('status')}
+                    label={t('status')}
+                    error={errors?.status?.message}
+                    options={statusOptions}
+                  />
+                </div>
+
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Input
+                    {...register('startDate')}
+                    type="datetime-local"
+                    label={t('start') + ' ' + t('date')}
+                    error={errors?.startDate?.message}
+                  />
+                  <Input
+                    {...register('endDate')}
+                    type="datetime-local"
+                    label={t('end') + ' ' + t('date')}
+                    error={errors?.endDate?.message}
+                  />
+                </div>
+
+                <div>
+                  <Textarea
+                    {...register('description')}
+                    label={
+                      <div className="flex items-center justify-between">
+                        <span>
+                          {t('description')} <span className="text-gray-400">Optional. 0/240</span>
+                        </span>
+                        <span className="text-xs text-gray-400">{description.length}/240</span>
+                      </div>
+                    }
+                    error={errors?.description?.message}
+                    placeholder="Internal notes for admins"
+                    rows={3}
+                    maxLength={240}
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-dark-200">
+                    {t('tags')} <span className="text-xs text-gray-400">Press Enter to add</span>
+                  </label>
+                  <div className="flex space-x-2 rtl:space-x-reverse">
+                    <Input
+                      value={tagInput}
+                      onChange={(e) => setTagInput(e.target.value)}
+                      onKeyDown={handleTagInputKeyDown}
+                      placeholder="Type a tag..."
+                      classNames={{ root: 'flex-1' }}
+                    />
+                    <Button
+                      type="button"
+                      onClick={handleAddTag}
+                      className="whitespace-nowrap px-4"
+                      disabled={!tagInput.trim()}>
+                      {t('add')}
+                    </Button>
+                  </div>
+                  {tags.length > 0 && (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {tags.map((tag, index) => (
+                        <span
+                          key={index}
+                          className="inline-flex items-center space-x-1.5 rounded-md bg-gray-100 px-2.5 py-1 text-sm text-gray-700 dark:bg-dark-600 dark:text-dark-200 rtl:space-x-reverse">
+                          <span>{tag}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveTag(tag)}
+                            className="rounded-sm hover:bg-gray-200 dark:hover:bg-dark-500">
+                            <XMarkIcon className="size-3.5" />
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">
+            <Button
+              className="min-w-[7rem]"
+              onClick={() => {
+                reset();
+                setTags([]);
+              }}
+              disabled={loading}>
+              {t('reset')}
+            </Button>
+            <Button type="submit" className="min-w-[7rem]" color="primary" disabled={loading}>
+              {t('create')}
+            </Button>
+          </div>
+        </form>
+      </div>
+    </Page>
+  );
+};
+
+export default CreateCampaign;

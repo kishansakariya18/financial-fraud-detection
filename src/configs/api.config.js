@@ -620,6 +620,14 @@ export const apiConfig = {
     ENQUIRES: {
       LIST: '/users/admin/enquiries/list',
       CHANGE_STATUS: '/users/admin/enquiries/update-status'
+    },
+    CAMPAIGN: {
+      LIST: '/bonus/admin/campaign/list',
+      CREATE: '/bonus/admin/campaign/create',
+      DETAIL: '/bonus/admin/campaign/:campaignUID',
+      UPDATE: '/bonus/admin/campaign/update',
+      CHANGE_STATUS: '/bonus/admin/campaign/:campaignUID/status',
+      DELETE: '/bonus/admin/campaign/:campaignUID'
     }
   }
 };
