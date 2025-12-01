@@ -53,6 +53,18 @@ const EnquiresService = {
     } catch (error) {
       console.log('Error changing Enquires status', error);
     }
+  },
+  getSummary: async () => {
+    try {
+      const url = apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.ENQUIRES.SUMMARY;
+      return await sendRequest({
+        url,
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      });
+    } catch (error) {
+      console.log('Error getting Enquires summary', error);
+    }
   }
 };
 

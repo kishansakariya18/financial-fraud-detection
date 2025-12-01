@@ -19,6 +19,7 @@ export default function EnquiresList() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyword, setKeyword] = useState(searchParams.get('keyword') || '');
+  const [summary, setSummary] = useState(null);
   const pageTitle = t('enquires');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
@@ -44,9 +45,22 @@ export default function EnquiresList() {
     return { status: result?.status, error: result?.error };
   };
 
+  const fetchSummary = async () => {
+    const result = await EnquiresService.getSummary();
+    if (result?.status === 200) {
+      setSummary(result.response?.data);
+    }
+    return { status: result?.status, error: result?.error };
+  };
+
+  useEffect(() => {
+    fetchSummary();
+  }, []);
+
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
     fetchData: fetchEnquires,
+    fetchSummary,
     queryParams,
     setSearchParams,
     initialSettings: {
@@ -139,6 +153,7 @@ export default function EnquiresList() {
         setSearchParams={setSearchParams}
         table={table}
         pageTitle={pageTitle}
+        summary={summary}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
       />

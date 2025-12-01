@@ -164,6 +164,10 @@ export function RowActions({ row, table }) {
                   if (table.options?.meta?.fetchNewList) {
                     table.options.meta.fetchNewList();
                   }
+                  // Refresh summary after status change
+                  if (table.options?.meta?.fetchSummary) {
+                    table.options.meta.fetchSummary();
+                  }
                   setStatusSuccess(true);
                   toast.success(result.response?.message || 'Status changed successfully');
                 } else {
