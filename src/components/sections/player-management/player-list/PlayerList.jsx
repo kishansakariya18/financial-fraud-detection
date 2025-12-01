@@ -74,7 +74,9 @@ export default function PlayerList({
         userUID: false,
         CountryID: false,
         isKYCVerified: false,
-        isBankVerified: false,
+        // isBankVerified: false,
+        isEmailVerified: false,
+        isMobileVerified: false,
         segmentationID: false,
         playerClassID: false
       }

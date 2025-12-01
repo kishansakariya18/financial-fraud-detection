@@ -4,9 +4,15 @@ import PropTypes from 'prop-types';
 // Local Imports
 import { IdCell, DateCell, BoldCell, BadgeCell } from 'components/custom/table/cell';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
-import { playerStatusOptions, genderOptions } from '../helper';
+import {
+  playerStatusOptions,
+  genderOptions,
+  emailVerifiedOptions,
+  mobileVerifiedOptions,
+  playerKycLevelOptions
+} from '../helper';
 import { panVerifiedOptions } from '../helper';
-import { bankVerifiedOptions } from '../helper';
+// import { bankVerifiedOptions } from '../helper';
 import { PlayerRowActions } from './PlayerRowActions';
 import { isB2BPlatform } from 'utils/platformNavigation';
 
@@ -112,17 +118,44 @@ export const PlayerColumns = ({
     }),
     ...(listFor !== 'agent'
       ? [
-          columnHelper.accessor((row) => row.isBankVerified, {
-            id: 'isBankVerified',
-            label: 'Bank Verified',
-            header: 'Bank Verified',
-            cell: BoldCell,
-            meta: { optionData: bankVerifiedOptions },
-            filterFn: 'arrIncludesSome',
-            enableSorting: false
-          }),
+          // columnHelper.accessor((row) => row.isBankVerified, {
+          //   id: 'isBankVerified',
+          //   label: 'Bank Verified',
+          //   header: 'Bank Verified',
+          //   cell: BoldCell,
+          //   meta: { optionData: bankVerifiedOptions },
+          //   filterFn: 'arrIncludesSome',
+          //   enableSorting: false
+          // }),
           ...(!isB2B
             ? [
+                columnHelper.accessor((row) => row.isEmailVerified, {
+                  id: 'isEmailVerified',
+                  label: 'Email Verified',
+                  header: 'Email Verified',
+                  cell: BadgeCell,
+                  meta: { optionData: emailVerifiedOptions },
+                  filterFn: 'arrIncludesSome',
+                  enableSorting: false
+                }),
+                columnHelper.accessor((row) => row.isMobileVerified, {
+                  id: 'isMobileVerified',
+                  label: 'Mobile Verified',
+                  header: 'Mobile Verified',
+                  cell: BadgeCell,
+                  meta: { optionData: mobileVerifiedOptions },
+                  filterFn: 'arrIncludesSome',
+                  enableSorting: false
+                }),
+                columnHelper.accessor((row) => row.userKYCLevel, {
+                  id: 'userKYCLevel',
+                  label: 'KYC Level',
+                  header: 'KYC Level',
+                  cell: BadgeCell,
+                  meta: { optionData: playerKycLevelOptions },
+                  filterFn: 'arrIncludesSome',
+                  enableSorting: false
+                }),
                 columnHelper.accessor((row) => row.isKYCVerified, {
                   id: 'isKYCVerified',
                   label: 'KYC Verified',

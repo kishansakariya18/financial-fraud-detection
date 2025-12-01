@@ -6,6 +6,7 @@ import {
   XCircleIcon
 } from '@heroicons/react/24/outline';
 import { TRANSACTION } from 'constants/app.constant';
+import { RiNumber0, RiNumber1, RiNumber2, RiNumber3, RiNumber4 } from 'react-icons/ri';
 
 export const responseMapper = (apiData) => {
   const list = apiData.map((item) => {
@@ -35,7 +36,10 @@ export const responseMapper = (apiData) => {
       country: item.CountryID,
       SegmentationID: '0',
       blockedAt: item?.UserBlockedAt ? getDateInUTCToTimeZone(item.UserBlockedAt) : '',
-      agentName: item?.Agent?.Username
+      agentName: item?.Agent?.Username,
+      isEmailVerified: playerEmailVerifyToApp(item.IsEmailVerified),
+      isMobileVerified: playerMobileVerifyToApp(item.IsMobileVerified),
+      userKYCLevel: item.UserKYCLevel
     };
   });
 
@@ -64,6 +68,7 @@ export const playerKycToApp = (kyc) => {
       return 'pending';
   }
 };
+
 export const playerBankVerifyToApp = (bankStatus) => {
   switch (bankStatus) {
     case true:
@@ -74,6 +79,29 @@ export const playerBankVerifyToApp = (bankStatus) => {
       break;
   }
 };
+
+export const playerEmailVerifyToApp = (emailStatus) => {
+  switch (+emailStatus) {
+    case 1:
+      return 'verified';
+    case 0:
+      return 'not-verified';
+    default:
+      break;
+  }
+};
+
+export const playerMobileVerifyToApp = (mobileStatus) => {
+  switch (+mobileStatus) {
+    case 1:
+      return 'verified';
+    case 0:
+      return 'not-verified';
+    default:
+      break;
+  }
+};
+
 export const playerKycToAPI = (kyc) => {
   switch (kyc) {
     case 'pending':
@@ -147,6 +175,35 @@ export const bankVerifiedOptions = [
     icon: XCircleIcon
   }
 ];
+export const emailVerifiedOptions = [
+  {
+    value: 'verified',
+    label: 'Verified',
+    color: 'success',
+    icon: CheckBadgeIcon
+  },
+  {
+    value: 'not-verified',
+    label: 'Not Verified',
+    color: 'error',
+    icon: XCircleIcon
+  }
+];
+export const mobileVerifiedOptions = [
+  {
+    value: 'verified',
+    label: 'Verified',
+    color: 'success',
+    icon: CheckBadgeIcon
+  },
+  {
+    value: 'not-verified',
+    label: 'Not Verified',
+    color: 'error',
+    icon: XCircleIcon
+  }
+];
+
 export const bankVerifyOptionToAPI = (status) => {
   switch (status) {
     case 'verified':
@@ -157,6 +214,57 @@ export const bankVerifyOptionToAPI = (status) => {
       return null;
   }
 };
+
+export const emailVerifyOptionToAPI = (status) => {
+  switch (status) {
+    case 'verified':
+      return 1;
+    case 'not-verified':
+      return 0;
+    default:
+      return null;
+  }
+};
+
+export const mobileVerifyOptionToAPI = (status) => {
+  switch (status) {
+    case 'verified':
+      return 1;
+    case 'not-verified':
+      return 0;
+    default:
+      return null;
+  }
+};
+
+export const playerKycLevelOptions = [
+  {
+    value: null,
+    label: 'Not Initiated',
+    icon: RiNumber0
+  },
+  {
+    value: '1',
+    label: 'Level 1',
+    icon: RiNumber1
+  },
+  {
+    value: '2',
+    label: 'Level 2',
+    icon: RiNumber2
+  },
+  {
+    value: '3',
+    label: 'Level 3',
+    icon: RiNumber3
+  },
+  {
+    value: '4',
+    label: 'Level 4',
+    icon: RiNumber4
+  }
+];
+
 export const panVerifyOptionToAPI = (kyc) => {
   switch (kyc) {
     case 'pending':
