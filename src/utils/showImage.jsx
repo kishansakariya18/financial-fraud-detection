@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+
 import { Dialog, Transition, TransitionChild } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import { Button } from 'components/ui';
 import apiConfig from 'configs/api.config';
 import clsx from 'clsx';
+// import { toast } from 'sonner';
 
 export const ShowImage = ({
   destPath,
@@ -34,6 +36,50 @@ export const ShowImage = ({
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isModalOpen]);
+
+  // const handleDownload = async () => {
+  //   try {
+  //     const response = await fetch(imageSrc);
+  //     if (!response.ok) throw new Error('Network response was not ok');
+  //     const blob = await response.blob();
+  //     const url = window.URL.createObjectURL(blob);
+  //     const link = document.createElement('a');
+  //     link.href = url;
+  //     link.download = imageKey?.split('/').pop() || 'download';
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     document.body.removeChild(link);
+  //     window.URL.revokeObjectURL(url);
+  //   } catch (error) {
+  //     console.error('Download failed:', error);
+  //     toast.error('Direct download not supported by server. Opening in new tab.');
+  //     window.open(imageSrc, '_blank');
+  //   }
+  // };
+
+  const handleDownload = async () => {
+    try {
+      const response = await fetch(imageSrc, {
+        method: 'GET',
+        credentials: 'omit'
+      });
+      if (!response.ok) throw new Error('Network response was not ok');
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = imageKey.split('/').pop() || 'download';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download failed:', error);
+      // toast.error('Direct download not supported by server. Opening in new tab.');
+      window.open(imageSrc, '_blank');
+    }
+  };
 
   return (
     <>
@@ -79,13 +125,25 @@ export const ShowImage = ({
               </Button>
 
               {/* Fixed Size Modal Container */}
-              <div className="flex h-[400px] w-[320px] items-center justify-center overflow-hidden rounded-lg bg-white p-4 shadow-2xl dark:bg-dark-700 sm:h-[600px] sm:w-[800px]">
+              <div className="flex h-[400px] w-[320px] flex-col items-center justify-center overflow-hidden rounded-lg bg-white p-4 shadow-2xl dark:bg-dark-700 sm:h-[600px] sm:w-[800px]">
                 {/* Image */}
-                <img
-                  src={imageSrc}
-                  alt="Full size preview"
-                  className="h-full w-full object-contain"
-                />
+                <div className="flex h-full w-full flex-1 items-center justify-center overflow-hidden">
+                  <img
+                    src={imageSrc}
+                    alt="Full size preview"
+                    className="h-full w-full object-contain"
+                  />
+                </div>
+                {/* Download Button */}
+                <div className="mt-4 flex justify-center">
+                  <Button
+                    onClick={handleDownload}
+                    variant="soft"
+                    isIcon
+                    className="size-10 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-dark-600 dark:hover:bg-dark-500">
+                    <ArrowDownTrayIcon className="size-6" />
+                  </Button>
+                </div>
               </div>
             </div>
           </TransitionChild>
