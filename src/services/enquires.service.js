@@ -14,10 +14,10 @@ const EnquiresService = {
           status: filters?.status || undefined,
           setBy: filters?.setBy || undefined,
           type: filters?.subject || undefined,
-          start_date: filters.startDate
+          startDate: filters.startDate
             ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
             : undefined,
-          end_date: filters.endDate
+          endDate: filters.endDate
             ? dayjs(+filters.endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
             : undefined
         }

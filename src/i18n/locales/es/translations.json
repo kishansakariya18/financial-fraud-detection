@@ -654,5 +654,7 @@
   "areYouSureEnquires": "¿Estás seguro de que quieres eliminar esta consulta?",
   "areYouSureEnquiresChangeStatus": "¿Estás seguro de que quieres cambiar el estado de esta consulta?",
   "enquiry_change_status": "Cambiar estado",
-  "enquires": "Consultas"
+  "enquires": "Consultas",
+  "in_progress":"En Progreso",
+  "resolved":"Resuelto"
 }
