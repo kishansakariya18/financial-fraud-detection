@@ -6,6 +6,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { toast } from 'sonner';
 import PlayerSegmentationService from 'services/player-segmentation.services';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
+import { CopyableCell } from 'components/shared/table/CopyableCell';
 
 const columnHelper = createColumnHelper();
 
@@ -19,24 +20,30 @@ const PlayerListModal = ({ isOpen, onClose, segmentRules }) => {
       columnHelper.accessor('UserID', {
         id: 'userID',
         header: 'User ID',
+        label: 'User ID',
         enableSorting: false,
         size: 100
       }),
       columnHelper.accessor('Username', {
         id: 'username',
         header: 'Username',
+        label: 'Username',
+        cell: CopyableCell,
         enableSorting: false,
         size: 160
       }),
       columnHelper.accessor('Email', {
         id: 'email',
         header: 'Email',
+        label: 'Email',
+        cell: CopyableCell,
         enableSorting: false,
         size: 200
       }),
       columnHelper.accessor('Mobile', {
         id: 'mobile',
         header: 'Mobile',
+        label: 'Mobile',
         cell: (info) => {
           const phoneCode = info.row.original.PhoneCode || '';
           const mobile = info.getValue() || '';
@@ -48,14 +55,14 @@ const PlayerListModal = ({ isOpen, onClose, segmentRules }) => {
       columnHelper.accessor('FirstName', {
         id: 'firstName',
         header: 'First Name',
-        cell: (info) => info.getValue() || '-',
+        label: 'First Name',
         enableSorting: false,
         size: 120
       }),
       columnHelper.accessor('LastName', {
         id: 'lastName',
         header: 'Last Name',
-        cell: (info) => info.getValue() || '-',
+        label: 'Last Name',
         enableSorting: false,
         size: 120
       })

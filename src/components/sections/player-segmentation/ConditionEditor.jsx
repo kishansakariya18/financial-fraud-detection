@@ -6,6 +6,8 @@ import { Listbox } from 'components/shared/form/Listbox';
 import { Combobox } from 'components/shared/form/Combobox';
 import { TagsInputNew } from 'components/shared/form/TagsInputNew';
 import { useSegmentationMappings } from './useSegmentationMappings';
+import { ReferrerSelect } from './ReferrerSelect';
+import ReferrerSelectionModal from './ReferrerSelectionModal';
 import {
   getAttribute,
   getAttributeOptions,
@@ -24,13 +26,24 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
   const [field, setField] = useState(condition.field || '');
   const [operator, setOperator] = useState(condition.operator || '');
   const [value, setValue] = useState(condition.value);
+  const [isReferrerModalOpen, setIsReferrerModalOpen] = useState(false);
+
+  // Extract player IDs from value if it's referred_by field
+  const playerIds =
+    field === SegmentAttributeKey.REFERRED_BY && value
+      ? Array.isArray(value)
+        ? value
+        : [value]
+      : [];
 
   // Use the custom hook to fetch and cache data
-  const { countryOptions, currencyOptions, affiliateOptions } = useSegmentationMappings({
-    fetchCountries: field === SegmentAttributeKey.COUNTRY,
-    fetchCurrencies: field === SegmentAttributeKey.CURRENCY,
-    fetchAffiliates: field === SegmentAttributeKey.AFFILIATE
-  });
+  const { countryOptions, currencyOptions, affiliateOptions, playerOptions } =
+    useSegmentationMappings({
+      fetchCountries: field === SegmentAttributeKey.COUNTRY,
+      fetchCurrencies: field === SegmentAttributeKey.CURRENCY,
+      fetchAffiliates: field === SegmentAttributeKey.AFFILIATE,
+      playerIds: playerIds // Fetch player details for editing
+    });
 
   const attributeOptions = getAttributeOptions();
   const operatorOptions = getOperatorOptions(field);
@@ -91,6 +104,11 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
       return null;
     }
 
+    // Check if there's a value error
+    const hasValueError = Boolean(
+      error?.value || (typeof error === 'object' && error?.message && !error?.field)
+    );
+
     // Helper function to get dynamic options for country/currency
     const getDynamicOptions = () => {
       if (field === SegmentAttributeKey.COUNTRY) return countryOptions;
@@ -99,7 +117,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
       return null;
     };
 
-    // Helper to render Combobox for country/currency
+    // Helper to render Combobox for country/currency/affiliate
     const renderDynamicCombobox = (isMultiple = false) => {
       const options = getDynamicOptions();
       if (!options || options.length === 0) return null;
@@ -141,6 +159,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
           searchFields={['label', 'value']}
           multiple={isMultiple}
           highlight
+          error={hasValueError}
         />
       );
     };
@@ -157,7 +176,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
             placeholder="Min"
             value={value?.[0] || ''}
             onChange={(e) => setValue([parseFloat(e.target.value) || 0, value?.[1]])}
-            error={Boolean(error?.value)}
+            error={hasValueError}
             classNames={{ root: 'flex-1' }}
           />
           <span className="text-xs text-gray-500 dark:text-dark-300">to</span>
@@ -166,7 +185,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
             placeholder="Max"
             value={value?.[1] || ''}
             onChange={(e) => setValue([value?.[0], parseFloat(e.target.value) || 0])}
-            error={Boolean(error?.value)}
+            error={hasValueError}
             classNames={{ root: 'flex-1' }}
           />
         </div>
@@ -188,7 +207,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
           placeholder="Enter value"
           value={value || ''}
           onChange={(e) => setValue(parseFloat(e.target.value) || 0)}
-          error={Boolean(error?.value)}
+          error={hasValueError}
         />
       );
     }
@@ -208,7 +227,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
             onChange={(e) =>
               setValue({ ...value, direction: 'Ago', amount: parseInt(e.target.value) || 0 })
             }
-            error={Boolean(error?.value)}
+            error={hasValueError}
             classNames={{ root: 'w-20' }}
           />
           <Listbox
@@ -243,7 +262,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
               onChange={(e) =>
                 setValue([{ ...fromValue, amount: parseInt(e.target.value) || 0 }, toValue])
               }
-              error={Boolean(error?.value)}
+              error={hasValueError}
               classNames={{ root: 'w-16' }}
             />
             <Listbox
@@ -265,7 +284,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
               onChange={(e) =>
                 setValue([fromValue, { ...toValue, amount: parseInt(e.target.value) || 0 }])
               }
-              error={Boolean(error?.value)}
+              error={hasValueError}
               classNames={{ root: 'w-16' }}
             />
             <Listbox
@@ -293,7 +312,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
             type="datetime-local"
             value={value?.[0] || ''}
             onChange={(e) => setValue([e.target.value, value?.[1] || ''])}
-            error={Boolean(error?.value)}
+            error={hasValueError}
             classNames={{ root: 'flex-1' }}
           />
           <span className="text-xs text-gray-500 dark:text-dark-300">to</span>
@@ -301,7 +320,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
             type="datetime-local"
             value={value?.[1] || ''}
             onChange={(e) => setValue([value?.[0] || '', e.target.value])}
-            error={Boolean(error?.value)}
+            error={hasValueError}
             classNames={{ root: 'flex-1' }}
           />
         </div>
@@ -310,7 +329,39 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
 
     // Enum operators - IN/NOT_IN (Multiple select)
     if (operator === EnumStringOperator.IN || operator === EnumStringOperator.NOT_IN) {
-      // Check for dynamic options (country/currency)
+      // Handle referred_by with modal-based player selection
+      if (field === SegmentAttributeKey.REFERRED_BY) {
+        const selectedPlayers = Array.isArray(value)
+          ? value.map((id) => ({
+              value: id,
+              label: `Player ${id}` // Will be replaced with actual name from modal
+            }))
+          : [];
+
+        return (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                color="primary"
+                onClick={() => setIsReferrerModalOpen(true)}
+                className="whitespace-nowrap">
+                {t('select') + ' ' + t('players')}
+              </Button>
+              <span className="text-sm text-gray-600 dark:text-dark-300">
+                {selectedPlayers.length} {t('selected')}
+              </span>
+            </div>
+            {hasValueError && (
+              <p className="text-xs text-red-600 dark:text-red-400">
+                {t('please_select_at_least_one_player')}
+              </p>
+            )}
+          </div>
+        );
+      }
+
+      // Check for dynamic options (country/currency/affiliate)
       if (selectedAttribute?.inputType === ValueInputType.AUTOCOMPLETE) {
         const dynamicCombobox = renderDynamicCombobox(true);
         if (dynamicCombobox) return dynamicCombobox;
@@ -330,6 +381,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
             placeholder="Select values"
             displayField="label"
             multiple
+            error={hasValueError}
           />
         );
       }
@@ -354,6 +406,22 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
     // String operators - EQUALS/NOT_EQUALS (Single select)
 
     if ([EnumStringOperator.EQUALS, EnumStringOperator.NOT_EQUALS].includes(operator)) {
+      // Handle referred_by with custom ReferrerSelect component
+      if (field === SegmentAttributeKey.REFERRED_BY) {
+        return (
+          <ReferrerSelect
+            multiple={false}
+            value={value || null}
+            onChange={(selected) => {
+              setValue(selected?.value || '');
+            }}
+            placeholder="Select player"
+            error={hasValueError}
+            initialOptions={playerOptions} // Pre-load fetched player data
+          />
+        );
+      }
+
       if (selectedAttribute?.inputType === ValueInputType.AUTOCOMPLETE) {
         const dynamicCombobox = renderDynamicCombobox(false);
         if (dynamicCombobox) return dynamicCombobox;
@@ -368,6 +436,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
             onChange={(opt) => setValue(opt.value)}
             placeholder="Select value"
             displayField="label"
+            error={hasValueError}
           />
         );
       }
@@ -378,7 +447,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
           placeholder="Enter value"
           value={value || ''}
           onChange={(e) => setValue(e.target.value)}
-          error={Boolean(error?.value)}
+          error={hasValueError}
         />
       );
     }
@@ -392,6 +461,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
           onChange={(opt) => setValue(opt.value)}
           placeholder="Select value"
           displayField="label"
+          error={hasValueError}
         />
       );
     }
@@ -403,7 +473,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
         placeholder="Enter value"
         value={value || ''}
         onChange={(e) => setValue(e.target.value)}
-        error={Boolean(error?.value)}
+        error={hasValueError}
       />
     );
   };
@@ -413,7 +483,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
       {/* Main horizontal layout */}
       <div className="flex items-start gap-2">
         {/* Attribute Selector */}
-        <div className="w-[220px] flex-shrink-0">
+        <div className="w-[280px] flex-shrink-0">
           <Listbox
             data={attributeOptions}
             value={attributeOptions.find((opt) => opt.value === field) || null}
@@ -474,6 +544,28 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
           ) : null}
         </div>
       )}
+
+      {/* Referrer Selection Modal for referred_by field with IN/NOT_IN operators */}
+      {field === SegmentAttributeKey.REFERRED_BY &&
+        (operator === EnumStringOperator.IN || operator === EnumStringOperator.NOT_IN) && (
+          <ReferrerSelectionModal
+            open={isReferrerModalOpen}
+            onClose={() => setIsReferrerModalOpen(false)}
+            onSelectSubmit={(selectedPlayers) => {
+              const playerIds = selectedPlayers.map((player) => player.value);
+              setValue(playerIds);
+              setIsReferrerModalOpen(false);
+            }}
+            selectedItems={
+              Array.isArray(value)
+                ? value.map((id) => ({
+                    value: id,
+                    label: `Player ${id}`
+                  }))
+                : []
+            }
+          />
+        )}
     </div>
   );
 };

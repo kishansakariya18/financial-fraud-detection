@@ -2,6 +2,7 @@
 // Helper functions for managing rule tree operations
 
 import { v4 as uuidv4 } from 'uuid';
+import { SegmentAttributeKey } from './attributeRegistry';
 
 // Generate unique IDs for groups and conditions
 export const generateId = (prefix = 'node') => {
@@ -303,4 +304,33 @@ export const processRuleTree = (node, transformFn) => {
   }
 
   return newNode;
+};
+
+// Extract all player IDs from rule tree (for referred_by conditions)
+export const extractPlayerIdsFromRuleTree = (node) => {
+  const playerIds = new Set();
+
+  const extractFromNode = (n) => {
+    if (!n) return;
+    // Check if it's a condition with referred_by field
+    if (n.field === SegmentAttributeKey.REFERRED_BY && n.value) {
+      if (Array.isArray(n.value)) {
+        // Multiple player IDs
+        n.value.forEach((id) => {
+          if (id) playerIds.add(String(id));
+        });
+      } else {
+        // Single player ID
+        playerIds.add(String(n.value));
+      }
+    }
+
+    // Recursively process groups
+    if (n.conditions && Array.isArray(n.conditions)) {
+      n.conditions.forEach(extractFromNode);
+    }
+  };
+
+  extractFromNode(node);
+  return Array.from(playerIds);
 };

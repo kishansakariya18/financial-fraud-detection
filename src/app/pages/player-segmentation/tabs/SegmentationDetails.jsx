@@ -1,16 +1,20 @@
 // Import Dependencies
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { Badge, Card, Skeleton } from 'components/ui';
 import PlayerSegmentationService from 'services/player-segmentation.services';
-import { createDefaultRuleTree } from 'components/sections/player-segmentation/ruleUtils';
+import {
+  createDefaultRuleTree,
+  extractPlayerIdsFromRuleTree
+} from 'components/sections/player-segmentation/ruleUtils';
 import { RuleTreeDisplay } from 'components/sections/player-segmentation/RuleTreeDisplay';
 import { useSegmentationMappings } from 'components/sections/player-segmentation/useSegmentationMappings';
 import { Page } from 'components/shared/Page';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
+import { statusToApp } from '../hapler';
 
 const statusColorMap = {
   1: 'success',
@@ -64,12 +68,33 @@ const SegmentationDetails = () => {
   const [loading, setLoading] = useState(true);
   const [segmentationData, setSegmentationData] = useState(null);
 
+  // Extract player IDs from parsed rules (memoized to prevent unnecessary recalculations)
+  const playerIds = useMemo(() => {
+    console.log('segmentationData', segmentationData?.SegmentRules);
+    if (!segmentationData?.SegmentRules) return [];
+
+    const ids = extractPlayerIdsFromRuleTree(segmentationData.SegmentRules);
+    console.log('Extracted player IDs:', ids); // Debug log
+    return ids;
+  }, [segmentationData?.SegmentRules]);
+
   // Use the custom hook to fetch and cache mapping data
-  const { countryMap, currencyMap, affiliateMap } = useSegmentationMappings({
+  const { countryMap, currencyMap, affiliateMap, playerOptions } = useSegmentationMappings({
     fetchCountries: true,
     fetchCurrencies: true,
-    fetchAffiliates: true
+    fetchAffiliates: true,
+    playerIds: playerIds // Fetch player details for display
   });
+
+  // Create playerMap from playerOptions
+  const playerMap = useMemo(() => {
+    const map = {};
+    playerOptions.forEach((player) => {
+      map[player.value] = player.label;
+    });
+    console.log('Player map created:', map); // Debug log
+    return map;
+  }, [playerOptions]);
 
   const breadcrumbItem = [
     { title: t('player_segmentation'), path: '/bonus/player-segmentation' },
@@ -130,7 +155,7 @@ const SegmentationDetails = () => {
 
   const statusBadge = segmentationData ? (
     <Badge variant="soft" color={statusColorMap[segmentationData.IsActive] || 'neutral'}>
-      {segmentationData.IsActive === 1 ? 'Active' : 'Inactive'}
+      <span className="capitalize">{statusToApp(segmentationData.IsActive)}</span>
     </Badge>
   ) : null;
 
@@ -169,6 +194,10 @@ const SegmentationDetails = () => {
           title={''}
           rows={[
             {
+              label: t('segment_name'),
+              value: segmentationData.SegmentName || '—'
+            },
+            {
               label: t('segment_description'),
               value: segmentationData.SegmentDescription || '—'
             },
@@ -190,11 +219,15 @@ const SegmentationDetails = () => {
             },
             {
               label: t('created_at'),
-              value: getDateInUTCToTimeZone(segmentationData.CreatedAt)
+              value: segmentationData.DateCreated
+                ? getDateInUTCToTimeZone(segmentationData.DateCreated)
+                : '—'
             },
             {
               label: t('updatedAt'),
-              value: getDateInUTCToTimeZone(segmentationData.UpdatedAt)
+              value: segmentationData.DateUpdated
+                ? getDateInUTCToTimeZone(segmentationData.DateUpdated)
+                : '—'
             }
           ]}
         />
@@ -207,6 +240,7 @@ const SegmentationDetails = () => {
                 countryMap={countryMap}
                 affiliateMap={affiliateMap}
                 currencyMap={currencyMap}
+                playerMap={playerMap}
               />
             ) : (
               <div className="text-sm italic text-gray-500 dark:text-dark-300">

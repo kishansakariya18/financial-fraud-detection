@@ -23,10 +23,12 @@ const PlayerSegmentationService = {
       requestData.filters.endDate = moment(+filters.endDate).endOf('day').toDate();
     }
 
-    return apiInstance.post(
-      `${apiConfig.endPoints.PLAYER_SEGMENTATION.LIST}?page=${page}&per_page=${perPage}`,
-      requestData
-    );
+    return apiInstance.post(apiConfig.endPoints.PLAYER_SEGMENTATION.LIST, requestData, {
+      params: {
+        page: page + 1,
+        per_page: perPage
+      }
+    });
   },
 
   add: async (requestData) => {

@@ -64,6 +64,7 @@ const CreateOrEditFormPlayerSegmentation = ({
   const { t } = useTranslation();
   const initialValuesRef = useRef(null);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [isRulesValid, setIsRulesValid] = useState(false);
 
   const isEditMode = mode === 'edit' && initialData;
 
@@ -75,6 +76,7 @@ const CreateOrEditFormPlayerSegmentation = ({
     formState: { errors, isSubmitting }
   } = useForm({
     resolver: yupResolver(isEditMode ? playerSegmentationEditSchema : playerSegmentationSchema),
+    mode: 'onSubmit', // Only show validation errors on submit
     defaultValues: {
       segmentName: '',
       segmentDescription: '',
@@ -90,6 +92,21 @@ const CreateOrEditFormPlayerSegmentation = ({
   const isScheduled = watch('isScheduled');
   const segmentRules = watch('segmentRules');
   const evaluationFrequency = watch('evaluationFrequency');
+
+  // Silently validate segment rules for button state (without showing errors)
+  useEffect(() => {
+    const validateRules = async () => {
+      try {
+        const schema = isEditMode ? playerSegmentationEditSchema : playerSegmentationSchema;
+        const segmentRulesSchema = schema.fields.segmentRules;
+        await segmentRulesSchema.validate(segmentRules);
+        setIsRulesValid(true);
+      } catch {
+        setIsRulesValid(false);
+      }
+    };
+    validateRules();
+  }, [segmentRules, isEditMode]);
 
   // Helper function to get next update message based on frequency
   const getNextUpdateMessage = (frequency) => {
@@ -160,9 +177,9 @@ const CreateOrEditFormPlayerSegmentation = ({
 
     const request = {
       SegmentationUID: data.segmentationUID || null,
-      SegmentName: data.segmentName,
-      SegmentDescription: data.segmentDescription,
-      SegmentTag: data.segmentTag,
+      SegmentName: data.segmentName?.trim(),
+      SegmentDescription: data.segmentDescription?.trim(),
+      SegmentTag: data.segmentTag?.trim(),
       SegmentRules: segmentRules,
       ...(data.isScheduled !== undefined && { IsScheduled: data.isScheduled ? 1 : 0 }),
       ...(data.isActive !== undefined && { IsActive: data.isActive ? 1 : 0 }),
@@ -305,7 +322,7 @@ const CreateOrEditFormPlayerSegmentation = ({
             onClick={() => setIsPreviewModalOpen(true)}
             color="info"
             type="button"
-            disabled={isSubmitting}>
+            disabled={isSubmitting || !isRulesValid}>
             {t('player_preview')}
           </Button>
           <Button type="submit" color="primary" disabled={isSubmitting}>
