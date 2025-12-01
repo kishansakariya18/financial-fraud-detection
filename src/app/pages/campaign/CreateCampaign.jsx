@@ -1,7 +1,7 @@
 // Import Dependencies
 import { Page } from 'components/shared/Page';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Button, Input, Select, Textarea } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -11,6 +11,8 @@ import CampaignService from 'services/campaign.service';
 import { createCampaignSchema } from './schema';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import { campaignStatusOptions } from './helper';
+import { DatePicker } from 'components/shared/form/Datepicker';
 
 const CreateCampaign = () => {
   const [error, setError] = useState('');
@@ -29,7 +31,8 @@ const CreateCampaign = () => {
     formState: { errors },
     reset,
     watch,
-    setValue
+    setValue,
+    control
   } = useForm({
     resolver: yupResolver(createCampaignSchema),
     defaultValues: {
@@ -38,11 +41,15 @@ const CreateCampaign = () => {
       startDate: '',
       endDate: '',
       description: '',
-      tags: []
+      tags: [],
+      targetSegment: '',
+      forceIncludePlayers: '',
+      forceExcludePlayers: ''
     }
   });
 
   const description = watch('description') || '';
+  const formValues = watch(); // Watch all form values for review section
 
   const createCampaignAPI = async (requestObject) => {
     setLoading(true);
@@ -106,11 +113,6 @@ const CreateCampaign = () => {
     }
   };
 
-  const statusOptions = [
-    { value: 'inactive', label: 'Inactive' },
-    { value: 'active', label: 'Active' }
-  ];
-
   return (
     <Page title={t('create') + ' ' + t('campaign')}>
       <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
@@ -146,22 +148,48 @@ const CreateCampaign = () => {
                     {...register('status')}
                     label={t('status')}
                     error={errors?.status?.message}
-                    options={statusOptions}
+                    data={campaignStatusOptions}
                   />
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <Input
-                    {...register('startDate')}
-                    type="datetime-local"
-                    label={t('start') + ' ' + t('date')}
-                    error={errors?.startDate?.message}
+                  <Controller
+                    render={({ field: { onChange, value, ...rest } }) => (
+                      <DatePicker
+                        onChange={onChange}
+                        value={value || ''}
+                        label={t('start') + ' ' + t('date')}
+                        error={errors?.startDate?.message}
+                        options={{
+                          disableMobile: true,
+                          time_24hr: true,
+                          minDate: 'today'
+                        }}
+                        placeholder="Choose date..."
+                        {...rest}
+                      />
+                    )}
+                    name="startDate"
+                    control={control}
                   />
-                  <Input
-                    {...register('endDate')}
-                    type="datetime-local"
-                    label={t('end') + ' ' + t('date')}
-                    error={errors?.endDate?.message}
+                  <Controller
+                    render={({ field: { onChange, value, ...rest } }) => (
+                      <DatePicker
+                        onChange={onChange}
+                        value={value || ''}
+                        label={t('end') + ' ' + t('date')}
+                        error={errors?.endDate?.message}
+                        options={{
+                          disableMobile: true,
+                          time_24hr: true,
+                          minDate: 'today'
+                        }}
+                        placeholder="Choose date..."
+                        {...rest}
+                      />
+                    )}
+                    name="endDate"
+                    control={control}
                   />
                 </div>
 
@@ -220,6 +248,101 @@ const CreateCampaign = () => {
                       ))}
                     </div>
                   )}
+                </div>
+              </div>
+            </div>
+
+            {/* Targeting Section */}
+            <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-600 dark:bg-dark-800">
+              <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-dark-50">
+                2. Targeting
+              </h3>
+              <p className="mb-6 text-sm text-gray-500 dark:text-dark-300">
+                Pick a segment and optionally force include / exclude players.
+              </p>
+
+              <div className="space-y-4">
+                <Input
+                  {...register('targetSegment')}
+                  label={t('target') + ' ' + t('segment')}
+                  error={errors?.targetSegment?.message}
+                  placeholder="Search or paste ID"
+                />
+
+                <Textarea
+                  {...register('forceIncludePlayers')}
+                  label={t('force') + ' ' + t('include') + ' ' + t('players')}
+                  error={errors?.forceIncludePlayers?.message}
+                  placeholder="Internal notes for admins"
+                  rows={3}
+                />
+
+                <Textarea
+                  {...register('forceExcludePlayers')}
+                  label={t('force') + ' ' + t('exclude') + ' ' + t('players')}
+                  error={errors?.forceExcludePlayers?.message}
+                  placeholder="Internal notes for admins"
+                  rows={3}
+                />
+              </div>
+            </div>
+
+            {/* Review & Launch Section */}
+            <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-600 dark:bg-dark-800">
+              <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-dark-50">
+                3. Review & Launch
+              </h3>
+              <p className="mb-6 text-sm text-gray-500 dark:text-dark-300">
+                Read-only summary and payload preview.
+              </p>
+
+              <div className="grid gap-x-8 gap-y-4 text-sm sm:grid-cols-2">
+                <div className="space-y-3">
+                  <div className="grid grid-cols-[100px_1fr] gap-2">
+                    <span className="font-medium text-gray-900 dark:text-dark-50">Name:</span>
+                    <span className="break-all text-gray-600 dark:text-dark-200">
+                      {formValues.campaignName || '-'}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-[100px_1fr] gap-2">
+                    <span className="font-medium text-gray-900 dark:text-dark-50">Start:</span>
+                    <span className="text-gray-600 dark:text-dark-200">
+                      {formValues.startDate ? new Date(formValues.startDate).toLocaleString() : '-'}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-[100px_1fr] gap-2">
+                    <span className="font-medium text-gray-900 dark:text-dark-50">Segment:</span>
+                    <span className="break-all text-gray-600 dark:text-dark-200">
+                      {formValues.targetSegment || '-'}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-[100px_1fr] gap-2">
+                    <span className="font-medium text-gray-900 dark:text-dark-50">Exclude:</span>
+                    <span className="truncate text-gray-600 dark:text-dark-200">
+                      {formValues.forceExcludePlayers || '-'}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="grid grid-cols-[100px_1fr] gap-2">
+                    <span className="font-medium text-gray-900 dark:text-dark-50">Status:</span>
+                    <span className="capitalize text-gray-600 dark:text-dark-200">
+                      {formValues.status || '-'}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-[100px_1fr] gap-2">
+                    <span className="font-medium text-gray-900 dark:text-dark-50">End:</span>
+                    <span className="text-gray-600 dark:text-dark-200">
+                      {formValues.endDate ? new Date(formValues.endDate).toLocaleString() : '-'}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-[100px_1fr] gap-2">
+                    <span className="font-medium text-gray-900 dark:text-dark-50">Include:</span>
+                    <span className="truncate text-gray-600 dark:text-dark-200">
+                      {formValues.forceIncludePlayers || '-'}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

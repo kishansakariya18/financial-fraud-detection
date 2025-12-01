@@ -1,4 +1,4 @@
-import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { CheckBadgeIcon, XCircleIcon, ArchiveBoxIcon } from '@heroicons/react/24/outline';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 export const campaignListResponseMapper = (apiData) => {
@@ -26,6 +26,8 @@ export const campaignStatusToAPP = (status) => {
     return 'inactive';
   } else if (status === 1 || status === 'active') {
     return 'active';
+  } else if (status === 2 || status === 'archive') {
+    return 'archive';
   }
   return 'inactive';
 };
@@ -35,6 +37,8 @@ export const campaignStatusToAPI = (status) => {
     return 0;
   } else if (status === 'active') {
     return 1;
+  } else if (status === 'archive') {
+    return 2;
   }
   return undefined;
 };
@@ -53,5 +57,12 @@ export const campaignStatusOptions = [
     label: 'Inactive',
     color: 'error',
     icon: XCircleIcon
+  },
+  {
+    key: 'archive',
+    value: 'archive',
+    label: 'Archive',
+    color: 'warning',
+    icon: ArchiveBoxIcon
   }
 ];

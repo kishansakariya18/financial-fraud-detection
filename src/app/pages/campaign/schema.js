@@ -8,7 +8,7 @@ export const createCampaignSchema = Yup.object().shape({
     .required('Campaign Name is required'),
 
   status: Yup.string()
-    .oneOf(['active', 'inactive'], 'Invalid status')
+    .oneOf(['active', 'inactive', 'archive'], 'Invalid status')
     .required('Status is required'),
 
   startDate: Yup.date()
@@ -22,5 +22,11 @@ export const createCampaignSchema = Yup.object().shape({
 
   description: Yup.string().max(240, 'Description must be at most 240 characters').optional(),
 
-  tags: Yup.array().of(Yup.string()).optional()
+  tags: Yup.array().of(Yup.string()).optional(),
+
+  targetSegment: Yup.string().optional(),
+
+  forceIncludePlayers: Yup.string().optional(),
+
+  forceExcludePlayers: Yup.string().optional()
 });
