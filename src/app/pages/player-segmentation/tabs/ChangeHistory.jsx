@@ -218,7 +218,7 @@ const ChangeHistory = () => {
             onClearFilters={clearFilterHandler}
             searchColumn="SegmentName"
             searchPlaceholder={t('search_segment_name')}
-            showSearch={true}
+            showSearch={false}
             filters={[
               {
                 type: 'date',

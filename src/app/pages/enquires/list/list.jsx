@@ -82,7 +82,7 @@ export default function EnquiresList() {
     }
     if (queryParams.startDate && queryParams.endDate) {
       filtersFromQuery.push({
-        id: 'createdAt',
+        id: 'Created At',
         value: [+queryParams.startDate, +queryParams.endDate]
       });
     }
@@ -103,7 +103,7 @@ export default function EnquiresList() {
       if (data.id === 'Set By') {
         filterItems.setBy = data.value;
       }
-      if (data.id === 'createdAt') {
+      if (data.id === 'Created At') {
         filterItems.date = data.value;
       }
     }

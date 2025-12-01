@@ -5,8 +5,9 @@ export const siteConfigurationRoutes = [
   {
     path: 'site-configuration/app-settings',
     lazy: async () => {
-      const { default: ApplicationSettings } =
-        await import('../../pages/site-configuration/app-settings');
+      const { default: ApplicationSettings } = await import(
+        '../../pages/site-configuration/app-settings'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.APP_SETTING.EDIT}>
@@ -60,8 +61,9 @@ export const siteConfigurationRoutes = [
   {
     path: 'site-configuration/payment-provider-config',
     lazy: async () => {
-      const { default: PaymentProvider } =
-        await import('../../pages/payment-provider-config/list/list');
+      const { default: PaymentProvider } = await import(
+        '../../pages/payment-provider-config/list/list'
+      );
       return {
         Component: () => (
           <PrivateRoute
@@ -76,8 +78,9 @@ export const siteConfigurationRoutes = [
   {
     path: 'site-configuration/email-provider/edit/:providerUID',
     lazy: async () => {
-      const { default: EditEmailProvider } =
-        await import('../../pages/email-provider/EditProvider');
+      const { default: EditEmailProvider } = await import(
+        '../../pages/email-provider/EditProvider'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.EMAIL_PROVIDER.EDIT}>
@@ -116,8 +119,9 @@ export const siteConfigurationRoutes = [
   {
     path: 'site-configuration/payment-provider-config/edit/:providerUID',
     lazy: async () => {
-      const { default: EditEmailProvider } =
-        await import('../../pages/payment-provider-config/EditProvider');
+      const { default: EditEmailProvider } = await import(
+        '../../pages/payment-provider-config/EditProvider'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.PAYMENT_PROVIDER.EDIT}>

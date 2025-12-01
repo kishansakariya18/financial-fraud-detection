@@ -42,8 +42,9 @@ export const adminRoute = [
       {
         path: 'login-history',
         lazy: async () => {
-          const { default: LoginHistory } =
-            await import('../../pages/users/admin/login-history/list');
+          const { default: LoginHistory } = await import(
+            '../../pages/users/admin/login-history/list'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.ADMIN.LIST}>

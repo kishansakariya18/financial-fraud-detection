@@ -25,6 +25,7 @@ export const createBonusTemplateColumns = ({
   columnHelper.accessor('id', {
     id: 'id',
     header: 'ID',
+    label: 'ID',
     cell: (info) => <span className="font-medium text-gray-700">{info.getValue() || '—'}</span>,
     enableSorting: false,
     size: 120
@@ -32,6 +33,7 @@ export const createBonusTemplateColumns = ({
   columnHelper.accessor('templateName', {
     id: 'templateName',
     header: 'Template Name',
+    label: 'Template Name',
     cell: (info) => <span className="font-medium text-gray-900">{info.getValue() || '—'}</span>,
     enableSorting: false,
     size: 220
@@ -39,6 +41,7 @@ export const createBonusTemplateColumns = ({
   columnHelper.accessor('displayTitle', {
     id: 'displayTitle',
     header: 'Display Title',
+    label: 'Display Title',
     cell: (info) => info.getValue() || '—',
     enableSorting: false,
     size: 200
@@ -46,6 +49,7 @@ export const createBonusTemplateColumns = ({
   columnHelper.accessor('bonusType', {
     id: 'bonusType',
     header: 'Bonus Type',
+    label: 'Bonus Type',
     cell: (info) => info.getValue() || '—',
     enableSorting: false,
     size: 180
@@ -53,6 +57,7 @@ export const createBonusTemplateColumns = ({
   columnHelper.accessor('status', {
     id: 'status',
     header: 'Status',
+    label: 'Status',
     cell: BadgeCell,
     meta: { optionData: bonusTemplateStatusOptions },
     enableSorting: false,
@@ -61,6 +66,7 @@ export const createBonusTemplateColumns = ({
   columnHelper.accessor('updatedAt', {
     id: 'updatedAt',
     header: 'Last Updated',
+    label: 'Last Updated',
     cell: (info) => formatDate(info.getValue()),
     enableSorting: false,
     size: 200
@@ -68,6 +74,7 @@ export const createBonusTemplateColumns = ({
   columnHelper.display({
     id: 'actions',
     header: 'Actions',
+    label: 'Actions',
     cell: (props) => (
       <BonusTemplateRowActions
         {...props}

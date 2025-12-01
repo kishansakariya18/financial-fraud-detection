@@ -2,6 +2,8 @@
 import { MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import { PERMISSIONS } from 'constants/app.constant';
+import usePermissions from '../../../../app/router/usePermissions';
 
 // Local Imports
 import { DateFilter } from 'components/shared/table/DateFilter';
@@ -18,6 +20,8 @@ import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 export function Toolbar({ table, pageTitle = '', breadcrumbs = null }) {
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { hasPermission } = usePermissions();
+  const canAddNote = hasPermission(PERMISSIONS.USER.COMMENT_ADD);
 
   const onOpenDialogBox = () => {
     setIsDialogOpen(true);
@@ -61,7 +65,7 @@ export function Toolbar({ table, pageTitle = '', breadcrumbs = null }) {
             title={pageTitle}
             btnTitle={t('add') + ' ' + t('note')}
             btnColor={'primary'}
-            isShowBtn={true}>
+            isShowBtn={canAddNote}>
             <CreateNote onClose={onOkDialogBox} />
           </CustomModal>
         </div>

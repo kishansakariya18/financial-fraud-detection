@@ -184,7 +184,6 @@ export default function ViewBonusTemplate() {
             onClick={() => navigate('/bonus/templates')}>
             Back to Templates
           </Button>
-          {statusBadge}
         </div>
 
         {isLoading ? (

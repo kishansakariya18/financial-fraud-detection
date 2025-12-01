@@ -1,6 +1,7 @@
 import apiConfig from 'configs/api.config';
 import { sendRequest } from 'utils/axios';
 import { replaceText } from 'utils/custom.utilities';
+import dayjs from 'dayjs';
 
 const EnquiresService = {
   list: async ({ pagination, filters }) => {
@@ -12,7 +13,13 @@ const EnquiresService = {
           keyword: filters?.keyword || undefined,
           status: filters?.status || undefined,
           setBy: filters?.setBy || undefined,
-          type: filters?.subject || undefined
+          type: filters?.subject || undefined,
+          start_date: filters.startDate
+            ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
+            : undefined,
+          end_date: filters.endDate
+            ? dayjs(+filters.endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
+            : undefined
         }
       };
       const url = apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.ENQUIRES.LIST;

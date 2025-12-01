@@ -9,6 +9,7 @@ import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
+import { DateFilter } from 'components/shared/table/DateFilter';
 import { enquiresStatusOptions, enquiresSubjectOptions } from '../helper';
 
 export function Toolbar({
@@ -177,6 +178,17 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}
+        />
+      )}
+
+      {table.getColumn('Created At') && (
+        <DateFilter
+          column={table.getColumn('Created At')}
+          title={t('date') + ' ' + t('range')}
+          config={{
+            maxDate: new Date().fp_incr(1),
+            mode: 'range'
+          }}
         />
       )}
 

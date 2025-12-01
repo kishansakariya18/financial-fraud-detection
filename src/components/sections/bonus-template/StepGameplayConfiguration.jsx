@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { Input } from 'components/ui/Form';
@@ -64,6 +64,7 @@ export function StepGameplayConfiguration({
 }) {
   const { t } = useTranslation();
   const [categoryOptions, setCategoryOptions] = useState(intialCategoryOptions);
+  const debounceTimeoutRef = useRef(null);
 
   const handleToggleChange = (field) => (event) => {
     onChange(field, event.target.checked);
@@ -144,20 +145,40 @@ export function StepGameplayConfiguration({
     ]
   );
 
+  // Debounced version of fetchPrviderCategories
+  const debouncedFetchProviderCategories = useCallback(
+    (providerIds) => {
+      // Clear previous timeout
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+
+      // Set new timeout
+      debounceTimeoutRef.current = setTimeout(() => {
+        fetchPrviderCategories(providerIds);
+      }, 500); // 500ms debounce delay
+    },
+    [fetchPrviderCategories]
+  );
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const handleSelectionChangeData = (field, value) => {
     if (field === 'allowedProviders') {
-      fetchPrviderCategories(value);
+      debouncedFetchProviderCategories(value);
     }
     if (field === 'allowedCategories') {
       checkGamesAreAvailableForCatAndPr(data.allowedProviders, value);
     }
     onSelectChange(field, value);
   };
-
-  // Update category options when provider selection changes
-  // useEffect(() => {
-  //   fetchPrviderCategories(data.allowedProviders);
-  // }, [data.allowedProviders, fetchPrviderCategories]);
 
   const renderFilterSection = ({ title, items, placeholder, error, field, options }) => {
     const normalizedValues = normalizeItems(items);

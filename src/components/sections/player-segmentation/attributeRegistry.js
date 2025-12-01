@@ -16,7 +16,8 @@ export const SegmentAttributeKey = {
   FREE_BONUS_RATIO: 'free_bonus_ratio',
   DEPOSIT_BONUS_COUNT: 'deposit_bonus_count',
   DEPOSIT_BONUS_AMOUNT: 'deposit_bonus_amount',
-  CLEAN_DEPOSIT_RATIO: 'clean_deposit_ratio',
+  CLEAN_DEPOSIT_COUNT_RATIO: 'clean_deposit_count_ratio',
+  CLEAN_DEPOSIT_AMOUNT_RATIO: 'clean_deposit_amount_ratio',
   DEPOSIT_BONUS_RATIO: 'deposit_bonus_ratio',
   TOTAL_BONUS_RATIO: 'total_bonus_ratio',
 
@@ -29,6 +30,7 @@ export const SegmentAttributeKey = {
   PHONE_VERIFIED: 'phone_verified',
   KYC_VERIFIED: 'kyc_verified',
   AFFILIATE: 'affiliate',
+  REFERRED_BY: 'referred_by',
 
   // Timestamps
   FIRST_DEPOSIT_TIME: 'first_deposit_time',
@@ -192,9 +194,16 @@ export const attributeRegistry = {
     inputType: ValueInputType.NUMBER,
     supportedOperators: numericOperator
   },
-  [SegmentAttributeKey.CLEAN_DEPOSIT_RATIO]: {
-    key: SegmentAttributeKey.CLEAN_DEPOSIT_RATIO,
-    label: 'Clean Deposit Ratio (%)',
+  [SegmentAttributeKey.CLEAN_DEPOSIT_COUNT_RATIO]: {
+    key: SegmentAttributeKey.CLEAN_DEPOSIT_COUNT_RATIO,
+    label: 'Clean Deposit Count Ratio (%)',
+    dataType: 'numeric',
+    inputType: ValueInputType.NUMBER,
+    supportedOperators: numericOperator
+  },
+  [SegmentAttributeKey.CLEAN_DEPOSIT_AMOUNT_RATIO]: {
+    key: SegmentAttributeKey.CLEAN_DEPOSIT_AMOUNT_RATIO,
+    label: 'Clean Deposit Amount Ratio (%)',
     dataType: 'numeric',
     inputType: ValueInputType.NUMBER,
     supportedOperators: numericOperator
@@ -318,6 +327,13 @@ export const attributeRegistry = {
     key: SegmentAttributeKey.AFFILIATE,
     label: 'Affiliate',
     dataType: 'string',
+    inputType: ValueInputType.AUTOCOMPLETE,
+    supportedOperators: enumStringOperator
+  },
+  [SegmentAttributeKey.REFERRED_BY]: {
+    key: SegmentAttributeKey.REFERRED_BY,
+    label: 'Referred By',
+    dataType: 'enum',
     inputType: ValueInputType.AUTOCOMPLETE,
     supportedOperators: enumStringOperator
   }

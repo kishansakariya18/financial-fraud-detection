@@ -84,8 +84,9 @@ export const affiliatesRoutes = [
   {
     path: 'affiliates/users/:affiliateId/withdrawals',
     lazy: async () => {
-      const { default: AffiliateWithdrawalsList } =
-        await import('../../pages/affiliates/withdrawals/list');
+      const { default: AffiliateWithdrawalsList } = await import(
+        '../../pages/affiliates/withdrawals/list'
+      );
       return {
         Component: () => (
           <PrivateRoute permission={PERMISSIONS.AFFILIATES.TRANSACTIONS}>
@@ -123,8 +124,9 @@ export const affiliatesRoutes = [
       {
         path: 'campaigns',
         lazy: async () => {
-          const { default: AffiliateCampaignsList } =
-            await import('../../pages/affiliates/campaigns/list');
+          const { default: AffiliateCampaignsList } = await import(
+            '../../pages/affiliates/campaigns/list'
+          );
           return {
             Component: () => (
               <>
@@ -139,8 +141,9 @@ export const affiliatesRoutes = [
       {
         path: 'campaigns/:campaignUID/detail',
         lazy: async () => {
-          const { default: AffiliateCampaignDetails } =
-            await import('../../pages/affiliates/campaigns/ViewDetails');
+          const { default: AffiliateCampaignDetails } = await import(
+            '../../pages/affiliates/campaigns/ViewDetails'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.AFFILIATES.CAMPAIGN.VIEW}>
@@ -153,8 +156,9 @@ export const affiliatesRoutes = [
       {
         path: 'campaigns/:campaignID/referred_users',
         lazy: async () => {
-          const { default: AffiliateCampaignReferredUsers } =
-            await import('../../pages/affiliates/campaigns/referred-users/list');
+          const { default: AffiliateCampaignReferredUsers } = await import(
+            '../../pages/affiliates/campaigns/referred-users/list'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.AFFILIATES.USER_SIGNUP_LIST}>
@@ -167,8 +171,9 @@ export const affiliatesRoutes = [
       {
         path: 'campaigns/:campaignID/referred_users/:userID/transactions',
         lazy: async () => {
-          const { default: AffiliateCampaignReferredUsersTransactions } =
-            await import('../../pages/affiliates/campaigns/referred-users/transactions/list');
+          const { default: AffiliateCampaignReferredUsersTransactions } = await import(
+            '../../pages/affiliates/campaigns/referred-users/transactions/list'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.AFFILIATES.TRANSACTIONS}>
@@ -194,8 +199,9 @@ export const affiliatesRoutes = [
       {
         path: 'referred_users/:userID/transactions',
         lazy: async () => {
-          const { default: AffiliateUsersTransactionsList } =
-            await import('../../pages/affiliates/users/transactions/list');
+          const { default: AffiliateUsersTransactionsList } = await import(
+            '../../pages/affiliates/users/transactions/list'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.AFFILIATES.USER_SIGNUP_LIST}>
@@ -208,8 +214,9 @@ export const affiliatesRoutes = [
       {
         path: 'withdrawals',
         lazy: async () => {
-          const { default: AffiliateWithdrawalsList } =
-            await import('../../pages/affiliates/withdrawals/list');
+          const { default: AffiliateWithdrawalsList } = await import(
+            '../../pages/affiliates/withdrawals/list'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.AFFILIATES.PAYOUT}>
@@ -222,8 +229,9 @@ export const affiliatesRoutes = [
       {
         path: 'commission',
         lazy: async () => {
-          const { default: CommissionSummary } =
-            await import('../../pages/affiliates/commission/list');
+          const { default: CommissionSummary } = await import(
+            '../../pages/affiliates/commission/list'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.AFFILIATES.C}>
@@ -236,8 +244,9 @@ export const affiliatesRoutes = [
       {
         path: 'commission-settings',
         lazy: async () => {
-          const { default: CommissionSettings } =
-            await import('../../pages/affiliates/commission-settings');
+          const { default: CommissionSettings } = await import(
+            '../../pages/affiliates/commission-settings'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.AFFILIATES.CAMPAIGNS_LIST}>
@@ -250,8 +259,9 @@ export const affiliatesRoutes = [
       {
         path: 'transactions',
         lazy: async () => {
-          const { default: AffiliateTransactionsList } =
-            await import('../../pages/affiliates/transactions/list');
+          const { default: AffiliateTransactionsList } = await import(
+            '../../pages/affiliates/transactions/list'
+          );
           return {
             Component: () => (
               <>

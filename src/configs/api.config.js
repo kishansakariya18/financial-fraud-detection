@@ -74,6 +74,7 @@ export const apiConfig = {
       LIMIT_SUMMARY: '/users/admin/limit-summary/:userId',
       COUNTRY_LIST: '/config/admin/config/countries',
       SEGMENTATION_LIST: '/bonus/admin/segmentation/list',
+      REFERRERS_LIST: '/users/admin/users/referrers-list',
       VERIFY_KYC_BY_ADMIN: '/users/admin/kyc/:userUID/veryfyByAdmin'
     },
     ADMIN_USER: {
@@ -618,7 +619,8 @@ export const apiConfig = {
     },
     ENQUIRES: {
       LIST: '/users/admin/enquiries/list',
-      CHANGE_STATUS: '/users/admin/enquiries/update-status'
+      CHANGE_STATUS: '/users/admin/enquiries/update-status',
+      SUMMARY: '/users/admin/enquiries/summary'
     }
   }
 };

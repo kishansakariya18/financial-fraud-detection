@@ -9,8 +9,8 @@ export const rolePermissionListMapper = (apiData) => {
         permissionID: permission.PermissionID,
         moduleID: permission.ModuleID,
         permissionName: permission.PermissionName,
-        createBy: permission.CreateBy,
-        username: permission.Username,
+        createBy: permission.CreateBy || '-',
+        username: permission.Username || '-',
         status: permission.Status,
         moduleName: item.ModuleName,
         permissionSlug: permission.SlugName,
@@ -38,7 +38,7 @@ export const responseMapper = (apiData) => {
   const resultData = apiData.map((data) => ({
     id: data.RoleID,
     roleName: data.RoleName,
-    createBy: data.Username,
+    createBy: data.Username || '-',
     createdAt: getDateInUTCToTimeZone(data.DateCreated)
   }));
   return resultData;
