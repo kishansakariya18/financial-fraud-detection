@@ -1308,5 +1308,6 @@
   "in_progress":"In Progress",
   "resolved":"Resolved",
   "withdrawal": "Withdrawal",
-  "free_bonuses_claimed": "Free Bonuses Claimed"
+  "free_bonuses_claimed": "Free Bonuses Claimed",
+  "enquiry":"Enquiry"
 }
