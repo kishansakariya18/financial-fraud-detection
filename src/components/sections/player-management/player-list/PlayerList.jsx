@@ -61,7 +61,9 @@ export default function PlayerList({
       onEdit,
       onChangeStatus,
       onCreditAmount,
-      onResetPassword
+      onResetPassword,
+      countries,
+      playerClasses
     }),
     fetchData: fetchPlayers,
     queryParams,
@@ -74,7 +76,9 @@ export default function PlayerList({
         userUID: false,
         CountryID: false,
         isKYCVerified: false,
-        isBankVerified: false,
+        // isBankVerified: false,
+        isEmailVerified: false,
+        isMobileVerified: false,
         segmentationID: false,
         playerClassID: false
       }
@@ -97,6 +101,15 @@ export default function PlayerList({
       }
       if (queryParams.status) {
         filtersFromQuery.push({ id: 'status', value: queryParams.status });
+      }
+      if (queryParams.isEmailVerified) {
+        filtersFromQuery.push({ id: 'isEmailVerified', value: queryParams.isEmailVerified });
+      }
+      if (queryParams.isMobileVerified) {
+        filtersFromQuery.push({ id: 'isMobileVerified', value: queryParams.isMobileVerified });
+      }
+      if (queryParams.userKYCLevel) {
+        filtersFromQuery.push({ id: 'userKYCLevel', value: queryParams.userKYCLevel });
       }
       if (queryParams.isKYCVerified) {
         filtersFromQuery.push({ id: 'isKYCVerified', value: queryParams.isKYCVerified });
@@ -151,6 +164,15 @@ export default function PlayerList({
       if (data.id === 'status') {
         filterItems.status = data.value;
       }
+      if (data.id === 'isEmailVerified') {
+        filterItems.isEmailVerified = data.value;
+      }
+      if (data.id === 'isMobileVerified') {
+        filterItems.isMobileVerified = data.value;
+      }
+      if (data.id === 'userKYCLevel') {
+        filterItems.userKYCLevel = data.value;
+      }
       if (data.id === 'isKYCVerified') {
         filterItems.isKYCVerified = data.value;
       }
@@ -191,6 +213,9 @@ export default function PlayerList({
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
       ...(filterItems.status && { status: filterItems.status }),
       ...(filterItems.isBankVerified && { isBankVerified: filterItems.isBankVerified }),
+      ...(filterItems.isEmailVerified && { isEmailVerified: filterItems.isEmailVerified }),
+      ...(filterItems.isMobileVerified && { isMobileVerified: filterItems.isMobileVerified }),
+      ...(filterItems.userKYCLevel && { userKYCLevel: filterItems.userKYCLevel }),
       ...(filterItems.isKYCVerified && { isKYCVerified: filterItems.isKYCVerified }),
       ...(countryIds.length && { CountryID: countryIds.join(',') }),
       ...(segmentationIds.length && { SegmentationID: segmentationIds.join(',') }),
