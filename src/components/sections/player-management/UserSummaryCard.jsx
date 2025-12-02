@@ -179,7 +179,7 @@ const UserSummaryCard = ({ summaryData, loading }) => {
                             value={item.BonusUsedCount || 0}
                           />
                           <SummaryDataItem
-                            label={t('free_bonus_count')}
+                            label={t('free_bonuses_claimed')}
                             value={item.FreeBonusCount || 0}
                           />
                           <SummaryDataItem
@@ -202,11 +202,11 @@ const UserSummaryCard = ({ summaryData, loading }) => {
                           {/* Transaction Data */}
                           {/* <SummarySection title={t('transactions')}> */}
                           <SummaryDataItem
-                            label={t('total_deposits')}
+                            label={t('total') + ' ' + t('deposit') + ' ' + t('amount')}
                             value={formatCurrency(item.TotalDeposits || 0, item.currency?.code)}
                           />
                           <SummaryDataItem
-                            label={t('total_withdrawals')}
+                            label={t('total') + ' ' + t('withdrawal') + ' ' + t('amount')}
                             value={formatCurrency(item.TotalWithdrawals || 0, item.currency?.code)}
                           />
                           <SummaryDataItem label={t('dep_count')} value={item.DepositCount || 0} />

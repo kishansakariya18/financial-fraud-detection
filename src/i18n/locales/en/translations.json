@@ -1174,7 +1174,7 @@
   "last_bonus_date": "Last Bonus Claimed Date",
   "house_net_earnings": "House Net Earnings",
   "free_bonus_ratio": "Free Bonus %",
-  "clean_deposit_count_ratio": "Clean Deposit Count%",
+  "clean_deposit_count_ratio": "Clean Deposits %",
   "clean_deposit_amount_ratio": "Clean Deposit Amount%",
   "deposit_bonus_ratio": "Deposit Bonus %",
   "total_bonus_ratio": "Bonus %",
@@ -1306,5 +1306,7 @@
   "referred_by_player_id":"Referred By Player ID",
   "please_select_at_least_one_player":"Please select at least one player",
   "in_progress":"In Progress",
-  "resolved":"Resolved"
+  "resolved":"Resolved",
+  "withdrawal": "Withdrawal",
+  "free_bonuses_claimed": "Free Bonuses Claimed"
 }
