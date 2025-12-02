@@ -195,41 +195,41 @@ const PlayerActivity = () => {
 
   return (
     <Page title={t('player_activity')}>
-      <div className="transition-content grid w-full grid-rows-[auto_1fr]">
-        <div className="flex items-center space-x-4 px-[--margin-x] pt-5 lg:pt-6 rtl:space-x-reverse">
-          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
-            {t('player_activity')}
-          </h2>
-          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
+      <div className="transition-content pb-8">
+        <div className="grid w-full grid-rows-[auto_1fr] px-[--margin-x]">
+          <div className="flex items-center space-x-4 pt-5 lg:pt-6 rtl:space-x-reverse">
+            <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
+              {t('player_activity')}
+            </h2>
+            <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
+          </div>
         </div>
 
-        <div className="space-y-4">
-          <TableToolbar
-            table={table}
-            onApplyFilters={applyFilterHandler}
-            onClearFilters={clearFilterHandler}
-            searchColumn="User"
-            searchPlaceholder={`${t('search')} ${t('player')}`}
-            showSearch={true}
-            filters={[
-              {
-                type: 'date',
-                column: 'DateCreated',
-                title: t('date_range'),
-                config: {
-                  mode: 'range',
-                  maxDate: new Date().fp_incr?.(1)
-                }
+        <TableToolbar
+          table={table}
+          onApplyFilters={applyFilterHandler}
+          onClearFilters={clearFilterHandler}
+          searchColumn="User"
+          searchPlaceholder={`${t('search')} ${t('player')}`}
+          showSearch={true}
+          filters={[
+            {
+              type: 'date',
+              column: 'DateCreated',
+              title: t('date_range'),
+              config: {
+                mode: 'range',
+                maxDate: new Date().fp_incr?.(1)
               }
-            ]}
-          />
-          <TableCard
-            tableSettings={tableSettings}
-            table={table}
-            loading={isLoading}
-            paginationEnabled={true}
-          />
-        </div>
+            }
+          ]}
+        />
+        <TableCard
+          tableSettings={tableSettings}
+          table={table}
+          loading={isLoading}
+          paginationEnabled={true}
+        />
       </div>
     </Page>
   );
