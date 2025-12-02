@@ -2,7 +2,7 @@
 import { Page } from 'components/shared/Page';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
-import { Button, Input, Select, Textarea } from 'components/ui';
+import { Button, Input, Select, Textarea, Checkbox, Radio } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useNavigate, useParams } from 'react-router';
@@ -46,7 +46,17 @@ const EditCampaign = () => {
       tags: [],
       targetSegment: '',
       forceIncludePlayers: '',
-      forceExcludePlayers: ''
+      forceExcludePlayers: '',
+      // Bonus Removal Rules
+      removeAfterTimeEnabled: false,
+      removeAfterTimeValue: '',
+      removeAfterTimeUnit: 'days',
+      removeOnExitSegment: false,
+      fixedCutoffDate: null,
+      maxClaimsAcrossPromotions: '',
+      // Re-Issuance Policy
+      reIssuancePolicy: 'one',
+      allowStackN: ''
     }
   });
 
@@ -195,6 +205,128 @@ const EditCampaign = () => {
                     error={errors?.status?.message}
                     data={campaignStatusOptions}
                   />
+                </div>
+
+                {/* Bonus Removal Rules */}
+                <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-600 dark:bg-dark-800">
+                  <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-dark-50">
+                    3. Bonus Removal Rules
+                  </h3>
+                  <p className="mb-6 text-sm text-gray-500 dark:text-dark-300">
+                    Configure when issued bonuses should be removed.
+                  </p>
+
+                  <div className="space-y-4">
+                    <div>
+                      <Checkbox
+                        checked={!!formValues.removeAfterTimeEnabled}
+                        onChange={(e) => setValue('removeAfterTimeEnabled', e.target.checked)}
+                        label="Remove bonuses after X time from issuance"
+                      />
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-[1fr_160px]">
+                      <Input
+                        {...register('removeAfterTimeValue')}
+                        type="number"
+                        label="Time"
+                        error={errors?.removeAfterTimeValue?.message}
+                        placeholder="e.g. 400"
+                        disabled={!formValues.removeAfterTimeEnabled}
+                      />
+                      <Select
+                        {...register('removeAfterTimeUnit')}
+                        label="Unit"
+                        error={errors?.removeAfterTimeUnit?.message}
+                        disabled={!formValues.removeAfterTimeEnabled}
+                        data={[
+                          { key: 'minutes', value: 'minutes', label: 'Minutes' },
+                          { key: 'hours', value: 'hours', label: 'Hours' },
+                          { key: 'days', value: 'days', label: 'Days' },
+                          { key: 'weeks', value: 'weeks', label: 'Weeks' }
+                        ]}
+                      />
+                    </div>
+                    <div>
+                      <Checkbox
+                        checked={!!formValues.removeOnExitSegment}
+                        onChange={(e) => setValue('removeOnExitSegment', e.target.checked)}
+                        label="Remove if player exits target segment"
+                      />
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <Controller
+                        render={({ field: { onChange, value, ...rest } }) => (
+                          <DatePicker
+                            onChange={onChange}
+                            value={value || ''}
+                            label="Fixed Cut-off Date"
+                            error={errors?.fixedCutoffDate?.message}
+                            options={{ disableMobile: true, time_24hr: true }}
+                            placeholder="Choose date..."
+                            disabled={!formValues.removeAfterTimeEnabled}
+                            {...rest}
+                          />
+                        )}
+                        name="fixedCutoffDate"
+                        control={control}
+                      />
+                      <Input
+                        {...register('maxClaimsAcrossPromotions')}
+                        label="Max Claims Across Promotions"
+                        error={errors?.maxClaimsAcrossPromotions?.message}
+                        placeholder="e.g. 2"
+                        type="number"
+                        min="0"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Re-Issuance Policy */}
+                <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-600 dark:bg-dark-800">
+                  <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-dark-50">
+                    4. Re-Issuance Policy
+                  </h3>
+                  <p className="mb-6 text-sm text-gray-500 dark:text-dark-300">
+                    Control how bonuses may be re-issued.
+                  </p>
+
+                  <div className="space-y-3">
+                    <div className="flex flex-col gap-2">
+                      <Radio
+                        label="One bonus per player at a time"
+                        value="one"
+                        checked={formValues.reIssuancePolicy === 'one'}
+                        onChange={(e) => setValue('reIssuancePolicy', e.target.value)}
+                      />
+                      <Radio
+                        label="Re-issue even if player has an active one"
+                        value="reissue"
+                        checked={formValues.reIssuancePolicy === 'reissue'}
+                        onChange={(e) => setValue('reIssuancePolicy', e.target.value)}
+                      />
+                      <div className="flex items-center gap-2">
+                        <Radio
+                          label="Allow stacking up to"
+                          value="stack"
+                          checked={formValues.reIssuancePolicy === 'stack'}
+                          onChange={(e) => setValue('reIssuancePolicy', e.target.value)}
+                        />
+                        <Input
+                          {...register('allowStackN')}
+                          className="w-24"
+                          type="number"
+                          min="1"
+                          placeholder="2"
+                          disabled={formValues.reIssuancePolicy !== 'stack'}
+                          error={errors?.allowStackN?.message}
+                        />
+                        <span className="text-sm text-gray-600 dark:text-dark-200">
+                          active bonuses
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">

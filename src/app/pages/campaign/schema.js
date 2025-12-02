@@ -28,5 +28,38 @@ export const createCampaignSchema = Yup.object().shape({
 
   forceIncludePlayers: Yup.string().optional(),
 
-  forceExcludePlayers: Yup.string().optional()
+  forceExcludePlayers: Yup.string().optional(),
+  // Bonus Removal Rules
+  removeAfterTimeEnabled: Yup.boolean().optional(),
+  removeAfterTimeValue: Yup.number()
+    .transform((v, o) => (o === '' || o === null ? undefined : v))
+    .when('removeAfterTimeEnabled', (enabled, schema) =>
+      enabled ? schema.required('Time is required').min(1, 'Must be at least 1') : schema.optional()
+    ),
+  removeAfterTimeUnit: Yup.string()
+    .oneOf(['minutes', 'hours', 'days', 'weeks'], 'Invalid unit')
+    .when('removeAfterTimeEnabled', (enabled, schema) =>
+      enabled ? schema.required() : schema.optional()
+    ),
+  removeOnExitSegment: Yup.boolean().optional(),
+  fixedCutoffDate: Yup.date()
+    .typeError('Fixed Cut-off Date must be a valid date')
+    .nullable()
+    .when('removeAfterTimeEnabled', (enabled, schema) =>
+      enabled ? schema.required('Fixed Cut-off Date is required') : schema.optional()
+    ),
+  maxClaimsAcrossPromotions: Yup.number()
+    .transform((v, o) => (o === '' || o === null ? undefined : v))
+    .min(0, 'Must be 0 or greater')
+    .optional(),
+
+  // Re-Issuance Policy
+  reIssuancePolicy: Yup.string()
+    .oneOf(['one', 'reissue', 'stack'], 'Invalid re-issuance policy')
+    .required('Re-Issuance Policy is required'),
+  allowStackN: Yup.number()
+    .transform((v, o) => (o === '' || o === null ? undefined : v))
+    .when('reIssuancePolicy', (policy, schema) =>
+      policy === 'stack' ? schema.required('Stack N is required').min(1).max(50) : schema.optional()
+    )
 });
