@@ -73,7 +73,7 @@ const PlayerSegmentationService = {
       segmentationUID
     );
 
-    return apiInstance.post(`${url}?page=${page}&perPage=${perPage}`, requestData);
+    return apiInstance.post(`${url}?page=${page + 1}&perPage=${perPage}`, requestData);
   },
 
   playerPreview: async ({ segmentationUID, segmentRules }) => {
@@ -102,7 +102,7 @@ const PlayerSegmentationService = {
     }
 
     return apiInstance.post(
-      `${apiConfig.endPoints.PLAYER_SEGMENTATION.CHANGE_LOG?.replace(':segmentationUID', segmentationUID)}?page=${page}&per_page=${perPage}`,
+      `${apiConfig.endPoints.PLAYER_SEGMENTATION.CHANGE_LOG?.replace(':segmentationUID', segmentationUID)}?page=${page + 1}&per_page=${perPage}`,
       requestData
     );
   },
@@ -129,7 +129,7 @@ const PlayerSegmentationService = {
     }
 
     return apiInstance.post(
-      `${apiConfig.endPoints.PLAYER_SEGMENTATION.EXECUTION_LOG}?page=${page}&per_page=${perPage}`,
+      `${apiConfig.endPoints.PLAYER_SEGMENTATION.EXECUTION_LOG}?page=${page + 1}&per_page=${perPage}`,
       requestData
     );
   },
@@ -158,7 +158,7 @@ const PlayerSegmentationService = {
       segmentationUID
     );
 
-    return apiInstance.post(`${url}?page=${page}&per_page=${perPage}`, requestData);
+    return apiInstance.post(`${url}?page=${page + 1}&per_page=${perPage}`, requestData);
   }
 };
 
