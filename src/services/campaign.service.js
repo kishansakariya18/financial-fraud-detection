@@ -132,6 +132,38 @@ const CampaignService = {
     } catch (err) {
       console.log('Error', err);
     }
+  },
+
+  archiveCampaign: async (campaignUID) => {
+    const endPoint = replaceText(apiConfig.endPoints.CAMPAIGN.ARCHIVE, ':campaignUID', campaignUID);
+    try {
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + endPoint,
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
+
+  cloneCampaign: async (campaignUID) => {
+    const endPoint = replaceText(apiConfig.endPoints.CAMPAIGN.CLONE, ':campaignUID', campaignUID);
+    try {
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + endPoint,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
   }
 };
 

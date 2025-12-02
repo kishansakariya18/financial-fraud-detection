@@ -1,6 +1,12 @@
 // Import Dependencies
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
-import { EllipsisHorizontalIcon, PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import {
+  EllipsisHorizontalIcon,
+  PencilIcon,
+  TrashIcon,
+  SquaresPlusIcon,
+  ArchiveBoxArrowDownIcon
+} from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -26,6 +32,9 @@ export function RowActions({ row, table }) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteSuccess, setDeleteSuccess] = useState(false);
   const [deleteError, setDeleteError] = useState(false);
+  const [archiveModalOpen, setArchiveModalOpen] = useState(false);
+  const [archiveSuccess, setArchiveSuccess] = useState(false);
+  const [archiveError, setArchiveError] = useState(false);
   const navigate = useNavigate();
 
   const confirmMessages = {
@@ -50,6 +59,17 @@ export function RowActions({ row, table }) {
     }
   };
 
+  const archiveConfirmMessages = {
+    pending: {
+      description: t('Are you sure you want to archive this campaign?'),
+      actionText: t('archive')
+    },
+    success: {
+      title: t('success'),
+      description: t('Campaign archived successfully')
+    }
+  };
+
   const closeModal = () => {
     setChangeStatusModalOpen(false);
   };
@@ -68,6 +88,16 @@ export function RowActions({ row, table }) {
 
   const closeDeleteModal = () => {
     setDeleteModalOpen(false);
+  };
+
+  const openArchiveModal = () => {
+    setArchiveModalOpen(true);
+    setArchiveError(false);
+    setArchiveSuccess(false);
+  };
+
+  const closeArchiveModal = () => {
+    setArchiveModalOpen(false);
   };
 
   const handleChangeStatus = useCallback(async () => {
@@ -109,6 +139,37 @@ export function RowActions({ row, table }) {
 
   const state = changeStatusError ? 'error' : changeStatusSuccess ? 'success' : 'pending';
   const deleteState = deleteError ? 'error' : deleteSuccess ? 'success' : 'pending';
+  const archiveState = archiveError ? 'error' : archiveSuccess ? 'success' : 'pending';
+
+  const handleArchive = useCallback(async () => {
+    setConfirmDeleteLoading(true);
+    const result = await CampaignService.archiveCampaign(row.original.campaignUID);
+    if (result?.status === 200) {
+      setArchiveSuccess(true);
+      toast.success(result.response?.message || 'Campaign archived successfully');
+      setTimeout(() => {
+        navigate('/campaign');
+      }, 800);
+    } else {
+      setArchiveError(true);
+      toast.error(result?.error || 'Failed to archive campaign');
+    }
+    setConfirmDeleteLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [row]);
+
+  const handleClone = useCallback(async () => {
+    setConfirmDeleteLoading(true);
+    const result = await CampaignService.cloneCampaign(row.original.campaignUID);
+    if (result?.status === 200) {
+      toast.success(result.response?.message || 'Campaign cloned successfully');
+      navigate('/campaign');
+    } else {
+      toast.error(result?.error || 'Failed to clone campaign');
+    }
+    setConfirmDeleteLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [row]);
 
   return (
     <>
@@ -139,6 +200,36 @@ export function RowActions({ row, table }) {
                       onClick={() => navigate(`/campaign/${row.original.campaignUID}/edit`)}>
                       <PencilIcon className="size-4.5 stroke-1" />
                       <span>{t('edit')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
+              {hasPermission(PERMISSIONS.CAMPAIGN?.EDIT) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={openArchiveModal}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-warning outline-none transition-colors dark:text-warning-light rtl:space-x-reverse',
+                        focus && 'bg-warning/10 dark:bg-warning-light/10'
+                      )}>
+                      <ArchiveBoxArrowDownIcon className="size-4.5 stroke-1" />
+                      <span>{t('archive') || 'Archive'}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
+              {hasPermission(PERMISSIONS.CAMPAIGN?.CREATE) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      onClick={handleClone}
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                        focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                      )}>
+                      <SquaresPlusIcon className="size-4.5 stroke-1" />
+                      <span>{t('clone') || 'Clone'}</span>
                     </button>
                   )}
                 </MenuItem>
@@ -185,6 +276,14 @@ export function RowActions({ row, table }) {
         onOk={handleChangeStatus}
         confirmLoading={confirmDeleteLoading}
         state={state}
+      />
+      <ConfirmModal
+        show={archiveModalOpen}
+        onClose={closeArchiveModal}
+        messages={archiveConfirmMessages}
+        onOk={handleArchive}
+        confirmLoading={confirmDeleteLoading}
+        state={archiveState}
       />
       <ConfirmModal
         show={deleteModalOpen}

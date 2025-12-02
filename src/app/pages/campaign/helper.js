@@ -61,7 +61,7 @@ export const campaignStatusOptions = [
   {
     key: 'archive',
     value: 'archive',
-    label: 'Archive',
+    label: 'Archived',
     color: 'warning',
     icon: ArchiveBoxIcon
   }
