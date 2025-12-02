@@ -27,10 +27,10 @@ const ChangeHistory = () => {
 
   const breadcrumbItem = [
     { title: t('player_segmentation'), path: '/bonus/player-segmentation' },
-    {
-      title: t('view'),
-      path: `/bonus/player-segmentation/${segmentationUID}/tab/details`
-    },
+    // {
+    //   title: t('view'),
+    //   path: `/bonus/player-segmentation/${segmentationUID}/tab/details`
+    // },
     { title: t('change_history') }
   ];
 
