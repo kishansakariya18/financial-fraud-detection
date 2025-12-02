@@ -3,7 +3,6 @@ import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/r
 import {
   EllipsisHorizontalIcon,
   PencilIcon,
-  TrashIcon,
   SquaresPlusIcon,
   ArchiveBoxArrowDownIcon
 } from '@heroicons/react/24/outline';
@@ -78,12 +77,6 @@ export function RowActions({ row, table }) {
     setChangeStatusModalOpen(true);
     setChangeStatusError(false);
     setChangeStatusSuccess(false);
-  };
-
-  const openDeleteModal = () => {
-    setDeleteModalOpen(true);
-    setDeleteError(false);
-    setDeleteSuccess(false);
   };
 
   const closeDeleteModal = () => {
@@ -245,21 +238,6 @@ export function RowActions({ row, table }) {
                       )}>
                       <TbStatusChange className="size-4.5 stroke-1" />
                       <span>{t('change') + ' ' + t('status')}</span>
-                    </button>
-                  )}
-                </MenuItem>
-              )}
-              {hasPermission(PERMISSIONS.CAMPAIGN?.DELETE) && (
-                <MenuItem>
-                  {({ focus }) => (
-                    <button
-                      onClick={openDeleteModal}
-                      className={clsx(
-                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide text-error outline-none transition-colors dark:text-error-light rtl:space-x-reverse',
-                        focus && 'bg-error/10 dark:bg-error-light/10'
-                      )}>
-                      <TrashIcon className="size-4.5 stroke-1" />
-                      <span>{t('delete_text')}</span>
                     </button>
                   )}
                 </MenuItem>
