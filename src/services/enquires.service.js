@@ -65,6 +65,19 @@ const EnquiresService = {
     } catch (error) {
       console.log('Error getting Enquires summary', error);
     }
+  },
+  details: async (enquiryUID) => {
+    try {
+      const url = apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.ENQUIRES.DETAILS;
+      return await sendRequest({
+        url,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: { enquiryUID }
+      });
+    } catch (error) {
+      console.log('Error getting Enquiry details', error);
+    }
   }
 };
 
