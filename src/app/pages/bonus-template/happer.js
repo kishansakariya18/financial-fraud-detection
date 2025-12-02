@@ -312,17 +312,20 @@ export const bonusTemplateTypeOptions = [
   {
     key: 'deposit_boost',
     value: 'deposit_boost',
-    label: 'Deposit Boost'
+    label: 'Deposit Boost',
+    icon: 'deposit_boost'
   },
   {
     key: 'free_chip',
     value: 'free_chip',
-    label: 'Free Chip'
+    label: 'Free Chip',
+    icon: 'free_chip'
   },
   {
     key: 'free_spins',
     value: 'free_spins',
-    label: 'Free Spins'
+    label: 'Free Spins',
+    icon: 'free_spins'
   }
 ];
 

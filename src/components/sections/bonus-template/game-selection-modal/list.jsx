@@ -11,6 +11,7 @@ import { Button } from 'components/ui';
 import { CustomModal } from 'components/custom';
 import { responseMapper } from 'app/pages/casino-management/games/helper';
 import { TableToolbar } from 'components/shared/table/TableToolbar';
+import { statusOptions } from 'app/pages/casino-management/games/helper';
 
 export default function GamesListModal({
   open,
@@ -210,6 +211,16 @@ export default function GamesListModal({
         onClearFilters={clearFilterHandler}
         searchColumn="name"
         searchPlaceholder={t('search') + ' games...'}
+        filters={[
+          {
+            type: 'faceted',
+            column: 'status',
+            title: t('status'),
+            options: statusOptions,
+            isMultiple: true,
+            showCheckbox: true
+          }
+        ]}
       />
       <TableCard
         tableSettings={tableSettings}

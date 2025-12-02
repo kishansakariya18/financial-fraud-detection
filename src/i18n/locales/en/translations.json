@@ -1307,5 +1307,6 @@
   "please_select_at_least_one_player":"Please select at least one player",
   "in_progress":"In Progress",
   "resolved":"Resolved",
-  "enquiry":"Enquiry"
+  "enquiry":"Enquiry",
+  "game_selection":"Game Selection"
 }

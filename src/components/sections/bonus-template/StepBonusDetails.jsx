@@ -1,9 +1,11 @@
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'components/ui';
 import { Input, Textarea, Upload } from 'components/ui/Form';
+import RenderImage from 'components/ui/custom/ImageRender';
+import apiConfig from 'configs/api.config';
 
 export function StepBonusDetails({ data, onChange, onImageChange, errors = {} }) {
   const { t } = useTranslation();
@@ -68,6 +70,17 @@ const UploadField = ({ label, value, error, onChange }) => {
   const fileName =
     typeof value === 'string' ? value : value?.name ? value.name : 'No file selected';
 
+  const localPreview = useMemo(() => {
+    if (value && typeof value !== 'string') {
+      try {
+        return URL.createObjectURL(value);
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  }, [value]);
+
   return (
     <div className="space-y-2">
       <label className="input-label text-sm text-gray-600 dark:text-dark-100">{label}</label>
@@ -105,6 +118,27 @@ const UploadField = ({ label, value, error, onChange }) => {
       <p className="text-xs text-gray-400 dark:text-dark-400">
         Required size: 1024x1024px (PNG/JPG)
       </p>
+      <div className="mt-2 h-64 rounded-md border p-2 dark:border-dark-500">
+        {typeof value === 'string' && value ? (
+          <RenderImage
+            value={`${apiConfig.baseURL.S3_URL}/bonus-template/${value}`}
+            id={'bonusTemplateImage'}
+            enableModal={true}
+            maxWidth="100%"
+            maxHeight="100%"
+          />
+        ) : (
+          localPreview && (
+            <RenderImage
+              preview={localPreview}
+              id={'bonusTemplateImagePreview'}
+              enableModal={true}
+              maxWidth="100%"
+              maxHeight="100%"
+            />
+          )
+        )}
+      </div>
       {error && <p className="text-sm text-error dark:text-error-light">{error}</p>}
     </div>
   );

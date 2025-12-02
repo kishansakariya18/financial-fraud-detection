@@ -638,5 +638,6 @@
   "enquires": "Demandes de renseignements",
   "in_progress":"En Progreso",
   "resolved":"Resuelto",
-  "enquiry":"enquête"
+  "enquiry":"enquête",
+  "game_selection":"Sélection de jeux"
 }

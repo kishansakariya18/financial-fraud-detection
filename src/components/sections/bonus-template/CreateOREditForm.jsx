@@ -39,7 +39,7 @@ const defaultRule = {
 const defaultFormState = {
   templateInfo: {
     templateName: '',
-    bonusType: 'deposit_boost',
+    bonusType: '',
     bonusTag: [],
     expiryAfterIssuanceDays: ''
   },

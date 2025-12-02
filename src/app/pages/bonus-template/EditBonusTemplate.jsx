@@ -138,7 +138,7 @@ export default function EditBonusTemplate() {
 
   if (isLoading) {
     return (
-      <ContentWrapper pageTitle={t('edit') + ' ' + t('bonusTemplate')}>
+      <ContentWrapper pageTitle={t('edit') + ' ' + t('bonus_template')}>
         <Skeleton className="h-full w-full" />
         <Skeleton className="h-full w-full" />
         <Skeleton className="h-full w-full" />
@@ -150,7 +150,7 @@ export default function EditBonusTemplate() {
 
   if (!templateDetail) {
     return (
-      <ContentWrapper pageTitle={t('edit') + ' ' + t('bonusTemplate')}>
+      <ContentWrapper pageTitle={t('edit') + ' ' + t('bonus_template')}>
         <div className="text-sm text-gray-600 dark:text-dark-200">
           Unable to load bonus template
         </div>
@@ -159,7 +159,7 @@ export default function EditBonusTemplate() {
   }
 
   return (
-    <ContentWrapper pageTitle={t('edit') + ' ' + t('bonusTemplate')}>
+    <ContentWrapper pageTitle={t('edit') + ' ' + t('bonus_template')}>
       <CreateOREditForm onSubmit={handleSubmit} isEdit={true} value={templateDetail} />
     </ContentWrapper>
   );

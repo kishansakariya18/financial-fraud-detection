@@ -657,5 +657,6 @@
   "enquires": "Consultas",
   "in_progress":"En Progreso",
   "resolved":"Resuelto",
-  "enquiry":"consulta" 
+  "enquiry":"consulta",
+  "game_selection":"Selección de juego" 
 }
