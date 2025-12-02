@@ -12,6 +12,7 @@ import { ExportCSV } from 'components/custom/export';
 import apiConfig from 'configs/api.config';
 import { getQueryParams } from 'utils/custom.utilities';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
+import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 const columnHelper = createColumnHelper();
 
@@ -63,7 +64,7 @@ const playerColumns = [
     enableSorting: false,
     size: 100
   }),
-  columnHelper.accessor('createdAt', {
+  columnHelper.accessor((row) => getDateInUTCToTimeZone(row.createdAt), {
     id: 'createdAt',
     header: 'Joined Date',
     label: 'Joined Date',
@@ -80,10 +81,10 @@ export default function PlayerSegmentationPlayerList() {
 
   const breadcrumbItem = [
     { title: t('player_segmentation'), path: '/bonus/player-segmentation' },
-    {
-      title: t('view'),
-      path: `/bonus/player-segmentation/${segmentationUID}/tab/details`
-    },
+    // {
+    //   title: t('view'),
+    //   path: `/bonus/player-segmentation/${segmentationUID}/tab/details`
+    // },
     { title: t('players') }
   ];
 

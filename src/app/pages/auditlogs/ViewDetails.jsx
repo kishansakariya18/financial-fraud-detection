@@ -96,7 +96,7 @@ const ViewDetails = () => {
                   {t('createdBy')}:
                 </p>
                 <p>
-                  <span>{response?.auditAdmin?.Username}</span>
+                  <span>{response?.auditAdmin?.Username ?? response?.Username}</span>
                   {response.auditAdmin?.Username && (
                     <Button
                       data-tooltip
