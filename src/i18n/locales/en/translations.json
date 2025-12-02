@@ -1306,5 +1306,6 @@
   "referred_by_player_id":"Referred By Player ID",
   "please_select_at_least_one_player":"Please select at least one player",
   "in_progress":"In Progress",
-  "resolved":"Resolved"
+  "resolved":"Resolved",
+  "enquiry":"Enquiry"
 }

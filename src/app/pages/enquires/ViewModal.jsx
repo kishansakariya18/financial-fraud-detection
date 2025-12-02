@@ -26,7 +26,7 @@ export default function ViewModal({ data }) {
     <div className="col-span-12 sm:col-span-8 lg:col-span-9">
       <div className="h-full px-4 pb-2">
         <h6 className="mt-2 border-b border-gray-200 pb-2 text-base font-semibold text-gray-700 dark:border-dark-500 dark:text-dark-200">
-          {t('enquires')} {t('details')}:
+          {t('enquiry')} {t('detail')}:
         </h6>
         <div className="mt-4 max-h-[60vh] overflow-y-auto overflow-x-hidden pr-1">
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2">

@@ -637,5 +637,6 @@
   "enquiry_change_status": "Changer le statut",
   "enquires": "Demandes de renseignements",
   "in_progress":"En Progreso",
-  "resolved":"Resuelto"
+  "resolved":"Resuelto",
+  "enquiry":"enquête"
 }

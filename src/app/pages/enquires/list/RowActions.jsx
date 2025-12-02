@@ -181,7 +181,7 @@ export function RowActions({ row, table }) {
 
       <CustomModal
         show={isDialogOpen}
-        title={t('enquires') + ' ' + t('details')}
+        title={t('enquiry') + ' ' + t('detail')}
         btnTitle={t('view_details') || t('view')}
         onClose={onCloseDialogBox}
         onOpen={onOpenDialogBox}

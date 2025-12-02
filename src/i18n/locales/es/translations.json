@@ -656,5 +656,6 @@
   "enquiry_change_status": "Cambiar estado",
   "enquires": "Consultas",
   "in_progress":"En Progreso",
-  "resolved":"Resuelto"
+  "resolved":"Resuelto",
+  "enquiry":"consulta" 
 }
