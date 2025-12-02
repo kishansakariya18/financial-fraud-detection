@@ -19,26 +19,24 @@ export const parseAdminStatusToApi = (status) => {
 export const translator = (t, text, ns) => t(`${text}`, { ns });
 export const getBatdgeForStage = (type) => {
   switch (+type) {
-    case 0:
-      return 'betplaced';
     case 1:
       return 'result';
     case 2:
       return 'rollback';
     default:
-      break;
+      return 'result';
   }
 };
 export const getStageAppToApi = (type) => {
   switch (type) {
-    case 'betplaced':
-      return 0;
+    // case 'betplaced':
+    //   return 0;
     case 'result':
       return 1;
     case 'rollback':
       return 2;
     default:
-      break;
+      return 1;
   }
 };
 export const mapType = (item) => {
@@ -155,11 +153,6 @@ export const amountColorBasedOnTypeForPlatform = (amount, type) => {
   }
 };
 export const stageOptions = [
-  {
-    value: 'betplaced',
-    label: 'Betplaced',
-    color: 'success'
-  },
   {
     value: 'result',
     label: 'Result',
