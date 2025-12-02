@@ -11,6 +11,7 @@ import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import { Page } from 'components/shared/Page';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
 
 const columnHelper = createColumnHelper();
 
@@ -76,29 +77,33 @@ const PlayerActivity = () => {
       size: 140,
       enableSorting: false
     }),
-    columnHelper.accessor('TriggerEvent', {
-      header: t('trigger_event'),
-      size: 140,
-      enableSorting: false
-    }),
+    columnHelper.accessor(
+      (row) => (row.TriggerEvent ? capitalizeFirstLetter(row.TriggerEvent) : '—'),
+      {
+        header: t('trigger_event'),
+        size: 140,
+        enableSorting: false
+      }
+    ),
     columnHelper.accessor('ChangeReason', {
       header: t('reason'),
       cell: (info) => info.getValue() || '—',
       size: 180,
       enableSorting: false
     }),
-    columnHelper.accessor('EvaluationTime', {
+    columnHelper.accessor((row) => getDateInUTCToTimeZone(row.EvaluationTime), {
       header: t('evaluation_time'),
       cell: DateCell,
       size: 160,
       enableSorting: false
-    }),
-    columnHelper.accessor('DateCreated', {
-      header: t('logged_at'),
-      cell: DateCell,
-      size: 160,
-      enableSorting: false
     })
+    // ,
+    // columnHelper.accessor((row) => getDateInUTCToTimeZone(row.DateCreated), {
+    //   header: t('logged_at'),
+    //   cell: DateCell,
+    //   size: 160,
+    //   enableSorting: false
+    // })
   ];
 
   const fetchData = useCallback(async () => {
