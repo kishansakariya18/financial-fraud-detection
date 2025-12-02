@@ -635,5 +635,7 @@
   "areYouSureEnquires": "Êtes-vous sûr de vouloir supprimer cette enquire?",
   "areYouSureEnquiresChangeStatus": "Êtes-vous sûr de vouloir changer le statut de cette enquire?",
   "enquiry_change_status": "Changer le statut",
-  "enquires": "Demandes de renseignements"
+  "enquires": "Demandes de renseignements",
+  "in_progress":"En Progreso",
+  "resolved":"Resuelto"
 }
