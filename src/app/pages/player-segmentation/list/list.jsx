@@ -178,7 +178,7 @@ export default function PlayerSegmentationList() {
             title: t('created_at'),
             config: {
               mode: 'range',
-              maxDate: new Date().fp_incr?.(1)
+              maxDate: new Date().fp_incr?.(0)
             }
           }
         ]}
