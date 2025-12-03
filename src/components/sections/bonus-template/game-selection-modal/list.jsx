@@ -12,6 +12,8 @@ import { CustomModal } from 'components/custom';
 import { responseMapper } from 'app/pages/casino-management/games/helper';
 import { TableToolbar } from 'components/shared/table/TableToolbar';
 import { statusOptions } from 'app/pages/casino-management/games/helper';
+import ProviderService from 'services/provider.services';
+import { toast } from 'sonner';
 
 export default function GamesListModal({
   open,
@@ -26,6 +28,7 @@ export default function GamesListModal({
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
   const [checkedRows, setCheckedRows] = useState([]);
   const checkedIds = useMemo(() => checkedRows.map((row) => row.value), [checkedRows]);
+  const [providerOptions, setProviderOptions] = useState([]);
 
   const handleCheck = (row) => {
     const isChecked = checkedRows.some((item) => item.value === row.id);
@@ -68,6 +71,30 @@ export default function GamesListModal({
       return Array.from(mergedMap.values());
     });
   };
+
+  useEffect(() => {
+    const loadProviders = async () => {
+      try {
+        const res = await ProviderService.getProviderList({
+          filters: { status: 1 },
+          isPaginationRequired: false
+        });
+        if (res?.status === 200) {
+          const items = Array.isArray(res.response?.data) ? res.response.data : [];
+          const options = items
+            .filter((p) => p?.ProviderID != null)
+            .map((p) => ({ value: p.ProviderID, label: p.Name || String(p.ProviderID) }));
+          setProviderOptions(options);
+        } else if (res?.error) {
+          toast.error(res.error);
+        }
+      } catch {
+        toast.error('Unable to load providers');
+      }
+    };
+
+    loadProviders();
+  }, []);
 
   const fetchGames = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
@@ -219,6 +246,14 @@ export default function GamesListModal({
             options: statusOptions,
             isMultiple: true,
             showCheckbox: true
+          },
+          {
+            type: 'faceted',
+            column: 'provider',
+            title: t('provider'),
+            options: providerOptions,
+            isMultiple: false,
+            showCheckbox: false
           }
         ]}
       />
