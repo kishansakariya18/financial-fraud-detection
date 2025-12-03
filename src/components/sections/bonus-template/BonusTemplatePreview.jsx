@@ -39,7 +39,7 @@ const renderList = (items = [], lookup = {}) => {
 
 const Section = ({ title, children }) => (
   <div className="space-y-2">
-    <h4 className="block w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-xs font-medium uppercase tracking-wide text-gray-700 dark:border-dark-600 dark:bg-dark-800 dark:text-dark-100">
+    <h4 className="block w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-xs font-bold uppercase tracking-wide text-gray-700 dark:border-dark-600 dark:bg-dark-800 dark:text-dark-100">
       {title}
     </h4>
     {children}

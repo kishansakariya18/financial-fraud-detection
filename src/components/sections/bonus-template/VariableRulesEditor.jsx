@@ -59,6 +59,19 @@ export function VariableRulesEditor({
     [errors]
   );
 
+  // Collect all error messages for a row (rule)
+  const getRowErrors = useCallback(
+    (index) => {
+      const fields = ['paymentMethod', 'rangeFrom', 'rangeTo', 'boostPercent', 'wagering', 'mco'];
+      const msgs = fields
+        .map((f) => getFieldError(index, f))
+        .filter((msg) => typeof msg === 'string' && msg.trim().length > 0);
+      // Deduplicate while keeping order
+      return [...new Set(msgs)];
+    },
+    [getFieldError]
+  );
+
   // allow only first row form to edit other disbale , payment method wise
   const isDisabledFormField = useCallback(
     (index) => {
@@ -241,89 +254,101 @@ export function VariableRulesEditor({
                   </td>
                 </tr>
               ) : (
-                localRules.map((rule, index) => (
-                  <tr
-                    key={rule.id || `rule-${index}`}
-                    className="bg-white text-gray-700 dark:bg-dark-700 dark:text-dark-100">
-                    <td className="px-3 py-2">
-                      <Select
-                        label={t('payment_method')}
-                        data={paymentMethodOptions}
-                        value={rule.paymentMethod || 'all'}
-                        onChange={(e) => updateRuleField(index, 'paymentMethod', e.target.value)}
-                        classNames={{
-                          ...inputClassNames,
-                          select: 'h-9 text-xs'
-                        }}
-                        error={getFieldError(index, 'paymentMethod')}
-                      />
-                    </td>
-                    <td className="px-3 py-2">
-                      <Input
-                        label={t('min_deposit')}
-                        type="number"
-                        value={rule.rangeFrom || ''}
-                        disabled={isDisabledFormField(index)}
-                        onChange={(e) => updateRuleField(index, 'rangeFrom', e.target.value)}
-                        classNames={inputClassNames}
-                        error={getFieldError(index, 'rangeFrom')}
-                      />
-                    </td>
-                    <td className="px-3 py-2">
-                      <Input
-                        label={t('max_deposit')}
-                        type="number"
-                        value={rule.rangeTo || ''}
-                        onChange={(e) => updateRuleField(index, 'rangeTo', e.target.value)}
-                        classNames={inputClassNames}
-                        error={getFieldError(index, 'rangeTo')}
-                      />
-                    </td>
-                    <td className="px-3 py-2">
-                      <Input
-                        label={t('boost_percentage')}
-                        type="number"
-                        value={rule.boostPercent || ''}
-                        onChange={(e) => updateRuleField(index, 'boostPercent', e.target.value)}
-                        classNames={inputClassNames}
-                        error={getFieldError(index, 'boostPercent')}
-                      />
-                    </td>
-                    <td className="px-3 py-2">
-                      <Input
-                        label={t('wagering')}
-                        type="number"
-                        value={rule.wagering || ''}
-                        onChange={(e) => updateRuleField(index, 'wagering', e.target.value)}
-                        classNames={inputClassNames}
-                        error={getFieldError(index, 'wagering')}
-                      />
-                    </td>
-                    <td className="px-3 py-2">
-                      <Input
-                        label={t('max_cashout')}
-                        type="number"
-                        value={rule.mco || ''}
-                        onChange={(e) => updateRuleField(index, 'mco', e.target.value)}
-                        classNames={inputClassNames}
-                        error={getFieldError(index, 'mco')}
-                      />
-                    </td>
-                    <td className="px-3 py-2">
-                      <div className="flex justify-end gap-2">
-                        <Button
-                          type="button"
-                          isIcon
-                          variant="flat"
-                          color="error"
-                          className="size-8"
-                          onClick={() => handleDeleteRule(index)}>
-                          <TrashIcon className="size-4.5 stroke-1" />
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                localRules.map((rule, index) => {
+                  const rowErrors = getRowErrors(index);
+                  const hasErrors = rowErrors.length > 0;
+                  return (
+                    <>
+                      <tr
+                        key={(rule.id || `rule-${index}`) + '-row'}
+                        className={`bg-white text-gray-700 dark:bg-dark-700 dark:text-dark-100 ${hasErrors ? 'ring-1 ring-error/30 dark:ring-error/40' : ''}`}>
+                        <td className="px-3 py-2">
+                          <Select
+                            label={t('payment_method')}
+                            data={paymentMethodOptions}
+                            value={rule.paymentMethod || 'all'}
+                            onChange={(e) =>
+                              updateRuleField(index, 'paymentMethod', e.target.value)
+                            }
+                            classNames={{ ...inputClassNames, select: 'h-9 text-xs' }}
+                            error={getFieldError(index, 'paymentMethod')}
+                          />
+                        </td>
+                        <td className="px-3 py-2">
+                          <Input
+                            label={t('min_deposit')}
+                            type="number"
+                            value={rule.rangeFrom || ''}
+                            disabled={isDisabledFormField(index)}
+                            onChange={(e) => updateRuleField(index, 'rangeFrom', e.target.value)}
+                            classNames={inputClassNames}
+                          />
+                        </td>
+                        <td className="px-3 py-2">
+                          <Input
+                            label={t('max_deposit')}
+                            type="number"
+                            value={rule.rangeTo || ''}
+                            onChange={(e) => updateRuleField(index, 'rangeTo', e.target.value)}
+                            classNames={inputClassNames}
+                          />
+                        </td>
+                        <td className="px-3 py-2">
+                          <Input
+                            label={t('boost_percentage')}
+                            type="number"
+                            value={rule.boostPercent || ''}
+                            onChange={(e) => updateRuleField(index, 'boostPercent', e.target.value)}
+                            classNames={inputClassNames}
+                            error={getFieldError(index, 'boostPercent')}
+                          />
+                        </td>
+                        <td className="px-3 py-2">
+                          <Input
+                            label={t('wagering')}
+                            type="number"
+                            value={rule.wagering || ''}
+                            onChange={(e) => updateRuleField(index, 'wagering', e.target.value)}
+                            classNames={inputClassNames}
+                            error={getFieldError(index, 'wagering')}
+                          />
+                        </td>
+                        <td className="px-3 py-2">
+                          <Input
+                            label={t('max_cashout')}
+                            type="number"
+                            value={rule.mco || ''}
+                            onChange={(e) => updateRuleField(index, 'mco', e.target.value)}
+                            classNames={inputClassNames}
+                            error={getFieldError(index, 'mco')}
+                          />
+                        </td>
+                        <td className="px-3 py-2">
+                          <div className="flex justify-end gap-2">
+                            <Button
+                              type="button"
+                              isIcon
+                              variant="flat"
+                              color="error"
+                              className="size-8"
+                              onClick={() => handleDeleteRule(index)}>
+                              <TrashIcon className="size-4.5 stroke-1" />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                      {hasErrors && (
+                        <tr key={(rule.id || `rule-${index}`) + '-errors'}>
+                          <td colSpan={7} className="bg-error/5 px-3 py-2">
+                            <div className="text-[11px] leading-5 text-error dark:text-error-light">
+                              {rowErrors.join(' • ')}
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </>
+                  );
+                })
               )}
             </tbody>
           </table>
