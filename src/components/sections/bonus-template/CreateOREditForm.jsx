@@ -294,7 +294,9 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
     }));
   };
 
-  const handleGameplayChange = (field, value) => {
+  // Live-validate Gameplay fields (min/max and related) when user edits
+  const handleGameplayChange = async (field, value) => {
+    // Update state first
     setFormState((prev) => ({
       ...prev,
       gameplay: {
@@ -302,6 +304,37 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
         [field]: value
       }
     }));
+
+    // Validate gameplay step incrementally
+    try {
+      const stepId = 'gameplayConfiguration';
+      const schema = stepSchemas[stepId];
+      if (!schema) return;
+
+      const nextGameplay = { ...formState.gameplay, [field]: value };
+      await schema.validate(nextGameplay, { abortEarly: false });
+
+      // Clear gameplay errors when valid
+      setStepErrors((prev) => {
+        const updated = { ...prev };
+        delete updated[stepId];
+        return updated;
+      });
+    } catch (error) {
+      if (error.inner) {
+        const fieldErrors = {};
+        error.inner.forEach((err) => {
+          if (err.path) {
+            fieldErrors[err.path] = err.message;
+          }
+        });
+
+        setStepErrors((prev) => ({
+          ...prev,
+          gameplayConfiguration: fieldErrors
+        }));
+      }
+    }
   };
 
   const handleGameplayMultiSelectChange = (field, values) => {
@@ -559,13 +592,19 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
                     Back
                   </Button>
                 )}
-                <Button
-                  type="submit"
-                  color="primary"
-                  loading={isSubmitting && isLastStep}
-                  disabled={isSubmitting}>
-                  {isLastStep ? t('save') + ' ' + t('template') : t('next_step')}
-                </Button>
+                {(() => {
+                  const gameplayErrors = stepErrors.gameplayConfiguration || {};
+                  const hasGameplayErrors = Object.keys(gameplayErrors).length > 0;
+                  return (
+                    <Button
+                      type="submit"
+                      color="primary"
+                      loading={isSubmitting && isLastStep}
+                      disabled={isSubmitting || (isLastStep && hasGameplayErrors)}>
+                      {isLastStep ? t('save') + ' ' + t('template') : t('next_step')}
+                    </Button>
+                  );
+                })()}
               </div>
             </div>
           </form>
