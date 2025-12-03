@@ -106,9 +106,9 @@ export default function EditBonusTemplate() {
       allowedProviders: gameplay.allowedProviders.map((provider) => provider?.value || provider),
       allowedCategories: gameplay.allowedCategories.map((category) => category?.value || category),
       allowedGames: gameplay.allowedGames.map((game) => game?.value || game),
-      gameProviderIncluded: gameplay.providerIncluded ? 1 : 0,
-      gameCategoryIncluded: gameplay.categoryIncluded ? 1 : 0,
-      gameIncluded: gameplay.gameIncluded ? 1 : 0,
+      gameProviderIncluded: gameplay.allowedProviders.length > 0 ? 1 : 0,
+      gameCategoryIncluded: gameplay.allowedCategories.length > 0 ? 1 : 0,
+      gameIncluded: gameplay.allowedGames.length > 0 ? 1 : 0,
 
       // configs (these will be JSON.stringified by objectToFormData)
       depositBoostConfig,
