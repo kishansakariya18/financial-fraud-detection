@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { ArrowTrendingUpIcon, CurrencyDollarIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { toast } from 'sonner';
 import { useNavigate, useSearchParams } from 'react-router';
 
@@ -182,6 +183,18 @@ export default function BonusTemplateList() {
     filtersInitializedRef.current = false;
   };
 
+  // Enhance bonus type options with icons for faceted filter dropdown
+  const bonusTypeIconMap = {
+    deposit_boost: ArrowTrendingUpIcon,
+    free_chip: CurrencyDollarIcon,
+    free_spins: SparklesIcon
+  };
+  const bonusTypeOptionsWithIcons = useMemo(
+    () => bonusTemplateTypeOptions.map((opt) => ({ ...opt, icon: bonusTypeIconMap[opt.value] })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [t]
+  );
+
   return (
     <ContentWrapper pageTitle={pageTitle} enableFullScreen={tableSettings.enableFullScreen}>
       <TableToolbar
@@ -210,7 +223,7 @@ export default function BonusTemplateList() {
             type: 'faceted',
             column: 'bonusType',
             title: t('bonus_type'),
-            options: bonusTemplateTypeOptions,
+            options: bonusTypeOptionsWithIcons,
             isMultiple: false,
             showCheckbox: false
           },

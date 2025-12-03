@@ -24,6 +24,7 @@ const TagsInputNew = forwardRef(
       error,
       label,
       allowCustom = true,
+      maxTags,
       ...rest
     },
     ref
@@ -62,6 +63,11 @@ const TagsInputNew = forwardRef(
 
     const handleAddTag = (tag) => {
       if (!tag?.value) return;
+      // Enforce optional maxTags limit
+      if (typeof maxTags === 'number' && maxTags > 0 && value.length >= maxTags) {
+        setQuery('');
+        return;
+      }
       const exists = value.some((item) => item.value === tag.value);
       if (exists) {
         setQuery('');
@@ -143,8 +149,10 @@ const TagsInputNew = forwardRef(
                   }}>
                   {value.map((tag) => (
                     <Tag key={tag.id} component="button" type="button">
-                      <span className="border-r border-gray-300 pr-1 leading-none text-gray-600 dark:text-dark-200">
-                        {tag.value}
+                      <span
+                        title={tag.value}
+                        className="inline-block max-w-[12rem] truncate border-r border-gray-300 pr-1 align-middle leading-none text-gray-600 dark:text-dark-200">
+                        {tag.value?.length > 30 ? `${tag.value.slice(0, 30)}…` : tag.value}
                       </span>
                       <Button
                         type="button"
@@ -168,6 +176,7 @@ const TagsInputNew = forwardRef(
                     unstyled
                     classNames={{ root: 'min-w-[60px] flex-1' }}
                     autoComplete="off"
+                    maxLength={30}
                     onKeyDown={(e) => {
                       if (e.key === 'Backspace' && e.target.value === '' && value.length > 0) {
                         e.preventDefault();

@@ -588,7 +588,12 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
 
               <div className="flex gap-3">
                 {activeStep !== 0 && (
-                  <Button type="button" variant="outlined" color="neutral" onClick={handleBack}>
+                  <Button
+                    type="button"
+                    variant="outlined"
+                    color="neutral"
+                    className="h-10 w-36 px-4"
+                    onClick={handleBack}>
                     Back
                   </Button>
                 )}
@@ -596,13 +601,19 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
                   const gameplayErrors = stepErrors.gameplayConfiguration || {};
                   const hasGameplayErrors = Object.keys(gameplayErrors).length > 0;
                   return (
-                    <Button
-                      type="submit"
-                      color="primary"
-                      loading={isSubmitting && isLastStep}
-                      disabled={isSubmitting || (isLastStep && hasGameplayErrors)}>
-                      {isLastStep ? t('save') + ' ' + t('template') : t('next_step')}
-                    </Button>
+                    <div className="flex flex-col items-end">
+                      <Button
+                        type="submit"
+                        color="primary"
+                        loading={isSubmitting && isLastStep}
+                        className="h-10 w-36 px-4"
+                        disabled={isSubmitting || (isLastStep && hasGameplayErrors)}>
+                        {isLastStep ? t('save') + ' ' + t('template') : t('next_step')}
+                      </Button>
+                      <span className="mt-1 text-sm font-medium text-gray-900 dark:text-dark-50">
+                        Step {activeStep + 1} of {STEPS.length}
+                      </span>
+                    </div>
                   );
                 })()}
               </div>

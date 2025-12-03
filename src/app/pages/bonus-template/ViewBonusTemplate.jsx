@@ -244,7 +244,10 @@ export default function ViewBonusTemplate() {
                   label: t('expiry_after_issuance_days'),
                   value: normalized.templateInfo.expiryAfterIssuanceDays ?? '—'
                 },
-                { label: 'Notes', value: normalized.bonusDetails.notes || '—' },
+                {
+                  label: t('description') + ` (${t('player_facing')})`,
+                  value: normalized.bonusDetails.notes || '—'
+                },
                 {
                   label: t('bonus_tags'),
                   value: normalized.templateInfo.bonusTag?.join(', ') || '—'
