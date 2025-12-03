@@ -657,6 +657,10 @@
   "enquires": "Consultas",
   "in_progress":"En Progreso",
   "resolved":"Resuelto",
+  "withdrawal": "Retiro",
+  "free_bonuses_claimed": "Bonos gratis reclamados",
+  "clean_deposit_count_ratio": "Depositos limpios ratio",
+  "clean_deposit_amount_ratio": "Depositos limpios ratio",
   "enquiry":"consulta",
   "game_selection":"Selección de juego" 
 }

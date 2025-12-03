@@ -11,6 +11,7 @@ import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import { Page } from 'components/shared/Page';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
 
 const columnHelper = createColumnHelper();
 
@@ -22,10 +23,10 @@ const PlayerActivity = () => {
 
   const breadcrumbItem = [
     { title: t('player_segmentation'), path: '/bonus/player-segmentation' },
-    {
-      title: t('view'),
-      path: `/bonus/player-segmentation/${segmentationUID}/tab/details`
-    },
+    // {
+    //   title: t('view'),
+    //   path: `/bonus/player-segmentation/${segmentationUID}/tab/details`
+    // },
     { title: t('player_activity') }
   ];
 
@@ -76,29 +77,33 @@ const PlayerActivity = () => {
       size: 140,
       enableSorting: false
     }),
-    columnHelper.accessor('TriggerEvent', {
-      header: t('trigger_event'),
-      size: 140,
-      enableSorting: false
-    }),
+    columnHelper.accessor(
+      (row) => (row.TriggerEvent ? capitalizeFirstLetter(row.TriggerEvent) : '—'),
+      {
+        header: t('trigger_event'),
+        size: 140,
+        enableSorting: false
+      }
+    ),
     columnHelper.accessor('ChangeReason', {
       header: t('reason'),
       cell: (info) => info.getValue() || '—',
       size: 180,
       enableSorting: false
     }),
-    columnHelper.accessor('EvaluationTime', {
+    columnHelper.accessor((row) => getDateInUTCToTimeZone(row.EvaluationTime), {
       header: t('evaluation_time'),
       cell: DateCell,
       size: 160,
       enableSorting: false
-    }),
-    columnHelper.accessor('DateCreated', {
-      header: t('logged_at'),
-      cell: DateCell,
-      size: 160,
-      enableSorting: false
     })
+    // ,
+    // columnHelper.accessor((row) => getDateInUTCToTimeZone(row.DateCreated), {
+    //   header: t('logged_at'),
+    //   cell: DateCell,
+    //   size: 160,
+    //   enableSorting: false
+    // })
   ];
 
   const fetchData = useCallback(async () => {
@@ -195,41 +200,41 @@ const PlayerActivity = () => {
 
   return (
     <Page title={t('player_activity')}>
-      <div className="transition-content grid w-full grid-rows-[auto_1fr]">
-        <div className="flex items-center space-x-4 px-[--margin-x] pt-5 lg:pt-6 rtl:space-x-reverse">
-          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
-            {t('player_activity')}
-          </h2>
-          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
+      <div className="transition-content pb-8">
+        <div className="grid w-full grid-rows-[auto_1fr] px-[--margin-x]">
+          <div className="flex items-center space-x-4 pt-5 lg:pt-6 rtl:space-x-reverse">
+            <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
+              {t('player_activity')}
+            </h2>
+            <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
+          </div>
         </div>
 
-        <div className="space-y-4">
-          <TableToolbar
-            table={table}
-            onApplyFilters={applyFilterHandler}
-            onClearFilters={clearFilterHandler}
-            searchColumn="User"
-            searchPlaceholder={`${t('search')} ${t('player')}`}
-            showSearch={true}
-            filters={[
-              {
-                type: 'date',
-                column: 'DateCreated',
-                title: t('date_range'),
-                config: {
-                  mode: 'range',
-                  maxDate: new Date().fp_incr?.(1)
-                }
+        <TableToolbar
+          table={table}
+          onApplyFilters={applyFilterHandler}
+          onClearFilters={clearFilterHandler}
+          searchColumn="User"
+          searchPlaceholder={`${t('search')} ${t('player')}`}
+          showSearch={true}
+          filters={[
+            {
+              type: 'date',
+              column: 'DateCreated',
+              title: t('date_range'),
+              config: {
+                mode: 'range',
+                maxDate: new Date().fp_incr?.(1)
               }
-            ]}
-          />
-          <TableCard
-            tableSettings={tableSettings}
-            table={table}
-            loading={isLoading}
-            paginationEnabled={true}
-          />
-        </div>
+            }
+          ]}
+        />
+        <TableCard
+          tableSettings={tableSettings}
+          table={table}
+          loading={isLoading}
+          paginationEnabled={true}
+        />
       </div>
     </Page>
   );
