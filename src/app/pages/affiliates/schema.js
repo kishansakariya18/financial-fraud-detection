@@ -23,7 +23,7 @@ export const createAffiliateSchema = Yup.object().shape({
     .required('User Name Required')
     .matches(
       /^(?!.*__)[a-zA-Z][a-zA-Z0-9_]{1,28}[a-zA-Z0-9]$/,
-      'Username must start with a letter, contain only letters, numbers, or underscores, cannot have consecutive or ending underscores, and must be 3–30 characters long.'
+      'Username must be 3–30 characters, start with a letter, end with a letter or number, and not contain consecutive underscores.'
     ),
   password: Yup.string()
     .trim()
@@ -35,10 +35,7 @@ export const createAffiliateSchema = Yup.object().shape({
   email: Yup.string()
     .trim()
     .required('Email Required')
-    .matches(
-      /^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
-      'Enter a valid email address without the "+" symbol'
-    ),
+    .matches(/^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/, 'Enter a valid email address.'),
   mobile: Yup.string()
     .trim()
     .required('Enter Your Mobile Number')
