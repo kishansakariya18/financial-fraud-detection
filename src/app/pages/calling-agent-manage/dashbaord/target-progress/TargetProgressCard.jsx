@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { Card, Skeleton } from 'components/ui';
 import { t } from 'i18next';
 import moment from 'moment';
+import { setAmountBN } from 'helpers/functions';
 
 // Helper function to format date range
 const formatDateRange = (startDate, endDate) => {
@@ -109,7 +110,7 @@ const TargetProgressCard = ({ targetProgress, loading = false }) => {
                     {achieved?.toLocaleString() || '0'} / {target?.toLocaleString() || '0'}
                   </p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">
-                    Commission: {commission?.toFixed(2) || '0.00'}
+                    Commission: {setAmountBN(commission, 2) || '0.00'}
                   </p>
                 </div>
               </div>
