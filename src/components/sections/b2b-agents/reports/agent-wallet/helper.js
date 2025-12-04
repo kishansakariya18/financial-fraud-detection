@@ -1,6 +1,7 @@
 // Helper functions for Agent Wallet Report
 import { parseAgentTypeToApp } from 'components/sections/b2b-agents/helper';
 import { GENERAL_STATUS } from 'constants/app.constant';
+import { setAmountBN } from 'helpers/functions';
 
 export const mapStatusToApp = (status) => {
   switch (status) {
@@ -37,5 +38,5 @@ export const responseMapper = (apiData) => {
  * Calculate grand total from balance and lineup balance
  */
 export const calculateGrandTotal = (balance, lineUpBalance) => {
-  return (parseFloat(balance || 0) + parseFloat(lineUpBalance || 0)).toFixed(2);
+  return setAmountBN(balance || 0, 2) + setAmountBN(lineUpBalance || 0, 2);
 };

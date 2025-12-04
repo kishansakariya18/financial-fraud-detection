@@ -3,6 +3,7 @@ import { IdCell, DateCell, BadgeCell } from '../../../../../components/custom/ta
 import { ensureString } from 'utils/ensureString';
 import { Highlight } from 'components/shared/Highlight';
 import { RowActions } from './RowActions';
+import { setAmountBN } from 'helpers/functions';
 
 const columnHelper = createColumnHelper();
 
@@ -46,7 +47,7 @@ export const columns = ({ onApprove, onReject, onSettle }) => [
     header: 'Requested Amount',
     cell: (info) => (
       <span className="font-medium text-gray-900 dark:text-dark-100">
-        {parseFloat(info.getValue() || 0).toFixed(2)}
+        {setAmountBN(info.getValue() || 0, 2)}
       </span>
     ),
     enableSorting: false
@@ -60,7 +61,7 @@ export const columns = ({ onApprove, onReject, onSettle }) => [
       const amount = info.getValue();
       return amount ? (
         <span className="font-medium text-green-600 dark:text-green-400">
-          {parseFloat(amount).toFixed(2)}
+          {setAmountBN(amount || 0, 2)}
         </span>
       ) : (
         <span className="text-gray-500 dark:text-dark-400">-</span>

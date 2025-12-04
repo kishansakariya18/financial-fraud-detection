@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import { CustomModal } from 'components/custom';
 import { Textarea, Input, Button } from 'components/ui';
 import { Radio } from 'components/ui';
+import { setAmountBN } from 'helpers/functions';
 
 // Validation schemas
 // approvedAmount is required only when adjustAmount is true
@@ -164,7 +165,7 @@ const ActionModal = ({ show, type, request, onClose, onSubmit }) => {
               <div className="flex justify-between">
                 <span className="text-gray-600 dark:text-dark-300">Requested Amount:</span>
                 <span className="font-medium">
-                  ${parseFloat(request?.requestedAmount || 0).toFixed(2)}
+                  ${setAmountBN(request?.requestedAmount || 0, 2)}
                 </span>
               </div>
               <div className="flex justify-between">

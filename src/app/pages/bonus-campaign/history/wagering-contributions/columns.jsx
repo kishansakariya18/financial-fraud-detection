@@ -1,31 +1,13 @@
 // Import Dependencies
 import { createColumnHelper } from '@tanstack/react-table';
-import PropTypes from 'prop-types';
 
 // Local Imports
-import { IdCell, DateCell } from '../../../../../components/custom/table/cell';
+import { IdCell, DateCell, SafeAmountCell } from '../../../../../components/custom/table/cell';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
 
 // ----------------------------------------------------------------------
 
 const columnHelper = createColumnHelper();
-
-// Safe Amount Cell Component
-const SafeAmountCell = ({ getValue }) => {
-  const value = getValue();
-  if (value === null || value === undefined || isNaN(Number(value))) {
-    return <span className="font-medium">-</span>;
-  }
-  return (
-    <p className="text-sm+ font-medium text-gray-800 dark:text-dark-100">
-      {Number(value).toFixed(2)}
-    </p>
-  );
-};
-
-SafeAmountCell.propTypes = {
-  getValue: PropTypes.func
-};
 
 export const columns = [
   columnHelper.accessor((row) => row.ContributionID, {
