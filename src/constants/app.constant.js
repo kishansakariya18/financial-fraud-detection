@@ -320,7 +320,7 @@ export const PERMISSIONS = Object.freeze({
     VIEW: 'game-view',
     CREATE: 'game-create',
     EDIT: 'game-edit',
-    CHANGE_STATUS: 'game-chnage-status',
+    CHANGE_STATUS: 'game-change-status',
     DELETE: 'game-delete',
     ADD_SEGMENTATION: 'game-add-segmentation'
   },

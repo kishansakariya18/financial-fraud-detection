@@ -6,6 +6,8 @@ import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { HiOutlineBan } from 'react-icons/hi';
+import { PERMISSIONS } from 'constants/app.constant';
+import usePermissions from 'app/router/usePermissions';
 
 export default function Toolbar({
   table,
@@ -19,6 +21,7 @@ export default function Toolbar({
   const navigate = useNavigate();
   const pageTitle = t('blacklisted') + ' ' + t('email') + '/' + t('phone_number');
   const buttonTitle = t('add') + ' ' + t('blacklist') + ' ' + t('email') + '/' + t('phone_number');
+  const { hasPermission } = usePermissions();
 
   const handleReset = () => {
     setSearchValue('');
@@ -37,13 +40,15 @@ export default function Toolbar({
             {pageTitle}
           </h2>
         </div>
-        <Button
-          className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
-          color="primary"
-          onClick={() => navigate('/blacklist/email-phone')}>
-          <HiOutlineBan className="size-5" />
-          <span>{buttonTitle}</span>
-        </Button>
+        {hasPermission(PERMISSIONS.BLACKLIST.ADD_EMAIL_MOBILE_RESTRCTION) && (
+          <Button
+            className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
+            color="primary"
+            onClick={() => navigate('/blacklist/email-phone')}>
+            <HiOutlineBan className="size-5" />
+            <span>{buttonTitle}</span>
+          </Button>
+        )}
       </div>
       <div className="flex items-center justify-between px-[--margin-x] pt-4">
         <div className="flex space-x-2">

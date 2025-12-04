@@ -6,6 +6,8 @@ import { Button, Input } from 'components/ui';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import clsx from 'clsx';
+import { PERMISSIONS } from 'constants/app.constant';
+import usePermissions from 'app/router/usePermissions';
 // ----------------------------------------------------------------------
 
 export function DisposableEmailToolbar({
@@ -23,6 +25,7 @@ export function DisposableEmailToolbar({
   };
 
   const { t } = useTranslation();
+  const { hasPermission } = usePermissions();
   return (
     <div className="table-toolbar">
       <div
@@ -35,7 +38,9 @@ export function DisposableEmailToolbar({
             {t('disposable') + ' ' + t('email')}
           </h2>
         </div>
-        <CreateDisposableEmail tableFetch={table.options.meta?.fetchNewList} />
+        {hasPermission(PERMISSIONS.BLACKLIST.ADD_RESTRICTED_EMAIL_DOMAIN) && (
+          <CreateDisposableEmail tableFetch={table.options.meta?.fetchNewList} />
+        )}
       </div>
       <div className={`flex items-center justify-between gap-4 px-[--margin-x] pb-4 pt-4`}>
         <div className="flex space-x-2">
