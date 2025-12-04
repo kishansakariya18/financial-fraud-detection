@@ -138,7 +138,7 @@ const CustomCombobox = forwardRef(
                       <ComboboxButton
                         as="div"
                         className={clsx(
-                          'relative w-full cursor-default overflow-hidden rounded-lg border text-start outline-none transition-colors focus:outline-none',
+                          'relative w-full cursor-default rounded-lg border text-start outline-none transition-colors focus:outline-none',
                           error
                             ? 'border-error dark:border-error-lighter'
                             : 'border-gray-300 focus-within:!border-primary-600 hover:border-gray-400 dark:border-dark-450 dark:focus-within:!border-primary-500 dark:hover:border-dark-400'
@@ -218,7 +218,7 @@ const CustomCombobox = forwardRef(
                         '--left-anchor': `${inputLeft}px`
                       }}
                       className={clsx(
-                        'absolute !left-[--left-anchor] z-10 max-h-60 overflow-y-auto overflow-x-hidden rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none',
+                        'absolute !left-[--left-anchor] z-50 max-h-96 overflow-y-auto overflow-x-hidden rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none',
                         multiple && 'mt-2'
                       )}>
                       {filteredData.length === 0 && query !== '' ? (

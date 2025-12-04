@@ -1,12 +1,13 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TrashIcon, DocumentDuplicateIcon } from '@heroicons/react/24/outline';
 import { Button, Input } from 'components/ui';
 import { Listbox } from 'components/shared/form/Listbox';
 import { Combobox } from 'components/shared/form/Combobox';
 import { TagsInputNew } from 'components/shared/form/TagsInputNew';
-import AuthService from 'services/auth.services';
-import CurrencyService from 'services/currency.services';
+import { useSegmentationMappings } from './useSegmentationMappings';
+import { ReferrerSelect } from './ReferrerSelect';
+import ReferrerSelectionModal from './ReferrerSelectionModal';
 import {
   getAttribute,
   getAttributeOptions,
@@ -25,52 +26,28 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
   const [field, setField] = useState(condition.field || '');
   const [operator, setOperator] = useState(condition.operator || '');
   const [value, setValue] = useState(condition.value);
-  const [countryOptions, setCountryOptions] = useState([]);
-  const [currencyOptions, setCurrencyOptions] = useState([]);
+  const [isReferrerModalOpen, setIsReferrerModalOpen] = useState(false);
 
-  const countriesFetched = useRef(false);
-  const currenciesFetched = useRef(false);
+  // Extract player IDs from value if it's referred_by field
+  const playerIds =
+    field === SegmentAttributeKey.REFERRED_BY && value
+      ? Array.isArray(value)
+        ? value
+        : [value]
+      : [];
+
+  // Use the custom hook to fetch and cache data
+  const { countryOptions, currencyOptions, affiliateOptions, playerOptions } =
+    useSegmentationMappings({
+      fetchCountries: field === SegmentAttributeKey.COUNTRY,
+      fetchCurrencies: field === SegmentAttributeKey.CURRENCY,
+      fetchAffiliates: field === SegmentAttributeKey.AFFILIATE,
+      playerIds: playerIds // Fetch player details for editing
+    });
 
   const attributeOptions = getAttributeOptions();
   const operatorOptions = getOperatorOptions(field);
   const selectedAttribute = getAttribute(field);
-
-  // Fetch country/currency options when attribute changes to country or currency
-  useEffect(() => {
-    const fetchAttributeOptions = async () => {
-      if (field === SegmentAttributeKey.COUNTRY && !countriesFetched.current) {
-        countriesFetched.current = true;
-        await AuthService.getCountries()
-          .then(({ response }) => {
-            const options = response.data.map((country) => ({
-              value: country.CountryID,
-              label: country.CountryName
-            }));
-            setCountryOptions(options);
-          })
-          .catch(() => {
-            countriesFetched.current = false; // Reset on error so it can retry
-            setCountryOptions([]);
-          });
-      }
-      if (field === SegmentAttributeKey.CURRENCY && !currenciesFetched.current) {
-        currenciesFetched.current = true;
-        await CurrencyService.getPlatformCurrancyCodes()
-          .then(({ response }) => {
-            const options = response.data.map(({ Code, CurrencyID }) => ({
-              value: CurrencyID,
-              label: Code
-            }));
-            setCurrencyOptions(options);
-          })
-          .catch(() => {
-            currenciesFetched.current = false; // Reset on error so it can retry
-            setCurrencyOptions([]);
-          });
-      }
-    };
-    fetchAttributeOptions();
-  }, [field]);
 
   // Reset operator and value when attribute changes
   useEffect(() => {
@@ -93,12 +70,13 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
         operator === DatetimeOperator.GREATER_THAN_X_AGO
       ) {
         setValue({ amount: 7, direction: 'Ago', unit: 'days' });
-      } else if (operator === DatetimeOperator.BETWEEN_RELATIVE) {
-        setValue({
-          from: { amount: 7, unit: 'days' },
-          to: { amount: 0, unit: 'days' }
-        });
-      } else if (operator === DatetimeOperator.BETWEEN_DATE_RANGE) {
+      } else if (operator === DatetimeOperator.BETWEEN) {
+        setValue([
+          { amount: 7, unit: 'days' },
+          { amount: 0, unit: 'days' }
+        ]);
+      } else if (operator === DatetimeOperator.IN_RANGE) {
+        // Absolute date range: array of datetime strings
         setValue(['', '']);
       } else if (operator === EnumStringOperator.IN || operator === EnumStringOperator.NOT_IN) {
         setValue([]);
@@ -126,19 +104,32 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
       return null;
     }
 
+    // Check if there's a value error
+    const hasValueError = Boolean(
+      error?.value || (typeof error === 'object' && error?.message && !error?.field)
+    );
+
     // Helper function to get dynamic options for country/currency
     const getDynamicOptions = () => {
       if (field === SegmentAttributeKey.COUNTRY) return countryOptions;
       if (field === SegmentAttributeKey.CURRENCY) return currencyOptions;
+      if (field === SegmentAttributeKey.AFFILIATE) return affiliateOptions;
       return null;
     };
 
-    // Helper to render Combobox for country/currency
+    // Helper to render Combobox for country/currency/affiliate
     const renderDynamicCombobox = (isMultiple = false) => {
       const options = getDynamicOptions();
       if (!options || options.length === 0) return null;
 
-      const attributeLabel = field === SegmentAttributeKey.COUNTRY ? 'country' : 'currency';
+      const attributeLabel =
+        field === SegmentAttributeKey.COUNTRY
+          ? 'country'
+          : field === SegmentAttributeKey.CURRENCY
+            ? 'currency'
+            : field === SegmentAttributeKey.AFFILIATE
+              ? 'affiliate'
+              : null;
 
       return (
         <Combobox
@@ -168,6 +159,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
           searchFields={['label', 'value']}
           multiple={isMultiple}
           highlight
+          error={hasValueError}
         />
       );
     };
@@ -184,7 +176,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
             placeholder="Min"
             value={value?.[0] || ''}
             onChange={(e) => setValue([parseFloat(e.target.value) || 0, value?.[1]])}
-            error={Boolean(error?.value)}
+            error={hasValueError}
             classNames={{ root: 'flex-1' }}
           />
           <span className="text-xs text-gray-500 dark:text-dark-300">to</span>
@@ -193,7 +185,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
             placeholder="Max"
             value={value?.[1] || ''}
             onChange={(e) => setValue([value?.[0], parseFloat(e.target.value) || 0])}
-            error={Boolean(error?.value)}
+            error={hasValueError}
             classNames={{ root: 'flex-1' }}
           />
         </div>
@@ -215,7 +207,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
           placeholder="Enter value"
           value={value || ''}
           onChange={(e) => setValue(parseFloat(e.target.value) || 0)}
-          error={Boolean(error?.value)}
+          error={hasValueError}
         />
       );
     }
@@ -235,7 +227,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
             onChange={(e) =>
               setValue({ ...value, direction: 'Ago', amount: parseInt(e.target.value) || 0 })
             }
-            error={Boolean(error?.value)}
+            error={hasValueError}
             classNames={{ root: 'w-20' }}
           />
           <Listbox
@@ -251,8 +243,14 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
       );
     }
 
-    if (operator === DatetimeOperator.BETWEEN_RELATIVE) {
+    if (
+      operator === DatetimeOperator.BETWEEN &&
+      selectedAttribute?.inputType === ValueInputType.DATETIME
+    ) {
       const timeUnitOptions = getTimeUnitOptions();
+      const fromValue = value?.[0] || { amount: 7, unit: 'days' };
+      const toValue = value?.[1] || { amount: 30, unit: 'days' };
+
       return (
         <div className="space-y-1.5">
           <div className="flex items-center gap-1.5">
@@ -260,25 +258,17 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
             <Input
               type="number"
               placeholder="Value"
-              value={value?.from?.amount || ''}
+              value={fromValue.amount || ''}
               onChange={(e) =>
-                setValue({
-                  ...value,
-                  from: { ...value?.from, amount: parseInt(e.target.value) || 0 }
-                })
+                setValue([{ ...fromValue, amount: parseInt(e.target.value) || 0 }, toValue])
               }
-              error={Boolean(error?.value)}
+              error={hasValueError}
               classNames={{ root: 'w-16' }}
             />
             <Listbox
               data={timeUnitOptions}
-              value={timeUnitOptions.find((opt) => opt.value === value?.from?.unit) || null}
-              onChange={(opt) =>
-                setValue({
-                  ...value,
-                  from: { ...value?.from, unit: opt.value }
-                })
-              }
+              value={timeUnitOptions.find((opt) => opt.value === fromValue.unit) || null}
+              onChange={(opt) => setValue([{ ...fromValue, unit: opt.value }, toValue])}
               placeholder="Unit"
               displayField="label"
               classNames={{ root: 'flex-1' }}
@@ -290,25 +280,17 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
             <Input
               type="number"
               placeholder="Amt"
-              value={value?.to?.amount || ''}
+              value={toValue.amount || ''}
               onChange={(e) =>
-                setValue({
-                  ...value,
-                  to: { ...value?.to, amount: parseInt(e.target.value) || 0 }
-                })
+                setValue([fromValue, { ...toValue, amount: parseInt(e.target.value) || 0 }])
               }
-              error={Boolean(error?.value)}
+              error={hasValueError}
               classNames={{ root: 'w-16' }}
             />
             <Listbox
               data={timeUnitOptions}
-              value={timeUnitOptions.find((opt) => opt.value === value?.to?.unit) || null}
-              onChange={(opt) =>
-                setValue({
-                  ...value,
-                  to: { ...value?.to, unit: opt.value }
-                })
-              }
+              value={timeUnitOptions.find((opt) => opt.value === toValue.unit) || null}
+              onChange={(opt) => setValue([fromValue, { ...toValue, unit: opt.value }])}
               placeholder="Unit"
               displayField="label"
               classNames={{ root: 'flex-1' }}
@@ -322,7 +304,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
     // Datetime operators - absolute date range
     if (
       selectedAttribute?.inputType === ValueInputType.DATETIME &&
-      operator === DatetimeOperator.BETWEEN_DATE_RANGE
+      operator === DatetimeOperator.IN_RANGE
     ) {
       return (
         <div className="flex items-center gap-2">
@@ -330,7 +312,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
             type="datetime-local"
             value={value?.[0] || ''}
             onChange={(e) => setValue([e.target.value, value?.[1] || ''])}
-            error={Boolean(error?.value)}
+            error={hasValueError}
             classNames={{ root: 'flex-1' }}
           />
           <span className="text-xs text-gray-500 dark:text-dark-300">to</span>
@@ -338,7 +320,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
             type="datetime-local"
             value={value?.[1] || ''}
             onChange={(e) => setValue([value?.[0] || '', e.target.value])}
-            error={Boolean(error?.value)}
+            error={hasValueError}
             classNames={{ root: 'flex-1' }}
           />
         </div>
@@ -347,7 +329,39 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
 
     // Enum operators - IN/NOT_IN (Multiple select)
     if (operator === EnumStringOperator.IN || operator === EnumStringOperator.NOT_IN) {
-      // Check for dynamic options (country/currency)
+      // Handle referred_by with modal-based player selection
+      if (field === SegmentAttributeKey.REFERRED_BY) {
+        const selectedPlayers = Array.isArray(value)
+          ? value.map((id) => ({
+              value: id,
+              label: `Player ${id}` // Will be replaced with actual name from modal
+            }))
+          : [];
+
+        return (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                color="primary"
+                onClick={() => setIsReferrerModalOpen(true)}
+                className="whitespace-nowrap">
+                {t('select') + ' ' + t('players')}
+              </Button>
+              <span className="text-sm text-gray-600 dark:text-dark-300">
+                {selectedPlayers.length} {t('selected')}
+              </span>
+            </div>
+            {hasValueError && (
+              <p className="text-xs text-red-600 dark:text-red-400">
+                {t('please_select_at_least_one_player')}
+              </p>
+            )}
+          </div>
+        );
+      }
+
+      // Check for dynamic options (country/currency/affiliate)
       if (selectedAttribute?.inputType === ValueInputType.AUTOCOMPLETE) {
         const dynamicCombobox = renderDynamicCombobox(true);
         if (dynamicCombobox) return dynamicCombobox;
@@ -367,6 +381,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
             placeholder="Select values"
             displayField="label"
             multiple
+            error={hasValueError}
           />
         );
       }
@@ -391,6 +406,22 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
     // String operators - EQUALS/NOT_EQUALS (Single select)
 
     if ([EnumStringOperator.EQUALS, EnumStringOperator.NOT_EQUALS].includes(operator)) {
+      // Handle referred_by with custom ReferrerSelect component
+      if (field === SegmentAttributeKey.REFERRED_BY) {
+        return (
+          <ReferrerSelect
+            multiple={false}
+            value={value || null}
+            onChange={(selected) => {
+              setValue(selected?.value || '');
+            }}
+            placeholder="Select player"
+            error={hasValueError}
+            initialOptions={playerOptions} // Pre-load fetched player data
+          />
+        );
+      }
+
       if (selectedAttribute?.inputType === ValueInputType.AUTOCOMPLETE) {
         const dynamicCombobox = renderDynamicCombobox(false);
         if (dynamicCombobox) return dynamicCombobox;
@@ -405,6 +436,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
             onChange={(opt) => setValue(opt.value)}
             placeholder="Select value"
             displayField="label"
+            error={hasValueError}
           />
         );
       }
@@ -415,7 +447,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
           placeholder="Enter value"
           value={value || ''}
           onChange={(e) => setValue(e.target.value)}
-          error={Boolean(error?.value)}
+          error={hasValueError}
         />
       );
     }
@@ -429,6 +461,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
           onChange={(opt) => setValue(opt.value)}
           placeholder="Select value"
           displayField="label"
+          error={hasValueError}
         />
       );
     }
@@ -440,7 +473,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
         placeholder="Enter value"
         value={value || ''}
         onChange={(e) => setValue(e.target.value)}
-        error={Boolean(error?.value)}
+        error={hasValueError}
       />
     );
   };
@@ -450,7 +483,7 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
       {/* Main horizontal layout */}
       <div className="flex items-start gap-2">
         {/* Attribute Selector */}
-        <div className="w-[220px] flex-shrink-0">
+        <div className="w-[280px] flex-shrink-0">
           <Listbox
             data={attributeOptions}
             value={attributeOptions.find((opt) => opt.value === field) || null}
@@ -511,6 +544,28 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
           ) : null}
         </div>
       )}
+
+      {/* Referrer Selection Modal for referred_by field with IN/NOT_IN operators */}
+      {field === SegmentAttributeKey.REFERRED_BY &&
+        (operator === EnumStringOperator.IN || operator === EnumStringOperator.NOT_IN) && (
+          <ReferrerSelectionModal
+            open={isReferrerModalOpen}
+            onClose={() => setIsReferrerModalOpen(false)}
+            onSelectSubmit={(selectedPlayers) => {
+              const playerIds = selectedPlayers.map((player) => player.value);
+              setValue(playerIds);
+              setIsReferrerModalOpen(false);
+            }}
+            selectedItems={
+              Array.isArray(value)
+                ? value.map((id) => ({
+                    value: id,
+                    label: `Player ${id}`
+                  }))
+                : []
+            }
+          />
+        )}
     </div>
   );
 };

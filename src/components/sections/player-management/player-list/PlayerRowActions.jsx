@@ -254,7 +254,7 @@ export function PlayerRowActions({
               leaveTo="opacity-0 translate-y-2">
               <MenuItems
                 anchor={{ to: 'bottom end', gap: 12 }}
-                className="absolute z-[100] w-[12rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
+                className="absolute z-[100] w-[14rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
                 {canView && (
                   <MenuItem>
                     {({ focus }) => (

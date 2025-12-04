@@ -64,7 +64,7 @@ export function StepRewardDetails({
           <div className="space-y-4">
             <Input
               label={t('max_bonus_amount')}
-              type="number"
+              type="any"
               placeholder={t('max_bonus_amount_placeholder')}
               value={data.maxBonusAmount}
               onChange={(event) => onChange('maxBonusAmount', event.target.value)}
@@ -111,14 +111,17 @@ export function StepRewardDetails({
         <GameSelect
           value={data.selectedGame}
           onChange={(selected) => {
-            (onChange('gameId', selected?.value || ''),
+            onChange('gameId', selected?.value || ''),
               onChange('selectedGame', {
                 value: selected?.value || '',
                 label: selected?.label || ''
-              }));
+              });
           }}
           placeholder={t('search_game_info')}
           error={errors.gameId}
+          filters={{
+            onlyFreeSpinSupport: 1
+          }}
           onOptionsCache={onGameOptionsCache}
         />
         <div className="grid gap-4 md:grid-cols-2">

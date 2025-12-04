@@ -1,50 +1,48 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { useLockScrollbar } from 'hooks';
-
 import TableCard from 'components/ui/custom/TableCard';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import GamesService from 'services/games.services';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
-import ProviderService from 'services/provider.services';
 import { gameSelectionModalColumns } from './columns';
 import { Button } from 'components/ui';
 import { CustomModal } from 'components/custom';
-import { providerResponserMapper, responseMapper } from 'app/pages/casino-management/games/helper';
-import { GamesFilters } from './gamesFilters';
+import { responseMapper } from 'app/pages/casino-management/games/helper';
+import { TableToolbar } from 'components/shared/table/TableToolbar';
+import { statusOptions } from 'app/pages/casino-management/games/helper';
+import ProviderService from 'services/provider.services';
+import { toast } from 'sonner';
 
 export default function GamesListModal({
   open,
   onClose,
   onSelectSubmit,
   selectedItems,
-  isIncluded
+  providerIds = [],
+  categoryIds = []
 }) {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
   const [checkedRows, setCheckedRows] = useState([]);
   const checkedIds = useMemo(() => checkedRows.map((row) => row.value), [checkedRows]);
-
   const [providerOptions, setProviderOptions] = useState([]);
 
-  const fetchAllProviders = async () => {
-    const result = await ProviderService.getAllProviders();
-
-    if (result.status === 200) {
-      setProviderOptions(providerResponserMapper(result.response.data));
-    }
-
-    return { status: result.status, error: result.error };
-  };
-
   const handleCheck = (row) => {
-    console.log('row: ', row);
     const isChecked = checkedRows.some((item) => item.value === row.id);
     if (!isChecked) {
-      setCheckedRows((prev) => [...prev, { value: row.id, label: row.name }]);
+      // Store game with provider and category IDs
+      setCheckedRows((prev) => [
+        ...prev,
+        {
+          value: row.id,
+          label: row.name,
+          providerId: row.providerId,
+          categoryId: row.categoryId
+        }
+      ]);
     } else {
       setCheckedRows((prev) => prev.filter((item) => item.value !== row.id));
     }
@@ -55,7 +53,12 @@ export default function GamesListModal({
     if (currentRows.length === 0) {
       return;
     }
-    currentRows = currentRows.map((row) => ({ value: row.id, label: row.name }));
+    currentRows = currentRows.map((row) => ({
+      value: row.id,
+      label: row.name,
+      providerId: row.providerId,
+      categoryId: row.categoryId
+    }));
 
     setCheckedRows((prev) => {
       const allSelected = currentRows.every((row) => prev.some((item) => item.value === row.value));
@@ -63,11 +66,35 @@ export default function GamesListModal({
       if (allSelected) {
         return prev.filter((item) => !currentRows.some((row) => row.value === item.value));
       }
-      const nextSet = new Set(prev);
-      currentRows.forEach((row) => nextSet.add(row));
-      return Array.from(nextSet);
+      const mergedMap = new Map(prev.map((item) => [item.value, item]));
+      currentRows.forEach((row) => mergedMap.set(row.value, row));
+      return Array.from(mergedMap.values());
     });
   };
+
+  useEffect(() => {
+    const loadProviders = async () => {
+      try {
+        const res = await ProviderService.getProviderList({
+          filters: { status: 1 },
+          isPaginationRequired: false
+        });
+        if (res?.status === 200) {
+          const items = Array.isArray(res.response?.data) ? res.response.data : [];
+          const options = items
+            .filter((p) => p?.ProviderID != null)
+            .map((p) => ({ value: p.ProviderID, label: p.Name || String(p.ProviderID) }));
+          setProviderOptions(options);
+        } else if (res?.error) {
+          toast.error(res.error);
+        }
+      } catch {
+        toast.error('Unable to load providers');
+      }
+    };
+
+    loadProviders();
+  }, []);
 
   const fetchGames = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
@@ -75,7 +102,11 @@ export default function GamesListModal({
 
     const result = await GamesService.getGamesList({
       pagination: { pageIndex, pageSize },
-      filters: queryParams
+      filters: {
+        ...queryParams,
+        providerIds,
+        categoryIds
+      }
     });
 
     if (result.status === 200) {
@@ -88,11 +119,6 @@ export default function GamesListModal({
 
     return { status: result.status, error: result.error };
   };
-
-  useEffect(() => {
-    fetchAllProviders();
-  }, []);
-
   useEffect(() => {
     if (selectedItems) {
       setCheckedRows(selectedItems);
@@ -184,17 +210,14 @@ export default function GamesListModal({
     table.resetColumnFilters();
   };
 
-  useLockScrollbar(tableSettings.enableFullScreen);
-  // console.log('tableSettings: from reports', table);
+  // useLockScrollbar(tableSettings.enableFullScreen);
   const onSubmit = async () => {
     onSelectSubmit(checkedRows);
   };
 
-  console.log('checkedRows: ', checkedRows);
-
   return (
     <CustomModal
-      title={isIncluded ? t('included_games') : t('excluded_games')}
+      title={t('game_selection')}
       show={open}
       onClose={onClose}
       sizeClass="max-w-7xl"
@@ -208,11 +231,31 @@ export default function GamesListModal({
           {t('assign') + ' ' + t('selected')}
         </Button>
       }>
-      <GamesFilters
+      <TableToolbar
         table={table}
-        providerOptions={providerOptions}
+        disableGutters
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
+        searchColumn="name"
+        searchPlaceholder={t('search') + ' games...'}
+        filters={[
+          {
+            type: 'faceted',
+            column: 'status',
+            title: t('status'),
+            options: statusOptions,
+            isMultiple: true,
+            showCheckbox: true
+          },
+          {
+            type: 'faceted',
+            column: 'provider',
+            title: t('provider'),
+            options: providerOptions,
+            isMultiple: false,
+            showCheckbox: false
+          }
+        ]}
       />
       <TableCard
         tableSettings={tableSettings}

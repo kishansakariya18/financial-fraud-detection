@@ -41,6 +41,7 @@ import { releaseNotesRoutes } from './routes/release-notes.route';
 import { supervisorRoute } from './routes/supervisor.route';
 import responsibleGamblingRoute from './routes/responsible-gambling.route.jsx';
 import toolsRoutes from './routes/tools.route';
+import enquiresRoute from './routes/enquires.route';
 
 import onlyCallingAgentRoutes from './routes/calling-agents.route';
 import { callingAgentsRoute } from './routes/supervisor.route';
@@ -96,6 +97,7 @@ const protectedRoutes = {
             ...releaseNotesRoutes,
             ...toolsRoutes,
             ...responsibleGamblingRoute,
+            ...enquiresRoute,
             // B2C-only admin routes
             {
               loader: platformGuard([PLATFORM_TYPE.B2C]),

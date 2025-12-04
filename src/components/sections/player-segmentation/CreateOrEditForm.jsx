@@ -23,7 +23,7 @@ const evaluationFrequencyOptions = [
 
 const transformToUTC = (condition) => {
   const attribute = getAttribute(condition.field);
-  if (attribute?.dataType === 'datetime' && condition.value) {
+  if (attribute?.dataType === 'datetime' && condition?.operator === 'in_range' && condition.value) {
     const transformValue = (val) => {
       if (!val) return val;
       return moment(val).utc().format();
@@ -40,7 +40,7 @@ const transformToUTC = (condition) => {
 
 const transformToLocal = (condition) => {
   const attribute = getAttribute(condition.field);
-  if (attribute?.dataType === 'datetime' && condition.value) {
+  if (attribute?.dataType === 'datetime' && condition?.operator === 'in_range' && condition.value) {
     const transformValue = (val) => {
       if (!val) return val;
       return moment.utc(val).local().format('YYYY-MM-DDTHH:mm');
@@ -64,6 +64,7 @@ const CreateOrEditFormPlayerSegmentation = ({
   const { t } = useTranslation();
   const initialValuesRef = useRef(null);
   const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
+  const [isRulesValid, setIsRulesValid] = useState(false);
 
   const isEditMode = mode === 'edit' && initialData;
 
@@ -75,10 +76,12 @@ const CreateOrEditFormPlayerSegmentation = ({
     formState: { errors, isSubmitting }
   } = useForm({
     resolver: yupResolver(isEditMode ? playerSegmentationEditSchema : playerSegmentationSchema),
+    mode: 'onSubmit', // Only show validation errors on submit
     defaultValues: {
       segmentName: '',
       segmentDescription: '',
       segmentTag: '',
+      isActive: true,
       segmentRules: createDefaultRuleTree(),
       isScheduled: true,
       evaluationFrequency: 'DAILY',
@@ -89,6 +92,21 @@ const CreateOrEditFormPlayerSegmentation = ({
   const isScheduled = watch('isScheduled');
   const segmentRules = watch('segmentRules');
   const evaluationFrequency = watch('evaluationFrequency');
+
+  // Silently validate segment rules for button state (without showing errors)
+  useEffect(() => {
+    const validateRules = async () => {
+      try {
+        const schema = isEditMode ? playerSegmentationEditSchema : playerSegmentationSchema;
+        const segmentRulesSchema = schema.fields.segmentRules;
+        await segmentRulesSchema.validate(segmentRules);
+        setIsRulesValid(true);
+      } catch {
+        setIsRulesValid(false);
+      }
+    };
+    validateRules();
+  }, [segmentRules, isEditMode]);
 
   // Helper function to get next update message based on frequency
   const getNextUpdateMessage = (frequency) => {
@@ -111,7 +129,7 @@ const CreateOrEditFormPlayerSegmentation = ({
   // Load initial data for edit mode
   useEffect(() => {
     let initialValues;
-    if (isEditMode && initialData) {
+    if (initialData) {
       const rules = initialData.segmentRules || initialData.SegmentRules || createDefaultRuleTree();
       // Convert UTC dates to local time for display
       const segmentRules = processRuleTree(rules, transformToLocal);
@@ -122,6 +140,7 @@ const CreateOrEditFormPlayerSegmentation = ({
         segmentDescription: initialData.segmentDescription || initialData.SegmentDescription || '',
         segmentTag: initialData.segmentTag || initialData.SegmentTag || '',
         segmentRules: segmentRules,
+        isActive: initialData.IsActive || initialData.isActive,
         isScheduled:
           initialData.isScheduled !== undefined
             ? initialData.isScheduled
@@ -134,6 +153,7 @@ const CreateOrEditFormPlayerSegmentation = ({
         segmentName: '',
         segmentDescription: '',
         segmentTag: '',
+        isActive: true,
         segmentRules: createDefaultRuleTree(),
         isScheduled: true,
         evaluationFrequency: 'DAILY'
@@ -157,9 +177,9 @@ const CreateOrEditFormPlayerSegmentation = ({
 
     const request = {
       SegmentationUID: data.segmentationUID || null,
-      SegmentName: data.segmentName,
-      SegmentDescription: data.segmentDescription,
-      SegmentTag: data.segmentTag,
+      SegmentName: data.segmentName?.trim(),
+      SegmentDescription: data.segmentDescription?.trim(),
+      SegmentTag: data.segmentTag?.trim(),
       SegmentRules: segmentRules,
       ...(data.isScheduled !== undefined && { IsScheduled: data.isScheduled ? 1 : 0 }),
       ...(data.isActive !== undefined && { IsActive: data.isActive ? 1 : 0 }),
@@ -302,7 +322,7 @@ const CreateOrEditFormPlayerSegmentation = ({
             onClick={() => setIsPreviewModalOpen(true)}
             color="info"
             type="button"
-            disabled={isSubmitting}>
+            disabled={isSubmitting || !isRulesValid}>
             {t('player_preview')}
           </Button>
           <Button type="submit" color="primary" disabled={isSubmitting}>

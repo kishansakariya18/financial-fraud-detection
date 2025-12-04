@@ -184,7 +184,6 @@ export default function ViewBonusTemplate() {
             onClick={() => navigate('/bonus/templates')}>
             Back to Templates
           </Button>
-          {statusBadge}
         </div>
 
         {isLoading ? (
@@ -245,7 +244,10 @@ export default function ViewBonusTemplate() {
                   label: t('expiry_after_issuance_days'),
                   value: normalized.templateInfo.expiryAfterIssuanceDays ?? '—'
                 },
-                { label: 'Notes', value: normalized.bonusDetails.notes || '—' },
+                {
+                  label: t('description') + ` (${t('player_facing')})`,
+                  value: normalized.bonusDetails.notes || '—'
+                },
                 {
                   label: t('bonus_tags'),
                   value: normalized.templateInfo.bonusTag?.join(', ') || '—'
@@ -256,14 +258,27 @@ export default function ViewBonusTemplate() {
                 {
                   label: t('desktop_image'),
                   value: normalized.bonusDetails.desktopImageUrl ? (
-                    <img
-                      src={normalized.bonusDetails.desktopImageUrl}
-                      alt={''}
-                      className="h-full w-full object-cover"
-                      style={{
-                        maxWidth: '100px',
-                        maxHeight: '100px'
-                      }}
+                    // <img
+                    //   src={normalized.bonusDetails.desktopImageUrl}
+                    //   alt={''}
+                    //   className="h-full w-full object-cover"
+                    //   style={{
+                    //     maxWidth: '100px',
+                    //     maxHeight: '100px'
+                    //   }}
+                    //   // onError={(e) => {
+                    //   //   e.target.src = '/images/default-image.png';
+                    //   // }}
+                    //   // onLoad={(e) => {
+                    //   //   e.target.style.display = 'block';
+                    //   // }}
+                    // />
+                    <RenderImage
+                      value={normalized.bonusDetails.desktopImageUrl}
+                      alt={t('desktop_image')}
+                      maxWidth="100px"
+                      maxHeight="100px"
+                      enableModal={true}
                       // onError={(e) => {
                       //   e.target.src = '/images/default-image.png';
                       // }}
@@ -279,8 +294,11 @@ export default function ViewBonusTemplate() {
                   label: t('mobile_image'),
                   value: normalized.bonusDetails.mobileImageUrl ? (
                     <RenderImage
-                      src={normalized.bonusDetails.mobileImageUrl}
+                      value={normalized.bonusDetails.mobileImageUrl}
                       alt={t('mobile_image')}
+                      maxWidth="100px"
+                      maxHeight="100px"
+                      enableModal={true}
                     />
                   ) : (
                     'Not uploaded'
@@ -400,15 +418,24 @@ export default function ViewBonusTemplate() {
                 { label: t('maximum_bet'), value: normalized.gameplay.maxBet ?? '—' },
                 {
                   label: t('providers'),
-                  value: `${normalized.gameplay.providerIncluded ? 'Included' : 'Excluded'}: ${normalized.gameplay.allowedProviders.map((provider) => provider.label).join(', ')}`
+                  value:
+                    normalized.gameplay.allowedProviders.length > 0
+                      ? `${normalized.gameplay.providerIncluded ? 'Included' : 'Excluded'}: ${normalized.gameplay.allowedProviders.map((provider) => provider.label).join(', ')}`
+                      : '—'
                 },
                 {
                   label: t('categories'),
-                  value: `${normalized.gameplay.categoryIncluded ? 'Included' : 'Excluded'}: ${normalized.gameplay.allowedCategories.map((category) => category.label).join(', ')}`
+                  value:
+                    normalized.gameplay.allowedCategories.length > 0
+                      ? `${normalized.gameplay.categoryIncluded ? 'Included' : 'Excluded'}: ${normalized.gameplay.allowedCategories.map((category) => category.label).join(', ')}`
+                      : '—'
                 },
                 {
                   label: t('games'),
-                  value: `${normalized.gameplay.gameIncluded ? 'Included' : 'Excluded'}: ${normalized.gameplay.allowedGames.map((game) => game.label).join(', ')}`
+                  value:
+                    normalized.gameplay.allowedGames.length > 0
+                      ? `${normalized.gameplay.gameIncluded ? 'Included' : 'Excluded'}: ${normalized.gameplay.allowedGames.map((game) => game.label).join(', ')}`
+                      : '—'
                 }
               ]}
             />

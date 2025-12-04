@@ -58,6 +58,7 @@ const EditPlayerSegmentation = () => {
             segmentTag: data.SegmentTag || '',
             segmentRules: parsedRules,
             isScheduled: data.IsScheduled === 1,
+            isActive: data.IsActive,
             evaluationFrequency: data.EvaluationFrequency || 'DAILY'
           };
 

@@ -19,6 +19,7 @@ import { siteConfiguration } from './site-configuration';
 import { bonusManagement } from './bonus-management';
 import { userClass } from './user-class';
 import { responsibleGambling } from './responsible-gambling';
+import { enquires } from './enquires';
 import { blacklist } from './blacklist';
 import { bank } from './bank';
 import { userManualWithdrawTransaction } from './user-manual-withdraw-transaction';
@@ -74,6 +75,7 @@ export const dashboards = () => ({
     crm,
     userClass,
     responsibleGambling,
+    enquires,
     blacklist,
     bank,
     userManualWithdrawTransaction,

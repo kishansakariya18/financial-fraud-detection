@@ -52,32 +52,25 @@ export function BonusTemplateRowActions({
     pending: {
       title: t('change') + ' ' + t('status'),
       description: isActive
-        ? t('bonus_template_deactivate_confirmation') ||
-          'Are you sure you want to deactivate this bonus template?'
-        : t('bonus_template_activate_confirmation') ||
-          'Are you sure you want to activate this bonus template?',
+        ? t('bonus_template_deactivate_confirmation')
+        : t('bonus_template_activate_confirmation'),
       actionText: t('submit')
     },
     success: {
-      title: t('bonus_template_status_changed') || 'Status Updated',
-      description:
-        t('bonus_template_status_changed_successfully') ||
-        'Bonus template status has been updated successfully.'
+      title: t('bonus_template_status_changed'),
+      description: t('bonus_template_status_changed_successfully')
     }
   };
 
   const deleteMessages = {
     pending: {
-      title: t('delete') + ' ' + t('bonus_template'),
-      description:
-        t('delete_bonus_template_confirmation') ||
-        'Are you sure you want to delete this bonus template? This action cannot be undone.',
-      actionText: t('delete') || 'Delete'
+      title: t('Delete') + ' ' + t('bonus_template'),
+      description: t('delete_bonus_template_confirmation'),
+      actionText: t('Delete')
     },
     success: {
-      title: t('deleted_successfully') || 'Deleted Successfully',
-      description:
-        t('bonus_template_deleted_successfully') || 'Bonus template has been deleted successfully.'
+      title: t('deleted_successfully'),
+      description: t('bonus_template_deleted_successfully')
     }
   };
 
@@ -85,7 +78,7 @@ export function BonusTemplateRowActions({
     pending: {
       title: t('duplicate') + ' ' + t('bonus_template'),
       description: t('duplicate_bonus_template_confirmation'),
-      actionText: t('duplicate') || 'Duplicate'
+      actionText: t('duplicate')
     },
     success: {
       title: t('duplicated_successfully'),

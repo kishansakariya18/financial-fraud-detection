@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "ESLINT_PRETTIER_OFF=1 vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -28,6 +28,7 @@
     "@tanstack/react-table": "^8.20.6",
     "apexcharts": "^4.4.0",
     "axios": "^1.7.9",
+    "bignumber.js": "^9.3.1",
     "cleave.js": "^1.6.0",
     "color": "^4.2.3",
     "dayjs": "^1.11.13",

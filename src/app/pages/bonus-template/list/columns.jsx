@@ -2,6 +2,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { BadgeCell } from 'components/custom/table/cell';
 import { bonusTemplateStatusOptions } from '../happer';
 import { BonusTemplateRowActions } from 'components/sections/bonus-template/BonusTemplateRowActions';
+import { CopyableCell } from 'components/shared/table/CopyableCell';
 
 const columnHelper = createColumnHelper();
 
@@ -25,6 +26,7 @@ export const createBonusTemplateColumns = ({
   columnHelper.accessor('id', {
     id: 'id',
     header: 'ID',
+    label: 'ID',
     cell: (info) => <span className="font-medium text-gray-700">{info.getValue() || '—'}</span>,
     enableSorting: false,
     size: 120
@@ -32,20 +34,23 @@ export const createBonusTemplateColumns = ({
   columnHelper.accessor('templateName', {
     id: 'templateName',
     header: 'Template Name',
-    cell: (info) => <span className="font-medium text-gray-900">{info.getValue() || '—'}</span>,
+    label: 'Template Name',
+    cell: (info) => <CopyableCell getValue={info.getValue} table={info.table} highlight={true} />,
     enableSorting: false,
     size: 220
   }),
   columnHelper.accessor('displayTitle', {
     id: 'displayTitle',
     header: 'Display Title',
-    cell: (info) => info.getValue() || '—',
+    label: 'Display Title',
+    cell: (info) => <CopyableCell getValue={info.getValue} table={info.table} highlight={true} />,
     enableSorting: false,
     size: 200
   }),
   columnHelper.accessor('bonusType', {
     id: 'bonusType',
     header: 'Bonus Type',
+    label: 'Bonus Type',
     cell: (info) => info.getValue() || '—',
     enableSorting: false,
     size: 180
@@ -53,6 +58,7 @@ export const createBonusTemplateColumns = ({
   columnHelper.accessor('status', {
     id: 'status',
     header: 'Status',
+    label: 'Status',
     cell: BadgeCell,
     meta: { optionData: bonusTemplateStatusOptions },
     enableSorting: false,
@@ -61,6 +67,7 @@ export const createBonusTemplateColumns = ({
   columnHelper.accessor('updatedAt', {
     id: 'updatedAt',
     header: 'Last Updated',
+    label: 'Last Updated',
     cell: (info) => formatDate(info.getValue()),
     enableSorting: false,
     size: 200
@@ -68,6 +75,7 @@ export const createBonusTemplateColumns = ({
   columnHelper.display({
     id: 'actions',
     header: 'Actions',
+    label: 'Actions',
     cell: (props) => (
       <BonusTemplateRowActions
         {...props}

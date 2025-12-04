@@ -6,6 +6,14 @@ import {
   XCircleIcon
 } from '@heroicons/react/24/outline';
 import { TRANSACTION } from 'constants/app.constant';
+import {
+  // TbCircleNumber0,
+  TbCircleNumber1,
+  TbCircleNumber2,
+  TbCircleNumber3,
+  TbCircleNumber4
+} from 'react-icons/tb';
+import { CiCircleRemove } from 'react-icons/ci';
 
 export const responseMapper = (apiData) => {
   const list = apiData.map((item) => {
@@ -29,13 +37,16 @@ export const responseMapper = (apiData) => {
       status: playerStatusToApp(item.AccountStatus),
       createdAt: item.DateCreated ? getDateInUTCToTimeZone(item.DateCreated) : '',
       lastLoginAt: item.LastLoginAt ? getDateInUTCToTimeZone(item.LastLoginAt) : '',
-      isBankVerified: playerBankVerifyToApp(item.isBankVerified),
-      isKYCVerified: playerKycToApp(item.isKYCVerified),
+      isBankVerified: playerBankVerifyToApp(item.IsBankVerified),
+      isKYCVerified: playerKycToApp(item.IsKYCVerified),
       gender: item.Gender || '-',
       country: item.CountryID,
       SegmentationID: '0',
       blockedAt: item?.UserBlockedAt ? getDateInUTCToTimeZone(item.UserBlockedAt) : '',
-      agentName: item?.Agent?.Username
+      agentName: item?.Agent?.Username,
+      isEmailVerified: playerEmailVerifyToApp(item.IsEmailVerified),
+      isMobileVerified: playerMobileVerifyToApp(item.IsMobileVerified),
+      userKYCLevel: item.UserKYCLevel ? item.UserKYCLevel : '0'
     };
   });
 
@@ -54,14 +65,17 @@ export const playerStatusToApp = (status) => {
 };
 export const playerKycToApp = (kyc) => {
   switch (+kyc) {
+    case 0:
+      return 'pending';
     case 1:
       return 'verified';
-    case 0:
-      return 'not-verified';
+    case 2:
+      return 'rejected';
     default:
-      break;
+      return 'pending';
   }
 };
+
 export const playerBankVerifyToApp = (bankStatus) => {
   switch (bankStatus) {
     case true:
@@ -72,12 +86,37 @@ export const playerBankVerifyToApp = (bankStatus) => {
       break;
   }
 };
+
+export const playerEmailVerifyToApp = (emailStatus) => {
+  switch (+emailStatus) {
+    case 1:
+      return 'verified';
+    case 0:
+      return 'not-verified';
+    default:
+      break;
+  }
+};
+
+export const playerMobileVerifyToApp = (mobileStatus) => {
+  switch (+mobileStatus) {
+    case 1:
+      return 'verified';
+    case 0:
+      return 'not-verified';
+    default:
+      break;
+  }
+};
+
 export const playerKycToAPI = (kyc) => {
   switch (kyc) {
+    case 'pending':
+      return 0;
     case 'verified':
       return 1;
-    case 'not-verified':
-      return 0;
+    case 'rejected':
+      return 2;
     default:
       return null;
   }
@@ -143,6 +182,35 @@ export const bankVerifiedOptions = [
     icon: XCircleIcon
   }
 ];
+export const emailVerifiedOptions = [
+  {
+    value: 'verified',
+    label: 'Verified',
+    color: 'success',
+    icon: CheckBadgeIcon
+  },
+  {
+    value: 'not-verified',
+    label: 'Not Verified',
+    color: 'error',
+    icon: XCircleIcon
+  }
+];
+export const mobileVerifiedOptions = [
+  {
+    value: 'verified',
+    label: 'Verified',
+    color: 'success',
+    icon: CheckBadgeIcon
+  },
+  {
+    value: 'not-verified',
+    label: 'Not Verified',
+    color: 'error',
+    icon: XCircleIcon
+  }
+];
+
 export const bankVerifyOptionToAPI = (status) => {
   switch (status) {
     case 'verified':
@@ -153,7 +221,8 @@ export const bankVerifyOptionToAPI = (status) => {
       return null;
   }
 };
-export const panVerifyOptionToAPI = (status) => {
+
+export const emailVerifyOptionToAPI = (status) => {
   switch (status) {
     case 'verified':
       return 1;
@@ -163,7 +232,65 @@ export const panVerifyOptionToAPI = (status) => {
       return null;
   }
 };
+
+export const mobileVerifyOptionToAPI = (status) => {
+  switch (status) {
+    case 'verified':
+      return 1;
+    case 'not-verified':
+      return 0;
+    default:
+      return null;
+  }
+};
+
+export const playerKycLevelOptions = [
+  {
+    value: '0',
+    label: 'Not Initiated',
+    icon: CiCircleRemove
+  },
+  {
+    value: '1',
+    label: 'Level 1',
+    icon: TbCircleNumber1
+  },
+  {
+    value: '2',
+    label: 'Level 2',
+    icon: TbCircleNumber2
+  },
+  {
+    value: '3',
+    label: 'Level 3',
+    icon: TbCircleNumber3
+  },
+  {
+    value: '4',
+    label: 'Level 4',
+    icon: TbCircleNumber4
+  }
+];
+
+export const panVerifyOptionToAPI = (kyc) => {
+  switch (kyc) {
+    case 'pending':
+      return 0;
+    case 'verified':
+      return 1;
+    case 'rejected':
+      return 2;
+    default:
+      return null;
+  }
+};
 export const panVerifiedOptions = [
+  {
+    value: 'pending',
+    label: 'Pending',
+    color: 'warning',
+    icon: ClockIcon
+  },
   {
     value: 'verified',
     label: 'Verified',
@@ -171,8 +298,8 @@ export const panVerifiedOptions = [
     icon: CheckBadgeIcon
   },
   {
-    value: 'not-verified',
-    label: 'Not Verified',
+    value: 'rejected',
+    label: 'Rejected',
     color: 'error',
     icon: XCircleIcon
   }

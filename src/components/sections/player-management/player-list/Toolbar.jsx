@@ -9,8 +9,14 @@ import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
 import { Button, Input } from 'components/ui';
 import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
-import { playerStatusOptions, panVerifiedOptions } from '../helper';
-import { bankVerifiedOptions } from '../helper';
+import {
+  playerStatusOptions,
+  panVerifiedOptions,
+  emailVerifiedOptions,
+  mobileVerifiedOptions,
+  playerKycLevelOptions
+} from '../helper';
+// import { bankVerifiedOptions } from '../helper';
 import { t } from 'i18next';
 import { DashboardCard } from 'components/custom/DashboardCard';
 import { dummyCards } from 'helpers/functions';
@@ -178,7 +184,7 @@ function Filters({
   onApplyFilters = () => {},
   onClearFilters = () => {},
   country,
-  segmentation,
+  // segmentation,
   playerClasses = []
 }) {
   const isFiltered = table.getState().columnFilters.length > 0;
@@ -194,7 +200,7 @@ function Filters({
           showCheckbox={false}
         />
       )}
-      {table.getColumn('isBankVerified') && (
+      {/* {table.getColumn('isBankVerified') && (
         <FacedtedFilter
           options={bankVerifiedOptions}
           column={table.getColumn('isBankVerified')}
@@ -203,12 +209,42 @@ function Filters({
           isMultiple={false}
           showCheckbox={false}
         />
-      )}
+      )} */}
       {table.getColumn('gender') && (
         <FacedtedFilter
           options={genderOptions}
           column={table.getColumn('gender')}
           title={t('gender')}
+          Icon={MapPinIcon}
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
+      {table.getColumn('isEmailVerified') && (
+        <FacedtedFilter
+          options={emailVerifiedOptions}
+          column={table.getColumn('isEmailVerified')}
+          title={t('email_verified')}
+          Icon={MapPinIcon}
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
+      {table.getColumn('isMobileVerified') && (
+        <FacedtedFilter
+          options={mobileVerifiedOptions}
+          column={table.getColumn('isMobileVerified')}
+          title={t('mobile_verified')}
+          Icon={MapPinIcon}
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
+      {table.getColumn('userKYCLevel') && (
+        <FacedtedFilter
+          options={playerKycLevelOptions}
+          column={table.getColumn('userKYCLevel')}
+          title={t('kyc') + ' ' + t('level')}
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}
@@ -226,7 +262,11 @@ function Filters({
       )}
       {playerClasses && table.getColumn('playerClassID') && (
         <FacedtedFilter
-          options={Array.isArray(playerClasses) ? playerClasses : []}
+          options={
+            Array.isArray(playerClasses)
+              ? playerClasses.map((item) => ({ ...item, value: String(item.value) }))
+              : []
+          }
           column={table.getColumn('playerClassID')}
           title={t('userClass') || 'Player Class'}
           Icon={MapPinIcon}
@@ -269,7 +309,7 @@ function Filters({
           showCheckbox={true}
         />
       )}
-      {segmentation && table.getColumn('SegmentationID') && (
+      {/* {segmentation && table.getColumn('SegmentationID') && (
         <FacedtedFilter
           options={
             segmentation
@@ -287,7 +327,7 @@ function Filters({
           isMultiple={true}
           showCheckbox={true}
         />
-      )}
+      )} */}
       <div>
         <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
           {t('search')}

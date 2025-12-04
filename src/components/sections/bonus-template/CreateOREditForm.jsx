@@ -39,7 +39,7 @@ const defaultRule = {
 const defaultFormState = {
   templateInfo: {
     templateName: '',
-    bonusType: 'deposit_boost',
+    bonusType: '',
     bonusTag: [],
     expiryAfterIssuanceDays: ''
   },
@@ -294,7 +294,9 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
     }));
   };
 
-  const handleGameplayChange = (field, value) => {
+  // Live-validate Gameplay fields (min/max and related) when user edits
+  const handleGameplayChange = async (field, value) => {
+    // Update state first
     setFormState((prev) => ({
       ...prev,
       gameplay: {
@@ -302,6 +304,37 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
         [field]: value
       }
     }));
+
+    // Validate gameplay step incrementally
+    try {
+      const stepId = 'gameplayConfiguration';
+      const schema = stepSchemas[stepId];
+      if (!schema) return;
+
+      const nextGameplay = { ...formState.gameplay, [field]: value };
+      await schema.validate(nextGameplay, { abortEarly: false });
+
+      // Clear gameplay errors when valid
+      setStepErrors((prev) => {
+        const updated = { ...prev };
+        delete updated[stepId];
+        return updated;
+      });
+    } catch (error) {
+      if (error.inner) {
+        const fieldErrors = {};
+        error.inner.forEach((err) => {
+          if (err.path) {
+            fieldErrors[err.path] = err.message;
+          }
+        });
+
+        setStepErrors((prev) => ({
+          ...prev,
+          gameplayConfiguration: fieldErrors
+        }));
+      }
+    }
   };
 
   const handleGameplayMultiSelectChange = (field, values) => {
@@ -516,7 +549,6 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
     if (firstErrorStepIndex !== -1) {
       setStepErrors(allErrors);
       setActiveStep(firstErrorStepIndex);
-      console.error('Please fix all errors before submitting');
       return;
     }
 
@@ -555,21 +587,35 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
               </Button>
 
               <div className="flex gap-3">
-                <Button
-                  type="button"
-                  variant="outlined"
-                  color="neutral"
-                  onClick={handleBack}
-                  disabled={activeStep === 0}>
-                  Back
-                </Button>
-                <Button
-                  type="submit"
-                  color="primary"
-                  loading={isSubmitting && isLastStep}
-                  disabled={isSubmitting}>
-                  {isLastStep ? t('save') + ' ' + t('template') : t('next_step')}
-                </Button>
+                {activeStep !== 0 && (
+                  <Button
+                    type="button"
+                    variant="outlined"
+                    color="neutral"
+                    className="h-10 w-36 px-4"
+                    onClick={handleBack}>
+                    Back
+                  </Button>
+                )}
+                {(() => {
+                  const gameplayErrors = stepErrors.gameplayConfiguration || {};
+                  const hasGameplayErrors = Object.keys(gameplayErrors).length > 0;
+                  return (
+                    <div className="flex flex-col items-end">
+                      <Button
+                        type="submit"
+                        color="primary"
+                        loading={isSubmitting && isLastStep}
+                        className="h-10 w-36 px-4"
+                        disabled={isSubmitting || (isLastStep && hasGameplayErrors)}>
+                        {isLastStep ? t('save') + ' ' + t('template') : t('next_step')}
+                      </Button>
+                      <span className="mt-1 text-sm font-medium text-gray-900 dark:text-dark-50">
+                        Step {activeStep + 1} of {STEPS.length}
+                      </span>
+                    </div>
+                  );
+                })()}
               </div>
             </div>
           </form>

@@ -219,7 +219,7 @@ const CreateAffiliate = () => {
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-2">
-                <div className="col-span-2">
+                <div className="col-span-3">
                   <Input
                     {...register('dateOfBirth')}
                     type="date"

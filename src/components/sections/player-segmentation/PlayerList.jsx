@@ -134,10 +134,18 @@ export default function PlayerList({
   };
 
   const clearFilterHandler = () => {
-    if (!isEmptyObject(queryParams)) {
-      handleSetSearchParams({ pageIndex: DEFAULT_PAGE_INDEX, pageSize: DEFAULT_PER_PAGE_RECORD });
-    }
+    // Reset column filters in the table
     table.resetColumnFilters();
+
+    // Only clear URL query params if syncing with URL (not for modal/offline pagination)
+    if (syncWithUrl && !isEmptyObject(queryParams)) {
+      handleSetSearchParams({
+        pageIndex: DEFAULT_PAGE_INDEX,
+        pageSize: DEFAULT_PER_PAGE_RECORD,
+        keyword: undefined, // Remove keyword filter
+        status: undefined // Remove status filter
+      });
+    }
   };
 
   useLockScrollbar(tableSettings?.enableFullScreen);

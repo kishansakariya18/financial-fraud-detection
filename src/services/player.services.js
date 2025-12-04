@@ -6,7 +6,9 @@ import {
   transactionStatusToAPI,
   transactionTypeAppToApi,
   txnTypeToAPI,
-  playerKycToAPI
+  playerKycToAPI,
+  emailVerifyOptionToAPI,
+  mobileVerifyOptionToAPI
 } from 'components/sections/player-management/helper';
 import apiConfig from 'configs/api.config';
 import dayjs from 'dayjs';
@@ -18,10 +20,17 @@ const PlayerService = {
   playerList: async (data) => {
     try {
       const { pagination, filters } = data;
-      console.log('filters: ', filters);
+      // console.log('filters: ', filters);
       const apiRequestParams = {
         ...(data.agentUID && { agentUID: data.agentUID }),
         keyword: filters.keyword ? filters.keyword : undefined,
+        isEmailVerified: filters.isEmailVerified
+          ? emailVerifyOptionToAPI(filters.isEmailVerified)
+          : undefined,
+        isMobileVerified: filters.isMobileVerified
+          ? mobileVerifyOptionToAPI(filters.isMobileVerified)
+          : undefined,
+        playerKYCLevel: filters.userKYCLevel ? filters.userKYCLevel : undefined,
         status: filters.status ? playerStatusToAPI(filters.status) : undefined,
         isKYCVerified: filters.isKYCVerified ? playerKycToAPI(filters.isKYCVerified) : undefined,
         isBankVerified: filters.isBankVerified ? playerKycToAPI(filters.isBankVerified) : undefined,
@@ -736,6 +745,56 @@ const PlayerService = {
     return apiInstance.patch(apiConfig.endPoints.B2B_AGENT.PLAYER_RESET_PASSWORD(userUID), {
       password
     });
+  },
+
+  getReferrersList: async ({ page, perPage, keyword, startDate, endDate, playesIds = [] }) => {
+    try {
+      const body = {
+        page,
+        perPage,
+        keyword,
+        startDate,
+        endDate,
+        playesIds
+      };
+      const endPoint = apiConfig.endPoints.USER.REFERRERS_LIST;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from getReferrersList', error);
+    }
+  },
+
+  verifyKycByAdmin: async (userUID) => {
+    try {
+      const endPoint = replaceText(
+        apiConfig.endPoints.USER.VERIFY_KYC_BY_ADMIN,
+        ':userUID',
+        userUID
+      );
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+      const response = await sendRequest({
+        url: apiURL,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: {
+          userUID: userUID
+        }
+      });
+      return response;
+    } catch (error) {
+      console.log('Error from verifyKycByAdmin', error);
+    }
   }
 };
 

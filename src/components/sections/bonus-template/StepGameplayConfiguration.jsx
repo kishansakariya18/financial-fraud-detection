@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { Input } from 'components/ui/Form';
-import { Switch, Button } from 'components/ui';
+import { Button } from 'components/ui';
 import { Combobox } from 'components/shared/form/Combobox';
 import GamesListModal from './game-selection-modal/list';
 import { useTranslation } from 'react-i18next';
+import CategoryService from 'services/category.services';
 
 const optionShape = PropTypes.shape({
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -57,25 +58,129 @@ export function StepGameplayConfiguration({
   onChange,
   onSelectChange,
   providerOptions = [],
-  categoryOptions = [],
+  categoryOptions: intialCategoryOptions = [],
   onGameOptionsCache,
   errors = {}
 }) {
   const { t } = useTranslation();
+  const [categoryOptions, setCategoryOptions] = useState(intialCategoryOptions);
+  const debounceTimeoutRef = useRef(null);
+
   const handleToggleChange = (field) => (event) => {
     onChange(field, event.target.checked);
   };
 
-  const renderFilterSection = ({
-    title,
-    items,
-    includeField,
-    placeholder,
-    error,
-    field,
-    options,
-    t
-  }) => {
+  const checkGamesAreAvailableForCatAndPr = useCallback(
+    (providerIds, categoryIds) => {
+      const currentGames = data.allowedGames || [];
+      if (currentGames.length > 0) {
+        const gamesToKeep = currentGames.filter((game) => {
+          const gameProviderId = String(game?.providerId);
+          const gameCategoryId = String(game?.categoryId);
+          const matchesProvider =
+            providerIds.length === 0 ||
+            providerIds.some((id) => Number(id) === Number(gameProviderId));
+          const matchesCategory =
+            categoryIds.length === 0 ||
+            categoryIds.some((id) => Number(id) === Number(gameCategoryId));
+          return matchesProvider && matchesCategory;
+        });
+
+        if (gamesToKeep.length !== currentGames.length) {
+          onSelectChange('allowedGames', gamesToKeep);
+        }
+      }
+    },
+    [data.allowedGames, onSelectChange]
+  );
+
+  const fetchPrviderCategories = useCallback(
+    async (providerIds) => {
+      let categoriesption = [...intialCategoryOptions];
+      if (providerIds?.length > 0) {
+        try {
+          const responce = await CategoryService.getCategoryByProviderIds(providerIds);
+          if (responce?.response?.status === 200) {
+            const categoriesIds = responce?.response?.data;
+            categoriesption = categoriesption
+              .map((category) => {
+                if (categoriesIds.includes(category.value)) {
+                  return category;
+                }
+                return null;
+              })
+              .filter(Boolean);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      // Filter selected categories to keep only those that are still available
+      const currentCategories = data.allowedCategories || [];
+      let categoriesToKeep = [...data.allowedCategories];
+      if (currentCategories.length > 0) {
+        // Extract available category values from the options
+        const availableCategoryValues = categoriesption.map((cat) => String(cat.value));
+
+        // Keep only selected categories that are in the available options
+        categoriesToKeep = currentCategories.filter((categoryValue) =>
+          availableCategoryValues.includes(String(categoryValue))
+        );
+
+        // Only update if the filtered list is different
+        if (categoriesToKeep.length !== currentCategories.length) {
+          onSelectChange('allowedCategories', categoriesToKeep);
+        }
+      }
+
+      checkGamesAreAvailableForCatAndPr(providerIds, categoriesToKeep);
+      setCategoryOptions(categoriesption);
+    },
+    [
+      checkGamesAreAvailableForCatAndPr,
+      data.allowedCategories,
+      intialCategoryOptions,
+      onSelectChange
+    ]
+  );
+
+  // Debounced version of fetchPrviderCategories
+  const debouncedFetchProviderCategories = useCallback(
+    (providerIds) => {
+      // Clear previous timeout
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+
+      // Set new timeout
+      debounceTimeoutRef.current = setTimeout(() => {
+        fetchPrviderCategories(providerIds);
+      }, 500); // 500ms debounce delay
+    },
+    [fetchPrviderCategories]
+  );
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleSelectionChangeData = (field, value) => {
+    if (field === 'allowedProviders') {
+      debouncedFetchProviderCategories(value);
+    }
+    if (field === 'allowedCategories') {
+      checkGamesAreAvailableForCatAndPr(data.allowedProviders, value);
+    }
+    onSelectChange(field, value);
+  };
+
+  const renderFilterSection = ({ title, items, placeholder, error, field, options }) => {
     const normalizedValues = normalizeItems(items);
     const optionMap = buildOptionMap(options);
     const draftSelected = normalizedValues.map((value) => ({
@@ -83,14 +188,14 @@ export function StepGameplayConfiguration({
       label: optionMap.get(value)?.label ?? value
     }));
     const combinedOptions = mergeOptions(options, draftSelected);
-    const includeValue = data[includeField];
+    // const includeValue = data[includeField];
 
     const selectedValueSet = new Set(draftSelected.map((item) => item.value));
     const comboboxValue = combinedOptions.filter((option) => selectedValueSet.has(option.value));
 
     const handleRemove = (valueToRemove) => {
       const filtered = normalizedValues.filter((value) => value !== valueToRemove);
-      onSelectChange(field, filtered);
+      handleSelectionChangeData(field, filtered);
     };
 
     const handleBackspace = (event) => {
@@ -105,7 +210,7 @@ export function StepGameplayConfiguration({
       <div className="space-y-2">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm font-medium text-gray-800 dark:text-dark-50">{title}</p>
-          <div className="flex items-center gap-2 text-xs font-medium text-gray-600 dark:text-dark-200">
+          {/* <div className="flex items-center gap-2 text-xs font-medium text-gray-600 dark:text-dark-200">
             <span>{t('exclude')}</span>
             <Switch
               checked={includeValue !== false}
@@ -113,7 +218,7 @@ export function StepGameplayConfiguration({
               aria-label={`${title} include toggle`}
             />
             <span>{t('include')}</span>
-          </div>
+          </div> */}
         </div>
         <Combobox
           multiple
@@ -124,7 +229,7 @@ export function StepGameplayConfiguration({
             const next = Array.isArray(selectedItems)
               ? selectedItems.map((item) => String(item.value ?? item))
               : [];
-            onSelectChange(field, next);
+            handleSelectionChangeData(field, next);
           }}
           placeholder={placeholder}
           error={error}
@@ -149,6 +254,7 @@ export function StepGameplayConfiguration({
           <Input
             label={t('minimum_bet')}
             type="number"
+            min={0}
             value={data.minBet}
             onChange={(event) => onChange('minBet', event.target.value)}
             error={errors.minBet}
@@ -156,6 +262,7 @@ export function StepGameplayConfiguration({
           <Input
             label={t('maximum_bet')}
             type="number"
+            min={0}
             value={data.maxBet}
             onChange={(event) => onChange('maxBet', event.target.value)}
             error={errors.maxBet}
@@ -191,6 +298,8 @@ export function StepGameplayConfiguration({
         onToggleChange={handleToggleChange}
         errors={errors}
         onGameOptionsCache={onGameOptionsCache}
+        categoriesIds={data.allowedCategories}
+        providersIds={data.allowedProviders}
       />
     </div>
   );
@@ -199,7 +308,7 @@ export function StepGameplayConfiguration({
 const GameSelectionSection = ({
   data,
   onSelectChange,
-  onToggleChange,
+  // onToggleChange,
   errors,
   onGameOptionsCache
 }) => {
@@ -220,7 +329,6 @@ const GameSelectionSection = ({
   };
 
   const handleModalSave = (nextSelection) => {
-    console.log('nextSelection: ', nextSelection);
     handleGamesChange(nextSelection);
     setIsModalOpen(false);
   };
@@ -234,7 +342,7 @@ const GameSelectionSection = ({
             {selectedGames.length} game{selectedGames.length === 1 ? '' : 's'} selected
           </span>
         </p>
-        <div className="flex items-center gap-2 text-xs font-medium text-gray-600 dark:text-dark-200">
+        {/* <div className="flex items-center gap-2 text-xs font-medium text-gray-600 dark:text-dark-200">
           <span>Exclude</span>
           <Switch
             checked={data.gameIncluded !== false}
@@ -242,7 +350,7 @@ const GameSelectionSection = ({
             aria-label="Game include toggle"
           />
           <span>Include</span>
-        </div>
+        </div> */}
       </div>
 
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
@@ -261,11 +369,12 @@ const GameSelectionSection = ({
 
       {isModalOpen && (
         <GamesListModal
-          isIncluded={data.gameIncluded}
           open={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onSelectSubmit={handleModalSave}
           selectedItems={selectedGames}
+          providerIds={data.allowedProviders}
+          categoryIds={data.allowedCategories}
         />
       )}
     </div>

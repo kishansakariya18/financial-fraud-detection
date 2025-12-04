@@ -166,7 +166,8 @@ export default function PlayerSegmentationList() {
             title: t('status'),
             options: [
               { value: 'active', label: t('active'), color: 'success' },
-              { value: 'inactive', label: t('inactive'), color: 'error' }
+              { value: 'inactive', label: t('inactive'), color: 'error' },
+              { value: 'archived', label: t('archived'), color: 'warning' }
             ],
             isMultiple: false,
             showCheckbox: false
@@ -177,7 +178,7 @@ export default function PlayerSegmentationList() {
             title: t('created_at'),
             config: {
               mode: 'range',
-              maxDate: new Date().fp_incr?.(1)
+              maxDate: new Date().fp_incr?.(0)
             }
           }
         ]}

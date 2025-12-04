@@ -4,9 +4,15 @@ import PropTypes from 'prop-types';
 // Local Imports
 import { IdCell, DateCell, BoldCell, BadgeCell } from 'components/custom/table/cell';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
-import { playerStatusOptions, genderOptions } from '../helper';
+import {
+  playerStatusOptions,
+  genderOptions,
+  emailVerifiedOptions,
+  mobileVerifiedOptions,
+  playerKycLevelOptions
+} from '../helper';
 import { panVerifiedOptions } from '../helper';
-import { bankVerifiedOptions } from '../helper';
+// import { bankVerifiedOptions } from '../helper';
 import { PlayerRowActions } from './PlayerRowActions';
 import { isB2BPlatform } from 'utils/platformNavigation';
 
@@ -17,7 +23,9 @@ export const PlayerColumns = ({
   onEdit,
   onChangeStatus,
   onCreditAmount,
-  onResetPassword
+  onResetPassword,
+  playerClasses,
+  countries
 }) => {
   const isB2B = isB2BPlatform();
   return [
@@ -112,40 +120,80 @@ export const PlayerColumns = ({
     }),
     ...(listFor !== 'agent'
       ? [
-          columnHelper.accessor((row) => row.isBankVerified, {
-            id: 'isBankVerified',
-            label: 'Bank Verified',
-            header: 'Bank Verified',
-            cell: BoldCell,
-            meta: { optionData: bankVerifiedOptions },
-            filterFn: 'arrIncludesSome',
-            enableSorting: false
-          }),
+          // columnHelper.accessor((row) => row.isBankVerified, {
+          //   id: 'isBankVerified',
+          //   label: 'Bank Verified',
+          //   header: 'Bank Verified',
+          //   cell: BoldCell,
+          //   meta: { optionData: bankVerifiedOptions },
+          //   filterFn: 'arrIncludesSome',
+          //   enableSorting: false
+          // }),
           ...(!isB2B
             ? [
+                columnHelper.accessor((row) => row.isEmailVerified, {
+                  id: 'isEmailVerified',
+                  label: 'Email Verified',
+                  header: 'Email Verified',
+                  cell: BadgeCell,
+                  meta: { optionData: emailVerifiedOptions },
+                  filterFn: 'arrIncludesSome',
+                  enableSorting: false
+                }),
+                columnHelper.accessor((row) => row.isMobileVerified, {
+                  id: 'isMobileVerified',
+                  label: 'Mobile Verified',
+                  header: 'Mobile Verified',
+                  cell: BadgeCell,
+                  meta: { optionData: mobileVerifiedOptions },
+                  filterFn: 'arrIncludesSome',
+                  enableSorting: false
+                }),
+                columnHelper.accessor((row) => row.userKYCLevel, {
+                  id: 'userKYCLevel',
+                  label: 'KYC Level',
+                  header: 'KYC Level',
+                  cell: BadgeCell,
+                  meta: { optionData: playerKycLevelOptions },
+                  filterFn: 'arrIncludesSome',
+                  enableSorting: false
+                }),
                 columnHelper.accessor((row) => row.isKYCVerified, {
                   id: 'isKYCVerified',
                   label: 'KYC Verified',
                   header: 'KYC Verified',
-                  cell: BoldCell,
+                  cell: BadgeCell,
                   meta: { optionData: panVerifiedOptions },
                   filterFn: 'arrIncludesSome',
                   enableSorting: false
                 }),
-                columnHelper.display({
+                columnHelper.accessor((row) => row.playerClassID, {
                   id: 'playerClassID',
                   label: 'Player Class',
                   header: 'Player Class',
-                  cell: BoldCell,
+                  cell: BadgeCell,
+                  meta: {
+                    optionData: Array.isArray(playerClasses) ? playerClasses : []
+                  },
+                  filterFn: 'arrIncludesSome',
                   enableSorting: false
                 })
               ]
             : []),
-          columnHelper.accessor((row) => row.CountryID, {
+          columnHelper.accessor((row) => row.country, {
             id: 'CountryID',
             label: 'Country',
             header: 'Country',
-            cell: BoldCell,
+            cell: BadgeCell,
+            meta: {
+              optionData: countries
+                ? countries.map((countr) => ({
+                    value: countr.CountryID,
+                    label: countr.CountryName
+                  }))
+                : []
+            },
+            filterFn: 'arrIncludesSome',
             enableSorting: false
           })
           // columnHelper.accessor((row) => row.SegmentationID, {

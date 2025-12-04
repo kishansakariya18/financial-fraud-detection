@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
 
-export function RowActions({ row, table, onAddEditClick }) {
+export function RowActions ({ row, table, onAddEditClick }) {
   const { t } = useTranslation();
   const { hasPermission } = usePermissions();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -28,6 +28,7 @@ export function RowActions({ row, table, onAddEditClick }) {
 
   const deleteConfirmMessages = {
     pending: {
+      title: t('areYouSure'),
       description: t('are_you_sure_you_want_to_delete_this_blog_category'),
       actionText: t('delete')
     },
@@ -187,7 +188,7 @@ export function RowActions({ row, table, onAddEditClick }) {
                           focus && 'bg-error/10'
                         )}>
                         <TrashIcon className="size-4.5 stroke-1" />
-                        <span>{t('delete')}</span>
+                        <span>{t('deleteItem')}</span>
                       </button>
                     )}
                   </MenuItem>

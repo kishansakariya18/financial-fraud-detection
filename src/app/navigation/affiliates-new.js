@@ -31,7 +31,10 @@ export const affiliatesNew = {
   title: 'Affiliates',
   transKey: 'affiliate',
   Icon: TbAffiliate,
-  permission: [PERMISSIONS.AFFILIATES.VIEW, PERMISSIONS.AFFILIATES.COMMISSION_SETTING.GLOBAL],
+  permission: [
+    PERMISSIONS.AFFILIATES.VIEW,
+    PERMISSIONS.AFFILIATES.COMMISSION_SETTING.GLOBAL.UPDATE
+  ],
   platformType: [PLATFORM_TYPE.B2C],
   childs: [
     {
@@ -51,7 +54,7 @@ export const affiliatesNew = {
       title: 'Commission',
       transKey: 'nav.commission-setting',
       Icon: GrSettingsOption,
-      permission: PERMISSIONS.AFFILIATES.COMMISSION_SETTING.GLOBAL,
+      permission: PERMISSIONS.AFFILIATES.COMMISSION_SETTING.GLOBAL.UPDATE,
       platformType: [PLATFORM_TYPE.B2C]
     }
   ]

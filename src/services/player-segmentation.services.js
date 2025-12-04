@@ -23,10 +23,12 @@ const PlayerSegmentationService = {
       requestData.filters.endDate = moment(+filters.endDate).endOf('day').toDate();
     }
 
-    return apiInstance.post(
-      `${apiConfig.endPoints.PLAYER_SEGMENTATION.LIST}?page=${page}&per_page=${perPage}`,
-      requestData
-    );
+    return apiInstance.post(apiConfig.endPoints.PLAYER_SEGMENTATION.LIST, requestData, {
+      params: {
+        page: page + 1,
+        per_page: perPage
+      }
+    });
   },
 
   add: async (requestData) => {
@@ -71,7 +73,7 @@ const PlayerSegmentationService = {
       segmentationUID
     );
 
-    return apiInstance.post(`${url}?page=${page}&perPage=${perPage}`, requestData);
+    return apiInstance.post(`${url}?page=${page + 1}&perPage=${perPage}`, requestData);
   },
 
   playerPreview: async ({ segmentationUID, segmentRules }) => {
@@ -82,41 +84,15 @@ const PlayerSegmentationService = {
     return apiInstance.post(apiConfig.endPoints.PLAYER_SEGMENTATION.PLAYER_PREVIEW, data);
   },
 
-  duplicate: async (segmentationUID) => {
-    // First, fetch the details of the segmentation to duplicate
-    const detailUrl = apiConfig.endPoints.PLAYER_SEGMENTATION.DETAIL.replace(
-      ':segmentationUID',
-      segmentationUID
-    );
-    const detailResponse = await apiInstance.get(detailUrl);
-
-    if (!detailResponse?.response?.data) {
-      throw new Error('Failed to fetch segmentation details');
-    }
-
-    const originalData = detailResponse.response.data;
-
-    // Create a copy with modified data
-    const duplicateData = {
-      SegmentName: `[Copy] ${originalData.SegmentName}`,
-      SegmentDescription: originalData.SegmentDescription || '',
-      SegmentTag: originalData.SegmentTag || '',
-      SegmentRules: originalData.SegmentRules,
-      IsScheduled: originalData.IsScheduled,
-      EvaluationFrequency: originalData.EvaluationFrequency || 'NONE',
-      IsActive: false // Set to inactive
-    };
-
-    // Use the add method to create the duplicate
-    return PlayerSegmentationService.add(duplicateData);
-  },
-
   // Log APIs
-  getChangeLog: async (page = 1, perPage = 10, filters = {}) => {
+  getChangeLog: async (page = 1, perPage = 10, filters = {}, segmentationUID) => {
     const requestData = { filters: {} };
 
     if (filters.keyword) {
       requestData.filters.keyword = filters.keyword;
+    }
+    if (filters.segmentationUID) {
+      requestData.filters.segmentationUID = filters.segmentationUID;
     }
     if (filters.startDate) {
       requestData.filters.startDate = moment(+filters.startDate).startOf('day').toDate();
@@ -126,9 +102,17 @@ const PlayerSegmentationService = {
     }
 
     return apiInstance.post(
-      `${apiConfig.endPoints.PLAYER_SEGMENTATION.CHANGE_LOG}?page=${page}&per_page=${perPage}`,
+      `${apiConfig.endPoints.PLAYER_SEGMENTATION.CHANGE_LOG?.replace(':segmentationUID', segmentationUID)}?page=${page + 1}&per_page=${perPage}`,
       requestData
     );
+  },
+
+  archive: async (segmentationUID) => {
+    const url = apiConfig.endPoints.PLAYER_SEGMENTATION.ARCHIVE.replace(
+      ':segmentationUID',
+      segmentationUID
+    );
+    return apiInstance.patch(url);
   },
 
   getExecutionLog: async (page = 1, perPage = 10, filters = {}) => {
@@ -145,7 +129,7 @@ const PlayerSegmentationService = {
     }
 
     return apiInstance.post(
-      `${apiConfig.endPoints.PLAYER_SEGMENTATION.EXECUTION_LOG}?page=${page}&per_page=${perPage}`,
+      `${apiConfig.endPoints.PLAYER_SEGMENTATION.EXECUTION_LOG}?page=${page + 1}&per_page=${perPage}`,
       requestData
     );
   },
@@ -159,6 +143,9 @@ const PlayerSegmentationService = {
     if (filters.userId) {
       requestData.filters.userId = filters.userId;
     }
+    if (filters.segmentationUID) {
+      requestData.filters.segmentationUID = filters.segmentationUID;
+    }
     if (filters.startDate) {
       requestData.filters.startDate = moment(+filters.startDate).startOf('day').toDate();
     }
@@ -171,7 +158,7 @@ const PlayerSegmentationService = {
       segmentationUID
     );
 
-    return apiInstance.post(`${url}?page=${page}&per_page=${perPage}`, requestData);
+    return apiInstance.post(`${url}?page=${page + 1}&per_page=${perPage}`, requestData);
   }
 };
 

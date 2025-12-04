@@ -73,7 +73,9 @@ export const apiConfig = {
       USER_OVER_ALL_SUMMARY: '/users/admin/user-summary/:userId',
       LIMIT_SUMMARY: '/users/admin/limit-summary/:userId',
       COUNTRY_LIST: '/config/admin/config/countries',
-      SEGMENTATION_LIST: '/bonus/admin/segmentation/list'
+      SEGMENTATION_LIST: '/bonus/admin/segmentation/list',
+      REFERRERS_LIST: '/users/admin/users/referrers-list',
+      VERIFY_KYC_BY_ADMIN: '/users/admin/kyc/:userUID/veryfyByAdmin'
     },
     ADMIN_USER: {
       ADMIN_LIST: '/admin/admin/admin/list',
@@ -327,10 +329,12 @@ export const apiConfig = {
       CHANGE_STATUS: '/bonus/admin/player-segmentation/:segmentationUID/change-status',
       REFRESH: '/bonus/admin/player-segmentation/:segmentationUID/refresh',
       PLAYER_LIST: '/bonus/admin/player-segmentation/:segmentationUID/player-list',
+      PLAYER_LIST_EXPORT: '/bonus/admin/player-segmentation/:segmentationUID/player-list/export',
       PLAYER_PREVIEW: '/bonus/admin/player-segmentation/preview',
-      CHANGE_LOG: '/bonus/admin/player-segmentation/change-log',
+      CHANGE_LOG: '/bonus/admin/player-segmentation/:segmentationUID/change-log',
       EXECUTION_LOG: '/bonus/admin/player-segmentation/execution-log',
-      MAP_CHANGE_LOG: '/bonus/admin/player-segmentation/:segmentationUID/map-change-log'
+      MAP_CHANGE_LOG: '/bonus/admin/player-segmentation/:segmentationUID/map-change-log',
+      ARCHIVE: '/bonus/admin/player-segmentation/:segmentationUID/archive'
     },
     // COUNTRY: {
     //   LIST: '/admin/country/list',
@@ -354,7 +358,8 @@ export const apiConfig = {
       EDIT: '/games/admin/casino-management/category/:categoryId/edit',
       DELETE: '/games/admin/casino-management/category/:categoryId/delete',
       CHANGE_STATUS: '/games/admin/casino-management/category/:categoryId/change-status',
-      ALL_ACTIVE_LIST: '/games/admin/casino-management/category/all'
+      ALL_ACTIVE_LIST: '/games/admin/casino-management/category/all',
+      GET_CATEGORY_BY_PROVIDER_IDS: '/games/admin/casino-management/category/by-provider-ids'
     },
     TOOLS: {
       DETAIL: '/games/admin/ip-lookup/details'
@@ -580,7 +585,8 @@ export const apiConfig = {
       REFERRED_USERS_REPORT: '/affiliates/admin/affiliates/{affiliateId}/export-referred-users',
       CREATE: '/users/admin/users/create-affiliate-user',
       EDIT: '/users/admin/users/edit-affiliate-user',
-      CHANGE_STATUS: '/affiliates/admin/affiliates/{affiliateUID}/change-status'
+      CHANGE_STATUS: '/affiliates/admin/affiliates/{affiliateUID}/change-status',
+      DROPDOWN: '/affiliates/admin/affiliates/normal-list'
     },
     FAQ: {
       LIST: '/affiliates/admin/faq/list',
@@ -610,6 +616,12 @@ export const apiConfig = {
       DELETE: '/content/admin/blogs/:blogId/delete',
       DETAIL: '/content/admin/blogs/:slug/details',
       CHANGE_STATUS: '/content/admin/blogs/:blogId/change-status'
+    },
+    ENQUIRES: {
+      LIST: '/users/admin/enquiries/list',
+      CHANGE_STATUS: '/users/admin/enquiries/update-status',
+      SUMMARY: '/users/admin/enquiries/summary',
+      DETAILS: '/users/admin/enquiries/details'
     }
   }
 };
