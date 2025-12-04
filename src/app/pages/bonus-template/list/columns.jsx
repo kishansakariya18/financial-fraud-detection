@@ -2,6 +2,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { BadgeCell } from 'components/custom/table/cell';
 import { bonusTemplateStatusOptions } from '../happer';
 import { BonusTemplateRowActions } from 'components/sections/bonus-template/BonusTemplateRowActions';
+import { CopyableCell } from 'components/shared/table/CopyableCell';
 
 const columnHelper = createColumnHelper();
 
@@ -34,7 +35,7 @@ export const createBonusTemplateColumns = ({
     id: 'templateName',
     header: 'Template Name',
     label: 'Template Name',
-    cell: (info) => <span className="font-medium text-gray-900">{info.getValue() || '—'}</span>,
+    cell: (info) => <CopyableCell getValue={info.getValue} table={info.table} highlight={true} />,
     enableSorting: false,
     size: 220
   }),
@@ -42,7 +43,7 @@ export const createBonusTemplateColumns = ({
     id: 'displayTitle',
     header: 'Display Title',
     label: 'Display Title',
-    cell: (info) => info.getValue() || '—',
+    cell: (info) => <CopyableCell getValue={info.getValue} table={info.table} highlight={true} />,
     enableSorting: false,
     size: 200
   }),

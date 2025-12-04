@@ -39,7 +39,7 @@ const renderList = (items = [], lookup = {}) => {
 
 const Section = ({ title, children }) => (
   <div className="space-y-2">
-    <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-dark-300">
+    <h4 className="block w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-xs font-bold uppercase tracking-wide text-gray-700 dark:border-dark-600 dark:bg-dark-800 dark:text-dark-100">
       {title}
     </h4>
     {children}
@@ -52,7 +52,7 @@ Section.propTypes = {
 };
 
 const compactListClasses =
-  'grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-3 gap-y-1 text-xs text-gray-600 dark:text-dark-100';
+  'grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-3 gap-y-2 text-sm';
 
 export function BonusTemplatePreview({ data, lookups }) {
   const { t } = useTranslation();
@@ -63,31 +63,59 @@ export function BonusTemplatePreview({ data, lookups }) {
       <div className="flex flex-col gap-4">
         <Section title={t('template_info')}>
           <dl className={compactListClasses}>
-            <dt>{t('template_name')}</dt>
-            <dd>{templateInfo.templateName || '—'}</dd>
-            <dt>{t('bonus_type')}</dt>
-            <dd>{getBonusTypeLabel(templateInfo.bonusType || '_', t)}</dd>
-            <dt>{t('bonus_tags')}</dt>
-            <dd>{templateInfo.bonusTag?.join(', ') || '—'}</dd>
-            <dt>{t('expiry_after_issuance_days')}</dt>
-            <dd>{templateInfo.expiryAfterIssuanceDays || '—'}</dd>
+            <dt className="font-semibold text-gray-900 dark:text-dark-50">{t('template_name')}</dt>
+            <dd className="break-words text-gray-800 dark:text-dark-100">
+              {templateInfo.templateName || '—'}
+            </dd>
+            <dt className="font-semibold text-gray-900 dark:text-dark-50">{t('bonus_type')}</dt>
+            <dd className="break-words text-gray-800 dark:text-dark-100">
+              {getBonusTypeLabel(templateInfo.bonusType || '_', t)}
+            </dd>
+            <dt className="font-semibold text-gray-900 dark:text-dark-50">{t('bonus_tags')}</dt>
+            <dd className="break-words text-gray-800 dark:text-dark-100">
+              {templateInfo.bonusTag?.join(', ') || '—'}
+            </dd>
+            <dt className="font-semibold text-gray-900 dark:text-dark-50">
+              {t('expiry_after_issuance_days')}
+            </dt>
+            <dd className="break-words text-gray-800 dark:text-dark-100">
+              {templateInfo.expiryAfterIssuanceDays || '—'}
+            </dd>
           </dl>
         </Section>
 
         <Section title={t('bonus_details')}>
           <dl className={compactListClasses}>
-            <dt>{t('bonus_name')}</dt>
-            <dd>{bonusDetails.displayTitle || '—'}</dd>
-            <dt>{t('description') + ` (${t('player_facing')})`}</dt>
-            <dd className="overflow-hidden">{bonusDetails.notes || '—'}</dd>
-            <dt>{t('description') + ` (${t('internal')})`}</dt>
-            <dd className="overflow-hidden">{bonusDetails.adminNotes || '—'}</dd>
-            <dt>{t('display_priority')}</dt>
-            <dd>{bonusDetails.displayPriority || '—'}</dd>
-            <dt>{t('desktop_image')}</dt>
-            <dd>{bonusDetails.desktopImage?.name || 'Not selected'}</dd>
-            <dt>{t('mobile_image')}</dt>
-            <dd>{bonusDetails.mobileImage?.name || 'Not selected'}</dd>
+            <dt className="font-semibold text-gray-900 dark:text-dark-50">{t('bonus_name')}</dt>
+            <dd className="break-words text-gray-800 dark:text-dark-100">
+              {bonusDetails.displayTitle || '—'}
+            </dd>
+            <dt className="font-semibold text-gray-900 dark:text-dark-50">
+              {t('description') + ` (${t('player_facing')})`}
+            </dt>
+            <dd className="break-words text-gray-800 dark:text-dark-100">
+              {bonusDetails.notes || '—'}
+            </dd>
+            <dt className="font-semibold text-gray-900 dark:text-dark-50">
+              {t('description') + ` (${t('internal')})`}
+            </dt>
+            <dd className="break-words text-gray-800 dark:text-dark-100">
+              {bonusDetails.adminNotes || '—'}
+            </dd>
+            <dt className="font-semibold text-gray-900 dark:text-dark-50">
+              {t('display_priority')}
+            </dt>
+            <dd className="break-words text-gray-800 dark:text-dark-100">
+              {bonusDetails.displayPriority || '—'}
+            </dd>
+            <dt className="font-semibold text-gray-900 dark:text-dark-50">{t('desktop_image')}</dt>
+            <dd className="break-words text-gray-800 dark:text-dark-100">
+              {bonusDetails.desktopImage?.name || 'Not selected'}
+            </dd>
+            <dt className="font-semibold text-gray-900 dark:text-dark-50">{t('mobile_image')}</dt>
+            <dd className="break-words text-gray-800 dark:text-dark-100">
+              {bonusDetails.mobileImage?.name || 'Not selected'}
+            </dd>
           </dl>
         </Section>
 
@@ -95,136 +123,202 @@ export function BonusTemplatePreview({ data, lookups }) {
           {templateInfo.bonusType === 'deposit_boost' && (
             <>
               <dl className={compactListClasses}>
-                <dt>{t('boost_mode')}</dt>
-                <dd>{boostModeOptionsLabel(rewardDetails.boostMode || '_', t)}</dd>
+                <dt className="font-semibold text-gray-900 dark:text-dark-50">{t('boost_mode')}</dt>
+                <dd className="break-words text-gray-800 dark:text-dark-100">
+                  {boostModeOptionsLabel(rewardDetails.boostMode || '_', t)}
+                </dd>
                 {rewardDetails.boostMode === 'fixed' && (
                   <>
-                    <dt>{t('boost_percentage')}</dt>
-                    <dd>{rewardDetails.boostPercent || '—'}</dd>
-                    <dt>{t('minimum_deposit')}</dt>
-                    <dd>{rewardDetails.minDepositAmount || '—'}</dd>
+                    <dt className="font-semibold text-gray-900 dark:text-dark-50">
+                      {t('boost_percentage')}
+                    </dt>
+                    <dd className="break-words text-gray-800 dark:text-dark-100">
+                      {rewardDetails.boostPercent || '—'}
+                    </dd>
+                    <dt className="font-semibold text-gray-900 dark:text-dark-50">
+                      {t('minimum_deposit')}
+                    </dt>
+                    <dd className="break-words text-gray-800 dark:text-dark-100">
+                      {rewardDetails.minDepositAmount || '—'}
+                    </dd>
                   </>
                 )}
                 {rewardDetails.boostMode === 'variable' && (
                   <>
-                    <dt>{t('max_bonus_amount')}</dt>
-                    <dd>{rewardDetails.maxBonusAmount || '—'}</dd>
-                    <dt>{t('variable_rules')}</dt>
-                    <dd>{''}</dd>
+                    <dt className="font-semibold text-gray-900 dark:text-dark-50">
+                      {t('max_bonus_amount')}
+                    </dt>
+                    <dd className="break-words text-gray-800 dark:text-dark-100">
+                      {rewardDetails.maxBonusAmount || '—'}
+                    </dd>
+                    <dt className="font-semibold text-gray-900 dark:text-dark-50">
+                      {t('variable_rules')}
+                    </dt>
+                    <dd className="text-gray-800 dark:text-dark-100">{''}</dd>
                   </>
                 )}
               </dl>
               {rewardDetails.variableRules && rewardDetails.boostMode === 'variable' && (
-                <div>
-                  {/* <span className="block text-xs">{t('variable_rules')}</span> */}
-                  <div className="mt-2">
-                    <table className="w-full min-w-full divide-y divide-gray-200 text-tiny dark:divide-dark-500">
-                      <thead>
-                        <tr className="text-left font-medium">
-                          <th>{t('payment_method')}</th>
-                          <th>{t('min_deposit')}</th>
-                          <th>{t('max_deposit')}</th>
-                          <th>{t('boost_percentage')}</th>
-                          <th>{t('wagering')}</th>
-                          <th>{t('mco')}</th>
+                <div className="mt-2 overflow-x-auto rounded-md border border-gray-200 dark:border-dark-600">
+                  <table className="min-w-full divide-y divide-gray-200 text-xs dark:divide-dark-500">
+                    <thead className="bg-gray-50 dark:bg-dark-800/60">
+                      <tr>
+                        <th className="px-2 py-1.5 text-left text-[11px] font-semibold uppercase tracking-wide text-gray-600 dark:text-dark-200">
+                          {t('payment_method')}
+                        </th>
+                        <th className="px-2 py-1.5 text-left text-[11px] font-semibold uppercase tracking-wide text-gray-600 dark:text-dark-200">
+                          {t('min_deposit')}
+                        </th>
+                        <th className="px-2 py-1.5 text-left text-[11px] font-semibold uppercase tracking-wide text-gray-600 dark:text-dark-200">
+                          {t('max_deposit')}
+                        </th>
+                        <th className="px-2 py-1.5 text-left text-[11px] font-semibold uppercase tracking-wide text-gray-600 dark:text-dark-200">
+                          {t('boost_percentage')}
+                        </th>
+                        <th className="px-2 py-1.5 text-left text-[11px] font-semibold uppercase tracking-wide text-gray-600 dark:text-dark-200">
+                          {t('wagering')}
+                        </th>
+                        <th className="px-2 py-1.5 text-left text-[11px] font-semibold uppercase tracking-wide text-gray-600 dark:text-dark-200">
+                          {t('mco')}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 dark:divide-dark-600">
+                      {rewardDetails.variableRules.map((rule, index) => (
+                        <tr
+                          key={rule.id || `rule-${index}`}
+                          className="hover:bg-gray-50 dark:hover:bg-dark-800/40">
+                          <td className="px-2 py-1.5 text-gray-800 dark:text-dark-100">
+                            {paymentMethodOptionsLabel(rule.paymentMethod, t)}
+                          </td>
+                          <td className="px-2 py-1.5 text-left tabular-nums text-gray-800 dark:text-dark-100">
+                            {rule.rangeFrom}
+                          </td>
+                          <td className="px-2 py-1.5 text-left tabular-nums text-gray-800 dark:text-dark-100">
+                            {rule.rangeTo}
+                          </td>
+                          <td className="px-2 py-1.5 text-left tabular-nums text-gray-800 dark:text-dark-100">
+                            {rule.boostPercent != null ? `${rule.boostPercent}%` : '—'}
+                          </td>
+                          <td className="px-2 py-1.5 text-left tabular-nums text-gray-800 dark:text-dark-100">
+                            {rule.wagering}
+                          </td>
+                          <td className="px-2 py-1.5 text-left tabular-nums text-gray-800 dark:text-dark-100">
+                            {rule.mco}
+                          </td>
                         </tr>
-                      </thead>
-                      <tbody>
-                        {rewardDetails.variableRules.map((rule, index) => (
-                          <tr className="text-left" key={rule.id || `rule-${index}`}>
-                            <td>{paymentMethodOptionsLabel(rule.paymentMethod, t)}</td>
-                            <td>{rule.rangeFrom}</td>
-                            <td>{rule.rangeTo}</td>
-                            <td>{rule.boostPercent}</td>
-                            <td>{rule.wagering}</td>
-                            <td>{rule.mco}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               )}
             </>
           )}
           {templateInfo.bonusType === 'free_chip' && (
             <dl className={compactListClasses}>
-              <dt>{t('chip_amount')}</dt>
-              <dd>{rewardDetails.chipAmount || '—'}</dd>
+              <dt className="font-semibold text-gray-900 dark:text-dark-50">{t('chip_amount')}</dt>
+              <dd className="break-words text-gray-800 dark:text-dark-100">
+                {rewardDetails.chipAmount || '—'}
+              </dd>
             </dl>
           )}
           {templateInfo.bonusType === 'free_spins' && (
             <dl className={compactListClasses}>
-              <dt>{t('free_spins_game')}</dt>
-              <dd>{rewardDetails.selectedGame?.label || '—'}</dd>
-              <dt>{t('spins_count')}</dt>
-              <dd>{rewardDetails.spinsCount || '—'}</dd>
-              <dt>{t('denomination_per_spin')}</dt>
-              <dd>{rewardDetails.denominationPerSpin || '—'}</dd>
-              <dt>{t('max_free_spin_winnings')}</dt>
-              <dd>{rewardDetails.maxFreeSpinWinnings || '—'}</dd>
+              <dt className="font-semibold text-gray-900 dark:text-dark-50">
+                {t('free_spins_game')}
+              </dt>
+              <dd className="break-words text-gray-800 dark:text-dark-100">
+                {rewardDetails.selectedGame?.label || '—'}
+              </dd>
+              <dt className="font-semibold text-gray-900 dark:text-dark-50">{t('spins_count')}</dt>
+              <dd className="break-words text-gray-800 dark:text-dark-100">
+                {rewardDetails.spinsCount || '—'}
+              </dd>
+              <dt className="font-semibold text-gray-900 dark:text-dark-50">
+                {t('denomination_per_spin')}
+              </dt>
+              <dd className="break-words text-gray-800 dark:text-dark-100">
+                {rewardDetails.denominationPerSpin || '—'}
+              </dd>
+              <dt className="font-semibold text-gray-900 dark:text-dark-50">
+                {t('max_free_spin_winnings')}
+              </dt>
+              <dd className="break-words text-gray-800 dark:text-dark-100">
+                {rewardDetails.maxFreeSpinWinnings || '—'}
+              </dd>
             </dl>
           )}
         </Section>
 
         <Section title="Wagering Configuration">
           <dl className={compactListClasses}>
-            <dt>{t('wagering_mode')}</dt>
-            <dd>{wageringModeOptionsLabel(wageringConfig.mode || '_', t)}</dd>
+            <dt className="font-semibold text-gray-900 dark:text-dark-50">{t('wagering_mode')}</dt>
+            <dd className="break-words text-gray-800 dark:text-dark-100">
+              {wageringModeOptionsLabel(wageringConfig.mode || '_', t)}
+            </dd>
             {wageringConfig.mode === 'multiplier' && (
               <>
-                <dt>{t('wagering_base')}</dt>
-                <dd>{wageringBaseOptionsLabel(wageringConfig.base || '_', t)}</dd>
+                <dt className="font-semibold text-gray-900 dark:text-dark-50">
+                  {t('wagering_base')}
+                </dt>
+                <dd className="break-words text-gray-800 dark:text-dark-100">
+                  {wageringBaseOptionsLabel(wageringConfig.base || '_', t)}
+                </dd>
               </>
             )}
-            <dt>{t('wagering_value')}</dt>
-            <dd>{wageringConfig.wageringValue || '—'}</dd>
-            <dt>{t('days_to_wager')}</dt>
-            <dd>{wageringConfig.daysToWager || '—'}</dd>
+            <dt className="font-semibold text-gray-900 dark:text-dark-50">{t('wagering_value')}</dt>
+            <dd className="break-words text-gray-800 dark:text-dark-100">
+              {wageringConfig.wageringValue || '—'}
+            </dd>
+            <dt className="font-semibold text-gray-900 dark:text-dark-50">{t('days_to_wager')}</dt>
+            <dd className="break-words text-gray-800 dark:text-dark-100">
+              {wageringConfig.daysToWager || '—'}
+            </dd>
           </dl>
         </Section>
 
         <Section title="Max Cashout Configuration">
           <dl className={compactListClasses}>
-            <dt>{t('mode')}</dt>
-            <dd>{wageringModeOptionsLabel(maxCashoutConfig.mode || '_', t)}</dd>
+            <dt className="text-sm font-semibold text-gray-900 dark:text-dark-50">{t('mode')}</dt>
+            <dd className="break-words text-sm text-gray-800 dark:text-dark-100">
+              {wageringModeOptionsLabel(maxCashoutConfig.mode || '_', t)}
+            </dd>
             {maxCashoutConfig.mode === 'multiplier' && (
               <>
-                <dt>{t('max_cashout_base')}</dt>
-                <dd>{wageringBaseOptionsLabel(maxCashoutConfig.base || '_', t)}</dd>
+                <dt className="text-sm font-semibold text-gray-900 dark:text-dark-50">
+                  {t('max_cashout_base')}
+                </dt>
+                <dd className="break-words text-sm text-gray-800 dark:text-dark-100">
+                  {wageringBaseOptionsLabel(maxCashoutConfig.base || '_', t)}
+                </dd>
               </>
             )}
-            <dt>{t('max_cashout')}</dt>
-            <dd>{maxCashoutConfig.cashoutValue || '—'}</dd>
-            <dt>{t('sticky_bonus')}</dt>
-            <dd>{maxCashoutConfig.stickyBonus ? 'Yes' : 'No'}</dd>
-            {/* <dt>{t('variable_rules')}</dt>
-            <dd>
-              {maxCashoutConfig?.variableRules?.length === 0 ? (
-                <span className="text-gray-500 dark:text-dark-200">{t('no_rules_defined')}</span>
-              ) : (
-                <ul className="space-y-1 text-xs text-gray-600 dark:text-dark-200">
-                  {(maxCashoutConfig?.variableRules || []).map((rule) => (
-                    <li key={rule.id} className="rounded bg-gray-100 px-2 py-1 dark:bg-dark-700/60">
-                      {lookups.paymentMethod[rule.paymentMethod] || rule.paymentMethod} · Deposit{' '}
-                      {rule.minDeposit || '—'} - {rule.maxDeposit || '—'} · Boost{' '}
-                      {rule.boostPercent || '—'}% · Wager {rule.wagering || '—'} · Cashout{' '}
-                      {rule.maxCashout || '—'}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </dd> */}
+            <dt className="text-sm font-semibold text-gray-900 dark:text-dark-50">
+              {t('max_cashout')}
+            </dt>
+            <dd className="break-words text-sm text-gray-800 dark:text-dark-100">
+              {maxCashoutConfig.cashoutValue || '—'}
+            </dd>
+            <dt className="text-sm font-semibold text-gray-900 dark:text-dark-50">
+              {t('sticky_bonus')}
+            </dt>
+            <dd className="break-words text-sm text-gray-800 dark:text-dark-100">
+              {maxCashoutConfig.stickyBonus ? 'Yes' : 'No'}
+            </dd>
           </dl>
         </Section>
 
         <Section title="Gameplay Configuration">
           <dl className={compactListClasses}>
-            <dt>{t('minimum_bet')}</dt>
-            <dd>{gameplay.minBet || '—'}</dd>
-            <dt>{t('maximum_bet')}</dt>
-            <dd>{gameplay.maxBet || '—'}</dd>
-            <dt>{t('providers')}</dt>
+            <dt className="font-semibold text-gray-900 dark:text-dark-50">{t('minimum_bet')}</dt>
+            <dd className="break-words text-gray-800 dark:text-dark-100">
+              {gameplay.minBet || '—'}
+            </dd>
+            <dt className="font-semibold text-gray-900 dark:text-dark-50">{t('maximum_bet')}</dt>
+            <dd className="break-words text-gray-800 dark:text-dark-100">
+              {gameplay.maxBet || '—'}
+            </dd>
+            <dt className="font-semibold text-gray-900 dark:text-dark-50">{t('providers')}</dt>
             <dd>
               {gameplay.allowedProviders && gameplay.allowedProviders.length > 0 ? (
                 <span>
@@ -237,7 +331,7 @@ export function BonusTemplatePreview({ data, lookups }) {
                 '—'
               )}
             </dd>
-            <dt>{t('categories')}</dt>
+            <dt className="font-semibold text-gray-900 dark:text-dark-50">{t('categories')}</dt>
             <dd>
               {gameplay.allowedCategories && gameplay.allowedCategories.length > 0 ? (
                 <span>
@@ -250,7 +344,7 @@ export function BonusTemplatePreview({ data, lookups }) {
                 '—'
               )}
             </dd>
-            <dt>{t('games')}</dt>
+            <dt className="font-semibold text-gray-900 dark:text-dark-50">{t('games')}</dt>
             <dd>
               {gameplay.allowedGames && gameplay.allowedGames.length > 0 ? (
                 <span>
