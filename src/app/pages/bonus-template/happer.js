@@ -210,10 +210,16 @@ export const normalizeBonusTemplateDetail = (payload) => {
     minBet: Number(template.MinBet) || null,
     maxBet: Number(template.MaxBet) || null,
     allowedProviders:
-      template.bonusTemplateAllowedProviders?.map(({ ProviderID }) => ProviderID) || [],
+      template.bonusTemplateAllowedProviders?.map((p) => ({
+        value: p.ProviderID,
+        label: p.Name || p.ProviderName || String(p.ProviderID)
+      })) || [],
     providerIncluded: asBoolean(template.GameProviderIncluded ?? template.providerIncluded ?? true),
     allowedCategories:
-      template.bonusTemplateAllowedCategories?.map(({ CategoryID }) => CategoryID) || [],
+      template.bonusTemplateAllowedCategories?.map((c) => ({
+        value: c.CategoryID,
+        label: c.Name || c.CategoryName || String(c.CategoryID)
+      })) || [],
     categoryIncluded: asBoolean(template.GameCategoryIncluded ?? template.categoryIncluded ?? true),
     allowedGames:
       template.bonusTemplateAllowedGames?.map((game) => ({
@@ -312,17 +318,20 @@ export const bonusTemplateTypeOptions = [
   {
     key: 'deposit_boost',
     value: 'deposit_boost',
-    label: 'Deposit Boost'
+    label: 'Deposit Boost',
+    icon: 'deposit_boost'
   },
   {
     key: 'free_chip',
     value: 'free_chip',
-    label: 'Free Chip'
+    label: 'Free Chip',
+    icon: 'free_chip'
   },
   {
     key: 'free_spins',
     value: 'free_spins',
-    label: 'Free Spins'
+    label: 'Free Spins',
+    icon: 'free_spins'
   }
 ];
 

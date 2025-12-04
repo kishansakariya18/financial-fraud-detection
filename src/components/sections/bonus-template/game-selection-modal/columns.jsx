@@ -3,6 +3,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 
 import { statusOptions } from 'app/pages/casino-management/games/helper';
 import { BadgeCell, BoldCell, DateCell, IdCell } from 'components/custom/table/cell';
+import { CopyableCell } from 'components/shared/table/CopyableCell';
 import { Checkbox } from 'components/ui';
 
 const columnHelper = createColumnHelper();
@@ -60,7 +61,7 @@ export const gameSelectionModalColumns = ({ selectedIds, handleCheck, onTogglePa
     id: 'name',
     label: 'Name',
     header: 'Name',
-    cell: BoldCell,
+    cell: (info) => <CopyableCell getValue={info.getValue} table={info.table} highlight />,
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.provider, {

@@ -24,6 +24,7 @@ const TagsInputNew = forwardRef(
       error,
       label,
       allowCustom = true,
+      maxTags,
       ...rest
     },
     ref
@@ -62,6 +63,11 @@ const TagsInputNew = forwardRef(
 
     const handleAddTag = (tag) => {
       if (!tag?.value) return;
+      // Enforce optional maxTags limit
+      if (typeof maxTags === 'number' && maxTags > 0 && value.length >= maxTags) {
+        setQuery('');
+        return;
+      }
       const exists = value.some((item) => item.value === tag.value);
       if (exists) {
         setQuery('');
@@ -107,6 +113,24 @@ const TagsInputNew = forwardRef(
       return normalizedOptions.some((opt) => opt.value === q) || value.some((v) => v.value === q);
     }, [normalizedOptions, value, query]);
 
+    // Check if dropdown has data to show - needs to be called with open state
+    const shouldShowIcon = (isOpen) => {
+      const hasQuery = query.trim().length > 0;
+
+      // If dropdown is open and there are options to show
+      if (isOpen && filteredOptions.length > 0) return true;
+
+      // If user is typing, show icon if there are filtered results or can create custom tag
+      if (hasQuery) {
+        if (filteredOptions.length > 0) return true;
+        if (allowCustom && !queryAlreadyInOptions) return true;
+        return false;
+      }
+
+      // If no query and not open, don't show icon
+      return false;
+    };
+
     // const onChangeList = (list) => {
     //   if (!Array.isArray(list) || list.length === 0) return; // ✅ safety
 
@@ -143,8 +167,10 @@ const TagsInputNew = forwardRef(
                   }}>
                   {value.map((tag) => (
                     <Tag key={tag.id} component="button" type="button">
-                      <span className="border-r border-gray-300 pr-1 leading-none text-gray-600 dark:text-dark-200">
-                        {tag.value}
+                      <span
+                        title={tag.value}
+                        className="inline-block max-w-[12rem] truncate border-r border-gray-300 pr-1 align-middle leading-none text-gray-600 dark:text-dark-200">
+                        {tag.value?.length > 30 ? `${tag.value.slice(0, 30)}…` : tag.value}
                       </span>
                       <Button
                         type="button"
@@ -168,6 +194,7 @@ const TagsInputNew = forwardRef(
                     unstyled
                     classNames={{ root: 'min-w-[60px] flex-1' }}
                     autoComplete="off"
+                    maxLength={30}
                     onKeyDown={(e) => {
                       if (e.key === 'Backspace' && e.target.value === '' && value.length > 0) {
                         e.preventDefault();
@@ -178,15 +205,17 @@ const TagsInputNew = forwardRef(
                     value={query}
                   />
 
-                  <div className="flex items-center ltr:ml-2 rtl:mr-2">
-                    <ChevronDownIcon
-                      className={clsx(
-                        'h-5 w-5 text-gray-400 dark:text-dark-300',
-                        open && 'rotate-180'
-                      )}
-                      aria-hidden="true"
-                    />
-                  </div>
+                  {shouldShowIcon(open) && (
+                    <div className="flex items-center ltr:ml-2 rtl:mr-2">
+                      <ChevronDownIcon
+                        className={clsx(
+                          'h-5 w-5 text-gray-400 dark:text-dark-300',
+                          open && 'rotate-180'
+                        )}
+                        aria-hidden="true"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 
