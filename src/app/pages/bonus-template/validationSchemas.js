@@ -14,7 +14,7 @@ const variableRuleItemSchema = Yup.object()
     rangeFrom: Yup.number()
       .transform(numberTransform)
       .nullable()
-      .min(0, 'Must be greater than 0')
+      .min(0, 'Min Deposit Must be greater than 0')
       .test('required-when-range-to-exists', 'Please add min deposit', function (value) {
         const { rangeTo } = this.parent;
         // If rangeTo is set, rangeFrom is required
@@ -27,47 +27,51 @@ const variableRuleItemSchema = Yup.object()
 
         return true;
       })
-      .typeError('Invalid number'),
+      .typeError('Min Deposit Invalid number'),
     rangeTo: Yup.number()
       .transform(numberTransform)
       .nullable()
-      .min(0, 'Must be greater than 0')
-      .test('greater-than-range-from', 'Must be greater than min deposit', function (value) {
-        const { rangeFrom } = this.parent;
-        // If both values exist, rangeTo must be >= rangeFrom
-        if (
-          value !== null &&
-          value !== undefined &&
-          value !== '' &&
-          rangeFrom !== null &&
-          rangeFrom !== undefined &&
-          rangeFrom !== ''
-        ) {
-          const minValue = Number(rangeFrom);
-          const maxValue = Number(value);
-          if (!isNaN(minValue) && !isNaN(maxValue)) {
-            return maxValue >= minValue;
+      .min(0, 'Max Deposit Must be greater than 0')
+      .test(
+        'greater-than-range-from',
+        'Max Deposit Must be greater than min deposit',
+        function (value) {
+          const { rangeFrom } = this.parent;
+          // If both values exist, rangeTo must be >= rangeFrom
+          if (
+            value !== null &&
+            value !== undefined &&
+            value !== '' &&
+            rangeFrom !== null &&
+            rangeFrom !== undefined &&
+            rangeFrom !== ''
+          ) {
+            const minValue = Number(rangeFrom);
+            const maxValue = Number(value);
+            if (!isNaN(minValue) && !isNaN(maxValue)) {
+              return maxValue >= minValue;
+            }
           }
+          return true;
         }
-        return true;
-      })
-      .typeError('Invalid number'),
+      )
+      .typeError('Max Deposit Invalid number'),
     boostPercent: Yup.number()
       .transform(numberTransform)
       .nullable()
-      .min(0, 'Must be greater than 0')
-      .max(100, 'Must be less than or equal to 100')
-      .typeError('Invalid number'),
+      .min(0, 'Boos(%) Must be greater than 0')
+      .max(100, 'Boos(%) Must be less than or equal to 100')
+      .typeError('Boos(%) Invalid number'),
     wagering: Yup.number()
       .transform(numberTransform)
       .nullable()
-      .min(0, 'Must be greater than 0')
-      .typeError('Invalid number'),
+      .min(0, 'Wagering Must be greater than 0')
+      .typeError('Wagering Invalid number'),
     mco: Yup.number()
       .transform(numberTransform)
       .nullable()
-      .min(0, 'Must be greater than 0')
-      .typeError('Invalid number')
+      .min(0, 'Max Cashout Must be greater than 0')
+      .typeError('Max Cashout Invalid number')
   })
   .test('continuous-range-with-previous', 'Range continuity error', function (currentRule) {
     let parentArray;

@@ -300,7 +300,6 @@ export function VariableRulesEditor({
                             value={rule.boostPercent || ''}
                             onChange={(e) => updateRuleField(index, 'boostPercent', e.target.value)}
                             classNames={inputClassNames}
-                            error={getFieldError(index, 'boostPercent')}
                           />
                         </td>
                         <td className="px-3 py-2">
@@ -310,7 +309,6 @@ export function VariableRulesEditor({
                             value={rule.wagering || ''}
                             onChange={(e) => updateRuleField(index, 'wagering', e.target.value)}
                             classNames={inputClassNames}
-                            error={getFieldError(index, 'wagering')}
                           />
                         </td>
                         <td className="px-3 py-2">
@@ -320,7 +318,6 @@ export function VariableRulesEditor({
                             value={rule.mco || ''}
                             onChange={(e) => updateRuleField(index, 'mco', e.target.value)}
                             classNames={inputClassNames}
-                            error={getFieldError(index, 'mco')}
                           />
                         </td>
                         <td className="px-3 py-2">
