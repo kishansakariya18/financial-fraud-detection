@@ -4,7 +4,8 @@ import {
   EllipsisHorizontalIcon,
   PencilIcon,
   SquaresPlusIcon,
-  ArchiveBoxArrowDownIcon
+  ArchiveBoxArrowDownIcon,
+  EyeIcon
 } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
@@ -164,6 +165,8 @@ export function RowActions({ row, table }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [row]);
 
+  const isArchived = row?.original?.status === 'archive';
+
   return (
     <>
       <div className="flex justify-center space-x-1.5 rtl:space-x-reverse">
@@ -182,7 +185,7 @@ export function RowActions({ row, table }) {
             <MenuItems
               anchor={{ to: 'bottom end', gap: 12 }}
               className="absolute z-[100] w-[10rem] rounded-lg border border-gray-300 bg-white py-1 shadow-lg shadow-gray-200/50 outline-none focus-visible:outline-none dark:border-dark-500 dark:bg-dark-750 dark:shadow-none ltr:right-0 rtl:left-0">
-              {hasPermission(PERMISSIONS.CAMPAIGN?.EDIT) && (
+              {!isArchived && hasPermission(PERMISSIONS.CAMPAIGN?.EDIT) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -197,7 +200,7 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              {hasPermission(PERMISSIONS.CAMPAIGN?.EDIT) && (
+              {!isArchived && hasPermission(PERMISSIONS.CAMPAIGN?.EDIT) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -227,7 +230,7 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              {hasPermission(PERMISSIONS.CAMPAIGN?.CHANGE_STATUS) && (
+              {!isArchived && hasPermission(PERMISSIONS.CAMPAIGN?.CHANGE_STATUS) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -242,6 +245,20 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
+              {/* View visible always; specifically needed when archived */}
+              <MenuItem>
+                {({ focus }) => (
+                  <button
+                    onClick={() => navigate(`/campaign/${row.original.campaignUID}`)}
+                    className={clsx(
+                      'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                      focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                    )}>
+                    <EyeIcon className="size-4.5 stroke-1" />
+                    <span>{t('view') || 'View'}</span>
+                  </button>
+                )}
+              </MenuItem>
             </MenuItems>
           </Transition>
         </Menu>

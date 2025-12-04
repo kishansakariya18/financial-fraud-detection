@@ -2,6 +2,7 @@ import apiConfig from 'configs/api.config';
 import { sendRequest } from 'utils/axios';
 import { campaignStatusToAPI } from 'app/pages/campaign/helper';
 import { replaceText } from 'utils/custom.utilities';
+import dayjs from 'dayjs';
 
 const CampaignService = {
   campaignList: async (data) => {
@@ -10,13 +11,17 @@ const CampaignService = {
       console.log('filters:', filters);
 
       const reqBody = {
-        page: pagination.pageIndex + 1,
-        per_page: pagination.pageSize,
+        // page: pagination.pageIndex + 1,
+        // per_page: pagination.pageSize,
         filters: {
           keyword: filters?.keyword || undefined,
           status: campaignStatusToAPI(filters?.status),
-          startDate: filters?.startDate || undefined,
-          endDate: filters?.endDate || undefined
+          startDate: filters.startDate
+            ? dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss')
+            : undefined,
+          endDate: filters.endDate
+            ? dayjs(+filters.endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
+            : undefined
         }
       };
       const endPoint = apiConfig.endPoints.CAMPAIGN.LIST;
@@ -27,6 +32,7 @@ const CampaignService = {
         headers: {
           'Content-Type': 'application/json'
         },
+        params: { page: pagination.pageIndex + 1, per_page: pagination.pageSize },
         body: reqBody
       });
       return response;

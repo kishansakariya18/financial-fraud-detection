@@ -2,8 +2,24 @@ import { CheckBadgeIcon, XCircleIcon, ArchiveBoxIcon } from '@heroicons/react/24
 import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 export const campaignListResponseMapper = (apiData) => {
-  const totalRecords = apiData?.total_record;
-  const list = apiData?.data?.map((item) => {
+  const totalRecords = apiData?.total_record ?? apiData?.totalRecords;
+  const list = (apiData?.data || []).map((item) => {
+    const isTemplate = item?.CampaignTemplateID != null || item?.CampaignTemplateUID != null;
+    if (isTemplate) {
+      return {
+        id: item?.CampaignTemplateID,
+        campaignUID: item?.CampaignTemplateUID,
+        name: item?.CampaignName,
+        status: campaignStatusToAPP(item?.Status),
+        startDate: getDateInUTCToTimeZone(item?.StartDate),
+        endDate: getDateInUTCToTimeZone(item?.EndDate),
+        description: item?.Description,
+        tags: item?.tags || [],
+        createdAt: getDateInUTCToTimeZone(item?.CreatedAt),
+        dateModified: getDateInUTCToTimeZone(item?.UpdatedAt),
+        admin: item?.CreatedByAdminID
+      };
+    }
     return {
       id: item?.CampaignID,
       campaignUID: item?.CampaignUID,

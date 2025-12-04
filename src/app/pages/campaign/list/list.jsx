@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import { campaignListResponseMapper } from '../helper';
+import CampaignService from 'services/campaign.service';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
 
@@ -28,71 +29,39 @@ export default function CampaignList() {
     hasPermission(PERMISSIONS.CAMPAIGN?.CHANGE_STATUS) ||
     hasPermission(PERMISSIONS.CAMPAIGN?.DELETE);
 
-  const fetchCampaigns = async () => {
-    // const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
-    // const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
+  const fetchCampaigns = async (params) => {
+    const pageIndex = isNaN(params?.pageIndex) ? DEFAULT_PAGE_INDEX : +params.pageIndex;
+    const pageSize = isNaN(params?.pageSize) ? DEFAULT_PER_PAGE_RECORD : +params.pageSize;
 
-    // Dummy data for initial implementation
-    const dummyData = {
-      status: 200,
-      response: {
-        total_record: 3,
-        data: [
-          {
-            CampaignID: 1,
-            CampaignUID: 'camp-001',
-            CampaignName: 'August Kickoff Reloads',
-            Status: 0,
-            StartDate: '2024-08-01T00:00:00Z',
-            EndDate: '2024-08-31T23:59:59Z',
-            Description: 'Internal notes for admins',
-            Tags: ['promo', 'demo01', 'campaign'],
-            DateCreated: '2024-07-15T10:00:00Z',
-            DateModified: '2024-07-20T15:30:00Z',
-            admin: { Username: 'admin' }
-          },
-          {
-            CampaignID: 2,
-            CampaignUID: 'camp-002',
-            CampaignName: 'Welcome Bonus Campaign',
-            Status: 1,
-            StartDate: '2024-12-01T00:00:00Z',
-            EndDate: '2024-12-31T23:59:59Z',
-            Description: 'New user welcome campaign',
-            Tags: ['welcome', 'bonus'],
-            DateCreated: '2024-11-01T10:00:00Z',
-            DateModified: '2024-11-15T12:00:00Z',
-            admin: { Username: 'admin' }
-          },
-          {
-            CampaignID: 3,
-            CampaignUID: 'camp-003',
-            CampaignName: 'Holiday Special',
-            Status: 0,
-            StartDate: '2024-12-20T00:00:00Z',
-            EndDate: '2025-01-05T23:59:59Z',
-            Description: 'Holiday season special offers',
-            Tags: ['holiday', 'special', 'seasonal'],
-            DateCreated: '2024-11-20T09:00:00Z',
-            DateModified: '2024-11-25T14:00:00Z',
-            admin: { Username: 'admin' }
-          }
-        ]
-      }
+    const filters = {
+      keyword: params?.keyword,
+      status: params?.status,
+      startDate: params?.startDate,
+      endDate: params?.endDate
     };
 
-    const apiData = campaignListResponseMapper(dummyData.response);
+    const response = await CampaignService.campaignList({
+      filters,
+      pagination: { pageIndex, pageSize }
+    });
 
-    if (dummyData.status === 200) {
+    // Response can be either { status, data, totalRecords } or { status, response: { data, total_record } }
+    if (response?.status === 200) {
+      const apiData = campaignListResponseMapper(
+        response?.response
+          ? response.response
+          : { data: response.data || [], totalRecords: response.totalRecords }
+      );
+
       return {
         status: 200,
         data: apiData.list,
-        totalRecords:
-          parseInt(dummyData.response?.total_record, 10) || dummyData.response?.data?.length || 0,
-        totalPages: 1
+        totalRecords: apiData.totalRecords || apiData.list.length || 0,
+        totalPages: Math.ceil((apiData.totalRecords || apiData.list.length || 0) / pageSize)
       };
     }
-    return { status: dummyData.status, error: 'Error loading campaigns' };
+
+    return { status: response?.status || 500, error: 'Error loading campaigns' };
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
