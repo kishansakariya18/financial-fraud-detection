@@ -1,4 +1,5 @@
 import moment from 'moment-timezone';
+import BigNumber from 'bignumber.js';
 
 export function getDateInUTCToTimeZone(
   date,
@@ -40,6 +41,29 @@ export function getEndOfDate(date) {
 export function capitalizeFirstLetter(val) {
   return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }
+
+const getAmountBN = (v) => {
+  if (v === null || v === undefined || v === '') return new BigNumber(0);
+  const bn = new BigNumber(v);
+  return bn.isFinite() ? bn : new BigNumber(0);
+};
+
+const _enforceScale = (bn, decimals = 18) => {
+  const fixed = bn.toFixed(decimals);
+  const [intPart] = fixed.split('.');
+  const intDigits = intPart.replace('-', '').length;
+  if (intDigits > 12) {
+    throw new Error('AMOUNT_OUT_OF_RANGE');
+  }
+  return fixed;
+};
+
+export const setAmountBN = (v, decimals = 12) => {
+  const bn = getAmountBN(v).decimalPlaces(decimals, BigNumber.ROUND_HALF_UP);
+  const fixed = _enforceScale(bn, decimals);
+  return fixed;
+};
+
 export const dummyCards = {
   User: {
     TOTAL_USERS: {
