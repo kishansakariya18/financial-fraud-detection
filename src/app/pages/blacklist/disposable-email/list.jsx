@@ -12,6 +12,8 @@ import { DisposableEmailToolbar } from './Toolbar';
 import BlacklistService from 'services/blacklist.services';
 import { getQueryParams } from 'utils/custom.utilities';
 import { disposablEmailResponseMapper } from '../helper';
+import { PERMISSIONS } from 'constants/app.constant';
+import usePermissions from 'app/router/usePermissions';
 
 export default function DisposableEmailList() {
   const { t } = useTranslation();
@@ -19,6 +21,11 @@ export default function DisposableEmailList() {
   const pageTitle = t('disposable') + ' ' + t('email');
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
   const [searchValue, setSearchValue] = useState(queryParams.keyword || '');
+  const { hasPermission } = usePermissions();
+  const canShowActions =
+    hasPermission(PERMISSIONS.BLACKLIST.ADD_RESTRICTED_EMAIL_DOMAIN) ||
+    hasPermission(PERMISSIONS.BLACKLIST.DELETE_RESTRICTED_EMAIL_DOMAIN) ||
+    hasPermission(PERMISSIONS.BLACKLIST.UPDATE_RESTRICTED_EMAIL_DOMAIN);
   const fetchData = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? 10 : +queryParams.pageSize;
@@ -39,12 +46,12 @@ export default function DisposableEmailList() {
   };
 
   const { table, isLoading, error, tableSettings, setError } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchData,
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'], right: canShowActions ? ['actions'] : [] },
       tableSettings: {}
     }
   });
