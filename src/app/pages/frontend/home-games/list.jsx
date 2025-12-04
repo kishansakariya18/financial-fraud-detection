@@ -11,9 +11,10 @@ import ContentWrapper from 'components/ui/custom/ContentWrapper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
-import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
+import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD, PERMISSIONS } from 'constants/app.constant';
 import { homeGamesResponse } from '../helper';
 import HomePageService from 'services/home-page.services';
+import usePermissions from 'app/router/usePermissions';
 
 export default function HomeGames() {
   const { t } = useTranslation();
@@ -22,6 +23,10 @@ export default function HomeGames() {
   const { homeCategoryId } = useParams();
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { hasPermission } = usePermissions();
+  const canShowActions =
+    hasPermission(PERMISSIONS.FRONTEND.DELETE_HOME_GAME) ||
+    hasPermission(PERMISSIONS.FRONTEND.CHANGE_HOME_GAME_STATUS);
 
   const fetchHomeGameList = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
@@ -45,12 +50,12 @@ export default function HomeGames() {
   };
 
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchData: fetchHomeGameList,
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'], right: canShowActions ? ['actions'] : [] },
       tableSettings: { enableFullScreen: false },
       columnVisibility: { firstName: false, lastName: false }
     }
