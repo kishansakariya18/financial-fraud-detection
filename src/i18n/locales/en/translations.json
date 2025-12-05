@@ -1304,5 +1304,14 @@
   "set_as_active":"Set As Active",
   "trigger_event":"Trigger Event",
   "referred_by_player_id":"Referred By Player ID",
-  "please_select_at_least_one_player":"Please select at least one player"
+  "please_select_at_least_one_player":"Please select at least one player",
+  "reissuance_policy":"Reissuance Policy",
+  "triggers":"Triggers",
+  "bonus_removal_rules":"Bonus Removal Rules",
+  "promotions":"Promotions",
+  "basics":"Basics",
+  "targeting":"Targeting"
+  
+  
+  
 }

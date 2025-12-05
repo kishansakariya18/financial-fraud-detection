@@ -40,6 +40,19 @@ export const campaignRoute = [
         )
       };
     }
+  },
+  {
+    path: '/campaign/:campaignUID',
+    lazy: async () => {
+      const { default: ViewCampaign } = await import('../../pages/campaign/ViewCampaign');
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.CAMPAIGN?.VIEW}>
+            <ViewCampaign />
+          </PrivateRoute>
+        )
+      };
+    }
   }
 ];
 

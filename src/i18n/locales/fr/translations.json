@@ -635,5 +635,11 @@
   "areYouSureEnquires": "Êtes-vous sûr de vouloir supprimer cette enquire?",
   "areYouSureEnquiresChangeStatus": "Êtes-vous sûr de vouloir changer le statut de cette enquire?",
   "enquiry_change_status": "Changer le statut",
-  "enquires": "Demandes de renseignements"
+  "enquires": "Demandes de renseignements",
+  "reissuance_policy":"Politique de reemission",
+  "triggers":"Disparateurs",
+  "bonus_removal_rules":"Regles de retrait de bonus",
+  "promotions":"Promotions",
+  "basics":"Bases",
+  "targeting":"Ciblage"
 }
