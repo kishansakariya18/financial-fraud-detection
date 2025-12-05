@@ -20,6 +20,8 @@ const CreateCampaign = () => {
   const [response, setResponse] = useState(null);
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
+  const [promotions, setPromotions] = useState([]);
+  const [selectedPromotionIndex, setSelectedPromotionIndex] = useState(null);
   const { t } = useTranslation();
 
   const breadcrumbItem = [{ title: t('campaign'), path: '/campaign' }, { title: t('create') }];
@@ -95,7 +97,8 @@ const CreateCampaign = () => {
   const onSubmit = async (data) => {
     const submitData = {
       ...data,
-      tags: tags
+      tags: tags,
+      promotions: promotions
     };
     await createCampaignAPI(submitData);
   };
@@ -121,6 +124,73 @@ const CreateCampaign = () => {
       e.preventDefault();
       handleAddTag();
     }
+  };
+
+  const makeDefaultPromotion = () => ({
+    id: Date.now().toString(),
+    name: '',
+    bonusTemplate: '',
+    priority: '',
+    cooldown: '',
+    maxClaims: { days: '', week: '', month: '', lifetime: '' },
+    title: '',
+    description: '',
+    imageUrls: []
+  });
+
+  const handleAddPromotion = () => {
+    const next = [...promotions, makeDefaultPromotion()];
+    setPromotions(next);
+    setSelectedPromotionIndex(next.length - 1);
+  };
+
+  const handleRemovePromotion = (index) => {
+    const next = promotions.filter((_, i) => i !== index);
+    setPromotions(next);
+    if (selectedPromotionIndex === index) {
+      setSelectedPromotionIndex(next.length ? 0 : null);
+    } else if (selectedPromotionIndex > index) {
+      setSelectedPromotionIndex((prev) => (prev != null ? prev - 1 : prev));
+    }
+  };
+
+  const updateSelectedPromotion = (path, value) => {
+    if (selectedPromotionIndex == null) return;
+    setPromotions((prev) => {
+      const next = [...prev];
+      const p = { ...next[selectedPromotionIndex] };
+      if (path.startsWith('maxClaims.')) {
+        const key = path.split('.')[1];
+        p.maxClaims = { ...p.maxClaims, [key]: value };
+      } else {
+        p[path] = value;
+      }
+      next[selectedPromotionIndex] = p;
+      return next;
+    });
+  };
+
+  const [imageUrlInput, setImageUrlInput] = useState('');
+  const addImageUrl = () => {
+    if (!imageUrlInput.trim() || selectedPromotionIndex == null) return;
+    setPromotions((prev) => {
+      const next = [...prev];
+      const p = { ...next[selectedPromotionIndex] };
+      p.imageUrls = [...(p.imageUrls || []), imageUrlInput.trim()];
+      next[selectedPromotionIndex] = p;
+      return next;
+    });
+    setImageUrlInput('');
+  };
+  const removeImageUrl = (url) => {
+    if (selectedPromotionIndex == null) return;
+    setPromotions((prev) => {
+      const next = [...prev];
+      const p = { ...next[selectedPromotionIndex] };
+      p.imageUrls = (p.imageUrls || []).filter((u) => u !== url);
+      next[selectedPromotionIndex] = p;
+      return next;
+    });
   };
 
   return (
@@ -372,10 +442,210 @@ const CreateCampaign = () => {
               </div>
             </div>
 
+            <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-600 dark:bg-dark-800">
+              <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-dark-50">
+                4. Promotions
+              </h3>
+              <p className="mb-6 text-sm text-gray-500 dark:text-dark-300">
+                Attach one or more promotions to this campaign.
+              </p>
+
+              <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
+                <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 dark:border-dark-600 dark:bg-dark-800/40">
+                  <div className="mb-3 flex items-center justify-between">
+                    <span className="font-medium text-gray-700 dark:text-dark-100">Promotions</span>
+                    <Button type="button" size="sm" onClick={handleAddPromotion}>
+                      {t('add')}
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    {promotions.map((p, idx) => (
+                      <div
+                        key={p.id}
+                        className={`flex items-center justify-between rounded-md border px-3 py-2 text-sm ${
+                          selectedPromotionIndex === idx
+                            ? 'bg-primary/5 dark:bg-primary/10 border-primary-500'
+                            : 'border-gray-200 bg-white dark:border-dark-600 dark:bg-dark-800'
+                        }`}>
+                        <button
+                          type="button"
+                          className="flex-1 text-left"
+                          onClick={() => setSelectedPromotionIndex(idx)}>
+                          <div className="font-medium text-gray-800 dark:text-dark-100">
+                            {p.name?.trim() || `Promo ${String(idx + 1).padStart(2, '0')}`}
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-dark-300">
+                            Template: {p.bonusTemplate?.trim() || '—'}
+                          </div>
+                        </button>
+                        <Button
+                          type="button"
+                          isIcon
+                          variant="flat"
+                          color="error"
+                          className="ml-2 size-8"
+                          onClick={() => handleRemovePromotion(idx)}>
+                          <XMarkIcon className="size-4.5" />
+                        </Button>
+                      </div>
+                    ))}
+                    {promotions.length === 0 && (
+                      <div className="rounded-md border border-dashed border-gray-300 p-3 text-center text-xs text-gray-500 dark:border-dark-600 dark:text-dark-300">
+                        {t('no_data') || 'No promotions added yet'}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  {selectedPromotionIndex == null ? (
+                    <div className="flex flex-col items-center justify-center rounded-md border border-dashed border-gray-300 p-6 text-center text-sm text-gray-500 dark:border-dark-600 dark:text-dark-300">
+                      <p className="mb-3">{t('select') || 'Select a promotion to edit'}</p>
+                      <Button type="button" size="sm" onClick={handleAddPromotion}>
+                        {t('add')}
+                      </Button>
+                    </div>
+                  ) : (
+                    (() => {
+                      const p = promotions[selectedPromotionIndex] || {};
+                      return (
+                        <div className="space-y-4">
+                          <div className="grid gap-4 sm:grid-cols-2">
+                            <Input
+                              label="Name (internal)*"
+                              value={p.name}
+                              onChange={(e) => updateSelectedPromotion('name', e.target.value)}
+                              placeholder="e.g. Promo 01"
+                            />
+                            <Input
+                              label="Bonus Template"
+                              value={p.bonusTemplate}
+                              onChange={(e) =>
+                                updateSelectedPromotion('bonusTemplate', e.target.value)
+                              }
+                              placeholder="Choose bonus template"
+                            />
+                          </div>
+                          <div className="grid gap-4 sm:grid-cols-2">
+                            <Input
+                              label="Priority"
+                              value={p.priority}
+                              onChange={(e) => updateSelectedPromotion('priority', e.target.value)}
+                              type="number"
+                              placeholder="e.g. 1"
+                            />
+                            <Input
+                              label="Cooldown (optional)"
+                              value={p.cooldown}
+                              onChange={(e) => updateSelectedPromotion('cooldown', e.target.value)}
+                              placeholder="e.g., 48h or 24:00"
+                            />
+                          </div>
+                          <div className="rounded-lg border border-gray-200 p-3 dark:border-dark-600">
+                            <div className="mb-2 font-medium text-gray-800 dark:text-dark-100">
+                              Max Claims per Player
+                            </div>
+                            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                              <Input
+                                label="Days"
+                                value={p.maxClaims?.days || ''}
+                                onChange={(e) =>
+                                  updateSelectedPromotion('maxClaims.days', e.target.value)
+                                }
+                                type="number"
+                                min="0"
+                              />
+                              <Input
+                                label="Week"
+                                value={p.maxClaims?.week || ''}
+                                onChange={(e) =>
+                                  updateSelectedPromotion('maxClaims.week', e.target.value)
+                                }
+                                type="number"
+                                min="0"
+                              />
+                              <Input
+                                label="Month"
+                                value={p.maxClaims?.month || ''}
+                                onChange={(e) =>
+                                  updateSelectedPromotion('maxClaims.month', e.target.value)
+                                }
+                                type="number"
+                                min="0"
+                              />
+                              <Input
+                                label="Lifetime"
+                                value={p.maxClaims?.lifetime || ''}
+                                onChange={(e) =>
+                                  updateSelectedPromotion('maxClaims.lifetime', e.target.value)
+                                }
+                                type="number"
+                                min="0"
+                              />
+                            </div>
+                          </div>
+
+                          <Input
+                            label="Title (player UI)"
+                            value={p.title}
+                            onChange={(e) => updateSelectedPromotion('title', e.target.value)}
+                            placeholder="e.g. 50% Reload Bonus"
+                          />
+
+                          <Textarea
+                            label="Description"
+                            value={p.description}
+                            onChange={(e) => updateSelectedPromotion('description', e.target.value)}
+                            rows={3}
+                            placeholder="Description"
+                          />
+
+                          <div className="space-y-2">
+                            <div className="flex items-end gap-2">
+                              <Input
+                                label="Image URL"
+                                value={imageUrlInput}
+                                onChange={(e) => setImageUrlInput(e.target.value)}
+                                placeholder="https://..."
+                              />
+                              <Button
+                                type="button"
+                                className="h-9"
+                                onClick={addImageUrl}
+                                disabled={!imageUrlInput.trim()}>
+                                {t('add')}
+                              </Button>
+                            </div>
+                            {(p.imageUrls || []).length > 0 && (
+                              <div className="flex flex-wrap gap-2">
+                                {p.imageUrls.map((url) => (
+                                  <span
+                                    key={url}
+                                    className="inline-flex items-center gap-2 rounded-md bg-gray-100 px-2 py-1 text-xs text-gray-700 dark:bg-dark-700 dark:text-dark-200">
+                                    <span className="max-w-[280px] truncate">{url}</span>
+                                    <button
+                                      type="button"
+                                      className="rounded-sm hover:bg-gray-200 dark:hover:bg-dark-600"
+                                      onClick={() => removeImageUrl(url)}>
+                                      <XMarkIcon className="size-3.5" />
+                                    </button>
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })()
+                  )}
+                </div>
+              </div>
+            </div>
+
             {/* Re-Issuance Policy */}
             <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-600 dark:bg-dark-800">
               <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-dark-50">
-                4. Re-Issuance Policy
+                5. Re-Issuance Policy
               </h3>
               <p className="mb-6 text-sm text-gray-500 dark:text-dark-300">
                 Control how bonuses may be re-issued.
@@ -420,7 +690,7 @@ const CreateCampaign = () => {
             {/* Review & Launch Section */}
             <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-600 dark:bg-dark-800">
               <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-dark-50">
-                5. Review & Launch
+                6. Review & Launch
               </h3>
               <p className="mb-6 text-sm text-gray-500 dark:text-dark-300">
                 Read-only summary and payload preview.

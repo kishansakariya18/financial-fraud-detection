@@ -624,7 +624,7 @@ export const apiConfig = {
     CAMPAIGN: {
       LIST: '/bonus/admin/campaign-template/list',
       CREATE: '/bonus/admin/campaign-template/create',
-      DETAIL: '/bonus/admin/campaign-template/:campaignUID',
+      DETAIL: '/bonus/admin/campaign-template/:campaignUID/details',
       UPDATE: '/bonus/admin/campaign-template/update',
       CHANGE_STATUS: '/bonus/admin/campaign-template/:campaignUID/change-status',
       DELETE: '/bonus/admin/campaign-template/:campaignUID',

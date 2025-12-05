@@ -141,11 +141,12 @@ const CampaignService = {
   },
 
   archiveCampaign: async (campaignUID) => {
-    const endPoint = replaceText(apiConfig.endPoints.CAMPAIGN.ARCHIVE, ':campaignUID', campaignUID);
+    // Use DELETE API to perform archive as per requirement
+    const endPoint = replaceText(apiConfig.endPoints.CAMPAIGN.DELETE, ':campaignUID', campaignUID);
     try {
       const response = await sendRequest({
         url: apiConfig.baseURL.API_BASE_URL + endPoint,
-        method: 'PATCH',
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
         }

@@ -119,9 +119,6 @@ export function RowActions({ row, table }) {
       toast.success(result.response?.message || 'Campaign deleted successfully', {
         invert: true
       });
-      setTimeout(() => {
-        navigate('/campaign');
-      }, 1000);
     } else {
       setDeleteError(true);
       toast.error(result?.error || 'Failed to delete campaign');
@@ -141,9 +138,7 @@ export function RowActions({ row, table }) {
     if (result?.status === 200) {
       setArchiveSuccess(true);
       toast.success(result.response?.message || 'Campaign archived successfully');
-      setTimeout(() => {
-        navigate('/campaign');
-      }, 800);
+      table.options.meta?.deleteRow(row);
     } else {
       setArchiveError(true);
       toast.error(result?.error || 'Failed to archive campaign');
@@ -157,7 +152,8 @@ export function RowActions({ row, table }) {
     const result = await CampaignService.cloneCampaign(row.original.campaignUID);
     if (result?.status === 200) {
       toast.success(result.response?.message || 'Campaign cloned successfully');
-      navigate('/campaign');
+      // refresh the list in place
+      table.options.meta?.fetchNewList(false);
     } else {
       toast.error(result?.error || 'Failed to clone campaign');
     }
