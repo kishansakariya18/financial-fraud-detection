@@ -1,4 +1,4 @@
-import { MagnifyingGlassIcon, MapPinIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, MapPinIcon, PlusIcon, TagIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
@@ -17,7 +17,8 @@ export function Toolbar({
   table,
   onApplyFilters = () => {},
   onClearFilters = () => {},
-  pageTitle = ''
+  pageTitle = '',
+  tags = []
 }) {
   const { isXs } = useBreakpointsContext();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
@@ -64,6 +65,7 @@ export function Toolbar({
             )}>
             <Filters
               table={table}
+              tags={tags}
               onApplyFilters={onApplyFilters}
               onClearFilters={onClearFilters}
             />
@@ -82,6 +84,7 @@ export function Toolbar({
             <SearchInput table={table} onApplyFilters={onApplyFilters} />
             <Filters
               table={table}
+              tags={tags}
               onApplyFilters={onApplyFilters}
               onClearFilters={onClearFilters}
             />
@@ -114,7 +117,7 @@ function SearchInput({ table, onApplyFilters }) {
   );
 }
 
-function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }) {
+function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {}, tags = [] }) {
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>
@@ -126,6 +129,17 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}
+        />
+      )}
+
+      {table.getColumn('Tags') && tags.length > 0 && (
+        <FacedtedFilter
+          options={tags}
+          column={table.getColumn('Tags')}
+          title={t('tags')}
+          Icon={TagIcon}
+          isMultiple={true}
+          showCheckbox={true}
         />
       )}
 

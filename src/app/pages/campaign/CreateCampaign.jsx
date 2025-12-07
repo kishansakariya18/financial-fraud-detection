@@ -8,10 +8,11 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import CampaignService from 'services/campaign.service';
+import SegmentationService from 'services/segmentation.services';
+import BonusTemplateService from 'services/bonus-template.services';
 import { createCampaignSchema } from './schema';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { campaignStatusOptions } from './helper';
 import { DatePicker } from 'components/shared/form/Datepicker';
 
 const CreateCampaign = () => {
@@ -22,6 +23,8 @@ const CreateCampaign = () => {
   const [tagInput, setTagInput] = useState('');
   const [promotions, setPromotions] = useState([]);
   const [selectedPromotionIndex, setSelectedPromotionIndex] = useState(null);
+  const [segments, setSegments] = useState([]);
+  const [bonusTemplates, setBonusTemplates] = useState([]);
   const { t } = useTranslation();
 
   const breadcrumbItem = [{ title: t('campaign'), path: '/campaign' }, { title: t('create') }];
@@ -93,6 +96,40 @@ const CreateCampaign = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
+
+  useEffect(() => {
+    const fetchSegments = async () => {
+      const result = await SegmentationService.getSegmentationList({
+        pagination: null,
+        filters: {},
+        isPaginationRequired: 0
+      });
+      if (result?.status === 200) {
+        const segmentOptions = (result.response?.data || []).map((segment) => ({
+          value: segment.SegmentationUID || segment.UID,
+          label: segment.Name || segment.SegmentationName
+        }));
+        setSegments(segmentOptions);
+      }
+    };
+
+    const fetchBonusTemplates = async () => {
+      const result = await BonusTemplateService.getTemplates({
+        pagination: { page: 1, limit: 1000 },
+        filters: {}
+      });
+      if (result?.status === 200) {
+        const templateOptions = (result.response?.data || []).map((template) => ({
+          value: template.BonusTemplateUID || template.UID,
+          label: template.Name || template.TemplateName
+        }));
+        setBonusTemplates(templateOptions);
+      }
+    };
+
+    fetchSegments();
+    fetchBonusTemplates();
+  }, []);
 
   const onSubmit = async (data) => {
     const submitData = {
@@ -217,20 +254,12 @@ const CreateCampaign = () => {
               </p>
 
               <div className="space-y-4">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <Input
-                    {...register('campaignName')}
-                    label={t('campaign') + ' ' + t('name') + '*'}
-                    error={errors?.campaignName?.message}
-                    placeholder="e.g. August Kickoff Reloads"
-                  />
-                  <Select
-                    {...register('status')}
-                    label={t('status')}
-                    error={errors?.status?.message}
-                    data={campaignStatusOptions}
-                  />
-                </div>
+                <Input
+                  {...register('campaignName')}
+                  label={t('campaign') + ' ' + t('name') + '*'}
+                  error={errors?.campaignName?.message}
+                  placeholder="e.g. August Kickoff Reloads"
+                />
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Controller
@@ -342,11 +371,18 @@ const CreateCampaign = () => {
               </p>
 
               <div className="space-y-4">
-                <Input
-                  {...register('targetSegment')}
-                  label={t('target') + ' ' + t('segment')}
-                  error={errors?.targetSegment?.message}
-                  placeholder="Search or paste ID"
+                <Controller
+                  name="targetSegment"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      label={t('target') + ' ' + t('segment')}
+                      error={errors?.targetSegment?.message}
+                      placeholder="Select segment"
+                      options={segments}
+                    />
+                  )}
                 />
 
                 <Textarea
@@ -517,13 +553,14 @@ const CreateCampaign = () => {
                               onChange={(e) => updateSelectedPromotion('name', e.target.value)}
                               placeholder="e.g. Promo 01"
                             />
-                            <Input
+                            <Select
                               label="Bonus Template"
                               value={p.bonusTemplate}
                               onChange={(e) =>
                                 updateSelectedPromotion('bonusTemplate', e.target.value)
                               }
                               placeholder="Choose bonus template"
+                              options={bonusTemplates}
                             />
                           </div>
                           <div className="grid gap-4 sm:grid-cols-2">

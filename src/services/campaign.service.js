@@ -21,7 +21,8 @@ const CampaignService = {
             : undefined,
           endDate: filters.endDate
             ? dayjs(+filters.endDate).hour(23).minute(59).second(59).format('YYYY-MM-DD HH:mm:ss')
-            : undefined
+            : undefined,
+          tags: filters?.tags || undefined
         }
       };
       const endPoint = apiConfig.endPoints.CAMPAIGN.LIST;
@@ -166,6 +167,33 @@ const CampaignService = {
         headers: {
           'Content-Type': 'application/json'
         }
+      });
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
+
+  campaignTags: async () => {
+    try {
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.CAMPAIGN.TAGS,
+        method: 'GET',
+        params: { isPaginationRequired: 0 }
+      });
+      return response;
+    } catch (err) {
+      console.log('Error', err);
+    }
+  },
+
+  campaignLogs: async (campaignUID, params) => {
+    const endPoint = replaceText(apiConfig.endPoints.CAMPAIGN.LOGS, ':campaignUID', campaignUID);
+    try {
+      const response = await sendRequest({
+        url: apiConfig.baseURL.API_BASE_URL + endPoint,
+        method: 'GET',
+        params: params
       });
       return response;
     } catch (err) {

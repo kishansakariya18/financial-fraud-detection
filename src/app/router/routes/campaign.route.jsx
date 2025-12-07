@@ -1,4 +1,5 @@
 import { PERMISSIONS } from 'constants/app.constant';
+import { Navigate } from 'react-router';
 import PrivateRoute from '../private';
 
 export const campaignRoute = [
@@ -42,17 +43,59 @@ export const campaignRoute = [
     }
   },
   {
-    path: '/campaign/:campaignUID',
+    path: '/campaign/:campaignUID/clone',
     lazy: async () => {
-      const { default: ViewCampaign } = await import('../../pages/campaign/ViewCampaign');
+      const { default: CloneCampaign } = await import('../../pages/campaign/CloneCampaign');
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.CAMPAIGN?.VIEW}>
-            <ViewCampaign />
+          <PrivateRoute permission={PERMISSIONS.CAMPAIGN?.CREATE}>
+            <CloneCampaign />
           </PrivateRoute>
         )
       };
     }
+  },
+  {
+    path: '/campaign/:campaignUID/tab',
+    lazy: async () => ({
+      Component: (await import('../../pages/campaign/Tabs')).default
+    }),
+    children: [
+      {
+        index: true,
+        element: <Navigate to="./details" />
+      },
+      {
+        path: 'details',
+        lazy: async () => {
+          const { ViewDetails: CampaignDetails } = await import(
+            '../../pages/campaign/details/ViewDetails'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.CAMPAIGN.VIEW}>
+                <CampaignDetails />
+              </PrivateRoute>
+            )
+          };
+        }
+      },
+      {
+        path: 'logs',
+        lazy: async () => {
+          const { default: CampaignLogs } = await import(
+            '../../pages/campaign/campaign-logs/CampaignLogs'
+          );
+          return {
+            Component: () => (
+              <PrivateRoute permission={PERMISSIONS.CAMPAIGN.VIEW}>
+                <CampaignLogs />
+              </PrivateRoute>
+            )
+          };
+        }
+      }
+    ]
   }
 ];
 

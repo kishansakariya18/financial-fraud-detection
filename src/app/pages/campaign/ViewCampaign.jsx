@@ -71,7 +71,6 @@ const ViewCampaign = () => {
   }
 
   const statusInfo = getStatusInfo(campaign.Status);
-  const StatusIcon = statusInfo.icon;
 
   const SectionHeader = ({ icon: Icon, title }) => (
     <div className="mb-5 flex items-center gap-2.5 border-b border-gray-200 pb-3 dark:border-dark-600">
@@ -112,13 +111,16 @@ const ViewCampaign = () => {
                 <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-dark-400">
                   {t('status')}
                 </p>
-                <Badge
-                  color={statusInfo.color}
-                  variant="flat"
-                  className="inline-flex items-center gap-1.5">
-                  {StatusIcon && <StatusIcon className="size-3.5" />}
-                  <span>{statusInfo.label}</span>
-                </Badge>
+                <span
+                  className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ${
+                    statusInfo.color === 'success'
+                      ? 'bg-success/10 text-success'
+                      : statusInfo.color === 'error'
+                        ? 'bg-error/10 text-error'
+                        : 'bg-warning/10 text-warning'
+                  }`}>
+                  {statusInfo.label}
+                </span>
               </div>
               <InfoField
                 label={t('start') + ' ' + t('date')}

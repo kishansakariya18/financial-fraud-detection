@@ -629,7 +629,9 @@ export const apiConfig = {
       CHANGE_STATUS: '/bonus/admin/campaign-template/:campaignUID/change-status',
       DELETE: '/bonus/admin/campaign-template/:campaignUID',
       ARCHIVE: '/bonus/admin/campaign-template/:campaignUID/archive',
-      CLONE: '/bonus/admin/campaign-template/:campaignUID/clone'
+      CLONE: '/bonus/admin/campaign-template/:campaignUID/clone',
+      LOGS: '/bonus/admin/campaign-template/:campaignUID/change-logs',
+      TAGS: '/bonus/admin/campaign-template/tags/list'
     }
   }
 };

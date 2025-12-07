@@ -15,6 +15,7 @@ export const campaignListResponseMapper = (apiData) => {
         endDate: getDateInUTCToTimeZone(item?.EndDate),
         description: item?.Description,
         tags: item?.tags || [],
+        promotionsCount: item?.CampaignPromotions?.length || 0,
         createdAt: getDateInUTCToTimeZone(item?.CreatedAt),
         dateModified: getDateInUTCToTimeZone(item?.UpdatedAt),
         admin: item?.CreatedByAdminID
@@ -29,6 +30,7 @@ export const campaignListResponseMapper = (apiData) => {
       endDate: getDateInUTCToTimeZone(item?.EndDate),
       description: item?.Description,
       tags: item?.Tags || [],
+      promotionsCount: item?.CampaignPromotions?.length || 0,
       createdAt: getDateInUTCToTimeZone(item?.DateCreated),
       dateModified: getDateInUTCToTimeZone(item?.DateModified),
       admin: item?.admin?.Username

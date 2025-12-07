@@ -29,6 +29,12 @@ export const columns = ({ canShowActions }) => [
     filterFn: 'arrIncludesSome',
     enableSorting: false
   }),
+  columnHelper.accessor((row) => row.promotionsCount, {
+    id: 'Promotions',
+    header: 'Promotions',
+    cell: (info) => info.getValue() || 0,
+    enableSorting: false
+  }),
   columnHelper.accessor((row) => row.startDate, {
     id: 'Start Date',
     header: 'Start Date',
@@ -41,6 +47,14 @@ export const columns = ({ canShowActions }) => [
     header: 'End Date',
     cell: DateCell,
     enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.tags, {
+    id: 'Tags',
+    header: 'Tags',
+    enableColumnFilter: true,
+    filterFn: 'arrIncludesSome',
+    enableSorting: false,
+    meta: { isVisible: false }
   }),
   columnHelper.accessor((row) => row.createdAt, {
     id: 'Created At',

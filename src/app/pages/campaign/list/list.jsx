@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
 import { useLockScrollbar } from 'hooks';
@@ -20,6 +20,7 @@ import { PERMISSIONS } from 'constants/app.constant';
 export default function CampaignList() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [tags, setTags] = useState([]);
   const pageTitle = t('campaign') + ' ' + t('list');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
@@ -37,7 +38,8 @@ export default function CampaignList() {
       keyword: params?.keyword,
       status: params?.status,
       startDate: params?.startDate,
-      endDate: params?.endDate
+      endDate: params?.endDate,
+      tags: params?.tags ? params.tags.split(',') : undefined
     };
 
     const response = await CampaignService.campaignList({
@@ -77,6 +79,22 @@ export default function CampaignList() {
   });
 
   useEffect(() => {
+    const fetchTags = async () => {
+      const result = await CampaignService.campaignTags();
+      if (result?.status === 200) {
+        const tagOptions = (result.response?.data || []).map((tag) => ({
+          key: tag.CampaignTagID,
+          value: tag.TagName,
+          label: tag.TagName,
+          count: tag.usageCount
+        }));
+        setTags(tagOptions);
+      }
+    };
+    fetchTags();
+  }, []);
+
+  useEffect(() => {
     if (!isLoading && error) {
       toast.error(error);
       setError('');
@@ -98,6 +116,12 @@ export default function CampaignList() {
         value: [+queryParams.startDate, +queryParams.endDate]
       });
     }
+    if (queryParams.tags) {
+      filtersFromQuery.push({
+        id: 'Tags',
+        value: queryParams.tags.split(',')
+      });
+    }
 
     setColumnFilters(filtersFromQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -115,6 +139,9 @@ export default function CampaignList() {
       if (data.id === 'Start Date') {
         filterItems.date = data.value;
       }
+      if (data.id === 'Tags') {
+        filterItems.tags = Array.isArray(data.value) ? data.value : [data.value];
+      }
     }
 
     setSearchParams({
@@ -123,7 +150,8 @@ export default function CampaignList() {
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
       ...(filterItems.status && { status: filterItems.status }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
-      ...(filterItems.date && { endDate: filterItems?.date[1] })
+      ...(filterItems.date && { endDate: filterItems?.date[1] }),
+      ...(filterItems.tags && filterItems.tags.length > 0 && { tags: filterItems.tags.join(',') })
     });
   };
 
@@ -141,6 +169,7 @@ export default function CampaignList() {
       <Toolbar
         table={table}
         pageTitle={pageTitle}
+        tags={tags}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
       />

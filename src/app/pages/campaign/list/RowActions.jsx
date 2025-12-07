@@ -147,17 +147,8 @@ export function RowActions({ row, table }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [row]);
 
-  const handleClone = useCallback(async () => {
-    setConfirmDeleteLoading(true);
-    const result = await CampaignService.cloneCampaign(row.original.campaignUID);
-    if (result?.status === 200) {
-      toast.success(result.response?.message || 'Campaign cloned successfully');
-      // refresh the list in place
-      table.options.meta?.fetchNewList(false);
-    } else {
-      toast.error(result?.error || 'Failed to clone campaign');
-    }
-    setConfirmDeleteLoading(false);
+  const handleClone = useCallback(() => {
+    navigate(`/campaign/${row.original.campaignUID}/clone`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [row]);
 
@@ -245,7 +236,7 @@ export function RowActions({ row, table }) {
               <MenuItem>
                 {({ focus }) => (
                   <button
-                    onClick={() => navigate(`/campaign/${row.original.campaignUID}`)}
+                    onClick={() => navigate(`/campaign/${row.original.campaignUID}/tab/details`)}
                     className={clsx(
                       'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
                       focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'

@@ -535,6 +535,13 @@ export const PERMISSIONS = Object.freeze({
   ENQUIRES: {
     LIST: 'enquiry-view',
     CHANGE_STATUS: 'enquiry-change-status'
+  },
+  CAMPAIGN: {
+    VIEW: 'campaign-view',
+    ADD: 'campaign-add',
+    EDIT: 'campaign-edit',
+    DELETE: 'campaign-delete',
+    CHANGE_STATUS: 'campaign-change-status'
   }
 });
 
