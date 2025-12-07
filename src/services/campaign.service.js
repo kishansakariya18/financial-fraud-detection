@@ -193,7 +193,11 @@ const CampaignService = {
       const response = await sendRequest({
         url: apiConfig.baseURL.API_BASE_URL + endPoint,
         method: 'GET',
-        params: params
+        params: params,
+        body: {
+          startDate: params.startDate,
+          endDate: params.endDate
+        }
       });
       return response;
     } catch (err) {

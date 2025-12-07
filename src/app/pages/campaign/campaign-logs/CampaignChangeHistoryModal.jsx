@@ -1,6 +1,48 @@
 import { useTranslation } from 'react-i18next';
 import { CustomModal } from 'components/custom/CustomModal';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
+import { Badge } from 'components/ui';
+import { campaignStatusToAPP } from '../helper';
+
+const CampaignDataDisplay = ({ data }) => {
+  if (!data || Object.keys(data).length === 0)
+    return <div className="text-sm italic text-gray-500">No data</div>;
+
+  return (
+    <div className="space-y-2">
+      {Object.entries(data).map(([key, value]) => (
+        <div
+          key={key}
+          className="flex flex-col border-b border-gray-100 pb-2 last:border-0 dark:border-dark-600">
+          <span className="text-xs font-semibold text-gray-500 dark:text-dark-300">{key}</span>
+          <span className="text-sm font-medium text-gray-900 dark:text-dark-100">
+            {formatValue(key, value)}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// Helper to format values based on key
+const formatValue = (key, value) => {
+  if (value === null || value === undefined) return '—';
+  if (key === 'Status') {
+    const status = campaignStatusToAPP(value);
+    return (
+      <Badge color={status === 'active' ? 'success' : status === 'inactive' ? 'error' : 'warning'}>
+        {status}
+      </Badge>
+    );
+  }
+  if (key.includes('Date') || key.includes('At') || key.includes('Time')) {
+    return getDateInUTCToTimeZone(value);
+  }
+  if (typeof value === 'object') {
+    return JSON.stringify(value);
+  }
+  return String(value);
+};
 
 // A generic change history modal for Campaigns that shows side-by-side comparison
 // of old vs new data (pretty-printed JSON when objects are provided)
@@ -13,11 +55,10 @@ const CampaignChangeHistoryModal = ({ isOpen, onClose, changeData }) => {
     changeData.CampaignName || changeData.campaignName || changeData.Name || changeData.name || '';
   const actionType = changeData.Action || changeData.action || changeData.ChangeType || '-';
   const changedBy = changeData.AdminName || changeData.adminName || changeData.user || '—';
-  const changedAt =
-    changeData.CreatedAt || changeData.createdAt || changeData.timestamp || changeData.UpdatedAt;
 
   // Try to detect old/new payloads from common keys
   const newPayload =
+    changeData.NewValues ||
     changeData.NewData ||
     changeData.newData ||
     changeData.New ||
@@ -26,6 +67,7 @@ const CampaignChangeHistoryModal = ({ isOpen, onClose, changeData }) => {
     changeData.after ||
     null;
   const oldPayload =
+    changeData.OldValues ||
     changeData.OldData ||
     changeData.oldData ||
     changeData.Old ||
@@ -34,29 +76,15 @@ const CampaignChangeHistoryModal = ({ isOpen, onClose, changeData }) => {
     changeData.before ||
     null;
 
-  const stringify = (val) => {
-    try {
-      if (val == null) return null;
-      if (typeof val === 'string') return val;
-      return JSON.stringify(val, null, 2);
-    } catch (e) {
-      console.error('Error stringifying value:', e);
-      return String(val);
-    }
-  };
-
-  const newString = stringify(newPayload);
-  const oldString = stringify(oldPayload);
-
   return (
     <CustomModal
       show={isOpen}
       onClose={onClose}
-      title={`${t('change_history')}${titleName ? ` - ${titleName}` : ''}`}
+      title={`${t('change_history')}${titleName ? ` - ${titleName}` : ''} (v${changeData.Version})`}
       sizeClass="max-w-6xl">
       <div className="space-y-4">
         {/* Change Info */}
-        <div className="grid gap-4 rounded-lg bg-gray-50 p-4 dark:bg-dark-700/40 md:grid-cols-3">
+        <div className="grid gap-4 rounded-lg bg-gray-50 p-4 dark:bg-dark-700/40 md:grid-cols-4">
           <div>
             <div className="text-xs font-semibold text-gray-500 dark:text-dark-300">
               {t('changed_by')}
@@ -65,10 +93,18 @@ const CampaignChangeHistoryModal = ({ isOpen, onClose, changeData }) => {
           </div>
           <div>
             <div className="text-xs font-semibold text-gray-500 dark:text-dark-300">
-              {t('date') || 'Date'}
+              {t('effective_from')}
             </div>
             <div className="text-sm font-medium">
-              {changedAt ? getDateInUTCToTimeZone(changedAt) : '—'}
+              {changeData.EffectiveFrom ? getDateInUTCToTimeZone(changeData.EffectiveFrom) : '—'}
+            </div>
+          </div>
+          <div>
+            <div className="text-xs font-semibold text-gray-500 dark:text-dark-300">
+              {t('effective_to')}
+            </div>
+            <div className="text-sm font-medium">
+              {changeData.EffectiveTo ? getDateInUTCToTimeZone(changeData.EffectiveTo) : '—'}
             </div>
           </div>
           <div>
@@ -79,41 +115,24 @@ const CampaignChangeHistoryModal = ({ isOpen, onClose, changeData }) => {
           </div>
         </div>
 
-        {/* Data Comparison */}
+        {/* Rules Comparison */}
         <div className="grid gap-4 md:grid-cols-2">
-          {/* New Data */}
+          {/* New Values */}
           <div className="space-y-2">
             <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-dark-300">
-              {t('new_data') || t('new_rules') || 'New'}
+              {t('new_values')}
             </h3>
             <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-800 dark:bg-gray-900/20">
-              {newString ? (
-                <pre className="max-h-96 overflow-auto text-xs leading-relaxed text-gray-800 dark:text-dark-50">
-                  {newString}
-                </pre>
-              ) : (
-                <div className="text-sm italic text-gray-500 dark:text-dark-300">
-                  {t('no_new_data') || 'No new data'}
-                </div>
-              )}
+              <CampaignDataDisplay data={newPayload} />
             </div>
           </div>
-
-          {/* Old Data */}
+          {/* Old Values */}
           <div className="space-y-2">
             <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500 dark:text-dark-300">
-              {t('old_data') || t('old_rules') || 'Old'}
+              {t('old_values')}
             </h3>
             <div className="rounded-lg border border-gray-200 bg-white p-4 dark:border-dark-500 dark:bg-dark-800">
-              {oldString ? (
-                <pre className="max-h-96 overflow-auto text-xs leading-relaxed text-gray-800 dark:text-dark-50">
-                  {oldString}
-                </pre>
-              ) : (
-                <div className="text-sm italic text-gray-500 dark:text-dark-300">
-                  {t('no_old_data') || t('no_old_rules') || 'No old data'}
-                </div>
-              )}
+              <CampaignDataDisplay data={oldPayload} />
             </div>
           </div>
         </div>

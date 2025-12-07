@@ -53,13 +53,58 @@ export const createCampaignSchema = Yup.object().shape({
     .min(0, 'Must be 0 or greater')
     .optional(),
 
+  // Triggers & Schedule
+  onSegmentEntry: Yup.boolean().optional(),
+  onSegmentExit: Yup.boolean().optional(),
+  recurring: Yup.boolean().optional(),
+  scheduleDays: Yup.array()
+    .of(Yup.number())
+    .when('recurring', (recurring, schema) => {
+      // We need to check if scheduleType is weekly. However, scheduleType is local state in the component.
+      // But we can infer it: if scheduleDays has values, it's weekly.
+      // Actually, we should probably rely on the fact that if recurring is true, either days+time OR interval+anchor is required.
+      // But since we don't have scheduleType in the form data, we can't strictly validate "one or the other".
+      // A loose validation: if recurring is true, at least one schedule config must be valid.
+      // For now, let's just validate the types if present.
+      return schema.optional();
+    }),
+  scheduleTime: Yup.string()
+    .nullable()
+    .when(['recurring', 'scheduleDays'], ([recurring, scheduleDays], schema) => {
+      if (recurring && scheduleDays && scheduleDays.length > 0) {
+        return schema.required('Time is required for weekly schedule');
+      }
+      return schema.optional();
+    }),
+  scheduleInterval: Yup.number()
+    .transform((v, o) => (o === '' || o === null ? undefined : v))
+    .nullable()
+    .min(1, 'Minimum 1 hour')
+    .max(168, 'Maximum 168 hours')
+    .when(['recurring', 'scheduleDays'], ([recurring, scheduleDays], schema) => {
+      if (recurring && (!scheduleDays || scheduleDays.length === 0)) {
+        // If recurring is true and NO days selected, we assume it's hourly schedule (or user hasn't selected anything yet).
+        // We can enforce interval if we assume empty days means hourly mode.
+        return schema.required('Interval is required');
+      }
+      return schema.optional();
+    }),
+  scheduleAnchor: Yup.string()
+    .nullable()
+    .when(['recurring', 'scheduleDays'], ([recurring, scheduleDays], schema) => {
+      if (recurring && (!scheduleDays || scheduleDays.length === 0)) {
+        return schema.required('Anchor is required');
+      }
+      return schema.optional();
+    }),
+
   // Re-Issuance Policy
   reIssuancePolicy: Yup.string()
     .oneOf(['one', 'reissue', 'stack'], 'Invalid re-issuance policy')
     .required('Re-Issuance Policy is required'),
   allowStackN: Yup.number()
     .transform((v, o) => (o === '' || o === null ? undefined : v))
-    .when('reIssuancePolicy', (policy, schema) =>
+    .when('reIssuancePolicy', ([policy], schema) =>
       policy === 'stack' ? schema.required('Stack N is required').min(1).max(50) : schema.optional()
     )
 });

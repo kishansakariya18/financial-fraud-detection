@@ -8,11 +8,14 @@ import { toast } from 'sonner';
 import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import CampaignService from 'services/campaign.service';
+import SegmentationService from 'services/segmentation.services';
+import BonusTemplateService from 'services/bonus-template.services';
 import { createCampaignSchema } from './schema';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { campaignStatusOptions } from './helper';
 import { DatePicker } from 'components/shared/form/Datepicker';
+import TriggersAndSchedule from 'components/sections/campaign/TriggersAndSchedule';
 
 const EditCampaign = () => {
   const [error, setError] = useState('');
@@ -21,6 +24,10 @@ const EditCampaign = () => {
   const [response, setResponse] = useState(null);
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
+  const [promotions, setPromotions] = useState([]);
+  const [selectedPromotionIndex, setSelectedPromotionIndex] = useState(null);
+  const [segments, setSegments] = useState([]);
+  const [bonusTemplates, setBonusTemplates] = useState([]);
   const { t } = useTranslation();
   const { campaignUID } = useParams();
 
@@ -56,7 +63,17 @@ const EditCampaign = () => {
       maxClaimsAcrossPromotions: '',
       // Re-Issuance Policy
       reIssuancePolicy: 'one',
-      allowStackN: ''
+      allowStackN: '',
+      // Triggers
+      onSegmentEntry: false,
+      onSegmentExit: false,
+      recurring: false,
+      scheduleDays: [],
+      scheduleTime: '',
+      scheduleInterval: '',
+      scheduleAnchor: '',
+      // Promotions
+      promotions: []
     }
   });
 
@@ -73,14 +90,80 @@ const EditCampaign = () => {
           reset({
             campaignName: data.CampaignName || '',
             status: data.Status === 1 ? 'active' : data.Status === 2 ? 'archive' : 'inactive',
-            startDate: data.StartDate ? new Date(data.StartDate).toISOString().slice(0, 16) : '',
-            endDate: data.EndDate ? new Date(data.EndDate).toISOString().slice(0, 16) : '',
+            startDate: data.StartDate ? new Date(data.StartDate) : '',
+            endDate: data.EndDate ? new Date(data.EndDate) : '',
             description: data.Description || '',
-            targetSegment: data.TargetSegment || '',
-            forceIncludePlayers: data.ForceIncludePlayers || '',
-            forceExcludePlayers: data.ForceExcludePlayers || ''
+            targetSegment: data.TargetSegmentID || '', // Assuming ID is used for now, or map to UID if needed
+            forceIncludePlayers: Array.isArray(data.IncludedPlayers)
+              ? data.IncludedPlayers.join(', ')
+              : data.IncludedPlayers || '',
+            forceExcludePlayers: Array.isArray(data.ExcludedPlayers)
+              ? data.ExcludedPlayers.join(', ')
+              : data.ExcludedPlayers || '',
+
+            // Triggers
+            onSegmentEntry: data.TriggerOnEntry === 1,
+            onSegmentExit: data.TriggerOnExit === 1,
+            recurring: data.isTriggerOnSchedule === 1,
+            scheduleDays: data.RecurringScheduleConfig?.dayOfWeek
+              ? [data.RecurringScheduleConfig.dayOfWeek]
+              : [], // Wrap in array
+            scheduleTime: data.RecurringScheduleConfig?.hour
+              ? `${String(data.RecurringScheduleConfig.hour).padStart(2, '0')}:00`
+              : '', // Format as HH:mm
+            scheduleInterval: '', // Not present in example JSON, check if needed
+            scheduleAnchor: '', // Not present in example JSON
+
+            // Bonus Removal Rules
+            removeAfterTimeEnabled: data.RemoveBonusAfterXTime === 1,
+            removeAfterTimeValue:
+              data.RemoveBonusAfterDays > 0
+                ? data.RemoveBonusAfterDays
+                : data.RemoveBonusAfterHours > 0
+                  ? data.RemoveBonusAfterHours
+                  : '',
+            removeAfterTimeUnit:
+              data.RemoveBonusAfterDays > 0
+                ? 'days'
+                : data.RemoveBonusAfterHours > 0
+                  ? 'hours'
+                  : 'days',
+            removeOnExitSegment: data.RemoveOnExitSegment === 1,
+            fixedCutoffDate: data.RemoveOnFixedDate ? new Date(data.RemoveOnFixedDate) : null,
+            maxClaimsAcrossPromotions: data.MaxClaimAcrossPromotions || '',
+
+            // Re-Issuance Policy
+            reIssuancePolicy:
+              data.ReissuePolicyType === 0
+                ? 'one'
+                : data.ReissuePolicyType === 1
+                  ? 'reissue'
+                  : 'stack',
+            allowStackN: data.ReissueBonusUpto || ''
           });
-          setTags(data.Tags || []);
+          setTags(data.tags || []);
+
+          // Map Promotions
+          if (data.CampaignPromotions && Array.isArray(data.CampaignPromotions)) {
+            setPromotions(
+              data.CampaignPromotions.map((p) => ({
+                id: p.CampaignPromotionID || Date.now().toString(),
+                name: p.PromoName || '',
+                bonusTemplate: p.BonusTemplateID || '', // Assuming ID matches value in dropdown
+                priority: p.Priority || '',
+                cooldown: p.CooldownHour || '',
+                maxClaims: {
+                  days: p.MaxClaimPerDay || '',
+                  week: p.MaxClaimPerWeek || '',
+                  month: p.MaxClaimPerMonth || '',
+                  lifetime: p.MaxClaimLifetime || ''
+                },
+                title: p.Title || '',
+                description: p.PromoDescription || '',
+                imageUrls: p.ImageUrl ? [p.ImageUrl] : [] // Assuming single URL in string
+              }))
+            );
+          }
         }
       } else {
         toast.error(result?.error || 'Failed to fetch campaign details');
@@ -127,6 +210,40 @@ const EditCampaign = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response]);
 
+  useEffect(() => {
+    const fetchSegments = async () => {
+      const result = await SegmentationService.getSegmentationList({
+        pagination: null,
+        filters: {},
+        isPaginationRequired: 0
+      });
+      if (result?.status === 200) {
+        const segmentOptions = (result.response?.data || []).map((segment) => ({
+          value: segment.SegmentationUID || segment.UID || segment.SegmentationID, // Fallback to ID if UID missing
+          label: segment.Name || segment.SegmentationName
+        }));
+        setSegments(segmentOptions);
+      }
+    };
+
+    const fetchBonusTemplates = async () => {
+      const result = await BonusTemplateService.getTemplates({
+        pagination: { page: 1, limit: 1000 },
+        filters: {}
+      });
+      if (result?.status === 200) {
+        const templateOptions = (result.response?.data || []).map((template) => ({
+          value: template.BonusTemplateUID || template.UID || template.BonusTemplateID, // Fallback to ID
+          label: template.Name || template.TemplateName
+        }));
+        setBonusTemplates(templateOptions);
+      }
+    };
+
+    fetchSegments();
+    fetchBonusTemplates();
+  }, []);
+
   const onSubmit = async (data) => {
     const submitData = {
       ...data,
@@ -156,6 +273,73 @@ const EditCampaign = () => {
       e.preventDefault();
       handleAddTag();
     }
+  };
+
+  const makeDefaultPromotion = () => ({
+    id: Date.now().toString(),
+    name: '',
+    bonusTemplate: '',
+    priority: '',
+    cooldown: '',
+    maxClaims: { days: '', week: '', month: '', lifetime: '' },
+    title: '',
+    description: '',
+    imageUrls: []
+  });
+
+  const handleAddPromotion = () => {
+    const next = [...promotions, makeDefaultPromotion()];
+    setPromotions(next);
+    setSelectedPromotionIndex(next.length - 1);
+  };
+
+  const handleRemovePromotion = (index) => {
+    const next = promotions.filter((_, i) => i !== index);
+    setPromotions(next);
+    if (selectedPromotionIndex === index) {
+      setSelectedPromotionIndex(next.length ? 0 : null);
+    } else if (selectedPromotionIndex > index) {
+      setSelectedPromotionIndex((prev) => (prev != null ? prev - 1 : prev));
+    }
+  };
+
+  const updateSelectedPromotion = (path, value) => {
+    if (selectedPromotionIndex == null) return;
+    setPromotions((prev) => {
+      const next = [...prev];
+      const p = { ...next[selectedPromotionIndex] };
+      if (path.startsWith('maxClaims.')) {
+        const key = path.split('.')[1];
+        p.maxClaims = { ...p.maxClaims, [key]: value };
+      } else {
+        p[path] = value;
+      }
+      next[selectedPromotionIndex] = p;
+      return next;
+    });
+  };
+
+  const [imageUrlInput, setImageUrlInput] = useState('');
+  const addImageUrl = () => {
+    if (!imageUrlInput.trim() || selectedPromotionIndex == null) return;
+    setPromotions((prev) => {
+      const next = [...prev];
+      const p = { ...next[selectedPromotionIndex] };
+      p.imageUrls = [...(p.imageUrls || []), imageUrlInput.trim()];
+      next[selectedPromotionIndex] = p;
+      return next;
+    });
+    setImageUrlInput('');
+  };
+  const removeImageUrl = (url) => {
+    if (selectedPromotionIndex == null) return;
+    setPromotions((prev) => {
+      const next = [...prev];
+      const p = { ...next[selectedPromotionIndex] };
+      p.imageUrls = (p.imageUrls || []).filter((u) => u !== url);
+      next[selectedPromotionIndex] = p;
+      return next;
+    });
   };
 
   if (fetchLoading) {
@@ -205,128 +389,6 @@ const EditCampaign = () => {
                     error={errors?.status?.message}
                     data={campaignStatusOptions}
                   />
-                </div>
-
-                {/* Bonus Removal Rules */}
-                <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-600 dark:bg-dark-800">
-                  <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-dark-50">
-                    3. Bonus Removal Rules
-                  </h3>
-                  <p className="mb-6 text-sm text-gray-500 dark:text-dark-300">
-                    Configure when issued bonuses should be removed.
-                  </p>
-
-                  <div className="space-y-4">
-                    <div>
-                      <Checkbox
-                        checked={!!formValues.removeAfterTimeEnabled}
-                        onChange={(e) => setValue('removeAfterTimeEnabled', e.target.checked)}
-                        label="Remove bonuses after X time from issuance"
-                      />
-                    </div>
-                    <div className="grid gap-4 sm:grid-cols-[1fr_160px]">
-                      <Input
-                        {...register('removeAfterTimeValue')}
-                        type="number"
-                        label="Time"
-                        error={errors?.removeAfterTimeValue?.message}
-                        placeholder="e.g. 400"
-                        disabled={!formValues.removeAfterTimeEnabled}
-                      />
-                      <Select
-                        {...register('removeAfterTimeUnit')}
-                        label="Unit"
-                        error={errors?.removeAfterTimeUnit?.message}
-                        disabled={!formValues.removeAfterTimeEnabled}
-                        data={[
-                          { key: 'minutes', value: 'minutes', label: 'Minutes' },
-                          { key: 'hours', value: 'hours', label: 'Hours' },
-                          { key: 'days', value: 'days', label: 'Days' },
-                          { key: 'weeks', value: 'weeks', label: 'Weeks' }
-                        ]}
-                      />
-                    </div>
-                    <div>
-                      <Checkbox
-                        checked={!!formValues.removeOnExitSegment}
-                        onChange={(e) => setValue('removeOnExitSegment', e.target.checked)}
-                        label="Remove if player exits target segment"
-                      />
-                    </div>
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <Controller
-                        render={({ field: { onChange, value, ...rest } }) => (
-                          <DatePicker
-                            onChange={onChange}
-                            value={value || ''}
-                            label="Fixed Cut-off Date"
-                            error={errors?.fixedCutoffDate?.message}
-                            options={{ disableMobile: true, time_24hr: true }}
-                            placeholder="Choose date..."
-                            disabled={!formValues.removeAfterTimeEnabled}
-                            {...rest}
-                          />
-                        )}
-                        name="fixedCutoffDate"
-                        control={control}
-                      />
-                      <Input
-                        {...register('maxClaimsAcrossPromotions')}
-                        label="Max Claims Across Promotions"
-                        error={errors?.maxClaimsAcrossPromotions?.message}
-                        placeholder="e.g. 2"
-                        type="number"
-                        min="0"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Re-Issuance Policy */}
-                <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-600 dark:bg-dark-800">
-                  <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-dark-50">
-                    4. Re-Issuance Policy
-                  </h3>
-                  <p className="mb-6 text-sm text-gray-500 dark:text-dark-300">
-                    Control how bonuses may be re-issued.
-                  </p>
-
-                  <div className="space-y-3">
-                    <div className="flex flex-col gap-2">
-                      <Radio
-                        label="One bonus per player at a time"
-                        value="one"
-                        checked={formValues.reIssuancePolicy === 'one'}
-                        onChange={(e) => setValue('reIssuancePolicy', e.target.value)}
-                      />
-                      <Radio
-                        label="Re-issue even if player has an active one"
-                        value="reissue"
-                        checked={formValues.reIssuancePolicy === 'reissue'}
-                        onChange={(e) => setValue('reIssuancePolicy', e.target.value)}
-                      />
-                      <div className="flex items-center gap-2">
-                        <Radio
-                          label="Allow stacking up to"
-                          value="stack"
-                          checked={formValues.reIssuancePolicy === 'stack'}
-                          onChange={(e) => setValue('reIssuancePolicy', e.target.value)}
-                        />
-                        <Input
-                          {...register('allowStackN')}
-                          className="w-24"
-                          type="number"
-                          min="1"
-                          placeholder="2"
-                          disabled={formValues.reIssuancePolicy !== 'stack'}
-                          error={errors?.allowStackN?.message}
-                        />
-                        <span className="text-sm text-gray-600 dark:text-dark-200">
-                          active bonuses
-                        </span>
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -439,11 +501,18 @@ const EditCampaign = () => {
               </p>
 
               <div className="space-y-4">
-                <Input
-                  {...register('targetSegment')}
-                  label={t('target') + ' ' + t('segment')}
-                  error={errors?.targetSegment?.message}
-                  placeholder="Search or paste ID"
+                <Controller
+                  name="targetSegment"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      label={t('target') + ' ' + t('segment')}
+                      error={errors?.targetSegment?.message}
+                      placeholder="Select segment"
+                      data={segments}
+                    />
+                  )}
                 />
 
                 <Textarea
@@ -464,10 +533,343 @@ const EditCampaign = () => {
               </div>
             </div>
 
+            {/* Triggers & Schedule */}
+            <TriggersAndSchedule
+              control={control}
+              watch={watch}
+              setValue={setValue}
+              errors={errors}
+              register={register}
+            />
+
+            {/* Bonus Removal Rules */}
+            <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-600 dark:bg-dark-800">
+              <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-dark-50">
+                4. Bonus Removal Rules
+              </h3>
+              <p className="mb-6 text-sm text-gray-500 dark:text-dark-300">
+                Configure when issued bonuses should be removed.
+              </p>
+
+              <div className="space-y-4">
+                <div>
+                  <Checkbox
+                    checked={!!formValues.removeAfterTimeEnabled}
+                    onChange={(e) => setValue('removeAfterTimeEnabled', e.target.checked)}
+                    label="Remove bonuses after X time from issuance"
+                  />
+                </div>
+                <div className="grid gap-4 sm:grid-cols-[1fr_160px]">
+                  <Input
+                    {...register('removeAfterTimeValue')}
+                    type="number"
+                    label="Time"
+                    error={errors?.removeAfterTimeValue?.message}
+                    placeholder="e.g. 400"
+                    disabled={!formValues.removeAfterTimeEnabled}
+                  />
+                  <Select
+                    {...register('removeAfterTimeUnit')}
+                    label="Unit"
+                    error={errors?.removeAfterTimeUnit?.message}
+                    disabled={!formValues.removeAfterTimeEnabled}
+                    data={[
+                      { key: 'minutes', value: 'minutes', label: 'Minutes' },
+                      { key: 'hours', value: 'hours', label: 'Hours' },
+                      { key: 'days', value: 'days', label: 'Days' },
+                      { key: 'weeks', value: 'weeks', label: 'Weeks' }
+                    ]}
+                  />
+                </div>
+                <div>
+                  <Checkbox
+                    checked={!!formValues.removeOnExitSegment}
+                    onChange={(e) => setValue('removeOnExitSegment', e.target.checked)}
+                    label="Remove if player exits target segment"
+                  />
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Controller
+                    render={({ field: { onChange, value, ...rest } }) => (
+                      <DatePicker
+                        onChange={onChange}
+                        value={value || ''}
+                        label="Fixed Cut-off Date"
+                        error={errors?.fixedCutoffDate?.message}
+                        options={{ disableMobile: true, time_24hr: true }}
+                        placeholder="Choose date..."
+                        disabled={!formValues.removeAfterTimeEnabled}
+                        {...rest}
+                      />
+                    )}
+                    name="fixedCutoffDate"
+                    control={control}
+                  />
+                  <Input
+                    {...register('maxClaimsAcrossPromotions')}
+                    label="Max Claims Across Promotions"
+                    error={errors?.maxClaimsAcrossPromotions?.message}
+                    placeholder="e.g. 2"
+                    type="number"
+                    min="0"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-600 dark:bg-dark-800">
+              <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-dark-50">
+                5. Promotions
+              </h3>
+              <p className="mb-6 text-sm text-gray-500 dark:text-dark-300">
+                Attach one or more promotions to this campaign.
+              </p>
+
+              <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
+                <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 dark:border-dark-600 dark:bg-dark-800/40">
+                  <div className="mb-3 flex items-center justify-between">
+                    <span className="font-medium text-gray-700 dark:text-dark-100">Promotions</span>
+                    <Button type="button" size="sm" onClick={handleAddPromotion}>
+                      {t('add')}
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    {promotions.map((p, idx) => (
+                      <div
+                        key={p.id}
+                        className={`flex items-center justify-between rounded-md border px-3 py-2 text-sm ${
+                          selectedPromotionIndex === idx
+                            ? 'bg-primary/5 dark:bg-primary/10 border-primary-500'
+                            : 'border-gray-200 bg-white dark:border-dark-600 dark:bg-dark-800'
+                        }`}>
+                        <button
+                          type="button"
+                          className="flex-1 text-left"
+                          onClick={() => setSelectedPromotionIndex(idx)}>
+                          <div className="font-medium text-gray-800 dark:text-dark-100">
+                            {p.name?.trim() || `Promo ${String(idx + 1).padStart(2, '0')}`}
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-dark-300">
+                            Template:{' '}
+                            {bonusTemplates.find((t) => t.value === p.bonusTemplate)?.label ||
+                              p.bonusTemplate ||
+                              '—'}
+                          </div>
+                        </button>
+                        <Button
+                          type="button"
+                          isIcon
+                          variant="flat"
+                          color="error"
+                          className="ml-2 size-8"
+                          onClick={() => handleRemovePromotion(idx)}>
+                          <XMarkIcon className="size-4.5" />
+                        </Button>
+                      </div>
+                    ))}
+                    {promotions.length === 0 && (
+                      <div className="rounded-md border border-dashed border-gray-300 p-3 text-center text-xs text-gray-500 dark:border-dark-600 dark:text-dark-300">
+                        {t('no_data') || 'No promotions added yet'}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div>
+                  {selectedPromotionIndex == null ? (
+                    <div className="flex flex-col items-center justify-center rounded-md border border-dashed border-gray-300 p-6 text-center text-sm text-gray-500 dark:border-dark-600 dark:text-dark-300">
+                      <p className="mb-3">{t('select') || 'Select a promotion to edit'}</p>
+                      <Button type="button" size="sm" onClick={handleAddPromotion}>
+                        {t('add')}
+                      </Button>
+                    </div>
+                  ) : (
+                    (() => {
+                      const p = promotions[selectedPromotionIndex] || {};
+                      return (
+                        <div className="space-y-4">
+                          <div className="grid gap-4 sm:grid-cols-2">
+                            <Input
+                              label="Name (internal)*"
+                              value={p.name}
+                              onChange={(e) => updateSelectedPromotion('name', e.target.value)}
+                              placeholder="e.g. Promo 01"
+                            />
+                            <Select
+                              label="Bonus Template"
+                              value={p.bonusTemplate}
+                              onChange={(e) =>
+                                updateSelectedPromotion('bonusTemplate', e.target.value)
+                              }
+                              placeholder="Choose bonus template"
+                              data={bonusTemplates}
+                            />
+                          </div>
+                          <div className="grid gap-4 sm:grid-cols-2">
+                            <Input
+                              label="Priority"
+                              value={p.priority}
+                              onChange={(e) => updateSelectedPromotion('priority', e.target.value)}
+                              type="number"
+                              placeholder="e.g. 1"
+                            />
+                            <Input
+                              label="Cooldown (optional)"
+                              value={p.cooldown}
+                              onChange={(e) => updateSelectedPromotion('cooldown', e.target.value)}
+                              placeholder="e.g., 48h or 24:00"
+                            />
+                          </div>
+                          <div className="rounded-lg border border-gray-200 p-3 dark:border-dark-600">
+                            <div className="mb-2 font-medium text-gray-800 dark:text-dark-100">
+                              Max Claims per Player
+                            </div>
+                            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                              <Input
+                                label="Days"
+                                value={p.maxClaims?.days || ''}
+                                onChange={(e) =>
+                                  updateSelectedPromotion('maxClaims.days', e.target.value)
+                                }
+                                type="number"
+                                min="0"
+                              />
+                              <Input
+                                label="Week"
+                                value={p.maxClaims?.week || ''}
+                                onChange={(e) =>
+                                  updateSelectedPromotion('maxClaims.week', e.target.value)
+                                }
+                                type="number"
+                                min="0"
+                              />
+                              <Input
+                                label="Month"
+                                value={p.maxClaims?.month || ''}
+                                onChange={(e) =>
+                                  updateSelectedPromotion('maxClaims.month', e.target.value)
+                                }
+                                type="number"
+                                min="0"
+                              />
+                              <Input
+                                label="Lifetime"
+                                value={p.maxClaims?.lifetime || ''}
+                                onChange={(e) =>
+                                  updateSelectedPromotion('maxClaims.lifetime', e.target.value)
+                                }
+                                type="number"
+                                min="0"
+                              />
+                            </div>
+                          </div>
+
+                          <Input
+                            label="Title (player UI)"
+                            value={p.title}
+                            onChange={(e) => updateSelectedPromotion('title', e.target.value)}
+                            placeholder="e.g. 50% Reload Bonus"
+                          />
+
+                          <Textarea
+                            label="Description"
+                            value={p.description}
+                            onChange={(e) => updateSelectedPromotion('description', e.target.value)}
+                            rows={3}
+                            placeholder="Description"
+                          />
+
+                          <div className="space-y-2">
+                            <div className="flex items-end gap-2">
+                              <Input
+                                label="Image URL"
+                                value={imageUrlInput}
+                                onChange={(e) => setImageUrlInput(e.target.value)}
+                                placeholder="https://..."
+                              />
+                              <Button
+                                type="button"
+                                className="h-9"
+                                onClick={addImageUrl}
+                                disabled={!imageUrlInput.trim()}>
+                                {t('add')}
+                              </Button>
+                            </div>
+                            {(p.imageUrls || []).length > 0 && (
+                              <div className="flex flex-wrap gap-2">
+                                {p.imageUrls.map((url) => (
+                                  <span
+                                    key={url}
+                                    className="inline-flex items-center gap-2 rounded-md bg-gray-100 px-2 py-1 text-xs text-gray-700 dark:bg-dark-700 dark:text-dark-200">
+                                    <span className="max-w-[280px] truncate">{url}</span>
+                                    <button
+                                      type="button"
+                                      className="rounded-sm hover:bg-gray-200 dark:hover:bg-dark-600"
+                                      onClick={() => removeImageUrl(url)}>
+                                      <XMarkIcon className="size-3.5" />
+                                    </button>
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })()
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Re-Issuance Policy */}
+            <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-600 dark:bg-dark-800">
+              <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-dark-50">
+                6. Re-Issuance Policy
+              </h3>
+              <p className="mb-6 text-sm text-gray-500 dark:text-dark-300">
+                Control how bonuses may be re-issued.
+              </p>
+
+              <div className="space-y-3">
+                <div className="flex flex-col gap-2">
+                  <Radio
+                    label="One bonus per player at a time"
+                    value="one"
+                    checked={formValues.reIssuancePolicy === 'one'}
+                    onChange={(e) => setValue('reIssuancePolicy', e.target.value)}
+                  />
+                  <Radio
+                    label="Re-issue even if player has an active one"
+                    value="reissue"
+                    checked={formValues.reIssuancePolicy === 'reissue'}
+                    onChange={(e) => setValue('reIssuancePolicy', e.target.value)}
+                  />
+                  <div className="flex items-center gap-2">
+                    <Radio
+                      label="Allow stacking up to"
+                      value="stack"
+                      checked={formValues.reIssuancePolicy === 'stack'}
+                      onChange={(e) => setValue('reIssuancePolicy', e.target.value)}
+                    />
+                    <Input
+                      {...register('allowStackN')}
+                      className="w-24"
+                      type="number"
+                      min="1"
+                      placeholder="2"
+                      disabled={formValues.reIssuancePolicy !== 'stack'}
+                      error={errors?.allowStackN?.message}
+                    />
+                    <span className="text-sm text-gray-600 dark:text-dark-200">active bonuses</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             {/* Review & Launch Section */}
             <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-600 dark:bg-dark-800">
               <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-dark-50">
-                3. Review & Launch
+                7. Review & Launch
               </h3>
               <p className="mb-6 text-sm text-gray-500 dark:text-dark-300">
                 Read-only summary and payload preview.

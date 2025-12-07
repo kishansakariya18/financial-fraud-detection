@@ -15,6 +15,7 @@ import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { EyeIcon } from '@heroicons/react/24/outline';
 import ChangeHistoryModal from './CampaignChangeHistoryModal';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
+import dayjs from 'dayjs';
 
 const columnHelper = createColumnHelper();
 
@@ -26,10 +27,10 @@ const CampaignChangeHistory = () => {
   const [selectedChange, setSelectedChange] = useState(null);
 
   const breadcrumbItem = [
-    { title: t('campaign_templates'), path: '/bonus/campaign-templates' },
+    { title: t('campaign_management'), path: '/campaign' },
     {
       title: t('view'),
-      path: `/bonus/campaign-templates/${campaignUID}/tab/details`
+      path: `/campaign/${campaignUID}/tab/details`
     },
     { title: t('change_history') }
   ];
@@ -111,8 +112,14 @@ const CampaignChangeHistory = () => {
 
     const filters = {};
     if (queryParams.keyword) filters.keyword = queryParams.keyword;
-    if (queryParams.startDate) filters.startDate = queryParams.startDate;
-    if (queryParams.endDate) filters.endDate = queryParams.endDate;
+
+    filters.startDate = dayjs(+filters.startDate).format('YYYY-MM-DD HH:mm:ss');
+
+    filters.endDate = dayjs(+queryParams.endDate)
+      .hour(23)
+      .minute(59)
+      .second(59)
+      .format('YYYY-MM-DD HH:mm:ss');
 
     const params = {
       page: pageIndex + 1,
@@ -122,11 +129,11 @@ const CampaignChangeHistory = () => {
 
     const response = await CampaignTemplateService.campaignLogs(campaignUID, params);
 
-    if (response.status === 200 && response.data) {
+    if (response.status === 200 && response.response) {
       return {
         status: response.status,
-        data: response.data || [],
-        totalRecords: response.totalRecords || 0
+        data: response.response.data || [],
+        totalRecords: response.response.totalRecords || 0
       };
     }
 

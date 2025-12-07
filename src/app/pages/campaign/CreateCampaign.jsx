@@ -14,6 +14,7 @@ import { createCampaignSchema } from './schema';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { DatePicker } from 'components/shared/form/Datepicker';
+import TriggersAndSchedule from 'components/sections/campaign/TriggersAndSchedule';
 
 const CreateCampaign = () => {
   const [error, setError] = useState('');
@@ -50,6 +51,14 @@ const CreateCampaign = () => {
       targetSegment: '',
       forceIncludePlayers: '',
       forceExcludePlayers: '',
+      // Triggers & Schedule
+      onSegmentEntry: false,
+      onSegmentExit: false,
+      recurring: false,
+      scheduleDays: [],
+      scheduleTime: '',
+      scheduleInterval: '',
+      scheduleAnchor: '',
       // Bonus Removal Rules
       removeAfterTimeEnabled: false,
       removeAfterTimeValue: '',
@@ -380,7 +389,7 @@ const CreateCampaign = () => {
                       label={t('target') + ' ' + t('segment')}
                       error={errors?.targetSegment?.message}
                       placeholder="Select segment"
-                      options={segments}
+                      data={segments}
                     />
                   )}
                 />
@@ -403,10 +412,20 @@ const CreateCampaign = () => {
               </div>
             </div>
 
+            {/* Triggers & Schedule Section */}
+            <TriggersAndSchedule
+              control={control}
+              watch={watch}
+              setValue={setValue}
+              errors={errors}
+              register={register}
+              sectionNumber={3}
+            />
+
             {/* Bonus Removal Rules */}
             <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-600 dark:bg-dark-800">
               <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-dark-50">
-                3. Bonus Removal Rules
+                4. Bonus Removal Rules
               </h3>
               <p className="mb-6 text-sm text-gray-500 dark:text-dark-300">
                 Configure when issued bonuses should be removed.
@@ -480,7 +499,7 @@ const CreateCampaign = () => {
 
             <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-600 dark:bg-dark-800">
               <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-dark-50">
-                4. Promotions
+                5. Promotions
               </h3>
               <p className="mb-6 text-sm text-gray-500 dark:text-dark-300">
                 Attach one or more promotions to this campaign.
@@ -560,7 +579,7 @@ const CreateCampaign = () => {
                                 updateSelectedPromotion('bonusTemplate', e.target.value)
                               }
                               placeholder="Choose bonus template"
-                              options={bonusTemplates}
+                              data={bonusTemplates}
                             />
                           </div>
                           <div className="grid gap-4 sm:grid-cols-2">
@@ -682,7 +701,7 @@ const CreateCampaign = () => {
             {/* Re-Issuance Policy */}
             <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-600 dark:bg-dark-800">
               <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-dark-50">
-                5. Re-Issuance Policy
+                6. Re-Issuance Policy
               </h3>
               <p className="mb-6 text-sm text-gray-500 dark:text-dark-300">
                 Control how bonuses may be re-issued.
@@ -727,7 +746,7 @@ const CreateCampaign = () => {
             {/* Review & Launch Section */}
             <div className="rounded-lg border border-gray-200 bg-white p-6 dark:border-dark-600 dark:bg-dark-800">
               <h3 className="mb-1 text-lg font-semibold text-gray-900 dark:text-dark-50">
-                6. Review & Launch
+                7. Review & Launch
               </h3>
               <p className="mb-6 text-sm text-gray-500 dark:text-dark-300">
                 Read-only summary and payload preview.
