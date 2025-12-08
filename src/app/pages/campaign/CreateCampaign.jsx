@@ -11,6 +11,7 @@ import CampaignService from 'services/campaign.service';
 import SegmentationService from 'services/segmentation.services';
 import BonusTemplateService from 'services/bonus-template.services';
 import { createCampaignSchema } from './schema';
+import { campaignStatusToAPI } from './helper';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { DatePicker } from 'components/shared/form/Datepicker';
@@ -115,7 +116,7 @@ const CreateCampaign = () => {
       });
       if (result?.status === 200) {
         const segmentOptions = (result.response?.data || []).map((segment) => ({
-          value: segment.SegmentationUID || segment.UID,
+          value: segment.UserSegmentID || segment.SegmentationUID || segment.UID,
           label: segment.Name || segment.SegmentationName
         }));
         setSegments(segmentOptions);
@@ -141,11 +142,75 @@ const CreateCampaign = () => {
   }, []);
 
   const onSubmit = async (data) => {
+    const parseIds = (str) =>
+      str
+        ? str
+            .split(',')
+            .map((s) => parseInt(s.trim()))
+            .filter((n) => !isNaN(n))
+        : [];
+
     const submitData = {
-      ...data,
+      campaignName: data.campaignName,
+      status: campaignStatusToAPI(data.status),
+      description: data.description,
+      startDate: data.startDate ? new Date(data.startDate).toISOString() : null,
+      endDate: data.endDate ? new Date(data.endDate).toISOString() : null,
+      targetSegmentID: data.targetSegment?.value ?? data.targetSegment,
+      includedPlayers: parseIds(data.forceIncludePlayers),
+      excludedPlayers: parseIds(data.forceExcludePlayers),
+
+      // Triggers
+      triggerOnEntry: data.onSegmentEntry ? 1 : 0,
+      triggerOnExit: data.onSegmentExit ? 1 : 0,
+      isTriggerOnSchedule: data.recurring ? 1 : 0,
+      recurringScheduleType: data.recurring ? 'weekly' : null,
+      recurringScheduleConfig: data.recurring
+        ? {
+            dayOfWeek: (data.scheduleDays || [])[0] || 1,
+            hour: data.scheduleTime ? parseInt(data.scheduleTime.split(':')[0]) : 0
+          }
+        : null,
+
+      // Bonus Removal
+      removeBonusAfterXTime: data.removeAfterTimeEnabled ? 1 : 0,
+      removeBonusAfterDays:
+        data.removeAfterTimeEnabled && data.removeAfterTimeUnit === 'days'
+          ? parseInt(data.removeAfterTimeValue)
+          : 0,
+      removeBonusAfterHours:
+        data.removeAfterTimeEnabled && data.removeAfterTimeUnit === 'hours'
+          ? parseInt(data.removeAfterTimeValue)
+          : 0,
+      removeOnExitSegment: data.removeOnExitSegment ? 1 : 0,
+      removeOnFixedDate: data.fixedCutoffDate ? new Date(data.fixedCutoffDate).toISOString() : null,
+      maxClaimAcrossPromotions: data.maxClaimsAcrossPromotions
+        ? parseInt(data.maxClaimsAcrossPromotions)
+        : 0,
+
+      // Re-issuance
+      reissuePolicyType:
+        data.reIssuancePolicy === 'one' ? 0 : data.reIssuancePolicy === 'reissue' ? 1 : 2,
+      reissueBonusUpto: data.allowStackN ? parseInt(data.allowStackN) : 0,
+
       tags: tags,
-      promotions: promotions
+
+      // Promotions
+      promotions: promotions.map((p) => ({
+        promoName: p.name,
+        bonusTemplateID: p.bonusTemplate,
+        priority: p.priority ? parseInt(p.priority) : 0,
+        cooldownHour: p.cooldown ? parseInt(p.cooldown) : 0,
+        maxClaimPerDay: p.maxClaims?.days ? parseInt(p.maxClaims.days) : 0,
+        maxClaimPerWeek: p.maxClaims?.week ? parseInt(p.maxClaims.week) : 0,
+        maxClaimPerMonth: p.maxClaims?.month ? parseInt(p.maxClaims.month) : 0,
+        maxClaimLifetime: p.maxClaims?.lifetime ? parseInt(p.maxClaims.lifetime) : 0,
+        title: p.title,
+        promoDescription: p.description,
+        imageUrl: p.imageUrls?.[0] || ''
+      }))
     };
+
     await createCampaignAPI(submitData);
   };
 

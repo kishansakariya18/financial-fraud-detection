@@ -44,14 +44,7 @@ const CampaignService = {
 
   createCampaign: async (data) => {
     try {
-      const reqBody = {
-        campaignName: data.campaignName,
-        status: data.status,
-        startDate: data.startDate,
-        endDate: data.endDate,
-        description: data.description || '',
-        tags: data.tags || []
-      };
+      const reqBody = data;
       const response = await sendRequest({
         url: apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.CAMPAIGN.CREATE,
         method: 'POST',
