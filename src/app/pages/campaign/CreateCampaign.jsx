@@ -164,13 +164,13 @@ const CreateCampaign = () => {
       triggerOnEntry: data.onSegmentEntry ? 1 : 0,
       triggerOnExit: data.onSegmentExit ? 1 : 0,
       isTriggerOnSchedule: data.recurring ? 1 : 0,
-      recurringScheduleType: data.recurring ? 'weekly' : null,
-      recurringScheduleConfig: data.recurring
-        ? {
-            dayOfWeek: (data.scheduleDays || [])[0] || 1,
-            hour: data.scheduleTime ? parseInt(data.scheduleTime.split(':')[0]) : 0
-          }
-        : null,
+      ...(data.recurring && {
+        recurringScheduleType: 'weekly',
+        recurringScheduleConfig: {
+          dayOfWeek: (data.scheduleDays || [])[0] || 1,
+          hour: data.scheduleTime ? parseInt(data.scheduleTime.split(':')[0]) : 0
+        }
+      }),
 
       // Bonus Removal
       removeBonusAfterXTime: data.removeAfterTimeEnabled ? 1 : 0,
@@ -682,44 +682,143 @@ const CreateCampaign = () => {
                             <div className="mb-2 font-medium text-gray-800 dark:text-dark-100">
                               Max Claims per Player
                             </div>
-                            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                              <Input
-                                label="Days"
-                                value={p.maxClaims?.days || ''}
-                                onChange={(e) =>
-                                  updateSelectedPromotion('maxClaims.days', e.target.value)
-                                }
-                                type="number"
-                                min="0"
-                              />
-                              <Input
-                                label="Week"
-                                value={p.maxClaims?.week || ''}
-                                onChange={(e) =>
-                                  updateSelectedPromotion('maxClaims.week', e.target.value)
-                                }
-                                type="number"
-                                min="0"
-                              />
-                              <Input
-                                label="Month"
-                                value={p.maxClaims?.month || ''}
-                                onChange={(e) =>
-                                  updateSelectedPromotion('maxClaims.month', e.target.value)
-                                }
-                                type="number"
-                                min="0"
-                              />
-                              <Input
-                                label="Lifetime"
-                                value={p.maxClaims?.lifetime || ''}
-                                onChange={(e) =>
-                                  updateSelectedPromotion('maxClaims.lifetime', e.target.value)
-                                }
-                                type="number"
-                                min="0"
-                              />
+                            {/* Add buttons for claim types not yet added */}
+                            <div className="mb-3 flex flex-wrap gap-2">
+                              {!p.maxClaims?.days && (
+                                <button
+                                  type="button"
+                                  onClick={() => updateSelectedPromotion('maxClaims.days', '1')}
+                                  className="flex items-center gap-1 rounded border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 dark:border-dark-500 dark:text-dark-200 dark:hover:bg-dark-700">
+                                  <span>+</span> Days
+                                </button>
+                              )}
+                              {!p.maxClaims?.week && (
+                                <button
+                                  type="button"
+                                  onClick={() => updateSelectedPromotion('maxClaims.week', '1')}
+                                  className="flex items-center gap-1 rounded border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 dark:border-dark-500 dark:text-dark-200 dark:hover:bg-dark-700">
+                                  <span>+</span> Week
+                                </button>
+                              )}
+                              {!p.maxClaims?.month && (
+                                <button
+                                  type="button"
+                                  onClick={() => updateSelectedPromotion('maxClaims.month', '1')}
+                                  className="flex items-center gap-1 rounded border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 dark:border-dark-500 dark:text-dark-200 dark:hover:bg-dark-700">
+                                  <span>+</span> Month
+                                </button>
+                              )}
+                              {!p.maxClaims?.lifetime && (
+                                <button
+                                  type="button"
+                                  onClick={() => updateSelectedPromotion('maxClaims.lifetime', '1')}
+                                  className="flex items-center gap-1 rounded border border-gray-300 px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50 dark:border-dark-500 dark:text-dark-200 dark:hover:bg-dark-700">
+                                  <span>+</span> Lifetime
+                                </button>
+                              )}
                             </div>
+
+                            {/* Display active claim fields */}
+                            <div className="space-y-2">
+                              {p.maxClaims?.days && (
+                                <div className="flex items-center gap-2">
+                                  <Input
+                                    label="day"
+                                    value={p.maxClaims.days}
+                                    onChange={(e) =>
+                                      updateSelectedPromotion('maxClaims.days', e.target.value)
+                                    }
+                                    type="number"
+                                    min="0"
+                                    className="flex-1"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      updateSelectedPromotion('maxClaims.days', undefined)
+                                    }
+                                    className="hover:text-error-600 mt-6 flex h-9 w-9 items-center justify-center rounded text-gray-500 hover:bg-gray-100 dark:hover:bg-dark-700">
+                                    <XMarkIcon className="h-5 w-5" />
+                                  </button>
+                                </div>
+                              )}
+                              {p.maxClaims?.week && (
+                                <div className="flex items-center gap-2">
+                                  <Input
+                                    label="week"
+                                    value={p.maxClaims.week}
+                                    onChange={(e) =>
+                                      updateSelectedPromotion('maxClaims.week', e.target.value)
+                                    }
+                                    type="number"
+                                    min="0"
+                                    className="flex-1"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      updateSelectedPromotion('maxClaims.week', undefined)
+                                    }
+                                    className="hover:text-error-600 mt-6 flex h-9 w-9 items-center justify-center rounded text-gray-500 hover:bg-gray-100 dark:hover:bg-dark-700">
+                                    <XMarkIcon className="h-5 w-5" />
+                                  </button>
+                                </div>
+                              )}
+                              {p.maxClaims?.month && (
+                                <div className="flex items-center gap-2">
+                                  <Input
+                                    label="month"
+                                    value={p.maxClaims.month}
+                                    onChange={(e) =>
+                                      updateSelectedPromotion('maxClaims.month', e.target.value)
+                                    }
+                                    type="number"
+                                    min="0"
+                                    className="flex-1"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      updateSelectedPromotion('maxClaims.month', undefined)
+                                    }
+                                    className="hover:text-error-600 mt-6 flex h-9 w-9 items-center justify-center rounded text-gray-500 hover:bg-gray-100 dark:hover:bg-dark-700">
+                                    <XMarkIcon className="h-5 w-5" />
+                                  </button>
+                                </div>
+                              )}
+                              {p.maxClaims?.lifetime && (
+                                <div className="flex items-center gap-2">
+                                  <Input
+                                    label="lifetime"
+                                    value={p.maxClaims.lifetime}
+                                    onChange={(e) =>
+                                      updateSelectedPromotion('maxClaims.lifetime', e.target.value)
+                                    }
+                                    type="number"
+                                    min="0"
+                                    className="flex-1"
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() =>
+                                      updateSelectedPromotion('maxClaims.lifetime', undefined)
+                                    }
+                                    className="hover:text-error-600 mt-6 flex h-9 w-9 items-center justify-center rounded text-gray-500 hover:bg-gray-100 dark:hover:bg-dark-700">
+                                    <XMarkIcon className="h-5 w-5" />
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+
+                            {!p.maxClaims?.days &&
+                              !p.maxClaims?.week &&
+                              !p.maxClaims?.month &&
+                              !p.maxClaims?.lifetime && (
+                                <p className="text-sm text-gray-500 dark:text-dark-400">
+                                  No limits set. Player can keep receiving this promotion unless
+                                  campaign-level cap blocks further claims.
+                                </p>
+                              )}
                           </div>
 
                           <Input
@@ -833,54 +932,272 @@ const CreateCampaign = () => {
                 Read-only summary and payload preview.
               </p>
 
-              <div className="grid gap-x-8 gap-y-4 text-sm sm:grid-cols-2">
-                <div className="space-y-3">
-                  <div className="grid grid-cols-[100px_1fr] gap-2">
-                    <span className="font-medium text-gray-900 dark:text-dark-50">Name:</span>
-                    <span className="break-all text-gray-600 dark:text-dark-200">
-                      {formValues.campaignName || '-'}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-[100px_1fr] gap-2">
-                    <span className="font-medium text-gray-900 dark:text-dark-50">Start:</span>
-                    <span className="text-gray-600 dark:text-dark-200">
-                      {formValues.startDate ? new Date(formValues.startDate).toLocaleString() : '-'}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-[100px_1fr] gap-2">
-                    <span className="font-medium text-gray-900 dark:text-dark-50">Segment:</span>
-                    <span className="break-all text-gray-600 dark:text-dark-200">
-                      {formValues.targetSegment || '-'}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-[100px_1fr] gap-2">
-                    <span className="font-medium text-gray-900 dark:text-dark-50">Exclude:</span>
-                    <span className="truncate text-gray-600 dark:text-dark-200">
-                      {formValues.forceExcludePlayers || '-'}
-                    </span>
+              <div className="space-y-6">
+                {/* Basic Info */}
+                <div>
+                  <h4 className="mb-3 font-medium text-gray-900 dark:text-dark-50">
+                    Basic Information
+                  </h4>
+                  <div className="grid gap-x-8 gap-y-3 text-sm sm:grid-cols-2">
+                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                      <span className="font-medium text-gray-700 dark:text-dark-100">Name:</span>
+                      <span className="break-all text-gray-600 dark:text-dark-200">
+                        {formValues.campaignName || '-'}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                      <span className="font-medium text-gray-700 dark:text-dark-100">Status:</span>
+                      <span className="capitalize text-gray-600 dark:text-dark-200">
+                        {formValues.status || '-'}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                      <span className="font-medium text-gray-700 dark:text-dark-100">
+                        Start Date:
+                      </span>
+                      <span className="text-gray-600 dark:text-dark-200">
+                        {formValues.startDate
+                          ? new Date(formValues.startDate).toLocaleString()
+                          : '-'}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                      <span className="font-medium text-gray-700 dark:text-dark-100">
+                        End Date:
+                      </span>
+                      <span className="text-gray-600 dark:text-dark-200">
+                        {formValues.endDate ? new Date(formValues.endDate).toLocaleString() : '-'}
+                      </span>
+                    </div>
+                    <div className="col-span-2 grid grid-cols-[120px_1fr] gap-2">
+                      <span className="font-medium text-gray-700 dark:text-dark-100">
+                        Description:
+                      </span>
+                      <span className="text-gray-600 dark:text-dark-200">
+                        {formValues.description || '-'}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  <div className="grid grid-cols-[100px_1fr] gap-2">
-                    <span className="font-medium text-gray-900 dark:text-dark-50">Status:</span>
-                    <span className="capitalize text-gray-600 dark:text-dark-200">
-                      {formValues.status || '-'}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-[100px_1fr] gap-2">
-                    <span className="font-medium text-gray-900 dark:text-dark-50">End:</span>
-                    <span className="text-gray-600 dark:text-dark-200">
-                      {formValues.endDate ? new Date(formValues.endDate).toLocaleString() : '-'}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-[100px_1fr] gap-2">
-                    <span className="font-medium text-gray-900 dark:text-dark-50">Include:</span>
-                    <span className="truncate text-gray-600 dark:text-dark-200">
-                      {formValues.forceIncludePlayers || '-'}
-                    </span>
+                {/* Targeting */}
+                <div>
+                  <h4 className="mb-3 font-medium text-gray-900 dark:text-dark-50">Targeting</h4>
+                  <div className="grid gap-x-8 gap-y-3 text-sm sm:grid-cols-2">
+                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                      <span className="font-medium text-gray-700 dark:text-dark-100">
+                        Target Segment:
+                      </span>
+                      <span className="break-all text-gray-600 dark:text-dark-200">
+                        {formValues.targetSegment?.label || formValues.targetSegment || '-'}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                      <span className="font-medium text-gray-700 dark:text-dark-100">
+                        Include Players:
+                      </span>
+                      <span className="truncate text-gray-600 dark:text-dark-200">
+                        {formValues.forceIncludePlayers || '-'}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                      <span className="font-medium text-gray-700 dark:text-dark-100">
+                        Exclude Players:
+                      </span>
+                      <span className="truncate text-gray-600 dark:text-dark-200">
+                        {formValues.forceExcludePlayers || '-'}
+                      </span>
+                    </div>
                   </div>
                 </div>
+
+                {/* Triggers */}
+                <div>
+                  <h4 className="mb-3 font-medium text-gray-900 dark:text-dark-50">
+                    Triggers & Schedule
+                  </h4>
+                  <div className="grid gap-x-8 gap-y-3 text-sm sm:grid-cols-2">
+                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                      <span className="font-medium text-gray-700 dark:text-dark-100">
+                        On Segment Entry:
+                      </span>
+                      <span className="text-gray-600 dark:text-dark-200">
+                        {formValues.onSegmentEntry ? 'Yes' : 'No'}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                      <span className="font-medium text-gray-700 dark:text-dark-100">
+                        On Segment Exit:
+                      </span>
+                      <span className="text-gray-600 dark:text-dark-200">
+                        {formValues.onSegmentExit ? 'Yes' : 'No'}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                      <span className="font-medium text-gray-700 dark:text-dark-100">
+                        Recurring:
+                      </span>
+                      <span className="text-gray-600 dark:text-dark-200">
+                        {formValues.recurring ? 'Yes' : 'No'}
+                      </span>
+                    </div>
+                    {formValues.recurring && (
+                      <>
+                        <div className="grid grid-cols-[120px_1fr] gap-2">
+                          <span className="font-medium text-gray-700 dark:text-dark-100">
+                            Schedule Days:
+                          </span>
+                          <span className="text-gray-600 dark:text-dark-200">
+                            {formValues.scheduleDays?.join(', ') || '-'}
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-[120px_1fr] gap-2">
+                          <span className="font-medium text-gray-700 dark:text-dark-100">
+                            Schedule Time:
+                          </span>
+                          <span className="text-gray-600 dark:text-dark-200">
+                            {formValues.scheduleTime || '-'}
+                          </span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                {/* Bonus Removal */}
+                <div>
+                  <h4 className="mb-3 font-medium text-gray-900 dark:text-dark-50">
+                    Bonus Removal Rules
+                  </h4>
+                  <div className="grid gap-x-8 gap-y-3 text-sm sm:grid-cols-2">
+                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                      <span className="font-medium text-gray-700 dark:text-dark-100">
+                        Remove After Time:
+                      </span>
+                      <span className="text-gray-600 dark:text-dark-200">
+                        {formValues.removeAfterTimeEnabled
+                          ? `${formValues.removeAfterTimeValue} ${formValues.removeAfterTimeUnit}`
+                          : 'No'}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                      <span className="font-medium text-gray-700 dark:text-dark-100">
+                        Remove on Exit:
+                      </span>
+                      <span className="text-gray-600 dark:text-dark-200">
+                        {formValues.removeOnExitSegment ? 'Yes' : 'No'}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                      <span className="font-medium text-gray-700 dark:text-dark-100">
+                        Fixed Cutoff Date:
+                      </span>
+                      <span className="text-gray-600 dark:text-dark-200">
+                        {formValues.fixedCutoffDate
+                          ? new Date(formValues.fixedCutoffDate).toLocaleString()
+                          : '-'}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                      <span className="font-medium text-gray-700 dark:text-dark-100">
+                        Max Claims Across:
+                      </span>
+                      <span className="text-gray-600 dark:text-dark-200">
+                        {formValues.maxClaimsAcrossPromotions || '-'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Re-Issuance Policy */}
+                <div>
+                  <h4 className="mb-3 font-medium text-gray-900 dark:text-dark-50">
+                    Re-Issuance Policy
+                  </h4>
+                  <div className="grid gap-x-8 gap-y-3 text-sm">
+                    <div className="grid grid-cols-[120px_1fr] gap-2">
+                      <span className="font-medium text-gray-700 dark:text-dark-100">Policy:</span>
+                      <span className="text-gray-600 dark:text-dark-200">
+                        {formValues.reIssuancePolicy === 'one'
+                          ? 'One bonus per player at a time'
+                          : formValues.reIssuancePolicy === 'reissue'
+                            ? 'Re-issue even if player has an active one'
+                            : formValues.reIssuancePolicy === 'stack'
+                              ? `Allow stacking up to ${formValues.allowStackN || 0} active bonuses`
+                              : '-'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tags */}
+                {tags.length > 0 && (
+                  <div>
+                    <h4 className="mb-3 font-medium text-gray-900 dark:text-dark-50">Tags</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Promotions */}
+                {promotions.length > 0 && (
+                  <div>
+                    <h4 className="mb-3 font-medium text-gray-900 dark:text-dark-50">
+                      Promotions ({promotions.length})
+                    </h4>
+                    <div className="space-y-3">
+                      {promotions.map((promo, idx) => (
+                        <div
+                          key={promo.id}
+                          className="rounded-lg border border-gray-200 p-3 dark:border-dark-600">
+                          <div className="mb-2 font-medium text-gray-900 dark:text-dark-50">
+                            {idx + 1}. {promo.name || 'Unnamed Promotion'}
+                          </div>
+                          <div className="grid gap-2 text-xs text-gray-600 dark:text-dark-200">
+                            <div>
+                              <span className="font-medium">Template: </span>
+                              {promo.bonusTemplate || '-'}
+                            </div>
+                            <div>
+                              <span className="font-medium">Priority: </span>
+                              {promo.priority || '-'}
+                            </div>
+                            {promo.cooldown && (
+                              <div>
+                                <span className="font-medium">Cooldown: </span>
+                                {promo.cooldown}h
+                              </div>
+                            )}
+                            {(promo.maxClaims?.days ||
+                              promo.maxClaims?.week ||
+                              promo.maxClaims?.month ||
+                              promo.maxClaims?.lifetime) && (
+                              <div>
+                                <span className="font-medium">Max Claims: </span>
+                                {[
+                                  promo.maxClaims?.days && `${promo.maxClaims.days}/day`,
+                                  promo.maxClaims?.week && `${promo.maxClaims.week}/week`,
+                                  promo.maxClaims?.month && `${promo.maxClaims.month}/month`,
+                                  promo.maxClaims?.lifetime &&
+                                    `${promo.maxClaims.lifetime}/lifetime`
+                                ]
+                                  .filter(Boolean)
+                                  .join(', ')}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

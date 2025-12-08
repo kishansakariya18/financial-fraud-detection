@@ -74,18 +74,15 @@ const CampaignService = {
   },
 
   updateCampaign: async (data) => {
+    const endPoint = replaceText(
+      apiConfig.endPoints.CAMPAIGN.UPDATE,
+      ':campaignUID',
+      data.campaignUID
+    );
     try {
-      const reqBody = {
-        campaignUID: data.campaignUID,
-        campaignName: data.campaignName,
-        status: data.status,
-        startDate: data.startDate,
-        endDate: data.endDate,
-        description: data.description || '',
-        tags: data.tags || []
-      };
+      const reqBody = data;
       const response = await sendRequest({
-        url: apiConfig.baseURL.API_BASE_URL + apiConfig.endPoints.CAMPAIGN.UPDATE,
+        url: apiConfig.baseURL.API_BASE_URL + endPoint,
         method: 'PUT',
         body: reqBody,
         headers: {
