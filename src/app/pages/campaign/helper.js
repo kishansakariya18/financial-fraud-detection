@@ -1,0 +1,86 @@
+import { CheckBadgeIcon, XCircleIcon, ArchiveBoxIcon } from '@heroicons/react/24/outline';
+import { getDateInUTCToTimeZone } from 'helpers/functions';
+
+export const campaignListResponseMapper = (apiData) => {
+  const totalRecords = apiData?.total_record ?? apiData?.totalRecords;
+  const list = (apiData?.data || []).map((item) => {
+    const isTemplate = item?.CampaignTemplateID != null || item?.CampaignTemplateUID != null;
+    if (isTemplate) {
+      return {
+        id: item?.CampaignTemplateID,
+        campaignUID: item?.CampaignTemplateUID,
+        name: item?.CampaignName,
+        status: campaignStatusToAPP(item?.Status),
+        startDate: getDateInUTCToTimeZone(item?.StartDate),
+        endDate: getDateInUTCToTimeZone(item?.EndDate),
+        description: item?.Description,
+        tags: item?.tags || [],
+        promotionsCount: item?.CampaignPromotions?.length || 0,
+        createdAt: getDateInUTCToTimeZone(item?.CreatedAt),
+        dateModified: getDateInUTCToTimeZone(item?.UpdatedAt),
+        admin: item?.CreatedByAdminID
+      };
+    }
+    return {
+      id: item?.CampaignID,
+      campaignUID: item?.CampaignUID,
+      name: item?.CampaignName,
+      status: campaignStatusToAPP(item?.Status),
+      startDate: getDateInUTCToTimeZone(item?.StartDate),
+      endDate: getDateInUTCToTimeZone(item?.EndDate),
+      description: item?.Description,
+      tags: item?.Tags || [],
+      promotionsCount: item?.CampaignPromotions?.length || 0,
+      createdAt: getDateInUTCToTimeZone(item?.DateCreated),
+      dateModified: getDateInUTCToTimeZone(item?.DateModified),
+      admin: item?.admin?.Username
+    };
+  });
+  return { list, totalRecords };
+};
+
+export const campaignStatusToAPP = (status) => {
+  if (status === 0 || status === 'inactive') {
+    return 'inactive';
+  } else if (status === 1 || status === 'active') {
+    return 'active';
+  } else if (status === 2 || status === 'archive') {
+    return 'archive';
+  }
+  return 'inactive';
+};
+
+export const campaignStatusToAPI = (status) => {
+  if (status === 'inactive') {
+    return 0;
+  } else if (status === 'active') {
+    return 1;
+  } else if (status === 'archive') {
+    return 2;
+  }
+  return undefined;
+};
+
+export const campaignStatusOptions = [
+  {
+    key: 'active',
+    value: 'active',
+    label: 'Active',
+    color: 'success',
+    icon: CheckBadgeIcon
+  },
+  {
+    key: 'inactive',
+    value: 'inactive',
+    label: 'Inactive',
+    color: 'error',
+    icon: XCircleIcon
+  },
+  {
+    key: 'archive',
+    value: 'archive',
+    label: 'Archived',
+    color: 'warning',
+    icon: ArchiveBoxIcon
+  }
+];

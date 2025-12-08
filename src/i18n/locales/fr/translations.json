@@ -643,5 +643,11 @@
   "clean_deposit_count_ratio": "Depositos limpios ratio",
   "clean_deposit_amount_ratio": "Depositos limpios ratio",
   "enquiry":"enquête",
-  "game_selection":"Sélection de jeux"
+  "game_selection":"Sélection de jeux",
+    "reissuance_policy":"Politique de reemission",
+  "triggers":"Disparateurs",
+  "bonus_removal_rules":"Regles de retrait de bonus",
+  "promotions":"Promotions",
+  "basics":"Bases",
+  "targeting":"Ciblage"
 }

@@ -42,6 +42,7 @@ import { supervisorRoute } from './routes/supervisor.route';
 import responsibleGamblingRoute from './routes/responsible-gambling.route.jsx';
 import toolsRoutes from './routes/tools.route';
 import enquiresRoute from './routes/enquires.route';
+import campaignRoute from './routes/campaign.route';
 
 import onlyCallingAgentRoutes from './routes/calling-agents.route';
 import { callingAgentsRoute } from './routes/supervisor.route';
@@ -120,7 +121,8 @@ const protectedRoutes = {
                 ...faqRoutes,
                 ...userKycRoute,
                 ...layoutThemeRoute,
-                ...kycConfigurationsRoute
+                ...kycConfigurationsRoute,
+                ...campaignRoute
               ]
             },
 

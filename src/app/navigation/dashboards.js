@@ -34,6 +34,7 @@ import { faq } from './faq';
 import { affiliatesNew } from './affiliates-new';
 import { kyc } from './kyc';
 // import { globalCommissionSetting } from './global-commission-setting';
+import { campaign } from './campaign';
 
 export const dashboards = () => ({
   id: 'dashboards',
@@ -83,6 +84,7 @@ export const dashboards = () => ({
     // userManualDepositTransaction,
     releaseNotes,
     toolsNavigation,
-    faq
+    faq,
+    campaign
   ]
 });
