@@ -105,14 +105,34 @@ const CloneCampaign = () => {
             onSegmentEntry: data.TriggerOnEntry === 1,
             onSegmentExit: data.TriggerOnExit === 1,
             recurring: data.isTriggerOnSchedule === 1,
-            scheduleDays: data.RecurringScheduleConfig?.dayOfWeek
-              ? [data.RecurringScheduleConfig.dayOfWeek]
-              : [], // Wrap in array
-            scheduleTime: data.RecurringScheduleConfig?.hour
-              ? `${String(data.RecurringScheduleConfig.hour).padStart(2, '0')}:00`
-              : '', // Format as HH:mm
-            scheduleInterval: '', // Not present in example JSON, check if needed
-            scheduleAnchor: '', // Not present in example JSON
+            scheduleDays:
+              data.RecurringScheduleConfig?.type === 'weekly' &&
+              Array.isArray(data.RecurringScheduleConfig?.days)
+                ? data.RecurringScheduleConfig.days.map((d) => {
+                    const dayReverseMap = {
+                      mon: 1,
+                      tue: 2,
+                      wed: 3,
+                      thu: 4,
+                      fri: 5,
+                      sat: 6,
+                      sun: 7
+                    };
+                    return dayReverseMap[d] || d;
+                  })
+                : [],
+            scheduleTime:
+              data.RecurringScheduleConfig?.type === 'weekly'
+                ? data.RecurringScheduleConfig.time
+                : '',
+            scheduleInterval:
+              data.RecurringScheduleConfig?.type === 'every_x_hours'
+                ? data.RecurringScheduleConfig.intervalHour
+                : '',
+            scheduleAnchor:
+              data.RecurringScheduleConfig?.type === 'every_x_hours'
+                ? data.RecurringScheduleConfig.anchor
+                : '',
 
             // Bonus Removal Rules
             removeAfterTimeEnabled: data.RemoveBonusAfterXTime === 1,
@@ -225,13 +245,14 @@ const CloneCampaign = () => {
 
     const fetchBonusTemplates = async () => {
       const result = await BonusTemplateService.getTemplates({
-        pagination: { page: 1, limit: 1000 },
-        filters: {}
+        pagination: null,
+        filters: {},
+        isPaginationRequired: 0
       });
       if (result?.status === 200) {
         const templateOptions = (result.response?.data || []).map((template) => ({
-          value: template.BonusTemplateUID || template.UID || template.BonusTemplateID, // Fallback to ID
-          label: template.Name || template.TemplateName
+          value: template.BonusTemplateID || template.UID,
+          label: template.TemplateName || template.Name
         }));
         setBonusTemplates(templateOptions);
       }
@@ -256,7 +277,7 @@ const CloneCampaign = () => {
       description: data.description,
       startDate: data.startDate ? new Date(data.startDate).toISOString() : null,
       endDate: data.endDate ? new Date(data.endDate).toISOString() : null,
-      targetSegmentID: data.targetSegment?.value ?? data.targetSegment,
+      targetSegmentID: data.targetSegment ? parseInt(data.targetSegment) : 0,
       includedPlayers: parseIds(data.forceIncludePlayers),
       excludedPlayers: parseIds(data.forceExcludePlayers),
 
@@ -265,11 +286,29 @@ const CloneCampaign = () => {
       triggerOnExit: data.onSegmentExit ? 1 : 0,
       isTriggerOnSchedule: data.recurring ? 1 : 0,
       ...(data.recurring && {
-        recurringScheduleType: 'weekly',
-        recurringScheduleConfig: {
-          dayOfWeek: (data.scheduleDays || [])[0] || 1,
-          hour: data.scheduleTime ? parseInt(data.scheduleTime.split(':')[0]) : 0
-        }
+        recurringScheduleType: data.scheduleInterval ? 'every_x_hours' : 'weekly',
+        recurringScheduleConfig: data.scheduleInterval
+          ? {
+              type: 'every_x_hours',
+              intervalHour: parseInt(data.scheduleInterval),
+              anchor: parseInt(data.scheduleAnchor || 0)
+            }
+          : {
+              type: 'weekly',
+              days: (data.scheduleDays || []).map((d) => {
+                const dayMap = {
+                  1: 'mon',
+                  2: 'tue',
+                  3: 'wed',
+                  4: 'thu',
+                  5: 'fri',
+                  6: 'sat',
+                  7: 'sun'
+                };
+                return dayMap[d];
+              }),
+              time: data.scheduleTime
+            }
       }),
 
       // Bonus Removal
@@ -296,9 +335,9 @@ const CloneCampaign = () => {
       tags: tags,
 
       // Promotions
-      promotions: promotions.map((p) => ({
+      promo: promotions.map((p) => ({
         promoName: p.name,
-        bonusTemplateID: p.bonusTemplate,
+        bonusTemplateID: p.bonusTemplate ? parseInt(p.bonusTemplate) : 0,
         priority: p.priority ? parseInt(p.priority) : 0,
         cooldownHour: p.cooldown ? parseInt(p.cooldown) : 0,
         maxClaimPerDay: p.maxClaims?.days ? parseInt(p.maxClaims.days) : 0,
@@ -307,7 +346,7 @@ const CloneCampaign = () => {
         maxClaimLifetime: p.maxClaims?.lifetime ? parseInt(p.maxClaims.lifetime) : 0,
         title: p.title,
         promoDescription: p.description,
-        imageUrl: p.imageUrls?.[0] || ''
+        imageUrl: Array.isArray(p.imageUrls) ? p.imageUrls.flat() : []
       }))
     };
 
@@ -668,7 +707,6 @@ const CloneCampaign = () => {
                         error={errors?.fixedCutoffDate?.message}
                         options={{ disableMobile: true, time_24hr: true }}
                         placeholder="Choose date..."
-                        disabled={!formValues.removeAfterTimeEnabled}
                         {...rest}
                       />
                     )}

@@ -33,9 +33,13 @@ const TriggersAndSchedule = ({
   const selectedDays = getValue('scheduleDays') || [];
   const scheduleTime = getValue('scheduleTime');
 
+  const scheduleInterval = getValue('scheduleInterval');
+
   useEffect(() => {
-    // Sync local schedule type if needed, or just keep it local
-  }, []);
+    if (scheduleInterval) {
+      setScheduleType('hourly');
+    }
+  }, [scheduleInterval]);
 
   const handleManualChange = (name, value) => {
     if (onChange) {
@@ -128,10 +132,20 @@ const TriggersAndSchedule = ({
         {recurring && (
           <div className="space-y-6 rounded-lg bg-gray-50 p-4 dark:bg-dark-700/50">
             {/* Toggle Switch */}
-            <div className="w-fit rounded-md bg-gray-200 p-1 dark:bg-dark-600">
+            <div className="inline-flex rounded-md bg-gray-100 p-1 dark:bg-dark-700">
               <button
                 type="button"
-                onClick={() => setScheduleType('weekly')}
+                onClick={() => {
+                  setScheduleType('weekly');
+                  // Clear hourly data when switching to weekly
+                  if (control) {
+                    setValue('scheduleInterval', '');
+                    setValue('scheduleAnchor', '');
+                  } else {
+                    handleManualChange('scheduleInterval', '');
+                    handleManualChange('scheduleAnchor', '');
+                  }
+                }}
                 className={`rounded px-4 py-1.5 text-sm font-medium transition-colors ${
                   scheduleType === 'weekly'
                     ? 'bg-white text-gray-900 shadow-sm dark:bg-dark-800 dark:text-dark-50'
@@ -141,7 +155,17 @@ const TriggersAndSchedule = ({
               </button>
               <button
                 type="button"
-                onClick={() => setScheduleType('hourly')}
+                onClick={() => {
+                  setScheduleType('hourly');
+                  // Clear weekly data when switching to hourly
+                  if (control) {
+                    setValue('scheduleDays', []);
+                    setValue('scheduleTime', '');
+                  } else {
+                    handleManualChange('scheduleDays', []);
+                    handleManualChange('scheduleTime', '');
+                  }
+                }}
                 className={`rounded px-4 py-1.5 text-sm font-medium transition-colors ${
                   scheduleType === 'hourly'
                     ? 'bg-white text-gray-900 shadow-sm dark:bg-dark-800 dark:text-dark-50'
@@ -225,8 +249,8 @@ const TriggersAndSchedule = ({
                           {...field}
                           label="Anchor *"
                           data={[
-                            { value: 'start_time', label: 'From Start time' },
-                            { value: 'specific_time', label: 'Specific time' }
+                            { value: 0, label: 'From Start time' },
+                            { value: 1, label: 'Activation time' }
                           ]}
                           error={errors?.scheduleAnchor?.message}
                         />
@@ -238,8 +262,8 @@ const TriggersAndSchedule = ({
                       onChange={(e) => handleManualChange('scheduleAnchor', e.target.value)}
                       label="Anchor *"
                       data={[
-                        { value: 'start_time', label: 'From Start time' },
-                        { value: 'specific_time', label: 'Specific time' }
+                        { value: 0, label: 'From Start time' },
+                        { value: 1, label: 'Activation time' }
                       ]}
                       error={errors?.scheduleAnchor?.message}
                     />

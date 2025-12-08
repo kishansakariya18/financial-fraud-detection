@@ -45,9 +45,7 @@ export const createCampaignSchema = Yup.object().shape({
   fixedCutoffDate: Yup.date()
     .typeError('Fixed Cut-off Date must be a valid date')
     .nullable()
-    .when('removeAfterTimeEnabled', (enabled, schema) =>
-      enabled ? schema.required('Fixed Cut-off Date is required') : schema.optional()
-    ),
+    .optional(),
   maxClaimsAcrossPromotions: Yup.number()
     .transform((v, o) => (o === '' || o === null ? undefined : v))
     .min(0, 'Must be 0 or greater')

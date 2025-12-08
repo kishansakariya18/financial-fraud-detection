@@ -120,18 +120,22 @@ const CreateCampaign = () => {
           label: segment.Name || segment.SegmentationName
         }));
         setSegments(segmentOptions);
+        // Auto-select first segment if available and no segment is currently selected
+        if (segmentOptions.length > 0 && !watch('targetSegment')) {
+          setValue('targetSegment', segmentOptions[0].value);
+        }
       }
     };
 
     const fetchBonusTemplates = async () => {
       const result = await BonusTemplateService.getTemplates({
-        pagination: { page: 1, limit: 1000 },
-        filters: {}
+        filters: {},
+        isPaginationRequired: 0
       });
       if (result?.status === 200) {
         const templateOptions = (result.response?.data || []).map((template) => ({
-          value: template.BonusTemplateUID || template.UID,
-          label: template.Name || template.TemplateName
+          value: template.BonusTemplateID || template.UID,
+          label: template.TemplateName || template.Name
         }));
         setBonusTemplates(templateOptions);
       }
@@ -139,9 +143,12 @@ const CreateCampaign = () => {
 
     fetchSegments();
     fetchBonusTemplates();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  console.log(promotions);
   const onSubmit = async (data) => {
+    console.log(data);
     const parseIds = (str) =>
       str
         ? str
@@ -156,7 +163,7 @@ const CreateCampaign = () => {
       description: data.description,
       startDate: data.startDate ? new Date(data.startDate).toISOString() : null,
       endDate: data.endDate ? new Date(data.endDate).toISOString() : null,
-      targetSegmentID: data.targetSegment?.value ?? data.targetSegment,
+      targetSegmentID: data.targetSegment ? parseInt(data.targetSegment) : 0,
       includedPlayers: parseIds(data.forceIncludePlayers),
       excludedPlayers: parseIds(data.forceExcludePlayers),
 
@@ -165,11 +172,29 @@ const CreateCampaign = () => {
       triggerOnExit: data.onSegmentExit ? 1 : 0,
       isTriggerOnSchedule: data.recurring ? 1 : 0,
       ...(data.recurring && {
-        recurringScheduleType: 'weekly',
-        recurringScheduleConfig: {
-          dayOfWeek: (data.scheduleDays || [])[0] || 1,
-          hour: data.scheduleTime ? parseInt(data.scheduleTime.split(':')[0]) : 0
-        }
+        recurringScheduleType: data.scheduleInterval ? 'every-x-hour' : 'weekly',
+        recurringScheduleConfig: data.scheduleInterval
+          ? {
+              type: 'every_x_hours',
+              intervalHour: parseInt(data.scheduleInterval),
+              anchor: parseInt(data.scheduleAnchor || 0)
+            }
+          : {
+              type: 'weekly',
+              days: (data.scheduleDays || []).map((d) => {
+                const dayMap = {
+                  1: 'mon',
+                  2: 'tue',
+                  3: 'wed',
+                  4: 'thu',
+                  5: 'fri',
+                  6: 'sat',
+                  7: 'sun'
+                };
+                return dayMap[d];
+              }),
+              time: data.scheduleTime
+            }
       }),
 
       // Bonus Removal
@@ -196,9 +221,10 @@ const CreateCampaign = () => {
       tags: tags,
 
       // Promotions
-      promotions: promotions.map((p) => ({
+
+      promo: promotions.map((p) => ({
         promoName: p.name,
-        bonusTemplateID: p.bonusTemplate,
+        bonusTemplateID: p.bonusTemplate ? parseInt(p.bonusTemplate) : 0,
         priority: p.priority ? parseInt(p.priority) : 0,
         cooldownHour: p.cooldown ? parseInt(p.cooldown) : 0,
         maxClaimPerDay: p.maxClaims?.days ? parseInt(p.maxClaims.days) : 0,
@@ -207,7 +233,7 @@ const CreateCampaign = () => {
         maxClaimLifetime: p.maxClaims?.lifetime ? parseInt(p.maxClaims.lifetime) : 0,
         title: p.title,
         promoDescription: p.description,
-        imageUrl: p.imageUrls?.[0] || ''
+        imageUrl: Array.isArray(p.imageUrls) ? p.imageUrls.flat() : []
       }))
     };
 
@@ -240,7 +266,7 @@ const CreateCampaign = () => {
   const makeDefaultPromotion = () => ({
     id: Date.now().toString(),
     name: '',
-    bonusTemplate: '',
+    bonusTemplate: bonusTemplates.length > 0 ? bonusTemplates[0].value : '',
     priority: '',
     cooldown: '',
     maxClaims: { days: '', week: '', month: '', lifetime: '' },
@@ -559,7 +585,6 @@ const CreateCampaign = () => {
                         error={errors?.fixedCutoffDate?.message}
                         options={{ disableMobile: true, time_24hr: true }}
                         placeholder="Choose date..."
-                        disabled={!formValues.removeAfterTimeEnabled}
                         {...rest}
                       />
                     )}
@@ -611,7 +636,8 @@ const CreateCampaign = () => {
                             {p.name?.trim() || `Promo ${String(idx + 1).padStart(2, '0')}`}
                           </div>
                           <div className="text-xs text-gray-500 dark:text-dark-300">
-                            Template: {p.bonusTemplate?.trim() || '—'}
+                            Template:{' '}
+                            {bonusTemplates.find((t) => t.value === p.bonusTemplate)?.label || '—'}
                           </div>
                         </button>
                         <Button
