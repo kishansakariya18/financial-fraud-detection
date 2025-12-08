@@ -44,7 +44,7 @@ const CreateCampaign = () => {
     resolver: yupResolver(createCampaignSchema),
     defaultValues: {
       campaignName: '',
-      status: 'inactive',
+      status: 'active',
       startDate: '',
       endDate: '',
       description: '',
@@ -459,20 +459,36 @@ const CreateCampaign = () => {
                   )}
                 />
 
-                <Textarea
-                  {...register('forceIncludePlayers')}
-                  label={t('force') + ' ' + t('include') + ' ' + t('players')}
-                  error={errors?.forceIncludePlayers?.message}
-                  placeholder="Internal notes for admins"
-                  rows={3}
+                <Controller
+                  name="forceIncludePlayers"
+                  control={control}
+                  render={({ field: { onChange, value, ...rest } }) => (
+                    <Textarea
+                      {...rest}
+                      value={value}
+                      onChange={(e) => onChange(e.target.value.replace(/[^0-9,]/g, ''))}
+                      label={t('force') + ' ' + t('include') + ' ' + t('players')}
+                      error={errors?.forceIncludePlayers?.message}
+                      placeholder="e.g. 101, 102"
+                      rows={3}
+                    />
+                  )}
                 />
 
-                <Textarea
-                  {...register('forceExcludePlayers')}
-                  label={t('force') + ' ' + t('exclude') + ' ' + t('players')}
-                  error={errors?.forceExcludePlayers?.message}
-                  placeholder="Internal notes for admins"
-                  rows={3}
+                <Controller
+                  name="forceExcludePlayers"
+                  control={control}
+                  render={({ field: { onChange, value, ...rest } }) => (
+                    <Textarea
+                      {...rest}
+                      value={value}
+                      onChange={(e) => onChange(e.target.value.replace(/[^0-9,]/g, ''))}
+                      label={t('force') + ' ' + t('exclude') + ' ' + t('players')}
+                      error={errors?.forceExcludePlayers?.message}
+                      placeholder="e.g. 201, 202"
+                      rows={3}
+                    />
+                  )}
                 />
               </div>
             </div>
