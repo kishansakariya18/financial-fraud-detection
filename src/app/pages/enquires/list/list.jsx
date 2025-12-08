@@ -19,6 +19,7 @@ export default function EnquiresList() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [keyword, setKeyword] = useState(searchParams.get('keyword') || '');
+  const [summary, setSummary] = useState(null);
   const pageTitle = t('enquires');
 
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
@@ -44,9 +45,22 @@ export default function EnquiresList() {
     return { status: result?.status, error: result?.error };
   };
 
+  const fetchSummary = async () => {
+    const result = await EnquiresService.getSummary();
+    if (result?.status === 200) {
+      setSummary(result.response?.data);
+    }
+    return { status: result?.status, error: result?.error };
+  };
+
+  useEffect(() => {
+    fetchSummary();
+  }, []);
+
   const { table, isLoading, error, setError, tableSettings, setColumnFilters } = useTable({
     columns,
     fetchData: fetchEnquires,
+    fetchSummary,
     queryParams,
     setSearchParams,
     initialSettings: {
@@ -74,12 +88,15 @@ export default function EnquiresList() {
     if (queryParams.status) {
       filtersFromQuery.push({ id: 'Status', value: queryParams.status });
     }
+    if (queryParams.subject) {
+      filtersFromQuery.push({ id: 'Subject', value: queryParams.subject });
+    }
     if (queryParams.setBy) {
       filtersFromQuery.push({ id: 'Set By', value: queryParams.setBy });
     }
     if (queryParams.startDate && queryParams.endDate) {
       filtersFromQuery.push({
-        id: 'createdAt',
+        id: 'Created At',
         value: [+queryParams.startDate, +queryParams.endDate]
       });
     }
@@ -94,10 +111,13 @@ export default function EnquiresList() {
       if (data.id === 'Status') {
         filterItems.status = data.value;
       }
+      if (data.id === 'Subject') {
+        filterItems.subject = data.value;
+      }
       if (data.id === 'Set By') {
         filterItems.setBy = data.value;
       }
-      if (data.id === 'createdAt') {
+      if (data.id === 'Created At') {
         filterItems.date = data.value;
       }
     }
@@ -107,6 +127,7 @@ export default function EnquiresList() {
       pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(keyword.trim() && { keyword: keyword.trim() }),
       ...(filterItems.status && { status: filterItems.status }),
+      ...(filterItems.subject && { subject: filterItems.subject }),
       ...(filterItems.setBy && { setBy: filterItems.setBy }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
       ...(filterItems.date && { endDate: filterItems?.date[1] })
@@ -132,6 +153,7 @@ export default function EnquiresList() {
         setSearchParams={setSearchParams}
         table={table}
         pageTitle={pageTitle}
+        summary={summary}
         onApplyFilters={applyFilterHandler}
         onClearFilters={clearFilterHandler}
       />

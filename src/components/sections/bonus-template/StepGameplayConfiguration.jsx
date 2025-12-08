@@ -254,6 +254,7 @@ export function StepGameplayConfiguration({
           <Input
             label={t('minimum_bet')}
             type="number"
+            min={0}
             value={data.minBet}
             onChange={(event) => onChange('minBet', event.target.value)}
             error={errors.minBet}
@@ -261,6 +262,7 @@ export function StepGameplayConfiguration({
           <Input
             label={t('maximum_bet')}
             type="number"
+            min={0}
             value={data.maxBet}
             onChange={(event) => onChange('maxBet', event.target.value)}
             error={errors.maxBet}

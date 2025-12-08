@@ -11,6 +11,7 @@ import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 // import { viewResponseMapper } from './helper';
 // import { TextEditor } from 'components/shared/form/TextEditor';
 // import Quill, { Delta } from 'quill';
+import ObjectDiff from './ObjectDiff';
 
 const ViewDetails = () => {
   const { t } = useTranslation();
@@ -82,7 +83,15 @@ const ViewDetails = () => {
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('url')}:</p>
-                <p>{response?.URL}</p>
+                {response?.URL ? (
+                  <a
+                    href={response.URL}
+                    className="break-all text-primary-600 hover:text-primary-700 hover:underline dark:text-primary-400 dark:hover:text-primary-300">
+                    {response.URL}
+                  </a>
+                ) : (
+                  <p>—</p>
+                )}
               </div>
 
               <div>
@@ -96,7 +105,7 @@ const ViewDetails = () => {
                   {t('createdBy')}:
                 </p>
                 <p>
-                  <span>{response?.auditAdmin?.Username}</span>
+                  <span>{response?.auditAdmin?.Username ?? response?.Username}</span>
                   {response.auditAdmin?.Username && (
                     <Button
                       data-tooltip
@@ -117,21 +126,8 @@ const ViewDetails = () => {
                 </p>
                 <p>{getDateInUTCToTimeZone(response?.DateCreated)}</p>
               </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('old') + ' ' + t('value')}:
-                </p>
-                <pre className="overflow-auto rounded bg-gray-100 p-4 text-sm">
-                  {JSON.stringify(response?.OldValues, null, 2)}
-                </pre>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-800 dark:text-dark-100">
-                  {t('new_key') + ' ' + t('value')}:
-                </p>
-                <pre className="overflow-auto rounded bg-gray-100 p-4 text-sm">
-                  {JSON.stringify(response?.NewValues, null, 2)}
-                </pre>
+              <div className="col-span-full">
+                <ObjectDiff oldData={response?.OldValues} newData={response?.NewValues} />
               </div>
             </div>
             <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">

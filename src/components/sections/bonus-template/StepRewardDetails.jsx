@@ -64,7 +64,7 @@ export function StepRewardDetails({
           <div className="space-y-4">
             <Input
               label={t('max_bonus_amount')}
-              type="number"
+              type="any"
               placeholder={t('max_bonus_amount_placeholder')}
               value={data.maxBonusAmount}
               onChange={(event) => onChange('maxBonusAmount', event.target.value)}

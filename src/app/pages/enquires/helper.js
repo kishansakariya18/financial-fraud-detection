@@ -33,3 +33,31 @@ export const enquiresStatusOptions = [
     color: 'success'
   }
 ];
+
+export const enquiresSubjectOptions = [
+  {
+    value: 'Technical Support',
+    label: 'Technical Support',
+    color: 'primary'
+  },
+  {
+    value: 'Feedback',
+    label: 'Feedback',
+    color: 'info'
+  },
+  {
+    value: 'Payment Issue',
+    label: 'Payment Issue',
+    color: 'danger'
+  },
+  {
+    value: 'Account Issues',
+    label: 'Account Issues',
+    color: 'warning'
+  },
+  {
+    value: 'General Inquiry',
+    label: 'General Inquiry',
+    color: 'success'
+  }
+];

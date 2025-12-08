@@ -8,7 +8,7 @@ import { Chart } from 'components/custom/Chart';
 import { Link, useNavigate, useParams } from 'react-router';
 import { Page } from 'components/shared/Page';
 import { mapLimitSummary, playerStatusToApp } from './helper';
-import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
+import { capitalizeFirstLetter, getDateInUTCToTimeZone, setAmountBN } from 'helpers/functions';
 import PlayerService from 'services/player.services';
 // import { showImage } from 'utils/showImage';
 import { useTranslation } from 'react-i18next';
@@ -460,7 +460,7 @@ export function PlayerViewDetails({
           enabled: false,
           formatter: function (val, opts) {
             const value = opts.w.globals.series[opts.seriesIndex];
-            const percentage = val.toFixed(1);
+            const percentage = setAmountBN(val, 1);
             return `${percentage}%\n(${value})`;
           },
           style: {

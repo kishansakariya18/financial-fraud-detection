@@ -619,7 +619,9 @@ export const apiConfig = {
     },
     ENQUIRES: {
       LIST: '/users/admin/enquiries/list',
-      CHANGE_STATUS: '/users/admin/enquiries/update-status'
+      CHANGE_STATUS: '/users/admin/enquiries/update-status',
+      SUMMARY: '/users/admin/enquiries/summary',
+      DETAILS: '/users/admin/enquiries/details'
     },
     CAMPAIGN: {
       LIST: '/bonus/admin/campaign-template/list',

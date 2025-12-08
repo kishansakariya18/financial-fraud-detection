@@ -655,10 +655,12 @@
   "areYouSureEnquiresChangeStatus": "¿Estás seguro de que quieres cambiar el estado de esta consulta?",
   "enquiry_change_status": "Cambiar estado",
   "enquires": "Consultas",
-  "reissuance_policy":"Política de reemisión",
-  "triggers":"Disparadores",
-  "bonus_removal_rules":"Reglas de eliminación de bonos",
-  "promotions":"Promociones",
-  "basics":"Lo esencial",
-  "targeting":"Segmentación"
+  "in_progress":"En Progreso",
+  "resolved":"Resuelto",
+  "withdrawal": "Retiro",
+  "free_bonuses_claimed": "Bonos gratis reclamados",
+  "clean_deposit_count_ratio": "Depositos limpios ratio",
+  "clean_deposit_amount_ratio": "Depositos limpios ratio",
+  "enquiry":"consulta",
+  "game_selection":"Selección de juego" 
 }

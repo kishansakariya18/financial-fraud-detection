@@ -1,11 +1,12 @@
 // import { toast } from 'sonner';
 
-import ContentWrapper from 'components/ui/custom/ContentWrapper';
 import CreateOREditForm from 'components/sections/bonus-template/CreateOREditForm';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import BonusTemplateService from 'services/bonus-template.services';
 import { toast } from 'sonner';
+import { Page } from 'components/shared/Page';
+import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 
 export default function CreateBonusTemplate() {
   const navigate = useNavigate();
@@ -110,9 +111,26 @@ export default function CreateBonusTemplate() {
       });
   };
 
+  const breadcrumbItem = [
+    { title: t('bonus_template'), path: '/bonus/templates' },
+    { title: t('create') }
+  ];
+
   return (
-    <ContentWrapper pageTitle={t('create') + ' ' + t('bonusTemplate')}>
-      <CreateOREditForm onSubmit={handleSubmit} />
-    </ContentWrapper>
+    <Page title={t('create') + ' ' + t('bonus_template')}>
+      <div className="transition-content grid w-full grid-rows-[auto_1fr] px-[--margin-x] pb-8">
+        <div className="flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
+          <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50 lg:text-2xl">
+            {t('create') + ' ' + t('bonus_template') + ' ' + t('form')}
+          </h2>
+          <div className="hidden self-stretch py-1 sm:flex">
+            <div className="h-full w-px bg-gray-300 dark:bg-dark-600"></div>
+          </div>
+          <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
+        </div>
+
+        <CreateOREditForm onSubmit={handleSubmit} />
+      </div>
+    </Page>
   );
 }

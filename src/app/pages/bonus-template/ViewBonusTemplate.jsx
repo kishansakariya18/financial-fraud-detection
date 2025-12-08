@@ -244,7 +244,10 @@ export default function ViewBonusTemplate() {
                   label: t('expiry_after_issuance_days'),
                   value: normalized.templateInfo.expiryAfterIssuanceDays ?? '—'
                 },
-                { label: 'Notes', value: normalized.bonusDetails.notes || '—' },
+                {
+                  label: t('description') + ` (${t('player_facing')})`,
+                  value: normalized.bonusDetails.notes || '—'
+                },
                 {
                   label: t('bonus_tags'),
                   value: normalized.templateInfo.bonusTag?.join(', ') || '—'
@@ -415,15 +418,24 @@ export default function ViewBonusTemplate() {
                 { label: t('maximum_bet'), value: normalized.gameplay.maxBet ?? '—' },
                 {
                   label: t('providers'),
-                  value: `${normalized.gameplay.providerIncluded ? 'Included' : 'Excluded'}: ${normalized.gameplay.allowedProviders.map((provider) => provider.label).join(', ')}`
+                  value:
+                    normalized.gameplay.allowedProviders.length > 0
+                      ? `${normalized.gameplay.providerIncluded ? 'Included' : 'Excluded'}: ${normalized.gameplay.allowedProviders.map((provider) => provider.label).join(', ')}`
+                      : '—'
                 },
                 {
                   label: t('categories'),
-                  value: `${normalized.gameplay.categoryIncluded ? 'Included' : 'Excluded'}: ${normalized.gameplay.allowedCategories.map((category) => category.label).join(', ')}`
+                  value:
+                    normalized.gameplay.allowedCategories.length > 0
+                      ? `${normalized.gameplay.categoryIncluded ? 'Included' : 'Excluded'}: ${normalized.gameplay.allowedCategories.map((category) => category.label).join(', ')}`
+                      : '—'
                 },
                 {
                   label: t('games'),
-                  value: `${normalized.gameplay.gameIncluded ? 'Included' : 'Excluded'}: ${normalized.gameplay.allowedGames.map((game) => game.label).join(', ')}`
+                  value:
+                    normalized.gameplay.allowedGames.length > 0
+                      ? `${normalized.gameplay.gameIncluded ? 'Included' : 'Excluded'}: ${normalized.gameplay.allowedGames.map((game) => game.label).join(', ')}`
+                      : '—'
                 }
               ]}
             />

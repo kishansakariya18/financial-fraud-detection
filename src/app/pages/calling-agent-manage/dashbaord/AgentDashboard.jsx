@@ -11,6 +11,7 @@ import AgentService from 'services/agent.services';
 import AgentPendingRedeemRequestsList from './pending-redeem-requests/list';
 import AgentCommissionList from './commission-list/list';
 import TargetProgressCard from './target-progress/TargetProgressCard';
+import { setAmountBN } from 'helpers/functions';
 
 const AgentDashboard = () => {
   const { t } = useTranslation();
@@ -101,7 +102,7 @@ const AgentDashboard = () => {
             />
             <DashboardCard
               label={`${t('current')} ${t('period')} ${t('commission')}`}
-              value={dashboardData?.summary?.currentPeriodEarnings?.toFixed(2) || '0.00'}
+              value={setAmountBN(dashboardData?.summary?.currentPeriodEarnings, 2) || '0.00'}
               gradientFrom="from-green-500"
               gradientTo="to-green-600"
               textColor="text-green-100"
@@ -109,7 +110,7 @@ const AgentDashboard = () => {
             />
             <DashboardCard
               label={`${t('total')} ${t('commission')} ${t('earned')}`}
-              value={dashboardData?.summary?.totalEarned?.toFixed(2) || '0.00'}
+              value={setAmountBN(dashboardData?.summary?.totalEarned, 2) || '0.00'}
               gradientFrom="from-purple-500"
               gradientTo="to-purple-600"
               textColor="text-purple-100"
@@ -117,7 +118,7 @@ const AgentDashboard = () => {
             />
             <DashboardCard
               label={`${t('total')} ${t('redeemed')} ${t('amount')}`}
-              value={dashboardData?.summary?.totalRedeemed?.toFixed(2) || '0.00'}
+              value={setAmountBN(dashboardData?.summary?.totalRedeemed, 2) || '0.00'}
               gradientFrom="from-amber-400"
               gradientTo="to-orange-600"
               textColor="text-amber-50"

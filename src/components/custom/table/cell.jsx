@@ -10,6 +10,7 @@ import { setThisClass } from 'utils/setThisClass';
 import clsx from 'clsx';
 import { useCurrencyContext } from '../../../app/contexts/currency/context';
 import RenderImage from 'components/ui/custom/ImageRender';
+import { setAmountBN } from 'helpers/functions';
 
 export function DateCell({ getValue }) {
   // const { locale } = useLocaleContext();
@@ -99,8 +100,18 @@ export function BadgeCell({ getValue, column }) {
 export function AmountCell({ getValue }) {
   return (
     <p className="text-sm+ font-medium text-gray-800 dark:text-dark-100">
-      {getValue()?.toFixed(2)}
+      {setAmountBN(getValue(), 2)}
     </p>
+  );
+}
+
+export function SafeAmountCell({ getValue }) {
+  const value = getValue();
+  if (value === null || value === undefined || isNaN(Number(value))) {
+    return <span className="font-medium">-</span>;
+  }
+  return (
+    <p className="text-sm+ font-medium text-gray-800 dark:text-dark-100">{setAmountBN(value, 2)}</p>
   );
 }
 
@@ -114,7 +125,7 @@ export function BaseCurrencyAmountCell({ getValue }) {
   const dp = Number.isFinite(decimalPlaces) ? decimalPlaces : 2;
   return (
     <p className="text-sm+ font-medium text-gray-800 dark:text-dark-100">
-      {symbol} {amount.toFixed(dp)}
+      {symbol} {setAmountBN(amount, dp)}
     </p>
   );
 }
@@ -291,4 +302,8 @@ MultiLineCell.propTypes = {
 StatusIconCell.propTypes = {
   getValue: PropTypes.func,
   column: PropTypes.object
+};
+
+SafeAmountCell.propTypes = {
+  getValue: PropTypes.func
 };

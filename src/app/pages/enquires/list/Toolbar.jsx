@@ -9,7 +9,9 @@ import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { FacedtedFilter } from 'components/shared/table/FacedtedFilter';
-import { enquiresStatusOptions } from '../helper';
+import { DateFilter } from 'components/shared/table/DateFilter';
+import { enquiresStatusOptions, enquiresSubjectOptions } from '../helper';
+import { DashboardCard } from 'components/custom/DashboardCard';
 
 export function Toolbar({
   keyword,
@@ -18,6 +20,7 @@ export function Toolbar({
   setSearchParams,
   table,
   pageTitle = '',
+  summary = null,
   onApplyFilters = () => {},
   onClearFilters = () => {}
 }) {
@@ -37,6 +40,35 @@ export function Toolbar({
           </h2>
         </div>
       </div>
+
+      {summary && (
+        <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-3">
+          <DashboardCard
+            label={t('new')}
+            value={summary.new_count || 0}
+            gradientFrom="from-blue-500"
+            gradientTo="to-cyan-400"
+            textColor="text-sky-100"
+            maskShape="is-reuleaux-triangle"
+          />
+          <DashboardCard
+            label={t('in_progress')}
+            value={summary.in_progress_count || 0}
+            gradientFrom="from-amber-500"
+            gradientTo="to-orange-400"
+            textColor="text-sky-100"
+            maskShape="is-reuleaux-triangle"
+          />
+          <DashboardCard
+            label={t('resolved')}
+            value={summary.resolved_count || 0}
+            gradientFrom="from-green-500"
+            gradientTo="to-emerald-400"
+            textColor="text-sky-100"
+            maskShape="is-reuleaux-triangle"
+          />
+        </div>
+      )}
 
       {isXs ? (
         <>
@@ -169,6 +201,28 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
         />
       )}
 
+      {table.getColumn('Subject') && (
+        <FacedtedFilter
+          options={enquiresSubjectOptions}
+          column={table.getColumn('Subject')}
+          title={t('enquiry_subject')}
+          Icon={MapPinIcon}
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
+
+      {table.getColumn('Created At') && (
+        <DateFilter
+          column={table.getColumn('Created At')}
+          title={t('date') + ' ' + t('range')}
+          config={{
+            maxDate: new Date().fp_incr(1),
+            mode: 'range'
+          }}
+        />
+      )}
+
       <div>
         <Button onClick={onApplyFilters} className="h-8 whitespace-nowrap px-2.5 text-xs">
           {t('apply_filters')}
@@ -191,6 +245,7 @@ Toolbar.propTypes = {
   setSearchParams: PropTypes.func.isRequired,
   table: PropTypes.object,
   pageTitle: PropTypes.string,
+  summary: PropTypes.object,
   onApplyFilters: PropTypes.func,
   onClearFilters: PropTypes.func
 };
