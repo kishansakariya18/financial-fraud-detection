@@ -1015,6 +1015,7 @@ const CloneCampaign = () => {
                                 value={imageUrlInput}
                                 onChange={(e) => setImageUrlInput(e.target.value)}
                                 placeholder="https://..."
+                                classNames={{ root: 'flex-1' }}
                               />
                               <Button
                                 type="button"
@@ -1030,7 +1031,7 @@ const CloneCampaign = () => {
                                   <span
                                     key={url}
                                     className="inline-flex items-center gap-2 rounded-md bg-gray-100 px-2 py-1 text-xs text-gray-700 dark:bg-dark-700 dark:text-dark-200">
-                                    <span className="max-w-[280px] truncate">{url}</span>
+                                    <span className="break-all">{url}</span>
                                     <button
                                       type="button"
                                       className="rounded-sm hover:bg-gray-200 dark:hover:bg-dark-600"
