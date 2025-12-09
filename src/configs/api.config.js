@@ -622,6 +622,18 @@ export const apiConfig = {
       CHANGE_STATUS: '/users/admin/enquiries/update-status',
       SUMMARY: '/users/admin/enquiries/summary',
       DETAILS: '/users/admin/enquiries/details'
+    },
+    CAMPAIGN: {
+      LIST: '/bonus/admin/campaign-template/list',
+      CREATE: '/bonus/admin/campaign-template',
+      DETAIL: '/bonus/admin/campaign-template/:campaignUID/details',
+      UPDATE: '/bonus/admin/campaign-template/:campaignUID',
+      CHANGE_STATUS: '/bonus/admin/campaign-template/:campaignUID/change-status',
+      DELETE: '/bonus/admin/campaign-template/:campaignUID',
+      ARCHIVE: '/bonus/admin/campaign-template/:campaignUID/archive',
+      CLONE: '/bonus/admin/campaign-template/:campaignUID/clone',
+      LOGS: '/bonus/admin/campaign-template/:campaignUID/change-logs',
+      TAGS: '/bonus/admin/campaign-template/tags/list'
     }
   }
 };

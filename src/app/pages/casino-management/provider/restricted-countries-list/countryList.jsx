@@ -125,7 +125,7 @@ export default function RestrictedCountry() {
   };
   if (!submitLoading && !submitError && submitResponse) {
     toast.success(submitResponse);
-    navigate(`/casino/provider/list/restricted-countries/${providerId}`);
+    navigate(`/casino/provider/list/restricted-countries/${providerId}/list`);
   }
   if (!submitLoading && submitError) {
     toast.error(submitError);

@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Page } from 'components/shared/Page';
 import { Button, Card, Checkbox, Input } from 'components/ui';
 import { Listbox } from 'components/shared/form/Listbox';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { roleDetailMapper, rolePermissionListMapper } from './helper';
 import RoleService from 'services/role.services';
 // import { useParams } from 'react-router';
@@ -61,6 +61,7 @@ const EditRole = () => {
   const [error, setError] = useState('');
 
   const [checkedList, setCheckedList] = useState([]);
+  const [selectAllActive, setSelectAllActive] = useState(false);
   const allPermissionIds = useMemo(() => {
     const ids = [];
     response?.forEach((mod) => {
@@ -98,17 +99,55 @@ const EditRole = () => {
     return (response || []).filter((m) => setSel.has(m.moduleName));
   }, [response, selectedModules]);
 
+  const filteredPermissionIds = useMemo(() => {
+    const ids = [];
+    (filteredModules || []).forEach((mod) => {
+      mod?.permissionList?.forEach((perm) => ids.push(perm.permissionID));
+    });
+    return Array.from(new Set(ids));
+  }, [filteredModules]);
+
+  const targetIdsForToggle =
+    !selectedModules?.length || selectedModules.includes('all')
+      ? allPermissionIds
+      : filteredPermissionIds;
+
   const allSelected =
-    allPermissionIds.length > 0 && allPermissionIds.every((id) => checkedList.includes(id));
+    targetIdsForToggle.length > 0 && targetIdsForToggle.every((id) => checkedList.includes(id));
 
   const handleToggleAll = () => {
-    const newCheckedList = allSelected ? [] : [...allPermissionIds];
-    setCheckedList(newCheckedList);
+    if (allSelected) {
+      // Deselect only the target IDs (filtered or all), keep others
+      const newCheckedList = checkedList.filter((id) => !targetIdsForToggle.includes(id));
+      setSelectAllActive(false);
+      setCheckedList(newCheckedList);
+    } else {
+      // Select: union current selection with target IDs (do not remove previous selections)
+      setSelectAllActive(true);
+      setCheckedList((prev) => Array.from(new Set([...(prev || []), ...targetIdsForToggle])));
+    }
   };
+
+  // If Select All is active and the FILTER target changes, make selection exactly match the target
+  const prevTargetKeyRef = useRef('');
+  useEffect(() => {
+    if (!selectAllActive) return;
+    const target =
+      !selectedModules?.length || selectedModules.includes('all')
+        ? allPermissionIds
+        : filteredPermissionIds;
+    const key = (target || []).join(',');
+    if (prevTargetKeyRef.current === key) return;
+    prevTargetKeyRef.current = key;
+    // Add target IDs without removing existing selections
+    setCheckedList((prev) => Array.from(new Set([...(prev || []), ...target])));
+  }, [selectAllActive, selectedModules, filteredPermissionIds, allPermissionIds]);
   const handleCheck = (checked, permissionObj, modulePermissionList) => {
     console.log('handleCheck', checked, permissionObj, modulePermissionList);
 
     let newCheckedList = [...checkedList];
+    // Manual toggle cancels sticky Select All
+    if (selectAllActive) setSelectAllActive(false);
 
     if (!checked) {
       // Cascading deselect: remove this permission and any dependents globally
@@ -181,7 +220,7 @@ const EditRole = () => {
         roleName: detail.roleName
       });
     }
-  }, [detail]);
+  }, [detail, reset]);
 
   const navigate = useNavigate();
 
@@ -305,15 +344,28 @@ const EditRole = () => {
                           }
                           onChange={(vals) => {
                             const values = (vals || []).map((v) => v.value);
-                            if (!values.length) {
-                              setSelectedModules(['all']);
-                              return;
-                            }
-                            if (values.includes('all') && values.length > 1) {
-                              setSelectedModules(values.filter((v) => v !== 'all'));
-                              return;
-                            }
-                            setSelectedModules(values);
+                            setSelectedModules((prev) => {
+                              if (!values.length) return ['all'];
+
+                              const prevSet = new Set(prev || []);
+                              const newSet = new Set(values);
+                              const added = values.filter((v) => !prevSet.has(v));
+
+                              // If user explicitly selected 'All' now, keep only 'All'
+                              if (added.includes('all')) return ['all'];
+
+                              // If previously 'All' was selected and user added specifics, remove 'All'
+                              if (prevSet.has('all') && added.length > 0) {
+                                return values.filter((v) => v !== 'all');
+                              }
+
+                              // Safety: if both present without clear action, drop 'all'
+                              if (newSet.has('all') && values.length > 1) {
+                                return values.filter((v) => v !== 'all');
+                              }
+
+                              return values;
+                            });
                           }}
                           placeholder={'Filter by module(s)'}
                           displayField="label"
