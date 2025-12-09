@@ -8,6 +8,7 @@ import { VariableRulesEditor } from './VariableRulesEditor';
 import { GameSelect } from './GameSelect';
 import { useTranslation } from 'react-i18next';
 import BonusTemplateService from 'services/bonus-template.services';
+import CurrencyService from 'services/currency.services';
 export function StepRewardDetails({
   data,
   onChange,
@@ -34,6 +35,9 @@ export function StepRewardDetails({
   const [denoms, setDenoms] = useState([]);
   const [denomsLoading, setDenomsLoading] = useState(false);
   const [denomsError, setDenomsError] = useState('');
+  const [currencyMap, setCurrencyMap] = useState({});
+  const [currencyLoading, setCurrencyLoading] = useState(false);
+  const [currencyError, setCurrencyError] = useState('');
   const denominationChoiceKey = useMemo(
     () => data?.denominationChoiceKey || '',
     [data?.denominationChoiceKey]
@@ -78,6 +82,46 @@ export function StepRewardDetails({
       denoms.every((r) => r?.ThirdLowestValue != null),
     [denoms]
   );
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        setCurrencyLoading(true);
+        setCurrencyError('');
+        const res = await CurrencyService.getCurrencyList({
+          pagination: { pageIndex: 0, pageSize: 1000 },
+          filters: {}
+        });
+        if (cancelled) return;
+        const list = res?.response?.data || res?.response?.Data || [];
+        const map = Array.isArray(list)
+          ? list.reduce((acc, item) => {
+              const key = item?.CurrencyID ?? item?.id ?? item?.Id;
+              const name = item?.CurrencyName ?? item?.name ?? item?.Name ?? item?.Code ?? '';
+              if (key != null) acc[String(key)] = String(name || key);
+              return acc;
+            }, {})
+          : {};
+        setCurrencyMap(map);
+      } catch (e) {
+        if (!cancelled) setCurrencyError(e?.message || 'Failed to load currencies');
+      } finally {
+        if (!cancelled) setCurrencyLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const renderCurrencyName = (val) => {
+    if (val == null) return '';
+    const key = String(val);
+    return currencyMap[key] || key;
+  };
+
+  const isCurrencyStatusReady = !currencyLoading && !currencyError;
 
   useEffect(() => {
     // Only fetch when free_spins context and a game is selected
@@ -307,7 +351,7 @@ export function StepRewardDetails({
                 <table className="min-w-full text-left text-sm">
                   <thead>
                     <tr className="border-b dark:border-dark-600">
-                      <th className="px-2 py-2">Currency ID</th>
+                      <th className="px-2 py-2">Currency</th>
                       <th className="px-2 py-2">First</th>
                       <th className="px-2 py-2">Second</th>
                       <th className="px-2 py-2">Third</th>
@@ -320,7 +364,16 @@ export function StepRewardDetails({
                         className="border-b last:border-0 dark:border-dark-600">
                         <td className="px-2 py-2">
                           <div className="flex flex-col gap-1">
-                            <span className="text-sm font-medium">{row.CurrencyID}</span>
+                            <span className="text-sm font-medium">
+                              {row._isSelectRow
+                                ? row.CurrencyID
+                                : renderCurrencyName(row.CurrencyID)}
+                            </span>
+                            {!isCurrencyStatusReady && !row._isSelectRow && (
+                              <span className="text-[10px] text-gray-500 dark:text-dark-300">
+                                {currencyLoading ? 'Loading...' : currencyError}
+                              </span>
+                            )}
                           </div>
                         </td>
                         {row._isSelectRow ? (

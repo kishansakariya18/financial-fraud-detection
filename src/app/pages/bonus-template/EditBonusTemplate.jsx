@@ -6,6 +6,7 @@ import ContentWrapper from 'components/ui/custom/ContentWrapper';
 import { Skeleton } from 'components/ui';
 
 import BonusTemplateService from 'services/bonus-template.services';
+import CurrencyService from 'services/currency.services';
 import CreateOREditForm from 'components/sections/bonus-template/CreateOREditForm';
 import { normalizeBonusTemplateDetail } from './happer';
 import { useTranslation } from 'react-i18next';
@@ -135,6 +136,19 @@ export default function EditBonusTemplate() {
       handleLoadTemplate();
     }
   }, [templateId, handleLoadTemplate]);
+
+  useEffect(() => {
+    CurrencyService.getCurrencyList({
+      pagination: { pageIndex: 0, pageSize: 10 },
+      filters: {}
+    })
+      .then((res) => {
+        console.log('EditBonusTemplate currencies:', res);
+      })
+      .catch((err) => {
+        console.error('EditBonusTemplate currencies error:', err);
+      });
+  }, []);
 
   if (isLoading) {
     return (

@@ -1,4 +1,5 @@
 // import { toast } from 'sonner';
+import { useEffect } from 'react';
 
 import CreateOREditForm from 'components/sections/bonus-template/CreateOREditForm';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +8,7 @@ import BonusTemplateService from 'services/bonus-template.services';
 import { toast } from 'sonner';
 import { Page } from 'components/shared/Page';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import CurrencyService from 'services/currency.services';
 
 export default function CreateBonusTemplate() {
   const navigate = useNavigate();
@@ -115,6 +117,19 @@ export default function CreateBonusTemplate() {
     { title: t('bonus_template'), path: '/bonus/templates' },
     { title: t('create') }
   ];
+
+  useEffect(() => {
+    CurrencyService.getCurrencyList({
+      pagination: { pageIndex: 0, pageSize: 10 },
+      filters: {}
+    })
+      .then((res) => {
+        console.log('CreateBonusTemplate currencies:', res);
+      })
+      .catch((err) => {
+        console.error('CreateBonusTemplate currencies error:', err);
+      });
+  }, []);
 
   return (
     <Page title={t('create') + ' ' + t('bonus_template')}>
