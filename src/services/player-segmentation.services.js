@@ -1,4 +1,4 @@
-import { statusToAPI } from 'app/pages/player-segmentation/hapler';
+import { statusToAPI } from 'app/pages/player-segmentation/helper';
 import apiConfig from 'configs/api.config';
 import moment from 'moment-timezone';
 import apiInstance from 'utils/apiInstance';
