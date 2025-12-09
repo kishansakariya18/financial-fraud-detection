@@ -57,6 +57,28 @@ export function StepRewardDetails({
     ];
   }, [denoms, t]);
 
+  const canSelectFirst = useMemo(
+    () =>
+      Array.isArray(denoms) &&
+      denoms.length > 0 &&
+      denoms.every((r) => r?.FirstLowestValue != null),
+    [denoms]
+  );
+  const canSelectSecond = useMemo(
+    () =>
+      Array.isArray(denoms) &&
+      denoms.length > 0 &&
+      denoms.every((r) => r?.SecondLowestValue != null),
+    [denoms]
+  );
+  const canSelectThird = useMemo(
+    () =>
+      Array.isArray(denoms) &&
+      denoms.length > 0 &&
+      denoms.every((r) => r?.ThirdLowestValue != null),
+    [denoms]
+  );
+
   useEffect(() => {
     // Only fetch when free_spins context and a game is selected
     if (bonusType !== 'free_spins') return;
@@ -75,15 +97,34 @@ export function StepRewardDetails({
           if (!data?.denominationChoiceKey && items.length > 0) {
             const dps = Number(data?.denominationPerSpin);
             const hasValidDps = [1, 2, 3].includes(dps);
-            const key = hasValidDps
+            const preferredKey = hasValidDps
               ? dps === 1
                 ? 'FirstLowestValue'
                 : dps === 2
                   ? 'SecondLowestValue'
                   : 'ThirdLowestValue'
-              : 'FirstLowestValue';
-            onChange('denominationChoiceKey', key);
-            onChange('denominationPerSpin', hasValidDps ? dps : 1);
+              : null;
+            const canFirst = items.every((r) => r?.FirstLowestValue != null);
+            const canSecond = items.every((r) => r?.SecondLowestValue != null);
+            const canThird = items.every((r) => r?.ThirdLowestValue != null);
+            const firstAvailableKey =
+              (canFirst && 'FirstLowestValue') ||
+              (canSecond && 'SecondLowestValue') ||
+              (canThird && 'ThirdLowestValue') ||
+              null;
+            const finalKey =
+              preferredKey &&
+              ((preferredKey === 'FirstLowestValue' && canFirst) ||
+                (preferredKey === 'SecondLowestValue' && canSecond) ||
+                (preferredKey === 'ThirdLowestValue' && canThird))
+                ? preferredKey
+                : firstAvailableKey;
+            if (finalKey) {
+              onChange('denominationChoiceKey', finalKey);
+              const num =
+                finalKey === 'FirstLowestValue' ? 1 : finalKey === 'SecondLowestValue' ? 2 : 3;
+              onChange('denominationPerSpin', num);
+            }
           }
         }
       } catch (e) {
@@ -98,8 +139,14 @@ export function StepRewardDetails({
   }, [bonusType, data?.gameId]);
 
   const handleSelectDenominationKey = (key) => {
+    if (
+      (key === 'FirstLowestValue' && !canSelectFirst) ||
+      (key === 'SecondLowestValue' && !canSelectSecond) ||
+      (key === 'ThirdLowestValue' && !canSelectThird)
+    ) {
+      return;
+    }
     onChange('denominationChoiceKey', key);
-    // Also store numeric value 1/2/3 in denominationPerSpin as requested
     const num = key === 'FirstLowestValue' ? 1 : key === 'SecondLowestValue' ? 2 : 3;
     onChange('denominationPerSpin', num);
   };
@@ -284,6 +331,7 @@ export function StepRewardDetails({
                                   type="radio"
                                   name="denomination-level"
                                   checked={denominationChoiceKey === 'FirstLowestValue'}
+                                  disabled={!canSelectFirst}
                                   onChange={() => handleSelectDenominationKey('FirstLowestValue')}
                                 />
                               </label>
@@ -294,6 +342,7 @@ export function StepRewardDetails({
                                   type="radio"
                                   name="denomination-level"
                                   checked={denominationChoiceKey === 'SecondLowestValue'}
+                                  disabled={!canSelectSecond}
                                   onChange={() => handleSelectDenominationKey('SecondLowestValue')}
                                 />
                               </label>
@@ -304,6 +353,7 @@ export function StepRewardDetails({
                                   type="radio"
                                   name="denomination-level"
                                   checked={denominationChoiceKey === 'ThirdLowestValue'}
+                                  disabled={!canSelectThird}
                                   onChange={() => handleSelectDenominationKey('ThirdLowestValue')}
                                 />
                               </label>
