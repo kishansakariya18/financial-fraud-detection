@@ -15,7 +15,11 @@ import { PERMISSIONS } from 'constants/app.constant';
 import { playerSegmentationColumns } from './columns';
 import { TableToolbar } from 'components/shared/table/TableToolbar';
 import PlayerSegmentationService from 'services/player-segmentation.services';
-import { playerSegmentationResponseMapper } from '../hapler';
+import {
+  playerSegmentationResponseMapper,
+  evaluationFrequencyOptions,
+  statusOptions
+} from '../helper';
 
 export default function PlayerSegmentationList() {
   const { t } = useTranslation();
@@ -50,6 +54,9 @@ export default function PlayerSegmentationList() {
       }
       if (queryParams.endDate) {
         filters.endDate = queryParams.endDate;
+      }
+      if (queryParams.evaluationFrequency) {
+        filters.evaluationFrequency = queryParams.evaluationFrequency;
       }
 
       // Call API service
@@ -103,6 +110,9 @@ export default function PlayerSegmentationList() {
         value: [+queryParams.startDate, +queryParams.endDate]
       });
     }
+    if (queryParams.evaluationFrequency) {
+      filtersFromQuery.push({ id: 'evaluationFrequency', value: queryParams.evaluationFrequency });
+    }
 
     setColumnFilters(filtersFromQuery);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -120,6 +130,9 @@ export default function PlayerSegmentationList() {
       if (data.id === 'createdAt') {
         filterItems.date = data.value;
       }
+      if (data.id === 'evaluationFrequency') {
+        filterItems.evaluationFrequency = data.value;
+      }
     }
 
     setSearchParams({
@@ -128,7 +141,10 @@ export default function PlayerSegmentationList() {
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
       ...(filterItems.status && { status: filterItems.status }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
-      ...(filterItems.date && { endDate: filterItems?.date[1] })
+      ...(filterItems.date && { endDate: filterItems?.date[1] }),
+      ...(filterItems.evaluationFrequency && {
+        evaluationFrequency: filterItems.evaluationFrequency
+      })
     });
   };
 
@@ -164,11 +180,15 @@ export default function PlayerSegmentationList() {
             type: 'faceted',
             column: 'status',
             title: t('status'),
-            options: [
-              { value: 'active', label: t('active'), color: 'success' },
-              { value: 'inactive', label: t('inactive'), color: 'error' },
-              { value: 'archived', label: t('archived'), color: 'warning' }
-            ],
+            options: statusOptions,
+            isMultiple: false,
+            showCheckbox: false
+          },
+          {
+            type: 'faceted',
+            column: 'evaluationFrequency',
+            title: t('frequency'),
+            options: evaluationFrequencyOptions,
             isMultiple: false,
             showCheckbox: false
           },

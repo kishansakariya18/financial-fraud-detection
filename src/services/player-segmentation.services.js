@@ -1,4 +1,4 @@
-import { statusToAPI } from 'app/pages/player-segmentation/hapler';
+import { statusToAPI } from 'app/pages/player-segmentation/helper';
 import apiConfig from 'configs/api.config';
 import moment from 'moment-timezone';
 import apiInstance from 'utils/apiInstance';
@@ -21,6 +21,9 @@ const PlayerSegmentationService = {
     }
     if (filters.endDate) {
       requestData.filters.endDate = moment(+filters.endDate).endOf('day').toDate();
+    }
+    if (filters.evaluationFrequency) {
+      requestData.filters.evaluationFrequency = filters.evaluationFrequency;
     }
 
     return apiInstance.post(apiConfig.endPoints.PLAYER_SEGMENTATION.LIST, requestData, {
