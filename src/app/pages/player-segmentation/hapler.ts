@@ -12,7 +12,7 @@ export const playerSegmentationResponseMapper = (apiData: any) => {
             segmentationUID: item.SegmentationUID,
             segmentName: item.SegmentName,
             segmentDescription: item.SegmentDescription || '',
-            segmentTag: item.SegmentTag || '',
+            segmentTag: item.SegmentTag || '-',
             segmentRules: item.SegmentRules || {},
             isActive: statusToApp(item.IsActive),
             status: statusToApp(item.IsActive),
