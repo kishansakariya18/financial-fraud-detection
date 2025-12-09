@@ -15,7 +15,11 @@ import { PERMISSIONS } from 'constants/app.constant';
 import { playerSegmentationColumns } from './columns';
 import { TableToolbar } from 'components/shared/table/TableToolbar';
 import PlayerSegmentationService from 'services/player-segmentation.services';
-import { playerSegmentationResponseMapper, evaluationFrequencyOptions } from '../hapler';
+import {
+  playerSegmentationResponseMapper,
+  evaluationFrequencyOptions,
+  statusOptions
+} from '../helper';
 
 export default function PlayerSegmentationList() {
   const { t } = useTranslation();
@@ -176,11 +180,15 @@ export default function PlayerSegmentationList() {
             type: 'faceted',
             column: 'status',
             title: t('status'),
-            options: [
-              { value: 'active', label: t('active'), color: 'success' },
-              { value: 'inactive', label: t('inactive'), color: 'error' },
-              { value: 'archived', label: t('archived'), color: 'warning' }
-            ],
+            options: statusOptions,
+            isMultiple: false,
+            showCheckbox: false
+          },
+          {
+            type: 'faceted',
+            column: 'evaluationFrequency',
+            title: t('frequency'),
+            options: evaluationFrequencyOptions,
             isMultiple: false,
             showCheckbox: false
           },
@@ -192,14 +200,6 @@ export default function PlayerSegmentationList() {
               mode: 'range',
               maxDate: new Date().fp_incr?.(0)
             }
-          },
-          {
-            type: 'faceted',
-            column: 'evaluationFrequency',
-            title: t('frequency'),
-            options: evaluationFrequencyOptions,
-            isMultiple: false,
-            showCheckbox: false
           }
         ]}
       />
