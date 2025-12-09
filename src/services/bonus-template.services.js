@@ -70,6 +70,13 @@ const BonusTemplateService = {
     );
 
     return apiInstance.delete(endpoint);
+  },
+
+  // getDenominations: async (gameId) => {
+  getDenominations: async () => {
+    return apiInstance.get(apiConfig.endPoints.BONUS_TEMPLATE.DENOMINATION, {
+      params: { gameId: 1 }
+    });
   }
 };
 

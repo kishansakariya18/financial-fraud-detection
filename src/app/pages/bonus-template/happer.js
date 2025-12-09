@@ -1,5 +1,6 @@
 import apiConfig from 'configs/api.config';
 import moment from 'moment';
+import { getDateInUTCToTimeZone } from 'helpers/functions';
 import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
 
 export const normalizeBonusTemplateStatus = (status) => {
@@ -113,14 +114,26 @@ export const mapBonusTemplateListItem = (item, t) => {
     displayPriority: item?.DisplayPriority ?? 0,
     bonusType: getBonusTypeLabel(item?.BonusType, t) ?? '—',
     status,
-    createdAt: item?.DateCreated ?? item?.dateCreated ?? item?.CreatedAt ?? item?.createdAt ?? null,
+    createdAt:
+      (item?.DateCreated ?? item?.dateCreated ?? item?.CreatedAt ?? item?.createdAt)
+        ? getDateInUTCToTimeZone(
+            item?.DateCreated ?? item?.dateCreated ?? item?.CreatedAt ?? item?.createdAt
+          )
+        : null,
     updatedAt:
-      item?.DateModified ??
+      (item?.DateModified ??
       item?.dateModified ??
       item?.DateUpdated ??
       item?.updatedAt ??
-      item?.UpdatedAt ??
-      null
+      item?.UpdatedAt)
+        ? getDateInUTCToTimeZone(
+            item?.DateModified ??
+              item?.dateModified ??
+              item?.DateUpdated ??
+              item?.updatedAt ??
+              item?.UpdatedAt
+          )
+        : null
   };
 };
 

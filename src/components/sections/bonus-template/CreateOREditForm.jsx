@@ -99,8 +99,8 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
     { id: 'templateInfo', title: t('template_info') },
     { id: 'bonusDetails', title: t('bonus_details') },
     { id: 'rewardDetails', title: t('reward_details') },
-    { id: 'wageringConfiguration', title: t('wagering_configuration') },
-    { id: 'maxCashoutConfiguration', title: t('max_cashout_configuration') },
+    // { id: 'wageringConfiguration', title: t('wagering_configuration') },
+    // { id: 'maxCashoutConfiguration', title: t('max_cashout_configuration') },
     {
       id: 'gameplayConfiguration',
       title: t('gameplay_configuration')
@@ -473,9 +473,26 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
             onValidateRuleField={validateVariableRuleField}
             onGameOptionsCache={handleGameOptionsCache}
             errors={currentStepErrors}
+            wageringData={formState.wageringConfig}
+            onWageringChange={handleWageringConfigChange}
+            wageringOptions={WAGERING_MODE_OPTIONS(t)}
+            wageringBaseOptions={wageringBaseOptions}
+            wageringErrors={stepErrors.wageringConfiguration}
+            mcoData={formState.maxCashoutConfig}
+            onMcoChange={handleMaxCashoutChange}
+            mcoOptions={MCO_MODE_OPTIONS(t)}
+            mcoBaseOptions={wageringBaseOptions}
+            mcoErrors={stepErrors.maxCashoutConfiguration}
           />
         );
       case 'wageringConfiguration':
+        if (bonusType === 'deposit_boost' && formState.rewardDetails.boostMode === 'variable') {
+          return (
+            <div className="rounded-md border p-4 text-sm text-gray-600 dark:border-dark-500 dark:text-dark-200">
+              {t('wagering_configuration')} {t('has_been_moved_to')} {t('reward_details')}
+            </div>
+          );
+        }
         return (
           <StepWageringConfiguration
             data={formState.wageringConfig}
@@ -486,6 +503,13 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
           />
         );
       case 'maxCashoutConfiguration':
+        if (bonusType === 'deposit_boost' && formState.rewardDetails.boostMode === 'variable') {
+          return (
+            <div className="rounded-md border p-4 text-sm text-gray-600 dark:border-dark-500 dark:text-dark-200">
+              {t('max_cashout_configuration')} {t('has_been_moved_to')} {t('reward_details')}
+            </div>
+          );
+        }
         return (
           <StepMaxCashoutConfiguration
             data={formState.maxCashoutConfig}
