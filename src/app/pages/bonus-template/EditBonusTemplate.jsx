@@ -139,7 +139,7 @@ export default function EditBonusTemplate() {
 
   useEffect(() => {
     CurrencyService.getCurrencyList({
-      pagination: { pageIndex: 0, pageSize: 10 },
+      isPaginationRequired: 0,
       filters: {}
     })
       .then((res) => {

@@ -5,14 +5,19 @@ import { replaceText } from 'utils/custom.utilities';
 
 const CurrencyService = {
   getCurrencyList: async (body) => {
-    const { pagination, filters } = body;
+    const { pagination, filters, isPaginationRequired } = body || {};
     const { status, keyword } = filters || {};
 
     console.log('status: ', status);
-    const apiQueryParams = {
-      per_page: pagination.pageSize,
-      page: pagination.pageIndex + 1
-    };
+    const apiQueryParams = {};
+
+    // Support disabling pagination explicitly
+    if (isPaginationRequired === 0 || isPaginationRequired === '0') {
+      apiQueryParams.isPaginationRequired = 0;
+    } else if (pagination) {
+      apiQueryParams.per_page = pagination.pageSize;
+      apiQueryParams.page = pagination.pageIndex + 1;
+    }
 
     // Add status filter only if a specific status is selected
     if (status) {

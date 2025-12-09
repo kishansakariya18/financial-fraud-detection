@@ -134,7 +134,7 @@ export function StepRewardDetails({
     (async () => {
       try {
         setDenomsLoading(true);
-        const { response } = await BonusTemplateService.getDenominations();
+        const { response } = await BonusTemplateService.getDenominations(gameId);
         if (!cancelled) {
           const items = response?.data || [];
           setDenoms(items);
