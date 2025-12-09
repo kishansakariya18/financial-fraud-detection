@@ -4,6 +4,15 @@ import { getDateInUTCToTimeZone } from 'helpers/functions';
 import { Badge } from 'components/ui';
 import { campaignStatusToAPP } from '../helper';
 
+const prettifyKey = (key) => {
+  if (!key) return '';
+  const withSpaces = String(key)
+    .replace(/_/g, ' ')
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .trim();
+  return withSpaces.charAt(0).toUpperCase() + withSpaces.slice(1);
+};
+
 const CampaignDataDisplay = ({ data }) => {
   if (!data || Object.keys(data).length === 0)
     return <div className="text-sm italic text-gray-500">No data</div>;
@@ -14,7 +23,9 @@ const CampaignDataDisplay = ({ data }) => {
         <div
           key={key}
           className="flex flex-col border-b border-gray-100 pb-2 last:border-0 dark:border-dark-600">
-          <span className="text-xs font-semibold text-gray-500 dark:text-dark-300">{key}</span>
+          <span className="text-xs font-semibold text-gray-500 dark:text-dark-300">
+            {prettifyKey(key)}
+          </span>
           <span className="text-sm font-medium text-gray-900 dark:text-dark-100">
             {formatValue(key, value)}
           </span>
@@ -31,7 +42,9 @@ const formatValue = (key, value) => {
     const status = campaignStatusToAPP(value);
     return (
       <Badge color={status === 'active' ? 'success' : status === 'inactive' ? 'error' : 'warning'}>
-        {status}
+        {typeof status === 'string' && status.length
+          ? status.charAt(0).toUpperCase() + status.slice(1)
+          : status}
       </Badge>
     );
   }
