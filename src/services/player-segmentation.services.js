@@ -22,6 +22,9 @@ const PlayerSegmentationService = {
     if (filters.endDate) {
       requestData.filters.endDate = moment(+filters.endDate).endOf('day').toDate();
     }
+    if (filters.evaluationFrequency) {
+      requestData.filters.evaluationFrequency = filters.evaluationFrequency;
+    }
 
     return apiInstance.post(apiConfig.endPoints.PLAYER_SEGMENTATION.LIST, requestData, {
       params: {

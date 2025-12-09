@@ -25,6 +25,7 @@ export const playerSegmentationColumns = ({ canShowActions }) => [
     id: 'segmentTag',
     header: 'Tag',
     label: 'Tag',
+    cell: CopyableCell,
     enableSorting: false,
     size: 140
   }),
