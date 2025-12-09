@@ -1,5 +1,6 @@
 import apiConfig from 'configs/api.config';
 import moment from 'moment';
+import { CheckBadgeIcon, XCircleIcon } from '@heroicons/react/24/outline';
 
 export const normalizeBonusTemplateStatus = (status) => {
   if (status === undefined || status === null) return 'unknown';
@@ -304,13 +305,15 @@ export const bonusTemplateStatusOptions = [
     key: 'active',
     value: 'active',
     label: 'Active',
-    color: 'success'
+    color: 'success',
+    icon: CheckBadgeIcon
   },
   {
     key: 'inactive',
     value: 'inactive',
     label: 'Inactive',
-    color: 'error'
+    color: 'error',
+    icon: XCircleIcon
   }
 ];
 
