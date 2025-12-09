@@ -14,7 +14,7 @@ import { useSegmentationMappings } from 'components/sections/player-segmentation
 import { Page } from 'components/shared/Page';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
-import { statusToApp } from '../hapler';
+import { statusToApp } from '../helper';
 
 const statusColorMap = {
   1: 'success',
