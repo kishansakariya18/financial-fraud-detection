@@ -51,7 +51,7 @@ export function StepRewardDetails({
         dps === 1 ? 'FirstLowestValue' : dps === 2 ? 'SecondLowestValue' : 'ThirdLowestValue';
       onChange('denominationChoiceKey', key);
     }
-  }, [bonusType, data?.denominationPerSpin, data?.denominationChoiceKey]);
+  }, [bonusType, data?.denominationPerSpin, data?.denominationChoiceKey, onChange]);
 
   const denomRows = useMemo(() => {
     if (!Array.isArray(denoms) || denoms.length === 0) return [];
@@ -123,6 +123,21 @@ export function StepRewardDetails({
 
   const isCurrencyStatusReady = !currencyLoading && !currencyError;
 
+  // Keep fixed/variable-exclusive fields mutually cleared
+  useEffect(() => {
+    if (bonusType !== 'deposit_boost') return;
+    if (data.boostMode === 'fixed') {
+      if (data.maxBonusAmount) onChange('maxBonusAmount', '');
+      if (Array.isArray(data.variableRules) && data.variableRules.length > 0)
+        onChange('variableRules', []);
+    } else if (data.boostMode === 'variable') {
+      if (data.boostPercent) onChange('boostPercent', '');
+      if (data.minDepositAmount) onChange('minDepositAmount', '');
+    }
+    // we intentionally do not include variable fields (data.variableRules etc.) in deps to avoid infinite loops when clearing
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bonusType, data.boostMode, onChange]);
+
   useEffect(() => {
     // Only fetch when free_spins context and a game is selected
     if (bonusType !== 'free_spins') return;
@@ -180,7 +195,7 @@ export function StepRewardDetails({
     return () => {
       cancelled = true;
     };
-  }, [bonusType, data?.gameId]);
+  }, [bonusType, data?.gameId, data?.denominationChoiceKey, data?.denominationPerSpin, onChange]);
 
   const handleSelectDenominationKey = (key) => {
     if (
