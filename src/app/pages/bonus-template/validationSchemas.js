@@ -482,7 +482,13 @@ export const wageringConfigSchema = Yup.object().shape({
 // Step 5: Max Cashout Configuration
 export const maxCashoutConfigSchema = Yup.object().shape({
   mode: Yup.string().nullable(),
-  base: Yup.string().nullable(),
+  base: Yup.string()
+    .nullable()
+    .when('mode', {
+      is: (val) => val === 'multiplier',
+      then: (schema) => schema.required('Please select any one'),
+      otherwise: (schema) => schema.nullable()
+    }),
   cashoutValue: Yup.number()
     .transform((value, originalValue) => {
       return originalValue === '' || originalValue === null || originalValue === undefined

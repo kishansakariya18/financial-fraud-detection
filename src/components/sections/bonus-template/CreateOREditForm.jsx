@@ -395,18 +395,37 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
     }
   };
 
+  const getStepDataById = (stepId) => {
+    switch (stepId) {
+      case 'templateInfo':
+        return formState.templateInfo;
+      case 'bonusDetails':
+        return formState.bonusDetails;
+      case 'rewardDetails':
+        return formState.rewardDetails;
+      case 'wageringConfiguration':
+        return formState.wageringConfig;
+      case 'maxCashoutConfiguration':
+        return formState.maxCashoutConfig;
+      case 'gameplayConfiguration':
+        return formState.gameplay;
+      default:
+        return undefined;
+    }
+  };
+
   const handleNext = async () => {
     const stepId = currentStep.id;
-    let stepData = formState[stepId];
+    let stepData = getStepDataById(stepId);
     const boostMode = formState.rewardDetails.boostMode;
 
     // Special handling for maxCashoutConfiguration
     if (stepId === 'maxCashoutConfiguration') {
-      stepData = { ...stepData, boostMode };
+      stepData = { ...(stepData || {}), boostMode };
     }
     // Special handling for wageringConfiguration
     if (stepId === 'wageringConfiguration') {
-      stepData = { ...stepData, boostMode };
+      stepData = { ...(stepData || {}), boostMode };
     }
 
     const { isValid, errors } = await validateStep(stepId, stepData, boostMode);
@@ -587,12 +606,12 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
     for (let i = 0; i < STEPS.length; i++) {
       const step = STEPS[i];
       const stepId = step.id;
-      let stepData = formState[stepId];
+      let stepData = getStepDataById(stepId);
       const boostMode = formState.rewardDetails.boostMode;
 
       // Special handling for steps that need boostMode context
       if (stepId === 'maxCashoutConfiguration' || stepId === 'wageringConfiguration') {
-        stepData = { ...stepData, boostMode };
+        stepData = { ...(stepData || {}), boostMode };
       }
 
       const { isValid, errors } = await validateStep(stepId, stepData, boostMode);

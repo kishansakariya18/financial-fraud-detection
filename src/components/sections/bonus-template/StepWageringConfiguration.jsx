@@ -88,7 +88,8 @@ StepWageringConfiguration.propTypes = {
   data: PropTypes.shape({
     mode: PropTypes.string,
     base: PropTypes.string,
-    wageringValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    wageringValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    daysToWager: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
   }).isRequired,
   onChange: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(
