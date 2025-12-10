@@ -17,7 +17,7 @@ export const columns = ({ canShowActions }) => [
   }),
   columnHelper.accessor((row) => row.name, {
     id: 'Name',
-    header: 'Campaign Name',
+    header: 'Name',
     cell: BoldCell,
     enableSorting: false
   }),

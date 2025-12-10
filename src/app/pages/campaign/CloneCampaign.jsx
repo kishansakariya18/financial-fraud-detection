@@ -423,10 +423,28 @@ const CloneCampaign = () => {
   const [imageUrlInput, setImageUrlInput] = useState('');
   const addImageUrl = () => {
     if (!imageUrlInput.trim() || selectedPromotionIndex == null) return;
+    const url = imageUrlInput.trim();
+    const isValidUrl = (() => {
+      try {
+        const u = new URL(url);
+        return u.protocol === 'http:' || u.protocol === 'https:';
+      } catch {
+        return false;
+      }
+    })();
+    if (!isValidUrl) {
+      toast.error('Please enter a valid image URL (http/https).');
+      return;
+    }
     setPromotions((prev) => {
       const next = [...prev];
       const p = { ...next[selectedPromotionIndex] };
-      p.imageUrls = [...(p.imageUrls || []), imageUrlInput.trim()];
+      const list = Array.isArray(p.imageUrls) ? p.imageUrls : [];
+      if (!list.includes(url)) {
+        p.imageUrls = [...list, url];
+      } else {
+        p.imageUrls = list;
+      }
       next[selectedPromotionIndex] = p;
       return next;
     });
@@ -494,8 +512,7 @@ const CloneCampaign = () => {
                         error={errors?.startDate?.message}
                         options={{
                           disableMobile: true,
-                          time_24hr: true,
-                          minDate: 'today'
+                          time_24hr: true
                         }}
                         placeholder="Choose date..."
                         {...rest}
@@ -513,8 +530,7 @@ const CloneCampaign = () => {
                         error={errors?.endDate?.message}
                         options={{
                           disableMobile: true,
-                          time_24hr: true,
-                          minDate: 'today'
+                          time_24hr: true
                         }}
                         placeholder="Choose date..."
                         {...rest}
@@ -530,9 +546,7 @@ const CloneCampaign = () => {
                     {...register('description')}
                     label={
                       <div className="flex items-center justify-between">
-                        <span>
-                          {t('description')} <span className="text-gray-400">Optional. 0/240</span>
-                        </span>
+                        <span>{t('description')}</span>
                         <span className="text-xs text-gray-400">{description.length}/240</span>
                       </div>
                     }
@@ -616,7 +630,11 @@ const CloneCampaign = () => {
                       {...rest}
                       value={value}
                       onChange={(e) => onChange(e.target.value.replace(/[^0-9,]/g, ''))}
-                      label={t('force') + ' ' + t('include') + ' ' + t('players')}
+                      label={
+                        <span className="capitalize">
+                          {t('force') + ' ' + t('include') + ' ' + t('players')}
+                        </span>
+                      }
                       error={errors?.forceIncludePlayers?.message}
                       placeholder="e.g. 101, 102"
                       rows={3}
@@ -632,7 +650,11 @@ const CloneCampaign = () => {
                       {...rest}
                       value={value}
                       onChange={(e) => onChange(e.target.value.replace(/[^0-9,]/g, ''))}
-                      label={t('force') + ' ' + t('exclude') + ' ' + t('players')}
+                      label={
+                        <span className="capitalize">
+                          {t('force') + ' ' + t('exclude') + ' ' + t('players')}
+                        </span>
+                      }
                       error={errors?.forceExcludePlayers?.message}
                       placeholder="e.g. 201, 202"
                       rows={3}
@@ -777,7 +799,7 @@ const CloneCampaign = () => {
                     ))}
                     {promotions.length === 0 && (
                       <div className="rounded-md border border-dashed border-gray-300 p-3 text-center text-xs text-gray-500 dark:border-dark-600 dark:text-dark-300">
-                        {t('no_data') || 'No promotions added yet'}
+                        No promotions added yet
                       </div>
                     )}
                   </div>
@@ -873,7 +895,7 @@ const CloneCampaign = () => {
                               {p.maxClaims?.days && (
                                 <div className="flex items-center gap-2">
                                   <Input
-                                    label="day"
+                                    label="Day"
                                     value={p.maxClaims.days}
                                     onChange={(e) =>
                                       updateSelectedPromotion('maxClaims.days', e.target.value)
@@ -895,7 +917,7 @@ const CloneCampaign = () => {
                               {p.maxClaims?.week && (
                                 <div className="flex items-center gap-2">
                                   <Input
-                                    label="week"
+                                    label="Week"
                                     value={p.maxClaims.week}
                                     onChange={(e) =>
                                       updateSelectedPromotion('maxClaims.week', e.target.value)
@@ -917,7 +939,7 @@ const CloneCampaign = () => {
                               {p.maxClaims?.month && (
                                 <div className="flex items-center gap-2">
                                   <Input
-                                    label="month"
+                                    label="Month"
                                     value={p.maxClaims.month}
                                     onChange={(e) =>
                                       updateSelectedPromotion('maxClaims.month', e.target.value)
@@ -939,7 +961,7 @@ const CloneCampaign = () => {
                               {p.maxClaims?.lifetime && (
                                 <div className="flex items-center gap-2">
                                   <Input
-                                    label="lifetime"
+                                    label="Lifetime"
                                     value={p.maxClaims.lifetime}
                                     onChange={(e) =>
                                       updateSelectedPromotion('maxClaims.lifetime', e.target.value)
@@ -993,6 +1015,7 @@ const CloneCampaign = () => {
                                 value={imageUrlInput}
                                 onChange={(e) => setImageUrlInput(e.target.value)}
                                 placeholder="https://..."
+                                classNames={{ root: 'flex-1' }}
                               />
                               <Button
                                 type="button"
@@ -1008,7 +1031,7 @@ const CloneCampaign = () => {
                                   <span
                                     key={url}
                                     className="inline-flex items-center gap-2 rounded-md bg-gray-100 px-2 py-1 text-xs text-gray-700 dark:bg-dark-700 dark:text-dark-200">
-                                    <span className="max-w-[280px] truncate">{url}</span>
+                                    <span className="break-all">{url}</span>
                                     <button
                                       type="button"
                                       className="rounded-sm hover:bg-gray-200 dark:hover:bg-dark-600"
