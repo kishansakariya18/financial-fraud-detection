@@ -71,11 +71,17 @@ const variableRuleItemSchema = Yup.object()
     wagering: Yup.number()
       .transform(numberTransform)
       .nullable()
+      .test('required-wagering', 'Please add wagering', (val) => {
+        return val !== null && val !== undefined && val !== '';
+      })
       .min(0, 'Wagering Must be greater than 0')
       .typeError('Wagering Invalid number'),
     mco: Yup.number()
       .transform(numberTransform)
       .nullable()
+      .test('required-mco', 'Please add max cashout', (val) => {
+        return val !== null && val !== undefined && val !== '';
+      })
       .min(0, 'Max Cashout Must be greater than 0')
       .typeError('Max Cashout Invalid number')
   })
