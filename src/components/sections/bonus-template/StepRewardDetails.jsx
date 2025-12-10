@@ -138,6 +138,18 @@ export function StepRewardDetails({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bonusType, data.boostMode, onChange]);
 
+  // Clear wagering days when wagering mode is none to avoid disabled field keeping stale value
+  useEffect(() => {
+    if (wageringData?.mode !== 'none') return;
+    if (
+      wageringData?.daysToWager !== '' &&
+      wageringData?.daysToWager !== null &&
+      wageringData?.daysToWager !== undefined
+    ) {
+      onWageringChange('daysToWager', '');
+    }
+  }, [wageringData?.mode, wageringData?.daysToWager, onWageringChange]);
+
   useEffect(() => {
     // Only fetch when free_spins context and a game is selected
     if (bonusType !== 'free_spins') return;
