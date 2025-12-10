@@ -238,7 +238,7 @@ export default function ViewBonusTemplate() {
                 },
                 {
                   label: t('display_priority'),
-                  value: normalized.templateInfo.displayPriority ?? '—'
+                  value: normalized.bonusDetails.displayPriority ?? '—'
                 },
                 {
                   label: t('expiry_after_issuance_days'),

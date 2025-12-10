@@ -144,9 +144,7 @@ export default function CampaignViewDetails({ campaignUID, customBreadcrumbs }) 
                   </div>
                 </div>
               ) : (
-                <div className="rounded-md border border-dashed border-gray-300 bg-gray-50 p-3 text-center dark:border-dark-600 dark:bg-dark-800/50">
-                  <span className="text-sm text-gray-500 dark:text-dark-400">No tags</span>
-                </div>
+                <span className="text-sm text-gray-900 dark:text-dark-50">–</span>
               )}
             </div>
           </div>

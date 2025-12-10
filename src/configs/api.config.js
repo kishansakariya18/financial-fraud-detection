@@ -155,7 +155,8 @@ export const apiConfig = {
       DELETE: '/bonus/admin/bonus-template/:bonusTemplateID',
       UPDATE_STATUS: '/bonus/admin/bonus-template/:bonusTemplateID/change-status',
       LIST_TAGS: '/bonus/admin/bonus-template/tags/list',
-      DUPLICATE: '/bonus/admin/bonus-template/:bonusTemplateID/duplicate'
+      DUPLICATE: '/bonus/admin/bonus-template/:bonusTemplateID/duplicate',
+      DENOMINATION: '/bonus/admin/v2/free-spins/denomination-list'
     },
     AGENT: {
       DASHBOARD: '/admin/agent/dashboard',

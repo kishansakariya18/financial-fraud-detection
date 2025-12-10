@@ -13,6 +13,20 @@ export function StepTemplateInfo({
   errors = {}
 }) {
   const { t } = useTranslation();
+  const handleExpiryChange = (event) => {
+    const raw = event.target.value;
+    if (raw === '' || raw === null || raw === undefined) {
+      onChange('expiryAfterIssuanceDays', '');
+      return;
+    }
+    const n = Number(raw);
+    if (Number.isNaN(n)) {
+      onChange('expiryAfterIssuanceDays', '');
+      return;
+    }
+    const clamped = Math.max(0, Math.min(365, Math.trunc(n)));
+    onChange('expiryAfterIssuanceDays', clamped);
+  };
   return (
     <div className="space-y-4">
       <Input
@@ -45,9 +59,17 @@ export function StepTemplateInfo({
       <Input
         label={t('expiry_after_issuance_days')}
         type="number"
+        min={0}
+        max={365}
+        step={1}
         placeholder={t('enter_number_of_days')}
         value={data.expiryAfterIssuanceDays}
-        onChange={(event) => onChange('expiryAfterIssuanceDays', event.target.value)}
+        onChange={handleExpiryChange}
+        onKeyDown={(e) => {
+          if (['e', 'E', '+', '-', '.'].includes(e.key)) {
+            e.preventDefault();
+          }
+        }}
         error={errors.expiryAfterIssuanceDays}
       />
     </div>

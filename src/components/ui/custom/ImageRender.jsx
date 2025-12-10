@@ -13,7 +13,8 @@ const RenderImage = ({
   label = '',
   maxWidth = '100px',
   maxHeight = '100px',
-  enableModal = false
+  enableModal = false,
+  noMargin = false
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const imageSrc = preview ? preview : value;
@@ -67,10 +68,17 @@ const RenderImage = ({
         <img
           id={id}
           src={imageSrc}
-          className={clsx('img-thumbnail mb-2 mr-2 rounded', {
+          className={clsx('img-thumbnail rounded', {
+            'mb-2 mr-2': !noMargin,
             'cursor-pointer transition-opacity hover:opacity-80': enableModal
           })}
-          style={{ maxWidth: maxWidth, maxHeight: maxHeight }}
+          style={{
+            maxWidth: maxWidth,
+            maxHeight: maxHeight,
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain'
+          }}
           alt={'null'}
           onLoad={handleImageLoad}
           onError={handleImageError}
