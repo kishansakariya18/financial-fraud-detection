@@ -184,14 +184,16 @@ export const templateInfoSchema = Yup.object().shape({
         : Number(originalValue);
     })
     .nullable()
-    .min(0, 'Expiry days must be at least 1')
+    .required('Expiry days is required')
+    .min(0, 'Expiry days must be 0 or greater')
+    .max(365, 'Expiry days must be 365 or less')
     .integer('Expiry days must be a whole number')
     .typeError('Expiry days must be a valid number')
 });
 
 // Step 2: Bonus Details
 export const bonusDetailsSchema = Yup.object().shape({
-  bonusName: Yup.string().trim().nullable(),
+  displayTitle: Yup.string().trim().nullable().required('Bonus name is required'),
   notes: Yup.string().trim().nullable(),
   displayPriority: Yup.number()
     .transform((value, originalValue) => {
@@ -245,7 +247,8 @@ export const bonusDetailsSchema = Yup.object().shape({
         img.src = objectUrl;
       });
     })
-    .nullable(),
+    .nullable()
+    .required('Desktop image is required'),
   mobileImage: Yup.mixed()
     .test('file-type', 'File must be PNG or JPG', (value) => {
       if (value === null || value === undefined) return true;
@@ -289,6 +292,7 @@ export const bonusDetailsSchema = Yup.object().shape({
       });
     })
     .nullable()
+    .required('Mobile image is required')
 });
 
 // Step 3: Reward Details (validates all possible fields, but only relevant ones are used based on bonusType)
@@ -312,6 +316,7 @@ export const rewardDetailsSchema = Yup.object().shape({
         : Number(originalValue);
     })
     .nullable()
+    .required('Minimum deposit amount is required')
     .min(0, 'Minimum deposit amount must be 0 or greater')
     .typeError('Minimum deposit amount must be a valid number'),
   // Deposit Boost - Variable
@@ -370,6 +375,11 @@ export const rewardDetailsSchema = Yup.object().shape({
         : Number(originalValue);
     })
     .nullable()
+    .when('$bonusType', {
+      is: (val) => val === 'free_spins',
+      then: (schema) => schema.required('Max free spin winnings is required'),
+      otherwise: (schema) => schema
+    })
     .min(0, 'Max free spin winnings must be 0 or greater')
     .typeError('Max free spin winnings must be a valid number')
 });
@@ -377,7 +387,7 @@ export const rewardDetailsSchema = Yup.object().shape({
 // Step 4: Wagering Configuration
 export const wageringConfigSchema = Yup.object().shape({
   mode: Yup.string().nullable(),
-  base: Yup.string().nullable(),
+  base: Yup.string().nullable().required('Please select any one'),
   wageringValue: Yup.number()
     .transform((value, originalValue) => {
       return originalValue === '' || originalValue === null || originalValue === undefined
@@ -394,8 +404,17 @@ export const wageringConfigSchema = Yup.object().shape({
         : Number(originalValue);
     })
     .nullable()
-    .min(0, 'Days to wager must be 0 or greater')
-    .typeError('Days to wager must be a valid number')
+    .when('mode', {
+      is: (val) => val !== 'none',
+      then: (schema) =>
+        schema
+          .required('Days to wager is required')
+          .min(0, 'Days to wager must be 0 or greater')
+          .max(365, 'Days to wager must be 365 or less')
+          .integer('Days to wager must be a whole number')
+          .typeError('Days to wager must be a valid number'),
+      otherwise: (schema) => schema.nullable()
+    })
 });
 
 // Step 5: Max Cashout Configuration

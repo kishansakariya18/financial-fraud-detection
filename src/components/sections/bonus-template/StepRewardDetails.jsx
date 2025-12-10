@@ -255,40 +255,41 @@ export function StepRewardDetails({
               paymentMethodOptions={paymentMethodOptions}
               errors={errors}
             />
-            {/* Embedded Wagering + Max Cashout when variable */}
-            {bonusType === 'deposit_boost' && (
-              <div className="space-y-6">
-                <div className="rounded-md border p-4 dark:border-dark-500">
-                  <p className="mb-3 text-sm font-medium text-gray-700 dark:text-dark-100">
-                    {t('wagering_configuration')}
-                  </p>
-                  <StepWageringConfiguration
-                    data={wageringData}
-                    onChange={onWageringChange}
-                    options={wageringOptions}
-                    baseOptions={wageringBaseOptions}
-                    errors={wageringErrors || {}}
-                  />
-                </div>
-                <div className="rounded-md border p-4 dark:border-dark-500">
-                  <p className="mb-3 text-sm font-medium text-gray-700 dark:text-dark-100">
-                    {t('max_cashout_configuration')}
-                  </p>
-                  <StepMaxCashoutConfiguration
-                    data={mcoData}
-                    onChange={onMcoChange}
-                    options={mcoOptions}
-                    baseOptions={mcoBaseOptions}
-                    errors={mcoErrors || {}}
-                  />
-                </div>
-              </div>
-            )}
             {/* {errors.variableRules && (
               <p className="mt-2 text-sm text-error dark:text-error-light">
                 {errors.variableRules}
               </p>
             )} */}
+          </div>
+        )}
+
+        {/* Embedded Wagering + Max Cashout for both Fixed and Variable */}
+        {bonusType === 'deposit_boost' && (
+          <div className="space-y-6">
+            <div className="rounded-md border p-4 dark:border-dark-500">
+              <p className="mb-3 text-sm font-medium text-gray-700 dark:text-dark-100">
+                {t('wagering_configuration')}
+              </p>
+              <StepWageringConfiguration
+                data={wageringData}
+                onChange={onWageringChange}
+                options={wageringOptions}
+                baseOptions={wageringBaseOptions}
+                errors={wageringErrors || {}}
+              />
+            </div>
+            <div className="rounded-md border p-4 dark:border-dark-500">
+              <p className="mb-3 text-sm font-medium text-gray-700 dark:text-dark-100">
+                {t('max_cashout_configuration')}
+              </p>
+              <StepMaxCashoutConfiguration
+                data={mcoData}
+                onChange={onMcoChange}
+                options={mcoOptions}
+                baseOptions={mcoBaseOptions}
+                errors={mcoErrors || {}}
+              />
+            </div>
           </div>
         )}
       </div>
