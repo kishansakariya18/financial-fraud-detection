@@ -255,16 +255,16 @@ export function StepRewardDetails({
               paymentMethodOptions={paymentMethodOptions}
               errors={errors}
             />
-            {/* {errors.variableRules && (
+            {errors.variableRules && (
               <p className="mt-2 text-sm text-error dark:text-error-light">
                 {errors.variableRules}
               </p>
-            )} */}
+            )}
           </div>
         )}
 
-        {/* Embedded Wagering + Max Cashout for both Fixed and Variable */}
-        {bonusType === 'deposit_boost' && (
+        {/* Wagering + Max Cashout: only for deposit_boost + variable mode */}
+        {bonusType === 'deposit_boost' && data.boostMode === 'variable' && (
           <div className="space-y-6">
             <div className="rounded-md border p-4 dark:border-dark-500">
               <p className="mb-3 text-sm font-medium text-gray-700 dark:text-dark-100">

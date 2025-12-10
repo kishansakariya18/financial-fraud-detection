@@ -6,8 +6,10 @@ import {
   BonusTemplateStepper,
   StepBonusDetails,
   StepGameplayConfiguration,
+  StepMaxCashoutConfiguration,
   StepRewardDetails,
-  StepTemplateInfo
+  StepTemplateInfo,
+  StepWageringConfiguration
 } from 'components/sections/bonus-template';
 import {
   BOOST_MODE_OPTIONS,
@@ -93,15 +95,6 @@ const defaultFormState = {
 export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const STEPS = [
-    { id: 'templateInfo', title: t('template_info') },
-    { id: 'bonusDetails', title: t('bonus_details') },
-    { id: 'rewardDetails', title: t('reward_details') },
-    {
-      id: 'gameplayConfiguration',
-      title: t('gameplay_configuration')
-    }
-  ];
 
   const [formState, setFormState] = useState(defaultFormState);
   const [activeStep, setActiveStep] = useState(0);
@@ -109,6 +102,27 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
   const [stepErrors, setStepErrors] = useState({});
   const { providerOptions, categoryOptions, gameOptions, tagOptions, handleGameOptionsCache } =
     useBonusTemplateOptions();
+
+  const showEmbeddedWagering =
+    formState.templateInfo.bonusType === 'deposit_boost' &&
+    formState.rewardDetails.boostMode === 'variable';
+
+  const STEPS = useMemo(() => {
+    const steps = [
+      { id: 'templateInfo', title: t('template_info') },
+      { id: 'bonusDetails', title: t('bonus_details') },
+      { id: 'rewardDetails', title: t('reward_details') }
+    ];
+
+    // Only add standalone Wagering / Max Cashout steps when not embedded
+    if (!showEmbeddedWagering) {
+      steps.push({ id: 'wageringConfiguration', title: t('wagering_configuration') });
+      steps.push({ id: 'maxCashoutConfiguration', title: t('max_cashout_configuration') });
+    }
+
+    steps.push({ id: 'gameplayConfiguration', title: t('gameplay_configuration') });
+    return steps;
+  }, [t, showEmbeddedWagering]);
 
   const currentStep = STEPS[activeStep];
   const isLastStep = activeStep === STEPS.length - 1;
@@ -352,6 +366,11 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
     });
   };
 
+  // Keep activeStep in range when steps shrink (e.g., toggling embedded wagering)
+  useEffect(() => {
+    setActiveStep((prev) => Math.min(prev, STEPS.length - 1));
+  }, [STEPS.length]);
+
   const validateStep = async (stepId, stepData, boostMode = null) => {
     const schema = stepSchemas[stepId];
     if (!schema) return { isValid: true, errors: null };
@@ -394,9 +413,9 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
     console.log('errors', errors);
 
     let additionalErrors = {};
-    // If we are on rewardDetails step and it's deposit_boost (Fixed or Variable), we must also validate
-    // wageringConfiguration and maxCashoutConfiguration because they are embedded here.
-    if (stepId === 'rewardDetails' && formState.templateInfo.bonusType === 'deposit_boost') {
+    // If we are on rewardDetails step and it's deposit_boost + variable, we validate embedded
+    // wageringConfiguration and maxCashoutConfiguration.
+    if (stepId === 'rewardDetails' && showEmbeddedWagering) {
       const wageringData = { ...formState.wageringConfig, boostMode };
       const { isValid: isWageringValid, errors: wageringErrors } = await validateStep(
         'wageringConfiguration',
@@ -514,6 +533,26 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
             mcoOptions={MCO_MODE_OPTIONS(t)}
             mcoBaseOptions={wageringBaseOptions}
             mcoErrors={stepErrors.maxCashoutConfiguration}
+          />
+        );
+      case 'wageringConfiguration':
+        return (
+          <StepWageringConfiguration
+            data={formState.wageringConfig}
+            onChange={handleWageringConfigChange}
+            options={WAGERING_MODE_OPTIONS(t)}
+            baseOptions={wageringBaseOptions}
+            errors={currentStepErrors}
+          />
+        );
+      case 'maxCashoutConfiguration':
+        return (
+          <StepMaxCashoutConfiguration
+            data={formState.maxCashoutConfig}
+            onChange={handleMaxCashoutChange}
+            options={MCO_MODE_OPTIONS(t)}
+            baseOptions={wageringBaseOptions}
+            errors={currentStepErrors}
           />
         );
       case 'gameplayConfiguration':

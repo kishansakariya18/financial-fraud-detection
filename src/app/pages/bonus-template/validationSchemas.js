@@ -14,6 +14,9 @@ const variableRuleItemSchema = Yup.object()
     rangeFrom: Yup.number()
       .transform(numberTransform)
       .nullable()
+      .test('required-range-from', 'Please add min deposit', (val) => {
+        return val !== null && val !== undefined && val !== '';
+      })
       .min(0, 'Min Deposit Must be greater than 0')
       .test('required-when-range-to-exists', 'Please add min deposit', function (value) {
         const { rangeTo } = this.parent;
@@ -31,6 +34,9 @@ const variableRuleItemSchema = Yup.object()
     rangeTo: Yup.number()
       .transform(numberTransform)
       .nullable()
+      .test('required-range-to', 'Please add max deposit', (val) => {
+        return val !== null && val !== undefined && val !== '';
+      })
       .min(0, 'Max Deposit Must be greater than 0')
       .test(
         'greater-than-range-from',
@@ -306,9 +312,20 @@ export const rewardDetailsSchema = Yup.object().shape({
         : Number(originalValue);
     })
     .nullable()
-    .min(0, 'Boost percentage must be 0 or greater')
-    .max(100, 'Boost percentage cannot exceed 100')
-    .typeError('Boost percentage must be a valid number'),
+    .when('$bonusType', {
+      is: (val) => val === 'deposit_boost',
+      then: (schema) =>
+        schema.when('$boostMode', {
+          is: (bm) => bm === 'fixed',
+          then: (inner) =>
+            inner
+              .min(0, 'Boost percentage must be 0 or greater')
+              .max(100, 'Boost percentage cannot exceed 100')
+              .typeError('Boost percentage must be a valid number'),
+          otherwise: (inner) => inner.nullable()
+        }),
+      otherwise: (schema) => schema.nullable()
+    }),
   minDepositAmount: Yup.number()
     .transform((value, originalValue) => {
       return originalValue === '' || originalValue === null || originalValue === undefined
@@ -316,9 +333,20 @@ export const rewardDetailsSchema = Yup.object().shape({
         : Number(originalValue);
     })
     .nullable()
-    .required('Minimum deposit amount is required')
-    .min(0, 'Minimum deposit amount must be 0 or greater')
-    .typeError('Minimum deposit amount must be a valid number'),
+    .when('$bonusType', {
+      is: (val) => val === 'deposit_boost',
+      then: (schema) =>
+        schema.when('$boostMode', {
+          is: (bm) => bm === 'fixed',
+          then: (inner) =>
+            inner
+              .required('Minimum deposit amount is required')
+              .moreThan(0, 'Minimum deposit amount must be greater than 0')
+              .typeError('Minimum deposit amount must be a valid number'),
+          otherwise: (inner) => inner.nullable()
+        }),
+      otherwise: (schema) => schema.nullable()
+    }),
   // Deposit Boost - Variable
   maxBonusAmount: Yup.number()
     .transform((value, originalValue) => {
@@ -327,9 +355,31 @@ export const rewardDetailsSchema = Yup.object().shape({
         : Number(originalValue);
     })
     .nullable()
-    .min(0, 'Max bonus amount must be 0 or greater')
-    .typeError('Max bonus amount must be a valid number'),
-  variableRules: Yup.array().of(variableRuleItemSchema).nullable(),
+    .when('$bonusType', {
+      is: (val) => val === 'deposit_boost',
+      then: (schema) =>
+        schema.when('$boostMode', {
+          is: (bm) => bm === 'variable',
+          then: (inner) =>
+            inner
+              .required('Max bonus amount is required')
+              .min(0, 'Max bonus amount must be 0 or greater')
+              .typeError('Max bonus amount must be a valid number'),
+          otherwise: (inner) => inner.nullable()
+        }),
+      otherwise: (schema) => schema.nullable()
+    }),
+  variableRules: Yup.mixed().when('$bonusType', {
+    is: (val) => val === 'deposit_boost',
+    then: () =>
+      Yup.mixed().when('$boostMode', {
+        is: (bm) => bm === 'variable',
+        then: () =>
+          Yup.array().of(variableRuleItemSchema).nullable().min(1, 'Please add at least one rule'),
+        otherwise: () => Yup.mixed().nullable()
+      }),
+    otherwise: () => Yup.mixed().nullable()
+  }),
   // Free Chip
   amount: Yup.number()
     .transform((value, originalValue) => {
@@ -387,7 +437,13 @@ export const rewardDetailsSchema = Yup.object().shape({
 // Step 4: Wagering Configuration
 export const wageringConfigSchema = Yup.object().shape({
   mode: Yup.string().nullable(),
-  base: Yup.string().nullable().required('Please select any one'),
+  base: Yup.string()
+    .nullable()
+    .when('mode', {
+      is: (val) => val === 'multiplier',
+      then: (schema) => schema.required('Please select any one'),
+      otherwise: (schema) => schema.nullable()
+    }),
   wageringValue: Yup.number()
     .transform((value, originalValue) => {
       return originalValue === '' || originalValue === null || originalValue === undefined
@@ -405,11 +461,11 @@ export const wageringConfigSchema = Yup.object().shape({
     })
     .nullable()
     .when('mode', {
-      is: (val) => val !== 'none',
+      is: (val) => val && val !== 'none',
       then: (schema) =>
         schema
           .required('Days to wager is required')
-          .min(0, 'Days to wager must be 0 or greater')
+          .moreThan(0, 'Days to wager must be greater than 0')
           .max(365, 'Days to wager must be 365 or less')
           .integer('Days to wager must be a whole number')
           .typeError('Days to wager must be a valid number'),
