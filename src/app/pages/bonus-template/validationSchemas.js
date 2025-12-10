@@ -197,7 +197,7 @@ export const templateInfoSchema = Yup.object().shape({
     })
     .nullable()
     .required('Expiry days is required')
-    .min(0, 'Expiry days must be 0 or greater')
+    .moreThan(0, 'Expiry days must be greater than 0')
     .max(365, 'Expiry days must be 365 or less')
     .integer('Expiry days must be a whole number')
     .typeError('Expiry days must be a valid number')
