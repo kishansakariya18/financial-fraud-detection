@@ -198,13 +198,32 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
   };
 
   const handleRewardDetailsChange = (field, value) => {
-    setFormState((prev) => ({
-      ...prev,
-      rewardDetails: {
-        ...prev.rewardDetails,
-        [field]: value
+    setFormState((prev) => {
+      const next = {
+        ...prev,
+        rewardDetails: {
+          ...prev.rewardDetails,
+          [field]: value
+        }
+      };
+      // Also clear wagering and max cashout configs when boost mode changes
+      if (field === 'boostMode') {
+        next.wageringConfig = {
+          mode: 'none',
+          base: '',
+          wageringValue: '',
+          daysToWager: null
+        };
+        next.maxCashoutConfig = {
+          mode: 'none',
+          base: '',
+          cashoutValue: '',
+          stickyBonus: false,
+          kycRequired: false
+        };
       }
-    }));
+      return next;
+    });
   };
 
   const handleVariableRulesChange = (rules) => {
