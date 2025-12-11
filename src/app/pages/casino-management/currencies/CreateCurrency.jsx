@@ -122,7 +122,7 @@ const CreateCurrency = () => {
                 placeholder={t('enter') + ' ' + t('name')}
               />
               <Controller
-                name="Code"
+                name="code"
                 control={control}
                 render={({ field }) => (
                   <Listbox
