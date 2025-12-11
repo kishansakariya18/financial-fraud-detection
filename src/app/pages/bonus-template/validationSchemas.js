@@ -370,7 +370,7 @@ export const rewardDetailsSchema = Yup.object().shape({
             inner
               .required('Max bonus amount is required')
               .min(0, 'Max bonus amount must be 0 or greater')
-              .max(200, 'Max bonus amount must be 1000000000000 or lesser')
+              .max(1000000000000, 'Max bonus amount must be 1000000000000 or lesser')
               .typeError('Max bonus amount must be a valid number'),
           otherwise: (inner) => inner.nullable()
         }),
