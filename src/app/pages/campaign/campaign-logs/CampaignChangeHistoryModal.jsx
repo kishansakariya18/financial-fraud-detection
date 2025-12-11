@@ -37,7 +37,7 @@ const CampaignDataDisplay = ({ data }) => {
 
 // Helper to format values based on key
 const formatValue = (key, value) => {
-  if (value === null || value === undefined) return '—';
+  if (value === null || value === undefined || value === '') return '—';
   if (key === 'Status') {
     const status = campaignStatusToAPP(value);
     return (
@@ -49,9 +49,15 @@ const formatValue = (key, value) => {
     );
   }
   if (key.includes('Date') || key.includes('At') || key.includes('Time')) {
-    return getDateInUTCToTimeZone(value);
+    return value ? getDateInUTCToTimeZone(value) : '—';
+  }
+  if (Array.isArray(value)) {
+    if (value.length === 0) return '—';
+    return value.map((v) => (v === null || v === undefined ? '' : String(v))).join(', ');
   }
   if (typeof value === 'object') {
+    const keys = Object.keys(value || {});
+    if (keys.length === 0) return '—';
     return JSON.stringify(value);
   }
   return String(value);

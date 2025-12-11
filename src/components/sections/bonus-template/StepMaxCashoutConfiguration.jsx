@@ -16,8 +16,9 @@ export function StepMaxCashoutConfiguration({ data, onChange, options, baseOptio
         value={data.mode}
         onChange={(event) => {
           const value = event.target.value;
+          // Do not auto-select base on multiplier; let user pick so validation can run
           if (value === 'multiplier' && !data.base) {
-            onChange('base', baseOptions[0]?.value);
+            onChange('base', '');
           }
           if (value === 'none') {
             onChange('cashoutValue', '');

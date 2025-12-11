@@ -649,5 +649,7 @@
   "bonus_removal_rules":"Regles de retrait de bonus",
   "promotions":"Promotions",
   "basics":"Bases",
-  "targeting":"Ciblage"
+  "targeting":"Ciblage",
+  "old_values":"Anciennes valeurs",
+  "new_values":"Nouvelles valeurs"
 }

@@ -51,7 +51,7 @@ export function StepRewardDetails({
         dps === 1 ? 'FirstLowestValue' : dps === 2 ? 'SecondLowestValue' : 'ThirdLowestValue';
       onChange('denominationChoiceKey', key);
     }
-  }, [bonusType, data?.denominationPerSpin, data?.denominationChoiceKey]);
+  }, [bonusType, data?.denominationPerSpin, data?.denominationChoiceKey, onChange]);
 
   const denomRows = useMemo(() => {
     if (!Array.isArray(denoms) || denoms.length === 0) return [];
@@ -123,6 +123,33 @@ export function StepRewardDetails({
 
   const isCurrencyStatusReady = !currencyLoading && !currencyError;
 
+  // Keep fixed/variable-exclusive fields mutually cleared
+  useEffect(() => {
+    if (bonusType !== 'deposit_boost') return;
+    if (data.boostMode === 'fixed') {
+      if (data.maxBonusAmount) onChange('maxBonusAmount', '');
+      if (Array.isArray(data.variableRules) && data.variableRules.length > 0)
+        onChange('variableRules', []);
+    } else if (data.boostMode === 'variable') {
+      if (data.boostPercent) onChange('boostPercent', '');
+      if (data.minDepositAmount) onChange('minDepositAmount', '');
+    }
+    // we intentionally do not include variable fields (data.variableRules etc.) in deps to avoid infinite loops when clearing
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bonusType, data.boostMode, onChange]);
+
+  // Clear wagering days when wagering mode is none to avoid disabled field keeping stale value
+  useEffect(() => {
+    if (wageringData?.mode !== 'none') return;
+    if (
+      wageringData?.daysToWager !== '' &&
+      wageringData?.daysToWager !== null &&
+      wageringData?.daysToWager !== undefined
+    ) {
+      onWageringChange('daysToWager', '');
+    }
+  }, [wageringData?.mode, wageringData?.daysToWager, onWageringChange]);
+
   useEffect(() => {
     // Only fetch when free_spins context and a game is selected
     if (bonusType !== 'free_spins') return;
@@ -180,7 +207,7 @@ export function StepRewardDetails({
     return () => {
       cancelled = true;
     };
-  }, [bonusType, data?.gameId]);
+  }, [bonusType, data?.gameId, data?.denominationChoiceKey, data?.denominationPerSpin, onChange]);
 
   const handleSelectDenominationKey = (key) => {
     if (
@@ -255,40 +282,41 @@ export function StepRewardDetails({
               paymentMethodOptions={paymentMethodOptions}
               errors={errors}
             />
-            {/* Embedded Wagering + Max Cashout when variable */}
-            {bonusType === 'deposit_boost' && (
-              <div className="space-y-6">
-                <div className="rounded-md border p-4 dark:border-dark-500">
-                  <p className="mb-3 text-sm font-medium text-gray-700 dark:text-dark-100">
-                    {t('wagering_configuration')}
-                  </p>
-                  <StepWageringConfiguration
-                    data={wageringData}
-                    onChange={onWageringChange}
-                    options={wageringOptions}
-                    baseOptions={wageringBaseOptions}
-                    errors={wageringErrors || {}}
-                  />
-                </div>
-                <div className="rounded-md border p-4 dark:border-dark-500">
-                  <p className="mb-3 text-sm font-medium text-gray-700 dark:text-dark-100">
-                    {t('max_cashout_configuration')}
-                  </p>
-                  <StepMaxCashoutConfiguration
-                    data={mcoData}
-                    onChange={onMcoChange}
-                    options={mcoOptions}
-                    baseOptions={mcoBaseOptions}
-                    errors={mcoErrors || {}}
-                  />
-                </div>
-              </div>
-            )}
-            {/* {errors.variableRules && (
+            {errors.variableRules && (
               <p className="mt-2 text-sm text-error dark:text-error-light">
                 {errors.variableRules}
               </p>
-            )} */}
+            )}
+          </div>
+        )}
+
+        {/* Wagering + Max Cashout: only for deposit_boost + variable mode */}
+        {bonusType === 'deposit_boost' && data.boostMode === 'variable' && (
+          <div className="space-y-6">
+            <div className="rounded-md border p-4 dark:border-dark-500">
+              <p className="mb-3 text-sm font-medium text-gray-700 dark:text-dark-100">
+                {t('wagering_configuration')}
+              </p>
+              <StepWageringConfiguration
+                data={wageringData}
+                onChange={onWageringChange}
+                options={wageringOptions}
+                baseOptions={wageringBaseOptions}
+                errors={wageringErrors || {}}
+              />
+            </div>
+            <div className="rounded-md border p-4 dark:border-dark-500">
+              <p className="mb-3 text-sm font-medium text-gray-700 dark:text-dark-100">
+                {t('max_cashout_configuration')}
+              </p>
+              <StepMaxCashoutConfiguration
+                data={mcoData}
+                onChange={onMcoChange}
+                options={mcoOptions}
+                baseOptions={mcoBaseOptions}
+                errors={mcoErrors || {}}
+              />
+            </div>
           </div>
         )}
       </div>

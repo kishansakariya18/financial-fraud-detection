@@ -95,17 +95,6 @@ const defaultFormState = {
 export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const STEPS = [
-    { id: 'templateInfo', title: t('template_info') },
-    { id: 'bonusDetails', title: t('bonus_details') },
-    { id: 'rewardDetails', title: t('reward_details') },
-    // { id: 'wageringConfiguration', title: t('wagering_configuration') },
-    // { id: 'maxCashoutConfiguration', title: t('max_cashout_configuration') },
-    {
-      id: 'gameplayConfiguration',
-      title: t('gameplay_configuration')
-    }
-  ];
 
   const [formState, setFormState] = useState(defaultFormState);
   const [activeStep, setActiveStep] = useState(0);
@@ -113,6 +102,27 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
   const [stepErrors, setStepErrors] = useState({});
   const { providerOptions, categoryOptions, gameOptions, tagOptions, handleGameOptionsCache } =
     useBonusTemplateOptions();
+
+  const showEmbeddedWagering =
+    formState.templateInfo.bonusType === 'deposit_boost' &&
+    formState.rewardDetails.boostMode === 'variable';
+
+  const STEPS = useMemo(() => {
+    const steps = [
+      { id: 'templateInfo', title: t('template_info') },
+      { id: 'bonusDetails', title: t('bonus_details') },
+      { id: 'rewardDetails', title: t('reward_details') }
+    ];
+
+    // Only add standalone Wagering / Max Cashout steps when not embedded
+    if (!showEmbeddedWagering) {
+      steps.push({ id: 'wageringConfiguration', title: t('wagering_configuration') });
+      steps.push({ id: 'maxCashoutConfiguration', title: t('max_cashout_configuration') });
+    }
+
+    steps.push({ id: 'gameplayConfiguration', title: t('gameplay_configuration') });
+    return steps;
+  }, [t, showEmbeddedWagering]);
 
   const currentStep = STEPS[activeStep];
   const isLastStep = activeStep === STEPS.length - 1;
@@ -188,13 +198,32 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
   };
 
   const handleRewardDetailsChange = (field, value) => {
-    setFormState((prev) => ({
-      ...prev,
-      rewardDetails: {
-        ...prev.rewardDetails,
-        [field]: value
+    setFormState((prev) => {
+      const next = {
+        ...prev,
+        rewardDetails: {
+          ...prev.rewardDetails,
+          [field]: value
+        }
+      };
+      // Also clear wagering and max cashout configs when boost mode changes
+      if (field === 'boostMode') {
+        next.wageringConfig = {
+          mode: 'none',
+          base: '',
+          wageringValue: '',
+          daysToWager: null
+        };
+        next.maxCashoutConfig = {
+          mode: 'none',
+          base: '',
+          cashoutValue: '',
+          stickyBonus: false,
+          kycRequired: false
+        };
       }
-    }));
+      return next;
+    });
   };
 
   const handleVariableRulesChange = (rules) => {
@@ -356,12 +385,20 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
     });
   };
 
+  // Keep activeStep in range when steps shrink (e.g., toggling embedded wagering)
+  useEffect(() => {
+    setActiveStep((prev) => Math.min(prev, STEPS.length - 1));
+  }, [STEPS.length]);
+
   const validateStep = async (stepId, stepData, boostMode = null) => {
     const schema = stepSchemas[stepId];
     if (!schema) return { isValid: true, errors: null };
 
     try {
-      const context = boostMode ? { boostMode } : {};
+      const context = {
+        ...(boostMode ? { boostMode } : {}),
+        bonusType: formState?.templateInfo?.bonusType
+      };
       await schema.validate(stepData, { abortEarly: false, context });
       return { isValid: true, errors: null };
     } catch (error) {
@@ -377,34 +414,85 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
     }
   };
 
+  const getStepDataById = (stepId) => {
+    switch (stepId) {
+      case 'templateInfo':
+        return formState.templateInfo;
+      case 'bonusDetails':
+        return formState.bonusDetails;
+      case 'rewardDetails':
+        return formState.rewardDetails;
+      case 'wageringConfiguration':
+        return formState.wageringConfig;
+      case 'maxCashoutConfiguration':
+        return formState.maxCashoutConfig;
+      case 'gameplayConfiguration':
+        return formState.gameplay;
+      default:
+        return undefined;
+    }
+  };
+
   const handleNext = async () => {
     const stepId = currentStep.id;
-    let stepData = formState[stepId];
+    let stepData = getStepDataById(stepId);
     const boostMode = formState.rewardDetails.boostMode;
 
     // Special handling for maxCashoutConfiguration
     if (stepId === 'maxCashoutConfiguration') {
-      stepData = { ...stepData, boostMode };
+      stepData = { ...(stepData || {}), boostMode };
     }
     // Special handling for wageringConfiguration
     if (stepId === 'wageringConfiguration') {
-      stepData = { ...stepData, boostMode };
+      stepData = { ...(stepData || {}), boostMode };
     }
 
     const { isValid, errors } = await validateStep(stepId, stepData, boostMode);
     console.log('errors', errors);
-    if (!isValid) {
+
+    let additionalErrors = {};
+    // If we are on rewardDetails step and it's deposit_boost + variable, we validate embedded
+    // wageringConfiguration and maxCashoutConfiguration.
+    if (stepId === 'rewardDetails' && showEmbeddedWagering) {
+      const wageringData = { ...formState.wageringConfig, boostMode };
+      const { isValid: isWageringValid, errors: wageringErrors } = await validateStep(
+        'wageringConfiguration',
+        wageringData,
+        boostMode
+      );
+      if (!isWageringValid) {
+        additionalErrors.wageringConfiguration = wageringErrors;
+      }
+
+      const mcoData = { ...formState.maxCashoutConfig, boostMode };
+      const { isValid: isMcoValid, errors: mcoErrors } = await validateStep(
+        'maxCashoutConfiguration',
+        mcoData,
+        boostMode
+      );
+      if (!isMcoValid) {
+        additionalErrors.maxCashoutConfiguration = mcoErrors;
+      }
+    }
+
+    if (!isValid || Object.keys(additionalErrors).length > 0) {
       setStepErrors((prev) => ({
         ...prev,
-        [stepId]: errors
+        [stepId]: errors,
+        ...additionalErrors
       }));
-      console.error('Please fix the errors before proceeding', errors);
+      console.error('Please fix the errors before proceeding', { ...errors, ...additionalErrors });
       return;
     }
     // Clear errors for current step
     setStepErrors((prev) => {
       const updated = { ...prev };
       delete updated[stepId];
+      // Also clear embedded errors if we are moving away from rewardDetails
+      if (stepId === 'rewardDetails') {
+        delete updated.wageringConfiguration;
+        delete updated.maxCashoutConfiguration;
+      }
       return updated;
     });
 
@@ -486,13 +574,6 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
           />
         );
       case 'wageringConfiguration':
-        if (bonusType === 'deposit_boost' && formState.rewardDetails.boostMode === 'variable') {
-          return (
-            <div className="rounded-md border p-4 text-sm text-gray-600 dark:border-dark-500 dark:text-dark-200">
-              {t('wagering_configuration')} {t('has_been_moved_to')} {t('reward_details')}
-            </div>
-          );
-        }
         return (
           <StepWageringConfiguration
             data={formState.wageringConfig}
@@ -503,13 +584,6 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
           />
         );
       case 'maxCashoutConfiguration':
-        if (bonusType === 'deposit_boost' && formState.rewardDetails.boostMode === 'variable') {
-          return (
-            <div className="rounded-md border p-4 text-sm text-gray-600 dark:border-dark-500 dark:text-dark-200">
-              {t('max_cashout_configuration')} {t('has_been_moved_to')} {t('reward_details')}
-            </div>
-          );
-        }
         return (
           <StepMaxCashoutConfiguration
             data={formState.maxCashoutConfig}
@@ -551,12 +625,12 @@ export default function CreateOREditForm({ onSubmit, isEdit = false, value }) {
     for (let i = 0; i < STEPS.length; i++) {
       const step = STEPS[i];
       const stepId = step.id;
-      let stepData = formState[stepId];
+      let stepData = getStepDataById(stepId);
       const boostMode = formState.rewardDetails.boostMode;
 
       // Special handling for steps that need boostMode context
       if (stepId === 'maxCashoutConfiguration' || stepId === 'wageringConfiguration') {
-        stepData = { ...stepData, boostMode };
+        stepData = { ...(stepData || {}), boostMode };
       }
 
       const { isValid, errors } = await validateStep(stepId, stepData, boostMode);
