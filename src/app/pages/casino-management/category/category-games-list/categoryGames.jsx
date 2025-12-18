@@ -15,6 +15,8 @@ import useTable from 'components/ui/useTable';
 import CategoryService from 'services/category.services';
 import { CategoryGameFilters } from './gameFilters';
 import { Button, Circlebar } from 'components/ui';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 export default function CategoryGames() {
   const { t } = useTranslation();
@@ -25,6 +27,7 @@ export default function CategoryGames() {
   const handleCheck = (id) => {
     setChecked((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]));
   };
+  const { hasPermission } = usePermissions();
 
   const columns = gameColumns({ selectedIds: checked, handleCheck, actionLabel: 'Remove' });
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
@@ -137,20 +140,22 @@ export default function CategoryGames() {
       />
 
       <TableCard tableSettings={tableSettings} table={table} loading={isLoading} />
-      <div className="flex justify-center">
-        <Button
-          type="button"
-          className="ml-6 mt-4"
-          color="primary"
-          disabled={checked == 0 || submitLoading}
-          onClick={onSubmit}>
-          {!submitLoading ? (
-            t('remove')
-          ) : (
-            <Circlebar size={4} strokeWidth={4} color="primary" isIndeterminate />
-          )}
-        </Button>
-      </div>
+      {hasPermission(PERMISSIONS.CATEGORY.REMOVE_GAMES_FROM_CATEGORY) && (
+        <div className="flex justify-center">
+          <Button
+            type="button"
+            className="ml-6 mt-4"
+            color="primary"
+            disabled={checked == 0 || submitLoading}
+            onClick={onSubmit}>
+            {!submitLoading ? (
+              t('remove')
+            ) : (
+              <Circlebar size={4} strokeWidth={4} color="primary" isIndeterminate />
+            )}
+          </Button>
+        </div>
+      )}
     </ContentWrapper>
   );
 }

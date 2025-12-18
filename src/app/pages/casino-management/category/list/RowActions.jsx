@@ -1,6 +1,6 @@
 // Import Dependencies
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
-import { ArrowUpRightIcon, EllipsisHorizontalIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { EllipsisHorizontalIcon, PencilIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -17,6 +17,7 @@ import { EditCategory } from '../EditCategory';
 import { useNavigate } from 'react-router';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
+import { LuGamepad2 } from 'react-icons/lu';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
@@ -129,7 +130,7 @@ export function RowActions({ row, table }) {
                   )}
                 </MenuItem>
               )}
-              {hasPermission(PERMISSIONS.GAME.VIEW) && (
+              {hasPermission(PERMISSIONS.CATEGORY.VIEW_CATEGORY_GAMES) && (
                 <MenuItem>
                   {({ focus }) => (
                     <button
@@ -140,7 +141,7 @@ export function RowActions({ row, table }) {
                       onClick={() =>
                         navigate(`/casino/category/list/category-games/${row.original.id}/list`)
                       }>
-                      <ArrowUpRightIcon className="size-4.5 stroke-1" />
+                      <LuGamepad2 className="size-4.5 stroke-1" />
                       <span>{t('games')}</span>
                     </button>
                   )}

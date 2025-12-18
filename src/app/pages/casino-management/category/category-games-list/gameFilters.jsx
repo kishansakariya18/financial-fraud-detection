@@ -10,6 +10,8 @@ import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { t } from 'i18next';
 import { useNavigate, useParams } from 'react-router';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 // ----------------------------------------------------------------------
 
@@ -25,6 +27,7 @@ export function CategoryGameFilters({
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
   const navigate = useNavigate();
   const { categoryId } = useParams();
+  const { hasPermission } = usePermissions();
 
   return (
     <div className="table-toolbar">
@@ -43,7 +46,7 @@ export function CategoryGameFilters({
           <Breadcrumbs items={breadcrumbItem} className="max-sm:hidden" />
         </div>
 
-        {!isGameList && (
+        {hasPermission(PERMISSIONS.CATEGORY.ADD_GAMES_TO_CATEGORY) && !isGameList && (
           <Button
             className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
             color="primary"
