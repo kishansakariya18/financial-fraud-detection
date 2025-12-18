@@ -14,8 +14,10 @@ import { useTranslation } from 'react-i18next';
 import CategoryService from 'services/category.services';
 import { CustomModal } from 'components/custom';
 import { EditCategory } from '../EditCategory';
+import { useNavigate } from 'react-router';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';
+import { LuGamepad2 } from 'react-icons/lu';
 
 export function RowActions({ row, table }) {
   const { t } = useTranslation();
@@ -27,6 +29,7 @@ export function RowActions({ row, table }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { hasPermission } = usePermissions();
+  const navigate = useNavigate();
 
   const confirmMessages = {
     pending: {
@@ -123,6 +126,23 @@ export function RowActions({ row, table }) {
                       )}>
                       <TbEdit className="size-4.5 stroke-1" />
                       <span>{t('Edit') + ' ' + t('casino_category')}</span>
+                    </button>
+                  )}
+                </MenuItem>
+              )}
+              {hasPermission(PERMISSIONS.CATEGORY.VIEW_CATEGORY_GAMES) && (
+                <MenuItem>
+                  {({ focus }) => (
+                    <button
+                      className={clsx(
+                        'flex h-9 w-full items-center space-x-3 px-3 tracking-wide outline-none transition-colors rtl:space-x-reverse',
+                        focus && 'bg-gray-100 text-gray-800 dark:bg-dark-600 dark:text-dark-100'
+                      )}
+                      onClick={() =>
+                        navigate(`/casino/category/list/category-games/${row.original.id}/list`)
+                      }>
+                      <LuGamepad2 className="size-4.5 stroke-1" />
+                      <span>{t('games')}</span>
                     </button>
                   )}
                 </MenuItem>

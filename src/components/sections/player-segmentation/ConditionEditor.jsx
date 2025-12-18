@@ -371,7 +371,9 @@ const ConditionEditor = ({ condition, onChange, disabled = false, onRemove, onCo
         return (
           <Listbox
             data={selectedAttribute.options}
-            value={selectedAttribute.options.filter((opt) => value?.includes(opt.value))}
+            value={selectedAttribute.options.filter(
+              (opt) => Array.isArray(value) && value.includes(opt.value)
+            )}
             onChange={(selected) => {
               const values = Array.isArray(selected)
                 ? selected.map((s) => s.value)

@@ -8,7 +8,7 @@ import { replaceText } from 'utils/custom.utilities';
 const SegmentationService = {
   getSegmentationList: async (body) => {
     try {
-      const { pagination, filters } = body;
+      const { pagination, filters, isPaginationRequired } = body;
 
       const apiRequestParams = {
         filters: {
@@ -23,7 +23,7 @@ const SegmentationService = {
         },
         per_page: pagination ? pagination.pageSize : undefined,
         page: pagination ? pagination.pageIndex + 1 : undefined,
-        ...(!pagination && { pagination: false })
+        isPaginationRequired: isPaginationRequired !== undefined ? isPaginationRequired : 1
       };
 
       const apiQueryParams = {

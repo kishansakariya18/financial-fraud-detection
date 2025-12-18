@@ -52,7 +52,7 @@ Section.propTypes = {
 };
 
 const compactListClasses =
-  'grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-3 gap-y-2 text-sm';
+  'grid grid-cols-[10rem_minmax(0,1fr)] items-start gap-x-3 gap-y-2 text-sm';
 
 export function BonusTemplatePreview({ data, lookups }) {
   const { t } = useTranslation();

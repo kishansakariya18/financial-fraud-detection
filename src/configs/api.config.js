@@ -155,7 +155,8 @@ export const apiConfig = {
       DELETE: '/bonus/admin/bonus-template/:bonusTemplateID',
       UPDATE_STATUS: '/bonus/admin/bonus-template/:bonusTemplateID/change-status',
       LIST_TAGS: '/bonus/admin/bonus-template/tags/list',
-      DUPLICATE: '/bonus/admin/bonus-template/:bonusTemplateID/duplicate'
+      DUPLICATE: '/bonus/admin/bonus-template/:bonusTemplateID/duplicate',
+      DENOMINATION: '/bonus/admin/v2/free-spins/denomination-list'
     },
     AGENT: {
       DASHBOARD: '/admin/agent/dashboard',
@@ -359,7 +360,10 @@ export const apiConfig = {
       DELETE: '/games/admin/casino-management/category/:categoryId/delete',
       CHANGE_STATUS: '/games/admin/casino-management/category/:categoryId/change-status',
       ALL_ACTIVE_LIST: '/games/admin/casino-management/category/all',
-      GET_CATEGORY_BY_PROVIDER_IDS: '/games/admin/casino-management/category/by-provider-ids'
+      GET_CATEGORY_BY_PROVIDER_IDS: '/games/admin/casino-management/category/by-provider-ids',
+      CATEGORY_GAMES_LIST: '/games/admin/casino-management/category/:categoryId/category-games',
+      ADD_GAMES: '/games/admin/casino-management/category/:categoryId/add-games',
+      REMOVE_GAMES: '/games/admin/casino-management/category/:categoryId/remove-games'
     },
     TOOLS: {
       DETAIL: '/games/admin/ip-lookup/details'
@@ -622,6 +626,18 @@ export const apiConfig = {
       CHANGE_STATUS: '/users/admin/enquiries/update-status',
       SUMMARY: '/users/admin/enquiries/summary',
       DETAILS: '/users/admin/enquiries/details'
+    },
+    CAMPAIGN: {
+      LIST: '/bonus/admin/campaign-template/list',
+      CREATE: '/bonus/admin/campaign-template',
+      DETAIL: '/bonus/admin/campaign-template/:campaignUID/details',
+      UPDATE: '/bonus/admin/campaign-template/:campaignUID',
+      CHANGE_STATUS: '/bonus/admin/campaign-template/:campaignUID/change-status',
+      DELETE: '/bonus/admin/campaign-template/:campaignUID',
+      ARCHIVE: '/bonus/admin/campaign-template/:campaignUID/archive',
+      CLONE: '/bonus/admin/campaign-template/:campaignUID/clone',
+      LOGS: '/bonus/admin/campaign-template/:campaignUID/change-logs',
+      TAGS: '/bonus/admin/campaign-template/tags/list'
     }
   }
 };

@@ -1,20 +1,12 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import { BadgeCell } from 'components/custom/table/cell';
+import { BadgeCell, DateCell } from 'components/custom/table/cell';
 import { bonusTemplateStatusOptions } from '../happer';
 import { BonusTemplateRowActions } from 'components/sections/bonus-template/BonusTemplateRowActions';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
 
 const columnHelper = createColumnHelper();
 
-const formatDate = (value) => {
-  if (!value) return '—';
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-
-  return date.toLocaleString();
-};
+// Using shared DateCell for consistent formatting across modules
 
 export const createBonusTemplateColumns = ({
   onView,
@@ -68,7 +60,8 @@ export const createBonusTemplateColumns = ({
     id: 'updatedAt',
     header: 'Last Updated',
     label: 'Last Updated',
-    cell: (info) => formatDate(info.getValue()),
+    cell: DateCell,
+    filterFn: 'inNumberRange',
     enableSorting: false,
     size: 200
   }),

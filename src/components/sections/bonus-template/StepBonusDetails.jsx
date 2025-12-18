@@ -118,14 +118,15 @@ const UploadField = ({ label, value, error, onChange }) => {
       <p className="text-xs text-gray-400 dark:text-dark-400">
         Required size: 1024x1024px (PNG/JPG)
       </p>
-      <div className="mt-2 h-64 rounded-md border p-2 dark:border-dark-500">
+      <div className="mt-2 flex h-40 w-40 items-center justify-center overflow-hidden rounded-md border p-2 dark:border-dark-500">
         {typeof value === 'string' && value ? (
           <RenderImage
             value={`${apiConfig.baseURL.S3_URL}/bonus-template/${value}`}
             id={'bonusTemplateImage'}
             enableModal={true}
-            maxWidth="100%"
-            maxHeight="100%"
+            maxWidth="160px"
+            maxHeight="160px"
+            noMargin={true}
           />
         ) : (
           localPreview && (
@@ -133,8 +134,9 @@ const UploadField = ({ label, value, error, onChange }) => {
               preview={localPreview}
               id={'bonusTemplateImagePreview'}
               enableModal={true}
-              maxWidth="100%"
-              maxHeight="100%"
+              maxWidth="160px"
+              maxHeight="160px"
+              noMargin={true}
             />
           )
         )}

@@ -1,7 +1,8 @@
 import { createColumnHelper } from '@tanstack/react-table';
-import { BadgeCell, DateCell } from 'components/custom/table/cell';
+import { BadgeCell, DateCell, IdCell } from 'components/custom/table/cell';
 import { PlayerSegmentationRowActions } from './RowActions';
 import { CopyableCell } from 'components/shared/table/CopyableCell';
+import { evaluationFrequencyOptions, statusOptions } from '../helper';
 
 const columnHelper = createColumnHelper();
 
@@ -10,6 +11,7 @@ export const playerSegmentationColumns = ({ canShowActions }) => [
     id: 'id',
     header: 'ID',
     label: 'ID',
+    cell: IdCell,
     enableSorting: false,
     size: 80
   }),
@@ -25,6 +27,7 @@ export const playerSegmentationColumns = ({ canShowActions }) => [
     id: 'segmentTag',
     header: 'Tag',
     label: 'Tag',
+    cell: CopyableCell,
     enableSorting: false,
     size: 140
   }),
@@ -48,13 +51,7 @@ export const playerSegmentationColumns = ({ canShowActions }) => [
     label: 'Frequency',
     cell: BadgeCell,
     meta: {
-      optionData: [
-        { value: 'NONE', label: 'None', color: null },
-        { value: 'HOURLY', label: 'Hourly', color: null },
-        { value: 'DAILY', label: 'Daily', color: null },
-        { value: 'WEEKLY', label: 'Weekly', color: null },
-        { value: 'MONTHLY', label: 'Monthly', color: null }
-      ]
+      optionData: evaluationFrequencyOptions
     },
     enableSorting: false,
     size: 120
@@ -65,11 +62,7 @@ export const playerSegmentationColumns = ({ canShowActions }) => [
     label: 'Status',
     cell: BadgeCell,
     meta: {
-      optionData: [
-        { value: 'active', label: 'Active', color: 'success' },
-        { value: 'inactive', label: 'Inactive', color: 'error' },
-        { value: 'archived', label: 'Archived', color: 'warning' }
-      ]
+      optionData: statusOptions
     },
     enableSorting: false,
     size: 100

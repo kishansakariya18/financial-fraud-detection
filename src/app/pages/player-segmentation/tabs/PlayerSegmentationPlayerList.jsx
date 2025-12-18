@@ -7,7 +7,7 @@ import PlayerList from 'components/sections/player-segmentation/PlayerList';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import PlayerSegmentationService from 'services/player-segmentation.services';
 import { createColumnHelper } from '@tanstack/react-table';
-import { BadgeCell, DateCell } from 'components/custom/table/cell';
+import { DateCell, IdCell } from 'components/custom/table/cell';
 import { ExportCSV } from 'components/custom/export';
 import apiConfig from 'configs/api.config';
 import { getQueryParams } from 'utils/custom.utilities';
@@ -22,6 +22,7 @@ const playerColumns = [
     id: 'userID',
     header: 'User ID',
     label: 'User ID',
+    cell: IdCell,
     enableSorting: false,
     size: 140
   }),
@@ -49,21 +50,21 @@ const playerColumns = [
     enableSorting: false,
     size: 140
   }),
-  columnHelper.accessor('status', {
-    id: 'status',
-    header: 'Status',
-    label: 'Status',
-    cell: BadgeCell,
-    meta: {
-      optionData: [
-        { value: 'active', label: 'Active', color: 'success' },
-        { value: 'inactive', label: 'Inactive', color: 'error' },
-        { value: 'blocked', label: 'Blocked', color: 'warning' }
-      ]
-    },
-    enableSorting: false,
-    size: 100
-  }),
+  // columnHelper.accessor('status', {
+  //   id: 'status',
+  //   header: 'Status',
+  //   label: 'Status',
+  //   cell: BadgeCell,
+  //   meta: {
+  //     optionData: [
+  //       { value: 'active', label: 'Active', color: 'success' },
+  //       { value: 'inactive', label: 'Inactive', color: 'error' },
+  //       { value: 'blocked', label: 'Blocked', color: 'warning' }
+  //     ]
+  //   },
+  //   enableSorting: false,
+  //   size: 100
+  // }),
   columnHelper.accessor((row) => getDateInUTCToTimeZone(row.createdAt), {
     id: 'createdAt',
     header: 'Joined Date',
