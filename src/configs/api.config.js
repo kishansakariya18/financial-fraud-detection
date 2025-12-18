@@ -360,7 +360,10 @@ export const apiConfig = {
       DELETE: '/games/admin/casino-management/category/:categoryId/delete',
       CHANGE_STATUS: '/games/admin/casino-management/category/:categoryId/change-status',
       ALL_ACTIVE_LIST: '/games/admin/casino-management/category/all',
-      GET_CATEGORY_BY_PROVIDER_IDS: '/games/admin/casino-management/category/by-provider-ids'
+      GET_CATEGORY_BY_PROVIDER_IDS: '/games/admin/casino-management/category/by-provider-ids',
+      CATEGORY_GAMES_LIST: '/games/admin/casino-management/category/:categoryId/category-games',
+      ADD_GAMES: '/games/admin/casino-management/category/:categoryId/add-games',
+      REMOVE_GAMES: '/games/admin/casino-management/category/:categoryId/remove-games'
     },
     TOOLS: {
       DETAIL: '/games/admin/ip-lookup/details'
