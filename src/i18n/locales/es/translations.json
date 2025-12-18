@@ -668,5 +668,7 @@
   "bonus_removal_rules":"Reglas de eliminación de bonos",
   "promotions":"Promociones",
   "basics":"Lo esencial",
-  "targeting":"Segmentación"
+  "targeting":"Segmentación",
+  "old_values":"Viejos valores",
+  "new_values":"Nuevos valores"
 }

@@ -7,6 +7,27 @@ export function StepWageringConfiguration({ data, onChange, options, baseOptions
   const { t } = useTranslation();
   const showBase = data.mode === 'multiplier';
   const showValue = data.mode === 'fixed_amount' || data.mode === 'multiplier';
+  const daysDisabled = data.mode === 'none';
+
+  const handleDaysChange = (event) => {
+    if (daysDisabled) {
+      onChange('daysToWager', '');
+      return;
+    }
+    const raw = event.target.value;
+    if (data.mode === 'none') {
+      onChange('daysToWager', '');
+      return;
+    }
+    if (raw === '' || raw === null || raw === undefined) {
+      onChange('daysToWager', '');
+      return;
+    }
+    const num = Number(raw);
+    if (Number.isNaN(num)) return;
+    const clamped = Math.max(1, Math.min(365, Math.trunc(num)));
+    onChange('daysToWager', clamped);
+  };
 
   return (
     <div className="space-y-4">
@@ -54,9 +75,10 @@ export function StepWageringConfiguration({ data, onChange, options, baseOptions
         type="number"
         placeholder={t('enter_days_to_wager_info')}
         value={data.daysToWager}
-        disabled={!showValue}
-        onChange={(event) => onChange('daysToWager', event.target.value)}
-        error={errors.daysToWager}
+        disabled={daysDisabled}
+        onChange={handleDaysChange}
+        // Hide validation while disabled so "required" doesn't show for mode none
+        error={daysDisabled ? undefined : errors.daysToWager}
       />
     </div>
   );
@@ -66,7 +88,8 @@ StepWageringConfiguration.propTypes = {
   data: PropTypes.shape({
     mode: PropTypes.string,
     base: PropTypes.string,
-    wageringValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    wageringValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    daysToWager: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
   }).isRequired,
   onChange: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(
