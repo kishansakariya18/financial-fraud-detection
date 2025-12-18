@@ -87,6 +87,36 @@ export const casinoRoutes = [
     }
   },
   {
+    path: '/casino/category/list/category-games/:categoryId/list',
+    lazy: async () => {
+      const { default: CategoryGames } = await import(
+        '../../pages/casino-management/category/category-games-list/categoryGames'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.GAME.VIEW}>
+            <CategoryGames />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
+    path: '/casino/category/list/select-games/:categoryId/list',
+    lazy: async () => {
+      const { default: GameList } = await import(
+        '../../pages/casino-management/category/category-games-list/gameList'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute permission={PERMISSIONS.GAME.VIEW}>
+            <GameList />
+          </PrivateRoute>
+        )
+      };
+    }
+  },
+  {
     path: '/casino/games/list',
     lazy: async () => {
       const { default: List } = await import('../../pages/casino-management/games/list/list');

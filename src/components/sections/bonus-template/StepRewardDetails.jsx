@@ -346,11 +346,11 @@ export function StepRewardDetails({
         <GameSelect
           value={data.selectedGame}
           onChange={(selected) => {
-            onChange('gameId', selected?.value || ''),
+            (onChange('gameId', selected?.value || ''),
               onChange('selectedGame', {
                 value: selected?.value || '',
                 label: selected?.label || ''
-              });
+              }));
             // Clear previously selected denomination when game changes
             onChange('selectedDenomination', undefined);
           }}

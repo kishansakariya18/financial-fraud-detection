@@ -42,3 +42,17 @@ export const statusOptions = [
     icon: XCircleIcon
   }
 ];
+
+export const categoryGameMapper = (apiData) => {
+  return apiData.map((item) => ({
+    id: item.GameID,
+    name: item?.game?.Name
+  }));
+};
+
+export const gameMapper = (apiData) => {
+  return apiData.map((item) => ({
+    id: item.GameID,
+    name: item?.Name
+  }));
+};

@@ -305,7 +305,10 @@ export const PERMISSIONS = Object.freeze({
     CREATE: 'category-create',
     EDIT: 'category-edit',
     CHANGE_STATUS: 'category-change-status',
-    DELETE: 'category-delete'
+    DELETE: 'category-delete',
+    ADD_GAMES_TO_CATEGORY: 'category-add-games',
+    REMOVE_GAMES_FROM_CATEGORY: 'category-remove-games',
+    VIEW_CATEGORY_GAMES: 'category-games-view'
   },
   PROVIDER: {
     VIEW: 'provider-view',
