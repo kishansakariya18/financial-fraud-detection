@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Page } from 'components/shared/Page';
 import { Button, Card, Checkbox, Input } from 'components/ui';
 import { Listbox } from 'components/shared/form/Listbox';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { rolePermissionListMapper } from './helper';
 import RoleService from 'services/role.services';
 import { useNavigate } from 'react-router';
@@ -20,11 +20,22 @@ const AddRole = () => {
   const pageTitle = t('add') + ' ' + t('role');
   const roleName = t('role') + ' ' + t('name');
   const save = t('save');
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+    setValue,
+    trigger
+  } = useForm({
+    resolver: yupResolver(addRoleSchema)
+  });
   const [response, setResponse] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
   const [checkedList, setCheckedList] = useState([]);
+  const [selectAllActive, setSelectAllActive] = useState(false);
   const [selectedModules, setSelectedModules] = useState(['all']);
   const moduleOptions = useMemo(() => {
     const list = [{ label: 'All Modules', value: 'all' }];
@@ -43,6 +54,13 @@ const AddRole = () => {
     const setSel = new Set(selectedModules);
     return (response || []).filter((m) => setSel.has(m.moduleName));
   }, [response, selectedModules]);
+  const filteredPermissionIds = useMemo(() => {
+    const ids = [];
+    (filteredModules || []).forEach((mod) => {
+      mod?.permissionList?.forEach((perm) => ids.push(perm.permissionID));
+    });
+    return Array.from(new Set(ids));
+  }, [filteredModules]);
   const allPermissionIds = useMemo(() => {
     const ids = [];
     response?.forEach((mod) => {
@@ -61,17 +79,65 @@ const AddRole = () => {
     return list;
   }, [response]);
 
+  const targetIdsForToggle =
+    !selectedModules?.length || selectedModules.includes('all')
+      ? allPermissionIds
+      : filteredPermissionIds;
+
   const allSelected =
-    allPermissionIds.length > 0 && allPermissionIds.every((id) => checkedList.includes(id));
+    targetIdsForToggle.length > 0 && targetIdsForToggle.every((id) => checkedList.includes(id));
 
   const handleToggleAll = () => {
-    const newCheckedList = allSelected ? [] : [...allPermissionIds];
-    setCheckedList(newCheckedList);
-    setValue('permissionsIdList', newCheckedList, { shouldValidate: true });
-    trigger('permissionsIdList');
+    if (allSelected) {
+      // Deselect only the target IDs (filtered or all), keep others
+      const newCheckedList = checkedList.filter((id) => !targetIdsForToggle.includes(id));
+      setSelectAllActive(false);
+      setCheckedList(newCheckedList);
+      setValue('permissionsIdList', newCheckedList, { shouldValidate: true });
+      trigger('permissionsIdList');
+    } else {
+      // Select: union current selection with target IDs (do not remove previous selections)
+      setSelectAllActive(true);
+      setCheckedList((prev) => {
+        const updated = Array.from(new Set([...(prev || []), ...targetIdsForToggle]));
+        setValue('permissionsIdList', updated, { shouldValidate: true });
+        trigger('permissionsIdList');
+        return updated;
+      });
+    }
   };
+
+  // If Select All is active and the FILTER target changes, make selection exactly match the target
+  const prevTargetKeyRef = useRef('');
+  useEffect(() => {
+    if (!selectAllActive) return;
+    const target =
+      !selectedModules?.length || selectedModules.includes('all')
+        ? allPermissionIds
+        : filteredPermissionIds;
+    const key = (target || []).join(',');
+    if (prevTargetKeyRef.current === key) return;
+    prevTargetKeyRef.current = key;
+    // Add target IDs without removing existing selections
+    setCheckedList((prev) => {
+      const updated = Array.from(new Set([...(prev || []), ...target]));
+      setValue('permissionsIdList', updated, { shouldValidate: true });
+      trigger('permissionsIdList');
+      return updated;
+    });
+  }, [
+    selectAllActive,
+    selectedModules,
+    filteredPermissionIds,
+    allPermissionIds,
+    setValue,
+    trigger
+  ]);
+
   const handleCheck = (checked, permissionObj) => {
     let newCheckedList = [...checkedList];
+    // Manual toggle cancels sticky Select All
+    if (selectAllActive) setSelectAllActive(false);
 
     if (!checked) {
       // Cascading deselect: remove this permission and any dependents within the module
@@ -129,17 +195,6 @@ const AddRole = () => {
   const [isSubmitLoading, setSubmitLoading] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const [submitResponse, setSubmitResponse] = useState(null);
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-    setValue,
-    trigger
-  } = useForm({
-    resolver: yupResolver(addRoleSchema)
-  });
 
   const navigate = useNavigate();
 
@@ -258,16 +313,28 @@ const AddRole = () => {
                           }
                           onChange={(vals) => {
                             const values = (vals || []).map((v) => v.value);
-                            if (!values.length) {
-                              setSelectedModules(['all']);
-                              return;
-                            }
-                            // If specific modules selected, ensure 'all' is not selected
-                            if (values.includes('all') && values.length > 1) {
-                              setSelectedModules(values.filter((v) => v !== 'all'));
-                              return;
-                            }
-                            setSelectedModules(values);
+                            setSelectedModules((prev) => {
+                              if (!values.length) return ['all'];
+
+                              const prevSet = new Set(prev || []);
+                              const newSet = new Set(values);
+                              const added = values.filter((v) => !prevSet.has(v));
+
+                              // If user explicitly selected 'All' now, keep only 'All'
+                              if (added.includes('all')) return ['all'];
+
+                              // If previously 'All' was selected and user added specifics, remove 'All'
+                              if (prevSet.has('all') && added.length > 0) {
+                                return values.filter((v) => v !== 'all');
+                              }
+
+                              // Safety: if both present without clear action, drop 'all'
+                              if (newSet.has('all') && values.length > 1) {
+                                return values.filter((v) => v !== 'all');
+                              }
+
+                              return values;
+                            });
                           }}
                           placeholder={'Filter by module(s)'}
                           displayField="label"

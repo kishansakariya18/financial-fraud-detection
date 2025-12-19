@@ -4,7 +4,7 @@ import RowActions from './RowActions';
 
 const columnHelper = createColumnHelper();
 
-export const columns = [
+export const columns = ({ canShowActions } = {}) => [
   columnHelper.accessor((row) => row.id, {
     id: 'id',
     label: 'ID',
@@ -40,11 +40,15 @@ export const columns = [
     cell: DateCell,
     enableSorting: false
   }),
-  columnHelper.display({
-    id: 'actions',
-    label: 'Row Actions',
-    header: 'Actions',
-    cell: RowActions,
-    enableSorting: false
-  })
+  ...(canShowActions
+    ? [
+        columnHelper.display({
+          id: 'actions',
+          label: 'Row Actions',
+          header: 'Actions',
+          cell: RowActions,
+          enableSorting: false
+        })
+      ]
+    : [])
 ];

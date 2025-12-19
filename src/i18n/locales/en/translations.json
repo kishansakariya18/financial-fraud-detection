@@ -1310,5 +1310,13 @@
   "withdrawal": "Withdrawal",
   "free_bonuses_claimed": "Free Bonuses Claimed",
   "enquiry":"Enquiry",
-  "game_selection":"Game Selection"
+  "game_selection":"Game Selection",
+    "reissuance_policy":"Reissuance Policy",
+  "triggers":"Triggers",
+  "bonus_removal_rules":"Bonus Removal Rules",
+  "promotions":"Promotions",
+  "basics":"Basics",
+  "targeting":"Targeting",
+  "old_values":"Old Values",
+  "new_values":"New Values"
 }

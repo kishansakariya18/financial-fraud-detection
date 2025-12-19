@@ -12,6 +12,10 @@ import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.const
 import { Page } from 'components/shared/Page';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { capitalizeFirstLetter, getDateInUTCToTimeZone } from 'helpers/functions';
+import { CopyableCell } from 'components/shared/table/CopyableCell';
+import { Button } from 'components/ui';
+import { useClipboard } from 'hooks';
+import { DocumentDuplicateIcon } from '@heroicons/react/20/solid';
 
 const columnHelper = createColumnHelper();
 
@@ -20,6 +24,7 @@ const PlayerActivity = () => {
   const { segmentationUID } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
+  const { copied, copy } = useClipboard({ timeout: 2000 });
 
   const breadcrumbItem = [
     { title: t('player_segmentation'), path: '/bonus/player-segmentation' },
@@ -38,8 +43,36 @@ const PlayerActivity = () => {
         if (!user) return '—';
         return (
           <div className="flex flex-col">
-            <span className="font-medium">{user.Username || '—'}</span>
-            <span className="text-xs text-gray-500">{user.Email || '—'}</span>
+            <span className="font-medium">
+              {user.Username || '—'}{' '}
+              {user.Username && user.Username !== '-' && (
+                <Button
+                  data-tooltip
+                  data-tooltip-content={copied ? 'Copied' : 'Copy'}
+                  onClick={() => copy(user.Username)}
+                  isIcon
+                  variant="flat"
+                  className="size-5 rounded-full opacity-0 group-hover/td:opacity-100"
+                  aria-label="Copy Button">
+                  <DocumentDuplicateIcon className="size-3.5" />
+                </Button>
+              )}
+            </span>
+            <span className="text-xs text-gray-500">
+              {user.Email || '—'}
+              {user.Email && user.Email !== '-' && (
+                <Button
+                  data-tooltip
+                  data-tooltip-content={copied ? 'Copied' : 'Copy'}
+                  onClick={() => copy(user.Email)}
+                  isIcon
+                  variant="flat"
+                  className="size-5 rounded-full opacity-0 group-hover/td:opacity-100"
+                  aria-label="Copy Button">
+                  <DocumentDuplicateIcon className="size-3.5" />
+                </Button>
+              )}
+            </span>
           </div>
         );
       },
@@ -48,7 +81,7 @@ const PlayerActivity = () => {
     }),
     columnHelper.accessor('UserID', {
       header: t('user_id'),
-      cell: (info) => info.getValue() || '—',
+      cell: CopyableCell,
       size: 100,
       enableSorting: false
     }),

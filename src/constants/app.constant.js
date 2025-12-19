@@ -305,7 +305,10 @@ export const PERMISSIONS = Object.freeze({
     CREATE: 'category-create',
     EDIT: 'category-edit',
     CHANGE_STATUS: 'category-change-status',
-    DELETE: 'category-delete'
+    DELETE: 'category-delete',
+    ADD_GAMES_TO_CATEGORY: 'category-add-games',
+    REMOVE_GAMES_FROM_CATEGORY: 'category-remove-games',
+    VIEW_CATEGORY_GAMES: 'category-games-view'
   },
   PROVIDER: {
     VIEW: 'provider-view',
@@ -320,7 +323,7 @@ export const PERMISSIONS = Object.freeze({
     VIEW: 'game-view',
     CREATE: 'game-create',
     EDIT: 'game-edit',
-    CHANGE_STATUS: 'game-chnage-status',
+    CHANGE_STATUS: 'game-change-status',
     DELETE: 'game-delete',
     ADD_SEGMENTATION: 'game-add-segmentation'
   },
@@ -535,6 +538,13 @@ export const PERMISSIONS = Object.freeze({
   ENQUIRES: {
     LIST: 'enquiry-view',
     CHANGE_STATUS: 'enquiry-change-status'
+  },
+  CAMPAIGN: {
+    VIEW: 'campaign-view',
+    ADD: 'campaign-add',
+    EDIT: 'campaign-edit',
+    DELETE: 'campaign-delete',
+    CHANGE_STATUS: 'campaign-change-status'
   }
 });
 

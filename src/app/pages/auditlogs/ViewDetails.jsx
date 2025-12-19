@@ -83,11 +83,11 @@ const ViewDetails = () => {
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-800 dark:text-dark-100">{t('url')}:</p>
-                {response?.URL ? (
+                {response?.WebURL ? (
                   <a
-                    href={response.URL}
+                    href={response.WebURL}
                     className="break-all text-primary-600 hover:text-primary-700 hover:underline dark:text-primary-400 dark:hover:text-primary-300">
-                    {response.URL}
+                    {response.WebURL}
                   </a>
                 ) : (
                   <p>—</p>

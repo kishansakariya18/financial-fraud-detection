@@ -61,7 +61,7 @@ export const responseMapper = (apiData) => {
     mobile: data.Mobile,
     betAmount: data.BetAmount,
     stage: getBatdgeForStage(data.Stage),
-    betWinningTxnId: data.BetWinningTransactionID,
+    betWinningTxnId: data.BetWinningTransactionID ? data.BetWinningTransactionID : '-',
     resultDate: data.ResultDate ? data.ResultDate : '',
     winAmount: data.WinningAmount,
     userAmount: amountColorBasedOnType(data.Amount, data.OutcomeType),

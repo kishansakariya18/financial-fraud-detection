@@ -9,6 +9,8 @@ import { ipResponseMapper } from '../helper';
 import { useSearchParams } from 'react-router';
 import { getQueryParams } from 'utils/custom.utilities';
 import Toolbar from './Toolbar';
+import { PERMISSIONS } from 'constants/app.constant';
+import usePermissions from 'app/router/usePermissions';
 
 export default function BlacklistIP() {
   const { t } = useTranslation();
@@ -17,6 +19,8 @@ export default function BlacklistIP() {
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
   const [searchValue, setSearchValue] = useState(queryParams.keyword || '');
+  const { hasPermission } = usePermissions();
+  const canShowActions = hasPermission(PERMISSIONS.BLACKLIST.DELETE);
 
   const fetchData = async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? 0 : +queryParams.pageIndex;
@@ -38,12 +42,12 @@ export default function BlacklistIP() {
   };
 
   const { table, isLoading, tableSettings } = useTable({
-    columns,
+    columns: columns({ canShowActions }),
     fetchData,
     queryParams,
     setSearchParams,
     initialSettings: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { left: ['id'], right: canShowActions ? ['actions'] : [] },
       tableSettings: {}
     }
   });

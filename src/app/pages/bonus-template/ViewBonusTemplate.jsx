@@ -16,6 +16,7 @@ import {
 } from './happer';
 import { useTranslation } from 'react-i18next';
 import RenderImage from 'components/ui/custom/ImageRender';
+import { getDateInUTCToTimeZone } from 'helpers/functions';
 
 const statusColorMap = {
   active: 'success',
@@ -24,12 +25,12 @@ const statusColorMap = {
   unknown: 'neutral'
 };
 
-const formatDateTime = (value) => {
-  if (!value) return null;
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return String(value);
-  return date.toLocaleString();
-};
+// const formatDateTime = (value) => {
+//   if (!value) return null;
+//   const date = new Date(value);
+//   if (Number.isNaN(date.getTime())) return String(value);
+//   return date.toLocaleString();
+// };
 
 const formatStatusBadge = (status, color) => (
   <Badge variant="soft" color={color}>
@@ -238,7 +239,7 @@ export default function ViewBonusTemplate() {
                 },
                 {
                   label: t('display_priority'),
-                  value: normalized.templateInfo.displayPriority ?? '—'
+                  value: normalized.bonusDetails.displayPriority ?? '—'
                 },
                 {
                   label: t('expiry_after_issuance_days'),
@@ -254,7 +255,10 @@ export default function ViewBonusTemplate() {
                 },
                 { label: t('created_by'), value: normalized.createdByAdmin.name ?? '—' },
                 { label: t('updated_by'), value: normalized.updatedByAdmin.name ?? '—' },
-                { label: t('created_at'), value: formatDateTime(normalized.createdAt) ?? '—' },
+                {
+                  label: t('created_at'),
+                  value: getDateInUTCToTimeZone(normalized.createdAt) ?? '—'
+                },
                 {
                   label: t('desktop_image'),
                   value: normalized.bonusDetails.desktopImageUrl ? (
