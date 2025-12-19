@@ -34,6 +34,8 @@ const EditPages = () => {
     handleSubmit,
     formState: { errors },
     control,
+    setValue,
+    trigger,
     // watch,
     reset
   } = useForm({
@@ -61,7 +63,10 @@ const EditPages = () => {
     setContent(val);
     const quill = new Quill(document.createElement('div'));
     quill.setContents(val);
-    setHtmlContent(quill.root.innerHTML);
+    const html = quill.root.innerHTML;
+    setHtmlContent(html);
+    setValue('content', html);
+    trigger('content');
   };
 
   const editPagesAPI = async (requestObject) => {
