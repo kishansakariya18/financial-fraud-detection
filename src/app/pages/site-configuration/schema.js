@@ -66,3 +66,18 @@ export const validateNumberValue = (value, opts = {}) => {
     return e?.message || 'Invalid number';
   }
 };
+
+export const passwordManagerSchema = Yup.object().shape({
+  currentPassword: Yup.string().trim().required('Current password is required'),
+  newPassword: Yup.string()
+    .trim()
+    .required('New password is required')
+    .matches(
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+      'Minimum 8 Character Required, Atleast One Letter and One Number and One Special Character'
+    ),
+  confirmPassword: Yup.string()
+    .trim()
+    .required('Confirm password is required')
+    .oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
+});

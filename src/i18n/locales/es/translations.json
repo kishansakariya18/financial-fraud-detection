@@ -670,5 +670,14 @@
   "basics":"Lo esencial",
   "targeting":"Segmentación",
   "old_values":"Viejos valores",
-  "new_values":"Nuevos valores"
+  "new_values":"Nuevos valores",
+  "passwordManager":"Gestor de contraseñas",
+  "userManageFundPassword":"Gestionar contraseña de fondos (Jugador)",
+  "affiliateManageFundPassword":"Gestionar contraseña de fondos (Afiliado)",
+  "currentPassword":"Contraseña actual",
+  "currentPasswordPlaceholder":"Ingrese la contraseña actual",
+  "newPassword":"Nueva contraseña",
+  "newPasswordPlaceholder":"Ingrese la nueva contraseña",
+  "confirmPassword":"Confirmar contraseña",
+  "confirmPasswordPlaceholder":"Ingrese la contraseña de confirmación"
 }

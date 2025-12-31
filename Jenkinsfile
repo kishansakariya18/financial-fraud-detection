@@ -4,6 +4,7 @@ pipeline {
    environment {
         DOCKERHUB_CREDENTIALS = 'docker-hub-credentials-id'  // Docker Hub credentials ID
         DOCKERHUB_REPO = "sourcecodelab/sourcecodelab"
+        DOCKER_BUILDKIT = "1"
 	// SONARQUBE_ENV = 'sonarqube'        
     }
 
