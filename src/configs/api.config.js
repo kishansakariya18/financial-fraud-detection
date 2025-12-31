@@ -75,7 +75,8 @@ export const apiConfig = {
       COUNTRY_LIST: '/config/admin/config/countries',
       SEGMENTATION_LIST: '/bonus/admin/segmentation/list',
       REFERRERS_LIST: '/users/admin/users/referrers-list',
-      VERIFY_KYC_BY_ADMIN: '/users/admin/kyc/:userUID/veryfyByAdmin'
+      VERIFY_KYC_BY_ADMIN: '/users/admin/kyc/:userUID/veryfyByAdmin',
+      CHANGE_MANAGE_FUND_PASSWORD: '/admin/config/user/change-manage-fund-password'
     },
     ADMIN_USER: {
       ADMIN_LIST: '/admin/admin/admin/list',
@@ -286,7 +287,8 @@ export const apiConfig = {
       FUND: '/affiliates/admin/affiliates/fund',
       AFFILIATE_LOGIN_HISTORY: '/affiliates/admin/affiliates/:affiliateID/login-history',
       CHANGE_AFFILIATE_FUND_PASSWORD: '/config/admin/config/affiliate/change-manage-fund-password',
-      SUMMARY: '/affiliates/admin/affiliates/summary'
+      SUMMARY: '/affiliates/admin/affiliates/summary',
+      CHANGE_MANAGE_FUND_PASSWORD: '/admin/config/affiliate/change-manage-fund-password'
     },
     SETTINGS: {
       USER_KYC: {

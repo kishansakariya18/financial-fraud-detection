@@ -11,6 +11,8 @@ import kycProvider from './kyc-provider';
 import smsProvider from './sms-provider';
 import paymentProviderConfig from './payment-provider-config';
 
+import { passwordManager } from './password-manager';
+
 export const siteConfiguration = {
   id: 'site_configuration',
   type: NAV_TYPE_COLLAPSE,
@@ -29,6 +31,7 @@ export const siteConfiguration = {
   childs: [
     // country,
     appSettings,
+    passwordManager,
     RateLimitRules,
     emailProvider,
     kycProvider,
