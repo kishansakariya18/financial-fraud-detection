@@ -107,13 +107,14 @@ export default function PasswordManager() {
     try {
       const response = await PasswordManagerService.changeUserFundPassword(data);
       if (response?.status === 200 || response?.status === 201) {
-        toast.success(response?.data?.message || 'User fund password updated successfully');
+        console.log(response);
+        toast.success(response?.response.message || 'User fund password updated successfully');
         resetForm();
       } else {
-        toast.error(response?.data?.message || 'Failed to update user fund password');
+        toast.error(response?.response.message || 'Failed to update user fund password');
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || 'An error occurred');
+      toast.error(error?.response?.message || 'An error occurred');
     } finally {
       setLoadingUser(false);
     }
@@ -124,13 +125,15 @@ export default function PasswordManager() {
     try {
       const response = await PasswordManagerService.changeAffiliateFundPassword(data);
       if (response?.status === 200 || response?.status === 201) {
-        toast.success(response?.data?.message || 'Affiliate fund password updated successfully');
+        toast.success(
+          response?.response?.message || 'Affiliate fund password updated successfully'
+        );
         resetForm();
       } else {
-        toast.error(response?.data?.message || 'Failed to update affiliate fund password');
+        toast.error(response?.response?.message || 'Failed to update affiliate fund password');
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || 'An error occurred');
+      toast.error(error?.response?.message || 'An error occurred');
     } finally {
       setLoadingAffiliate(false);
     }
