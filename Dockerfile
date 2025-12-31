@@ -2,7 +2,10 @@
 FROM node:20 AS nodework
 WORKDIR /app
 COPY package*.json ./
-RUN NODE_OPTIONS="--max-old-space-size=2014" npm install
+# RUN NODE_OPTIONS="--max-old-space-size=2014"  npm install
+RUN --mount=type=cache,target=/root/.npm \
+    NODE_OPTIONS="--max-old-space-size=2024" \
+    npm install --prefer-offline --no-audit
 COPY . ./
 # Accept multiple build-time variables
 #ARG VITE_S3_URL
