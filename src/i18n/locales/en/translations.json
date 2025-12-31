@@ -1318,5 +1318,14 @@
   "basics":"Basics",
   "targeting":"Targeting",
   "old_values":"Old Values",
-  "new_values":"New Values"
+  "new_values":"New Values",
+  "currentPassword":"Current Password",
+  "currentPasswordPlaceholder":"Enter current password",
+  "newPassword":"New Password",
+  "newPasswordPlaceholder":"Enter new password",
+  "confirmPassword":"Confirm Password",
+  "confirmPasswordPlaceholder":"Enter confirm password",
+  "userManageFundPassword":"Manage Fund Password (Player)",
+  "affiliateManageFundPassword":"Manage Fund Password (Affiliate)",
+  "passwordManager":"Password Manager"
 }

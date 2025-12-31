@@ -76,20 +76,20 @@ const PasswordChangeForm = ({ title, onSubmit, loading }) => {
       <form onSubmit={handleSubmit(onFormSubmit)} className="flex flex-col gap-4">
         {renderPasswordInput(
           'currentPassword',
-          t('Current Password'),
-          t('Enter current password'),
+          t('currentPassword'),
+          t('currentPasswordPlaceholder'),
           'current'
         )}
-        {renderPasswordInput('newPassword', t('New Password'), t('Enter new password'), 'new')}
+        {renderPasswordInput('newPassword', t('newPassword'), t('newPasswordPlaceholder'), 'new')}
         {renderPasswordInput(
           'confirmPassword',
-          t('Confirm Password'),
-          t('Confirm new password'),
+          t('confirmPassword'),
+          t('confirmPasswordPlaceholder'),
           'confirm'
         )}
         <div className="mt-2 flex justify-end">
           <Button type="submit" color="primary" disabled={loading}>
-            {loading ? t('Updating...') : t('Update Password')}
+            {loading ? t('Updating...') : t('update')}
           </Button>
         </div>
       </form>
@@ -107,13 +107,13 @@ export default function PasswordManager() {
     try {
       const response = await PasswordManagerService.changeUserFundPassword(data);
       if (response?.status === 200 || response?.status === 201) {
-        toast.success(response?.data?.message || t('User fund password updated successfully'));
+        toast.success(response?.data?.message || 'User fund password updated successfully');
         resetForm();
       } else {
-        toast.error(response?.data?.message || t('Failed to update user fund password'));
+        toast.error(response?.data?.message || 'Failed to update user fund password');
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || t('An error occurred'));
+      toast.error(error?.response?.data?.message || 'An error occurred');
     } finally {
       setLoadingUser(false);
     }
@@ -124,23 +124,23 @@ export default function PasswordManager() {
     try {
       const response = await PasswordManagerService.changeAffiliateFundPassword(data);
       if (response?.status === 200 || response?.status === 201) {
-        toast.success(response?.data?.message || t('Affiliate fund password updated successfully'));
+        toast.success(response?.data?.message || 'Affiliate fund password updated successfully');
         resetForm();
       } else {
-        toast.error(response?.data?.message || t('Failed to update affiliate fund password'));
+        toast.error(response?.data?.message || 'Failed to update affiliate fund password');
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || t('An error occurred'));
+      toast.error(error?.response?.data?.message || 'An error occurred');
     } finally {
       setLoadingAffiliate(false);
     }
   };
 
   return (
-    <ContentWrapper pageTitle={t('Password Manager')}>
+    <ContentWrapper pageTitle={t('passwordManager')}>
       <div className="flex items-center space-x-4 px-[--margin-x] py-5 lg:py-6 rtl:space-x-reverse">
         <h2 className="text-xl font-medium tracking-wide text-gray-800 dark:text-dark-50">
-          {t('Password Manager')}
+          {t('passwordManager')}
         </h2>
         <div className="ml-4 flex items-center space-x-4 py-5 lg:py-6 rtl:space-x-reverse">
           <div className="hidden self-stretch py-1 sm:flex">
@@ -151,12 +151,12 @@ export default function PasswordManager() {
       <div className="px-[--margin-x]">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <PasswordChangeForm
-            title={t('User Manage Fund Password')}
+            title={t('userManageFundPassword')}
             onSubmit={handleUserPasswordChange}
             loading={loadingUser}
           />
           <PasswordChangeForm
-            title={t('Affiliate Manage Fund Password')}
+            title={t('affiliateManageFundPassword')}
             onSubmit={handleAffiliatePasswordChange}
             loading={loadingAffiliate}
           />

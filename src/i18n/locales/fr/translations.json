@@ -651,5 +651,14 @@
   "basics":"Bases",
   "targeting":"Ciblage",
   "old_values":"Anciennes valeurs",
-  "new_values":"Nouvelles valeurs"
+  "new_values":"Nouvelles valeurs",
+  "passwordManager":"Gestionnaire de mot de passe",
+  "userManageFundPassword":"Gestionnaire de mot de passe (Joueur)",
+  "affiliateManageFundPassword":"Gestionnaire de mot de passe (Afiliado)",
+  "currentPassword":"Mot de passe actuel",
+  "currentPasswordPlaceholder":"Entrez le mot de passe actuel",
+  "newPassword":"Nouveau mot de passe",
+  "newPasswordPlaceholder":"Entrez le nouveau mot de passe",
+  "confirmPassword":"Confirmer le mot de passe",
+  "confirmPasswordPlaceholder":"Entrez le mot de passe de confirmation"
 }
