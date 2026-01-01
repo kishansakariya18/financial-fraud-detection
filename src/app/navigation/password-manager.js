@@ -11,5 +11,8 @@ export const passwordManager = {
   title: 'Password Manager',
   transKey: 'passwordManager',
   Icon: LuLock,
-  permission: PERMISSIONS.APP_SETTING.EDIT
+  permission: [
+    PERMISSIONS.PASSWORD_MANAGER.USER_FUND_PASSWORD_UPDATE,
+    PERMISSIONS.PASSWORD_MANAGER.AFFILIATE_FUND_PASSWORD_UPDATE
+  ]
 };

@@ -10,6 +10,8 @@ import { toast } from 'sonner';
 import PasswordManagerService from 'services/password-manager.service';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/20/solid';
 import { passwordManagerSchema } from '../schema';
+import usePermissions from 'app/router/usePermissions';
+import { PERMISSIONS } from 'constants/app.constant';
 
 const PasswordChangeForm = ({ title, onSubmit, loading }) => {
   const { t } = useTranslation();
@@ -101,6 +103,13 @@ export default function PasswordManager() {
   const { t } = useTranslation();
   const [loadingUser, setLoadingUser] = useState(false);
   const [loadingAffiliate, setLoadingAffiliate] = useState(false);
+  const { hasPermission } = usePermissions();
+  const hasUserFundPasswordUpdatePermission = hasPermission(
+    PERMISSIONS.PASSWORD_MANAGER.USER_FUND_PASSWORD_UPDATE
+  );
+  const hasAffiliateFundPasswordUpdatePermission = hasPermission(
+    PERMISSIONS.PASSWORD_MANAGER.AFFILIATE_FUND_PASSWORD_UPDATE
+  );
 
   const handleUserPasswordChange = async (data, resetForm) => {
     setLoadingUser(true);
@@ -153,16 +162,20 @@ export default function PasswordManager() {
       </div>
       <div className="px-[--margin-x]">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <PasswordChangeForm
-            title={t('userManageFundPassword')}
-            onSubmit={handleUserPasswordChange}
-            loading={loadingUser}
-          />
-          <PasswordChangeForm
-            title={t('affiliateManageFundPassword')}
-            onSubmit={handleAffiliatePasswordChange}
-            loading={loadingAffiliate}
-          />
+          {hasUserFundPasswordUpdatePermission && (
+            <PasswordChangeForm
+              title={t('userManageFundPassword')}
+              onSubmit={handleUserPasswordChange}
+              loading={loadingUser}
+            />
+          )}
+          {hasAffiliateFundPasswordUpdatePermission && (
+            <PasswordChangeForm
+              title={t('affiliateManageFundPassword')}
+              onSubmit={handleAffiliatePasswordChange}
+              loading={loadingAffiliate}
+            />
+          )}
         </div>
       </div>
     </ContentWrapper>
