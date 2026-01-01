@@ -139,7 +139,7 @@ export const siteConfigurationRoutes = [
       );
       return {
         Component: () => (
-          <PrivateRoute permission={PERMISSIONS.APP_SETTING.EDIT}>
+          <PrivateRoute>
             <PasswordManager />
           </PrivateRoute>
         )
