@@ -130,6 +130,21 @@ export const siteConfigurationRoutes = [
         )
       };
     }
+  },
+  {
+    path: 'site-configuration/password-manager',
+    lazy: async () => {
+      const { default: PasswordManager } = await import(
+        '../../pages/site-configuration/password-manager'
+      );
+      return {
+        Component: () => (
+          <PrivateRoute>
+            <PasswordManager />
+          </PrivateRoute>
+        )
+      };
+    }
   }
 ];
 

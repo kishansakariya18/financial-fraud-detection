@@ -440,6 +440,10 @@ export const PERMISSIONS = Object.freeze({
   APP_SETTING: {
     EDIT: 'app-setting-edit'
   },
+  PASSWORD_MANAGER: {
+    USER_FUND_PASSWORD_UPDATE: 'user-fund-password-update',
+    AFFILIATE_FUND_PASSWORD_UPDATE: 'affiliate-fund-password-update'
+  },
   KYC_PROVIDER: {
     LIST: 'kyc-provider-view',
     ADD: 'kyc-provider-add',
