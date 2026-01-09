@@ -105,12 +105,6 @@ export const affiliateStatusOptions = [
     icon: CheckBadgeIcon
   },
   {
-    value: 'SUSPENDED',
-    label: 'Suspended',
-    color: 'warning',
-    icon: XCircleIcon
-  },
-  {
     value: 'CLOSED',
     label: 'Closed',
     color: 'error',
