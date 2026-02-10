@@ -7,12 +7,15 @@ import { Page } from 'components/shared/Page';
 import { Button } from 'components/ui';
 import { useThemeContext } from 'app/contexts/theme/context';
 import { useHover } from 'hooks';
+import { useSelector } from 'react-redux';
+import { ROLE } from 'constants/app.constant';
 
 // ----------------------------------------------------------------------
 
 export default function Error404() {
   const { primaryColorScheme: primary, isDark } = useThemeContext();
   const [btnRef, btnHovered] = useHover();
+  const userData = useSelector((state) => state.auth?.userData);
 
   return (
     <Page title="Error 404">
@@ -34,7 +37,8 @@ export default function Error404() {
           <div className="mt-8">
             <Button
               component={Link}
-              to="/"
+              // onClick={() => dispatch(AuthAction.logout())}
+              to={+userData?.role === ROLE.ADMIN ? '/round-summary' : '/dashboards/home'}
               ref={btnRef}
               isGlow={btnHovered}
               color="primary"

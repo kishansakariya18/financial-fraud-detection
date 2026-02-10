@@ -15,8 +15,6 @@ import { TbUser } from 'react-icons/tb';
 import apiConfig from 'configs/api.config';
 import AuthService from 'services/auth.services';
 
-import AgentAuthService from 'services/b2b-agent/agent-auth.services';
-
 const links = [
   {
     id: '1',
@@ -56,7 +54,7 @@ export function Profile() {
   const handleConfirmOk = () => {
     setConfirmLoading(true);
 
-    const req = isAgentuser ? AgentAuthService.logout() : AuthService.logout();
+    const req = AuthService.logout();
 
     req
       .then(() => {

@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CurrencyContext } from './context';
 import { useSelector } from 'react-redux';
-import CurrencyService from 'services/currency.services';
 
 export const CurrencyProvider = ({ children }) => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
@@ -15,31 +14,12 @@ export const CurrencyProvider = ({ children }) => {
     try {
       setLoading(true);
       setError(null);
-      CurrencyService.getDefaultCurrency()
-        .then((res) => {
-          const { Code = null, Symbol = '', DecimalPlaces = 2 } = res.response.data;
-          const decimalPlaces = DecimalPlaces === 0 ? 0 : DecimalPlaces || 2;
-          setCode(Code || null);
-          setSymbol(Symbol || '');
-          setDecimalPlaces(decimalPlaces);
 
-          localStorage.setItem(
-            'BaseCurrency',
-            JSON.stringify({
-              code: Code || null,
-              symbol: Symbol || '',
-              decimalPlaces: decimalPlaces
-            })
-          );
-        })
-        .catch((err) => {
-          setError(err?.message || err || 'Failed to load base currency');
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      setCode('USD');
+      setSymbol('');
+      setDecimalPlaces(2);
     } catch (err) {
-      setError(err?.message || 'Failed to load base currency');
+      setError(err?.message || err || 'Failed to load base currency');
     } finally {
       setLoading(false);
     }
@@ -96,9 +76,9 @@ export const CurrencyProvider = ({ children }) => {
       }
     })();
     if (cached?.code && cached?.symbol) {
-      setCode(cached.code);
-      setSymbol(cached.symbol);
-      setDecimalPlaces(Number(cached.decimalPlaces ?? 2));
+      setCode(cached?.code);
+      setSymbol(cached?.symbol);
+      setDecimalPlaces(Number(cached?.decimalPlaces ?? 2));
     } else {
       fetchAndSetCurrency();
     }
