@@ -5,7 +5,6 @@ import { useLockScrollbar } from 'hooks';
 import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import useTable from 'components/ui/useTable';
-import DashboardService from 'services/dashboard.services';
 import { Button, Select } from 'components/ui';
 import { t } from 'i18next';
 
@@ -40,18 +39,23 @@ export default function TopPlayers() {
     data.timeRangeType = playerTimeRange ? playerTimeRange : 1;
     data.type = playerFilter ? playerFilter : 1;
 
-    const result = await DashboardService.getTopPlayers(data);
+    // const result = await DashboardService.getTopPlayers(data);
 
-    const apiData = result.response.data;
+    // const apiData = result.response.data;
 
-    if (result.status === 200) {
-      return {
-        status: 200,
-        data: apiData,
-        totalRecords: parseInt(result?.response?.totalRecords)
-      };
-    }
-    return { status: result.status, error: result.error };
+    // if (result.status === 200) {
+    //   return {
+    //     status: 200,
+    //     data: apiData,
+    //     totalRecords: parseInt(result?.response?.totalRecords)
+    //   };
+    // }
+    // return { status: result.status, error: result.error };
+    return {
+      status: 200,
+      data: [],
+      totalRecords: 0
+    };
   };
 
   const handleSearch = () => {

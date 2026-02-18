@@ -9,13 +9,14 @@ export const apiConfig = {
   platformType: import.meta.env.VITE_PLATFORM_TYPE || PLATFORM_TYPE.B2C, // b2b (Business to Business) or b2c(Business to Customer)
   endPoints: {
     AUTH: {
-      VALIDATE: '/admin/admin/auth/validate',
-      VERIFYOTP: '/admin/admin/auth/login',
+      LOGIN: '/auth/login',
+      SIGNUP: '/auth/register',
+      LOGOUT: '/auth/logout',
+      REFRESH: '/auth/refresh',
       RESENDOTP: '/admin/admin/auth/resend-otp',
       CHANGE_PASSWORD: '/admin/admin/auth/change-password',
       VALIDATE_RESET_PASSWORD: '/admin/admin/auth/validate-reset-password',
-      RESET_PASSWORD: '/admin/admin/auth/reset-password',
-      LOGOUT: '/admin/admin/auth/logout'
+      RESET_PASSWORD: '/admin/admin/auth/reset-password'
     },
     AUTH_AGENT: {
       VALIDATE: '/agent/auth/validate',

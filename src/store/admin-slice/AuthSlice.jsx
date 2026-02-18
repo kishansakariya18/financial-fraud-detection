@@ -37,7 +37,8 @@ const AuthSlice = createSlice({
   reducers: {
     login(state, action) {
       state.isLoggedIn = true;
-      state.userData = action.payload.adminData || action.payload.agentData;
+      state.userData =
+        action.payload.userData || action.payload.adminData || action.payload.agentData;
       state.isMasterAdmin = action.payload.isMasterAdmin;
       state.permissions = action.payload.permissions;
       state.adminType = action.payload.adminType || null;
@@ -55,13 +56,6 @@ const AuthSlice = createSlice({
       state.agentType = null;
       state.isAgentUser = false;
       state.permissions = [];
-    },
-    sendLoginOtp(state, action) {
-      state.isLoggedIn = false;
-      state.twoStepMode = 'login';
-      state.authEmail = action.payload.authEmail;
-      state.authPassword = action.payload.authPassword;
-      state.authMfaEnabled = action.payload.mfaEnabled;
     },
     roleUpdate(state, action) {
       console.log('action.payload::', action.payload);

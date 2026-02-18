@@ -4,21 +4,18 @@ import apiInstance from 'utils/apiInstance';
 const AuthService = {
   login: async (body) => {
     const requestObject = {
-      mobile: String(body.mobile),
-      password: String(body.password),
-      phoneCode: String(body.phoneCode)
+      email: String(body.email),
+      password: String(body.password)
     };
-    return apiInstance.post(apiConfig.endPoints.AUTH.VALIDATE, requestObject);
+    return apiInstance.post(apiConfig.endPoints.AUTH.LOGIN, requestObject);
   },
-  otpVerification: async (body) => {
+  signup: async (body) => {
     const requestObject = {
-      mobile: String(body.mobile),
-      password: String(body.password),
-      token: String(body.token),
-      otp: String(body.otp),
-      phoneCode: String(body.phoneCode)
+      name: String(body.name),
+      email: String(body.email),
+      password: String(body.password)
     };
-    return apiInstance.post(apiConfig.endPoints.AUTH.VERIFYOTP, requestObject);
+    return apiInstance.post(apiConfig.endPoints.AUTH.SIGNUP, requestObject);
   },
   valdiateResetPassword: async (body) => {
     const requestObject = {
@@ -40,6 +37,7 @@ const AuthService = {
     };
     return apiInstance.post(apiConfig.endPoints.AUTH.RESET_PASSWORD, requestObject);
   },
+
   resedOtp: async (body) => {
     const requestObject = {
       mobile: String(body.mobile),
@@ -67,7 +65,7 @@ const AuthService = {
     return apiInstance.get(apiConfig.endPoints.ADMIN_USER.COUNTRY_LIST);
   },
   logout: () => {
-    return apiInstance.get(apiConfig.endPoints.AUTH.LOGOUT);
+    return apiInstance.post(apiConfig.endPoints.AUTH.LOGOUT);
   }
 };
 

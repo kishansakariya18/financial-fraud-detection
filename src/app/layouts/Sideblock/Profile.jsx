@@ -54,7 +54,7 @@ export function Profile() {
   const handleConfirmOk = () => {
     setConfirmLoading(true);
 
-    const req = AuthService.logout();
+    const req = AuthService.logout(userData._id);
 
     req
       .then(() => {
@@ -89,7 +89,7 @@ export function Profile() {
           as={Avatar}
           size={9}
           role="button"
-          name={userData?.FirstName + ' ' + userData?.LastName}
+          name={userData?.name}
           src={
             userData?.ImageName ? `${apiConfig.baseURL.S3_URL}/admin/${userData.ImageName}` : null
           }
@@ -115,17 +115,17 @@ export function Profile() {
                         ? `${apiConfig.baseURL.S3_URL}/admin/${userData.ImageName}`
                         : null
                     }
-                    name={userData?.FirstName + ' ' + userData?.LastName}
+                    name={userData?.name}
                   />
                   <div>
                     <Link
                       className="text-base font-medium text-gray-700 hover:text-primary-600 focus:text-primary-600 dark:text-dark-100 dark:hover:text-primary-400 dark:focus:text-primary-400"
                       onClick={close}>
-                      {userData?.FirstName + ' ' + userData?.LastName}
+                      {userData?.name}
                     </Link>
 
                     <p className="mt-0.5 text-xs text-gray-400 dark:text-dark-300">
-                      {userData?.Username}
+                      {userData?.name}
                     </p>
                   </div>
                 </div>

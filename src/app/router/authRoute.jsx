@@ -1,6 +1,6 @@
 import ForgotPassword from 'app/pages/Auth/ForgotPassword';
 import Login from '../pages/Auth/Login';
-import OTPVerification from '../pages/Auth/OTPVerification';
+import Signup from '../pages/Auth/Signup';
 import ResetPassword from 'app/pages/Auth/ResetPassword';
 
 export const authRoute = [
@@ -9,8 +9,8 @@ export const authRoute = [
     element: <Login />
   },
   {
-    path: '/otp-verification',
-    element: <OTPVerification />
+    path: '/signup',
+    element: <Signup />
   },
   {
     path: '/forgot-password',

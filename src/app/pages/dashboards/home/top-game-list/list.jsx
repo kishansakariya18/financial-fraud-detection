@@ -5,7 +5,6 @@ import { useLockScrollbar } from 'hooks';
 import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import useTable from 'components/ui/useTable';
-import DashboardService from 'services/dashboard.services';
 import { Button, Select } from 'components/ui';
 import { t } from 'i18next';
 
@@ -42,20 +41,25 @@ export default function TopGames() {
 
     console.log('fetchTopGames: ', data);
 
-    const result = await DashboardService.getTopGames(data);
+    // const result = await DashboardService.getTopGames(data);
 
-    console.log('result: ', result.response);
+    // console.log('result: ', result.response);
 
-    const apiData = result.response.data;
+    // const apiData = result.response.data;
 
-    if (result.status === 200) {
-      return {
-        status: 200,
-        data: apiData,
-        totalRecords: parseInt(result?.response?.totalRecords)
-      };
-    }
-    return { status: result.status, error: result.error };
+    // if (result.status === 200) {
+    //   return {
+    //     status: 200,
+    //     data: apiData,
+    //     totalRecords: parseInt(result?.response?.totalRecords)
+    //   };
+    // }
+    // return { status: result.status, error: result.error };
+    return {
+      status: 200,
+      data: [],
+      totalRecords: 0
+    };
   };
 
   const handleSearch = () => {
@@ -86,6 +90,7 @@ export default function TopGames() {
     const filtersFromQuery = [];
 
     setColumnFilters(filtersFromQuery);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useLockScrollbar(tableSettings.enableFullScreen);

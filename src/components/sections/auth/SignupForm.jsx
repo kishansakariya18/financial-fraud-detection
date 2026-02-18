@@ -1,5 +1,5 @@
 // Import Dependencies
-import { LockClosedIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
+import { LockClosedIcon, UserIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
@@ -10,29 +10,30 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 
 // Local Imports
-import { Button, Card, Checkbox, Input } from 'components/ui';
+import { Button, Card, Input } from 'components/ui';
 import { useDisclosure } from 'hooks';
 
 // ----------------------------------------------------------------------
 
-export default function LoginForm({
+export default function SignupForm({
   authService,
-  loginSchema,
-  onLoginSuccess,
-  forgotPasswordLink = '/forgot-password',
-  signupLink = '/signup',
-  title = 'Welcome Back',
-  subtitle = 'Please sign in to continue'
+  signupSchema,
+  onSignupSuccess,
+  loginLink = '/login',
+  title = 'Create Account',
+  subtitle = 'Sign up to get started'
 }) {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting }
   } = useForm({
-    resolver: yupResolver(loginSchema),
+    resolver: yupResolver(signupSchema),
     defaultValues: {
+      name: '',
       email: '',
-      password: ''
+      password: '',
+      confirmPassword: ''
     }
   });
 
@@ -41,7 +42,8 @@ export default function LoginForm({
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const { t } = useTranslation();
-  const [show, { toggle }] = useDisclosure();
+  const [showPassword, { toggle: togglePassword }] = useDisclosure();
+  const [showConfirmPassword, { toggle: toggleConfirmPassword }] = useDisclosure();
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -52,12 +54,12 @@ export default function LoginForm({
 
   const submitHandler = async (data) => {
     await authService
-      .login(data)
+      .signup(data)
       .then(async (result) => {
-        await onLoginSuccess?.(result.response, data);
+        await onSignupSuccess?.(result.response, data);
       })
       .catch((error) => {
-        console.error('Error while login:', error);
+        console.error('Error while signup:', error);
         toast.error(error);
       });
   };
@@ -72,6 +74,13 @@ export default function LoginForm({
         <form onSubmit={handleSubmit(submitHandler)} autoComplete="off">
           <div className="space-y-4">
             <Input
+              label={t('name')}
+              placeholder={t('enter') + ' ' + t('name')}
+              prefix={<UserIcon className="size-4.5" />}
+              {...register('name')}
+              error={errors?.name?.message}
+            />
+            <Input
               label={t('email')}
               placeholder={t('enter') + ' ' + t('email')}
               prefix={<EnvelopeIcon className="size-4.5" />}
@@ -80,15 +89,15 @@ export default function LoginForm({
             />
             <Input
               label={t('password')}
-              type={show ? 'text' : 'password'}
+              type={showPassword ? 'text' : 'password'}
               placeholder={t('enter') + ' ' + t('password')}
               prefix={<LockClosedIcon className="size-4.5" />}
               suffix={
                 <Button
                   variant="flat"
                   className="pointer-events-auto size-6 shrink-0 rounded-full p-0"
-                  onClick={toggle}>
-                  {show ? (
+                  onClick={togglePassword}>
+                  {showPassword ? (
                     <EyeSlashIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
                   ) : (
                     <EyeIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
@@ -98,28 +107,39 @@ export default function LoginForm({
               {...register('password')}
               error={errors?.password?.message}
             />
-          </div>
-
-          <div className="mt-4 flex items-center justify-between space-x-2">
-            <Checkbox label="Remember me" />
-            <a
-              href={forgotPasswordLink}
-              className="text-xs text-gray-400 transition-colors hover:text-gray-800 focus:text-gray-800 dark:text-dark-300 dark:hover:text-dark-100 dark:focus:text-dark-100">
-              {t('forgot') + ' ' + t('password')} ?
-            </a>
+            <Input
+              label={t('confirmPassword') || 'Confirm Password'}
+              type={showConfirmPassword ? 'text' : 'password'}
+              placeholder={t('enter') + ' ' + (t('confirmPassword') || 'Confirm Password')}
+              prefix={<LockClosedIcon className="size-4.5" />}
+              suffix={
+                <Button
+                  variant="flat"
+                  className="pointer-events-auto size-6 shrink-0 rounded-full p-0"
+                  onClick={toggleConfirmPassword}>
+                  {showConfirmPassword ? (
+                    <EyeSlashIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
+                  ) : (
+                    <EyeIcon className="size-4.5 text-gray-500 dark:text-dark-200" />
+                  )}
+                </Button>
+              }
+              {...register('confirmPassword')}
+              error={errors?.confirmPassword?.message}
+            />
           </div>
 
           <Button type="submit" className="mt-5 w-full" color="primary" disabled={isSubmitting}>
-            {t('signIn')}
+            {t('signUp') || 'Sign Up'}
           </Button>
 
           <div className="mt-4 text-center">
             <p className="text-sm text-gray-400 dark:text-dark-300">
-              {t('dont_have_account') || "Don't have an account?"}{' '}
+              {t('already_have_account') || 'Already have an account?'}{' '}
               <a
-                href={signupLink}
+                href={loginLink}
                 className="text-primary-600 transition-colors hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-200">
-                {t('signUp') || 'Sign Up'}
+                {t('signIn')}
               </a>
             </p>
           </div>

@@ -81,216 +81,212 @@ export default function Home() {
   };
 
   const fetchCards = async () => {
-    try {
-      setIsCardLoading(true);
-      const userCards = await DashboardService.getCardsFromUser();
-      const gameCards = await DashboardService.getCardsFromGame();
-      const walletCards = await DashboardService.getCardsFromWallet();
-      const betCards = await DashboardService.getCardsFromBet();
-
-      if (
-        userCards.status === 200 &&
-        gameCards.status == 200 &&
-        walletCards.status == 200 &&
-        betCards.status == 200
-      ) {
-        setCardResponse({
-          ...userCards.response.data,
-          ...gameCards.response.data,
-          ...walletCards.response.data,
-          ...betCards.response.data
-        });
-      } else {
-        setCardError('Something went wrong while fetching card data');
-      }
-    } catch (error) {
-      console.log('errr fetchCards: ', error);
-    }
-    setIsCardLoading(false);
+    // try {
+    //   setIsCardLoading(true);
+    //   const userCards = await DashboardService.getCardsFromUser();
+    //   const gameCards = await DashboardService.getCardsFromGame();
+    //   const walletCards = await DashboardService.getCardsFromWallet();
+    //   const betCards = await DashboardService.getCardsFromBet();
+    //   if (
+    //     userCards.status === 200 &&
+    //     gameCards.status == 200 &&
+    //     walletCards.status == 200 &&
+    //     betCards.status == 200
+    //   ) {
+    //     setCardResponse({
+    //       ...userCards.response.data,
+    //       ...gameCards.response.data,
+    //       ...walletCards.response.data,
+    //       ...betCards.response.data
+    //     });
+    //   } else {
+    //     setCardError('Something went wrong while fetching card data');
+    //   }
+    // } catch (error) {
+    //   console.log('errr fetchCards: ', error);
+    // }
+    // setIsCardLoading(false);
   };
 
   const fetchDepositStats = async () => {
-    try {
-      setIsDepositLoading(true);
-      const result = await DashboardService.getDepositStats(dateFilters);
-
-      if (result.status === 200) {
-        const data = result.response.data;
-        setRedata(data);
-
-        setDepositResponse({
-          name: t('deposit', { ns: 'glossary' }),
-          type: 'line',
-          height: 350,
-          series: [
-            {
-              name: 'Deposit Amount',
-              type: 'column',
-              data: data?.deposits || []
-            },
-            {
-              name: 'Deposit Count',
-              type: 'line',
-              data: data?.depositCount || []
-            }
-          ],
-          options: {
-            chart: {
-              id: 'deposit',
-              height: 350,
-              type: 'line',
-              stacked: false,
-              toolbar: {
-                show: true,
-                export: {
-                  svg: {
-                    filename: 'deposit'
-                  },
-                  png: {
-                    filename: 'deposit'
-                  },
-                  csv: {
-                    filename: 'deposit'
-                  }
-                },
-                tools: {
-                  download: true,
-                  zoomin: true,
-                  zoomout: true,
-                  reset: true,
-
-                  customIcons: [
-                    {
-                      icon: '<i class="fa fa-expand"></i>', // Custom fullscreen icon (FontAwesome)
-                      click: function () {
-                        toggleFullScreen();
-                      },
-                      title: 'Full Screen',
-                      class: 'custom-icon'
-                    }
-                  ]
-                }
-              }
-            },
-            tooltip: {
-              enabled: true,
-              shared: true,
-              followCursor: false,
-              intersect: false,
-              inverseOrder: false,
-              onDatasetHover: {
-                highlightDataSeries: false
-              }
-            },
-            stroke: {
-              width: [0, 3],
-              curve: 'smooth'
-            },
-            // states: {
-            //   hover: {
-            //     filter: { type: 'none' }
-            //   },
-            //   active: {
-            //     filter: { type: 'none' }
-            //   }
-            // },
-            dataLabels: {
-              enabled: false
-            },
-            // labels: data?.dates || [],
-            yaxis: [
-              {
-                title: {
-                  text: 'Deposit Amount'
-                }
-              },
-              {
-                opposite: true,
-                title: {
-                  text: 'Deposit Count'
-                }
-              }
-            ],
-            xaxis: {
-              // type: 'category',
-              stepSize: 10,
-              tickPlacement: 'on',
-              categories: data?.dates || []
-            },
-            markers: {
-              size: 0
-            }
-          }
-        });
-        // setDepositResponse({
-        //   type: "bar",
-        //   options: {
-        //     chart: {
-        //       // type: 'bar',
-        //       id: "basic-bar"
-        //     },
-        //     dataLabels: {
-        //       enabled: true,
-        //       enabledOnSeries: undefined,
-        //       formatter: function (val, opts) {
-        //         return val;
-        //       },
-        //       textAnchor: "top",
-        //       distributed: false,
-        //       offsetX: 0,
-        //       offsetY: 0,
-        //       style: {
-        //         fontSize: "14px",
-        //         fontFamily: "Helvetica, Arial, sans-serif",
-        //         fontWeight: "bold",
-        //         colors: undefined
-        //       }
-        //     },
-        //     tooltip: {
-        //       enabled: true,
-        //       enabledOnSeries: undefined,
-        //       shared: true,
-        //       followCursor: false,
-        //       intersect: false,
-        //       inverseOrder: false,
-        //       custom: undefined,
-        //       fillSeriesColor: false,
-        //       theme: false,
-        //       style: {
-        //         fontSize: "12px",
-        //         fontFamily: undefined
-        //       },
-        //       onDatasetHover: {
-        //         highlightDataSeries: false
-        //       }
-        //     },
-        //     xaxis: {
-        //       categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
-        //       tickPlacement: 'on',
-        //     }
-        //   },
-        //   plotOptions: {
-        //     bar: {
-        //       columnWidth: "50%", // Adjust bar width for better hover
-        //       barHeight: "100%", // Makes small bars easier to hover over
-        //       borderRadius: 4, // Adds padding around bars for smoother interaction
-        //       minBarHeight: 5, // Minimum height for bars
-        //     }
-        //   },
-        //   series: [
-        //     {
-        //       name: "series-1",
-        //       data: [2, 40, 45, 50, 49, 60, 70, 91]
-        //     }
-        //   ]
-        // })
-      } else {
-        setDepositError(result.error);
-      }
-    } catch (error) {
-      console.log('errr fetchDepositStats: ', error);
-    }
-    setIsDepositLoading(false);
+    // try {
+    //   setIsDepositLoading(true);
+    //   const result = await DashboardService.getDepositStats(dateFilters);
+    //   if (result.status === 200) {
+    //     const data = result.response.data;
+    //     setRedata(data);
+    //     setDepositResponse({
+    //       name: t('deposit', { ns: 'glossary' }),
+    //       type: 'line',
+    //       height: 350,
+    //       series: [
+    //         {
+    //           name: 'Deposit Amount',
+    //           type: 'column',
+    //           data: data?.deposits || []
+    //         },
+    //         {
+    //           name: 'Deposit Count',
+    //           type: 'line',
+    //           data: data?.depositCount || []
+    //         }
+    //       ],
+    //       options: {
+    //         chart: {
+    //           id: 'deposit',
+    //           height: 350,
+    //           type: 'line',
+    //           stacked: false,
+    //           toolbar: {
+    //             show: true,
+    //             export: {
+    //               svg: {
+    //                 filename: 'deposit'
+    //               },
+    //               png: {
+    //                 filename: 'deposit'
+    //               },
+    //               csv: {
+    //                 filename: 'deposit'
+    //               }
+    //             },
+    //             tools: {
+    //               download: true,
+    //               zoomin: true,
+    //               zoomout: true,
+    //               reset: true,
+    //               customIcons: [
+    //                 {
+    //                   icon: '<i class="fa fa-expand"></i>', // Custom fullscreen icon (FontAwesome)
+    //                   click: function () {
+    //                     toggleFullScreen();
+    //                   },
+    //                   title: 'Full Screen',
+    //                   class: 'custom-icon'
+    //                 }
+    //               ]
+    //             }
+    //           }
+    //         },
+    //         tooltip: {
+    //           enabled: true,
+    //           shared: true,
+    //           followCursor: false,
+    //           intersect: false,
+    //           inverseOrder: false,
+    //           onDatasetHover: {
+    //             highlightDataSeries: false
+    //           }
+    //         },
+    //         stroke: {
+    //           width: [0, 3],
+    //           curve: 'smooth'
+    //         },
+    //         // states: {
+    //         //   hover: {
+    //         //     filter: { type: 'none' }
+    //         //   },
+    //         //   active: {
+    //         //     filter: { type: 'none' }
+    //         //   }
+    //         // },
+    //         dataLabels: {
+    //           enabled: false
+    //         },
+    //         // labels: data?.dates || [],
+    //         yaxis: [
+    //           {
+    //             title: {
+    //               text: 'Deposit Amount'
+    //             }
+    //           },
+    //           {
+    //             opposite: true,
+    //             title: {
+    //               text: 'Deposit Count'
+    //             }
+    //           }
+    //         ],
+    //         xaxis: {
+    //           // type: 'category',
+    //           stepSize: 10,
+    //           tickPlacement: 'on',
+    //           categories: data?.dates || []
+    //         },
+    //         markers: {
+    //           size: 0
+    //         }
+    //       }
+    //     });
+    //     // setDepositResponse({
+    //     //   type: "bar",
+    //     //   options: {
+    //     //     chart: {
+    //     //       // type: 'bar',
+    //     //       id: "basic-bar"
+    //     //     },
+    //     //     dataLabels: {
+    //     //       enabled: true,
+    //     //       enabledOnSeries: undefined,
+    //     //       formatter: function (val, opts) {
+    //     //         return val;
+    //     //       },
+    //     //       textAnchor: "top",
+    //     //       distributed: false,
+    //     //       offsetX: 0,
+    //     //       offsetY: 0,
+    //     //       style: {
+    //     //         fontSize: "14px",
+    //     //         fontFamily: "Helvetica, Arial, sans-serif",
+    //     //         fontWeight: "bold",
+    //     //         colors: undefined
+    //     //       }
+    //     //     },
+    //     //     tooltip: {
+    //     //       enabled: true,
+    //     //       enabledOnSeries: undefined,
+    //     //       shared: true,
+    //     //       followCursor: false,
+    //     //       intersect: false,
+    //     //       inverseOrder: false,
+    //     //       custom: undefined,
+    //     //       fillSeriesColor: false,
+    //     //       theme: false,
+    //     //       style: {
+    //     //         fontSize: "12px",
+    //     //         fontFamily: undefined
+    //     //       },
+    //     //       onDatasetHover: {
+    //     //         highlightDataSeries: false
+    //     //       }
+    //     //     },
+    //     //     xaxis: {
+    //     //       categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
+    //     //       tickPlacement: 'on',
+    //     //     }
+    //     //   },
+    //     //   plotOptions: {
+    //     //     bar: {
+    //     //       columnWidth: "50%", // Adjust bar width for better hover
+    //     //       barHeight: "100%", // Makes small bars easier to hover over
+    //     //       borderRadius: 4, // Adds padding around bars for smoother interaction
+    //     //       minBarHeight: 5, // Minimum height for bars
+    //     //     }
+    //     //   },
+    //     //   series: [
+    //     //     {
+    //     //       name: "series-1",
+    //     //       data: [2, 40, 45, 50, 49, 60, 70, 91]
+    //     //     }
+    //     //   ]
+    //     // })
+    //   } else {
+    //     setDepositError(result.error);
+    //   }
+    // } catch (error) {
+    //   console.log('errr fetchDepositStats: ', error);
+    // }
+    // setIsDepositLoading(false);
   };
 
   const style = document.createElement('style');
@@ -305,430 +301,411 @@ export default function Home() {
   document.head.appendChild(style);
 
   const fetchCasinoStats = async () => {
-    try {
-      setIsCasinoLoading(true);
-      const result = await DashboardService.getCasinoStats(dateFilters);
-
-      if (result.status === 200) {
-        const data = result.response.data;
-
-        setCasinoResponse({
-          name: t('casino', { ns: 'glossary' }),
-          type: 'line',
-          height: 350,
-          series: [
-            {
-              name: 'Wagered Amount',
-              type: 'column',
-              data: data?.totalWagered || []
-            },
-            {
-              name: 'Payout Amount',
-              type: 'column',
-              data: data?.totalPayout || []
-            },
-            {
-              name: 'Wagered Count',
-              type: 'area',
-              data: data?.wageredCount || []
-            },
-            {
-              name: 'Payout Count',
-              type: 'line',
-              data: data?.payoutCount || []
-            }
-          ],
-          options: {
-            chart: {
-              id: 'casino',
-              height: 350,
-              type: 'line',
-              toolbar: {
-                export: {
-                  svg: {
-                    filename: 'casino'
-                  },
-                  png: {
-                    filename: 'casino'
-                  },
-                  csv: {
-                    filename: 'casino'
-                  }
-                }
-              }
-            },
-            stroke: {
-              width: [0, 0, 2, 3],
-              curve: 'smooth'
-            },
-            fill: {
-              opacity: [1, 1, 0.25, 1]
-            },
-            // title: {
-            //   text: t("casino", { ns: "glossary" }),
-            // },
-            labels: data?.dates || [],
-            yaxis: [
-              {
-                title: {
-                  text: t('amount', { ns: 'glossary' })
-                },
-                seriesName: ['Wagered Amount', 'Payout Amount']
-              },
-              {
-                title: {
-                  text: t('count', { ns: 'glossary' })
-                },
-                seriesName: ['Wagered Count', 'Payout Count'],
-                opposite: true
-              }
-            ]
-          }
-        });
-      } else {
-        setCasinoError(result.error);
-      }
-    } catch (error) {
-      console.log('errr fetchCasinoStats: ', error);
-    }
-    setIsCasinoLoading(false);
+    // try {
+    //   setIsCasinoLoading(true);
+    //   const result = await DashboardService.getCasinoStats(dateFilters);
+    //   if (result.status === 200) {
+    //     const data = result.response.data;
+    //     setCasinoResponse({
+    //       name: t('casino', { ns: 'glossary' }),
+    //       type: 'line',
+    //       height: 350,
+    //       series: [
+    //         {
+    //           name: 'Wagered Amount',
+    //           type: 'column',
+    //           data: data?.totalWagered || []
+    //         },
+    //         {
+    //           name: 'Payout Amount',
+    //           type: 'column',
+    //           data: data?.totalPayout || []
+    //         },
+    //         {
+    //           name: 'Wagered Count',
+    //           type: 'area',
+    //           data: data?.wageredCount || []
+    //         },
+    //         {
+    //           name: 'Payout Count',
+    //           type: 'line',
+    //           data: data?.payoutCount || []
+    //         }
+    //       ],
+    //       options: {
+    //         chart: {
+    //           id: 'casino',
+    //           height: 350,
+    //           type: 'line',
+    //           toolbar: {
+    //             export: {
+    //               svg: {
+    //                 filename: 'casino'
+    //               },
+    //               png: {
+    //                 filename: 'casino'
+    //               },
+    //               csv: {
+    //                 filename: 'casino'
+    //               }
+    //             }
+    //           }
+    //         },
+    //         stroke: {
+    //           width: [0, 0, 2, 3],
+    //           curve: 'smooth'
+    //         },
+    //         fill: {
+    //           opacity: [1, 1, 0.25, 1]
+    //         },
+    //         // title: {
+    //         //   text: t("casino", { ns: "glossary" }),
+    //         // },
+    //         labels: data?.dates || [],
+    //         yaxis: [
+    //           {
+    //             title: {
+    //               text: t('amount', { ns: 'glossary' })
+    //             },
+    //             seriesName: ['Wagered Amount', 'Payout Amount']
+    //           },
+    //           {
+    //             title: {
+    //               text: t('count', { ns: 'glossary' })
+    //             },
+    //             seriesName: ['Wagered Count', 'Payout Count'],
+    //             opposite: true
+    //           }
+    //         ]
+    //       }
+    //     });
+    //   } else {
+    //     setCasinoError(result.error);
+    //   }
+    // } catch (error) {
+    //   console.log('errr fetchCasinoStats: ', error);
+    // }
+    // setIsCasinoLoading(false);
   };
 
   const fetchGGRReport = async () => {
-    try {
-      setIsGGRLoading(true);
-      const result = await DashboardService.getGGRReport(dateFilters);
-
-      if (result.status === 200) {
-        console.log('result.response.data', result.response.data);
-
-        const data = result.response.data;
-
-        setGGRResponse({
-          name: t('ggr', { ns: 'glossary' }) + ' ' + t('report', { ns: 'glossary' }),
-          type: 'bar',
-          height: 350,
-          series: [
-            {
-              name: 'Total Revenue',
-              type: 'column',
-              data: data?.totalRevenue || []
-            },
-            {
-              name: 'Total Wagered',
-              type: 'column',
-              data: data?.totalWagered || []
-            },
-            {
-              name: 'Total Payout',
-              type: 'column',
-              data: data?.totalPayout || []
-            }
-          ],
-          options: {
-            chart: {
-              id: 'ggr',
-              height: 350,
-              type: 'bar',
-              toolbar: {
-                show: true,
-                export: {
-                  svg: {
-                    filename: 'ggr'
-                  },
-                  png: {
-                    filename: 'ggr'
-                  },
-                  csv: {
-                    filename: 'ggr'
-                  }
-                }
-              }
-            },
-            stroke: {
-              show: true,
-              colors: ['transparent']
-            },
-            xaxis: {
-              tickPlacement: 'on'
-            },
-            tooltip: {
-              enabled: true,
-              enabledOnSeries: undefined,
-              shared: true,
-              followCursor: false,
-              intersect: false,
-              inverseOrder: false,
-              onDatasetHover: {
-                highlightDataSeries: false
-              }
-            },
-            states: {
-              hover: {
-                filter: { type: 'none' }
-              },
-              active: {
-                filter: { type: 'none' }
-              }
-            },
-            dataLabels: {
-              enabled: false
-            },
-            // title: {
-            //   text:
-            //     t("ggr", { ns: "glossary" }) +
-            //     " " +
-            //     t("report", { ns: "glossary" }),
-            // },
-            labels: data?.dates || []
-          }
-        });
-      } else {
-        setGGRError(result.error);
-      }
-    } catch (error) {
-      console.log('errr fetchGGRReport: ', error);
-    }
-    setIsGGRLoading(false);
+    // try {
+    //   setIsGGRLoading(true);
+    //   const result = await DashboardService.getGGRReport(dateFilters);
+    //   if (result.status === 200) {
+    //     console.log('result.response.data', result.response.data);
+    //     const data = result.response.data;
+    //     setGGRResponse({
+    //       name: t('ggr', { ns: 'glossary' }) + ' ' + t('report', { ns: 'glossary' }),
+    //       type: 'bar',
+    //       height: 350,
+    //       series: [
+    //         {
+    //           name: 'Total Revenue',
+    //           type: 'column',
+    //           data: data?.totalRevenue || []
+    //         },
+    //         {
+    //           name: 'Total Wagered',
+    //           type: 'column',
+    //           data: data?.totalWagered || []
+    //         },
+    //         {
+    //           name: 'Total Payout',
+    //           type: 'column',
+    //           data: data?.totalPayout || []
+    //         }
+    //       ],
+    //       options: {
+    //         chart: {
+    //           id: 'ggr',
+    //           height: 350,
+    //           type: 'bar',
+    //           toolbar: {
+    //             show: true,
+    //             export: {
+    //               svg: {
+    //                 filename: 'ggr'
+    //               },
+    //               png: {
+    //                 filename: 'ggr'
+    //               },
+    //               csv: {
+    //                 filename: 'ggr'
+    //               }
+    //             }
+    //           }
+    //         },
+    //         stroke: {
+    //           show: true,
+    //           colors: ['transparent']
+    //         },
+    //         xaxis: {
+    //           tickPlacement: 'on'
+    //         },
+    //         tooltip: {
+    //           enabled: true,
+    //           enabledOnSeries: undefined,
+    //           shared: true,
+    //           followCursor: false,
+    //           intersect: false,
+    //           inverseOrder: false,
+    //           onDatasetHover: {
+    //             highlightDataSeries: false
+    //           }
+    //         },
+    //         states: {
+    //           hover: {
+    //             filter: { type: 'none' }
+    //           },
+    //           active: {
+    //             filter: { type: 'none' }
+    //           }
+    //         },
+    //         dataLabels: {
+    //           enabled: false
+    //         },
+    //         // title: {
+    //         //   text:
+    //         //     t("ggr", { ns: "glossary" }) +
+    //         //     " " +
+    //         //     t("report", { ns: "glossary" }),
+    //         // },
+    //         labels: data?.dates || []
+    //       }
+    //     });
+    //   } else {
+    //     setGGRError(result.error);
+    //   }
+    // } catch (error) {
+    //   console.log('errr fetchGGRReport: ', error);
+    // }
+    // setIsGGRLoading(false);
   };
 
   const fetchLoggedInPlayers = async () => {
-    try {
-      setIsLoggedInLoading(true);
-      const result = await DashboardService.getLoggedInPlayers(dateFilters);
-
-      if (result.status === 200) {
-        console.log('result.response.data', result.response.data);
-
-        const data = result.response.data;
-
-        setLoggedInResponse({
-          name: t('loggedIn', { ns: 'glossary' }) + ' ' + t('players', { ns: 'glossary' }),
-          type: 'donut',
-          width: 1000,
-          series: data,
-          options: {
-            chart: {
-              id: 'ggr',
-              width: 1000,
-              type: 'donut',
-              toolbar: {
-                export: {
-                  svg: {
-                    filename: 'ggr'
-                  },
-                  png: {
-                    filename: 'ggr'
-                  },
-                  csv: {
-                    filename: 'ggr'
-                  }
-                }
-              }
-            },
-            // title: {
-            //   text:
-            //     t("loggedIn", { ns: "glossary" }) +
-            //     " " +
-            //     t("players", { ns: "glossary" }),
-            // },
-            labels: ['Logged In Players', 'Total Players'],
-            plotOptions: {
-              pie: {
-                donut: {
-                  size: '50%'
-                }
-              }
-            },
-            legend: {
-              show: true,
-              position: 'bottom'
-            }
-          }
-        });
-      } else {
-        setLoggedInError(result.error);
-      }
-    } catch (error) {
-      console.log('errr fetchLoggedInPlayers: ', error);
-    }
-    setIsLoggedInLoading(false);
+    // try {
+    //   setIsLoggedInLoading(true);
+    //   const result = await DashboardService.getLoggedInPlayers(dateFilters);
+    //   if (result.status === 200) {
+    //     console.log('result.response.data', result.response.data);
+    //     const data = result.response.data;
+    //     setLoggedInResponse({
+    //       name: t('loggedIn', { ns: 'glossary' }) + ' ' + t('players', { ns: 'glossary' }),
+    //       type: 'donut',
+    //       width: 1000,
+    //       series: data,
+    //       options: {
+    //         chart: {
+    //           id: 'ggr',
+    //           width: 1000,
+    //           type: 'donut',
+    //           toolbar: {
+    //             export: {
+    //               svg: {
+    //                 filename: 'ggr'
+    //               },
+    //               png: {
+    //                 filename: 'ggr'
+    //               },
+    //               csv: {
+    //                 filename: 'ggr'
+    //               }
+    //             }
+    //           }
+    //         },
+    //         // title: {
+    //         //   text:
+    //         //     t("loggedIn", { ns: "glossary" }) +
+    //         //     " " +
+    //         //     t("players", { ns: "glossary" }),
+    //         // },
+    //         labels: ['Logged In Players', 'Total Players'],
+    //         plotOptions: {
+    //           pie: {
+    //             donut: {
+    //               size: '50%'
+    //             }
+    //           }
+    //         },
+    //         legend: {
+    //           show: true,
+    //           position: 'bottom'
+    //         }
+    //       }
+    //     });
+    //   } else {
+    //     setLoggedInError(result.error);
+    //   }
+    // } catch (error) {
+    //   console.log('errr fetchLoggedInPlayers: ', error);
+    // }
+    // setIsLoggedInLoading(false);
   };
 
   const fetchActivePlayers = async () => {
-    try {
-      setIsActivePlayersLoading(true);
-      const result = await DashboardService.getActivePlayers(dateFilters);
-
-      if (result.status === 200) {
-        console.log('result.response.data', result.response.data);
-
-        const data = result.response.data;
-
-        setActivePlayersResponse({
-          name: t('active', { ns: 'glossary' }) + ' ' + t('players', { ns: 'glossary' }),
-          type: 'bar',
-          height: 350,
-          series: [
-            {
-              name: 'User Count',
-              type: 'bar',
-              data: data?.userCount || []
-            }
-          ],
-          options: {
-            chart: {
-              id: 'active',
-              height: 350,
-              type: 'bar',
-              toolbar: {
-                export: {
-                  svg: {
-                    filename: 'active-players'
-                  },
-                  png: {
-                    filename: 'active-players'
-                  },
-                  csv: {
-                    filename: 'active-players'
-                  }
-                }
-              }
-            },
-            // title: {
-            //   text:
-            //     t("active", { ns: "glossary" }) +
-            //     " " +
-            //     t("players", { ns: "glossary" }),
-            // },
-            grid: {
-              show: true,
-              yaxis: {
-                lines: {
-                  show: false
-                }
-              }
-            },
-            plotOptions: {
-              bar: {
-                horizontal: true,
-                barHeight: '40%'
-              }
-            },
-            xaxis: {
-              categories: data?.dates || []
-            },
-            dataLabels: {
-              enabled: false
-            }
-          }
-        });
-      } else {
-        setActivePlayersError(result.error);
-      }
-    } catch (error) {
-      console.log('errr fetchActivePlayers: ', error);
-    }
-    setIsActivePlayersLoading(false);
+    // try {
+    //   setIsActivePlayersLoading(true);
+    //   const result = await DashboardService.getActivePlayers(dateFilters);
+    //   if (result.status === 200) {
+    //     console.log('result.response.data', result.response.data);
+    //     const data = result.response.data;
+    //     setActivePlayersResponse({
+    //       name: t('active', { ns: 'glossary' }) + ' ' + t('players', { ns: 'glossary' }),
+    //       type: 'bar',
+    //       height: 350,
+    //       series: [
+    //         {
+    //           name: 'User Count',
+    //           type: 'bar',
+    //           data: data?.userCount || []
+    //         }
+    //       ],
+    //       options: {
+    //         chart: {
+    //           id: 'active',
+    //           height: 350,
+    //           type: 'bar',
+    //           toolbar: {
+    //             export: {
+    //               svg: {
+    //                 filename: 'active-players'
+    //               },
+    //               png: {
+    //                 filename: 'active-players'
+    //               },
+    //               csv: {
+    //                 filename: 'active-players'
+    //               }
+    //             }
+    //           }
+    //         },
+    //         // title: {
+    //         //   text:
+    //         //     t("active", { ns: "glossary" }) +
+    //         //     " " +
+    //         //     t("players", { ns: "glossary" }),
+    //         // },
+    //         grid: {
+    //           show: true,
+    //           yaxis: {
+    //             lines: {
+    //               show: false
+    //             }
+    //           }
+    //         },
+    //         plotOptions: {
+    //           bar: {
+    //             horizontal: true,
+    //             barHeight: '40%'
+    //           }
+    //         },
+    //         xaxis: {
+    //           categories: data?.dates || []
+    //         },
+    //         dataLabels: {
+    //           enabled: false
+    //         }
+    //       }
+    //     });
+    //   } else {
+    //     setActivePlayersError(result.error);
+    //   }
+    // } catch (error) {
+    //   console.log('errr fetchActivePlayers: ', error);
+    // }
+    // setIsActivePlayersLoading(false);
   };
 
   const fetchDemographicReport = async () => {
-    try {
-      setIsDemographicLoading(true);
-      const data = {};
-
-      data.timeRangeType = selectedTimeRage ? selectedTimeRage : 1;
-
-      if (selectedCountry?.length) {
-        const contryIds = selectedCountry.map((s) => s.value);
-        data.countries = contryIds;
-      }
-
-      console.log('getDemographicReport');
-
-      const result = await DashboardService.getDemographicReport(data);
-
-      if (result.status === 200) {
-        console.log('result.response.data', result.response.data);
-
-        const data = result.response.data;
-
-        setDemographicResponse({
-          name: t('demographic', { ns: 'glossary' }),
-          type: 'line',
-          height: 350,
-          series: [
-            {
-              name: 'Deposit Amount',
-              type: 'column',
-              data: data?.totalDeposit || []
-            },
-            {
-              name: 'Signup Count',
-              type: 'line',
-              data: data?.signupCount || []
-            },
-            {
-              name: 'Unique Depositor',
-              type: 'line',
-              data: data?.uniqueDepositors || []
-            }
-          ],
-          options: {
-            chart: {
-              id: 'demographic',
-              height: 350,
-              type: 'line',
-              toolbar: {
-                export: {
-                  svg: {
-                    filename: 'demographic'
-                  },
-                  png: {
-                    filename: 'demographic'
-                  },
-                  csv: {
-                    filename: 'demographic'
-                  }
-                }
-              }
-            },
-            stroke: {
-              width: [0, 3, 3],
-              curve: 'smooth'
-            },
-            labels: data?.countries || [],
-            yaxis: [
-              {
-                title: t('deposit', { ns: 'glossary' }) + ' ' + t('amount', { ns: 'glossary' })
-              },
-              {
-                opposite: true
-              }
-            ]
-          }
-        });
-      } else {
-        setDemographicError(result.error);
-      }
-    } catch (error) {
-      console.log('errr fetchDemographicReport: ', error);
-    }
-    setIsDemographicLoading(false);
+    // try {
+    //   setIsDemographicLoading(true);
+    //   const data = {};
+    //   data.timeRangeType = selectedTimeRage ? selectedTimeRage : 1;
+    //   if (selectedCountry?.length) {
+    //     const contryIds = selectedCountry.map((s) => s.value);
+    //     data.countries = contryIds;
+    //   }
+    //   console.log('getDemographicReport');
+    //   const result = await DashboardService.getDemographicReport(data);
+    //   if (result.status === 200) {
+    //     console.log('result.response.data', result.response.data);
+    //     const data = result.response.data;
+    //     setDemographicResponse({
+    //       name: t('demographic', { ns: 'glossary' }),
+    //       type: 'line',
+    //       height: 350,
+    //       series: [
+    //         {
+    //           name: 'Deposit Amount',
+    //           type: 'column',
+    //           data: data?.totalDeposit || []
+    //         },
+    //         {
+    //           name: 'Signup Count',
+    //           type: 'line',
+    //           data: data?.signupCount || []
+    //         },
+    //         {
+    //           name: 'Unique Depositor',
+    //           type: 'line',
+    //           data: data?.uniqueDepositors || []
+    //         }
+    //       ],
+    //       options: {
+    //         chart: {
+    //           id: 'demographic',
+    //           height: 350,
+    //           type: 'line',
+    //           toolbar: {
+    //             export: {
+    //               svg: {
+    //                 filename: 'demographic'
+    //               },
+    //               png: {
+    //                 filename: 'demographic'
+    //               },
+    //               csv: {
+    //                 filename: 'demographic'
+    //               }
+    //             }
+    //           }
+    //         },
+    //         stroke: {
+    //           width: [0, 3, 3],
+    //           curve: 'smooth'
+    //         },
+    //         labels: data?.countries || [],
+    //         yaxis: [
+    //           {
+    //             title: t('deposit', { ns: 'glossary' }) + ' ' + t('amount', { ns: 'glossary' })
+    //           },
+    //           {
+    //             opposite: true
+    //           }
+    //         ]
+    //       }
+    //     });
+    //   } else {
+    //     setDemographicError(result.error);
+    //   }
+    // } catch (error) {
+    //   console.log('errr fetchDemographicReport: ', error);
+    // }
+    // setIsDemographicLoading(false);
   };
 
   const fetchCountryList = async () => {
-    console.log('fetchCountryList');
-    const result = await AuthService.getCountries();
-    if (result.response && result?.response?.data?.length) {
-      console.log('result: ', result);
-      let countries = result?.response?.data.map((country) => {
-        return { value: country.CountryID, label: country.CountryName };
-      });
-      console.log('countries :::::', countries);
-
-      setCountryOptions(countries);
-    }
+    // console.log('fetchCountryList');
+    // const result = await AuthService.getCountries();
+    // if (result.response && result?.response?.data?.length) {
+    //   console.log('result: ', result);
+    //   let countries = result?.response?.data.map((country) => {
+    //     return { value: country.CountryID, label: country.CountryName };
+    //   });
+    //   console.log('countries :::::', countries);
+    //   setCountryOptions(countries);
+    // }
   };
 
   const handleCountryChange = (selected) => {
@@ -797,15 +774,14 @@ export default function Home() {
   useEffect(() => {
     //TODO: uncomment when implemented
     // fetchDashboard();
-    fetchCards();
-    fetchDepositStats();
-    fetchGGRReport();
-    fetchLoggedInPlayers();
-    fetchActivePlayers();
-    fetchDemographicReport();
-    fetchCountryList();
-    fetchCasinoStats();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // fetchCards();
+    // fetchDepositStats();
+    // fetchGGRReport();
+    // fetchLoggedInPlayers();
+    // fetchActivePlayers();
+    // fetchDemographicReport();
+    // fetchCountryList();
+    // fetchCasinoStats();
   }, [dateFilterApplied]);
 
   const onDateResetFilters = () => {
