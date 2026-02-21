@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import { createColumnHelper } from '@tanstack/react-table';
 import useTable from 'components/ui/useTable';
 import TableCard from 'components/ui/custom/TableCard';
-import PlayerService from 'services/player.services';
+import PlayerService from 'services/users.services';
 import PlatformLimitService from 'services/platform.services';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 

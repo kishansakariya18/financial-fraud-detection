@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import AuthService from 'services/auth.services';
 import CurrencyService from 'services/currency.services';
 import AffiliatesService from 'services/affiliates.services';
-import PlayerService from 'services/player.services';
+import PlayerService from 'services/users.services';
 
 // Global cache to share data across all hook instances
 const cache = {

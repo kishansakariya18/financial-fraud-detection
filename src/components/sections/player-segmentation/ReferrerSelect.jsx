@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
 import { AsyncCombobox } from 'components/shared/form/AsyncCombobox';
-import PlayerService from 'services/player.services';
+import PlayerService from 'services/users.services';
 
 const SEARCH_DEBOUNCE = 300;
 

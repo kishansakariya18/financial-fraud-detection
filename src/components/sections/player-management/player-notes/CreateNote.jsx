@@ -4,7 +4,7 @@ import { Button, Checkbox } from 'components/ui';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
-import PlayerService from 'services/player.services';
+import PlayerService from 'services/users.services';
 import Quill from 'quill'; // Ensure Quill is imported
 
 import { useParams } from 'react-router';

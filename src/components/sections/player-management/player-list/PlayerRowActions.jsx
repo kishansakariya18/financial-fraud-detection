@@ -18,7 +18,7 @@ import { CgUnblock, CgBlock } from 'react-icons/cg';
 import { GrUpgrade } from 'react-icons/gr';
 import { useTranslation } from 'react-i18next';
 import UserClassService from 'services/user-class.services';
-import PlayerService from 'services/player.services';
+import PlayerService from 'services/users.services';
 import { isB2BPlatform } from 'utils/platformNavigation';
 import usePermissions from 'app/router/usePermissions';
 import { PERMISSIONS } from 'constants/app.constant';

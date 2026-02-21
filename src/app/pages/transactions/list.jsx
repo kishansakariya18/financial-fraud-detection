@@ -8,13 +8,12 @@ import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 
-import PlayerService from 'services/player.services';
-import { playerTransactionsResponseMapper } from 'components/sections/player-management/helper';
+import PlayerService from 'services/users.services';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
-import { Toolbar } from 'components/sections/player-management/transaction-list/Toolbar';
+import { Toolbar } from './Toolbar';
 
 export default function TransactionsList() {
   const { t } = useTranslation();
@@ -37,11 +36,13 @@ export default function TransactionsList() {
       }
     });
 
+    console.log('result: ', result);
+
     if (result.status === 200) {
-      const response = playerTransactionsResponseMapper(result.response);
+      const response = result.response;
       return {
         status: 200,
-        data: response.list,
+        data: response,
         totalRecords: response.totalRecords || 0
       };
     }
@@ -70,23 +71,17 @@ export default function TransactionsList() {
   useEffect(() => {
     const filtersFromQuery = [];
     if (queryParams.keyword) {
-      filtersFromQuery.push({ id: 'username', value: queryParams.keyword });
+      filtersFromQuery.push({ id: 'userId', value: queryParams.keyword });
     }
-    if (queryParams.status) {
-      filtersFromQuery.push({ id: 'status', value: queryParams.status });
-    }
-    if (queryParams.transactionType) {
-      filtersFromQuery.push({
-        id: 'transactionType',
-        value: queryParams.transactionType
-      });
+    if (queryParams.fraudStatus) {
+      filtersFromQuery.push({ id: 'fraudStatus', value: queryParams.fraudStatus });
     }
     if (queryParams.type) {
       filtersFromQuery.push({ id: 'type', value: queryParams.type });
     }
     if (queryParams.startDate && queryParams.endDate) {
       filtersFromQuery.push({
-        id: 'createdAt',
+        id: 'transactionDate',
         value: [+queryParams.startDate, +queryParams.endDate]
       });
     }
@@ -97,19 +92,16 @@ export default function TransactionsList() {
   const applyFilterHandler = () => {
     const filterItems = {};
     for (let data of table.getState().columnFilters) {
-      if (data.id === 'username') {
+      if (data.id === 'userId') {
         filterItems.keyword = data.value;
       }
-      if (data.id === 'status') {
-        filterItems.status = data.value;
+      if (data.id === 'fraudStatus') {
+        filterItems.fraudStatus = data.value;
       }
       if (data.id === 'type') {
         filterItems.type = data.value;
       }
-      if (data.id === 'transactionType') {
-        filterItems.transactionType = data.value;
-      }
-      if (data.id === 'createdAt') {
+      if (data.id === 'transactionDate') {
         filterItems.date = data.value;
       }
     }
@@ -118,11 +110,8 @@ export default function TransactionsList() {
       pageIndex: DEFAULT_PAGE_INDEX,
       pageSize: DEFAULT_PER_PAGE_RECORD,
       ...(filterItems.keyword && { keyword: filterItems.keyword }),
-      ...(filterItems.status && { status: filterItems.status }),
+      ...(filterItems.fraudStatus && { fraudStatus: filterItems.fraudStatus }),
       ...(filterItems.type && { type: filterItems.type }),
-      ...(filterItems.transactionType && {
-        transactionType: filterItems.transactionType
-      }),
       ...(filterItems.date && { startDate: filterItems.date[0] }),
       ...(filterItems.date && { endDate: filterItems?.date[1] })
     });

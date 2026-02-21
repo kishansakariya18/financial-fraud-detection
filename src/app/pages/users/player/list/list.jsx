@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 // Local Imports - UI, Services, Helpers, Utils
 
-import PlayerService from 'services/player.services';
+import PlayerService from 'services/users.services';
 import UserClassService from 'services/user-class.services';
 import { useTranslation } from 'react-i18next';
 import PlayerList from 'components/sections/player-management/player-list/PlayerList';

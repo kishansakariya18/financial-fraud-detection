@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { ConfirmModal } from 'components/shared/ConfirmModal';
 import { Button } from 'components/ui';
 import { useTranslation } from 'react-i18next';
-import PlayerService from 'services/player.services';
+import PlayerService from 'services/users.services';
 import { CustomModal } from 'components/custom';
 import EditNote from './EditNote';
 import usePermissions from 'app/router/usePermissions';

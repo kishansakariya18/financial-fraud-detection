@@ -4,7 +4,7 @@ import TableCard from 'components/ui/custom/TableCard';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
-import PlayerService from 'services/player.services';
+import PlayerService from 'services/users.services';
 import { DEFAULT_PAGE_INDEX, DEFAULT_PER_PAGE_RECORD } from 'constants/app.constant';
 import { Button } from 'components/ui';
 import { CustomModal } from 'components/custom';

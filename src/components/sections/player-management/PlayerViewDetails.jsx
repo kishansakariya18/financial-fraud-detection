@@ -9,7 +9,7 @@ import { Link, useNavigate, useParams } from 'react-router';
 import { Page } from 'components/shared/Page';
 import { mapLimitSummary, playerStatusToApp } from './helper';
 import { capitalizeFirstLetter, getDateInUTCToTimeZone, setAmountBN } from 'helpers/functions';
-import PlayerService from 'services/player.services';
+import PlayerService from 'services/users.services';
 // import { showImage } from 'utils/showImage';
 import { useTranslation } from 'react-i18next';
 import { useClipboard } from 'hooks';

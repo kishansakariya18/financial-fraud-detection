@@ -304,53 +304,6 @@ export const panVerifiedOptions = [
     icon: XCircleIcon
   }
 ];
-export const playerTransactionsResponseMapper = (apiData) => {
-  const totalRecords = apiData.totalRecords;
-  const userData = apiData?.data?.userData?.[0] || {};
-  const list = apiData?.data?.transactionList?.map((item) => {
-    const currencySymbol = item.Currency?.Symbol || '';
-    const currencyName = item.Currency?.Name || '';
-
-    return {
-      id: item.TransactionID,
-      transactionUID: item.TransactionUID,
-      username: userData.Username,
-      type: transactionTypeApiToApp(item.CreditDebitType),
-      realCash: item.TransactionAmount,
-      bonus: item.Bonus,
-      realCashAmount: item.TransactionAmount,
-      transactionMesg: item.transactionType?.Name || 'Unknown',
-      currency: {
-        symbol: currencySymbol,
-        name: currencyName
-      },
-      baseCurrencyRate: item.BaseCurrencyRate,
-      baseCurrencyValue: item.BaseCurrencyValue,
-      createdAt: getDateInUTCToTimeZone(item.DateCreated),
-      status: transactionStatusToAPP(item.TransactionStatus),
-      transactionData: item.TransactionData,
-      admin: item.admin,
-      openingBalance: item.OpeningCurrencyBalance,
-      closingBalance: item.ClosingCurrencyBalance,
-      openingBonus: item.OpeningBonus,
-      totalBonus: item.TotalBonus,
-      referenceID: item.ReferenceID,
-      userID: item.UserID,
-      winning:
-        parseFloat(item.Winning) > 0
-          ? item.Winning
-          : item?.TransactionData?.Merchandise_Product_name
-            ? item.TransactionData['Merchandise_Product_name']
-            : 0,
-      coin: item.Coin,
-      _originalData: item,
-      transactionType: item.transactionType?.Name || transactionTypeInWords(item.TransactionType),
-      customMessage: item.CustomMessage,
-      transactionAmount: item.TransactionAmount
-    };
-  });
-  return { totalRecords, list, userData };
-};
 
 export const transactionStatusToAPP = (status) => {
   if (+status == 0) {

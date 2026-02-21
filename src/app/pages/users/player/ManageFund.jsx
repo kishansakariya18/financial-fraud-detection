@@ -6,7 +6,7 @@ import { Button, Input, Textarea } from 'components/ui';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
-import PlayerService from 'services/player.services';
+import PlayerService from 'services/users.services';
 import WalletService from 'services/wallet-services';
 import { Listbox } from 'components/shared/form/Listbox';
 import TextareaAutosize from 'react-textarea-autosize';

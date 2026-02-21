@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { CustomModal } from 'components/custom/CustomModal';
 import { Button, Input } from 'components/ui';
 import { LockClosedIcon } from '@heroicons/react/24/outline';
-import PlayerService from 'services/player.services';
+import PlayerService from 'services/users.services';
 
 const ResetPasswordDialog = ({ isOpen, onClose, playerData, onSuccess }) => {
   const { t } = useTranslation();

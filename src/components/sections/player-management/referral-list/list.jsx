@@ -9,7 +9,7 @@ import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 
-import PlayerService from 'services/player.services';
+import PlayerService from 'services/users.services';
 import { playerReferralResponseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';

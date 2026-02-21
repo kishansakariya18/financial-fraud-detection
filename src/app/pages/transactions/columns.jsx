@@ -3,87 +3,101 @@ import { createColumnHelper } from '@tanstack/react-table';
 
 // Local Imports
 import { RowActions } from './RowActions';
-import {
-  transactionStatusOption,
-  transactionTypeOption
-} from 'components/sections/player-management/helper';
 import { IdCell, DateCell, BoldCell, BadgeCell } from 'components/custom/table/cell';
+import {
+  TRANSACTION_TYPES,
+  PAYMENT_METHODS,
+  FRAUD_STATUS,
+  TRANSACTION_CATEGORIES
+} from './constants';
 
 // ----------------------------------------------------------------------
 
 const columnHelper = createColumnHelper();
 
 export const columns = [
-  columnHelper.accessor((row) => row.id, {
+  columnHelper.accessor((row) => row._id, {
     id: 'id',
-    label: 'Transaction ID',
-    header: 'Transaction ID',
+    label: 'ID',
+    header: 'ID',
     cell: IdCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.transactionUID, {
-    id: 'transactionUID',
-    label: 'Transaction UID',
-    header: 'Transaction UID',
-    cell: BoldCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => row.username, {
-    id: 'username',
-    label: 'Player',
-    header: 'Player',
-    cell: BoldCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => row.transactionType, {
-    id: 'transactionType',
-    label: 'Transaction Type',
-    header: 'Transaction Type',
-    cell: BoldCell,
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => row.transactionAmount, {
-    id: 'transactionAmount',
-    header: 'Transaction Amount',
-    label: 'Transaction Amount',
+  columnHelper.accessor((row) => row.categoryId, {
+    id: 'category',
+    label: 'Category',
+    header: 'Category',
     cell: ({ row }) => {
-      const amount = row.original.transactionAmount;
-      const currency = row.original.currency;
+      const catId = row.original.categoryId;
+      const category = TRANSACTION_CATEGORIES.find((c) => c.value === catId);
       return (
-        <div className="font-medium">
-          {currency?.symbol && (
-            <span className="mr-1 text-xs text-gray-500">{currency.symbol}</span>
-          )}
-          {amount || '0'}
-        </div>
+        <div className="font-medium">{category?.label || row.original.categoryLabel || catId}</div>
       );
     },
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.status, {
-    id: 'status',
-    label: 'Status',
-    header: 'Status',
-    cell: BadgeCell,
-    meta: { optionData: transactionStatusOption },
-    filterFn: 'arrIncludesSome',
+  columnHelper.accessor((row) => row.userId, {
+    id: 'userId',
+    label: 'User ID',
+    header: 'User ID',
+    cell: BoldCell,
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.type, {
-    id: 'type',
-    label: 'Credit/Debit',
-    header: 'Credit/Debit',
-    cell: BadgeCell,
-    meta: { optionData: transactionTypeOption },
-    filterFn: 'arrIncludesSome',
-    enableSorting: false
-  }),
-  columnHelper.accessor((row) => row.createdAt, {
-    id: 'createdAt',
+  columnHelper.accessor((row) => row.transactionDate, {
+    id: 'transactionDate',
     label: 'Date',
-    header: 'Created At',
+    header: 'Transaction Date',
     cell: DateCell,
-    filterFn: 'inNumberRange',
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.paymentMethod, {
+    id: 'paymentMethod',
+    label: 'Payment Method',
+    header: 'Payment Method',
+    cell: ({ row }) => {
+      const pm = row.original.paymentMethod;
+      const method = PAYMENT_METHODS.find((m) => m.value === pm);
+      return <div className="font-medium">{method?.label || pm}</div>;
+    },
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.fraudStatus, {
+    id: 'fraudStatus',
+    label: 'Fraud Status',
+    header: 'Fraud Status',
+    cell: BadgeCell,
+    meta: { optionData: FRAUD_STATUS },
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.fraudScore, {
+    id: 'fraudScore',
+    label: 'Fraud Score',
+    header: 'Fraud Score',
+    cell: ({ row }) => {
+      const score = row.original.fraudScore;
+      let color = 'text-gray-600';
+      if (score > 80) color = 'text-red-600 font-bold';
+      else if (score > 50) color = 'text-orange-600 font-bold';
+      else if (score > 20) color = 'text-yellow-600 font-bold';
+      else color = 'text-green-600 font-bold';
+
+      return <div className={color}>{score}</div>;
+    },
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.typeOrder, {
+    id: 'type',
+    label: 'Type',
+    header: 'Type',
+    cell: BadgeCell,
+    meta: { optionData: TRANSACTION_TYPES },
+    enableSorting: false
+  }),
+  columnHelper.accessor((row) => row.amount, {
+    id: 'amount',
+    label: 'Amount',
+    header: 'Amount',
+    cell: BoldCell,
     enableSorting: false
   }),
   columnHelper.display({

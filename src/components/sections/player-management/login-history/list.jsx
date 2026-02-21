@@ -7,7 +7,7 @@ import { useLockScrollbar } from 'hooks';
 import { columns } from './columns';
 import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
-import PlayerService from 'services/player.services';
+import PlayerService from 'services/users.services';
 import { loginHistoryResponseMapper } from '../helper';
 import { getQueryParams } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';

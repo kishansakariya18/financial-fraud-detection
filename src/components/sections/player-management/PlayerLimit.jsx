@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
-import PlayerService from 'services/player.services';
+import PlayerService from 'services/users.services';
 import { ContextualHelp } from 'components/shared/ContextualHelp';
 import { playerLimitSchema } from './schema';
 import { useTranslation } from 'react-i18next';

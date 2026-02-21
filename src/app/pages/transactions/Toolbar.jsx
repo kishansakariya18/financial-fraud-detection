@@ -13,11 +13,7 @@ import { TableConfig } from 'components/ui/custom/TableConfig';
 import { useBreakpointsContext } from 'app/contexts/breakpoint/context';
 import { useNavigate } from 'react-router';
 import { t } from 'i18next';
-import { statusOptions } from '../helper';
-import { DashboardCard } from 'components/custom/DashboardCard';
-import { dummyCards } from 'helpers/functions';
-import usePermissions from 'app/router/usePermissions';
-import { PERMISSIONS } from 'constants/app.constant';
+import { TRANSACTION_TYPES, FRAUD_STATUS } from './constants';
 
 // ----------------------------------------------------------------------
 
@@ -25,13 +21,11 @@ export function Toolbar({
   table,
   onApplyFilters = () => {},
   onClearFilters = () => {},
-  pageTitle = '',
-  summary = null
+  pageTitle = ''
 }) {
   const { isXs } = useBreakpointsContext();
   const navigate = useNavigate();
   const isFullScreenEnabled = table.getState().tableSettings.enableFullScreen;
-  const { hasPermission } = usePermissions();
 
   return (
     <div className="table-toolbar">
@@ -46,41 +40,16 @@ export function Toolbar({
           </h2>
         </div>
 
-        {hasPermission(PERMISSIONS.ADMIN.CREATE) && (
-          <Button
-            className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
-            color="primary"
-            onClick={() => navigate('/transaction/create')}>
-            <PlusIcon className="size-5" />
-            <span>{t('create') + ' ' + t('transaction')}</span>
-          </Button>
-        )}
+        <Button
+          className="h-8 space-x-1.5 rounded-md px-3 text-xs rtl:space-x-reverse"
+          color="primary"
+          onClick={() => navigate('/transactions/create')}>
+          <PlusIcon className="size-5" />
+          <span>{t('create') + ' ' + t('transaction')}</span>
+        </Button>
       </div>
       <div className="mb-3 mt-4 grid grid-cols-1 gap-4 px-[--margin-x] sm:grid-cols-4">
-        <DashboardCard
-          label={dummyCards.Admin.TOTAL_ADMIN.key}
-          value={summary ? summary.totalAdmins : dummyCards.Admin.TOTAL_ADMIN.value}
-          gradientFrom={dummyCards.Admin.TOTAL_ADMIN.gradientFrom}
-          gradientTo={dummyCards.Admin.TOTAL_ADMIN.gradientTo}
-          textColor="text-sky-100"
-          maskShape="is-reuleaux-triangle"
-        />
-        <DashboardCard
-          label={dummyCards.Admin.ACTIVE_ADMIN.key}
-          value={summary ? summary.activeAdmins : dummyCards.Admin.ACTIVE_ADMIN.value}
-          gradientFrom={dummyCards.Admin.ACTIVE_ADMIN.gradientFrom}
-          gradientTo={dummyCards.Admin.ACTIVE_ADMIN.gradientTo}
-          textColor="text-sky-100"
-          maskShape="is-reuleaux-triangle"
-        />
-        <DashboardCard
-          label={dummyCards.Admin.INACTIVE_ADMIN.key}
-          value={summary ? summary.inactiveAdmins : dummyCards.Admin.INACTIVE_ADMIN.value}
-          gradientFrom={dummyCards.Admin.INACTIVE_ADMIN.gradientFrom}
-          gradientTo={dummyCards.Admin.INACTIVE_ADMIN.gradientTo}
-          textColor="text-sky-100"
-          maskShape="is-reuleaux-triangle"
-        />
+        {/* Dashboard cards can be added here if needed for transaction summaries */}
       </div>
       {isXs ? (
         <>
@@ -132,8 +101,8 @@ export function Toolbar({
 function SearchInput({ table, onApplyFilters }) {
   return (
     <Input
-      value={table?.getColumn('username')?.getFilterValue() || ''}
-      onChange={(e) => table.getColumn('username').setFilterValue(e.target.value)}
+      value={table?.getColumn('userId')?.getFilterValue() || ''}
+      onChange={(e) => table.getColumn('userId').setFilterValue(e.target.value)}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
           onApplyFilters();
@@ -153,20 +122,31 @@ function Filters({ table, onApplyFilters = () => {}, onClearFilters = () => {} }
   const isFiltered = table.getState().columnFilters.length > 0;
   return (
     <>
-      {table.getColumn('status') && (
+      {table.getColumn('fraudStatus') && (
         <FacedtedFilter
-          options={statusOptions}
-          column={table.getColumn('status')}
-          title="Status"
+          options={FRAUD_STATUS}
+          column={table.getColumn('fraudStatus')}
+          title="Fraud Status"
           Icon={MapPinIcon}
           isMultiple={false}
           showCheckbox={false}
         />
       )}
 
-      {table.getColumn('createdAt') && (
+      {table.getColumn('type') && (
+        <FacedtedFilter
+          options={TRANSACTION_TYPES}
+          column={table.getColumn('type')}
+          title="Type"
+          Icon={MapPinIcon}
+          isMultiple={false}
+          showCheckbox={false}
+        />
+      )}
+
+      {table.getColumn('transactionDate') && (
         <DateFilter
-          column={table.getColumn('createdAt')}
+          column={table.getColumn('transactionDate')}
           title={t('date') + ' ' + t('range')}
           config={{
             maxDate: new Date().fp_incr(1),
