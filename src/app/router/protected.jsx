@@ -6,6 +6,7 @@ import dashboardRoute from './routes/dashboard.route';
 import adminRoute from './routes/admin.route';
 import playerRoutes from './routes/player.route';
 import profileRoute from './routes/profile.route';
+import transactionRoute from './routes/transaction.route';
 import { Outlet } from 'react-router';
 
 // ----------------------------------------------------------------------
@@ -26,7 +27,8 @@ const protectedRoutes = {
             // Routes available for both B2B and B2C platforms
             ...dashboardRoute,
             ...adminRoute,
-            ...playerRoutes
+            ...playerRoutes,
+            ...transactionRoute
           ]
         },
         ...profileRoute

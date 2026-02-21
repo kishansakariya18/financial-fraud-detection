@@ -570,33 +570,33 @@ const PlayerService = {
       console.log('Error from bulkUpdateUserLimits', error);
     }
   },
-  getAllUserTransactionList: async (reqBody) => {
+  getAllUserTransactionList: async () => {
     try {
-      const query = {
-        page: +reqBody.currentPage,
-        perPage: +reqBody.perPage
-      };
-      const body = {
-        filters: {
-          keyword: reqBody?.filters?.keyword,
-          endDate: reqBody?.filters?.endDate
-            ? ConvertDateIntoUTC(reqBody?.filters?.endDate + ' 23:59:59')
-            : '',
-          startDate: ConvertDateIntoUTC(reqBody?.filters?.startDate),
-          // type: reqBody?.filters?.type
-          transactionType: +reqBody?.filters.transactionType
-        }
-      };
+      // const query = {
+      //   page: +reqBody.currentPage,
+      //   perPage: +reqBody.perPage
+      // };
+      // const body = {
+      //   filters: {
+      //     keyword: reqBody?.filters?.keyword,
+      //     endDate: reqBody?.filters?.endDate
+      //       ? ConvertDateIntoUTC(reqBody?.filters?.endDate + ' 23:59:59')
+      //       : '',
+      //     startDate: ConvertDateIntoUTC(reqBody?.filters?.startDate),
+      //     // type: reqBody?.filters?.type
+      //     transactionType: +reqBody?.filters.transactionType
+      //   }
+      // };
       const endPoint = apiConfig.endPoints.USER.ALL_TRANSACTION_LIST;
-      const apiURL = apiConfig.baseURL.REACT_APP_API_URL + endPoint;
+      const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
         url: apiURL,
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json'
-        },
-        body,
-        params: query
+        }
+        // body,
+        // params: query
       });
       return response;
     } catch (error) {

@@ -19,6 +19,14 @@ export const dashboards = () => ({
       transKey: 'nav.dashboards.dashboard',
       Icon: MonitorIcon
     },
+    {
+      id: 'transactions',
+      path: '/transactions',
+      type: NAV_TYPE_ITEM,
+      title: 'Transactions',
+      transKey: 'nav.transactions.transactions',
+      Icon: MonitorIcon
+    },
     users
   ]
 });
