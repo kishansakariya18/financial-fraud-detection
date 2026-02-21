@@ -6,7 +6,8 @@
       "home": "Home",
       "users": "Users",
       "admin": "Admin",
-      "players": "Players"
+      "players": "Players",
+      "transactions": "Transactions"
     },
     "settings": {
       "settings": "Settings",
@@ -21,7 +22,8 @@
       "supervisors": "Supervisors",
       "calling_agents": "Calling Agents",
       "b2b_agents": "Agents",
-      "withdraw_requests": "Withdraw Requests"
+      "withdraw_requests": "Withdraw Requests",
+      "transactions": "Transactions"
     },
     "platform": {
       "platform": "Platform",

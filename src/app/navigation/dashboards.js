@@ -24,7 +24,7 @@ export const dashboards = () => ({
       path: '/transactions',
       type: NAV_TYPE_ITEM,
       title: 'Transactions',
-      transKey: 'nav.transactions.transactions',
+      transKey: 'nav.users.transactions',
       Icon: MonitorIcon
     },
     users
