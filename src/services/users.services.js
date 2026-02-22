@@ -57,23 +57,8 @@ const PlayerService = {
     }
   },
 
-  getAllUserTransactionList: async () => {
+  getAllUserTransactionList: async (payload) => {
     try {
-      // const query = {
-      //   page: +reqBody.currentPage,
-      //   perPage: +reqBody.perPage
-      // };
-      // const body = {
-      //   filters: {
-      //     keyword: reqBody?.filters?.keyword,
-      //     endDate: reqBody?.filters?.endDate
-      //       ? ConvertDateIntoUTC(reqBody?.filters?.endDate + ' 23:59:59')
-      //       : '',
-      //     startDate: ConvertDateIntoUTC(reqBody?.filters?.startDate),
-      //     // type: reqBody?.filters?.type
-      //     transactionType: +reqBody?.filters.transactionType
-      //   }
-      // };
       const endPoint = apiConfig.endPoints.USER.ALL_TRANSACTION_LIST;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
       const response = await sendRequest({
@@ -81,9 +66,8 @@ const PlayerService = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
-        }
-        // body,
-        // params: query
+        },
+        params: payload
       });
       return response;
     } catch (error) {

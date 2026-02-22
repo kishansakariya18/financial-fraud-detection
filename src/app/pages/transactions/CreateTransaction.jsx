@@ -3,8 +3,8 @@ import { Page } from 'components/shared/Page';
 import {
   CurrencyDollarIcon,
   CalendarIcon,
-  MapPinIcon,
-  GlobeAltIcon,
+  //   MapPinIcon,
+  //   GlobeAltIcon,
   DocumentTextIcon
 } from '@heroicons/react/24/outline';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -20,11 +20,13 @@ import { useSelector } from 'react-redux';
 import { TRANSACTION_TYPES, PAYMENT_METHODS, TRANSACTION_CATEGORIES } from './constants';
 import TransactionService from 'services/transactions.services';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router';
 
 const CreateTransaction = () => {
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
   const userData = useSelector((state) => state.auth.userData);
+  const navigate = useNavigate();
 
   const breadcrumbItem = [
     { title: t('transactions'), path: '/transactions' },
@@ -59,6 +61,7 @@ const CreateTransaction = () => {
 
       const response = await TransactionService.createTransaction(payload);
       toast.success(response.message || 'Transaction created successfully');
+      navigate('/transactions');
     } catch (error) {
       toast.error(error?.response?.data?.message || 'Failed to create transaction');
     } finally {
@@ -131,8 +134,8 @@ const CreateTransaction = () => {
                     value={PAYMENT_METHODS.find((pm) => pm.value === field.value) || null}
                     onChange={(val) => field.onChange(val.value)}
                     name={field.name}
-                    label={t('paymentMethod')}
-                    placeholder={t('select') + ' ' + t('paymentMethod')}
+                    label={'Payment Method'}
+                    placeholder={'Select Payment Method'}
                     displayField="label"
                     error={errors?.paymentMethod?.message}
                   />
@@ -147,21 +150,21 @@ const CreateTransaction = () => {
                 {...register('transactionDate')}
                 type="date"
                 prefix={<CalendarIcon className="size-5" />}
-                label={t('transactionDate')}
+                label={'Transaction Date'}
                 error={errors?.transactionDate?.message}
                 defaultValue={dayjs().format('YYYY-MM-DD')}
               />
               <Input
                 {...register('description')}
                 prefix={<DocumentTextIcon className="size-5" />}
-                label={t('description')}
+                label={'Description'}
                 error={errors?.description?.message}
-                placeholder={t('enter') + ' ' + t('description')}
+                placeholder={'Enter Description'}
               />
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <Input
+              {/* <Input
                 {...register('location.city')}
                 prefix={<MapPinIcon className="size-5" />}
                 label={t('city')}
@@ -171,10 +174,10 @@ const CreateTransaction = () => {
               <Input
                 {...register('location.country')}
                 prefix={<GlobeAltIcon className="size-5" />}
-                label={t('country')}
+                label={'Country'}
                 error={errors?.location?.country?.message}
-                placeholder={t('enter') + ' ' + t('country')}
-              />
+                placeholder={'Enter Country'}
+              /> */}
             </div>
           </div>
           <div className="mt-8 flex justify-end space-x-3 rtl:space-x-reverse">

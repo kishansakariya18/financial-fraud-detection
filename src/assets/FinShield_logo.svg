@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600" height="700" viewBox="0 0 600 700" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e88e5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d47a1;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="arrowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00c853;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#64dd17;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Shield -->
+  <path d="M300 50 
+           L500 150 
+           L450 400 
+           Q300 550 150 400 
+           L100 150 
+           Z" 
+        fill="url(#shieldGradient)" stroke="#0d47a1" stroke-width="8"/>
+
+  <!-- Bar Chart -->
+  <rect x="230" y="260" width="30" height="100" fill="#00c853"/>
+  <rect x="280" y="220" width="30" height="140" fill="#00c853"/>
+  <rect x="330" y="180" width="30" height="180" fill="#00c853"/>
+  <rect x="380" y="140" width="30" height="220" fill="#00c853"/>
+
+  <!-- Upward Arrow -->
+  <path d="M200 380 
+           Q350 320 450 200 
+           L430 200 
+           L500 140 
+           L470 230 
+           L450 220 
+           Q350 340 200 410 Z"
+        fill="url(#arrowGradient)" opacity="0.95"/>
+
+  <!-- Company Name -->
+  <text x="300" y="650" font-family="Arial, Helvetica, sans-serif" 
+        font-size="80" font-weight="bold" text-anchor="middle">
+    <tspan fill="#0d47a1">Fin</tspan>
+    <tspan fill="#00c853">Shield</tspan>
+  </text>
+
+</svg>

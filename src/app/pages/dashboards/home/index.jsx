@@ -1,1118 +1,133 @@
-/* eslint-disable no-unused-vars */
-import { Chart } from 'components/custom/Chart';
-import { CustomSelect } from 'components/custom/CustomSelect';
 import { DashboardCard } from 'components/custom/DashboardCard';
 import { Page } from 'components/shared/Page';
-import { Button, Card, Select, Skeleton } from 'components/ui';
-import { t } from 'i18next';
-import { useEffect, useState } from 'react';
-import AuthService from 'services/auth.services';
-import DashboardService from 'services/dashboard.services';
-import KPISummaryList from './kpi-summary-list/list';
-import TopGames from './top-game-list/list';
-import TopPlayers from './top-player-list/list';
-import { DatePicker } from 'components/shared/form/Datepicker';
+import { useState, useMemo } from 'react';
+import PlayerService from 'services/users.services';
 import dayjs from 'dayjs';
-import { getEndDate } from 'helpers/functions';
-import { useLocaleContext } from 'app/contexts/locale/context';
-import LastTenDepositList from './last-ten-deposit-list/list';
-import LastTenWithdrawList from './last-ten-withdraw-list/list';
-import LastTenRegistrationList from './last-ten-registration-list/list';
+import { useNavigate } from 'react-router';
+import { columns } from '../../transactions/columns';
+import TableCard from 'components/ui/custom/TableCard';
+import useTable from 'components/ui/useTable';
+import { TRANSACTION_CATEGORIES } from '../../transactions/constants';
 
 export default function Home() {
-  const [cardResponse, setCardResponse] = useState({});
-  const [cardError, setCardError] = useState(null);
-  const [isCardLoading, setIsCardLoading] = useState(false);
-  const [depositResponse, setDepositResponse] = useState(null);
-  const [depositError, setDepositError] = useState(null);
-  const [isDepositLoading, setIsDepositLoading] = useState(false);
-  const [ggrResponse, setGGRResponse] = useState(null);
-  const [ggrError, setGGRError] = useState(null);
-  const [isGGRLoading, setIsGGRLoading] = useState(false);
-  const [loggedInResponse, setLoggedInResponse] = useState(null);
-  const [loggedInError, setLoggedInError] = useState(null);
-  const [isLoggedInLoading, setIsLoggedInLoading] = useState(false);
-  const [activePlayersResponse, setActivePlayersResponse] = useState(null);
-  const [activePlayersError, setActivePlayersError] = useState(null);
-  const [isActivePlayersLoading, setIsActivePlayersLoading] = useState(false);
-  const [demographicResponse, setDemographicResponse] = useState(null);
-  const [demographicError, setDemographicError] = useState(null);
-  const [isDemographicLoading, setIsDemographicLoading] = useState(false);
-  const [countryOptions, setCountryOptions] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState(null);
-  const [countryError, setCountryError] = useState(null);
-  const [selectedTimeRage, setSelectedTimeRange] = useState(1);
-  const [casinoResponse, setCasinoResponse] = useState(null);
-  const [casinoError, setCasinoError] = useState(null);
-  const [isCasinoLoading, setIsCasinoLoading] = useState(false);
-  const [redata, setRedata] = useState([]);
-  const { locale } = useLocaleContext();
+  const navigate = useNavigate();
+  const [transactions, setTransactions] = useState([]);
 
-  const [dateFilters, setDateFilters] = useState({
-    startDate: dayjs().locale(locale).subtract(15, 'days').format('YYYY-MM-DD'),
-    endDate: dayjs().locale(locale).format('YYYY-MM-DD')
-  });
+  // Metrics calculation
+  const metrics = useMemo(() => {
+    if (!transactions.length)
+      return { monthlyExpense: 0, avgFraudScore: 0, trendingCategory: 'N/A' };
 
-  const [dateFilterApplied, setDateFilterApplied] = useState(false);
+    const now = dayjs();
+    const currentMonthTransactions = transactions.filter((tr) =>
+      dayjs(tr.transactionDate).isSame(now, 'month')
+    );
 
-  const onDateChange = (data) => {
-    setDateFilters({ startDate: data[0], endDate: data[1] });
-  };
+    const monthlyExpense = currentMonthTransactions
+      .filter((tr) => tr.type === 'EXPENSE')
+      .reduce((acc, tr) => acc + (Number(tr.amount) || 0), 0);
 
-  const timeRangeOptions = [
-    { value: 1, label: 'Last 30 days' },
-    { value: 2, label: 'Last 90 Days' },
-    { value: 3, label: 'Last 6 months' }
-  ];
+    const avgFraudScore =
+      transactions.reduce((acc, tr) => acc + (Number(tr.fraudScore) || 0), 0) / transactions.length;
 
-  const fetchDashboard = async () => {
-    // try {
-    //   setIsLoading(true);
-    //   const result = await DashboardService.getDashboard();
-    //   if (result.status === 200) {
-    //     setResponse(result.response.data);
-    //   } else {
-    //     setError(result.error);
-    //   }
-    // } catch (error) {
-    //   console.log('errr: ', error);
-    // }
-    // setIsLoading(false);
-  };
+    const categoryCounts = transactions.reduce((acc, tr) => {
+      acc[tr.categoryId] = (acc[tr.categoryId] || 0) + 1;
+      return acc;
+    }, {});
 
-  const fetchCards = async () => {
-    // try {
-    //   setIsCardLoading(true);
-    //   const userCards = await DashboardService.getCardsFromUser();
-    //   const gameCards = await DashboardService.getCardsFromGame();
-    //   const walletCards = await DashboardService.getCardsFromWallet();
-    //   const betCards = await DashboardService.getCardsFromBet();
-    //   if (
-    //     userCards.status === 200 &&
-    //     gameCards.status == 200 &&
-    //     walletCards.status == 200 &&
-    //     betCards.status == 200
-    //   ) {
-    //     setCardResponse({
-    //       ...userCards.response.data,
-    //       ...gameCards.response.data,
-    //       ...walletCards.response.data,
-    //       ...betCards.response.data
-    //     });
-    //   } else {
-    //     setCardError('Something went wrong while fetching card data');
-    //   }
-    // } catch (error) {
-    //   console.log('errr fetchCards: ', error);
-    // }
-    // setIsCardLoading(false);
-  };
+    const trendingCategoryId = Object.keys(categoryCounts).reduce(
+      (a, b) => (categoryCounts[a] > categoryCounts[b] ? a : b),
+      ''
+    );
 
-  const fetchDepositStats = async () => {
-    // try {
-    //   setIsDepositLoading(true);
-    //   const result = await DashboardService.getDepositStats(dateFilters);
-    //   if (result.status === 200) {
-    //     const data = result.response.data;
-    //     setRedata(data);
-    //     setDepositResponse({
-    //       name: t('deposit', { ns: 'glossary' }),
-    //       type: 'line',
-    //       height: 350,
-    //       series: [
-    //         {
-    //           name: 'Deposit Amount',
-    //           type: 'column',
-    //           data: data?.deposits || []
-    //         },
-    //         {
-    //           name: 'Deposit Count',
-    //           type: 'line',
-    //           data: data?.depositCount || []
-    //         }
-    //       ],
-    //       options: {
-    //         chart: {
-    //           id: 'deposit',
-    //           height: 350,
-    //           type: 'line',
-    //           stacked: false,
-    //           toolbar: {
-    //             show: true,
-    //             export: {
-    //               svg: {
-    //                 filename: 'deposit'
-    //               },
-    //               png: {
-    //                 filename: 'deposit'
-    //               },
-    //               csv: {
-    //                 filename: 'deposit'
-    //               }
-    //             },
-    //             tools: {
-    //               download: true,
-    //               zoomin: true,
-    //               zoomout: true,
-    //               reset: true,
-    //               customIcons: [
-    //                 {
-    //                   icon: '<i class="fa fa-expand"></i>', // Custom fullscreen icon (FontAwesome)
-    //                   click: function () {
-    //                     toggleFullScreen();
-    //                   },
-    //                   title: 'Full Screen',
-    //                   class: 'custom-icon'
-    //                 }
-    //               ]
-    //             }
-    //           }
-    //         },
-    //         tooltip: {
-    //           enabled: true,
-    //           shared: true,
-    //           followCursor: false,
-    //           intersect: false,
-    //           inverseOrder: false,
-    //           onDatasetHover: {
-    //             highlightDataSeries: false
-    //           }
-    //         },
-    //         stroke: {
-    //           width: [0, 3],
-    //           curve: 'smooth'
-    //         },
-    //         // states: {
-    //         //   hover: {
-    //         //     filter: { type: 'none' }
-    //         //   },
-    //         //   active: {
-    //         //     filter: { type: 'none' }
-    //         //   }
-    //         // },
-    //         dataLabels: {
-    //           enabled: false
-    //         },
-    //         // labels: data?.dates || [],
-    //         yaxis: [
-    //           {
-    //             title: {
-    //               text: 'Deposit Amount'
-    //             }
-    //           },
-    //           {
-    //             opposite: true,
-    //             title: {
-    //               text: 'Deposit Count'
-    //             }
-    //           }
-    //         ],
-    //         xaxis: {
-    //           // type: 'category',
-    //           stepSize: 10,
-    //           tickPlacement: 'on',
-    //           categories: data?.dates || []
-    //         },
-    //         markers: {
-    //           size: 0
-    //         }
-    //       }
-    //     });
-    //     // setDepositResponse({
-    //     //   type: "bar",
-    //     //   options: {
-    //     //     chart: {
-    //     //       // type: 'bar',
-    //     //       id: "basic-bar"
-    //     //     },
-    //     //     dataLabels: {
-    //     //       enabled: true,
-    //     //       enabledOnSeries: undefined,
-    //     //       formatter: function (val, opts) {
-    //     //         return val;
-    //     //       },
-    //     //       textAnchor: "top",
-    //     //       distributed: false,
-    //     //       offsetX: 0,
-    //     //       offsetY: 0,
-    //     //       style: {
-    //     //         fontSize: "14px",
-    //     //         fontFamily: "Helvetica, Arial, sans-serif",
-    //     //         fontWeight: "bold",
-    //     //         colors: undefined
-    //     //       }
-    //     //     },
-    //     //     tooltip: {
-    //     //       enabled: true,
-    //     //       enabledOnSeries: undefined,
-    //     //       shared: true,
-    //     //       followCursor: false,
-    //     //       intersect: false,
-    //     //       inverseOrder: false,
-    //     //       custom: undefined,
-    //     //       fillSeriesColor: false,
-    //     //       theme: false,
-    //     //       style: {
-    //     //         fontSize: "12px",
-    //     //         fontFamily: undefined
-    //     //       },
-    //     //       onDatasetHover: {
-    //     //         highlightDataSeries: false
-    //     //       }
-    //     //     },
-    //     //     xaxis: {
-    //     //       categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
-    //     //       tickPlacement: 'on',
-    //     //     }
-    //     //   },
-    //     //   plotOptions: {
-    //     //     bar: {
-    //     //       columnWidth: "50%", // Adjust bar width for better hover
-    //     //       barHeight: "100%", // Makes small bars easier to hover over
-    //     //       borderRadius: 4, // Adds padding around bars for smoother interaction
-    //     //       minBarHeight: 5, // Minimum height for bars
-    //     //     }
-    //     //   },
-    //     //   series: [
-    //     //     {
-    //     //       name: "series-1",
-    //     //       data: [2, 40, 45, 50, 49, 60, 70, 91]
-    //     //     }
-    //     //   ]
-    //     // })
-    //   } else {
-    //     setDepositError(result.error);
-    //   }
-    // } catch (error) {
-    //   console.log('errr fetchDepositStats: ', error);
-    // }
-    // setIsDepositLoading(false);
-  };
+    const trendingCategoryLabel =
+      TRANSACTION_CATEGORIES.find((c) => c.value === trendingCategoryId)?.label ||
+      trendingCategoryId ||
+      'N/A';
 
-  const style = document.createElement('style');
-  style.innerHTML = `
-    .apexcharts-bar-area {
-      pointer-events: all;
-    }
-    .apexcharts-bar-series .apexcharts-bar {
-      stroke-width: 10px !important; /* Increase the hoverable area for small bars */
-    }
-  `;
-  document.head.appendChild(style);
+    return {
+      monthlyExpense: monthlyExpense.toFixed(2),
+      avgFraudScore: avgFraudScore.toFixed(1),
+      trendingCategory: trendingCategoryLabel
+    };
+  }, [transactions]);
 
-  const fetchCasinoStats = async () => {
-    // try {
-    //   setIsCasinoLoading(true);
-    //   const result = await DashboardService.getCasinoStats(dateFilters);
-    //   if (result.status === 200) {
-    //     const data = result.response.data;
-    //     setCasinoResponse({
-    //       name: t('casino', { ns: 'glossary' }),
-    //       type: 'line',
-    //       height: 350,
-    //       series: [
-    //         {
-    //           name: 'Wagered Amount',
-    //           type: 'column',
-    //           data: data?.totalWagered || []
-    //         },
-    //         {
-    //           name: 'Payout Amount',
-    //           type: 'column',
-    //           data: data?.totalPayout || []
-    //         },
-    //         {
-    //           name: 'Wagered Count',
-    //           type: 'area',
-    //           data: data?.wageredCount || []
-    //         },
-    //         {
-    //           name: 'Payout Count',
-    //           type: 'line',
-    //           data: data?.payoutCount || []
-    //         }
-    //       ],
-    //       options: {
-    //         chart: {
-    //           id: 'casino',
-    //           height: 350,
-    //           type: 'line',
-    //           toolbar: {
-    //             export: {
-    //               svg: {
-    //                 filename: 'casino'
-    //               },
-    //               png: {
-    //                 filename: 'casino'
-    //               },
-    //               csv: {
-    //                 filename: 'casino'
-    //               }
-    //             }
-    //           }
-    //         },
-    //         stroke: {
-    //           width: [0, 0, 2, 3],
-    //           curve: 'smooth'
-    //         },
-    //         fill: {
-    //           opacity: [1, 1, 0.25, 1]
-    //         },
-    //         // title: {
-    //         //   text: t("casino", { ns: "glossary" }),
-    //         // },
-    //         labels: data?.dates || [],
-    //         yaxis: [
-    //           {
-    //             title: {
-    //               text: t('amount', { ns: 'glossary' })
-    //             },
-    //             seriesName: ['Wagered Amount', 'Payout Amount']
-    //           },
-    //           {
-    //             title: {
-    //               text: t('count', { ns: 'glossary' })
-    //             },
-    //             seriesName: ['Wagered Count', 'Payout Count'],
-    //             opposite: true
-    //           }
-    //         ]
-    //       }
-    //     });
-    //   } else {
-    //     setCasinoError(result.error);
-    //   }
-    // } catch (error) {
-    //   console.log('errr fetchCasinoStats: ', error);
-    // }
-    // setIsCasinoLoading(false);
-  };
-
-  const fetchGGRReport = async () => {
-    // try {
-    //   setIsGGRLoading(true);
-    //   const result = await DashboardService.getGGRReport(dateFilters);
-    //   if (result.status === 200) {
-    //     console.log('result.response.data', result.response.data);
-    //     const data = result.response.data;
-    //     setGGRResponse({
-    //       name: t('ggr', { ns: 'glossary' }) + ' ' + t('report', { ns: 'glossary' }),
-    //       type: 'bar',
-    //       height: 350,
-    //       series: [
-    //         {
-    //           name: 'Total Revenue',
-    //           type: 'column',
-    //           data: data?.totalRevenue || []
-    //         },
-    //         {
-    //           name: 'Total Wagered',
-    //           type: 'column',
-    //           data: data?.totalWagered || []
-    //         },
-    //         {
-    //           name: 'Total Payout',
-    //           type: 'column',
-    //           data: data?.totalPayout || []
-    //         }
-    //       ],
-    //       options: {
-    //         chart: {
-    //           id: 'ggr',
-    //           height: 350,
-    //           type: 'bar',
-    //           toolbar: {
-    //             show: true,
-    //             export: {
-    //               svg: {
-    //                 filename: 'ggr'
-    //               },
-    //               png: {
-    //                 filename: 'ggr'
-    //               },
-    //               csv: {
-    //                 filename: 'ggr'
-    //               }
-    //             }
-    //           }
-    //         },
-    //         stroke: {
-    //           show: true,
-    //           colors: ['transparent']
-    //         },
-    //         xaxis: {
-    //           tickPlacement: 'on'
-    //         },
-    //         tooltip: {
-    //           enabled: true,
-    //           enabledOnSeries: undefined,
-    //           shared: true,
-    //           followCursor: false,
-    //           intersect: false,
-    //           inverseOrder: false,
-    //           onDatasetHover: {
-    //             highlightDataSeries: false
-    //           }
-    //         },
-    //         states: {
-    //           hover: {
-    //             filter: { type: 'none' }
-    //           },
-    //           active: {
-    //             filter: { type: 'none' }
-    //           }
-    //         },
-    //         dataLabels: {
-    //           enabled: false
-    //         },
-    //         // title: {
-    //         //   text:
-    //         //     t("ggr", { ns: "glossary" }) +
-    //         //     " " +
-    //         //     t("report", { ns: "glossary" }),
-    //         // },
-    //         labels: data?.dates || []
-    //       }
-    //     });
-    //   } else {
-    //     setGGRError(result.error);
-    //   }
-    // } catch (error) {
-    //   console.log('errr fetchGGRReport: ', error);
-    // }
-    // setIsGGRLoading(false);
-  };
-
-  const fetchLoggedInPlayers = async () => {
-    // try {
-    //   setIsLoggedInLoading(true);
-    //   const result = await DashboardService.getLoggedInPlayers(dateFilters);
-    //   if (result.status === 200) {
-    //     console.log('result.response.data', result.response.data);
-    //     const data = result.response.data;
-    //     setLoggedInResponse({
-    //       name: t('loggedIn', { ns: 'glossary' }) + ' ' + t('players', { ns: 'glossary' }),
-    //       type: 'donut',
-    //       width: 1000,
-    //       series: data,
-    //       options: {
-    //         chart: {
-    //           id: 'ggr',
-    //           width: 1000,
-    //           type: 'donut',
-    //           toolbar: {
-    //             export: {
-    //               svg: {
-    //                 filename: 'ggr'
-    //               },
-    //               png: {
-    //                 filename: 'ggr'
-    //               },
-    //               csv: {
-    //                 filename: 'ggr'
-    //               }
-    //             }
-    //           }
-    //         },
-    //         // title: {
-    //         //   text:
-    //         //     t("loggedIn", { ns: "glossary" }) +
-    //         //     " " +
-    //         //     t("players", { ns: "glossary" }),
-    //         // },
-    //         labels: ['Logged In Players', 'Total Players'],
-    //         plotOptions: {
-    //           pie: {
-    //             donut: {
-    //               size: '50%'
-    //             }
-    //           }
-    //         },
-    //         legend: {
-    //           show: true,
-    //           position: 'bottom'
-    //         }
-    //       }
-    //     });
-    //   } else {
-    //     setLoggedInError(result.error);
-    //   }
-    // } catch (error) {
-    //   console.log('errr fetchLoggedInPlayers: ', error);
-    // }
-    // setIsLoggedInLoading(false);
-  };
-
-  const fetchActivePlayers = async () => {
-    // try {
-    //   setIsActivePlayersLoading(true);
-    //   const result = await DashboardService.getActivePlayers(dateFilters);
-    //   if (result.status === 200) {
-    //     console.log('result.response.data', result.response.data);
-    //     const data = result.response.data;
-    //     setActivePlayersResponse({
-    //       name: t('active', { ns: 'glossary' }) + ' ' + t('players', { ns: 'glossary' }),
-    //       type: 'bar',
-    //       height: 350,
-    //       series: [
-    //         {
-    //           name: 'User Count',
-    //           type: 'bar',
-    //           data: data?.userCount || []
-    //         }
-    //       ],
-    //       options: {
-    //         chart: {
-    //           id: 'active',
-    //           height: 350,
-    //           type: 'bar',
-    //           toolbar: {
-    //             export: {
-    //               svg: {
-    //                 filename: 'active-players'
-    //               },
-    //               png: {
-    //                 filename: 'active-players'
-    //               },
-    //               csv: {
-    //                 filename: 'active-players'
-    //               }
-    //             }
-    //           }
-    //         },
-    //         // title: {
-    //         //   text:
-    //         //     t("active", { ns: "glossary" }) +
-    //         //     " " +
-    //         //     t("players", { ns: "glossary" }),
-    //         // },
-    //         grid: {
-    //           show: true,
-    //           yaxis: {
-    //             lines: {
-    //               show: false
-    //             }
-    //           }
-    //         },
-    //         plotOptions: {
-    //           bar: {
-    //             horizontal: true,
-    //             barHeight: '40%'
-    //           }
-    //         },
-    //         xaxis: {
-    //           categories: data?.dates || []
-    //         },
-    //         dataLabels: {
-    //           enabled: false
-    //         }
-    //       }
-    //     });
-    //   } else {
-    //     setActivePlayersError(result.error);
-    //   }
-    // } catch (error) {
-    //   console.log('errr fetchActivePlayers: ', error);
-    // }
-    // setIsActivePlayersLoading(false);
-  };
-
-  const fetchDemographicReport = async () => {
-    // try {
-    //   setIsDemographicLoading(true);
-    //   const data = {};
-    //   data.timeRangeType = selectedTimeRage ? selectedTimeRage : 1;
-    //   if (selectedCountry?.length) {
-    //     const contryIds = selectedCountry.map((s) => s.value);
-    //     data.countries = contryIds;
-    //   }
-    //   console.log('getDemographicReport');
-    //   const result = await DashboardService.getDemographicReport(data);
-    //   if (result.status === 200) {
-    //     console.log('result.response.data', result.response.data);
-    //     const data = result.response.data;
-    //     setDemographicResponse({
-    //       name: t('demographic', { ns: 'glossary' }),
-    //       type: 'line',
-    //       height: 350,
-    //       series: [
-    //         {
-    //           name: 'Deposit Amount',
-    //           type: 'column',
-    //           data: data?.totalDeposit || []
-    //         },
-    //         {
-    //           name: 'Signup Count',
-    //           type: 'line',
-    //           data: data?.signupCount || []
-    //         },
-    //         {
-    //           name: 'Unique Depositor',
-    //           type: 'line',
-    //           data: data?.uniqueDepositors || []
-    //         }
-    //       ],
-    //       options: {
-    //         chart: {
-    //           id: 'demographic',
-    //           height: 350,
-    //           type: 'line',
-    //           toolbar: {
-    //             export: {
-    //               svg: {
-    //                 filename: 'demographic'
-    //               },
-    //               png: {
-    //                 filename: 'demographic'
-    //               },
-    //               csv: {
-    //                 filename: 'demographic'
-    //               }
-    //             }
-    //           }
-    //         },
-    //         stroke: {
-    //           width: [0, 3, 3],
-    //           curve: 'smooth'
-    //         },
-    //         labels: data?.countries || [],
-    //         yaxis: [
-    //           {
-    //             title: t('deposit', { ns: 'glossary' }) + ' ' + t('amount', { ns: 'glossary' })
-    //           },
-    //           {
-    //             opposite: true
-    //           }
-    //         ]
-    //       }
-    //     });
-    //   } else {
-    //     setDemographicError(result.error);
-    //   }
-    // } catch (error) {
-    //   console.log('errr fetchDemographicReport: ', error);
-    // }
-    // setIsDemographicLoading(false);
-  };
-
-  const fetchCountryList = async () => {
-    // console.log('fetchCountryList');
-    // const result = await AuthService.getCountries();
-    // if (result.response && result?.response?.data?.length) {
-    //   console.log('result: ', result);
-    //   let countries = result?.response?.data.map((country) => {
-    //     return { value: country.CountryID, label: country.CountryName };
-    //   });
-    //   console.log('countries :::::', countries);
-    //   setCountryOptions(countries);
-    // }
-  };
-
-  const handleCountryChange = (selected) => {
-    setSelectedCountry(selected);
-    setCountryError(selected ? '' : 'Countries are required.');
-  };
-
-  function toggleFullScreen() {
-    const chartContainer = document.getElementById('chart-container');
-    if (!document.fullscreenElement) {
-      // If not in fullscreen, request fullscreen
-      console.log('chartContainer.requestFullscreen: ', chartContainer);
-
-      if (chartContainer.requestFullscreen) {
-        chartContainer.requestFullscreen();
-        // Disable the dark background color on the body
-        document.body.style.background = 'transparent';
-      } else if (chartContainer.mozRequestFullScreen) {
-        // Firefox
-        chartContainer.mozRequestFullScreen();
-        // Disable the dark background color on the body
-        document.body.style.background = 'transparent';
-      } else if (chartContainer.webkitRequestFullscreen) {
-        // Chrome, Safari, Opera
-        chartContainer.webkitRequestFullscreen();
-        // Disable the dark background color on the body
-        document.body.style.background = 'transparent';
-      } else if (chartContainer.msRequestFullscreen) {
-        // IE/Edge
-        chartContainer.msRequestFullscreen();
-        // Disable the dark background color on the body
-        document.body.style.background = 'transparent';
-      }
-    } else {
-      // If in fullscreen, exit fullscreen
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-        // Restore the background color when exiting fullscreen
-        document.body.style.background = '';
-        document.body.style.overflow = ''; // Allow scrolling again when exiting fullscreen
-      } else if (document.mozCancelFullScreen) {
-        // Firefox
-        document.mozCancelFullScreen();
-        // Restore the background color when exiting fullscreen
-        document.body.style.background = '';
-        document.body.style.overflow = ''; // Allow scrolling again when exiting fullscreen
-      } else if (document.webkitExitFullscreen) {
-        // Chrome, Safari, Opera
-        document.webkitExitFullscreen();
-        // Restore the background color when exiting fullscreen
-        document.body.style.background = '';
-        document.body.style.overflow = ''; // Allow scrolling again when exiting fullscreen
-      } else if (document.msExitFullscreen) {
-        // IE/Edge
-        document.msExitFullscreen();
-        // Restore the background color when exiting fullscreen
-        document.body.style.background = '';
-        document.body.style.overflow = ''; // Allow scrolling again when exiting fullscreen
-      }
-    }
-  }
-
-  console.log('demographicResponse:', demographicResponse);
-  console.log('cards:', cardResponse);
-
-  useEffect(() => {
-    //TODO: uncomment when implemented
-    // fetchDashboard();
-    // fetchCards();
-    // fetchDepositStats();
-    // fetchGGRReport();
-    // fetchLoggedInPlayers();
-    // fetchActivePlayers();
-    // fetchDemographicReport();
-    // fetchCountryList();
-    // fetchCasinoStats();
-  }, [dateFilterApplied]);
-
-  const onDateResetFilters = () => {
-    setDateFilters({
-      startDate: dayjs().locale(locale).subtract(15, 'days').format('YYYY-MM-DD'),
-      endDate: dayjs().locale(locale).format('YYYY-MM-DD')
+  const fetchTransactions = async () => {
+    // Fetch a large number of transactions to calculate metrics and show recent ones
+    const result = await PlayerService.getAllUserTransactionList({
+      limit: 5,
+      sortOrder: 'desc'
     });
 
-    setDateFilterApplied((prev) => !prev);
+    if (result?.status === 200) {
+      const data = result.response.data || [];
+      setTransactions(data);
+      // Return only the first 5 for the recent transactions table
+      return {
+        status: 200,
+        data: data.slice(0, 5),
+        totalRecords: Math.min(data.length, 5)
+      };
+    }
+    return { status: result?.status, error: result?.error };
   };
 
+  const {
+    table,
+    isLoading: isTableLoading,
+    tableSettings
+  } = useTable({
+    columns,
+    fetchData: fetchTransactions,
+    initialSettings: {
+      columnPinning: { left: ['id'], right: ['actions'] },
+      tableSettings: { pagination: false } // Disable pagination for the dashboard preview
+    }
+  });
+
   return (
-    <Page title="Homepage">
-      <div className="transition-content w-full px-[--margin-x] pt-5 lg:pt-6">
-        <div className="min-w-0">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-            <DashboardCard
-              label={`${t('total')}  ${t('deposits')}`}
-              value={cardResponse.totalDeposits || '-'}
-              gradientFrom="from-info"
-              gradientTo="to-info-darker"
-              textColor="text-sky-100"
-              maskShape="is-reuleaux-triangle"
-            />
-            <DashboardCard
-              label={`${t('total')}  ${t('withdrawals')}`}
-              value={cardResponse.totalWithdrawals || '-'}
-              gradientFrom="from-amber-400"
-              gradientTo="to-orange-600"
-              textColor="text-amber-50"
-              maskShape="is-diamond"
-            />
-            <DashboardCard
-              label={`${t('ggr')}`}
-              value={cardResponse.ggr || '-'}
-              gradientFrom="from-pink-500"
-              gradientTo="to-rose-500"
-              textColor="text-pink-100"
-              maskShape="is-hexagon-2"
-            />
-            <DashboardCard
-              label={`${t('today')} ${t('registrations')}`}
-              value={cardResponse.todayRegistrations || '-'}
-              gradientFrom="from-info"
-              gradientTo="to-info-darker"
-              textColor="text-pink-100"
-              maskShape="is-diamond"
-            />
-            <DashboardCard
-              label={`${t('total')} ${t('players')}`}
-              value={cardResponse.totalPlayers || '-'}
-              gradientFrom="from-amber-400"
-              gradientTo="to-orange-600"
-              textColor="text-sky-100"
-              maskShape="is-hexagon-2"
-            />
-            <DashboardCard
-              label={`${t('total')} ${t('providers')}`}
-              value={cardResponse.totalProviders || '-'}
-              gradientFrom="from-pink-500"
-              gradientTo="to-rose-500"
-              textColor="text-sky-100"
-              maskShape="is-diamond"
-            />
-            <DashboardCard
-              label={`${t('total')} ${t('games')}`}
-              value={cardResponse.totalGames || '-'}
-              gradientFrom="from-info"
-              gradientTo="to-info-darker"
-              textColor="text-sky-100"
-              maskShape="is-diamond"
-            />
+    <Page title="Fraud Detection Dashboard">
+      <div className="w-full px-[--margin-x] pt-5 lg:pt-6">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <DashboardCard
+            label="Monthly Expense"
+            value={`$${metrics.monthlyExpense}`}
+            gradientFrom="from-blue-500"
+            gradientTo="to-blue-600"
+            textColor="text-blue-100"
+          />
+          <DashboardCard
+            label="Avg Fraud Score"
+            value={metrics.avgFraudScore}
+            gradientFrom="from-purple-500"
+            gradientTo="to-purple-600"
+            textColor="text-purple-100"
+          />
+          <DashboardCard
+            label="Trending Category"
+            value={metrics.trendingCategory}
+            gradientFrom="from-orange-500"
+            gradientTo="to-orange-600"
+            textColor="text-orange-100"
+          />
+          <DashboardCard
+            label="Actions"
+            value="New Transaction"
+            gradientFrom="from-emerald-500"
+            gradientTo="to-emerald-600"
+            textColor="text-emerald-100"
+            className="cursor-pointer transition-transform hover:scale-[1.02] active:scale-[0.98]"
+            onClick={() => navigate('/transactions/create')}
+          />
+        </div>
+
+        <div className="mt-8">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-lg font-bold text-gray-800 dark:text-dark-50">
+              Recent Transactions
+            </h2>
           </div>
-
-          <div className="mt-2 flex w-full flex-wrap items-center gap-2">
-            <DatePicker
-              value={[dateFilters?.startDate, dateFilters?.endDate]}
-              onChange={onDateChange}
-              className="w-full sm:w-[250px] md:w-[300px] lg:w-[350px] xl:w-[400px]"
-              options={{
-                mode: 'range',
-                dateFormat: 'Y-m-d'
-                // defaultDate: [dateFilters?.startDate, dateFilters?.endDate]
-              }}
-              placeholder="Choose date..."
-            />
-
-            <Button
-              type="submit"
-              color="primary"
-              className="rounded px-4 py-2 font-semibold text-white"
-              onClick={() => setDateFilterApplied((prev) => !prev)}>
-              Apply
-            </Button>
-            <Button
-              type="submit"
-              color="warning"
-              className="rounded px-4 py-2 font-semibold text-white"
-              onClick={onDateResetFilters}>
-              Reset
-            </Button>
-          </div>
-
-          <div className="-mx-2 flex flex-wrap pt-2">
-            {isDepositLoading && (
-              <div className="mb-4 w-full px-2 md:w-1/2">
-                <div className="flex flex-col border border-gray-150 dark:border-dark-600">
-                  <div className="flex space-x-5 px-5 py-4 rtl:space-x-reverse">
-                    {/* <Skeleton className="size-16 rounded-full" /> */}
-                    <div className="flex flex-1 flex-col justify-between py-2">
-                      <Skeleton className="h-3 w-full rounded" />
-                      <Skeleton className="h-3 w-full rounded" />
-                    </div>
-                  </div>
-                  <Skeleton className="h-48 w-full" />
-                  <div className="w-full px-6 py-4">
-                    <Skeleton className="h-3 w-full rounded" />
-                    <Skeleton className="mt-4 h-3 w-8/12 rounded" />
-                  </div>
-                </div>
-              </div>
-            )}
-            {!isDepositLoading && depositResponse && (
-              <div className="mb-4 w-full px-2 md:w-1/2" id="chart-container">
-                <Chart data={depositResponse} title={t('deposit')} />
-              </div>
-            )}
-            {!isDepositLoading && !depositResponse && <div className="mb-4 w-full px-2 md:w-1/2" />}
-
-            {/* Withdraw section - uncomment if needed */}
-            {/* {!isWithdrawLoading && withdrawResponse && (
-    <div className="w-full md:w-1/2 px-2 mb-4">
-      <Chart data={withdrawResponse} title={"withdraw"} />
-    </div>
-  )}
-  {!isWithdrawLoading && !withdrawResponse && (
-    <div className="w-full md:w-1/2 px-2 mb-4" />
-  )} */}
-
-            {isCasinoLoading && (
-              <div className="mb-4 w-full px-2 md:w-1/2">
-                <div className="flex flex-col border border-gray-150 dark:border-dark-600">
-                  <div className="flex space-x-5 px-5 py-4 rtl:space-x-reverse">
-                    {/* <Skeleton className="size-16 rounded-full" /> */}
-                    <div className="flex flex-1 flex-col justify-between py-2">
-                      <Skeleton className="h-3 w-full rounded" />
-                      <Skeleton className="h-3 w-full rounded" />
-                    </div>
-                  </div>
-                  <Skeleton className="h-48 w-full" />
-                  <div className="w-full px-6 py-4">
-                    <Skeleton className="h-3 w-full rounded" />
-                    <Skeleton className="mt-4 h-3 w-8/12 rounded" />
-                  </div>
-                </div>
-                {/* <Skeleton className="col-span-12 sm:col-span-6 lg:col-span-7 xl:col-span-8" /> */}
-              </div>
-            )}
-
-            {!isCasinoLoading && casinoResponse && (
-              <div className="mb-4 w-full px-2 md:w-1/2">
-                <Chart data={casinoResponse} title={t('casino')} />
-              </div>
-            )}
-            {!isCasinoLoading && !casinoResponse && <div className="mb-4 w-full px-2 md:w-1/2" />}
-
-            {isGGRLoading && (
-              <div className="mb-4 w-full px-2">
-                <div className="flex flex-col border border-gray-150 dark:border-dark-600">
-                  <div className="flex space-x-5 px-5 py-4 rtl:space-x-reverse">
-                    {/* <Skeleton className="size-16 rounded-full" /> */}
-                    <div className="flex flex-1 flex-col justify-between py-2">
-                      <Skeleton className="h-3 w-full rounded" />
-                      <Skeleton className="h-3 w-full rounded" />
-                    </div>
-                  </div>
-                  <Skeleton className="h-48 w-full" />
-                  <div className="w-full px-6 py-4">
-                    <Skeleton className="h-3 w-full rounded" />
-                    <Skeleton className="mt-4 h-3 w-8/12 rounded" />
-                  </div>
-                </div>
-                {/* <Skeleton className="col-span-12 sm:col-span-6 lg:col-span-7 xl:col-span-8" /> */}
-              </div>
-            )}
-
-            {!isGGRLoading && ggrResponse && (
-              <div className="mb-4 w-full px-2">
-                <Chart data={ggrResponse} title={`${t('ggr')} ${t('report')}`} />
-              </div>
-            )}
-
-            {isLoggedInLoading && (
-              <div className="mb-4 w-full px-2 md:w-1/2">
-                <div className="flex flex-col border border-gray-150 dark:border-dark-600">
-                  <div className="flex space-x-5 px-5 py-4 rtl:space-x-reverse">
-                    {/* <Skeleton className="size-16 rounded-full" /> */}
-                    <div className="flex flex-1 flex-col justify-between py-2">
-                      <Skeleton className="h-3 w-full rounded" />
-                      <Skeleton className="h-3 w-full rounded" />
-                    </div>
-                  </div>
-                  <Skeleton className="h-48 w-full" />
-                  <div className="w-full px-6 py-4">
-                    <Skeleton className="h-3 w-full rounded" />
-                    <Skeleton className="mt-4 h-3 w-8/12 rounded" />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {!isLoggedInLoading && loggedInResponse && (
-              <div className="mb-4 w-full px-2 md:w-1/3">
-                <Chart data={loggedInResponse} title={`${t('loggedIn')} ${t('players')}`} />
-              </div>
-            )}
-
-            {isActivePlayersLoading && (
-              <div className="mb-4 w-full px-2 md:w-2/3">
-                <div className="flex flex-col border border-gray-150 dark:border-dark-600">
-                  <div className="flex space-x-5 px-5 py-4 rtl:space-x-reverse">
-                    {/* <Skeleton className="size-16 rounded-full" /> */}
-                    <div className="flex flex-1 flex-col justify-between py-2">
-                      <Skeleton className="h-3 w-full rounded" />
-                      <Skeleton className="h-3 w-full rounded" />
-                    </div>
-                  </div>
-                  <Skeleton className="h-48 w-full" />
-                  <div className="w-full px-6 py-4">
-                    <Skeleton className="h-3 w-full rounded" />
-                    <Skeleton className="mt-4 h-3 w-8/12 rounded" />
-                  </div>
-                </div>
-              </div>
-            )}
-            {!isActivePlayersLoading && activePlayersResponse && (
-              <div className="mb-4 w-full px-2 md:w-2/3">
-                <Chart data={activePlayersResponse} title={`${t('active')} ${t('players')}`} />
-              </div>
-            )}
-
-            {isDemographicLoading && (
-              <div className="mb-4 w-full px-2">
-                <div className="flex flex-col border border-gray-150 dark:border-dark-600">
-                  <div className="flex space-x-5 px-5 py-4 rtl:space-x-reverse">
-                    {/* <Skeleton className="size-16 rounded-full" /> */}
-                    <div className="flex flex-1 flex-col justify-between py-2">
-                      <Skeleton className="h-3 w-full rounded" />
-                      <Skeleton className="h-3 w-full rounded" />
-                    </div>
-                  </div>
-                  <Skeleton className="h-48 w-full" />
-                  <div className="w-full px-6 py-4">
-                    <Skeleton className="h-3 w-full rounded" />
-                    <Skeleton className="mt-4 h-3 w-8/12 rounded" />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {!isDemographicLoading && demographicResponse && (
-              <div className="mb-4 w-full px-2">
-                <Card className="p-4">
-                  <div className="-mx-2 mb-4 flex flex-wrap">
-                    <div className="w-full px-2 sm:w-1/4" />
-                    <div className="w-full px-2 sm:w-1/4">
-                      <Select
-                        defaultValue={selectedTimeRage}
-                        onChange={(e) => setSelectedTimeRange(e.target.value)}
-                        data={timeRangeOptions}
-                      />
-                    </div>
-                    <div className="w-full px-2 sm:w-1/4">
-                      <CustomSelect
-                        id="Countries"
-                        showLabel={false}
-                        options={countryOptions}
-                        isMulti={true}
-                        error={countryError}
-                        value={selectedCountry}
-                        onChange={handleCountryChange}
-                      />
-                    </div>
-                    <div className="w-full px-2 sm:w-1/6">
-                      <Button
-                        type="submit"
-                        color="primary"
-                        className="rounded px-4 py-2 font-semibold text-white"
-                        onClick={fetchDemographicReport}>
-                        Apply
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="w-full">
-                    <Chart data={demographicResponse} title={t('demographic')} />
-                  </div>
-                </Card>
-              </div>
-            )}
-
-            <div className="mb-4 w-full px-2">
-              <Card className="p-4">
-                <KPISummaryList />
-              </Card>
-            </div>
-            <div className="mb-4 w-full px-2">
-              <Card className="p-4">
-                <TopGames />
-              </Card>
-            </div>
-            <div className="mb-4 w-full px-2">
-              <Card className="p-4">
-                <TopPlayers />
-              </Card>
-            </div>
-            <div className="mb-4 w-full px-2">
-              <Card className="p-4">
-                <LastTenDepositList />
-              </Card>
-            </div>
-            <div className="mb-4 w-full px-2">
-              <Card className="p-4">
-                <LastTenWithdrawList />
-              </Card>
-            </div>
-            <div className="mb-4 w-full px-2">
-              <Card className="p-4">
-                <LastTenRegistrationList />
-              </Card>
-            </div>
-          </div>
+          <TableCard tableSettings={tableSettings} table={table} loading={isTableLoading} />
         </div>
       </div>
     </Page>

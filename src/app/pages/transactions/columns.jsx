@@ -36,13 +36,6 @@ export const columns = [
     },
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.userId, {
-    id: 'userId',
-    label: 'User ID',
-    header: 'User ID',
-    cell: BoldCell,
-    enableSorting: false
-  }),
   columnHelper.accessor((row) => row.transactionDate, {
     id: 'transactionDate',
     label: 'Date',
@@ -85,7 +78,7 @@ export const columns = [
     },
     enableSorting: false
   }),
-  columnHelper.accessor((row) => row.typeOrder, {
+  columnHelper.accessor((row) => row.type, {
     id: 'type',
     label: 'Type',
     header: 'Type',

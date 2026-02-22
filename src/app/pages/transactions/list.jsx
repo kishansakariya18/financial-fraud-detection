@@ -26,14 +26,13 @@ export default function TransactionsList() {
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
 
     const result = await PlayerService.getAllUserTransactionList({
-      currentPage: pageIndex + 1,
-      perPage: pageSize,
-      filters: {
-        keyword: queryParams.keyword || undefined,
-        startDate: queryParams.startDate || undefined,
-        endDate: queryParams.endDate || undefined,
-        transactionType: queryParams.transactionType || undefined
-      }
+      page: pageIndex + 1,
+      limit: pageSize,
+      type: queryParams.type || undefined,
+      paymentMethod: queryParams.paymentMethod || undefined,
+      categoryId: queryParams.categoryId || undefined,
+      startDate: queryParams.startDate || undefined,
+      endDate: queryParams.endDate || undefined
     });
 
     console.log('result: ', result);
@@ -42,8 +41,8 @@ export default function TransactionsList() {
       const response = result.response;
       return {
         status: 200,
-        data: response,
-        totalRecords: response.totalRecords || 0
+        data: response.data,
+        totalRecords: response?.pagination?.totalRecords || 0
       };
     }
     return { status: result.status, error: result.error };

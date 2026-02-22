@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'components/ui';
 import { useTranslation } from 'react-i18next';
 import { CustomModal } from 'components/custom';
-import { ViewDetails } from 'components/sections/player-management/transaction-list/ViewDetails';
+import { TransactionDetails } from './TransactionDetails';
 
 export function RowActions({ row }) {
   const { t } = useTranslation();
@@ -30,7 +30,7 @@ export function RowActions({ row }) {
   return (
     <>
       <div className="flex justify-center space-x-1.5 rtl:space-x-reverse">
-        <Menu as="div" className="relative inline-block text-left" __demoMode>
+        <Menu as="div" className="relative inline-block text-left">
           <MenuButton as={Button} isIcon className="size-8 rounded-full">
             <EllipsisHorizontalIcon className="size-4.5" />
           </MenuButton>
@@ -70,7 +70,7 @@ export function RowActions({ row }) {
         onOpen={onOpenDialogBox}
         onOk={onOkDialogBox}
         sizeClass="max-w-xl">
-        <ViewDetails transaction={row.original} onClose={onCloseDialogBox} />
+        <TransactionDetails transaction={row.original} onClose={onCloseDialogBox} />
       </CustomModal>
     </>
   );
