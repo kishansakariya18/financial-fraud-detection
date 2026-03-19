@@ -11,9 +11,8 @@ export const transactionRoute = [
   {
     path: 'transactions/create',
     lazy: async () => {
-      const { default: CreateTransaction } = await import(
-        '../../pages/transactions/CreateTransaction'
-      );
+      const { default: CreateTransaction } =
+        await import('../../pages/transactions/CreateTransaction');
       return {
         Component: () => <CreateTransaction />
       };
