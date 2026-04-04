@@ -1,14 +1,9 @@
 .skeleton {
-  @apply bg-gray-150 [--easing:theme("transitionTimingFunction.elastic")] [--sk-color:theme("colors.white/60")] [--sk-to:translateX(100%)] [--sk-from:translateX(-100%)] rtl:[--sk-to:translateX(-100%)] rtl:[--sk-from:translateX(100%)] dark:bg-dark-600 dark:[--sk-color:theme("colors.dark.400")];
+  @apply bg-gray-150 [--easing:theme("transitionTimingFunction.elastic")] [--sk-color:theme("colors.white/60")] [--sk-from:translateX(-100%)] [--sk-to:translateX(100%)] dark:bg-dark-600 dark:[--sk-color:theme("colors.dark.400")] rtl:[--sk-from:translateX(100%)] rtl:[--sk-to:translateX(-100%)];
 }
 
 .skeleton.animate-wave::before {
-  background-image: linear-gradient(
-    90deg,
-    transparent,
-    var(--sk-color),
-    transparent
-  );
+  background-image: linear-gradient(90deg, transparent, var(--sk-color), transparent);
   animation: skeleton-wave 1.5s var(--easing) infinite;
 }
 

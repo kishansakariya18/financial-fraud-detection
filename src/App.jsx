@@ -1,5 +1,5 @@
 // Import Dependencies
-import { RouterProvider } from 'react-router';
+import { RouterProvider } from 'react-router-dom';
 
 // Local Imports
 import { BreakpointProvider } from 'app/contexts/breakpoint/Provider';

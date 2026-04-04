@@ -2,13 +2,13 @@
   @apply max-[425px]:![--width:calc(100%-calc(var(--margin-x)*2))];
 }
 
-[data-sonner-toaster][data-theme="light"] {
+[data-sonner-toaster][data-theme='light'] {
   --normal-bg: theme(colors.white) !important;
   --normal-border: theme(colors.gray.200) !important;
   --normal-text: theme(colors.gray.700) !important;
 }
 
-[data-sonner-toaster][data-theme="light"] :not(.soft-color) {
+[data-sonner-toaster][data-theme='light'] :not(.soft-color) {
   --success-bg: theme(colors.success) !important;
   --success-border: theme(colors.white/ 20%) !important;
   --success-text: theme(colors.white / 95%) !important;
@@ -18,27 +18,25 @@
   --error-text: theme(colors.white / 95%) !important;
 }
 
-[data-sonner-toaster][data-theme="light"]
-  [data-sonner-toast][data-invert="true"] {
+[data-sonner-toaster][data-theme='light'] [data-sonner-toast][data-invert='true'] {
   --normal-bg: theme(colors.gray.800) !important;
   --normal-border: theme(colors.gray.600) !important;
   --normal-text: theme(colors.gray.200) !important;
 }
 
-[data-sonner-toaster][data-theme="dark"]
-  [data-sonner-toast][data-invert="true"] {
+[data-sonner-toaster][data-theme='dark'] [data-sonner-toast][data-invert='true'] {
   --normal-bg: theme(colors.dark.100) !important;
   --normal-border: theme(colors.dark.200) !important;
   --normal-text: theme(colors.dark.700) !important;
 }
 
-[data-sonner-toaster][data-theme="dark"] {
+[data-sonner-toaster][data-theme='dark'] {
   --normal-bg: theme(colors.dark.900) !important;
   --normal-border: theme(colors.dark.700) !important;
   --normal-text: theme(colors.dark.100) !important;
 }
 
-[data-sonner-toaster][data-theme="dark"] :not(.soft-color) {
+[data-sonner-toaster][data-theme='dark'] :not(.soft-color) {
   --success-bg: theme(colors.success-darker) !important;
   --success-border: theme(colors.black/ 15%) !important;
   --success-text: theme(colors.white / 90%) !important;
@@ -48,7 +46,7 @@
   --error-text: theme(colors.white / 90%) !important;
 }
 
-[data-sonner-toast][data-styled="true"] {
+[data-sonner-toast][data-styled='true'] {
   @apply text-sm;
 }
 

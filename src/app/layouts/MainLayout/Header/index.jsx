@@ -1,73 +1,163 @@
-// Import Dependencies
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import clsx from 'clsx';
-
-// Local Imports
-import SearchIcon from 'assets/dualicons/search.svg?react';
-import { SidebarToggleBtn } from 'components/shared/SidebarToggleBtn';
-import { Button } from 'components/ui';
-import { Notifications } from 'components/template/Notifications';
-import { RightSidebar } from 'components/template/RightSidebar';
-import { LanguageSelector } from 'components/template/LaguageSelector';
-import { Search } from 'components/template/Search';
-import { useThemeContext } from 'app/contexts/theme/context';
-
-// ----------------------------------------------------------------------
-
-function SlashIcon(props) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="20" aria-hidden="true" {...props}>
-      <path
-        fill="none"
-        stroke="currentColor"
-        d="M3.5.5h12c1.7 0 3 1.3 3 3v13c0 1.7-1.3 3-3 3h-12c-1.7 0-3-1.3-3-3v-13c0-1.7 1.3-3 3-3z"
-        opacity="0.4"
-      />
-      <path fill="currentColor" d="M11.8 6L8 15.1h-.9L10.8 6h1z" />
-    </svg>
-  );
-}
+/*
+import { Bell, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router';
 
 export function Header() {
-  const { cardSkin } = useThemeContext();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/login');
+  };
 
   return (
-    <header
-      className={clsx(
-        'app-header transition-content sticky top-0 z-20 flex h-[65px] shrink-0 items-center justify-between border-b border-gray-200 bg-white/80 px-[--margin-x] backdrop-blur backdrop-saturate-150 dark:border-dark-600',
-        cardSkin === 'shadow' ? 'dark:bg-dark-750/80' : 'dark:bg-dark-900/80'
-      )}>
-      <SidebarToggleBtn />
+    <header style={styles.header}>
+      <h2 style={styles.title}>Dashboard</h2>
 
-      <div className="flex items-center gap-2 ltr:-mr-1.5 rtl:-ml-1.5">
-        <Search
-          renderButton={(open) => (
-            <>
-              <Button
-                onClick={open}
-                unstyled
-                className="h-8 w-64 justify-between gap-2 rounded-full border border-gray-200 px-3 text-xs+ hover:border-gray-400 dark:border-dark-500 dark:hover:border-dark-400 max-sm:hidden">
-                <div className="flex items-center gap-2">
-                  <MagnifyingGlassIcon className="size-4" />
-                  <span className="text-gray-400 dark:text-dark-300">Search here...</span>
-                </div>
-                <SlashIcon />
-              </Button>
+      <div style={styles.right}>
+        {/* Notification *}
+        <div style={styles.iconWrapper}>
+          <Bell size={20} />
+          <span style={styles.badge}></span>
+        </div>
 
-              <Button
-                onClick={open}
-                variant="flat"
-                isIcon
-                className="relative size-9 rounded-full sm:hidden">
-                <SearchIcon className="size-6 text-gray-900 dark:text-dark-100" />
-              </Button>
-            </>
-          )}
-        />
-        <Notifications />
-        <RightSidebar />
-        <LanguageSelector />
+        {/* Logout Button *}
+        <button onClick={handleLogout} style={styles.logoutBtn}>
+          <LogOut size={18} />
+        </button>
       </div>
     </header>
   );
 }
+
+const styles = {
+  header: {
+    height: '60px',
+    background: '#ffffff',
+    borderBottom: '1px solid #E5E7EB',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '0 30px'
+  },
+
+  title: {
+    fontSize: '18px',
+    fontWeight: '600',
+    color: '#111827'
+  },
+
+  right: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '15px'
+  },
+
+  iconWrapper: {
+    position: 'relative',
+    cursor: 'pointer',
+    color: '#374151'
+  },
+
+  badge: {
+    position: 'absolute',
+    top: '-3px',
+    right: '-3px',
+    width: '8px',
+    height: '8px',
+    background: '#EF4444',
+    borderRadius: '50%'
+  },
+
+  logoutBtn: {
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    color: '#EF4444'
+  }
+};
+*/
+import { Bell, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router';
+
+export function Header() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.clear(); // clear auth
+    navigate('/login'); // redirect
+  };
+
+  return (
+    <header style={styles.header}>
+      {/* LEFT */}
+      <h2 style={styles.title}>Dashboard</h2>
+
+      {/* RIGHT */}
+      <div style={styles.right}>
+        {/* Notification */}
+        <div style={styles.iconWrapper}>
+          <Bell size={20} />
+          <span style={styles.badge}></span>
+        </div>
+
+        {/* Logout Button */}
+        <button style={styles.logoutBtn} onClick={handleLogout}>
+          <LogOut size={18} />
+        </button>
+      </div>
+    </header>
+  );
+}
+
+const styles = {
+  header: {
+    height: '60px',
+    background: '#ffffff',
+    borderBottom: '1px solid #E5E7EB',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '0 30px'
+  },
+
+  title: {
+    fontSize: '18px',
+    fontWeight: '600',
+    color: '#111827'
+  },
+
+  right: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '12px' // spacing between bell & logout
+  },
+
+  iconWrapper: {
+    position: 'relative',
+    cursor: 'pointer',
+    color: '#374151'
+  },
+
+  badge: {
+    position: 'absolute',
+    top: '-3px',
+    right: '-3px',
+    width: '8px',
+    height: '8px',
+    background: '#EF4444',
+    borderRadius: '50%'
+  },
+
+  logoutBtn: {
+    background: 'transparent',
+    border: '1px solid #EF4444',
+    color: '#EF4444',
+    padding: '5px 10px',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
+};

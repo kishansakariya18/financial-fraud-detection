@@ -3,7 +3,7 @@ html {
   @apply h-full [--surface-1:--colors-dark-450] [--surface-2:--colors-dark-500] [--surface-3:--colors-dark-600] [-webkit-tap-highlight-color:transparent] [text-rendering:optimizeLegibility];
 }
 
-html[data-card-skin="bordered"] {
+html[data-card-skin='bordered'] {
   @apply [--surface-1:--colors-dark-500] [--surface-2:--colors-dark-600] [--surface-3:--colors-dark-700];
 }
 
@@ -15,11 +15,11 @@ body {
   @apply h-full bg-gray-50 font-sans text-sm leading-5 text-gray-700 antialiased [text-rendering:optimizeLegibility] dark:bg-dark-900 dark:text-dark-200 dark:[color-scheme:dark];
 }
 
-[data-card-skin="bordered"] body {
+[data-card-skin='bordered'] body {
   @apply bg-white dark:bg-dark-900;
 }
 
-.dark[data-card-skin="bordered"] body {
+.dark[data-card-skin='bordered'] body {
   @apply bg-dark-900;
 }
 
@@ -121,6 +121,6 @@ input.hide-number-arrow::-webkit-inner-spin-button {
 }
 
 /* Firefox Hide input number arrow*/
-input[type="number"].hide-number-arrow {
+input[type='number'].hide-number-arrow {
   -moz-appearance: textfield;
 }

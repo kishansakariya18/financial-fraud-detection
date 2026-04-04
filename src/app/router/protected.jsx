@@ -7,7 +7,8 @@ import adminRoute from './routes/admin.route';
 import playerRoutes from './routes/player.route';
 import profileRoute from './routes/profile.route';
 import transactionRoute from './routes/transaction.route';
-import { Outlet } from 'react-router';
+import { Outlet } from 'react-router-dom';
+import Analytics from 'app/pages/dashboards/analytics';
 
 // ----------------------------------------------------------------------
 
@@ -28,7 +29,12 @@ const protectedRoutes = {
             ...dashboardRoute,
             ...adminRoute,
             ...playerRoutes,
-            ...transactionRoute
+            ...transactionRoute,
+
+            {
+              path: 'dashboards/analytics',
+              element: <Analytics />
+            }
           ]
         },
         ...profileRoute

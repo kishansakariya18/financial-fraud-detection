@@ -19,8 +19,7 @@
 }
 
 .steps.line-space:not(.is-vertical) .step:not(:last-child)::before {
-  @apply w-[calc(100%-var(--size)-calc(var(--space)*2))] 
-  ltr:left-[calc(50%+calc(var(--size)/2+var(--space)))] rtl:right-[calc(50%+calc(var(--size)/2+var(--space)))];
+  @apply w-[calc(100%-var(--size)-calc(var(--space)*2))] ltr:left-[calc(50%+calc(var(--size)/2+var(--space)))] rtl:right-[calc(50%+calc(var(--size)/2+var(--space)))];
 }
 
 .steps.is-vertical {

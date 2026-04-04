@@ -1,6 +1,5 @@
 .filepond--credits {
-  @apply /* hidden*/
-    !text-tiny !font-light !opacity-[.1];
+  @apply /* hidden*/ !text-tiny !font-light !opacity-[.1];
 }
 
 .fp-grid .filepond--item {

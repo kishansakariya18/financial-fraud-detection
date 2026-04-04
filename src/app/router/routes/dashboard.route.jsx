@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router';
+/*import { Navigate } from 'react-router';
 
 export const dashboardRoute = [
   {
@@ -6,7 +6,7 @@ export const dashboardRoute = [
     element: <Navigate to="/dashboards/home" replace />
   },
   {
-    path: 'dashboards',
+    path: '/dashboards/home',
     children: [
       {
         index: true,
@@ -22,6 +22,27 @@ export const dashboardRoute = [
         }
       }
     ]
+  }
+];
+
+export default dashboardRoute;
+*/
+
+import { Navigate } from 'react-router-dom';
+
+export const dashboardRoute = [
+  {
+    path: '/dashboards/home',
+    lazy: async () => {
+      const { default: AdminDashboard } = await import('../../pages/dashboards/home');
+      return {
+        Component: () => <AdminDashboard />
+      };
+    }
+  },
+  {
+    path: '/',
+    element: <Navigate to="/dashboards/home" replace />
   }
 ];
 

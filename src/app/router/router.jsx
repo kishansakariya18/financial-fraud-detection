@@ -1,6 +1,6 @@
 // Import Dependencies
-import { createBrowserRouter } from 'react-router';
-
+import { createBrowserRouter } from 'react-router-dom';
+import transactionRoute from './routes/transaction.route';
 // Local Imports
 import Root from 'app/layouts/Root';
 import RootErrorBoundary from 'app/pages/errors/RootErrorBoundary';
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
     Component: Root,
     hydrateFallbackElement: <SplashScreen />,
     ErrorBoundary: RootErrorBoundary,
-    children: [...authRoute, protectedRoutes, publicRoutes]
+    children: [...authRoute, protectedRoutes, transactionRoute, publicRoutes]
   }
 ]);
 

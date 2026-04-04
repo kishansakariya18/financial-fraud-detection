@@ -32,7 +32,7 @@ export function ThemeProvider({ children }) {
 
   const [settings, setSettings] = useLocalStorage('settings', {
     themeMode: initialState.themeMode,
-    themeLayout: initialState.themeLayout,
+    themeLayout: 'main-layout',
     cardSkin: initialState.cardSkin,
     isMonochrome: initialState.isMonochrome,
     darkColorScheme: initialState.darkColorScheme,
@@ -137,7 +137,7 @@ export function ThemeProvider({ children }) {
   const resetTheme = () => {
     setSettings({
       themeMode: initialState.themeMode,
-      themeLayout: initialState.themeLayout,
+      themeLayout: 'main-layout',
       isMonochrome: initialState.isMonochrome,
       darkColorScheme: initialState.darkColorScheme,
       lightColorScheme: initialState.lightColorScheme,

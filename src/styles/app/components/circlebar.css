@@ -3,13 +3,11 @@
 }
 
 .circlebar-active-path {
-  animation: circlebar-active 2s theme("transitionTimingFunction.elastic")
-    infinite;
+  animation: circlebar-active 2s theme('transitionTimingFunction.elastic') infinite;
 }
 
 .circlebar-indeterminate-wrapper {
-  animation: 2s linear 0s infinite normal none running
-    circlebar-indeterminate-wrapper;
+  animation: 2s linear 0s infinite normal none running circlebar-indeterminate-wrapper;
 }
 
 .circlebar-indeterminate {

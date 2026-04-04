@@ -1,6 +1,7 @@
 // Import Dependencies
 import { Outlet } from 'react-router';
 import { useState } from 'react';
+import BottomNav from '../../components/shared/BottomNav';
 
 // Local Imports
 import { useSidebarContext } from 'app/contexts/sidebar/context';
@@ -46,5 +47,11 @@ export function AppLayout() {
 
   if (!isMounted) return null;
 
-  return <Outlet />;
+  //return <Outlet />;
+  return (
+    <>
+      <Outlet />
+      <BottomNav /> {/* 👈 always visible */}
+    </>
+  );
 }

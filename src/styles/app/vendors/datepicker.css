@@ -1,4 +1,4 @@
-@import "flatpickr/dist/themes/light.css";
+@import 'flatpickr/dist/themes/light.css';
 
 .flatpickr-calendar {
   @apply w-auto min-w-[240px] max-w-[294px] shadow-lg dark:shadow-none;
@@ -71,9 +71,7 @@ span.flatpickr-weekday {
 .flatpickr-weekdays,
 span.flatpickr-weekday,
 .flatpickr-months .flatpickr-month,
-.flatpickr-current-month
-  .flatpickr-monthDropdown-months
-  .flatpickr-monthDropdown-month,
+.flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month,
 .flatpickr-current-month .flatpickr-monthDropdown-months {
   @apply bg-gray-150 text-gray-600 dark:bg-dark-500 dark:text-dark-100;
 }

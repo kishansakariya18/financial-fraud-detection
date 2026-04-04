@@ -2,7 +2,7 @@
 import { Outlet } from 'react-router';
 
 // Local Imports
-import { Sidebar } from './Sidebar';
+//import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 
 // ----------------------------------------------------------------------
@@ -14,7 +14,6 @@ export default function Sideblock() {
       <main className="main-content transition-content grid grid-cols-1">
         <Outlet />
       </main>
-      <Sidebar />
     </>
   );
 }

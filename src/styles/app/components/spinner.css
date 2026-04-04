@@ -7,5 +7,5 @@
 }
 
 .spinner.is-elastic {
-  animation-timing-function: theme("transitionTimingFunction.elastic");
+  animation-timing-function: theme('transitionTimingFunction.elastic');
 }

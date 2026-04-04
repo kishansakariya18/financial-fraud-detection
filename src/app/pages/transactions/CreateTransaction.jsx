@@ -20,7 +20,7 @@ import { useSelector } from 'react-redux';
 import { TRANSACTION_TYPES, PAYMENT_METHODS, TRANSACTION_CATEGORIES } from './constants';
 import TransactionService from 'services/transactions.services';
 import dayjs from 'dayjs';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 const CreateTransaction = () => {
   const [loading, setLoading] = useState(false);
@@ -29,7 +29,7 @@ const CreateTransaction = () => {
   const navigate = useNavigate();
 
   const breadcrumbItem = [
-    { title: t('transactions'), path: '/transactions' },
+    { title: t('transactions'), path: '/dashboard/transactions' },
     { title: t('create') }
   ];
 
@@ -48,7 +48,7 @@ const CreateTransaction = () => {
     }
   });
 
-  const onSubmit = async (data) => {
+  /*const onSubmit = async (data) => {
     try {
       setLoading(true);
       const payload = {
@@ -63,6 +63,73 @@ const CreateTransaction = () => {
       toast.success(response.message || 'Transaction created successfully');
       navigate('/transactions');
     } catch (error) {
+      toast.error(error?.response?.data?.message || 'Failed to create transaction');
+    } finally {
+      setLoading(false);
+    }
+  };*/
+  const onSubmit = async (data) => {
+    try {
+      setLoading(true);
+
+      // =========================
+      // 1. CALL ML API
+      // =========================
+      let fraudScore = 0;
+      let isFraud = false;
+
+      try {
+        const mlRes = await fetch('http://127.0.0.1:8000/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            amount: Number(data.amount),
+            type: data.type,
+            paymentMethod: data.paymentMethod || 'CARD'
+          })
+        });
+
+        const prediction = await mlRes.json();
+
+        console.log('ML RESPONSE:', prediction);
+
+        fraudScore = prediction?.score || 0;
+        isFraud = prediction?.isFraud || false;
+      } catch (mlError) {
+        console.error('ML API FAILED:', mlError);
+        toast.warning('ML service not available, saving without fraud score');
+      }
+
+      // =========================
+      // 2. PREPARE PAYLOAD
+      // =========================
+      const payload = {
+        ...data,
+        userId: userData?.UserID || userData?.id,
+
+        // 🔥 REAL FRAUD DATA
+        fraudScore,
+        isFraud,
+
+        // OPTIONAL STATUS
+        fraudStatus: isFraud ? 'HIGH_RISK' : 'SAFE',
+
+        transactionDate: new Date(data.transactionDate).toISOString()
+      };
+
+      // =========================
+      // 3. SAVE TRANSACTION
+      // =========================
+      const response = await TransactionService.createTransaction(payload);
+
+      toast.success(response.message || 'Transaction created successfully');
+
+      // =========================
+      // 4. REDIRECT
+      // =========================
+      navigate('/transactions/create');
+    } catch (error) {
+      console.error(error);
       toast.error(error?.response?.data?.message || 'Failed to create transaction');
     } finally {
       setLoading(false);

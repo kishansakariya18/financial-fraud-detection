@@ -10,7 +10,7 @@ import TableCard from 'components/ui/custom/TableCard';
 import ContentWrapper from 'components/ui/custom/ContentWrapper';
 
 import PlayerService from 'services/users.services';
-import { playerTransactionsResponseMapper } from '../helper';
+//import { playerTransactionsResponseMapper } from '../helper';
 import { getQueryParams, isEmptyObject } from 'utils/custom.utilities';
 import { useTranslation } from 'react-i18next';
 import useTable from 'components/ui/useTable';
@@ -26,7 +26,7 @@ export default function PlayerTransactions({
   const playerId = initialPlayerId || params.playerId;
   const pageTitle = t('player') + ' ' + t('transactions');
   const queryParams = useMemo(() => getQueryParams(searchParams), [searchParams]);
-
+  const playerTransactionsResponseMapper = (data) => data;
   const fetchPlayerTransactions = useCallback(async () => {
     const pageIndex = isNaN(queryParams.pageIndex) ? DEFAULT_PAGE_INDEX : +queryParams.pageIndex;
     const pageSize = isNaN(queryParams.pageSize) ? DEFAULT_PER_PAGE_RECORD : +queryParams.pageSize;
