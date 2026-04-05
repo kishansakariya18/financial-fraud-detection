@@ -31,12 +31,14 @@ export default function Login() {
         AuthAction.login({
           userData: user,
           permissions: [],
-          isMasterAdmin: user.role === 'ADMIN' ? 1 : 0
+          isMasterAdmin: String(user.role || '').toUpperCase() === 'ADMIN' ? 1 : 0
         })
       );
 
       toast.success('Login successful');
-      navigate(state?.path || '/');
+      const defaultPath =
+        String(user?.role || '').toUpperCase() === 'ADMIN' ? '/admin' : '/dashboards/home';
+      navigate(state?.path || defaultPath);
       return true;
     },
     [dispatch, navigate, state?.path]
@@ -44,7 +46,16 @@ export default function Login() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate(state?.path || '/');
+      const userJson = localStorage.getItem(LOCAL_STORAGE.USER_DATA);
+      let role;
+      try {
+        role = userJson ? JSON.parse(userJson)?.role : null;
+      } catch {
+        role = null;
+      }
+      const defaultPath =
+        String(role || '').toUpperCase() === 'ADMIN' ? '/admin' : '/dashboards/home';
+      navigate(state?.path || defaultPath);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn, state?.path]);

@@ -1,6 +1,7 @@
 // Local Imports
 import { DynamicLayout } from 'app/layouts/DynamicLayout';
 import AuthGuard from 'middleware/AuthGuard';
+import AdminOnlyGuard from './AdminOnlyGuard';
 import AdminRouteGuard from './AdminRouteGuard';
 import dashboardRoute from './routes/dashboard.route';
 import adminRoute from './routes/admin.route';
@@ -17,6 +18,19 @@ const protectedRoutes = {
   id: 'protected',
   Component: AuthGuard,
   children: [
+    {
+      path: '/admin',
+      Component: AdminOnlyGuard,
+      children: [
+        {
+          index: true,
+          lazy: async () => {
+            const { default: AdminDashboard } = await import('../pages/admin/AdminDashboard');
+            return { Component: AdminDashboard };
+          }
+        }
+      ]
+    },
     // The dynamic layout supports both the main layout and the sideblock.
     {
       Component: DynamicLayout,

@@ -5,6 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { LOCAL_STORAGE } from 'constants/app.constant';
 import { useLocation, useNavigate } from 'react-router';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
@@ -39,13 +40,24 @@ export default function LoginForm({
   const navigate = useNavigate();
   const { state } = useLocation();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const userData = useSelector((state) => state.auth.userData);
 
   const { t } = useTranslation();
   const [show, { toggle }] = useDisclosure();
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate(state?.path || '/');
+      const role = userData?.role;
+      let r = role;
+      if (!r) {
+        try {
+          r = JSON.parse(localStorage.getItem(LOCAL_STORAGE.USER_DATA) || 'null')?.role;
+        } catch {
+          r = null;
+        }
+      }
+      const defaultPath = String(r || '').toUpperCase() === 'ADMIN' ? '/admin' : '/dashboards/home';
+      navigate(state?.path || defaultPath);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
