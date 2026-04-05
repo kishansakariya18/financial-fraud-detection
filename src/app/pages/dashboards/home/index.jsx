@@ -334,7 +334,7 @@ import { useNavigate } from 'react-router';
 import { columns } from '../../transactions/columns';
 import TableCard from 'components/ui/custom/TableCard';
 import useTable from 'components/ui/useTable';
-import { TRANSACTION_CATEGORIES } from '../../transactions/constants';
+import { getTransactionCategoryLabel } from '../../transactions/transactionCategoryLabel';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -391,8 +391,13 @@ export default function Home() {
       );
     }
 
-    const trendingCategoryLabel =
-      TRANSACTION_CATEGORIES.find((c) => c.value === trendingCategoryId)?.label || 'N/A';
+    const trendingCategoryLabel = trendingCategoryId
+      ? getTransactionCategoryLabel(
+          transactions.find((tr) => tr.categoryId === trendingCategoryId) || {
+            categoryId: trendingCategoryId
+          }
+        )
+      : 'N/A';
 
     return {
       monthlyExpense: monthlyExpense.toFixed(2),

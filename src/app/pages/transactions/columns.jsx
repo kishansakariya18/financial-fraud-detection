@@ -4,12 +4,8 @@ import { createColumnHelper } from '@tanstack/react-table';
 // Local Imports
 import { RowActions } from './RowActions';
 import { IdCell, DateCell, BoldCell, BadgeCell } from 'components/custom/table/cell';
-import {
-  TRANSACTION_TYPES,
-  PAYMENT_METHODS,
-  FRAUD_STATUS,
-  TRANSACTION_CATEGORIES
-} from './constants';
+import { TRANSACTION_TYPES, PAYMENT_METHODS, FRAUD_STATUS } from './constants';
+import { getTransactionCategoryLabel } from './transactionCategoryLabel';
 
 // ----------------------------------------------------------------------
 
@@ -27,13 +23,9 @@ export const columns = [
     id: 'category',
     label: 'Category',
     header: 'Category',
-    cell: ({ row }) => {
-      const catId = row.original.categoryId;
-      const category = TRANSACTION_CATEGORIES.find((c) => c.value === catId);
-      return (
-        <div className="font-medium">{category?.label || row.original.categoryLabel || catId}</div>
-      );
-    },
+    cell: ({ row }) => (
+      <div className="font-medium">{getTransactionCategoryLabel(row.original)}</div>
+    ),
     enableSorting: false
   }),
   columnHelper.accessor((row) => row.transactionDate, {

@@ -6,7 +6,7 @@ const TransactionService = {
     try {
       const endPoint = apiConfig.endPoints.USER.ALL_TRANSACTION_LIST;
       const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
-      const response = await sendRequest({
+      return await sendRequest({
         url: apiURL,
         method: 'POST',
         headers: {
@@ -14,9 +14,34 @@ const TransactionService = {
         },
         body: data
       });
-      return response;
     } catch (error) {
       console.log('Error from createTransaction', error);
+      throw error;
+    }
+  },
+
+  /** GET /transactions — same resource as list; fraud fields are filled by backend after async processing */
+  getTransactions: async (params = {}) => {
+    const endPoint = apiConfig.endPoints.USER.ALL_TRANSACTION_LIST;
+    const apiURL = apiConfig.baseURL.API_BASE_URL + endPoint;
+    const query = {
+      page: 1,
+      limit: 10,
+      sortBy: 'transactionDate',
+      sortOrder: 'desc',
+      ...params
+    };
+    try {
+      return await sendRequest({
+        url: apiURL,
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        params: query
+      });
+    } catch (error) {
+      console.log('Error from getTransactions', error);
       throw error;
     }
   }

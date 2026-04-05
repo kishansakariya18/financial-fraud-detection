@@ -1,11 +1,7 @@
 import { Badge } from 'components/ui';
 import { getDateInUTCToTimeZone } from 'helpers/functions';
-import {
-  FRAUD_STATUS,
-  TRANSACTION_TYPES,
-  TRANSACTION_CATEGORIES,
-  PAYMENT_METHODS
-} from './constants';
+import { FRAUD_STATUS, TRANSACTION_TYPES, PAYMENT_METHODS } from './constants';
+import { getTransactionCategoryLabel } from './transactionCategoryLabel';
 import {
   CurrencyDollarIcon,
   CalendarIcon,
@@ -104,11 +100,7 @@ export function TransactionDetails({ transaction }) {
             label="User ID"
             value={data.userId?.toString() || data.userId}
           />
-          <DetailItem
-            icon={TagIcon}
-            label="Category"
-            value={getLabel(data.categoryId, TRANSACTION_CATEGORIES)}
-          />
+          <DetailItem icon={TagIcon} label="Category" value={getTransactionCategoryLabel(data)} />
           <DetailItem
             icon={CreditCardIcon}
             label="Payment Method"

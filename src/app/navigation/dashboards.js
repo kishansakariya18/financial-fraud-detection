@@ -1,5 +1,6 @@
 import DashboardsIcon from 'assets/dualicons/dashboards.svg?react';
 import MonitorIcon from 'assets/nav-icons/monitor.svg?react';
+import { RectangleStackIcon } from '@heroicons/react/24/outline';
 import { NAV_TYPE_ITEM, NAV_TYPE_ROOT } from 'constants/app.constant';
 import { users } from './users';
 
@@ -26,6 +27,14 @@ export const dashboards = () => ({
       title: 'Transactions',
       transKey: 'nav.users.transactions',
       Icon: MonitorIcon
+    },
+    {
+      id: 'categories',
+      path: '/dashboards/categories',
+      type: NAV_TYPE_ITEM,
+      title: 'Categories',
+      transKey: 'nav.dashboards.categories',
+      Icon: RectangleStackIcon
     },
     users
   ]

@@ -34,8 +34,9 @@ export const profileRoute = [
       {
         path: 'player-fund-password',
         lazy: async () => {
-          const { default: PlayerFundPassword } =
-            await import('../../pages/profile/PlayerFundPassword');
+          const { default: PlayerFundPassword } = await import(
+            '../../pages/profile/PlayerFundPassword'
+          );
           return {
             Component: () => (
               <PrivateRoute allowedPlatforms={[PLATFORM_TYPE.B2C]}>

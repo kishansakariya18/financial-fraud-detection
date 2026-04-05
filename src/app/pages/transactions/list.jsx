@@ -42,7 +42,7 @@ export default function TransactionsList() {
       return {
         status: 200,
         data: response.data,
-        totalRecords: response?.pagination?.totalRecords || 0
+        totalRecords: response?.pagination?.total ?? response?.pagination?.totalRecords ?? 0
       };
     }
     return { status: result.status, error: result.error };

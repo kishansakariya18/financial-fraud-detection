@@ -42,7 +42,18 @@ export const apiConfig = {
       DETAIL: '/notifications/admin/audit-logs/view/:Id'
     },
     USER: {
-      ALL_TRANSACTION_LIST: '/transactions'
+      ALL_TRANSACTION_LIST: '/transactions',
+      CATEGORIES: '/categories',
+      /** Optional: backend may expose system/built-in categories here; otherwise derived from list payload */
+      CATEGORIES_SYSTEM: '/categories/system'
+    },
+    /** User-scoped fraud / transaction analytics (base path /api/v1/analytics) */
+    ANALYTICS: {
+      INCOME_VS_EXPENSE: '/analytics/income-vs-expense',
+      TRANSACTIONS: '/analytics/transactions',
+      FRAUD: '/analytics/fraud',
+      DASHBOARD: '/analytics/dashboard',
+      REPORT: '/analytics/report'
     },
     ADMIN_USER: {
       ADMIN_LIST: '/admin/admin/admin/list',

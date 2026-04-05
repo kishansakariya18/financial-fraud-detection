@@ -128,7 +128,7 @@ const navItems = [
 */
 
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, List, PlusCircle, BarChart2, User } from 'lucide-react';
+import { Home, List, PlusCircle, BarChart2, User, Tags } from 'lucide-react';
 
 export default function BottomNav() {
   const navigate = useNavigate();
@@ -139,12 +139,12 @@ export default function BottomNav() {
   const navItems = [
     {
       icon: <Home size={22} />,
-      label: 'Dashboard',
+      label: 'Dashboards',
       path: '/dashboards/home'
     },
     {
       icon: <List size={22} />,
-      label: 'Transactions',
+      label: 'Transaction',
       path: '/dashboards/transactions'
     },
     {
@@ -156,6 +156,11 @@ export default function BottomNav() {
       icon: <BarChart2 size={22} />,
       label: 'Graphs',
       path: '/dashboards/analytics'
+    },
+    {
+      icon: <Tags size={22} />,
+      label: 'Category',
+      path: '/dashboards/categories'
     },
     {
       icon: <User size={22} />,

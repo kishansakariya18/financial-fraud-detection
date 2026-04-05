@@ -31,8 +31,9 @@ export const playerRoutes = [
       {
         path: 'details',
         lazy: async () => {
-          const { ViewDetails: PlayerDetails } =
-            await import('../../pages/users/player/ViewDetails');
+          const { ViewDetails: PlayerDetails } = await import(
+            '../../pages/users/player/ViewDetails'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.USER.LIST}>
@@ -58,8 +59,9 @@ export const playerRoutes = [
       {
         path: 'transactions',
         lazy: async () => {
-          const { default: TransactionList } =
-            await import('../../pages/users/player/transaction-list/list');
+          const { default: TransactionList } = await import(
+            '../../pages/users/player/transaction-list/list'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.USER.TRANSACTION_LIST}>
@@ -72,8 +74,9 @@ export const playerRoutes = [
       {
         path: 'login-history',
         lazy: async () => {
-          const { default: LoginHistory } =
-            await import('../../pages/users/player/login-history/list');
+          const { default: LoginHistory } = await import(
+            '../../pages/users/player/login-history/list'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.USER.VIEW_LOGIN_HISTORY}>
@@ -102,8 +105,9 @@ export const playerRoutes = [
       {
         path: 'player-notes',
         lazy: async () => {
-          const { default: PlayerNoteList } =
-            await import('../../pages/users/player/player-notes/list');
+          const { default: PlayerNoteList } = await import(
+            '../../pages/users/player/player-notes/list'
+          );
           return {
             Component: () => (
               <PrivateRoute permission={PERMISSIONS.USER.COMMENT_VIEW}>
@@ -116,8 +120,9 @@ export const playerRoutes = [
       {
         path: 'referrals',
         lazy: async () => {
-          const { default: ReferralList } =
-            await import('../../pages/users/player/referral-list/list');
+          const { default: ReferralList } = await import(
+            '../../pages/users/player/referral-list/list'
+          );
           return {
             Component: () => (
               <PrivateRoute

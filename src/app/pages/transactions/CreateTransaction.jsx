@@ -12,24 +12,70 @@ import { Controller, useForm } from 'react-hook-form';
 import { Listbox } from 'components/shared/form/Listbox';
 import { Button, Input } from 'components/ui';
 import { createTransactionSchema } from './schema';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Breadcrumbs } from 'components/shared/Breadcrumbs';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { TRANSACTION_TYPES, PAYMENT_METHODS, TRANSACTION_CATEGORIES } from './constants';
+import { TRANSACTION_TYPES, PAYMENT_METHODS } from './constants';
 import TransactionService from 'services/transactions.services';
+import CategoryService, {
+  getCategoryEntityId,
+  isSystemCategoryItem,
+  mergeCategoryListsFromApiResponse
+} from 'services/categories.services';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 
 const CreateTransaction = () => {
   const [loading, setLoading] = useState(false);
+  const [categoryOptions, setCategoryOptions] = useState([]);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
   const { t } = useTranslation();
   const userData = useSelector((state) => state.auth.userData);
   const navigate = useNavigate();
 
+  const loadCategories = useCallback(async () => {
+    setCategoriesLoading(true);
+    try {
+      const res = await CategoryService.getCategories();
+      if (res.status !== 200) {
+        toast.error(res.error || res.response?.message || t('category_load_error'));
+        setCategoryOptions([]);
+        return;
+      }
+      const merged = mergeCategoryListsFromApiResponse(res);
+      const options = merged
+        .map((c) => {
+          const id = getCategoryEntityId(c);
+          if (id == null) return null;
+          const name = (c.name && String(c.name).trim()) || String(id);
+          const system = isSystemCategoryItem(c);
+          const label = system ? `${name} (${t('system_category_badge')})` : name;
+          return { value: String(id), label, isSystem: system };
+        })
+        .filter(Boolean)
+        .sort((a, b) => {
+          if (a.isSystem !== b.isSystem) return a.isSystem ? 1 : -1;
+          return a.label.localeCompare(b.label, undefined, { sensitivity: 'base' });
+        })
+        .map(({ value, label }) => ({ value, label }));
+      setCategoryOptions(options);
+    } catch (e) {
+      console.error(e);
+      toast.error(t('category_load_error'));
+      setCategoryOptions([]);
+    } finally {
+      setCategoriesLoading(false);
+    }
+  }, [t]);
+
+  useEffect(() => {
+    loadCategories();
+  }, [loadCategories]);
+
   const breadcrumbItem = [
-    { title: t('transactions'), path: '/dashboard/transactions' },
+    { title: t('transactions'), path: '/dashboards/transactions' },
     { title: t('create') }
   ];
 
@@ -48,86 +94,39 @@ const CreateTransaction = () => {
     }
   });
 
-  /*const onSubmit = async (data) => {
-    try {
-      setLoading(true);
-      const payload = {
-        ...data,
-        userId: userData?.UserID || userData?.id, // Use UserID or id based on authentication structure
-        fraudStatus: 'PENDING',
-        fraudScore: 0,
-        transactionDate: data.transactionDate.toISOString()
-      };
-
-      const response = await TransactionService.createTransaction(payload);
-      toast.success(response.message || 'Transaction created successfully');
-      navigate('/transactions');
-    } catch (error) {
-      toast.error(error?.response?.data?.message || 'Failed to create transaction');
-    } finally {
-      setLoading(false);
-    }
-  };*/
   const onSubmit = async (data) => {
     try {
       setLoading(true);
 
-      // =========================
-      // 1. CALL ML API
-      // =========================
-      let fraudScore = 0;
-      let isFraud = false;
-
-      try {
-        const mlRes = await fetch('http://127.0.0.1:8000/predict', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            amount: Number(data.amount),
-            type: data.type,
-            paymentMethod: data.paymentMethod || 'CARD'
-          })
-        });
-
-        const prediction = await mlRes.json();
-
-        console.log('ML RESPONSE:', prediction);
-
-        fraudScore = prediction?.score || 0;
-        isFraud = prediction?.isFraud || false;
-      } catch (mlError) {
-        console.error('ML API FAILED:', mlError);
-        toast.warning('ML service not available, saving without fraud score');
-      }
-
-      // =========================
-      // 2. PREPARE PAYLOAD
-      // =========================
       const payload = {
         ...data,
         userId: userData?.UserID || userData?.id,
-
-        // 🔥 REAL FRAUD DATA
-        fraudScore,
-        isFraud,
-
-        // OPTIONAL STATUS
-        fraudStatus: isFraud ? 'HIGH_RISK' : 'SAFE',
-
+        categoryId: data.categoryId != null ? String(data.categoryId) : data.categoryId,
         transactionDate: new Date(data.transactionDate).toISOString()
       };
 
-      // =========================
-      // 3. SAVE TRANSACTION
-      // =========================
-      const response = await TransactionService.createTransaction(payload);
+      const createResult = await TransactionService.createTransaction(payload);
 
-      toast.success(response.message || 'Transaction created successfully');
+      if (createResult.status !== 200 && createResult.status !== 201) {
+        toast.error(
+          createResult.error ||
+            createResult.response?.message ||
+            (typeof createResult.response === 'string' ? createResult.response : '') ||
+            'Failed to create transaction'
+        );
+        return;
+      }
 
-      // =========================
-      // 4. REDIRECT
-      // =========================
-      navigate('/transactions/create');
+      toast.success(createResult.response?.message || t('success'));
+
+      await TransactionService.getTransactions({
+        page: 1,
+        limit: 10,
+        sortBy: 'transactionDate',
+        sortOrder: 'desc'
+      });
+
+      navigate('/dashboards/transactions');
     } catch (error) {
       console.error(error);
       toast.error(error?.response?.data?.message || 'Failed to create transaction');
@@ -181,14 +180,25 @@ const CreateTransaction = () => {
               <Controller
                 render={({ field }) => (
                   <Listbox
-                    data={TRANSACTION_CATEGORIES}
-                    value={TRANSACTION_CATEGORIES.find((cat) => cat.value === field.value) || null}
-                    onChange={(val) => field.onChange(val.value)}
+                    data={categoryOptions}
+                    value={
+                      categoryOptions.find(
+                        (cat) => String(cat.value) === String(field.value ?? '')
+                      ) || null
+                    }
+                    onChange={(val) => field.onChange(val?.value != null ? String(val.value) : '')}
                     name={field.name}
                     label={t('category')}
-                    placeholder={t('select') + ' ' + t('category')}
+                    placeholder={
+                      categoriesLoading
+                        ? t('loading_categories')
+                        : categoryOptions.length === 0
+                          ? t('category_select_none_available')
+                          : t('select') + ' ' + t('category')
+                    }
                     displayField="label"
                     error={errors?.categoryId?.message}
+                    disabled={categoriesLoading}
                   />
                 )}
                 control={control}
@@ -256,7 +266,7 @@ const CreateTransaction = () => {
               className="min-w-[7rem]"
               color="primary"
               loading={loading}
-              disabled={loading}>
+              disabled={loading || categoriesLoading || categoryOptions.length === 0}>
               {t('create')}
             </Button>
           </div>
