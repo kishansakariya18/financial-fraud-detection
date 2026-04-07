@@ -5,7 +5,7 @@ import { loginSchema } from 'components/sections/auth/schema';
 import { useTranslation } from 'react-i18next';
 import { useCallback, useEffect } from 'react';
 import { LOCAL_STORAGE } from 'constants/app.constant';
-import { useLocation, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { AuthAction } from 'store/admin-slice/AuthSlice';
 import { toast } from 'sonner';
@@ -14,7 +14,6 @@ import { toast } from 'sonner';
 
 export default function Login() {
   const { t } = useTranslation();
-  const { state } = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoggedIn = useSelector((state) => state.auth?.isLoggedIn);
@@ -38,10 +37,13 @@ export default function Login() {
       toast.success('Login successful');
       const defaultPath =
         String(user?.role || '').toUpperCase() === 'ADMIN' ? '/admin' : '/dashboards/home';
-      navigate(state?.path || defaultPath);
+
+      console.log('defaultPath: ', defaultPath);
+
+      navigate(defaultPath);
       return true;
     },
-    [dispatch, navigate, state?.path]
+    [dispatch, navigate]
   );
 
   useEffect(() => {
@@ -55,10 +57,10 @@ export default function Login() {
       }
       const defaultPath =
         String(role || '').toUpperCase() === 'ADMIN' ? '/admin' : '/dashboards/home';
-      navigate(state?.path || defaultPath);
+      navigate(defaultPath);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoggedIn, state?.path]);
+  }, [isLoggedIn]);
 
   return (
     <AuthLayout title="Login">
