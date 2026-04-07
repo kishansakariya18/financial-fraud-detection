@@ -57,7 +57,8 @@ export const apiConfig = {
     },
     /** Platform admin (role ADMIN) — fraud product admin dashboard */
     ADMIN_FRAUD: {
-      DASHBOARD: '/admin/dashboard'
+      DASHBOARD: '/admin/dashboard',
+      USERS: '/admin/users'
     },
     ADMIN_USER: {
       ADMIN_LIST: '/admin/admin/admin/list',

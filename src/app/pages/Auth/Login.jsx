@@ -5,10 +5,11 @@ import { loginSchema } from 'components/sections/auth/schema';
 import { useTranslation } from 'react-i18next';
 import { useCallback, useEffect } from 'react';
 import { LOCAL_STORAGE } from 'constants/app.constant';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { AuthAction } from 'store/admin-slice/AuthSlice';
 import { toast } from 'sonner';
+import { getPostLoginPath } from 'utils/postLoginRedirect';
 
 // ----------------------------------------------------------------------
 
@@ -16,7 +17,8 @@ export default function Login() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLoggedIn = useSelector((state) => state.auth?.isLoggedIn);
+  const { state } = useLocation();
+  const isLoggedIn = useSelector((s) => s.auth?.isLoggedIn);
 
   const handleLoginSuccess = useCallback(
     async (apiResponse) => {
@@ -35,32 +37,24 @@ export default function Login() {
       );
 
       toast.success('Login successful');
-      const defaultPath =
-        String(user?.role || '').toUpperCase() === 'ADMIN' ? '/admin' : '/dashboards/home';
-
-      console.log('defaultPath: ', defaultPath);
-
-      navigate(defaultPath);
+      const target = getPostLoginPath(user, state);
+      navigate(target, { replace: true });
       return true;
     },
-    [dispatch, navigate]
+    [dispatch, navigate, state]
   );
 
   useEffect(() => {
-    if (isLoggedIn) {
-      const userJson = localStorage.getItem(LOCAL_STORAGE.USER_DATA);
-      let role;
-      try {
-        role = userJson ? JSON.parse(userJson)?.role : null;
-      } catch {
-        role = null;
-      }
-      const defaultPath =
-        String(role || '').toUpperCase() === 'ADMIN' ? '/admin' : '/dashboards/home';
-      navigate(defaultPath);
+    if (!isLoggedIn) return;
+    let storedUser = null;
+    try {
+      storedUser = JSON.parse(localStorage.getItem(LOCAL_STORAGE.USER_DATA) || 'null');
+    } catch {
+      storedUser = null;
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoggedIn]);
+    const target = getPostLoginPath(storedUser, state);
+    navigate(target, { replace: true });
+  }, [isLoggedIn, navigate, state]);
 
   return (
     <AuthLayout title="Login">

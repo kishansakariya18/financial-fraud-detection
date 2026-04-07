@@ -9,6 +9,7 @@ import { LOCAL_STORAGE } from 'constants/app.constant';
 import { useLocation, useNavigate } from 'react-router';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { getPostLoginPath } from 'utils/postLoginRedirect';
 
 // Local Imports
 import { Button, Card, Checkbox, Input } from 'components/ui';
@@ -39,28 +40,24 @@ export default function LoginForm({
 
   const navigate = useNavigate();
   const { state } = useLocation();
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const userData = useSelector((state) => state.auth.userData);
+  const isLoggedIn = useSelector((reduxState) => reduxState.auth.isLoggedIn);
+  const userData = useSelector((reduxState) => reduxState.auth.userData);
 
   const { t } = useTranslation();
   const [show, { toggle }] = useDisclosure();
 
   useEffect(() => {
-    if (isLoggedIn) {
-      const role = userData?.role;
-      let r = role;
-      if (!r) {
-        try {
-          r = JSON.parse(localStorage.getItem(LOCAL_STORAGE.USER_DATA) || 'null')?.role;
-        } catch {
-          r = null;
-        }
+    if (!isLoggedIn) return;
+    let u = userData;
+    if (!u?.role) {
+      try {
+        u = JSON.parse(localStorage.getItem(LOCAL_STORAGE.USER_DATA) || 'null');
+      } catch {
+        u = null;
       }
-      const defaultPath = String(r || '').toUpperCase() === 'ADMIN' ? '/admin' : '/dashboards/home';
-      navigate(state?.path || defaultPath);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    navigate(getPostLoginPath(u, state), { replace: true });
+  }, [isLoggedIn, userData, navigate, state]);
 
   const submitHandler = async (data) => {
     await authService

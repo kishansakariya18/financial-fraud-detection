@@ -1,13 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import { useNavigate } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'sonner';
-import { ArrowRightOnRectangleIcon, HomeIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 
 import { Button, Spinner } from 'components/ui';
-import { LOCAL_STORAGE } from 'constants/app.constant';
-import { AuthAction } from 'store/admin-slice/AuthSlice';
 import AdminDashboardService from 'services/adminDashboard.service';
 import { chartJsToComboRows, chartJsToNameValue } from 'utils/analyticsCharts';
 import {
@@ -174,10 +170,6 @@ function ActiveUsersChart({ chartJs }) {
 }
 
 export default function AdminDashboard() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const userData = useSelector((state) => state.auth.userData);
-
   const [loading, setLoading] = useState(true);
   const [payload, setPayload] = useState(null);
   const [startDate, setStartDate] = useState(() =>
@@ -216,164 +208,127 @@ export default function AdminDashboard() {
     load();
   }, [load]);
 
-  const handleLogout = () => {
-    localStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN);
-    localStorage.removeItem(LOCAL_STORAGE.USER_DATA);
-    localStorage.removeItem(LOCAL_STORAGE.IS_MASTER_ADMIN);
-    localStorage.removeItem(LOCAL_STORAGE.PERMISSIONS);
-    localStorage.removeItem(LOCAL_STORAGE.AUTH_EMAIL);
-    dispatch(AuthAction.logout());
-    navigate('/login', { replace: true });
-  };
-
   const kpis = payload?.kpis;
   const charts = payload?.charts;
   const meta = payload?.meta;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-dark-900">
-      <header className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 py-4 shadow-sm dark:border-dark-600 dark:bg-dark-800">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-gray-900 dark:text-dark-50">Admin panel</h1>
-            <p className="text-sm text-gray-500 dark:text-dark-400">
-              {userData?.email ? `Signed in as ${userData.email}` : 'Fraud platform overview'}
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <Button
-              variant="outlined"
-              className="gap-2"
-              onClick={() => navigate('/dashboards/home')}>
-              <HomeIcon className="size-4" />
-              User app
-            </Button>
-            <Button color="primary" className="gap-2" loading={loading} onClick={load}>
-              <ArrowPathIcon className="size-4" />
-              Refresh
-            </Button>
-            <Button
-              variant="flat"
-              className="gap-2 text-red-600 dark:text-red-400"
-              onClick={handleLogout}>
-              <ArrowRightOnRectangleIcon className="size-4" />
-              Log out
-            </Button>
-          </div>
+    <main className="mx-auto max-w-7xl px-4 py-8">
+      <div className="mb-6 flex flex-wrap items-center justify-end gap-2">
+        <Button color="primary" className="gap-2" loading={loading} onClick={load}>
+          <ArrowPathIcon className="size-4" />
+          Refresh data
+        </Button>
+      </div>
+      <div className="mb-6 flex flex-wrap items-end gap-4 rounded-xl border border-gray-200 bg-white p-4 dark:border-dark-600 dark:bg-dark-800">
+        <div>
+          <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-dark-300">
+            Start
+          </label>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-dark-500 dark:bg-dark-700"
+          />
         </div>
-      </header>
-
-      <main className="mx-auto max-w-7xl px-4 py-8">
-        <div className="mb-6 flex flex-wrap items-end gap-4 rounded-xl border border-gray-200 bg-white p-4 dark:border-dark-600 dark:bg-dark-800">
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-dark-300">
-              Start
-            </label>
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-dark-500 dark:bg-dark-700"
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-dark-300">
-              End
-            </label>
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-dark-500 dark:bg-dark-700"
-            />
-          </div>
-          <p className="text-xs text-gray-500 dark:text-dark-400 sm:ml-auto sm:max-w-md">
-            {meta?.description ||
-              'KPIs: total users is lifetime; other figures are for the selected range when the API supports it.'}
-          </p>
+        <div>
+          <label className="mb-1 block text-xs font-medium text-gray-600 dark:text-dark-300">
+            End
+          </label>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="rounded-lg border border-gray-300 px-3 py-2 text-sm dark:border-dark-500 dark:bg-dark-700"
+          />
         </div>
+        <p className="text-xs text-gray-500 dark:text-dark-400 sm:ml-auto sm:max-w-md">
+          {meta?.description ||
+            'KPIs: total users is lifetime; other figures are for the selected range when the API supports it.'}
+        </p>
+      </div>
 
-        {loading && !payload ? (
-          <div className="flex justify-center py-24">
-            <Spinner className="size-12 border-2" />
-          </div>
-        ) : null}
-
-        {kpis ? (
-          <div className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
-            <KpiCard label="Total users (lifetime)" value={kpis.totalUsers ?? '—'} />
-            <KpiCard
-              label="Transactions (range)"
-              value={kpis.totalTransactions ?? '—'}
-              sub="Per API selected window"
-            />
-            <KpiCard label="Fraud cases" value={kpis.fraudCases ?? '—'} />
-            <KpiCard label="High-risk transactions" value={kpis.highRiskTransactions ?? '—'} />
-            <KpiCard
-              label="Revenue volume (total)"
-              value={
-                kpis.revenueVolume?.total != null
-                  ? Number(kpis.revenueVolume.total).toLocaleString()
-                  : '—'
-              }
-            />
-            <KpiCard
-              label="Income"
-              value={
-                kpis.revenueVolume?.income != null
-                  ? Number(kpis.revenueVolume.income).toLocaleString()
-                  : '—'
-              }
-            />
-            <KpiCard
-              label="Expense"
-              value={
-                kpis.revenueVolume?.expense != null
-                  ? Number(kpis.revenueVolume.expense).toLocaleString()
-                  : '—'
-              }
-            />
-            <KpiCard
-              label="Net"
-              value={
-                kpis.revenueVolume?.net != null
-                  ? Number(kpis.revenueVolume.net).toLocaleString()
-                  : '—'
-              }
-            />
-          </div>
-        ) : null}
-
-        {meta?.startDate ? (
-          <p className="mb-6 text-xs text-gray-500 dark:text-dark-400">
-            API range: {dayjs(meta.startDate).format('MMM D, YYYY')} —{' '}
-            {dayjs(meta.endDate).format('MMM D, YYYY')}
-          </p>
-        ) : null}
-
-        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-          <ChartCard
-            title="Transactions per day"
-            description="Daily transaction counts (zeros filled per API).">
-            <TransactionsPerDayChart chartJs={charts?.transactionsPerDay} />
-          </ChartCard>
-          <ChartCard title="Transaction volume per day" description="Sum of amounts per day.">
-            <VolumePerDayChart chartJs={charts?.transactionVolumePerDay} />
-          </ChartCard>
-          <ChartCard
-            title="Fraud trends"
-            description="Average fraud score, high-risk counts, and new fraud log alerts."
-            className="xl:col-span-2">
-            <FraudTrendsChart chartJs={charts?.fraudTrends} />
-          </ChartCard>
-          <ChartCard
-            title="Active users"
-            description="Distinct users with at least one transaction per day."
-            className="xl:col-span-2">
-            <ActiveUsersChart chartJs={charts?.activeUsers} />
-          </ChartCard>
+      {loading && !payload ? (
+        <div className="flex justify-center py-24">
+          <Spinner className="size-12 border-2" />
         </div>
-      </main>
-    </div>
+      ) : null}
+
+      {kpis ? (
+        <div className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
+          <KpiCard label="Total users (lifetime)" value={kpis.totalUsers ?? '—'} />
+          <KpiCard
+            label="Transactions (range)"
+            value={kpis.totalTransactions ?? '—'}
+            sub="Per API selected window"
+          />
+          <KpiCard label="Fraud cases" value={kpis.fraudCases ?? '—'} />
+          <KpiCard label="High-risk transactions" value={kpis.highRiskTransactions ?? '—'} />
+          <KpiCard
+            label="Revenue volume (total)"
+            value={
+              kpis.revenueVolume?.total != null
+                ? Number(kpis.revenueVolume.total).toLocaleString()
+                : '—'
+            }
+          />
+          <KpiCard
+            label="Income"
+            value={
+              kpis.revenueVolume?.income != null
+                ? Number(kpis.revenueVolume.income).toLocaleString()
+                : '—'
+            }
+          />
+          <KpiCard
+            label="Expense"
+            value={
+              kpis.revenueVolume?.expense != null
+                ? Number(kpis.revenueVolume.expense).toLocaleString()
+                : '—'
+            }
+          />
+          <KpiCard
+            label="Net"
+            value={
+              kpis.revenueVolume?.net != null
+                ? Number(kpis.revenueVolume.net).toLocaleString()
+                : '—'
+            }
+          />
+        </div>
+      ) : null}
+
+      {meta?.startDate ? (
+        <p className="mb-6 text-xs text-gray-500 dark:text-dark-400">
+          API range: {dayjs(meta.startDate).format('MMM D, YYYY')} —{' '}
+          {dayjs(meta.endDate).format('MMM D, YYYY')}
+        </p>
+      ) : null}
+
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        <ChartCard
+          title="Transactions per day"
+          description="Daily transaction counts (zeros filled per API).">
+          <TransactionsPerDayChart chartJs={charts?.transactionsPerDay} />
+        </ChartCard>
+        <ChartCard title="Transaction volume per day" description="Sum of amounts per day.">
+          <VolumePerDayChart chartJs={charts?.transactionVolumePerDay} />
+        </ChartCard>
+        <ChartCard
+          title="Fraud trends"
+          description="Average fraud score, high-risk counts, and new fraud log alerts."
+          className="xl:col-span-2">
+          <FraudTrendsChart chartJs={charts?.fraudTrends} />
+        </ChartCard>
+        <ChartCard
+          title="Active users"
+          description="Distinct users with at least one transaction per day."
+          className="xl:col-span-2">
+          <ActiveUsersChart chartJs={charts?.activeUsers} />
+        </ChartCard>
+      </div>
+    </main>
   );
 }
